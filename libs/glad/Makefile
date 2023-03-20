@@ -35,17 +35,17 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug)
-TARGETDIR = ../Build/Glad/Debug/x86_64-linux/Binaries
+TARGETDIR = ../../Build/Glad/Debug/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libGlad.a
-OBJDIR = ../Build/Glad/Debug/x86_64-linux/CompilerData
+OBJDIR = ../../Build/Glad/Debug/x86_64-linux/CompilerData
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
-TARGETDIR = ../Build/Glad/Release/x86_64-linux/Binaries
+TARGETDIR = ../../Build/Glad/Release/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libGlad.a
-OBJDIR = ../Build/Glad/Release/x86_64-linux/CompilerData
+OBJDIR = ../../Build/Glad/Release/x86_64-linux/CompilerData
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s

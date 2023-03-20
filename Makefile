@@ -63,7 +63,7 @@ ifneq (,$(CitrusPlayground_config))
 endif
 
 clean:
-	@echo "Cleaning..."
+	@echo "Cleaning all..."
 	@${MAKE} --no-print-directory -C libs/glfw -f Makefile clean
 	@${MAKE} --no-print-directory -C libs/imgui -f Makefile clean
 	@${MAKE} --no-print-directory -C libs/glad -f Makefile clean
@@ -80,7 +80,7 @@ help:
 	@echo "  release"
 	@echo ""
 	@echo "Available targets:"
-	@echo "   all (build all projects, default)"
+	@echo "   all (build all, default)"
 	@echo "   clean (clean build files)"
 	@echo "   GLFW (build GLFW)"
 	@echo "   ImGui (build ImGui)"

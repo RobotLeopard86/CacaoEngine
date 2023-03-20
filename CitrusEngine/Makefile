@@ -19,7 +19,7 @@ endif
 # #############################################
 
 RESCOMP = windres
-INCLUDES += -Isrc -I..
+INCLUDES += -Isrc -I../libs/spdlog/include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -35,11 +35,11 @@ ifeq ($(config),debug)
 TARGETDIR = ../Build/CitrusEngine/Debug/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libCitrusEngine.a
 OBJDIR = ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData
-DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_DEBUG -DCE_ENABLEASSERTS
+DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_DEBUG -DCE_ENABLEASSERTS -DCE_ENGINE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu++20
-LIBS += ../libs/Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../libs/Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../libs/Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a -llibGL.so
-LDDEPS += ../libs/Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../libs/Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../libs/Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a
+LIBS += ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a -llibGL.so
+LDDEPS += ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
@@ -61,6 +61,12 @@ endif
 
 # File sets
 # #############################################
+
+GENERATED :=
+OBJECTS :=
+
+GENERATED += $(OBJDIR)/Log.o
+OBJECTS += $(OBJDIR)/Log.o
 
 
 # Rules
@@ -124,6 +130,10 @@ endif
 
 # File Rules
 # #############################################
+
+$(OBJDIR)/Log.o: src/Core/Log.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))

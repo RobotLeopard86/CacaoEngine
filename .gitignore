@@ -1,2 +1,5 @@
+# Don't send builds
 Build
-libs/build
+
+# Don't send auto-created logs
+citrus-engine.log
