@@ -67,6 +67,10 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/Log.o
 OBJECTS += $(OBJDIR)/Log.o
+GENERATED += $(OBJDIR)/Assert.o
+OBJECTS += $(OBJDIR)/Assert.o
+GENERATED += $(OBJDIR)/CitrusClient.o
+OBJECTS += $(OBJDIR)/CitrusClient.o
 
 
 # Rules
@@ -132,6 +136,14 @@ endif
 # #############################################
 
 $(OBJDIR)/Log.o: src/Core/Log.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/CitrusClient.o: src/Core/CitrusClient.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/Assert.o: src/Core/Assert.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

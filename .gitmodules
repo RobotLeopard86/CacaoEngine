@@ -1,17 +1,13 @@
 [submodule "libs/spdlog"]
 	path = libs/spdlog
 	url = https://github.com/gabime/spdlog
-	ignore = dirty
-[submodule "libs/glfw"]
-	path = libs/glfw
-	url = https://github.com/glfw/glfw
-	ignore = dirty
 [submodule "libs/glm"]
 	path = libs/glm
 	url = https://github.com/g-truc/glm
-	ignore = dirty
+[submodule "libs/glfw"]
+	path = libs/glfw
+	url = https://github.com/RobotLeopard86/citrus-glfw
 [submodule "libs/imgui"]
 	path = libs/imgui
-	url = https://github.com/ocornut/imgui
+	url = https://github.com/RobotLeopard86/citrus-imgui
 	branch = docking
-	ignore = dirty

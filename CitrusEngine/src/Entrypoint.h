@@ -1,10 +1,7 @@
 #pragma once
 
-#include "CitrusClientBridge.h"
+#include "Core/CitrusClient.h"
 #include "Core/Log.h"
-
-//Function declared in CitrusClientBridge.h, implemented by client
-extern int CitrusEngine::CreateClient();
 
 int main(){
     //Setup loggers
@@ -13,9 +10,15 @@ int main(){
     CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Starting Citrus Engine...");
 
     //Create client
-    int appId = CitrusEngine::CreateClient();
+    CitrusEngine::CitrusClient* client = CitrusEngine::CreateClient();
 
-    CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Received client!");
+    CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Running client \"" + client->GetID() + "\"...");
+
+    client->Run();
+
+    CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Shutting down Citrus Engine...");
+
+    delete client;
 
     return 0;
 }
