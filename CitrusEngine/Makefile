@@ -71,6 +71,8 @@ GENERATED += $(OBJDIR)/Assert.o
 OBJECTS += $(OBJDIR)/Assert.o
 GENERATED += $(OBJDIR)/CitrusClient.o
 OBJECTS += $(OBJDIR)/CitrusClient.o
+GENERATED += $(OBJDIR)/Event.o
+OBJECTS += $(OBJDIR)/Event.o
 
 
 # Rules
@@ -144,6 +146,10 @@ $(OBJDIR)/CitrusClient.o: src/Core/CitrusClient.cpp
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/Assert.o: src/Core/Assert.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/Event.o: src/Events/Event.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
