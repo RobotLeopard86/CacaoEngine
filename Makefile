@@ -35,40 +35,49 @@ all: $(PROJECTS)
 GLFW:
 ifneq (,$(GLFW_config))
 	@echo "Building GLFW - $(GLFW_config)... (1/5)"
-	@${MAKE} --no-print-directory -C libs/glfw -f Makefile config=$(GLFW_config)
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/glfw -f Makefile config=$(GLFW_config)
 endif
 
 ImGui:
 ifneq (,$(ImGui_config))
 	@echo "Building ImGui - $(ImGui_config)... (2/5)"
-	@${MAKE} --no-print-directory -C libs/imgui -f Makefile config=$(ImGui_config)
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/imgui -f Makefile config=$(ImGui_config)
 endif
 
 Glad:
 ifneq (,$(Glad_config))
 	@echo "Building Glad - $(Glad_config)... (3/5)"
-	@${MAKE} --no-print-directory -C libs/glad -f Makefile config=$(Glad_config)
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/glad -f Makefile config=$(Glad_config)
 endif
 
 CitrusEngine: GLFW Glad ImGui
 ifneq (,$(CitrusEngine_config))
 	@echo "Building CitrusEngine - $(CitrusEngine_config)... (4/5)"
-	@${MAKE} --no-print-directory -C CitrusEngine -f Makefile config=$(CitrusEngine_config)
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusEngine -f Makefile config=$(CitrusEngine_config)
 endif
 
 CitrusPlayground: CitrusEngine
 ifneq (,$(CitrusPlayground_config))
 	@echo "Building CitrusPlayground - $(CitrusPlayground_config)... (5/5)"
-	@${MAKE} --no-print-directory -C CitrusPlayground -f Makefile config=$(CitrusPlayground_config)
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusPlayground -f Makefile config=$(CitrusPlayground_config)
 endif
 
 clean:
 	@echo "Cleaning all..."
-	@${MAKE} --no-print-directory -C libs/glfw -f Makefile clean
-	@${MAKE} --no-print-directory -C libs/imgui -f Makefile clean
-	@${MAKE} --no-print-directory -C libs/glad -f Makefile clean
-	@${MAKE} --no-print-directory -C CitrusEngine -f Makefile clean
-	@${MAKE} --no-print-directory -C CitrusPlayground -f Makefile clean
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/glfw -f Makefile clean
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/imgui -f Makefile clean
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/glad -f Makefile clean
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusEngine -f Makefile clean
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusPlayground -f Makefile clean
+
+
+run-debug:
+	@echo "Running..."
+	@Build/CitrusPlayground/Debug/x86_64-linux/Binaries/CitrusPlayground
+
+run-release:
+	@echo "Running..."
+	@Build/CitrusPlayground/Release/x86_64-linux/Binaries/CitrusPlayground
 
 help:
 	@echo "Citrus Engine - Powered by GNU Make"
@@ -82,6 +91,8 @@ help:
 	@echo "Available targets:"
 	@echo "   all (build all, default)"
 	@echo "   clean (clean build files)"
+	@echo "   run-debug (run Citrus Playground debug build)"
+	@echo "   run-release (run Citrus Playground release build)"
 	@echo "   GLFW (build GLFW)"
 	@echo "   ImGui (build ImGui)"
 	@echo "   Glad (build Glad)"
