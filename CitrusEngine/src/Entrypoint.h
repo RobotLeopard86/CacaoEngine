@@ -12,12 +12,13 @@ int main(){
     //Create client
     CitrusEngine::CitrusClient* client = CitrusEngine::CreateClient();
 
-    CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Running client \"" + client->GetID() + "\"...");
+    CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Running client \"" + client->GetPackageID() + "\"...");
 
     client->Run();
 
     CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Shutting down Citrus Engine...");
 
+    //Free client pointer
     delete client;
 
     return 0;

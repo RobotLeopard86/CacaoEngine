@@ -1,6 +1,7 @@
 #include "CitrusClient.h"
 #include "Assert.h"
 #include "Events/Event.h"
+#include "IO/Window.h"
 
 namespace CitrusEngine {
 
@@ -20,12 +21,13 @@ namespace CitrusEngine {
         //Register event callbacks
         handler = EventHandler();
         handler.RegisterCallback(EventType::WindowClose, BIND_FUNC(CitrusClient::Shutdown));
-        handler.RegisterFallbackCallback(BIND_FUNC(CitrusClient::HandleEvent))
+        handler.RegisterFallbackCallback(BIND_FUNC(CitrusClient::HandleEvent));
 
         //Set events to dispatch to OnEvent
         Event::SetDispatchMethod(BIND_FUNC(CitrusClient::OnEvent));
 
-        //TODO: Create window
+        //Create window
+        Window::Create(id, 1280, 720);
     }
 
     //Base client does not need a destructor
@@ -42,7 +44,7 @@ namespace CitrusEngine {
         handler.Handle(event);
     }
 
-    void CitrusClient::Shutdown(WindowCloseEvent& wce){
+    void CitrusClient::Shutdown(Event& wce){
         wce.handled = true;
 
         run = false;

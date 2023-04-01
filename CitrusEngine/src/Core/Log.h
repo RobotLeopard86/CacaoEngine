@@ -10,7 +10,7 @@ namespace CitrusEngine {
         Info=1, //Information (e.g. engine starting)
         Warn=2, //Warnings (e.g. slow loading)
         Error=3, //Errors (e.g. shader compilation failure)
-        Fatal=4 //Fatal Errors (e.g. memory leak)
+        Fatal=4 //Fatal Errors (e.g. crash imminent)
     };
 
     class Logging {

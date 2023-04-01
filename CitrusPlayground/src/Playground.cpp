@@ -2,7 +2,7 @@
 
 class PlaygroundClient : public CitrusEngine::CitrusClient {
 public:
-    PlaygroundClient() { id = "playground"; }
+    PlaygroundClient() { id = "citrus-playground"; }
 };
 
 CitrusEngine::CitrusClient* CitrusEngine::CreateClient() {

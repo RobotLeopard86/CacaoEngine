@@ -18,18 +18,20 @@ namespace CitrusEngine {
         //Events dispatch to this method
         void OnEvent(Event& event);
 
-        //Gets app ID
-        std::string GetID() { return id; }
+        //Gets client package ID
+        std::string GetPackageID() { return id; }
     protected:
         std::string id;
     private:
         static CitrusClient* instance;
 
         bool run;
+        
         EventHandler handler;
 
+
         //Runs when client should close
-        void Shutdown();
+        void Shutdown(Event& wce);
         //Handles non-window close events
         void HandleEvent(Event& event);
     };
