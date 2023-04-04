@@ -1,12 +1,14 @@
 #include "CitrusClient.h"
 #include "Assert.h"
-#include "Events/Event.h"
 #include "IO/Window.h"
+#include "Log.h"
+#include "Utilities.h"
 
 namespace CitrusEngine {
 
     //Required definitions of static members
     CitrusClient* CitrusClient::instance = nullptr;
+    EventManager* CitrusClient::eventManager = nullptr;
 
     CitrusClient::CitrusClient(){
         //Confirm we are initializing the first client
@@ -18,16 +20,19 @@ namespace CitrusEngine {
         //Allow the app to run
         run = true;
 
-        //Register event callbacks
-        handler = EventHandler();
-        handler.RegisterCallback(EventType::WindowClose, BIND_FUNC(CitrusClient::Shutdown));
-        handler.RegisterFallbackCallback(BIND_FUNC(CitrusClient::HandleEvent));
+        //Set up event consumers
+        wceConsumer = new EventConsumer(BIND_FUNC(CitrusClient::Shutdown));
 
-        //Set events to dispatch to OnEvent
-        Event::SetDispatchMethod(BIND_FUNC(CitrusClient::OnEvent));
+        //Set up event manager
+        eventManager = new EventManager();
+        eventManager->SubscribeConsumer("WindowClose", wceConsumer);
 
         //Create window
         Window::Create(id, 1280, 720);
+
+        //For testing only: close window
+        WindowCloseEvent wce{};
+        CitrusClient::eventManager->Dispatch(wce);
     }
 
     //Base client does not need a destructor
@@ -39,17 +44,17 @@ namespace CitrusEngine {
         }
     }
 
-    //Runs when the application receives an event
-    void CitrusClient::OnEvent(Event& event) {
-        handler.Handle(event);
-    }
-
-    void CitrusClient::Shutdown(Event& wce){
-        wce.handled = true;
-
+    void CitrusClient::Shutdown(Event& e){
         run = false;
-    }
+        Window::Destroy();
 
-    //TODO
-    void CitrusClient::HandleEvent(Event& event) {}
+        //Prepare eventManager for freeing by unsubscribing all consumers;
+        eventManager->Shutdown();
+        
+        //Free pointers
+        delete eventManager;
+        delete wceConsumer;
+
+        e.handled = true;
+    } 
 }

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Events/Event.h"
+#include "Events/EventSystem.h"
 
 namespace CitrusEngine {
 
@@ -20,20 +20,20 @@ namespace CitrusEngine {
 
         //Gets client package ID
         std::string GetPackageID() { return id; }
+
+        static EventManager* eventManager;
     protected:
         std::string id;
     private:
         static CitrusClient* instance;
 
         bool run;
-        
-        EventHandler handler;
 
+        //Consumes WindowCloseEvents
+        EventConsumer* wceConsumer;
 
         //Runs when client should close
-        void Shutdown(Event& wce);
-        //Handles non-window close events
-        void HandleEvent(Event& event);
+        void Shutdown(Event& e);
     };
 
     //Implemented by client

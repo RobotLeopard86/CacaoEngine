@@ -6,6 +6,9 @@
 #endif
 
 #include "Core/Assert.h"
+#include "Events/EventSystem.h"
+#include "Core/Utilities.h"
+#include "Core/CitrusClient.h"
 
 namespace CitrusEngine {
     //Make window instance null pointer by default
@@ -17,6 +20,8 @@ namespace CitrusEngine {
 
         //Create a window of the type defined by the platform
         instance = GenWindow(title, initialSizeX, initialSizeY);
+
+        Logging::EngineLog(LogLevel::Info, "Window created!");
     }
 
     void Window::Destroy() {
@@ -27,5 +32,7 @@ namespace CitrusEngine {
         delete instance;
         //Assign null pointer to prevent another attempted destruction
         instance = nullptr;
+
+        Logging::EngineLog(LogLevel::Info, "Window destroyed!");
     }
 }

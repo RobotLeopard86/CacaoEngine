@@ -71,28 +71,34 @@ clean:
 	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusPlayground -f Makefile clean
 
 
-run-debug:
-	@echo "Running..."
+run:
+	@echo "Running latest Debug build..."
 	@Build/CitrusPlayground/Debug/x86_64-linux/Binaries/CitrusPlayground
 
 run-release:
-	@echo "Running..."
+	@echo "Running latest Release build..."
 	@Build/CitrusPlayground/Release/x86_64-linux/Binaries/CitrusPlayground
+
+build-run:
+	@echo "Building and running..."
+	@${MAKE} all
+	@${MAKE} run
 
 help:
 	@echo "Citrus Engine - Powered by GNU Make"
 	@echo "==================================="
-	@echo "Command usage: make [config=name] [target]"
+	@echo "Command usage: make [config=name] [command]"
 	@echo ""
 	@echo "Available configurations:"
 	@echo "  debug"
 	@echo "  release"
 	@echo ""
-	@echo "Available targets:"
+	@echo "Available commands:"
 	@echo "   all (build all, default)"
 	@echo "   clean (clean build files)"
-	@echo "   run-debug (run Citrus Playground debug build)"
-	@echo "   run-release (run Citrus Playground release build)"
+	@echo "   run (run CitrusPlayground debug build)"
+	@echo "   run-release (run CitrusPlayground release build)"
+	@echo "   build-run (build all, then run CitrusPlayground debug build)"
 	@echo "   GLFW (build GLFW)"
 	@echo "   ImGui (build ImGui)"
 	@echo "   Glad (build Glad)"
