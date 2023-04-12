@@ -17,7 +17,7 @@ namespace CitrusEngine {
         void SubscribeConsumer(std::string type, EventConsumer* consumer);
 
         //Unsubscribes a consumer from events of the given type
-        void UnsubscribeConsumer(std::string type, EventConsumer* consumer, bool deleteIfNoConsumers = true);
+        void UnsubscribeConsumer(std::string type, EventConsumer* consumer);
 
         //Dispatches the event to all subscribed consumers for the appropriate event type
         void Dispatch(Event& event);
