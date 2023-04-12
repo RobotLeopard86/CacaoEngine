@@ -18,8 +18,7 @@ namespace CitrusEngine {
         //Unsubscribe all consumers
         for(const auto& [type, eventTypeConsumers] : consumers){
             for(EventConsumer* consumer : eventTypeConsumers){
-                //Specifying don't delete if no consumers found to avoid editing the key list during iteration
-                UnsubscribeConsumer(type, consumer, false);
+                UnsubscribeConsumer(type, consumer);
             }
             registeredTypes.push_back(type);
         }
@@ -46,7 +45,7 @@ namespace CitrusEngine {
         consumers.insert_or_assign(type, insertValue);
     }
 
-    void EventManager::UnsubscribeConsumer(std::string type, EventConsumer* consumer, bool deleteIfNoConsumers){
+    void EventManager::UnsubscribeConsumer(std::string type, EventConsumer* consumer){
         std::vector<EventConsumer*> insertValue;
 
         //Retrieve list of existing consumers
@@ -77,15 +76,8 @@ namespace CitrusEngine {
             Logging::EngineLog(LogLevel::Error, "Cannot unsubscribe consumer from event type with no consumers!");
             return;
         }
-
-        //Apply changes to consumer map
-        if(!insertValue.empty()){
-            consumers.insert_or_assign(type, insertValue);
-        } else if(deleteIfNoConsumers){
-            //Erases event type from consumer map (runs by default, can be disabled)
-            consumers.erase(type);
-        }
-
+        
+        consumers.insert_or_assign(type, insertValue);
     }
 
     void EventManager::Dispatch(Event& event){
