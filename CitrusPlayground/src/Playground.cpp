@@ -5,7 +5,6 @@ public:
     PlaygroundClient() { id = "citrus-playground"; }
 };
 
-CitrusEngine::CitrusClient* CitrusEngine::CreateClient() {
-    CitrusEngine::Logging::ClientLog(CitrusEngine::LogLevel::Info, "Creating client...");
+CitrusEngine::CitrusClient* CreateClient() {
     return new PlaygroundClient();
 }

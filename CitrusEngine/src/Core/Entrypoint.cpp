@@ -1,7 +1,5 @@
-#pragma once
-
-#include "Core/CitrusClient.h"
-#include "Core/Log.h"
+#include "Entrypoint.h"
+#include "Log.h"
 
 int main(){
     //Setup loggers
@@ -10,10 +8,11 @@ int main(){
     CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Starting Citrus Engine...");
 
     //Create client
-    CitrusEngine::CitrusClient* client = CitrusEngine::CreateClient();
+    CitrusEngine::CitrusClient* client = CreateClient();
 
     CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Running client \"" + client->GetPackageID() + "\"...");
 
+    //Run client
     client->Run();
 
     CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Shutting down Citrus Engine...");

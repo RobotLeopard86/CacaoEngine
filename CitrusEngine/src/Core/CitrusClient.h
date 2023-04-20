@@ -15,17 +15,16 @@ namespace CitrusEngine {
         //Runs the client
         void Run();
 
-        //Events dispatch to this method
-        void OnEvent(Event& event);
-
         //Gets client package ID
         std::string GetPackageID() { return id; }
 
-        static EventManager* eventManager;
+        //Gets event manager
+        static EventManager* GetEventManager() { return eventManager; }
     protected:
         std::string id;
     private:
         static CitrusClient* instance;
+        static EventManager* eventManager;
 
         bool run;
 
@@ -35,7 +34,4 @@ namespace CitrusEngine {
         //Runs when client should close
         void Shutdown(Event& e);
     };
-
-    //Implemented by client
-    CitrusClient* CreateClient();
 }

@@ -13,24 +13,26 @@ namespace CitrusEngine {
     void EventManager::Shutdown(){
         Logging::EngineLog(LogLevel::Info, "Event manager shutting down, unsubscribing all consumers...");
 
-        std::vector<std::string> registeredTypes;
+        std::map<std::string, std::vector<EventConsumer*>> consumersCopy;
+
+        //Copy all consumer data to a map to avoid modifying the original map during unsubscription
+        for(auto it = consumers.begin(); it != consumers.end(); it++){
+            consumersCopy.insert_or_assign(it->first, it->second);
+        }
 
         //Unsubscribe all consumers
-        for(const auto& [type, eventTypeConsumers] : consumers){
-            for(EventConsumer* consumer : eventTypeConsumers){
-                UnsubscribeConsumer(type, consumer);
+        for(auto it = consumersCopy.begin(); it != consumersCopy.end(); it++){
+            for(auto it2 = it->second.begin(); it2 != it->second.end(); it2++){
+                UnsubscribeConsumer(it->first, *it2);
             }
-            registeredTypes.push_back(type);
         }
 
-        //Delete all empty entries once consumers are unsubscribed
-        for(std::string type : registeredTypes){
-            consumers.erase(type);
-        }
+        //Clear data
+        consumers.clear();
+        consumersCopy.clear();
     }
 
     void EventManager::SubscribeConsumer(std::string type, EventConsumer* consumer){
-
         std::vector<EventConsumer*> insertValue;
 
         //Retrieve list of existing consumers if it exists

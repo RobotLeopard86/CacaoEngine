@@ -21,40 +21,42 @@ namespace CitrusEngine {
         run = true;
 
         //Set up event consumers
-        wceConsumer = new EventConsumer(BIND_FUNC(CitrusClient::Shutdown));
+        wceConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::Shutdown));
 
         //Set up event manager
         eventManager = new EventManager();
         eventManager->SubscribeConsumer("WindowClose", wceConsumer);
-
-        //Create window
-        Window::Create(id, 1280, 720);
-
-        //For testing only: close window
-        WindowCloseEvent wce{};
-        CitrusClient::eventManager->Dispatch(wce);
     }
 
     //Base client does not need a destructor
     CitrusClient::~CitrusClient() {}
 
     void CitrusClient::Run(){
+        //Create window
+        Window::Create(id, 1280, 720);
         while(run){
-            //TODO: Manage lifecycle
+            Window::Update();
         }
-    }
+        Logging::EngineLog(LogLevel::Info, "Run stopped.");
 
-    void CitrusClient::Shutdown(Event& e){
-        run = false;
         Window::Destroy();
+
+        Logging::EngineLog(LogLevel::Info, "Unsubscribing all...");
 
         //Prepare eventManager for freeing by unsubscribing all consumers;
         eventManager->Shutdown();
+
+        Logging::EngineLog(LogLevel::Info, "Freeing pointers...");
         
         //Free pointers
         delete eventManager;
         delete wceConsumer;
 
+        Logging::EngineLog(LogLevel::Info, "Shutdown confirmed.");
+    }
+
+    void CitrusClient::Shutdown(Event& e){
         e.handled = true;
+        run = false;
     } 
 }
