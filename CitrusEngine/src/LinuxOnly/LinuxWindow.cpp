@@ -12,8 +12,6 @@ namespace CitrusEngine {
 
     LinuxWindow::LinuxWindow(std::string title, int initialSizeX, int initialSizeY)
         : windowTitle(title), size(glm::i32vec2(initialSizeX, initialSizeY)){
-
-        Logging::EngineLog(LogLevel::Info, "Creating window \"" + windowTitle + "\" with dimensions " + std::to_string(size.x) + "x" + std::to_string(size.y) + "...");
         
         //glfwInit returns a success value
         bool glfwSuccessfulInit = glfwInit();
