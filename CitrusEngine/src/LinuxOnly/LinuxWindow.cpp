@@ -56,10 +56,61 @@ namespace CitrusEngine {
             CitrusClient::GetEventManager()->Dispatch(wre);
         });
 
-        //Called when window closwed
+        //Called when window closed
         glfwSetWindowCloseCallback(window, [](GLFWwindow* glfwWindow){
             WindowCloseEvent wce{};
             CitrusClient::GetEventManager()->Dispatch(wce);
+        });
+
+        //Called when window receives/loses focus
+        glfwSetWindowFocusCallback(window, [](GLFWwindow* glfwWindow, int status){
+            if(status == GLFW_TRUE){
+                WindowReceiveFocusEvent wrfe = WindowReceiveFocusEvent{};
+                CitrusClient::GetEventManager()->Dispatch(wrfe);
+            } else if(status == GLFW_FALSE){
+                WindowLoseFocusEvent wlfe = WindowLoseFocusEvent{};
+                CitrusClient::GetEventManager()->Dispatch(wlfe);
+            }
+        });
+
+        //Called when GLFW receives key input
+        glfwSetKeyCallback(window, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods){
+            if(action == GLFW_PRESS || action == GLFW_REPEAT){
+                KeyDownEvent kde = KeyDownEvent{key};
+                CitrusClient::GetEventManager()->Dispatch(kde);
+            } else if(action == GLFW_RELEASE){
+                KeyUpEvent kue = KeyUpEvent{key};
+                CitrusClient::GetEventManager()->Dispatch(kue);
+            }
+        });
+
+        //Called when GLFW receives typing input
+        glfwSetCharCallback(window, [](GLFWwindow* glfwWindow, unsigned int character){
+            KeyTypeEvent kte = KeyTypeEvent{character};
+            CitrusClient::GetEventManager()->Dispatch(kte);
+        });
+
+        //Called when GLFW receives mouse button input
+        glfwSetMouseButtonCallback(window, [](GLFWwindow* glfwWindow, int btn, int action, int mods){
+            if(action == GLFW_PRESS){
+                MousePressEvent mpe = MousePressEvent{btn};
+                CitrusClient::GetEventManager()->Dispatch(mpe);
+            } else if(action == GLFW_RELEASE){
+                MouseReleaseEvent mre = MouseReleaseEvent{btn};
+                CitrusClient::GetEventManager()->Dispatch(mre);
+            }
+        });
+
+        //Called when GLFW detects mouse movement
+        glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseX, double mouseY){
+            MouseMoveEvent mme = MouseMoveEvent{mouseX, mouseY};
+            CitrusClient::GetEventManager()->Dispatch(mme);
+        });
+
+        //Called when GLFW detects mouse scroll input
+        glfwSetScrollCallback(window, [](GLFWwindow*, double offsetX, double offsetY){
+            MouseScrollEvent mse = MouseScrollEvent{offsetX, offsetY};
+            CitrusClient::GetEventManager()->Dispatch(mse);
         });
     }
 

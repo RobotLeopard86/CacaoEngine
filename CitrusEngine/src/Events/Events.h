@@ -56,8 +56,8 @@ namespace CitrusEngine {
     };
     class KeyTypeEvent : public Event { //Parameters: Keycode for key typed
     public:    
-        KeyTypeEvent(int keycode) : keycode(keycode) {}
-        int keycode;
+        KeyTypeEvent(unsigned int keycode) : keycode(keycode) {}
+        unsigned int keycode;
 
         std::string GetType() { return "KeyType"; }
     };
@@ -79,14 +79,14 @@ namespace CitrusEngine {
     };
     class MouseScrollEvent : public Event { //Parameters: X and Y offset for scrolling
     public:
-        MouseScrollEvent(int xOffset, int yOffset) : xOffset(xOffset), yOffset(yOffset) {}
+        MouseScrollEvent(double xOffset, double yOffset) : xOffset(xOffset), yOffset(yOffset) {}
         double xOffset, yOffset;
 
         std::string GetType() { return "MouseScroll"; }
     };
     class MouseMoveEvent : public Event { //Parameters: New X and Y position of mouse
     public:
-        MouseMoveEvent(int x, int y) : x(x), y(y) {}
+        MouseMoveEvent(double x, double y) : x(x), y(y) {}
         double x, y;
 
         std::string GetType() { return "MouseMove"; }

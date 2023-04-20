@@ -99,7 +99,7 @@ namespace CitrusEngine {
                 consumer->Consume(event);
             }
         } else {
-            Logging::EngineLog(LogLevel::Warn, "No consumers registered for dispatched event, not dispatching.");
+            Logging::EngineLog(LogLevel::Warn, "No consumers registered for dispatched event of type " + event.GetType() + ", not dispatching.");
         }
     }
 }
