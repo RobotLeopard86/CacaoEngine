@@ -34,25 +34,19 @@ namespace CitrusEngine {
     void CitrusClient::Run(){
         //Create window
         Window::Create(id, 1280, 720);
+
         while(run){
             Window::Update();
         }
-        Logging::EngineLog(LogLevel::Info, "Run stopped.");
-
-        Window::Destroy();
-
-        Logging::EngineLog(LogLevel::Info, "Unsubscribing all...");
 
         //Prepare eventManager for freeing by unsubscribing all consumers;
         eventManager->Shutdown();
 
-        Logging::EngineLog(LogLevel::Info, "Freeing pointers...");
+        Window::Destroy();
         
         //Free pointers
         delete eventManager;
         delete wceConsumer;
-
-        Logging::EngineLog(LogLevel::Info, "Shutdown confirmed.");
     }
 
     void CitrusClient::Shutdown(Event& e){
