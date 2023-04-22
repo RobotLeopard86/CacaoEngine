@@ -3,28 +3,35 @@
 
 #include "Citrus.h"
 
+#include <string>
+
 int dummyCount = 0;
 		
 void Dummy(CitrusEngine::Event& event){
 		dummyCount++;
 }
 
-BOOST_AUTO_TEST_CASE(TestEventManagerUnsubscription) {
+class DummyEvent : public CitrusEngine::Event {
+public:
+	std::string GetType() { return "DummyEvent"; }
+};
+
+BOOST_AUTO_TEST_CASE(TestEventConsumers) {
 		CitrusEngine::EventManager em{};
 
 		CitrusEngine::EventConsumer* dummyConsumer = new CitrusEngine::EventConsumer(Dummy);
 
-		em.SubscribeConsumer("WindowClose", dummyConsumer);
+		em.SubscribeConsumer("DummyEvent", dummyConsumer);
 
-		CitrusEngine::WindowCloseEvent dummyEvent{};
+		DummyEvent dummyEvent{};
 
 		em.Dispatch(dummyEvent);
 
 		BOOST_TEST(dummyCount == 1);
 
-		em.UnsubscribeConsumer("WindowClose", dummyConsumer);
+		em.UnsubscribeConsumer("DummyEvent", dummyConsumer);
 
-		CitrusEngine::WindowCloseEvent dummyEvent2{};
+		DummyEvent dummyEvent2{};
 
 		em.Dispatch(dummyEvent2);
 
