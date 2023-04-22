@@ -6,3 +6,6 @@ citrus-engine.log
 
 # Don't send VS Code auto-generated stuff
 .vscode
+
+# Don't send boost files
+libs/boost

@@ -74,12 +74,12 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking CitrusPlayground
+	@echo Linking CitrusPlayground...
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
 $(TARGETDIR):
-	@echo Creating $(TARGETDIR)
+	@echo Creating $(TARGETDIR)...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(TARGETDIR)
 else
@@ -87,7 +87,7 @@ else
 endif
 
 $(OBJDIR):
-	@echo Creating $(OBJDIR)
+	@echo Creating $(OBJDIR)...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(OBJDIR)
 else
@@ -129,7 +129,7 @@ endif
 # #############################################
 
 $(OBJDIR)/Playground.o: src/Playground.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)

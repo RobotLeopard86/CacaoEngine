@@ -17,7 +17,7 @@ endif
 # #############################################
 
 WINDRES = comp
-INCLUDES += -Isrc -I../libs/spdlog/include -I../libs/glm -I../libs/glfw/include -I../libs/glad/include
+INCLUDES += -Isrc -I../libs/spdlog/include -I../libs/glm -I../libs/glfw/include -I../libs/glad/include -I../libs/boost/include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -31,17 +31,19 @@ endef
 ifeq ($(config),debug)
 TARGETDIR = ../Build/CitrusEngine/Debug/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libCitrusEngine.a
+TEST-TARGET = $(TARGETDIR)/tests/CitrusEngineTests
 OBJDIR = ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData
 DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_DEBUG -DCE_ENABLEASSERTS -DGLFW_INCLUDE_NONE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu++20
-LIBS +=-lGLFW -lGlad -lImGui -lGL -lX11 -lXrandr -lXi
-LDDEPS += ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a
-ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -L../Build/GLFW/Debug/x86_64-linux/Binaries -L../Build/Glad/Debug/x86_64-linux/Binaries -L../Build/ImGui/Debug/x86_64-linux/Binaries
+LIBS +=-lGLFW -lGlad -lImGui -lGL -lX11 -lXrandr -lXi -lboost_test_exec_monitor -lboost_unit_test_framework
+LDDEPS += ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a 
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -L../Build/GLFW/Debug/x86_64-linux/Binaries -L../Build/Glad/Debug/x86_64-linux/Binaries -L../Build/ImGui/Debug/x86_64-linux/Binaries -L../libs/boost/lib -static
 
 else ifeq ($(config),release)
 TARGETDIR = ../Build/CitrusEngine/Release/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libCitrusEngine.a
+TEST-TARGET = $(TARGETDIR)/tests/CitrusEngineTests
 OBJDIR = ../Build/CitrusEngine/Release/x86_64-linux/CompilerData
 DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_RELEASE -DGLFW_INCLUDE_NONE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=gnu17
@@ -77,6 +79,9 @@ OBJECTS += $(OBJDIR)/EventManager.o
 GENERATED += $(OBJDIR)/LinuxWindow.o
 OBJECTS += $(OBJDIR)/LinuxWindow.o
 
+TESTOBJECTS :=
+TESTOBJECTS += $(OBJDIR)/tests/TestEntrypoint.o
+
 
 # Rules
 # #############################################
@@ -84,15 +89,24 @@ OBJECTS += $(OBJDIR)/LinuxWindow.o
 all: $(TARGET)
 	@:
 
-$(TARGET): $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
+test: $(TEST-TARGET)
+	@$(TEST-TARGET)
+
+$(TARGET): $(TARGETDIR) $(OBJDIR) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking CitrusEngine
-	$(SILENT) $(AR) -rcs ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData/libCitrusEngineBase.a $(OBJECTS)
-	$(SILENT) echo -e "create ../Build/CitrusEngine/Debug/x86_64-linux/Binaries/libCitrusEngine.a\naddlib ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData/libCitrusEngineBase.a\naddlib ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a\naddlib ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a\naddlib ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a\nsave\nend" | $(AR) -M
+	@echo Linking CitrusEngine...
+	@$(SILENT) $(AR) -rcs ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData/libCitrusEngineBase.a $(OBJECTS)
+	@$(SILENT) echo -e "create ../Build/CitrusEngine/Debug/x86_64-linux/Binaries/libCitrusEngine.a\naddlib ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData/libCitrusEngineBase.a\naddlib ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a\naddlib ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a\naddlib ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a\nsave\nend" | $(AR) -M
+	$(POSTBUILDCMDS)
+
+$(TEST-TARGET): $(TARGETDIR)/tests $(OBJDIR)/tests $(TESTOBJECTS) $(LDDEPS) | $(TARGETDIR)/tests
+	$(PRELINKCMDS)
+	@echo Linking test executable...
+	@$(CXX) -o "$@" $(TESTOBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(TARGET)
 	$(POSTBUILDCMDS)
 
 $(TARGETDIR):
-	@echo Creating $(TARGETDIR)
+	@echo Creating $(TARGETDIR)...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(TARGETDIR)
 else
@@ -100,11 +114,27 @@ else
 endif
 
 $(OBJDIR):
-	@echo Creating $(OBJDIR)
+	@echo Creating $(OBJDIR)...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(OBJDIR)
 else
 	$(SILENT) mkdir $(subst /,\\,$(OBJDIR))
+endif
+
+$(TARGETDIR)/tests:
+	@echo Creating $(TARGETDIR)/tests...
+ifeq (posix,$(SHELLTYPE))
+	$(SILENT) mkdir -p $(TARGETDIR)/tests
+else
+	$(SILENT) mkdir $(subst /,\\,$(TARGETDIR)/tests)
+endif
+
+$(OBJDIR)/tests:
+	@echo Creating $(OBJDIR)/tests...
+ifeq (posix,$(SHELLTYPE))
+	$(SILENT) mkdir -p $(OBJDIR)/tests
+else
+	$(SILENT) mkdir $(subst /,\\,$(OBJDIR)/tests)
 endif
 
 clean:
@@ -138,35 +168,44 @@ $(OBJECTS): | prebuild
 endif
 
 
+# Test File Rules
+# #############################################
+
+$(OBJDIR)/tests/TestEntrypoint.o: tests/TestingEntrypoint.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+
+
 # File Rules
 # #############################################
 
 $(OBJDIR)/Entrypoint.o: src/Core/Entrypoint.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/Log.o: src/Core/Log.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/CitrusClient.o: src/Core/CitrusClient.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/Assert.o: src/Core/Assert.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/EventManager.o: src/Events/EventManager.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/Window.o: src/IO/Window.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"\
 
 $(OBJDIR)/LinuxWindow.o: src/LinuxOnly/LinuxWindow.cpp
-	@echo "$(notdir $<)"
+	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)

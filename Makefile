@@ -44,7 +44,7 @@ ifneq (,$(Glad_config))
 	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/glad -f Makefile config=$(Glad_config)
 endif
 
-CitrusEngine: GLFW Glad ImGui
+CitrusEngine: deps
 ifneq (,$(CitrusEngine_config))
 	@echo "Building CitrusEngine - $(CitrusEngine_config)..."
 	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusEngine -f Makefile config=$(CitrusEngine_config)
@@ -65,6 +65,10 @@ clean:
 	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusPlayground -f Makefile clean
 
 
+deps: GLFW Glad ImGui
+	@:
+
+
 run:
 	@echo "Running latest Debug build..."
 	@Build/CitrusPlayground/Debug/x86_64-linux/Binaries/CitrusPlayground
@@ -77,6 +81,13 @@ build-run:
 	@echo "Building and running..."
 	@${MAKE} all
 	@${MAKE} run
+
+test: CitrusEngine
+	@echo "Running tests..."
+	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusEngine -f Makefile config=$(CitrusEngine_config) test
+
+full-build: clean deps CitrusEngine
+	@${MAKE} --no-print-directory test && ([ $$? -eq 0 ] && ${MAKE} --no-print-directory CitrusPlayground)
 
 help:
 	@echo "Command usage: make [config=name] [command]"
@@ -91,6 +102,8 @@ help:
 	@echo "   run (run CitrusPlayground debug build)"
 	@echo "   run-release (run CitrusPlayground release build)"
 	@echo "   build-run (build all, then run CitrusPlayground debug build)"
+	@echo "   test (build and run tests)"
+	@echo "   full-build (run a clean build of CitrusEngine and dependencies, test CitrusEngine, and build CitrusPlayground if tests succeed)"
 	@echo "   GLFW (build GLFW)"
 	@echo "   ImGui (build ImGui)"
 	@echo "   Glad (build Glad)"

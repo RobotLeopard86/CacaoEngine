@@ -71,12 +71,12 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking Glad
+	@echo Linking Glad...
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
 $(TARGETDIR):
-	@echo Creating $(TARGETDIR)
+	@echo Creating $(TARGETDIR)...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(TARGETDIR)
 else
@@ -84,7 +84,7 @@ else
 endif
 
 $(OBJDIR):
-	@echo Creating $(OBJDIR)
+	@echo Creating $(OBJDIR)...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(OBJDIR)
 else
@@ -92,7 +92,7 @@ else
 endif
 
 clean:
-	@echo Cleaning Glad
+	@echo Cleaning Glad...
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -126,7 +126,7 @@ endif
 # #############################################
 
 $(OBJDIR)/glad.o: src/glad.c
-	@echo "$(notdir $<)"
+	@echo "Building C file $(notdir $<)..."
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
