@@ -1,7 +1,6 @@
 #include "EventManager.h"
 
 #include "Core/Log.h"
-#include "Core/Utilities.h"
 #include "Core/Assert.h"
 
 #include <stdexcept>

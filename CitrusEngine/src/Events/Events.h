@@ -1,11 +1,17 @@
 #pragma once
 
 #include "Core/Log.h"
+#include "Utilities/Input.h"
+#include "Core/Assert.h"
+
+#include "glm/vec2.hpp"
 
 #include <string>
+#include <stdexcept>
 
 namespace CitrusEngine {
-
+    
+    //All subclasses of Event MUST have a default constructor with zero arguments
     class Event {
     public:
         Event() : handled(false) {}
@@ -15,6 +21,20 @@ namespace CitrusEngine {
         virtual std::string GetType() {
             return "None";
         }
+
+        //Casts generic event to usable event type
+        template<typename T>
+        static T EventTypeCast(Event& e) {
+            try {
+                T casted = dynamic_cast<T&>(e);
+                return casted;
+            } catch(const std::bad_cast& exception){
+                //Intentional auto-fail assert (fail-state already met)
+                Asserts::EngineAssert(false, "Cannot convert incompatible event types!");
+                //Will never be called (just there to make the compiler happy :D )
+                return T{};
+            }
+        }
     };
 
     //Window events
@@ -23,8 +43,10 @@ namespace CitrusEngine {
     class WindowLoseFocusEvent : public Event { public: std::string GetType() { return "WindowLoseFocus"; } }; //No additional parameters
     class WindowResizeEvent : public Event { //Parameters: New X and Y size of window
     public:
-        WindowResizeEvent(int x, int y) : x(x), y(y) {}
-        int x, y;
+        WindowResizeEvent(int x, int y) : size(x, y) {}
+        WindowResizeEvent() : size(0) {}
+
+        glm::i32vec2 size;
 
         std::string GetType() { return "WindowResize"; }
     };
@@ -34,6 +56,8 @@ namespace CitrusEngine {
     class ClientDynamicTickEvent : public Event { //Parameters: Delta time since last update
     public:
         ClientDynamicTickEvent(double timestep) : timestep(timestep) {}
+        ClientDynamicTickEvent() : timestep(0.0) {}
+
         double timestep;
 
         std::string GetType() { return "ClientDynamicTick"; }
@@ -43,6 +67,8 @@ namespace CitrusEngine {
     class KeyDownEvent : public Event { //Parameters: Keycode for key pressed
     public:
         KeyDownEvent(int keycode) : keycode(keycode) {}
+        KeyDownEvent() : keycode(CITRUS_KEY_SPACE) {}
+
         int keycode;
 
         std::string GetType() { return "KeyDown"; }
@@ -50,6 +76,8 @@ namespace CitrusEngine {
     class KeyUpEvent : public Event { //Parameters: Keycode for key released
     public:   
         KeyUpEvent(int keycode) : keycode(keycode) {}
+        KeyUpEvent() : keycode(CITRUS_KEY_SPACE) {}
+
         int keycode;
 
         std::string GetType() { return "KeyUp"; }
@@ -57,6 +85,8 @@ namespace CitrusEngine {
     class KeyTypeEvent : public Event { //Parameters: Keycode for key typed
     public:    
         KeyTypeEvent(unsigned int keycode) : keycode(keycode) {}
+        KeyTypeEvent() : keycode(CITRUS_KEY_SPACE) {}
+
         unsigned int keycode;
 
         std::string GetType() { return "KeyType"; }
@@ -66,6 +96,8 @@ namespace CitrusEngine {
     class MousePressEvent : public Event { //Parameters: Button code for button pressed
     public:
         MousePressEvent(int button) : button(button) {}
+        MousePressEvent() : button(CITRUS_MOUSE_BUTTON_LEFT) {}
+
         int button;
 
         std::string GetType() { return "MousePress"; }
@@ -73,21 +105,27 @@ namespace CitrusEngine {
     class MouseReleaseEvent : public Event { //Parameters: Button code for button released
     public:
         MouseReleaseEvent(int button) : button(button) {}
+        MouseReleaseEvent() : button(CITRUS_MOUSE_BUTTON_LEFT) {}
+
         int button;
 
         std::string GetType() { return "MouseRelease"; }
     };
     class MouseScrollEvent : public Event { //Parameters: X and Y offset for scrolling
     public:
-        MouseScrollEvent(double xOffset, double yOffset) : xOffset(xOffset), yOffset(yOffset) {}
-        double xOffset, yOffset;
+        MouseScrollEvent(double xOffset, double yOffset) : offset(xOffset, yOffset) {}
+        MouseScrollEvent() : offset(0.0) {}
+
+        glm::dvec2 offset;
 
         std::string GetType() { return "MouseScroll"; }
     };
     class MouseMoveEvent : public Event { //Parameters: New X and Y position of mouse
     public:
-        MouseMoveEvent(double x, double y) : x(x), y(y) {}
-        double x, y;
+        MouseMoveEvent(double x, double y) : position(x, y) {}
+        MouseMoveEvent() : position(0.0) {}
+
+        glm::dvec2 position;
 
         std::string GetType() { return "MouseMove"; }
     };

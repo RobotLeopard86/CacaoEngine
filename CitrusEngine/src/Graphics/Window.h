@@ -10,7 +10,7 @@ namespace CitrusEngine {
     //Window singleton
     class Window {
     public:
-        virtual ~Window() {}
+        virtual ~Window() {};
 
         //Creates a window
         static void Create(std::string title, int initialSizeX, int initialSizeY);
@@ -38,15 +38,16 @@ namespace CitrusEngine {
         //Implementation of GetSize
         virtual glm::i32vec2 GetSize_Impl() = 0;
         //Implemntation of SetSize
-        virtual void SetSize_Impl(glm::i32vec2 newSize) = 0;
+        virtual void SetSize_Impl(glm::i32vec2 newSize) {}
         //Implementation of SetVSyncEnabled
-        virtual void SetVSyncEnabled_Impl(bool value) = 0;
+        virtual void SetVSyncEnabled_Impl(bool value) {}
         //Implementation of IsVSyncEnabled
         virtual bool IsVSyncEnabled_Impl() = 0;
 
         //Runs when window should shut down
         virtual void Shutdown() = 0;
 
+        //Creates window for the native platform
         static Window* CreateNativeWindow(std::string title, int initialSizeX, int initialSizeY);
     private:
         static Window* instance;

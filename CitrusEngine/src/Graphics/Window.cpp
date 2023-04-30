@@ -2,8 +2,6 @@
 
 #include "Core/Assert.h"
 #include "Events/EventSystem.h"
-#include "Core/Utilities.h"
-#include "Core/CitrusClient.h"
 
 namespace CitrusEngine {
     //Make window instance null pointer by default

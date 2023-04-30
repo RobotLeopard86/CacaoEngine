@@ -15,6 +15,19 @@ namespace CitrusEngine {
         //Runs the client
         void Run();
 
+        //Runs on startup, before Run is called
+        virtual void ClientOnStartup() = 0;
+        //Runs on shutdown, before engine terminates
+        virtual void ClientOnShutdown() = 0;
+        //Runs every dynamic tick update
+        virtual void ClientOnDynamicTick(double timestep) = 0;
+        //Runs every fixed tick update
+        virtual void ClientOnFixedTick() = 0;
+
+        //Handlers for client tick events
+        void DynamicTickHandler(Event& e);
+        void FixedTickHandler(Event& e);
+
         //Gets client package ID
         std::string GetPackageID() { return id; }
 
@@ -30,6 +43,10 @@ namespace CitrusEngine {
 
         //Consumes WindowCloseEvents
         EventConsumer* wceConsumer;
+        
+        //Consumers for registering client for tick events
+        EventConsumer* clientFixedTickConsumer;
+        EventConsumer* clientDynamicTickConsumer;
 
         //Runs when client should close
         void Shutdown(Event& e);

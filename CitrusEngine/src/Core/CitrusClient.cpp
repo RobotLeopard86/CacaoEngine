@@ -1,8 +1,8 @@
 #include "CitrusClient.h"
 #include "Assert.h"
-#include "IO/Window.h"
+#include "Graphics/Window.h"
 #include "Log.h"
-#include "Utilities.h"
+#include "Utilities/Utilities.h"
 
 namespace CitrusEngine {
 
@@ -22,10 +22,18 @@ namespace CitrusEngine {
 
         //Set up event consumers
         wceConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::Shutdown));
+        clientFixedTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::FixedTickHandler));
+        clientDynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::DynamicTickHandler));
 
-        //Set up event manager
+        //Set up event manager and subscribe consumers
         eventManager = new EventManager();
         eventManager->SubscribeConsumer("WindowClose", wceConsumer);
+        eventManager->SubscribeConsumer("ClientFixedTick", clientDynamicTickConsumer);
+        eventManager->SubscribeConsumer("ClientDynamicTick", clientDynamicTickConsumer);
+
+        //Initialize input and utilities
+        Input::Create();
+        Utilities::Create();
     }
 
     //Base client does not need a destructor
@@ -35,7 +43,18 @@ namespace CitrusEngine {
         //Create window
         Window::Create(id, 1280, 720);
 
+        //Allow client to set up
+        this->ClientOnStartup();
+
+        double elapsed = 0;
+
         while(run){
+            double oldElapsed = elapsed; 
+            elapsed = Utilities::GetElapsedTime();
+
+            ClientDynamicTickEvent tickEvent{elapsed - oldElapsed};
+            eventManager->Dispatch(tickEvent);
+
             Window::Update();
         }
 
@@ -50,7 +69,21 @@ namespace CitrusEngine {
     }
 
     void CitrusClient::Shutdown(Event& e){
+        //Allow client to shut down
+        this->ClientOnShutdown();
+
         e.handled = true;
         run = false;
-    } 
+    }
+
+    void CitrusClient::FixedTickHandler(Event& e){
+        ClientOnFixedTick();
+        e.handled = true;
+    }
+
+    void CitrusClient::DynamicTickHandler(Event& e){
+        ClientDynamicTickEvent cdte = Event::EventTypeCast<ClientDynamicTickEvent>(e);
+        ClientOnDynamicTick(cdte.timestep);
+        e.handled = true;
+    }
 }

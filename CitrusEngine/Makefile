@@ -6,6 +6,23 @@ ifndef verbose
 	SILENT = @
 endif
 
+BACKENDS := OpenGL
+
+api :=
+correctedapi = 0
+
+ifndef renderapi
+	api = OpenGL
+endif
+
+# Is the rendering API OpenGL?
+ifeq ($(renderapi),OpenGL)
+    api = OpenGL
+else
+	correctedapi = 1
+    api = OpenGL
+endif
+
 .PHONY: clean prebuild
 
 SHELLTYPE := posix
@@ -36,7 +53,7 @@ OBJDIR = ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData
 DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_DEBUG -DCE_ENABLEASSERTS -DGLFW_INCLUDE_NONE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu++20
-LIBS +=-lGLFW -lGlad -lImGui -lGL -lX11 -lXrandr -lXi -lboost_test_exec_monitor -lboost_unit_test_framework
+LIBS +=-lGLFW -lGlad -lImGui -lGL -lX11 -lXrandr -lXi -lboost_test_exec_monitor -lboost_unit_test_framework -lboost_prg_exec_monitor
 LDDEPS += ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a 
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -L../Build/GLFW/Debug/x86_64-linux/Binaries -L../Build/Glad/Debug/x86_64-linux/Binaries -L../Build/ImGui/Debug/x86_64-linux/Binaries -L../libs/boost/lib -static
 
@@ -74,12 +91,29 @@ GENERATED += $(OBJDIR)/CitrusClient.o
 OBJECTS += $(OBJDIR)/CitrusClient.o
 GENERATED += $(OBJDIR)/Window.o
 OBJECTS += $(OBJDIR)/Window.o
+GENERATED += $(OBJDIR)/Input.o
+OBJECTS += $(OBJDIR)/Input.o
 GENERATED += $(OBJDIR)/EventManager.o
 OBJECTS += $(OBJDIR)/EventManager.o
-GENERATED += $(OBJDIR)/LinuxWindow.o
-OBJECTS += $(OBJDIR)/LinuxWindow.o
+GENERATED += $(OBJDIR)/Renderer.o
+OBJECTS += $(OBJDIR)/Renderer.o
+GENERATED += $(OBJDIR)/Utilities.o
+OBJECTS += $(OBJDIR)/Utilities.o
+GENERATED += $(OBJDIR)/NativeShader.o
+OBJECTS += $(OBJDIR)/NativeShader.o
+GENERATED += $(OBJDIR)/NativeRenderer.o
+OBJECTS += $(OBJDIR)/NativeRenderer.o
+GENERATED += $(OBJDIR)/NativeWindow.o
+OBJECTS += $(OBJDIR)/NativeWindow.o
+GENERATED += $(OBJDIR)/NativeUtilities.o
+OBJECTS += $(OBJDIR)/NativeUtilities.o
+GENERATED += $(OBJDIR)/NativeInput.o
+OBJECTS += $(OBJDIR)/NativeInput.o
 
 TESTOBJECTS :=
+TESTGENERATED :=
+
+TESTGENERATED += $(OBJDIR)/tests/TestEntrypoint.o
 TESTOBJECTS += $(OBJDIR)/tests/TestEntrypoint.o
 
 
@@ -141,8 +175,12 @@ clean:
 	@echo Cleaning CitrusEngine
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
+	$(SILENT) rm -f  $(TEST-TARGET)
 	$(SILENT) rm -rf $(GENERATED)
+	$(SILENT) rm -rf $(TESTGENERATED)
 	$(SILENT) rm -rf $(OBJDIR)
+	$(SILENT) rm -rf $(OBJDIR)/tests
+	$(SILENT) rm -rf $(TARGETDIR)/tests
 else
 	$(SILENT) if exist $(subst /,\\,$(TARGET)) del $(subst /,\\,$(TARGET))
 	$(SILENT) if exist $(subst /,\\,$(GENERATED)) del /s /q $(subst /,\\,$(GENERATED))
@@ -200,11 +238,39 @@ $(OBJDIR)/EventManager.o: src/Events/EventManager.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
-$(OBJDIR)/Window.o: src/IO/Window.cpp
+$(OBJDIR)/Window.o: src/Graphics/Window.cpp
 	@echo "Building C++ file $(notdir $<)..."
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"\
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
-$(OBJDIR)/LinuxWindow.o: src/LinuxOnly/LinuxWindow.cpp
+$(OBJDIR)/Renderer.o: src/Graphics/Renderer.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/Input.o: src/Utilities/Input.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/Utilities.o: src/Utilities/Utilities.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeShader.o: src/$(api)/$(api)Shader.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeRenderer.o: src/$(api)/$(api)Renderer.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeWindow.o: src/Linux/LinuxWindow.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeInput.o: src/Linux/LinuxInput.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeUtilities.o: src/Linux/LinuxUtilities.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

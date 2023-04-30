@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IO/Window.h"
+#include "Graphics/Window.h"
 
 #include "GLFW/glfw3.h"
 
@@ -17,7 +17,6 @@ namespace CitrusEngine {
         void SetSize_Impl(glm::i32vec2 newSize) override;
         void SetVSyncEnabled_Impl(bool value) override;
         bool IsVSyncEnabled_Impl() override;
-
         void Shutdown() override;
     private:
         bool useVSync;
