@@ -1,9 +1,11 @@
 #include "OpenGLShader.h"
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 
 #include "Core/Log.h"
 #include "Core/Assert.h"
+
+#include "glm/gtc/type_ptr.hpp"
 
 namespace CitrusEngine {
 
@@ -140,4 +142,103 @@ namespace CitrusEngine {
 
         bound = false;
     }
+
+    void OpenGLShader::UploadUniformMat4(std::string uniform, glm::mat4 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
+	}
+
+	void OpenGLShader::UploadUniformMat3(std::string uniform, glm::mat3 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(value));
+	}
+
+    void OpenGLShader::UploadUniformBoolean(std::string uniform, bool value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if (uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform1i(uniformLocation, value);
+	}
+
+    void OpenGLShader::UploadUniformFloat(std::string uniform, float value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform1f(uniformLocation, value);
+	}
+
+	void OpenGLShader::UploadUniformFloat2(std::string uniform, glm::vec2 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform2f(uniformLocation, value.x, value.y);
+	}
+
+	void OpenGLShader::UploadUniformFloat3(std::string uniform, glm::vec3 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform3f(uniformLocation, value.x, value.y, value.z);
+	}
+
+	void OpenGLShader::UploadUniformFloat4(std::string uniform, glm::vec4 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform4f(uniformLocation, value.x, value.y, value.z, value.w);
+	}
+
+    void OpenGLShader::UploadUniformInt(std::string uniform, int value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform1i(uniformLocation, value);
+	}
+
+	void OpenGLShader::UploadUniformInt2(std::string uniform, glm::i32vec2 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform2i(uniformLocation, value.x, value.y);
+	}
+
+	void OpenGLShader::UploadUniformInt3(std::string uniform, glm::i32vec3 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform3i(uniformLocation, value.x, value.y, value.z);
+	}
+
+	void OpenGLShader::UploadUniformInt4(std::string uniform, glm::i32vec4 value) {
+		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+		if(uniformLocation == -1) {
+			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
+			return;
+		}
+		glUniform4i(uniformLocation, value.x, value.y, value.z, value.w);
+	}
 }

@@ -20,14 +20,15 @@ namespace CitrusEngine {
 
     void OpenGLMesh::Compile() {
         if(compiled){
-            Logging::EngineLog(LogLevel::Warn, "Recompiling already compiled mesh...");
+            Logging::EngineLog(LogLevel::Error, "Cannot compile already compiled mesh!");
+            return;
         }
 
         //Unpack mesh data into OpenGL-compatible format
 
         //Get size of vertex data
         int numVertices = vertices.size();
-        float* vertexBufferData = new float[numVertices * 3];
+        float vertexBufferData[numVertices * 3];
         //Populate vertex buffer
         for(int i = 0; i < numVertices; i++){
             glm::vec3 vertex = vertices.at(i);
@@ -38,7 +39,7 @@ namespace CitrusEngine {
 
         //Get size of index data
         int numIndices = indices.size();
-        unsigned int* indexBufferData = new unsigned int[numIndices * 3];
+        unsigned int indexBufferData[numIndices * 3];
         //Populate index buffer
         for(int i = 0; i < numIndices; i++){
             glm::u32vec3 index = indices.at(i);
@@ -70,10 +71,6 @@ namespace CitrusEngine {
 
         //Release vertex array from OpenGL once it is saved
         glBindVertexArray(0);
-
-        //Free data arrays
-        delete[] vertexBufferData;
-        delete[] indexBufferData;
 
         compiled = true;
     }

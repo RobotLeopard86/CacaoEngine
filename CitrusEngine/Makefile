@@ -102,6 +102,10 @@ GENERATED += $(OBJDIR)/Renderer.o
 OBJECTS += $(OBJDIR)/Renderer.o
 GENERATED += $(OBJDIR)/Utilities.o
 OBJECTS += $(OBJDIR)/Utilities.o
+GENERATED += $(OBJDIR)/PerspectiveCamera.o
+OBJECTS += $(OBJDIR)/PerspectiveCamera.o
+GENERATED += $(OBJDIR)/OrthographicCamera.o
+OBJECTS += $(OBJDIR)/OrthographicCamera.o
 GENERATED += $(OBJDIR)/NativeWindow.o
 OBJECTS += $(OBJDIR)/NativeWindow.o
 GENERATED += $(OBJDIR)/NativeUtilities.o
@@ -256,6 +260,14 @@ $(OBJDIR)/Input.o: src/Utilities/Input.cpp
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/Utilities.o: src/Utilities/Utilities.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/PerspectiveCamera.o: src/Graphics/Cameras/PerspectiveCamera.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/OrthographicCamera.o: src/Graphics/Cameras/OrthographicCamera.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

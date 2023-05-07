@@ -68,4 +68,12 @@ namespace CitrusEngine {
         //Invoke native implementation
         instance->ResizeViewport_Impl(width, height);
     }
+
+    void Renderer::SetCamera(Camera* cam){
+        //Make sure we have an active renderer
+        Asserts::EngineAssert(instance != nullptr, "Cannot set camera for uninitialized or shutdown renderer!");
+
+        //Invoke native implementation
+        instance->SetCamera_Impl(cam);
+    }
 }

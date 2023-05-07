@@ -16,7 +16,9 @@ namespace CitrusEngine {
         void RenderGeometry_Impl(Mesh* mesh, Transform* transform, Shader* shader) override;
         void ResizeViewport_Impl(int width, int height) override;
         void InitBackend_Impl() override;
+        void SetCamera_Impl(Camera* cam) override;
     private:
         glm::vec4 clearColor;
+        Camera* activeCam;
     };
 }

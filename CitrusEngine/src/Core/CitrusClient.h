@@ -35,6 +35,7 @@ namespace CitrusEngine {
         static EventManager* GetEventManager() { return eventManager; }
     protected:
         std::string id;
+        glm::u16vec2 windowSize;
     private:
         static CitrusClient* instance;
         static EventManager* eventManager;

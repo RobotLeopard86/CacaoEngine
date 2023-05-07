@@ -44,7 +44,7 @@ namespace CitrusEngine {
 
     void CitrusClient::Run(){
         //Create window
-        Window::Create(id, 1280, 720);
+        Window::Create(id, windowSize.x, windowSize.y);
 
         //Allow client to set up
         ClientOnStartup();

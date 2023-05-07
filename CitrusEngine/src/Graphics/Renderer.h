@@ -4,6 +4,8 @@
 #include "Transform.h"
 #include "Shader.h"
 
+#include "Cameras/Camera.h"
+
 #include "glm/vec3.hpp"
 
 namespace CitrusEngine {
@@ -27,6 +29,8 @@ namespace CitrusEngine {
         static void ResizeViewport(int width, int height);
         //Initialize rendering backend
         static void InitBackend();
+        //Set the camera to use for rendering
+        static void SetCamera(Camera* cam);
     protected:
         //Implementation of SetClearColor
         virtual void SetClearColor_Impl(glm::u8vec3 color) = 0;
@@ -38,6 +42,8 @@ namespace CitrusEngine {
         virtual void ResizeViewport_Impl(int width, int height) = 0;
         //Implementation of InitBackend
         virtual void InitBackend_Impl() = 0;
+        //Implementation of SetCamera
+        virtual void SetCamera_Impl(Camera* cam) = 0;
 
         //Creates renderer for the native platform
         static Renderer* CreateNativeRenderer();
