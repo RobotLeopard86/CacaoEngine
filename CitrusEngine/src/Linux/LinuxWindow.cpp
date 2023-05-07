@@ -31,13 +31,13 @@ namespace CitrusEngine {
         glfwMakeContextCurrent(window);
 
         //Initialize backend
-        Renderer::InitBackend();
+        Renderer::GetInstance()->InitBackend();
 
         //Enable VSync
         SetVSyncEnabled_Impl(true);
 
         //Set viewport size
-        Renderer::ResizeViewport(initialSizeX, initialSizeY);
+        Renderer::GetInstance()->ResizeViewport(initialSizeX, initialSizeY);
     
         //Register GLFW callbacks
         

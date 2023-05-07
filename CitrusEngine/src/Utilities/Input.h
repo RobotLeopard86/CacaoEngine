@@ -3,38 +3,29 @@
 #include "glm/vec2.hpp"
 
 namespace CitrusEngine {
-
     //Input singleton
     class Input {
     public:
         virtual ~Input() {}
 
-        //Initializes the input instance
-        static void Create();
-
-        //Shuts down the input instance
-        static void Shutdown();
-
         //Returns a two-component vector of doubles representing the current cursor position
-        static glm::dvec2 GetCursorPos();
-
+        virtual glm::dvec2 GetCursorPos() = 0;
         //Returns a boolean representing whether the given key is pressed
-        static bool IsKeyPressed(int key);
-
+        virtual bool IsKeyPressed(int key) = 0;
         //Returns a boolean representing whether the given mouse button is pressed
-        static bool IsMouseButtonPressed(int button);
-    protected:
-        //Implementation of GetCursorPos
-        virtual glm::dvec2 GetCursorPos_Impl() = 0;
-        //Implementation of IsKeyPressed
-        virtual bool IsKeyPressed_Impl(int key) = 0;
-        //Implementation of IsMouseButtonPressed
-        virtual bool IsMouseButtonPressed_Impl(int button) = 0;
+        virtual bool IsMouseButtonPressed(int button) = 0;
 
+        //Get the current instance or create one if it doesn't exist
+        static Input* GetInstance();
+    protected:
         //Creates Input instance for the native platform
         static Input* CreateNativeInput();
+
+        //Protected constructor so only subclasses can call it
+        Input() {}
     private:
         static Input* instance;
+        static bool instanceExists;
     };
 }
 

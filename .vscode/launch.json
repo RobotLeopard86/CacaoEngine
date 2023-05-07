@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Citrus Engine",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Build/CitrusPlayground/Debug/x86_64-linux/Binaries/CitrusPlayground",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": ".",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

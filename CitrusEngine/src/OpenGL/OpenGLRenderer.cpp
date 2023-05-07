@@ -16,20 +16,20 @@ namespace CitrusEngine {
         activeCam = nullptr;
     }
 
-    void OpenGLRenderer::SetClearColor_Impl(glm::u8vec3 color) {
+    void OpenGLRenderer::SetClearColor(glm::u8vec3 color) {
         clearColor = glm::vec4((float(color.r) / 256), (float(color.g) / 256), (float(color.b) / 256), 1.0);
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     }
 
-    void OpenGLRenderer::Clear_Impl(){
+    void OpenGLRenderer::Clear(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRenderer::ResizeViewport_Impl(int width, int height){
+    void OpenGLRenderer::ResizeViewport(int width, int height){
         glViewport(0, 0, width, height);
     }
 
-    void OpenGLRenderer::InitBackend_Impl(){
+    void OpenGLRenderer::InitBackend(){
         //Initialize Glad (OpenGL loader)
         bool gladSuccessfulInit = gladLoaderLoadGL();
 
@@ -45,7 +45,7 @@ namespace CitrusEngine {
         Logging::EngineLog(LogLevel::Trace, msg);
     }
 
-    void OpenGLRenderer::RenderGeometry_Impl(Mesh* mesh, Transform* transform, Shader* shader) {
+    void OpenGLRenderer::RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) {
         Asserts::EngineAssert(activeCam != nullptr, "Cannot render without an active camera!");
 
         //Bind mesh and shader
@@ -69,7 +69,7 @@ namespace CitrusEngine {
         shader->Unbind();
     }
 
-    void OpenGLRenderer::SetCamera_Impl(Camera* cam){
+    void OpenGLRenderer::SetCamera(Camera* cam){
         activeCam = cam;
     }
 

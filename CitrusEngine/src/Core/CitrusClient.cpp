@@ -32,11 +32,6 @@ namespace CitrusEngine {
         eventManager->SubscribeConsumer("WindowClose", wceConsumer);
         eventManager->SubscribeConsumer("ClientFixedTick", dynamicTickConsumer);
         eventManager->SubscribeConsumer("DynamicTick", dynamicTickConsumer);
-
-        //Initialize input, utilities, and renderer
-        Input::Create();
-        Utilities::Create();
-        Renderer::Create();
     }
 
     //Base client does not need a destructor
@@ -54,7 +49,7 @@ namespace CitrusEngine {
         while(run){
             //Calculate timestep since last update
             double oldElapsed = elapsed; 
-            elapsed = Utilities::GetElapsedTime();
+            elapsed = Utilities::GetInstance()->GetElapsedTime();
 
             //Dispatch tick event
             DynamicTickEvent tickEvent{elapsed - oldElapsed};

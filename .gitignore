@@ -4,8 +4,8 @@ Build
 # Don't send auto-created logs
 citrus-engine.log
 
-# Don't send VS Code auto-generated stuff
-.vscode
+# Don't send VS Code auto-generated settings files
+.vscode/settings.json
 
 # Don't send boost files
 libs/boost

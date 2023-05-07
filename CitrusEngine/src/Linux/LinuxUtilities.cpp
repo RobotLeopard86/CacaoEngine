@@ -8,7 +8,7 @@ namespace CitrusEngine {
         return new LinuxUtilities();
     }
 
-    double LinuxUtilities::GetElapsedTime_Impl() {
+    double LinuxUtilities::GetElapsedTime() {
         return (glfwGetTime() / 1000);
     }
 }

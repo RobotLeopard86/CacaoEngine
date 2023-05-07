@@ -12,9 +12,9 @@ namespace CitrusEngine {
     public:
         LinuxInput();
 
-        glm::dvec2 GetCursorPos_Impl() override;
-        bool IsKeyPressed_Impl(int key) override;
-        bool IsMouseButtonPressed_Impl(int button) override;
+        glm::dvec2 GetCursorPos() override;
+        bool IsKeyPressed(int key) override;
+        bool IsMouseButtonPressed(int button) override;
 
         void CursorPosChangeHandler(Event& e);
         void KeyUpHandler(Event& e);

@@ -8,8 +8,8 @@ namespace CitrusEngine {
 	and aspect ratio, and a near clipping plane (where objects stop rendering when too close to the camera)
 	that is extremely close so that the camera can get super close to things before they disappear.
 	*/
-	PerspectiveCamera::PerspectiveCamera(float fov, glm::u16vec2 aspectRatio) 
-		: projectionMatrix(glm::infinitePerspective(fov, (float(aspectRatio.x) / float(aspectRatio.y)), 0.001f)), viewMatrix(1.0f),
+	PerspectiveCamera::PerspectiveCamera(float fov, float aspectRatio) 
+		: projectionMatrix(glm::infinitePerspective(fov, aspectRatio, 0.001f)), viewMatrix(1.0f),
 		position(0.0f), rotation(0.0f), viewProjectionMatrix(0.0f), lookTarget(0.0f) {}
 
 	void PerspectiveCamera::RecalculateViewMatrix() {

@@ -9,45 +9,34 @@
 #include "glm/vec3.hpp"
 
 namespace CitrusEngine {
-    
+    //Renderer singleton
     class Renderer {
     public:
-        virtual ~Renderer() {};
-
-        //Creates a renderer
-        static void Create();
-        //Shuts down a renderer
-        static void Shutdown();
+        virtual ~Renderer() {}
 
         //Sets clear color (takes 8-bit unsigned integer vector (0-255 for red, green, and blue))
-        static void SetClearColor(glm::u8vec3 color);
+        virtual void SetClearColor(glm::u8vec3 color) = 0;
         //Clears color and depth buffers
-        static void Clear();
+        virtual void Clear() = 0;
         //Renders some geometry
-        static void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader);
+        virtual void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) = 0;
         //Set viewport width and height
-        static void ResizeViewport(int width, int height);
+        virtual void ResizeViewport(int width, int height) = 0;
         //Initialize rendering backend
-        static void InitBackend();
+        virtual void InitBackend() = 0;
         //Set the camera to use for rendering
-        static void SetCamera(Camera* cam);
-    protected:
-        //Implementation of SetClearColor
-        virtual void SetClearColor_Impl(glm::u8vec3 color) = 0;
-        //Implementation of Clear
-        virtual void Clear_Impl() = 0;
-        //Implementation of RenderGeometry
-        virtual void RenderGeometry_Impl(Mesh* mesh, Transform* transform, Shader* shader) = 0;
-        //Implementation of ResizeViewport
-        virtual void ResizeViewport_Impl(int width, int height) = 0;
-        //Implementation of InitBackend
-        virtual void InitBackend_Impl() = 0;
-        //Implementation of SetCamera
-        virtual void SetCamera_Impl(Camera* cam) = 0;
+        virtual void SetCamera(Camera* cam) = 0;
 
-        //Creates renderer for the native platform
+        //Get the current instance or create one if it doesn't exist
+        static Renderer* GetInstance();
+    protected:
+        //Creates renderer for the native platform (implemented by subclasses)
         static Renderer* CreateNativeRenderer();
+
+        //Protected constructor so only subclasses can call it
+        Renderer() {}
     private:
         static Renderer* instance;
+        static bool instanceExists;
     };
 }

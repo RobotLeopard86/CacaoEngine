@@ -26,21 +26,21 @@ namespace CitrusEngine {
         cursorPos = glm::dvec2(0.0);
     }
 
-    bool LinuxInput::IsKeyPressed_Impl(int key){
+    bool LinuxInput::IsKeyPressed(int key){
         if(keyStateMap.find(key) != keyStateMap.end()){
             return keyStateMap.at(key);
         }
         return false;
     }
 
-    bool LinuxInput::IsMouseButtonPressed_Impl(int button){
+    bool LinuxInput::IsMouseButtonPressed(int button){
         if(mouseButtonStateMap.find(button) != mouseButtonStateMap.end()){
             return mouseButtonStateMap.at(button);
         }
         return false;
     }
 
-    glm::dvec2 LinuxInput::GetCursorPos_Impl(){
+    glm::dvec2 LinuxInput::GetCursorPos(){
         return cursorPos;
     }
 

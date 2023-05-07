@@ -9,6 +9,6 @@ namespace CitrusEngine {
     public:
         LinuxUtilities() {}
 
-        double GetElapsedTime_Impl() override;
+        double GetElapsedTime() override;
     };
 }

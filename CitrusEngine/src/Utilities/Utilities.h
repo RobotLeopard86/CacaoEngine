@@ -6,27 +6,24 @@
 #define BIND_MEMBER_FUNC(f) std::bind(&f, this, std::placeholders::_1)
 
 namespace CitrusEngine {
-    
     //Utilties singleton
     class Utilities {
     public:
         virtual ~Utilities() {}
 
-        //Creates the utilities instance
-        static void Create();
-
-        //Shuts down the utilities instance
-        static void Shutdown();
-
         //Gets the amount of elapsed time since application startup in milliseconds
-        static double GetElapsedTime();
-    protected:
-        //Implementation of GetElapsedTime
-        virtual double GetElapsedTime_Impl() = 0;
+        virtual double GetElapsedTime() = 0;
 
-        //Creates native utilities instance
+        //Get the current instance or create one if it doesn't exist
+        static Utilities* GetInstance();
+    protected:
+        //Creates renderer for the native platform (implemented by subclasses)
         static Utilities* CreateNativeUtilities();
+
+        //Protected constructor so only subclasses can call it
+        Utilities() {}
     private:
         static Utilities* instance;
+        static bool instanceExists;
     };
 }

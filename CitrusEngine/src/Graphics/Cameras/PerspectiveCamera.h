@@ -8,7 +8,7 @@ namespace CitrusEngine {
 	//Implement a perspective camera (method explanations found in Camera.h)
 	class PerspectiveCamera : public Camera {
 	public:
-		PerspectiveCamera(float fov, glm::u16vec2 aspectRatio);
+		PerspectiveCamera(float fov, float aspectRatio);
 
 		glm::vec3 GetPosition() override { return position; }
 		void SetPosition(glm::vec3 pos) override { position = pos; position.y *= -1; RecalculateViewMatrix(); }
