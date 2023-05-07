@@ -29,7 +29,7 @@ namespace CitrusEngine {
         Logging::EngineLog(LogLevel::Info, "Renderer shut down!");
     }
 
-    void Renderer::SetClearColor(glm::i8vec3 color){
+    void Renderer::SetClearColor(glm::u8vec3 color){
         //Make sure we have an active renderer
         Asserts::EngineAssert(instance != nullptr, "Cannot set clear color of uninitialized or shutdown renderer!");
 
@@ -45,11 +45,27 @@ namespace CitrusEngine {
         instance->Clear_Impl();
     }
 
-    void Renderer::RenderGeometry(Mesh mesh, Transform transform, Shader shader){
+    void Renderer::InitBackend(){
+        //Make sure we have an active renderer
+        Asserts::EngineAssert(instance != nullptr, "Cannot initialize backend for uninitialized or shutdown renderer!");
+
+        //Invoke native implementation
+        instance->InitBackend_Impl();
+    }
+
+    void Renderer::RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader){
         //Make sure we have an active renderer
         Asserts::EngineAssert(instance != nullptr, "Cannot render geometry using uninitialized or shutdown renderer!");
 
         //Invoke native implementation
         instance->RenderGeometry_Impl(mesh, transform, shader);
+    }
+
+    void Renderer::ResizeViewport(int width, int height){
+        //Make sure we have an active renderer
+        Asserts::EngineAssert(instance != nullptr, "Cannot set viewport size using uninitialized or shutdown renderer!");
+
+        //Invoke native implementation
+        instance->ResizeViewport_Impl(width, height);
     }
 }

@@ -2,6 +2,14 @@ ifndef config
   config=debug
 endif
 
+ifndef CC
+	CC="zig cc"
+endif
+
+ifndef CXX
+	CXX="zig C++"
+endif
+
 ifeq ($(config),debug)
   GLFW_config = debug
   ImGui_config = debug
@@ -48,7 +56,7 @@ endif
 Glad:
 ifneq (,$(Glad_config))
 	@echo "Building Glad - $(Glad_config)..."
-	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C libs/glad -f Makefile config=$(Glad_config)
+	@${MAKE} CXX="zig c++" CC="zig cc" renderapi=$(renderapi) --no-print-directory -C libs/glad -f Makefile config=$(Glad_config)
 	@echo "Done building Glad - $(Glad_config)."
 endif
 
@@ -102,13 +110,16 @@ build-run:
 test: CitrusEngine
 	@echo "Building and running tests..."
 	@${MAKE} CXX="zig c++" CC="zig cc" --no-print-directory -C CitrusEngine -f Makefile config=$(CitrusEngine_config) test
-	@echo "Done testing"
+	@echo "Done testing."
 
-full-build: clean deps CitrusEngine
-	@${MAKE} --no-print-directory test && ([ $$? -eq 0 ] && ${MAKE} --no-print-directory CitrusPlayground)
+clean-build: clean deps CitrusEngine CitrusPlayground
+	@:
+
+full-build: clean-build
+	@${MAKE} --no-print-directory test && ([ $$? -eq 0 ] && ${MAKE} --no-print-directory -C CitrusPlayground -f Makefile config=$(CitrusPlayground_config))
 
 help:
-	@echo "Command usage: make [config=name] [renderapi=api] [command]"
+	@echo "Command usage: make [config=name] [renderapi=api] [CC=alternate C compiler] [CXX=alternate C++ compiler] [command]"
 	@echo ""
 	@echo "Available configurations:"
 	@echo "  debug"

@@ -19,7 +19,7 @@ namespace CitrusEngine {
         //Standard output color sink
         sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 
-        //Get working directory
+        //Get logfile path
         std::string logfilepath = std::filesystem::current_path().string() + "/citrus-engine.log";
 
         //File output sink

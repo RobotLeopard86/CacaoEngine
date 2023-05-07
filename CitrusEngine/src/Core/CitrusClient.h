@@ -46,7 +46,7 @@ namespace CitrusEngine {
         
         //Consumers for registering client for tick events
         EventConsumer* clientFixedTickConsumer;
-        EventConsumer* clientDynamicTickConsumer;
+        EventConsumer* dynamicTickConsumer;
 
         //Runs when client should close
         void Shutdown(Event& e);

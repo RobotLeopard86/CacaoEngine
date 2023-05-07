@@ -9,18 +9,20 @@ endif
 BACKENDS := OpenGL
 
 api :=
-correctedapi = 0
+apidef :=
 
 ifndef renderapi
 	api = OpenGL
+	apidef = CE_GLAD_BUILD_GL
 endif
 
 # Is the rendering API OpenGL?
 ifeq ($(renderapi),OpenGL)
     api = OpenGL
+	apidef = CE_GLAD_BUILD_GL
 else
-	correctedapi = 1
     api = OpenGL
+	apidef = CE_GLAD_BUILD_GL
 endif
 
 .PHONY: clean prebuild
@@ -50,10 +52,11 @@ TARGETDIR = ../Build/CitrusEngine/Debug/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libCitrusEngine.a
 TEST-TARGET = $(TARGETDIR)/tests/CitrusEngineTests
 OBJDIR = ../Build/CitrusEngine/Debug/x86_64-linux/CompilerData
-DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_DEBUG -DCE_ENABLEASSERTS -DGLFW_INCLUDE_NONE
+DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_DEBUG -DCE_ENABLEASSERTS -DGLFW_INCLUDE_NONE -D$(apidef)
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=gnu++20
-LIBS +=-lGLFW -lGlad -lImGui -lGL -lX11 -lXrandr -lXi -lboost_test_exec_monitor -lboost_unit_test_framework -lboost_prg_exec_monitor
+LIBS +=-lGLFW -lGlad -lImGui -lGL
+TESTLIBS := -lboost_test_exec_monitor -lboost_unit_test_framework -lboost_prg_exec_monitor
 LDDEPS += ../Build/GLFW/Debug/x86_64-linux/Binaries/libGLFW.a ../Build/Glad/Debug/x86_64-linux/Binaries/libGlad.a ../Build/ImGui/Debug/x86_64-linux/Binaries/libImGui.a 
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -L../Build/GLFW/Debug/x86_64-linux/Binaries -L../Build/Glad/Debug/x86_64-linux/Binaries -L../Build/ImGui/Debug/x86_64-linux/Binaries -L../libs/boost/lib -static
 
@@ -62,7 +65,7 @@ TARGETDIR = ../Build/CitrusEngine/Release/x86_64-linux/Binaries
 TARGET = $(TARGETDIR)/libCitrusEngine.a
 TEST-TARGET = $(TARGETDIR)/tests/CitrusEngineTests
 OBJDIR = ../Build/CitrusEngine/Release/x86_64-linux/CompilerData
-DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_RELEASE -DGLFW_INCLUDE_NONE
+DEFINES += -DCE_PLATFORM_LINUX -DCE_ENV_RELEASE -DGLFW_INCLUDE_NONE -D$(apidef)
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=gnu17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=gnu++20
 LIBS +=-lGLFW -lGlad -lImGui -lGL -lX11 -lXrandr -lXi
@@ -99,16 +102,18 @@ GENERATED += $(OBJDIR)/Renderer.o
 OBJECTS += $(OBJDIR)/Renderer.o
 GENERATED += $(OBJDIR)/Utilities.o
 OBJECTS += $(OBJDIR)/Utilities.o
-GENERATED += $(OBJDIR)/NativeShader.o
-OBJECTS += $(OBJDIR)/NativeShader.o
-GENERATED += $(OBJDIR)/NativeRenderer.o
-OBJECTS += $(OBJDIR)/NativeRenderer.o
 GENERATED += $(OBJDIR)/NativeWindow.o
 OBJECTS += $(OBJDIR)/NativeWindow.o
 GENERATED += $(OBJDIR)/NativeUtilities.o
 OBJECTS += $(OBJDIR)/NativeUtilities.o
 GENERATED += $(OBJDIR)/NativeInput.o
 OBJECTS += $(OBJDIR)/NativeInput.o
+GENERATED += $(OBJDIR)/NativeShader.o
+OBJECTS += $(OBJDIR)/NativeShader.o
+GENERATED += $(OBJDIR)/NativeRenderer.o
+OBJECTS += $(OBJDIR)/NativeRenderer.o
+GENERATED += $(OBJDIR)/NativeMesh.o
+OBJECTS += $(OBJDIR)/NativeMesh.o
 
 TESTOBJECTS :=
 TESTGENERATED :=
@@ -211,7 +216,7 @@ endif
 
 $(OBJDIR)/tests/TestEntrypoint.o: tests/TestingEntrypoint.cpp
 	@echo "Building C++ file $(notdir $<)..."
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) $(TESTLIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 
 
@@ -259,6 +264,10 @@ $(OBJDIR)/NativeShader.o: src/$(api)/$(api)Shader.cpp
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/NativeRenderer.o: src/$(api)/$(api)Renderer.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeMesh.o: src/$(api)/$(api)Mesh.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

@@ -53,14 +53,14 @@ namespace CitrusEngine {
 
     //Client events
     class ClientFixedTickEvent : public Event { public: std::string GetType() { return "ClientFixedTick"; } }; //No additional parameters
-    class ClientDynamicTickEvent : public Event { //Parameters: Delta time since last update
+    class DynamicTickEvent : public Event { //Parameters: Delta time since last update
     public:
-        ClientDynamicTickEvent(double timestep) : timestep(timestep) {}
-        ClientDynamicTickEvent() : timestep(0.0) {}
+        DynamicTickEvent(double timestep) : timestep(timestep) {}
+        DynamicTickEvent() : timestep(0.0) {}
 
         double timestep;
 
-        std::string GetType() { return "ClientDynamicTick"; }
+        std::string GetType() { return "DynamicTick"; }
     };
 
     //Key events

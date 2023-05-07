@@ -3,6 +3,8 @@
 #include "Graphics/Window.h"
 #include "Log.h"
 #include "Utilities/Utilities.h"
+#include "Graphics/Renderer.h"
+#include "Utilities/Input.h"
 
 namespace CitrusEngine {
 
@@ -23,17 +25,18 @@ namespace CitrusEngine {
         //Set up event consumers
         wceConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::Shutdown));
         clientFixedTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::FixedTickHandler));
-        clientDynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::DynamicTickHandler));
+        dynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::DynamicTickHandler));
 
         //Set up event manager and subscribe consumers
         eventManager = new EventManager();
         eventManager->SubscribeConsumer("WindowClose", wceConsumer);
-        eventManager->SubscribeConsumer("ClientFixedTick", clientDynamicTickConsumer);
-        eventManager->SubscribeConsumer("ClientDynamicTick", clientDynamicTickConsumer);
+        eventManager->SubscribeConsumer("ClientFixedTick", dynamicTickConsumer);
+        eventManager->SubscribeConsumer("DynamicTick", dynamicTickConsumer);
 
-        //Initialize input and utilities
+        //Initialize input, utilities, and renderer
         Input::Create();
         Utilities::Create();
+        Renderer::Create();
     }
 
     //Base client does not need a destructor
@@ -44,17 +47,20 @@ namespace CitrusEngine {
         Window::Create(id, 1280, 720);
 
         //Allow client to set up
-        this->ClientOnStartup();
+        ClientOnStartup();
 
         double elapsed = 0;
 
         while(run){
+            //Calculate timestep since last update
             double oldElapsed = elapsed; 
             elapsed = Utilities::GetElapsedTime();
 
-            ClientDynamicTickEvent tickEvent{elapsed - oldElapsed};
+            //Dispatch tick event
+            DynamicTickEvent tickEvent{elapsed - oldElapsed};
             eventManager->Dispatch(tickEvent);
 
+            //Update window
             Window::Update();
         }
 
@@ -70,7 +76,7 @@ namespace CitrusEngine {
 
     void CitrusClient::Shutdown(Event& e){
         //Allow client to shut down
-        this->ClientOnShutdown();
+        ClientOnShutdown();
 
         e.handled = true;
         run = false;
@@ -82,7 +88,7 @@ namespace CitrusEngine {
     }
 
     void CitrusClient::DynamicTickHandler(Event& e){
-        ClientDynamicTickEvent cdte = Event::EventTypeCast<ClientDynamicTickEvent>(e);
+        DynamicTickEvent cdte = Event::EventTypeCast<DynamicTickEvent>(e);
         ClientOnDynamicTick(cdte.timestep);
         e.handled = true;
     }

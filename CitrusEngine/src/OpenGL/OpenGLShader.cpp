@@ -7,7 +7,7 @@
 
 namespace CitrusEngine {
 
-    Shader* Shader::Create(std::string vertexSrc, std::string fragmentSrc){
+    Shader* Shader::CreateShader(std::string vertexSrc, std::string fragmentSrc){
         return new OpenGLShader(vertexSrc, fragmentSrc);
     }
 
@@ -20,7 +20,7 @@ namespace CitrusEngine {
 
     void OpenGLShader::Compile() {
         if(compiled){
-            Logging::EngineLog(LogLevel::Warn, "Recompiling already compiled shader!");
+            Logging::EngineLog(LogLevel::Warn, "Recompiling already compiled shader...");
         }
 
         //Create vertex shader base
@@ -43,7 +43,7 @@ namespace CitrusEngine {
             //Clean up resources
             glDeleteShader(compiledVertexShader);
             //Log error
-            Asserts::EngineAssert(false, std::string("Vertex shader compilation failure: ") + infoLog.data());
+            Logging::EngineLog(LogLevel::Error, std::string("Vertex shader compilation failure: ") + infoLog.data());
             return;
         }
 
@@ -68,7 +68,7 @@ namespace CitrusEngine {
             glDeleteShader(compiledVertexShader);
             glDeleteShader(compiledFragmentShader);
             //Log error
-            Asserts::EngineAssert(false, std::string("Fragment shader compilation failure: ") + infoLog.data());
+            Logging::EngineLog(LogLevel::Error, std::string("Fragment shader compilation failure: ") + infoLog.data());
             return;
         }
 
@@ -96,7 +96,7 @@ namespace CitrusEngine {
             glDeleteShader(compiledVertexShader);
             glDeleteShader(compiledFragmentShader);
             //Log error
-            Asserts::EngineAssert(false, std::string("Shader program linking failure: ") + infoLog.data());
+            Logging::EngineLog(LogLevel::Error, std::string("Shader program linking failure: ") + infoLog.data());
             return;
         }
 
@@ -107,16 +107,17 @@ namespace CitrusEngine {
         glDeleteShader(compiledFragmentShader);
 
         compiledForm = program;
-
         compiled = true;
     }
 
     void OpenGLShader::Bind(){
         if(!compiled){
-            Compile();
+            Logging::EngineLog(LogLevel::Error, "Cannot bind uncompiled shader!");
+            return;
         }
         if(bound){
             Logging::EngineLog(LogLevel::Error, "Cannot bind already bound shader!");
+            return;
         }
         glUseProgram(compiledForm);
         bound = true;
@@ -125,12 +126,18 @@ namespace CitrusEngine {
     void OpenGLShader::Unbind(){
         if(!compiled){
             Logging::EngineLog(LogLevel::Error, "Cannot unbind uncompiled shader!");
+            return;
         }
-        if(bound){
+        if(!bound){
             Logging::EngineLog(LogLevel::Error, "Cannot unbind unbound shader!");
+            return;
         }
+
+        //Preserve shader program so it doesn't need to be recompiled
+        uint32_t shaderProgram = compiledForm;
         glDeleteProgram(compiledForm);
+        compiledForm = shaderProgram;
+
         bound = false;
-        compiled = false;
     }
 }

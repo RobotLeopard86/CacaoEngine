@@ -1,6 +1,11 @@
 #include "OpenGLRenderer.h"
 
-#include "glad/glad.h"
+#include "Core/Log.h"
+#include "Core/Assert.h"
+
+#include "glad/gl.h"
+
+#include <string>
 
 namespace CitrusEngine {
 
@@ -8,8 +13,8 @@ namespace CitrusEngine {
         clearColor = glm::vec4(1.0);
     }
 
-    void OpenGLRenderer::SetClearColor_Impl(glm::i8vec3 color) {
-        clearColor = glm::vec4((color.r / 256), (color.g / 256), (color.b / 256), 1.0);
+    void OpenGLRenderer::SetClearColor_Impl(glm::u8vec3 color) {
+        clearColor = glm::vec4((float(color.r) / 256), (float(color.g) / 256), (float(color.b) / 256), 1.0);
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     }
 
@@ -17,66 +22,45 @@ namespace CitrusEngine {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRenderer::RenderGeometry_Impl(Mesh mesh, Transform transform, Shader shader) {
-        //Unpack mesh data into OpenGL-compatible format
+    void OpenGLRenderer::ResizeViewport_Impl(int width, int height){
+        glViewport(0, 0, width, height);
+    }
 
-        //Get mesh data
-        glm::vec3* vertices = mesh.vertices.data();
-        glm::i32vec3* indices = mesh.indices.data();
+    void OpenGLRenderer::InitBackend_Impl(){
+        //Initialize Glad (OpenGL loader)
+        bool gladSuccessfulInit = gladLoaderLoadGL();
 
-        //Get sizes of data
-        int vertexSize = sizeof(vertices);
-        int numVertices = vertexSize / sizeof(glm::vec3);
-        float* vertexBufferData = new float[numVertices * 3];
-        //Populate buffer data
-        for(int i = 0; i < numVertices; i++){
-            vertexBufferData[i] = vertices[i].x;
-            vertexBufferData[i + 1] = vertices[i].y;
-            vertexBufferData[i + 2] = vertices[i].z;
-        }
-        //Get sizes of data
-        int indexSize = sizeof(indices);
-        int numIndices = indexSize / sizeof(glm::vec3);
-        int* indexBufferData = new int[numIndices * 3];
-        //Populate buffer data
-        for(int i = 0; i < numIndices; i++){
-            indexBufferData[i] = indices[i].x;
-            indexBufferData[i + 1] = indices[i].y;
-            indexBufferData[i + 2] = indices[i].z;
-        }
+        //Ensure Glad initialized correctly
+        Asserts::EngineAssert(gladSuccessfulInit, "Failed to initialize Glad!");
 
-        //Create OpenGL buffers
-        uint32_t vertexArray;
-        glCreateVertexArrays(1, &vertexArray);
+        //Log GL info
+        const char* glVendor = (const char*)glGetString(GL_VENDOR);
+        const char* glVersion = (const char*)glGetString(GL_VERSION);
+        const char* glRenderer = (const char*)glGetString(GL_RENDERER);
+        std::string msg = "Citrus Engine OpenGL Info:\n  OpenGL v";
+        msg = msg + glVersion + " provided by " + glVendor + ", running on " + glRenderer;
+        Logging::EngineLog(LogLevel::Trace, msg);
+    }
 
-        uint32_t vertexBuffer;
-        glCreateBuffers(1, &vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexSize, vertexBufferData, GL_STATIC_DRAW);
+    void OpenGLRenderer::RenderGeometry_Impl(Mesh* mesh, Transform* transform, Shader* shader) {
+        //Bind mesh and shader
+        mesh->Bind();
+        shader->Bind();
 
-        uint32_t indexBuffer;
-        glCreateBuffers(1, &indexBuffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices, indexBufferData, GL_STATIC_DRAW);
+        int numVertices = mesh->GetVertices().size();
+        int numIndices = mesh->GetIndices().size();
 
-        //Bind buffers to OpenGL for drawing
-        glBindVertexArray(vertexArray);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-        //Bind shader
-        shader.Bind();
-
-        //Configure OpenGL rendering
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
+        float glVbContent[(sizeof(float) * 3) * numVertices];
+        glGetBufferSubData(GL_ARRAY_BUFFER, 0, (sizeof(float) * 3) * numVertices, glVbContent);
+        int glIbContent[(sizeof(int) * 3) * numIndices];
+        glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, (sizeof(int) * 3) * numIndices, glIbContent);
 
         //Draw geometry
-        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
-
-        //Clean up
-        delete[] vertices;
-        delete[] indices;
+        glDrawElements(GL_TRIANGLES, (numIndices * 3), GL_UNSIGNED_INT, nullptr);
+        
+        //Unbind mesh and shader
+        mesh->Unbind();
+        shader->Unbind();
     }
 
     Renderer* Renderer::CreateNativeRenderer(){

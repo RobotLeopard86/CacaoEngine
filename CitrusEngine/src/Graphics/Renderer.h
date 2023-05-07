@@ -10,26 +10,34 @@ namespace CitrusEngine {
     
     class Renderer {
     public:
-        virtual ~Renderer() = 0;
+        virtual ~Renderer() {};
 
         //Creates a renderer
         static void Create();
         //Shuts down a renderer
         static void Shutdown();
 
-        //Sets clear color (takes 8-bit integer vector (0-255 for red, green, and blue))
-        static void SetClearColor(glm::i8vec3 color);
+        //Sets clear color (takes 8-bit unsigned integer vector (0-255 for red, green, and blue))
+        static void SetClearColor(glm::u8vec3 color);
         //Clears color and depth buffers
         static void Clear();
         //Renders some geometry
-        static void RenderGeometry(Mesh mesh, Transform transform, Shader shader);
+        static void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader);
+        //Set viewport width and height
+        static void ResizeViewport(int width, int height);
+        //Initialize rendering backend
+        static void InitBackend();
     protected:
         //Implementation of SetClearColor
-        virtual void SetClearColor_Impl(glm::i8vec3 color) {}
+        virtual void SetClearColor_Impl(glm::u8vec3 color) = 0;
         //Implementation of Clear
         virtual void Clear_Impl() = 0;
         //Implementation of RenderGeometry
-        virtual void RenderGeometry_Impl(Mesh mesh, Transform transform, Shader shader) {}
+        virtual void RenderGeometry_Impl(Mesh* mesh, Transform* transform, Shader* shader) = 0;
+        //Implementation of ResizeViewport
+        virtual void ResizeViewport_Impl(int width, int height) = 0;
+        //Implementation of InitBackend
+        virtual void InitBackend_Impl() = 0;
 
         //Creates renderer for the native platform
         static Renderer* CreateNativeRenderer();

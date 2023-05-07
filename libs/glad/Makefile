@@ -6,6 +6,33 @@ ifndef verbose
   SILENT = @
 endif
 
+BACKENDS := gl vulkan
+
+api :=
+apidef :=
+
+ifndef renderapi
+	api = gl
+	apidef = CE_GLAD_BUILD_GL
+endif
+
+# Is the rendering API OpenGL?
+ifeq ($(renderapi),OpenGL)
+    api = gl
+	apidef = CE_GLAD_BUILD_GL
+# Is the rendering API Vulkan?
+else
+
+ifeq ($(renderapi),Vulkan)
+	api = vulkan
+	apidef = CE_GLAD_BUILD_VK
+else
+    api = gl
+	apidef = CE_GLAD_BUILD_GL
+endif
+
+endif
+
 .PHONY: clean prebuild
 
 SHELLTYPE := posix
@@ -60,8 +87,8 @@ endif
 GENERATED :=
 OBJECTS :=
 
-GENERATED += $(OBJDIR)/glad.o
-OBJECTS += $(OBJDIR)/glad.o
+GENERATED += $(OBJDIR)/glad_$(api).o
+OBJECTS += $(OBJDIR)/glad_$(api).o
 
 # Rules
 # #############################################
@@ -125,7 +152,7 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/glad.o: src/glad.c
+$(OBJDIR)/glad_$(api).o: src/$(api).c
 	@echo "Building C file $(notdir $<)..."
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

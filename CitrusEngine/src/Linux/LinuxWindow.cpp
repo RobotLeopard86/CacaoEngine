@@ -6,7 +6,7 @@
 
 #include "Events/EventSystem.h"
 
-#include "glad/glad.h"
+#include "Graphics/Renderer.h"
 
 namespace CitrusEngine {
 
@@ -30,22 +30,14 @@ namespace CitrusEngine {
         //Create rendering context
         glfwMakeContextCurrent(window);
 
+        //Initialize backend
+        Renderer::InitBackend();
+
         //Enable VSync
         SetVSyncEnabled_Impl(true);
 
-        //Initialize Glad (OpenGL loader)
-        bool gladSuccessfulInit = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
-        //Ensure Glad initialized correctly
-        Asserts::EngineAssert(gladSuccessfulInit, "Failed to initialize Glad!");
-
-        //Log GL info
-        const char* glVendor = (const char*)glGetString(GL_VENDOR);
-        const char* glVersion = (const char*)glGetString(GL_VERSION);
-        const char* glRenderer = (const char*)glGetString(GL_RENDERER);
-        std::string msg = "Citrus Engine OpenGL Info:\n  OpenGL v";
-        msg = msg + glVersion + " provided by " + glVendor + ", running on " + glRenderer;
-        Logging::EngineLog(LogLevel::Trace, msg);
+        //Set viewport size
+        Renderer::ResizeViewport(initialSizeX, initialSizeY);
     
         //Register GLFW callbacks
         
