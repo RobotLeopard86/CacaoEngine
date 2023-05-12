@@ -78,4 +78,12 @@ namespace CitrusEngine {
         //Invoke native implementation
         return instance->IsVSyncEnabled_Impl();
     }
+
+    void Window::EnsureWindowRenderContext(){
+        //Make sure we have an active window
+        Asserts::EngineAssert(instance != nullptr, "Cannot ensure the render conetxt of uninitialized or destroyed window is the active one!");
+
+        //Invoke native implementation
+        instance->EnsureWindowRenderContext_Impl();
+    }
 }

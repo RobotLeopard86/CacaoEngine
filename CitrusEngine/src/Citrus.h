@@ -17,3 +17,6 @@
 #include "Graphics/Cameras/PerspectiveCamera.h"
 #include "Utilities/Utilities.h"
 #include "Utilities/Input.h"
+
+//Include ImGui so that it can be used
+#include "imgui/imgui.h"

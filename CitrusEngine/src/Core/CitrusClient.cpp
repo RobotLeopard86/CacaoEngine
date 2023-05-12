@@ -5,6 +5,7 @@
 #include "Utilities/Utilities.h"
 #include "Graphics/Renderer.h"
 #include "Utilities/Input.h"
+#include "ImGui/ImGuiWrapper.h"
 
 namespace CitrusEngine {
 
@@ -41,6 +42,9 @@ namespace CitrusEngine {
         //Create window
         Window::Create(id, windowSize.x, windowSize.y);
 
+        //Initialize ImGui
+        ImGuiWrapper::Init();
+
         //Allow client to set up
         ClientOnStartup();
 
@@ -51,9 +55,15 @@ namespace CitrusEngine {
             double oldElapsed = elapsed; 
             elapsed = Utilities::GetInstance()->GetElapsedTime();
 
+            //Setup ImGui frame
+            ImGuiWrapper::FrameSetup();
+
             //Dispatch tick event
             DynamicTickEvent tickEvent{elapsed - oldElapsed};
             eventManager->Dispatch(tickEvent);
+
+            //Render ImGui frame
+            ImGuiWrapper::FrameRender();
 
             //Update window
             Window::Update();
@@ -62,6 +72,10 @@ namespace CitrusEngine {
         //Prepare eventManager for freeing by unsubscribing all consumers;
         eventManager->Shutdown();
 
+        //Shutdown ImGui
+        ImGuiWrapper::Shutdown();
+
+        //Close window
         Window::Destroy();
         
         //Free pointers
@@ -73,7 +87,10 @@ namespace CitrusEngine {
         //Allow client to shut down
         ClientOnShutdown();
 
+        //Event is handled
         e.handled = true;
+
+        //Stop app
         run = false;
     }
 

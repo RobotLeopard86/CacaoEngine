@@ -17,6 +17,7 @@ namespace CitrusEngine {
         void SetSize_Impl(glm::i32vec2 newSize) override;
         void SetVSyncEnabled_Impl(bool value) override;
         bool IsVSyncEnabled_Impl() override;
+        void EnsureWindowRenderContext_Impl() override;
         void Shutdown() override;
     private:
         bool useVSync;

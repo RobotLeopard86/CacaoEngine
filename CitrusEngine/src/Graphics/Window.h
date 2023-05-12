@@ -30,6 +30,8 @@ namespace CitrusEngine {
         static void SetVSyncEnabled(bool value);
         //Returns if VSync is enabled or not
         static bool IsVSyncEnabled();
+        //Sets the active rendering context to the window's context
+        static void EnsureWindowRenderContext();
     protected:
         //Implementation of Update
         virtual void Update_Impl() = 0;
@@ -43,6 +45,8 @@ namespace CitrusEngine {
         virtual void SetVSyncEnabled_Impl(bool value) {}
         //Implementation of IsVSyncEnabled
         virtual bool IsVSyncEnabled_Impl() = 0;
+        //Implementation of IsVSyncEnabled
+        virtual void EnsureWindowRenderContext_Impl() = 0;
 
         //Runs when window should shut down
         virtual void Shutdown() = 0;

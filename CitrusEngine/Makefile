@@ -13,16 +13,16 @@ apidef :=
 
 ifndef renderapi
 	api = OpenGL
-	apidef = CE_GLAD_BUILD_GL
+	apidef = CE_RENDERER_GL
 endif
 
 # Is the rendering API OpenGL?
 ifeq ($(renderapi),OpenGL)
     api = OpenGL
-	apidef = CE_GLAD_BUILD_GL
+	apidef = CE_RENDERER_GL
 else
     api = OpenGL
-	apidef = CE_GLAD_BUILD_GL
+	apidef = CE_RENDERER_GL
 endif
 
 .PHONY: clean prebuild
@@ -36,7 +36,7 @@ endif
 # #############################################
 
 WINDRES = comp
-INCLUDES += -Isrc -I../libs/spdlog/include -I../libs/glm -I../libs/glfw/include -I../libs/glad/include -I../libs/boost/include
+INCLUDES += -Isrc -I../libs/spdlog/include -I../libs/glm -I../libs/glfw/include -I../libs/glad/include -I../libs/boost/include -I../libs -I../libs/imgui
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -96,6 +96,8 @@ GENERATED += $(OBJDIR)/Window.o
 OBJECTS += $(OBJDIR)/Window.o
 GENERATED += $(OBJDIR)/Input.o
 OBJECTS += $(OBJDIR)/Input.o
+GENERATED += $(OBJDIR)/ImGuiWrapper.o
+OBJECTS += $(OBJDIR)/ImGuiWrapper.o
 GENERATED += $(OBJDIR)/EventManager.o
 OBJECTS += $(OBJDIR)/EventManager.o
 GENERATED += $(OBJDIR)/Renderer.o
@@ -118,6 +120,10 @@ GENERATED += $(OBJDIR)/NativeRenderer.o
 OBJECTS += $(OBJDIR)/NativeRenderer.o
 GENERATED += $(OBJDIR)/NativeMesh.o
 OBJECTS += $(OBJDIR)/NativeMesh.o
+GENERATED += $(OBJDIR)/NativeImGuiPlatformBackend.o
+OBJECTS += $(OBJDIR)/NativeImGuiPlatformBackend.o
+GENERATED += $(OBJDIR)/NativeImGuiRenderBackend.o
+OBJECTS += $(OBJDIR)/NativeImGuiRenderBackend.o
 
 TESTOBJECTS :=
 TESTGENERATED :=
@@ -255,6 +261,10 @@ $(OBJDIR)/Renderer.o: src/Graphics/Renderer.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
+$(OBJDIR)/ImGuiWrapper.o: src/ImGui/ImGuiWrapper.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
 $(OBJDIR)/Input.o: src/Utilities/Input.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -283,6 +293,10 @@ $(OBJDIR)/NativeMesh.o: src/$(api)/$(api)Mesh.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
+$(OBJDIR)/NativeImGuiRenderBackend.o: src/$(api)/$(api)ImGuiRenderBackend.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
 $(OBJDIR)/NativeWindow.o: src/Linux/LinuxWindow.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -292,6 +306,10 @@ $(OBJDIR)/NativeInput.o: src/Linux/LinuxInput.cpp
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 $(OBJDIR)/NativeUtilities.o: src/Linux/LinuxUtilities.cpp
+	@echo "Building C++ file $(notdir $<)..."
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+
+$(OBJDIR)/NativeImGuiPlatformBackend.o: src/Linux/LinuxImGuiPlatformBackend.cpp
 	@echo "Building C++ file $(notdir $<)..."
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) $(LIBS) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

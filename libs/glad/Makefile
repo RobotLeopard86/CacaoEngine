@@ -13,22 +13,22 @@ apidef :=
 
 ifndef renderapi
 	api = gl
-	apidef = CE_GLAD_BUILD_GL
+	apidef = CE_RENDERER_GL
 endif
 
 # Is the rendering API OpenGL?
 ifeq ($(renderapi),OpenGL)
     api = gl
-	apidef = CE_GLAD_BUILD_GL
+	apidef = CE_RENDERER_GL
 # Is the rendering API Vulkan?
 else
 
 ifeq ($(renderapi),Vulkan)
 	api = vulkan
-	apidef = CE_GLAD_BUILD_VK
+	apidef = CE_RENDERER_VK
 else
     api = gl
-	apidef = CE_GLAD_BUILD_GL
+	apidef = CE_RENDERER_GL
 endif
 
 endif

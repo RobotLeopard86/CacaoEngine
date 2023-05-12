@@ -151,4 +151,8 @@ namespace CitrusEngine {
     void* LinuxWindow::GetNativeWindow_Impl(){
         return window;
     }
+
+    void LinuxWindow::EnsureWindowRenderContext_Impl(){
+        glfwMakeContextCurrent(window);
+    }
 }
