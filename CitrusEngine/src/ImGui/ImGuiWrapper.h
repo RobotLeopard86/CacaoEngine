@@ -27,11 +27,13 @@ namespace CitrusEngine {
     public:
         static void Init();
         static void Shutdown();
-        static void FrameSetup();
-        static void FrameRender();
+        static void NewFrame();
+        static void RenderFrame();
+        static void DrawFrame();
     private:
         static bool initialized;
         static bool renderingOK;
+        static bool drawingOK;
         static NativeWindowType* nativeWindow;
     };
 }

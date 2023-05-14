@@ -129,4 +129,8 @@ namespace CitrusEngine {
 
         std::string GetType() { return "MouseMove"; }
     };
+
+
+    //Other events
+    class ImGuiDrawEvent : public Event { public: std::string GetType() { return "ImGuiDraw"; } }; //No additional parameters
 }

@@ -30,6 +30,7 @@ public:
         indices.push_back({0, 1, 5});
         indices.push_back({0, 4, 5});
         indices.push_back({2, 3, 7});
+        indices.push_back({2, 6, 7});
 
         mesh = CitrusEngine::Mesh::CreateMesh(vertices, indices);
         mesh->Compile();
@@ -70,6 +71,9 @@ public:
 
         CitrusEngine::Renderer::GetInstance()->SetClearColor({25, 25, 25});
         CitrusEngine::Renderer::GetInstance()->SetCamera(cam);
+
+        uiDrawConsumer = new CitrusEngine::EventConsumer(BIND_MEMBER_FUNC(PlaygroundClient::OnImGuiDraw));
+        GetEventManager()->SubscribeConsumer("ImGuiDraw", uiDrawConsumer);
     }
 
     void ClientOnShutdown() override {
@@ -77,6 +81,7 @@ public:
         delete transform;
         delete shader;
         delete cam;
+        delete uiDrawConsumer;
     }
 
     void ClientOnDynamicTick(double timestep) override {
@@ -89,7 +94,7 @@ public:
         if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_K)){
             camRotChange += 0.1f;
         }
-        glm::vec3 currentRot = cam->GetRotation();
+        currentRot = cam->GetRotation();
         currentRot.y += camRotChange;
         
         if(currentRot.y < 0){
@@ -118,16 +123,16 @@ public:
         if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
             posChange.y -= 0.001f;
         }
-        glm::vec3 currentPos = cam->GetPosition();
-        currentPos.x += posChange.x;
-        currentPos.y += posChange.y;
-        currentPos.z += posChange.z;
+        currentPos = cam->GetPosition() + posChange;
 
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
         CitrusEngine::Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
+    }
+    void ClientOnFixedTick() override {}
 
+    void OnImGuiDraw(CitrusEngine::Event& e){
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 
         std::stringstream sscam;
@@ -140,11 +145,10 @@ public:
         if(ImGui::Button("Toggle VSync")){
             CitrusEngine::Window::SetVSyncEnabled(!CitrusEngine::Window::IsVSyncEnabled());
         }
-        ImGui::Text(ssvs.str().c_str());
-        ImGui::Text(sscam.str().c_str());
+        ImGui::Text("%s", ssvs.str().c_str());
+        ImGui::Text("%s", sscam.str().c_str());
         ImGui::End();
     }
-    void ClientOnFixedTick() override {}
 private:
     CitrusEngine::Mesh* mesh;
     CitrusEngine::Transform* transform;
@@ -153,6 +157,10 @@ private:
 
     std::vector<glm::vec3> vertices;
     std::vector<glm::u32vec3> indices;
+
+    glm::vec3 currentPos, currentRot;
+
+    CitrusEngine::EventConsumer* uiDrawConsumer;
 };
 
 CitrusEngine::CitrusClient* CreateClient() {

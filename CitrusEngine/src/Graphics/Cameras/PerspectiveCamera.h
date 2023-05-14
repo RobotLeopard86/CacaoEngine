@@ -11,7 +11,7 @@ namespace CitrusEngine {
 		PerspectiveCamera(float fov, float aspectRatio);
 
 		glm::vec3 GetPosition() override { return position; }
-		void SetPosition(glm::vec3 pos) override { position = pos; position.y *= -1; RecalculateViewMatrix(); }
+		void SetPosition(glm::vec3 pos) override { position = pos; RecalculateViewMatrix(); }
 		glm::vec3 GetRotation() override { return rotation; }
 		void SetRotation(glm::vec3 rot) override { rotation = rot; RecalculateViewMatrix(); }
 
