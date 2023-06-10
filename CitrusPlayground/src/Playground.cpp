@@ -93,17 +93,29 @@ public:
     void ClientOnDynamicTick(double timestep) override {
         Renderer::GetInstance()->Clear();
 
-        float camRotChange = 0.0f;
+        glm::vec3 camRotChange = glm::vec3(0.0f);
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_J)){
-            camRotChange -= 0.5f;
+            camRotChange.y -= 0.5f;
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_K)){
-            camRotChange += 0.5f;
+            camRotChange.y += 0.5f;
+        }
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Y)){
+            camRotChange.x -= 0.5f;
+        }
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_U)){
+            camRotChange.x += 0.5f;
+        }
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_X)){
+            camRotChange.z -= 0.5f;
+        }
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_C)){
+            camRotChange.z += 0.5f;
         }
         currentRot = cam->GetRotation();
         glm::vec3 pastLook = cam->GetLookTarget();
         glm::vec3 pastRot = glm::vec3(currentRot);
-        currentRot.y += camRotChange;
+        currentRot += camRotChange;
         
         if(currentRot.y < 0){
             currentRot.y = 360.0f;
@@ -114,22 +126,22 @@ public:
 
         glm::vec3 posChange = glm::vec3(0.0f);
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_W)){
-            posChange.x += 0.01f;
+            posChange.z += 0.01f;
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_S)){
-            posChange.x -= 0.01f;
-        }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
             posChange.z -= 0.01f;
         }
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
+            posChange.x -= 0.01f;
+        }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_D)){
-            posChange.z += 0.01f;
+            posChange.x += 0.01f;
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
             posChange.y += 0.01f;
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
-            posChange.y -= 0.1f;
+            posChange.y -= 0.01f;
         }
         currentPos = cam->GetPosition() + posChange;
 
