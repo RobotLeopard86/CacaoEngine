@@ -86,10 +86,6 @@ public:
         delete uiDrawConsumer;
     }
 
-    std::string Vec3ToString(glm::vec3 vec){
-        return "{ X: " + std::to_string(vec.x) + ", Y: " + std::to_string(vec.y) + ", Z: " + std::to_string(vec.z) + " }";
-    }
-
     void ClientOnDynamicTick(double timestep) override {
         Renderer::GetInstance()->Clear();
 
@@ -149,12 +145,6 @@ public:
         cam->SetPosition(currentPos);
 
         glm::vec3 lookDiff = glm::vec3((cam->GetLookTarget() - pastLook));
-
-        float pythDistance = sqrt(pow(abs(lookDiff.x), 2) + pow(abs(lookDiff.y), 2) + pow(abs(lookDiff.z), 2));
-
-        if(pythDistance > 0.5){
-            Logging::ClientLog(LogLevel::Warn, "BIG JUMP DETECTED\n\nFrom:\n\tRotation: " + Vec3ToString(pastRot) + "\n\tLook Target: " + Vec3ToString(pastLook) + "\n\nTo:\n\tRotation: " + Vec3ToString(currentRot) + "\n\tLook Target: " + Vec3ToString(cam->GetLookTarget()) + "\n\nDiff:\n\tRotation: " + Vec3ToString((currentRot - pastRot)) + "\n\tLook Target: " + Vec3ToString(lookDiff) + "\n");
-        }
 
         Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
     }
