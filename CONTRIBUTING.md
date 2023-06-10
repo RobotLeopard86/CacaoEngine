@@ -2,7 +2,7 @@
 
 ## VERY IMPORTANT
 * Citrus Engine will currently ONLY build on GNU/Linux using C++20.
-* You may need to install certain development packages if you are on GNU/Linux, as the project will not build without them.
+* You may need to install certain development packages if you are on GNU/Linux (do note that these are X11 packages, Citrus Engine currently does not support Wayland), as the project will not build without them.
     * On Debian and its derivatives (e.g. Ubuntu, Linux Mint), the  `xorg-dev` package is required
     * On Fedora and its derivatives (e.g. CentOS, Red Hat), the `libXcursor-devel`, `libXi-devel`, `libXinerama-devel`, and `libXrandr-devel` packages are required
 

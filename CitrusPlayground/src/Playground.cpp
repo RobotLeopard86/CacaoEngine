@@ -5,7 +5,9 @@
 #include <string>
 #include <sstream>
 
-class PlaygroundClient : public CitrusEngine::CitrusClient {
+using namespace CitrusEngine;
+
+class PlaygroundClient : public CitrusClient {
 public:
     PlaygroundClient() { id = "citrus-playground"; windowSize = {1280, 720}; }
 
@@ -32,10 +34,10 @@ public:
         indices.push_back({2, 3, 7});
         indices.push_back({2, 6, 7});
 
-        mesh = CitrusEngine::Mesh::CreateMesh(vertices, indices);
+        mesh = Mesh::CreateMesh(vertices, indices);
         mesh->Compile();
 
-        transform = new CitrusEngine::Transform({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
+        transform = new Transform({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
 
         std::string vertexShaderSource = R"(
             #version 330 core
@@ -63,16 +65,16 @@ public:
             }
         )";
         
-        shader = CitrusEngine::Shader::CreateShader(vertexShaderSource, fragmentShaderSource);
+        shader = Shader::CreateShader(vertexShaderSource, fragmentShaderSource);
         shader->Compile();
 
-        cam = new CitrusEngine::PerspectiveCamera(30, 1.7777777777777f);
+        cam = new PerspectiveCamera(30, 1.7777777777777f);
         cam->SetPosition({-1, 0, 0});
 
-        CitrusEngine::Renderer::GetInstance()->SetClearColor({25, 25, 25});
-        CitrusEngine::Renderer::GetInstance()->SetCamera(cam);
+        Renderer::GetInstance()->SetClearColor({25, 25, 25});
+        Renderer::GetInstance()->SetCamera(cam);
 
-        uiDrawConsumer = new CitrusEngine::EventConsumer(BIND_MEMBER_FUNC(PlaygroundClient::OnImGuiDraw));
+        uiDrawConsumer = new EventConsumer(BIND_MEMBER_FUNC(PlaygroundClient::OnImGuiDraw));
         GetEventManager()->SubscribeConsumer("ImGuiDraw", uiDrawConsumer);
     }
 
@@ -84,17 +86,23 @@ public:
         delete uiDrawConsumer;
     }
 
+    std::string Vec3ToString(glm::vec3 vec){
+        return "{ X: " + std::to_string(vec.x) + ", Y: " + std::to_string(vec.y) + ", Z: " + std::to_string(vec.z) + " }";
+    }
+
     void ClientOnDynamicTick(double timestep) override {
-        CitrusEngine::Renderer::GetInstance()->Clear();
+        Renderer::GetInstance()->Clear();
 
         float camRotChange = 0.0f;
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_J)){
-            camRotChange -= 0.1f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_J)){
+            camRotChange -= 0.5f;
         }
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_K)){
-            camRotChange += 0.1f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_K)){
+            camRotChange += 0.5f;
         }
         currentRot = cam->GetRotation();
+        glm::vec3 pastLook = cam->GetLookTarget();
+        glm::vec3 pastRot = glm::vec3(currentRot);
         currentRot.y += camRotChange;
         
         if(currentRot.y < 0){
@@ -105,64 +113,72 @@ public:
         }
 
         glm::vec3 posChange = glm::vec3(0.0f);
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_W)){
-            posChange.x += 0.001f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_W)){
+            posChange.x += 0.01f;
         }
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_S)){
-            posChange.x -= 0.001f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_S)){
+            posChange.x -= 0.01f;
         }
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
-            posChange.z -= 0.001f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
+            posChange.z -= 0.01f;
         }
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_D)){
-            posChange.z += 0.001f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_D)){
+            posChange.z += 0.01f;
         }
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
-            posChange.y += 0.001f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
+            posChange.y += 0.01f;
         }
-        if(CitrusEngine::Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
-            posChange.y -= 0.001f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
+            posChange.y -= 0.1f;
         }
         currentPos = cam->GetPosition() + posChange;
 
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
-        CitrusEngine::Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
+        glm::vec3 lookDiff = glm::vec3((cam->GetLookTarget() - pastLook));
+
+        float pythDistance = sqrt(pow(abs(lookDiff.x), 2) + pow(abs(lookDiff.y), 2) + pow(abs(lookDiff.z), 2));
+
+        if(pythDistance > 0.5){
+            Logging::ClientLog(LogLevel::Warn, "BIG JUMP DETECTED\n\nFrom:\n\tRotation: " + Vec3ToString(pastRot) + "\n\tLook Target: " + Vec3ToString(pastLook) + "\n\nTo:\n\tRotation: " + Vec3ToString(currentRot) + "\n\tLook Target: " + Vec3ToString(cam->GetLookTarget()) + "\n\nDiff:\n\tRotation: " + Vec3ToString((currentRot - pastRot)) + "\n\tLook Target: " + Vec3ToString(lookDiff) + "\n");
+        }
+
+        Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
     }
     void ClientOnFixedTick() override {}
 
-    void OnImGuiDraw(CitrusEngine::Event& e){
+    void OnImGuiDraw(Event& e){
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 
         std::stringstream sscam;
         sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
         std::stringstream ssvs;
-        ssvs << "VSync is currently " << (CitrusEngine::Window::IsVSyncEnabled() ? "on" : "off");
+        ssvs << "VSync is currently " << (Window::IsVSyncEnabled() ? "on" : "off");
 
         ImGui::Begin("Citrus Playground");
         ImGui::Text("This is a demo designed to showcase Citrus Engine.");
         if(ImGui::Button("Toggle VSync")){
-            CitrusEngine::Window::SetVSyncEnabled(!CitrusEngine::Window::IsVSyncEnabled());
+            Window::SetVSyncEnabled(!Window::IsVSyncEnabled());
         }
         ImGui::Text("%s", ssvs.str().c_str());
         ImGui::Text("%s", sscam.str().c_str());
         ImGui::End();
     }
 private:
-    CitrusEngine::Mesh* mesh;
-    CitrusEngine::Transform* transform;
-    CitrusEngine::Shader* shader;
-    CitrusEngine::PerspectiveCamera* cam;
+    Mesh* mesh;
+    Transform* transform;
+    Shader* shader;
+    PerspectiveCamera* cam;
 
     std::vector<glm::vec3> vertices;
     std::vector<glm::u32vec3> indices;
 
     glm::vec3 currentPos, currentRot;
 
-    CitrusEngine::EventConsumer* uiDrawConsumer;
+    EventConsumer* uiDrawConsumer;
 };
 
-CitrusEngine::CitrusClient* CreateClient() {
+CitrusClient* CreateClient() {
     return new PlaygroundClient();
 }
