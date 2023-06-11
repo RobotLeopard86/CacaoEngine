@@ -27,14 +27,9 @@ namespace CitrusEngine {
 		float yRotRadians = glm::radians(rotation.y);
 
 		//Use trigonometry to figure out where in 3D space our camera is looking if it was at 0, 0, 0
-		lookTarget.x = sin(yRotRadians);
-		lookTarget.y = sqrt((1 / pow(cos(xRotRadians), 2)) - 1);
-		lookTarget.z = cos(yRotRadians);
-
-		//Negate y look target if X rotation less than 0 (quirk of the math)
-		if(rotation.x < 0){
-			lookTarget.y *= -1;
-		}
+		lookTarget.x = cos(xRotRadians) * sin(yRotRadians);
+		lookTarget.y = sin(xRotRadians);
+		lookTarget.z = cos(xRotRadians) * cos(yRotRadians);
 
 		//Add the position to our look target (originally calculated at 0, 0, 0)
 		lookTarget += position;

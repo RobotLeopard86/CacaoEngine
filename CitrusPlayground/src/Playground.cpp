@@ -113,11 +113,23 @@ public:
         glm::vec3 pastRot = glm::vec3(currentRot);
         currentRot += camRotChange;
         
+        if(currentRot.x < 0){
+            currentRot.x = 360.0f;
+        }
+        if(currentRot.x > 360) {
+            currentRot.x = 0.0f;
+        }
         if(currentRot.y < 0){
             currentRot.y = 360.0f;
         }
         if(currentRot.y > 360) {
             currentRot.y = 0.0f;
+        }
+        if(currentRot.z < 0){
+            currentRot.z = 360.0f;
+        }
+        if(currentRot.z > 360) {
+            currentRot.z = 0.0f;
         }
 
         glm::vec3 posChange = glm::vec3(0.0f);
@@ -133,10 +145,10 @@ public:
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_D)){
             posChange.x += 0.01f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
             posChange.y += 0.01f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
             posChange.y -= 0.01f;
         }
         currentPos = cam->GetPosition() + posChange;
