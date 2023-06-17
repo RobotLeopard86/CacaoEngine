@@ -55,28 +55,28 @@ namespace CitrusEngine {
             double oldElapsed = elapsed; 
             elapsed = Utilities::GetInstance()->GetElapsedTime();
 
-            //Create ImGui frame
-            //ImGuiWrapper::NewFrame();
-
-            //Dispatch ImGui draw event
-            //ImGuiDrawEvent uiDrawEvent{};
-            //eventManager->Dispatch(uiDrawEvent);
-
-            //Render ImGui frame
-            //ImGuiWrapper::RenderFrame();
+            //Clear the screen
+            Renderer::GetInstance()->Clear();
 
             //Dispatch tick event
             DynamicTickEvent tickEvent{elapsed - oldElapsed};
             eventManager->Dispatch(tickEvent);
 
-            //Draw ImGui frame
-            //ImGuiWrapper::DrawFrame();
+            //Create ImGui frame
+            ImGuiWrapper::CreateFrame();
+
+            //Dispatch ImGui draw event
+            ImGuiDrawEvent uiDrawEvent{};
+            eventManager->Dispatch(uiDrawEvent);
+
+            //Render ImGui frame onscreen
+            ImGuiWrapper::RenderFrame();
 
             //Update window
             Window::Update();
         }
 
-        //Prepare eventManager for freeing by unsubscribing all consumers;
+        //Prepare eventManager for freeing by unsubscribing all consumers
         eventManager->Shutdown();
 
         //Shutdown ImGui

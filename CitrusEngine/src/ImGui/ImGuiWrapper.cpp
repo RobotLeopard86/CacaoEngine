@@ -5,6 +5,8 @@
 
 #include "Graphics/Window.h"
 
+#include "glad/gl.h"
+
 #include <stdexcept>
 
 namespace CitrusEngine {
@@ -134,24 +136,27 @@ namespace CitrusEngine {
         initialized = false;
     }
 
-    void ImGuiWrapper::NewFrame(){
+    void ImGuiWrapper::CreateFrame(){
         Asserts::EngineAssert(initialized, "ImGui must be initialized before new frame!");
-        Asserts::EngineAssert(!renderingOK, "New frame already created!");
-        Asserts::EngineAssert(!drawingOK, "Frame already rendered!");
+        Asserts::EngineAssert(!renderingOK, "Frame already created!");
 
         //Generate a new ImGui frame
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
+        #ifdef CE_RENDERER_GL
+		    ImGui_ImplOpenGL3_NewFrame();
+        #endif
+		#ifdef CE_PLATFORM_LINUX
+		    ImGui_ImplGlfw_NewFrame();
+        #endif
 		ImGui::NewFrame();
 
         renderingOK = true;
     }
 
     void ImGuiWrapper::RenderFrame(){
-        Asserts::EngineAssert(initialized, "ImGui must be initialized before rendering frame!");
-        Asserts::EngineAssert(renderingOK, "ImGui has already rendered its frame!");
-        Asserts::EngineAssert(!drawingOK, "ImGui has already drawn its frame!");
+        Asserts::EngineAssert(initialized, "ImGui must be initialized before drawing frame!");
+        Asserts::EngineAssert(renderingOK, "ImGui has not created a new frame!");
 
+        //Get ImGui IO instance
         ImGuiIO& imGuiIO = ImGui::GetIO();
 
         //Resize ImGui viewport
@@ -161,21 +166,10 @@ namespace CitrusEngine {
         //Render ImGui data
 		ImGui::Render();
 
-        renderingOK = false;
-        drawingOK = true;
-    }
-
-    void ImGuiWrapper::DrawFrame(){
-        Asserts::EngineAssert(initialized, "ImGui must be initialized before drawing frame!");
-        Asserts::EngineAssert(!renderingOK, "ImGui has not created a new frame!");
-        Asserts::EngineAssert(drawingOK, "ImGui has not rendered its frame!");
-
         //Render the ImGui draw data
 		#ifdef CE_RENDERER_GL
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         #endif
-
-        ImGuiIO& imGuiIO = ImGui::GetIO();
 
         //Is multi-viewport enabled?
 		if(imGuiIO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {

@@ -11,6 +11,10 @@ class PlaygroundClient : public CitrusClient {
 public:
     PlaygroundClient() { id = "citrus-playground"; windowSize = {1280, 720}; }
 
+    std::string Vec3ToString(glm::vec3 vec){
+        return "{ X: " + std::to_string(vec.x) + ", Y: " + std::to_string(vec.y) + ", Z: " + std::to_string(vec.z) + " }";
+    }
+
     void ClientOnStartup() override {
         vertices.push_back({0.5, 0.5, 0.5});
         vertices.push_back({-0.5, 0.5, 0.5});
@@ -87,8 +91,6 @@ public:
     }
 
     void ClientOnDynamicTick(double timestep) override {
-        Renderer::GetInstance()->Clear();
-
         glm::vec3 camRotChange = glm::vec3(0.0f);
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_J)){
             camRotChange.y -= 0.5f;
@@ -109,7 +111,6 @@ public:
             camRotChange.z += 0.5f;
         }
         currentRot = cam->GetRotation();
-        glm::vec3 pastLook = cam->GetLookTarget();
         glm::vec3 pastRot = glm::vec3(currentRot);
         currentRot += camRotChange;
         
@@ -156,7 +157,9 @@ public:
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
-        glm::vec3 lookDiff = glm::vec3((cam->GetLookTarget() - pastLook));
+        if(camRotChange != glm::zero<glm::vec3>()) {
+            Logging::ClientLog(LogLevel::Info, "Rotation is " + Vec3ToString(currentRot));
+        }
 
         Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
     }

@@ -16,20 +16,14 @@
 namespace CitrusEngine {
     //Citrus Engine ImGui wrapper
 
-    /* This code uses defined macro values. Here is an explanation list:
-    NativeWindowType - The type used by the platform for a window (e.g. GLFWwindow)
-    NativePlatform - The name of the platform windowing API for ImGui (e.g. Glfw)
-    NativeRenderingAPI - The native rendering API for ImGui (e.g. OpenGL)
-    NativeRenderingSuffix - An optional value representing a suffix for additional data (e.g. 3 for OpenGL 3)
-    NativeRenderingArgs - Any arguments necessary for ImGui to initialize for the correct rendering API (e.g. "#version 410" to specify OpenGL 4.1)
+    /* This code uses the defined macro value NativeWindowType, which is the native type used by the platform for a window (e.g. GLFWwindow)
     */
     class ImGuiWrapper {
     public:
         static void Init();
         static void Shutdown();
-        static void NewFrame();
+        static void CreateFrame();
         static void RenderFrame();
-        static void DrawFrame();
     private:
         static bool initialized;
         static bool renderingOK;
