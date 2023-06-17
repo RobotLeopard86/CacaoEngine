@@ -136,6 +136,7 @@ help:
 	@echo "   build-run (build all, then run CitrusPlayground debug build) (rendering API defaults to OpenGL if not explicitly set)"
 	@echo "   test (build and run tests)"
 	@echo "   full-build (run a clean build of CitrusEngine and dependencies, test CitrusEngine, and build CitrusPlayground if tests succeed) (rendering API defaults to OpenGL if not explicitly set)"
+	@echo "   clean-build (clean all build files and rebuild them)"
 	@echo "   GLFW (build GLFW)"
 	@echo "   ImGui (build ImGui)"
 	@echo "   Glad (build Glad)"
