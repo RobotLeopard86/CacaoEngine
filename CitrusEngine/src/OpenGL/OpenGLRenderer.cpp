@@ -31,10 +31,10 @@ namespace CitrusEngine {
 
     void OpenGLRenderer::InitBackend(){
         //Initialize Glad (OpenGL loader)
-        bool gladSuccessfulInit = gladLoaderLoadGL();
+        int gladLoaderResponse = gladLoaderLoadGL();
 
         //Ensure Glad initialized correctly
-        Asserts::EngineAssert(gladSuccessfulInit, "Failed to initialize Glad!");
+        Asserts::EngineAssert(gladLoaderResponse != 0, "Failed to initialize Glad!");
 
         //Log GL info
         const char* glVendor = (const char*)glGetString(GL_VENDOR);

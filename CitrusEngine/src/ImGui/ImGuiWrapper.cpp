@@ -12,9 +12,9 @@
 namespace CitrusEngine {
 
     //Initialize static variables
-    bool ImGuiWrapper::renderingOK = false;
     bool ImGuiWrapper::initialized = false;
-    bool ImGuiWrapper::drawingOK = false;
+    bool ImGuiWrapper::frameCreated = false;
+    bool ImGuiWrapper::frameComposed = false;
     NativeWindowType* ImGuiWrapper::nativeWindow = nullptr;
 
     //This code uses the defined macro NativeWindowType which is the type used by the platform for a window (e.g. GLFWwindow)
@@ -102,7 +102,7 @@ namespace CitrusEngine {
 		//Enable docking (snapping an ImGui window to another window)
 		imGuiIO.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		//Enable multi-viewports (dragging an ImGui window outside the main window)
-		imGuiIO.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		//imGuiIO.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		//Disable saving the ImGui state to a file
 		imGuiIO.IniFilename = nullptr;
 
@@ -138,7 +138,8 @@ namespace CitrusEngine {
 
     void ImGuiWrapper::CreateFrame(){
         Asserts::EngineAssert(initialized, "ImGui must be initialized before new frame!");
-        Asserts::EngineAssert(!renderingOK, "Frame already created!");
+        Asserts::EngineAssert(!frameCreated, "Frame already created!");
+        Asserts::EngineAssert(!frameComposed, "Frame already composed!");
 
         //Generate a new ImGui frame
         #ifdef CE_RENDERER_GL
@@ -149,12 +150,13 @@ namespace CitrusEngine {
         #endif
 		ImGui::NewFrame();
 
-        renderingOK = true;
+        frameCreated = true;
     }
 
-    void ImGuiWrapper::RenderFrame(){
+    void ImGuiWrapper::ComposeFrame(){
         Asserts::EngineAssert(initialized, "ImGui must be initialized before drawing frame!");
-        Asserts::EngineAssert(renderingOK, "ImGui has not created a new frame!");
+        Asserts::EngineAssert(frameCreated, "ImGui has not created a new frame!");
+        Asserts::EngineAssert(!frameComposed, "Frame already composed!");
 
         //Get ImGui IO instance
         ImGuiIO& imGuiIO = ImGui::GetIO();
@@ -166,9 +168,22 @@ namespace CitrusEngine {
         //Render ImGui data
 		ImGui::Render();
 
+        frameComposed = true;
+    }
+
+    void ImGuiWrapper::RenderFrame(){
+        Asserts::EngineAssert(initialized, "ImGui must be initialized before drawing frame!");
+        Asserts::EngineAssert(frameCreated, "ImGui has not created a new frame!");
+        Asserts::EngineAssert(frameComposed, "The current ImGui frame has not been composed!");
+
+        //Get ImGui IO instance
+        ImGuiIO& imGuiIO = ImGui::GetIO();
+
+        ImDrawData* drawData = ImGui::GetDrawData();
+
         //Render the ImGui draw data
 		#ifdef CE_RENDERER_GL
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            ImGui_ImplOpenGL3_RenderDrawData(drawData);
         #endif
 
         //Is multi-viewport enabled?
@@ -180,6 +195,7 @@ namespace CitrusEngine {
 			Window::EnsureWindowRenderContext();
 		}
 
-        drawingOK = false;
+        frameCreated = false;
+        frameComposed = false;
     }
 }

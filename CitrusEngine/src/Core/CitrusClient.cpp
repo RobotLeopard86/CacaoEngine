@@ -31,7 +31,7 @@ namespace CitrusEngine {
         //Set up event manager and subscribe consumers
         eventManager = new EventManager();
         eventManager->SubscribeConsumer("WindowClose", wceConsumer);
-        eventManager->SubscribeConsumer("ClientFixedTick", dynamicTickConsumer);
+        eventManager->SubscribeConsumer("FixedTick", clientFixedTickConsumer);
         eventManager->SubscribeConsumer("DynamicTick", dynamicTickConsumer);
     }
 
@@ -55,19 +55,22 @@ namespace CitrusEngine {
             double oldElapsed = elapsed; 
             elapsed = Utilities::GetInstance()->GetElapsedTime();
 
-            //Clear the screen
-            Renderer::GetInstance()->Clear();
-
-            //Dispatch tick event
-            DynamicTickEvent tickEvent{elapsed - oldElapsed};
-            eventManager->Dispatch(tickEvent);
-
             //Create ImGui frame
             ImGuiWrapper::CreateFrame();
 
             //Dispatch ImGui draw event
             ImGuiDrawEvent uiDrawEvent{};
             eventManager->Dispatch(uiDrawEvent);
+
+            //Render drawn UI into frame
+            ImGuiWrapper::ComposeFrame();
+
+            //Clear the screen
+            Renderer::GetInstance()->Clear();
+
+            //Dispatch tick event
+            DynamicTickEvent tickEvent{elapsed - oldElapsed};
+            eventManager->Dispatch(tickEvent);
 
             //Render ImGui frame onscreen
             ImGuiWrapper::RenderFrame();

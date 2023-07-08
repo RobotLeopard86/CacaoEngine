@@ -51,8 +51,8 @@ namespace CitrusEngine {
         std::string GetType() { return "WindowResize"; }
     };
 
-    //Client events
-    class ClientFixedTickEvent : public Event { public: std::string GetType() { return "ClientFixedTick"; } }; //No additional parameters
+    //Tick events
+    class FixedTickEvent : public Event { public: std::string GetType() { return "FixedTick"; } }; //No additional parameters
     class DynamicTickEvent : public Event { //Parameters: Delta time since last update
     public:
         DynamicTickEvent(double timestep) : timestep(timestep) {}

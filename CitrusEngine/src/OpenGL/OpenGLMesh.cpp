@@ -9,7 +9,7 @@ namespace CitrusEngine {
     }
 
     OpenGLMesh::OpenGLMesh(std::vector<glm::vec3> vertices, std::vector<glm::u32vec3> indices) 
-        : vertices(vertices), indices(indices) {}
+        : vertices(vertices), indices(indices), compiled(false), bound(false) {}
 
     OpenGLMesh::~OpenGLMesh(){
         //Clean up OpenGL objects
@@ -19,6 +19,7 @@ namespace CitrusEngine {
     }
 
     void OpenGLMesh::Compile() {
+        //Check if the mesh is compiled already
         if(compiled){
             Logging::EngineLog(LogLevel::Error, "Cannot compile already compiled mesh!");
             return;
