@@ -17,6 +17,19 @@ cd ./tmp/boost
 ./b2 install
 cd $cwd
 
+echo "The default compiler is Zig. Checking for presence of Zig on PATH..."
+if ! [ -f "$(which zig)" ]
+then
+    echo "Zig is either not installed or is not on your PATH."
+    read -p "Open the Zig download page in your browser? [y/n]" -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+		xdg-open "https://https://ziglang.org/download/"
+	fi
+else
+    echo "Zig is installed."
+fi
+
 echo "Cleaning up..."
 rm -rf ./tmp
 

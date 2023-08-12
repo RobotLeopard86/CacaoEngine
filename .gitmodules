@@ -6,8 +6,8 @@
 	url = https://github.com/g-truc/glm
 [submodule "libs/glfw"]
 	path = libs/glfw
-	url = https://github.com/RobotLeopard86/citrus-glfw
+	url = https://github.com/glfw/glfw
 [submodule "libs/imgui"]
 	path = libs/imgui
-	url = https://github.com/RobotLeopard86/citrus-imgui
+	url = https://github.com/ocornut/imgui
 	branch = docking

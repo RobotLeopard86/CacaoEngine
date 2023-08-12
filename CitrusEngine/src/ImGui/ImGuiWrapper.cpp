@@ -37,11 +37,11 @@ namespace CitrusEngine {
         ImVec4* colors = ImGui::GetStyle().Colors;
         ImGui::GetStyle().FrameRounding = 5;
         ImGui::GetStyle().PopupRounding = 3;
-        ImGui::GetStyle().WindowRounding = 4;
+        ImGui::GetStyle().WindowRounding = 0;
         ImGui::GetStyle().ChildRounding = 4;
         colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
         colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-        colors[ImGuiCol_WindowBg]               = ImVec4(0.00f, 0.00f, 0.00f, 0.94f);
+        colors[ImGuiCol_WindowBg]               = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
         colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
         colors[ImGuiCol_PopupBg]                = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
         colors[ImGuiCol_Border]                 = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
@@ -102,19 +102,13 @@ namespace CitrusEngine {
 		//Enable docking (snapping an ImGui window to another window)
 		imGuiIO.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		//Enable multi-viewports (dragging an ImGui window outside the main window)
-		//imGuiIO.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		imGuiIO.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		//Disable saving the ImGui state to a file
 		imGuiIO.IniFilename = nullptr;
 
         //Initialize ImGui
-        #ifdef CE_PLATFORM_LINUX
-            #ifdef CE_RENDERER_GL
-                ImGui_ImplGlfw_InitForOpenGL(nativeWindow, true);
-            #endif
-        #endif
-        #ifdef CE_RENDERER_GL
-            bool imGuiSuccess = ImGui_ImplOpenGL3_Init("#version 410");
-        #endif
+        ImGui_ImplGlfw_InitForOpenGL(nativeWindow, true);
+        bool imGuiSuccess = ImGui_ImplOpenGL3_Init("#version 410");
 
         Asserts::EngineAssert(imGuiSuccess, "ImGui initialization failed!");
 
@@ -124,12 +118,8 @@ namespace CitrusEngine {
     void ImGuiWrapper::Shutdown(){
         Asserts::EngineAssert(initialized, "ImGui must be initialized before shutdown!");
         //Shutdown ImGui's backends
-		#ifdef CE_PLATFORM_LINUX
-            ImGui_ImplGlfw_Shutdown();
-        #endif
-        #ifdef CE_RENDERER_GL
-            ImGui_ImplOpenGL3_Shutdown();
-        #endif
+        ImGui_ImplGlfw_Shutdown();
+        ImGui_ImplOpenGL3_Shutdown();
 		//Destroy the ImGui context
 		ImGui::DestroyContext();
 
@@ -142,12 +132,8 @@ namespace CitrusEngine {
         Asserts::EngineAssert(!frameComposed, "Frame already composed!");
 
         //Generate a new ImGui frame
-        #ifdef CE_RENDERER_GL
-		    ImGui_ImplOpenGL3_NewFrame();
-        #endif
-		#ifdef CE_PLATFORM_LINUX
-		    ImGui_ImplGlfw_NewFrame();
-        #endif
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
         frameCreated = true;
@@ -182,9 +168,7 @@ namespace CitrusEngine {
         ImDrawData* drawData = ImGui::GetDrawData();
 
         //Render the ImGui draw data
-		#ifdef CE_RENDERER_GL
-            ImGui_ImplOpenGL3_RenderDrawData(drawData);
-        #endif
+        ImGui_ImplOpenGL3_RenderDrawData(drawData);
 
         //Is multi-viewport enabled?
 		if(imGuiIO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {

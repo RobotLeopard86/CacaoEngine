@@ -2,16 +2,11 @@
 
 #include "imgui.h"
 
-#ifdef CE_PLATFORM_LINUX
-    #define NativeWindowType GLFWwindow
-    #include "GLFW/glfw3.h"
-    #include "imgui/backends/imgui_impl_glfw.h"
-#endif
-
-#ifdef CE_RENDERER_GL
-    #include "glad/gl.h"
-    #include "imgui/backends/imgui_impl_opengl3.h"
-#endif
+#define NativeWindowType GLFWwindow
+#include "GLFW/glfw3.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "glad/gl.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
 
 namespace CitrusEngine {
     //Citrus Engine ImGui wrapper
