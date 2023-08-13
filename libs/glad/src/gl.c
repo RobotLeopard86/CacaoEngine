@@ -564,6 +564,7 @@ int GLAD_GL_NV_texture_shader3 = 0;
 int GLAD_GL_NV_timeline_semaphore = 0;
 int GLAD_GL_NV_transform_feedback = 0;
 int GLAD_GL_NV_transform_feedback2 = 0;
+int GLAD_GL_NV_uniform_buffer_std430_layout = 0;
 int GLAD_GL_NV_uniform_buffer_unified_memory = 0;
 int GLAD_GL_NV_vdpau_interop = 0;
 int GLAD_GL_NV_vdpau_interop2 = 0;
@@ -8792,6 +8793,7 @@ static int glad_gl_find_extensions_gl( int version) {
     GLAD_GL_NV_timeline_semaphore = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_timeline_semaphore");
     GLAD_GL_NV_transform_feedback = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_transform_feedback");
     GLAD_GL_NV_transform_feedback2 = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_transform_feedback2");
+    GLAD_GL_NV_uniform_buffer_std430_layout = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_uniform_buffer_std430_layout");
     GLAD_GL_NV_uniform_buffer_unified_memory = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_uniform_buffer_unified_memory");
     GLAD_GL_NV_vdpau_interop = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_vdpau_interop");
     GLAD_GL_NV_vdpau_interop2 = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_vdpau_interop2");

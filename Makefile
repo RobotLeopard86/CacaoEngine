@@ -7,8 +7,8 @@ ifndef module
 endif
 
 CONFIGS := debug release
-MODULES := imgui_core glfw_core glad_gl3 glfw_lnx glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_lnx_x_gl3
-BACKENDS := citrus_backend_lnx_x_gl3
+MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_lnx_glfwx_gl3
+BACKENDS := citrus_backend_lnx_glfwx_gl3
 
 ifndef c
 	c="zig cc"
@@ -48,23 +48,21 @@ help:
 	@echo ""
 	@echo "Valid modules:"
 	@echo "  imgui_core (ImGui library without platform backends)"
-	@echo "  glfw_core (GLFW library without platform backends)"
 	@echo "  glad_gl3 (Glad OpenGL 3 library)"
 # @echo "  glad_vk (Glad Vulkan library)"
-# @echo "  glfw_osx (GLFW backend library for macOS) (dependencies: glfw_core)"
-# @echo "  glfw_win (GLFW backend library for Windows) (dependencies: glfw_core)"
-	@echo "  glfw_lnx (GLFW base backend library for Linux) (dependencies: glfw_core)"
-# @echo "  glfw_wl (GLFW backend library for Wayland) (dependencies: glfw_lnx)"
-	@echo "  glfw_x (GLFW backend library for X11) (dependencies: glfw_lnx)"
+# @echo "  glfw_osx (GLFW library for macOS)"
+# @echo "  glfw_win (GLFW library for Windows)"
+# @echo "  glfw_wl (GLFW library for Wayland on Linux)"
+	@echo "  glfw_x (GLFW library for X11 on Linux)"
 	@echo "  imgui_gl3 (ImGui backend library for OpenGL 3) (dependencies: imgui_core, glad_gl3)"
 # @echo "  imgui_dx12 (ImGui backend library for DirectX 12) (dependencies: imgui_core)"
 # @echo "  imgui_metal (ImGui backend library for Metal) (dependencies: imgui_core)"
 # @echo "  imgui_vk (ImGui backend library for Vulkan) (dependencies: imgui_core, glad_vk)"
-	@echo "  imgui_glfw (ImGui backend library for GLFW) (dependencies: imgui_core, glfw_core)"
+	@echo "  imgui_glfw (ImGui backend library for GLFW) (dependencies: imgui_core)"
 # @echo "  imgui_win (ImGui backend library for Windows)"
 	@echo "  citrus_core (Core Citrus Engine library) (dependencies: imgui_core)"
 	@echo "Valid backend modules:"
-	@echo "  citrus_backend_lnx_x_gl3 (Linux backend using GLFW (X11) and OpenGL 3) (dependencies: citrus_core, imgui_glfw, imgui_gl3, glfw_x)"
+	@echo "  citrus_backend_lnx_glfwx_gl3 (Linux backend using GLFW (X11) and OpenGL 3) (dependencies: citrus_core, imgui_glfw, imgui_gl3, glfw_x)"
 
 
 clean-all:

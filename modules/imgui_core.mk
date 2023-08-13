@@ -39,14 +39,14 @@ default:
 
 dirs:
 ifeq (posix,$(SHELLTYPE))
-	$(SILENT) mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 else
-	$(SILENT) mkdir $(subst /,\\,$(OBJDIR))
+	@mkdir $(subst /,\\,$(OBJDIR))
 endif
 ifeq (posix,$(SHELLTYPE))
-	$(SILENT) mkdir -p $(BINDIR)
+	@mkdir -p $(BINDIR)
 else
-	$(SILENT) mkdir $(subst /,\\,$(BINDIR))
+	@mkdir $(subst /,\\,$(BINDIR))
 endif
 
 prebuild:
@@ -55,7 +55,7 @@ prebuild:
 link:
 	@echo ""
 	@echo "Module 'imgui_core' build: Link Library (2/2)"
-	@echo "Linking '$(BIN)'..."
+	@echo "Linking '$(subst ../,,$(BIN))'..."
 	@$(AR) -rcs $(BIN) $(OBJECTS)
 
 build: dirs prebuild $(OBJECTS) link
