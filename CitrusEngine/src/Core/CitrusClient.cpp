@@ -1,17 +1,18 @@
 #include "CitrusClient.h"
 #include "Assert.h"
-#include "Graphics/Window.h"
 #include "Log.h"
 #include "Utilities/Utilities.h"
 #include "Graphics/Renderer.h"
 #include "Utilities/Input.h"
 #include "ImGui/ImGuiWrapper.h"
+#include "Backend.h"
 
 namespace CitrusEngine {
 
     //Required definitions of static members
     CitrusClient* CitrusClient::instance = nullptr;
     EventManager* CitrusClient::eventManager = nullptr;
+    Window* CitrusClient::window = nullptr;
 
     CitrusClient::CitrusClient(){
         //Confirm we are initializing the first client
@@ -25,13 +26,13 @@ namespace CitrusEngine {
 
         //Set up event consumers
         wceConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::Shutdown));
-        clientFixedTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::FixedTickHandler));
+        fixedTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::FixedTickHandler));
         dynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::DynamicTickHandler));
 
         //Set up event manager and subscribe consumers
         eventManager = new EventManager();
         eventManager->SubscribeConsumer("WindowClose", wceConsumer);
-        eventManager->SubscribeConsumer("FixedTick", clientFixedTickConsumer);
+        eventManager->SubscribeConsumer("FixedTick", fixedTickConsumer);
         eventManager->SubscribeConsumer("DynamicTick", dynamicTickConsumer);
     }
 
@@ -39,8 +40,19 @@ namespace CitrusEngine {
     CitrusClient::~CitrusClient() {}
 
     void CitrusClient::Run(){
+        //Initialize the backend
+        if(!Backend::Initialize()){
+            Logging::EngineLog(LogLevel::Fatal, "Backed initialization failed! Shutting down prematurely...");
+            eventManager->Shutdown();
+            delete eventManager;
+            delete wceConsumer;
+            delete fixedTickConsumer;
+            delete dynamicTickConsumer;
+            return;
+        }
+
         //Create window
-        Window::Create(id, windowSize.x, windowSize.y);
+        window = Window::Create(id, windowSize.x, windowSize.y);
 
         //Initialize ImGui
         ImGuiWrapper::Init();
@@ -76,7 +88,7 @@ namespace CitrusEngine {
             ImGuiWrapper::RenderFrame();
 
             //Update window
-            Window::Update();
+            window->Update();
         }
 
         //Prepare eventManager for freeing by unsubscribing all consumers
@@ -86,11 +98,13 @@ namespace CitrusEngine {
         ImGuiWrapper::Shutdown();
 
         //Close window
-        Window::Destroy();
+        window->Destroy();
         
         //Free pointers
         delete eventManager;
         delete wceConsumer;
+        delete dynamicTickConsumer;
+        delete fixedTickConsumer;
     }
 
     void CitrusClient::Shutdown(Event& e){

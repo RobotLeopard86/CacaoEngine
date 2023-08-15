@@ -9,7 +9,7 @@ endif
 
 .PHONY: default build link prebuild dirs
 
-INCLUDES := ../libs/imgui ../libs/imgui/backends
+INCLUDES := -I../libs/imgui -I../libs/imgui/backends -I../libs/glfw/include
 DEFINES :=
 LIBS :=
 LIBDIRS := -L/usr/lib64

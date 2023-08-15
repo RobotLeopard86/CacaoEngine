@@ -2,13 +2,9 @@
 
 #include "Core/Log.h"
 #include "Core/Assert.h"
+#include "Core/CitrusClient.h"
 
 #include "Graphics/Window.h"
-
-#include "GLFW/glfw3.h"
-#include "imgui/backends/imgui_impl_glfw.h"
-#include "glad/gl.h"
-#include "imgui/backends/imgui_impl_opengl3.h"
 
 #include <stdexcept>
 
@@ -18,21 +14,11 @@ namespace CitrusEngine {
     bool ImGuiWrapper::initialized = false;
     bool ImGuiWrapper::frameCreated = false;
     bool ImGuiWrapper::frameComposed = false;
-    NativeWindowType* ImGuiWrapper::nativeWindow = nullptr;
 
-    //This code uses the defined macro NativeWindowType which is the type used by the platform for a window (e.g. GLFWwindow)
     void ImGuiWrapper::Init(){
         Asserts::EngineAssert(!initialized, "ImGui is already initialized!");
         //Create an ImGui context
 		ImGui::CreateContext();
-
-        //Obtain the native window type
-        try {
-            nativeWindow = static_cast<NativeWindowType*>(Window::GetNativeWindow());
-        } catch(const std::bad_cast& exception){
-            Logging::EngineLog(LogLevel::Error, "Could not obtain native window type, cancelling ImGui initialization!");
-            return;
-        }
 
         ImGuiIO& imGuiIO = ImGui::GetIO();
 
@@ -109,9 +95,8 @@ namespace CitrusEngine {
 		//Disable saving the ImGui state to a file
 		imGuiIO.IniFilename = nullptr;
 
-        //Initialize ImGui
-        ImGui_ImplGlfw_InitForOpenGL(nativeWindow, true);
-        bool imGuiSuccess = ImGui_ImplOpenGL3_Init("#version 410");
+        //Initialize ImGui backend
+        bool imGuiSuccess = InitImGuiBackend();
 
         Asserts::EngineAssert(imGuiSuccess, "ImGui initialization failed!");
 
@@ -121,8 +106,7 @@ namespace CitrusEngine {
     void ImGuiWrapper::Shutdown(){
         Asserts::EngineAssert(initialized, "ImGui must be initialized before shutdown!");
         //Shutdown ImGui's backends
-        ImGui_ImplGlfw_Shutdown();
-        ImGui_ImplOpenGL3_Shutdown();
+        ShutdownImGuiBackend();
 		//Destroy the ImGui context
 		ImGui::DestroyContext();
 
@@ -135,8 +119,7 @@ namespace CitrusEngine {
         Asserts::EngineAssert(!frameComposed, "Frame already composed!");
 
         //Generate a new ImGui frame
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
+		ImGuiBackendNewFrame();
 		ImGui::NewFrame();
 
         frameCreated = true;
@@ -151,7 +134,7 @@ namespace CitrusEngine {
         ImGuiIO& imGuiIO = ImGui::GetIO();
 
         //Resize ImGui viewport
-        glm::i32vec2 windowSize = Window::GetSize();
+        glm::i32vec2 windowSize = CitrusClient::GetWindow()->GetSize();
         imGuiIO.DisplaySize = ImVec2(windowSize.x, windowSize.y);
 
         //Render ImGui data
@@ -171,15 +154,15 @@ namespace CitrusEngine {
         ImDrawData* drawData = ImGui::GetDrawData();
 
         //Render the ImGui draw data
-        ImGui_ImplOpenGL3_RenderDrawData(drawData);
+        ImGuiBackendRender(drawData);
 
         //Is multi-viewport enabled?
 		if(imGuiIO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 			//Update and render the ImGui viewports
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
-			//Apply our current context after viewport rendering
-			Window::EnsureWindowRenderContext();
+            //Run any post-viewport rendering code
+            ImGuiBackendPostViewport();
 		}
 
         frameCreated = false;

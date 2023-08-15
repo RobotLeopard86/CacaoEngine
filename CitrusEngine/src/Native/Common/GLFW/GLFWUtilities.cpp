@@ -1,14 +1,14 @@
-#include "LinuxUtilities.h"
+#include "GLFWUtilities.h"
 
 #include "GLFW/glfw3.h"
 
 namespace CitrusEngine {
 
     Utilities* Utilities::CreateNativeUtilities(){
-        return new LinuxUtilities();
+        return new GLFWUtilities();
     }
 
-    double LinuxUtilities::GetElapsedTime() {
+    double GLFWUtilities::GetElapsedTime() {
         return (glfwGetTime() / 1000);
     }
 }

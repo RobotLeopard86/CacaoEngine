@@ -2,6 +2,10 @@
 
 #include "glm/vec2.hpp"
 
+#include "Events/EventSystem.h"
+
+#include <map>
+
 namespace CitrusEngine {
     //Input singleton
     class Input {
@@ -9,23 +13,39 @@ namespace CitrusEngine {
         virtual ~Input() {}
 
         //Returns a two-component vector of doubles representing the current cursor position
-        virtual glm::dvec2 GetCursorPos() = 0;
+        glm::dvec2 GetCursorPos();
         //Returns a boolean representing whether the given key is pressed
-        virtual bool IsKeyPressed(int key) = 0;
+        bool IsKeyPressed(int key);
         //Returns a boolean representing whether the given mouse button is pressed
-        virtual bool IsMouseButtonPressed(int button) = 0;
+        bool IsMouseButtonPressed(int button);
 
         //Get the current instance or create one if it doesn't exist
-        static Input* GetInstance();
-    protected:
-        //Creates Input instance for the native platform
-        static Input* CreateNativeInput();
+        static Input* GetInstance(); 
 
-        //Protected constructor so only subclasses can call it
-        Input() {}
+        //Event handlers
+        void CursorPosChangeHandler(Event& e);
+        void KeyUpHandler(Event& e);
+        void MouseButtonUpHandler(Event& e);
+        void KeyDownHandler(Event& e);
+        void MouseButtonDownHandler(Event& e);
     private:
         static Input* instance;
         static bool instanceExists;
+
+        //Private constructor so only the singleton initializer can call it
+        Input();
+
+        //Event consumers
+        EventConsumer* cursorPosConsumer;
+        EventConsumer* keyUpConsumer;
+        EventConsumer* mouseButtonUpConsumer;
+        EventConsumer* keyDownConsumer;
+        EventConsumer* mouseButtonDownConsumer;
+
+        //Input data storage
+        glm::dvec2 cursorPos;
+        std::map<int, bool> keyStateMap;
+        std::map<int, bool> mouseButtonStateMap;
     };
 }
 

@@ -30,11 +30,15 @@ namespace CitrusEngine {
     }
 
     void OpenGLRenderer::InitBackend(){
+        Asserts::EngineAssert(backendInitialized, "Glad is already intialized!");
+
         //Initialize Glad (OpenGL loader)
         int gladLoaderResponse = gladLoaderLoadGL();
 
         //Ensure Glad initialized correctly
-        Asserts::EngineAssert(gladLoaderResponse != 0, "Failed to initialize Glad!");
+        Asserts::EngineAssert(gladLoaderResponse, "Failed to initialize Glad!");
+
+        backendInitialized = true;
 
         //Log GL info
         const char* glVendor = (const char*)glGetString(GL_VENDOR);
@@ -43,6 +47,15 @@ namespace CitrusEngine {
         std::string msg = "Citrus Engine OpenGL Info:\n  OpenGL v";
         msg = msg + glVersion + " provided by " + glVendor + ", running on " + glRenderer;
         Logging::EngineLog(LogLevel::Trace, msg);
+    }
+
+    void OpenGLRenderer::ShutdownBackend(){
+        Asserts::EngineAssert(backendInitialized, "Glad is not intialized!");
+
+        //Unload Glad
+        gladLoaderUnloadGL();
+
+        backendInitialized = false;
     }
 
     void OpenGLRenderer::RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) {

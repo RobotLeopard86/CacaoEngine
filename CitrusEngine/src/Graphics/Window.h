@@ -2,58 +2,49 @@
 
 #include <string>
 #include <utility>
+#include <map>
 
 #include "glm/vec2.hpp"
 
 namespace CitrusEngine {
     
-    //Window singleton
+    //Platform-agnostic window class
     class Window {
     public:
         virtual ~Window() {};
 
         //Creates a window
-        static void Create(std::string title, int initialSizeX, int initialSizeY);
+        static Window* Create(std::string title, int initialSizeX, int initialSizeY);
 
-        //Destroys the window
-        static void Destroy();
-
+        //Destroys the window and also destroys the window object
+        void Destroy();
         //Called every frame to update the window
-        static void Update();
-        //Get pointer to underlying window type
-        static void* GetNativeWindow();
+        void Update();
         //Get window size (returns integer two-component vector)
-        static glm::i32vec2 GetSize();
+        glm::i32vec2 GetSize() { return size; }
         //Resizes the window
-        static void SetSize(glm::i32vec2 newSize);
+        void SetSize(glm::i32vec2 newSize) { size = newSize; UpdateWindowSize(); }
         //Enable/disable VSync
-        static void SetVSyncEnabled(bool value);
+        void SetVSyncEnabled(bool value) { useVSync = value; UpdateVSyncState(); }
         //Returns if VSync is enabled or not
-        static bool IsVSyncEnabled();
-        //Sets the active rendering context to the window's context
-        static void EnsureWindowRenderContext();
-    protected:
-        //Implementation of Update
-        virtual void Update_Impl() = 0;
-        //Implementation of GetNativeWindow
-        virtual void* GetNativeWindow_Impl() = 0;
-        //Implementation of GetSize
-        virtual glm::i32vec2 GetSize_Impl() = 0;
-        //Implemntation of SetSize
-        virtual void SetSize_Impl(glm::i32vec2 newSize) {}
-        //Implementation of SetVSyncEnabled
-        virtual void SetVSyncEnabled_Impl(bool value) {}
-        //Implementation of IsVSyncEnabled
-        virtual bool IsVSyncEnabled_Impl() = 0;
-        //Implementation of IsVSyncEnabled
-        virtual void EnsureWindowRenderContext_Impl() = 0;
-
-        //Runs when window should shut down
-        virtual void Shutdown() = 0;
-
-        //Creates window for the native platform
-        static Window* CreateNativeWindow(std::string title, int initialSizeX, int initialSizeY);
+        bool IsVSyncEnabled() { return useVSync; }
+        //Get native window type (returns void*, must be cast to target window type)
+        void* GetNativeWindow() { return nativeWindow; }
     private:
-        static Window* instance;
+        Window(void* nativeWindow, glm::i32vec2 size, std::string title)
+            : nativeWindow(nativeWindow), size(size), windowTitle(title) {
+            SetVSyncEnabled(true);
+        }
+
+        bool useVSync;
+        glm::i32vec2 size;
+        std::string windowTitle;
+
+        void* nativeWindow;
+
+        static std::map<void*, Window*> nativeWindowLUT;
+
+        void UpdateVSyncState();
+        void UpdateWindowSize();
     };
 }

@@ -69,92 +69,92 @@ build: dirs prebuild $(OBJECTS) link
 
 $(OBJDIR)/context.o: $(SRCDIR)/context.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/init.o: $(SRCDIR)/init.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/input.o: $(SRCDIR)/input.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/platform.o: $(SRCDIR)/platform.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/vulkan.o: $(SRCDIR)/window.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/monitor.o: $(SRCDIR)/monitor.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/window.o: $(SRCDIR)/window.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/egl_context.o: $(SRCDIR)/egl_context.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/osmesa_context.o: $(SRCDIR)/osmesa_context.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/null_init.o: $(SRCDIR)/null_init.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/null_monitor.o: $(SRCDIR)/null_monitor.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/null_window.o: $(SRCDIR)/null_window.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/null_joystick.o: $(SRCDIR)/null_joystick.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/posix_module.o: $(SRCDIR)/posix_module.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/posix_time.o: $(SRCDIR)/posix_time.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/posix_thread.o: $(SRCDIR)/posix_thread.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/posix_poll.o: $(SRCDIR)/posix_poll.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/x11_init.o: $(SRCDIR)/x11_init.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/x11_monitor.o: $(SRCDIR)/x11_monitor.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/x11_window.o: $(SRCDIR)/x11_window.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/xkb_unicode.o: $(SRCDIR)/xkb_unicode.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/glx_context.o: $(SRCDIR)/glx_context.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/linux_joystick.o: $(SRCDIR)/linux_joystick.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<

@@ -5,19 +5,15 @@
 
 namespace CitrusEngine {
     void Asserts::EngineAssert(bool condition, std::string errorMsg){
-        #ifdef CE_ALLOWASSERTS
-            if(!condition){
-                Logging::EngineLog(LogLevel::Error, "Failed Assertion - " + errorMsg);
-                exit(-1);
-            }
-        #endif
+        if(!condition){
+            Logging::EngineLog(LogLevel::Error, "Failed Assertion - " + errorMsg);
+            exit(-1);
+        }
     }
     void Asserts::ClientAssert(bool condition, std::string errorMsg){
-        #ifdef CE_ALLOWASSERTS
-            if(!condition){
-                Logging::ClientLog(LogLevel::Error, "Failed Assertion - " + errorMsg);
-                exit(-1);
-            }
-        #endif
+        if(!condition){
+            Logging::ClientLog(LogLevel::Error, "Failed Assertion - " + errorMsg);
+            exit(-1);
+        }
     }
 }

@@ -35,6 +35,12 @@ namespace CitrusEngine {
 
         //Apply logging pattern (Month/Day/Year - Hour:Minute:Second AM/PM [Logger Name/Message Level]: Message Text)
         spdlog::set_pattern("%^%m/%d/%Y - %I:%M:%S %p [%n/%l]: %v%$");
+
+        //Force log file flushing
+        spdlog::flush_on(spdlog::level::trace);
+
+        engineLogger->set_level(spdlog::level::trace);
+        clientLogger->set_level(spdlog::level::trace);
     }
 
     void Logging::EngineLog(LogLevel level, std::string message){

@@ -24,6 +24,8 @@ namespace CitrusEngine {
         virtual void ResizeViewport(int width, int height) = 0;
         //Initialize rendering backend
         virtual void InitBackend() = 0;
+        //Shutdown rendering backed
+        virtual void ShutdownBackend() = 0;
         //Set the camera to use for rendering
         virtual void SetCamera(Camera* cam) = 0;
 
@@ -35,6 +37,8 @@ namespace CitrusEngine {
 
         //Protected constructor so only subclasses can call it
         Renderer() {}
+
+        bool backendInitialized = false;
     private:
         static Renderer* instance;
         static bool instanceExists;

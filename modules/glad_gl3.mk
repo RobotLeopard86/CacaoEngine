@@ -66,4 +66,4 @@ build: dirs prebuild $(OBJECTS) link
 
 $(OBJDIR)/gl.o: $(SRCDIR)/gl.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
+	@$(c) $(OPTS) -o "$@" $<

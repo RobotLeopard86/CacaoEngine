@@ -1,4 +1,4 @@
-MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_lnx_glfwx_gl3
+MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3
 
 .PHONY: default $(MODULES)
 
@@ -25,7 +25,7 @@ imgui_glfw: imgui_core
 imgui_gl3: imgui_core glad_gl3
 	@echo "Building module 'imgui_gl3'..."
 	@echo ""
-	@${MAKE} --no-print-directory -f imgui_glfw.mk build config=$(config) c="$(c)" cpp="$(cpp)"
+	@${MAKE} --no-print-directory -f imgui_gl3.mk build config=$(config) c="$(c)" cpp="$(cpp)"
 	@echo ""
 	@echo "Done building module 'imgui_gl3'."
 
@@ -50,9 +50,9 @@ citrus_core: imgui_core
 	@echo ""
 	@echo "Done building module 'citrus_core'."
 
-citrus_backend_lnx_glfwx_gl3: citrus_core glfw_x imgui_glfw imgui_gl3
-	@echo "Building module 'citrus_core'..."
+citrus_backend_glfwx_gl3: citrus_core glfw_x imgui_glfw imgui_gl3
+	@echo "Building module 'citrus_backend_glfwx_gl3'..."
 	@echo ""
-	@${MAKE} --no-print-directory -f citrus_core.mk build config=$(config) c="$(c)" cpp="$(cpp)"
+	@${MAKE} --no-print-directory -f citrus_backend_glfwx_gl3.mk build config=$(config) c="$(c)" cpp="$(cpp)"
 	@echo ""
-	@echo "Done building module 'citrus_core'."
+	@echo "Done building module 'citrus_backend_glfwx_gl3'."

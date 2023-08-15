@@ -4,6 +4,8 @@
 
 #include "Events/EventSystem.h"
 
+#include "Graphics/Window.h"
+
 namespace CitrusEngine {
 
     //Singleton client
@@ -33,20 +35,24 @@ namespace CitrusEngine {
 
         //Gets event manager
         static EventManager* GetEventManager() { return eventManager; }
+
+        //Gets window
+        static Window* GetWindow() { return window; }
     protected:
         std::string id;
         glm::u16vec2 windowSize;
     private:
         static CitrusClient* instance;
         static EventManager* eventManager;
+        static Window* window;
 
         bool run;
 
         //Consumes WindowCloseEvents
         EventConsumer* wceConsumer;
         
-        //Consumers for registering client for tick events
-        EventConsumer* clientFixedTickConsumer;
+        //Consumers for tick events
+        EventConsumer* fixedTickConsumer;
         EventConsumer* dynamicTickConsumer;
 
         //Runs when client should close

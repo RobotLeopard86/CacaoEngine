@@ -7,8 +7,8 @@ ifndef module
 endif
 
 CONFIGS := debug release
-MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_lnx_glfwx_gl3
-BACKENDS := citrus_backend_lnx_glfwx_gl3
+MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3
+BACKENDS := citrus_backend_glfwx_gl3
 
 ifndef c
 	c="zig cc"
@@ -62,7 +62,7 @@ help:
 # @echo "  imgui_win (ImGui backend library for Windows)"
 	@echo "  citrus_core (Core Citrus Engine library) (dependencies: imgui_core)"
 	@echo "Valid backend modules:"
-	@echo "  citrus_backend_lnx_glfwx_gl3 (Linux backend using GLFW (X11) and OpenGL 3) (dependencies: citrus_core, imgui_glfw, imgui_gl3, glfw_x)"
+	@echo "  citrus_backend_glfwx_gl3 (Backend using GLFW (X11) and OpenGL 3) (dependencies: citrus_core, imgui_glfw, imgui_gl3, glfw_x)"
 
 
 clean-all:

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Log.h"
-#include "Utilities/Input.h"
 #include "Core/Assert.h"
 
 #include "glm/vec2.hpp"
@@ -67,7 +66,7 @@ namespace CitrusEngine {
     class KeyDownEvent : public Event { //Parameters: Keycode for key pressed
     public:
         KeyDownEvent(int keycode) : keycode(keycode) {}
-        KeyDownEvent() : keycode(CITRUS_KEY_SPACE) {}
+        KeyDownEvent() : keycode(0) {} //0 used because Input.h has no key assigned to it
 
         int keycode;
 
@@ -76,7 +75,7 @@ namespace CitrusEngine {
     class KeyUpEvent : public Event { //Parameters: Keycode for key released
     public:   
         KeyUpEvent(int keycode) : keycode(keycode) {}
-        KeyUpEvent() : keycode(CITRUS_KEY_SPACE) {}
+        KeyUpEvent() : keycode(0) {} //0 used because Input.h has no key assigned to it
 
         int keycode;
 
@@ -85,7 +84,7 @@ namespace CitrusEngine {
     class KeyTypeEvent : public Event { //Parameters: Keycode for key typed
     public:    
         KeyTypeEvent(unsigned int keycode) : keycode(keycode) {}
-        KeyTypeEvent() : keycode(CITRUS_KEY_SPACE) {}
+        KeyTypeEvent() : keycode(0) {} //0 used because Input.h has no key assigned to it
 
         unsigned int keycode;
 
@@ -96,7 +95,7 @@ namespace CitrusEngine {
     class MousePressEvent : public Event { //Parameters: Button code for button pressed
     public:
         MousePressEvent(int button) : button(button) {}
-        MousePressEvent() : button(CITRUS_MOUSE_BUTTON_LEFT) {}
+        MousePressEvent() : button(9) {} //9 used because Input.h has no button assigned to it
 
         int button;
 
@@ -105,7 +104,7 @@ namespace CitrusEngine {
     class MouseReleaseEvent : public Event { //Parameters: Button code for button released
     public:
         MouseReleaseEvent(int button) : button(button) {}
-        MouseReleaseEvent() : button(CITRUS_MOUSE_BUTTON_LEFT) {}
+        MouseReleaseEvent() : button(9) {} //9 used because Input.h has no button assigned to it
 
         int button;
 
