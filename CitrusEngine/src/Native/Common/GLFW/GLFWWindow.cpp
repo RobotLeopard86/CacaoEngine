@@ -17,6 +17,8 @@
 
 namespace CitrusEngine {
 
+    std::map<void*, Window*> Window::nativeWindowLUT = std::map<void*, Window*>();
+
     Window* Window::Create(std::string title, int initialSizeX, int initialSizeY){
         if(!GLFWBackendComponent::IsInitialized()){
             Logging::EngineLog(LogLevel::Error, "Attempted window creation while GLFW backend component is uninitialized. Null pointer will be returned.");

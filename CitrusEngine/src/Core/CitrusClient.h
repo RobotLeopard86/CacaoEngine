@@ -46,6 +46,8 @@ namespace CitrusEngine {
         static EventManager* eventManager;
         static Window* window;
 
+        static bool instanceExists;
+
         bool run;
 
         //Consumes WindowCloseEvents

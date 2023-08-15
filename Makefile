@@ -11,11 +11,11 @@ MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_ba
 BACKENDS := citrus_backend_glfwx_gl3
 
 ifndef c
-	c="zig cc"
+	c=zig cc
 endif
 
 ifndef cpp
-	cpp="zig c++"
+	cpp=zig c++
 endif
 
 SHELLTYPE := posix
@@ -24,7 +24,13 @@ ifeq (.exe,$(findstring .exe,$(ComSpec)))
 endif
 
 ifndef target
-	target=$(shell $(cpp) -dumpmachine)
+	target != $(cpp) -dumpmachine
+endif
+
+ifeq (posix,$(SHELLTYPE))
+	builtmods != ls Build/modules
+else
+	builtmods= != dir $(subst /,\\,Build/modules)
 endif
 
 .PHONY: help build-module build-playground clean-module clean-all run-playground
@@ -99,26 +105,20 @@ endif
 ifeq ($(filter $(backend),$(BACKENDS)),)
 	$(error '$(backend)' is not a valid backend! Please refer to 'make help' for help)
 endif
-ifeq ($(wildcard "Build/modules/$(backend)"),)
-	@echo "'$(backend)' has not been built. Building backend and dependencies first..."
-	@${MAKE} --no-print-directory build-module config=$(config) c=$(c) cpp=$(cpp) module=$(backend)
+ifeq ($(filter $(builtmods),$(backend)),)
+	@echo "Backend '$(backend)' has not been built. Building backend and dependencies first..."
+	@${MAKE} --no-print-directory build-module config=$(config) c='$(c)' cpp='$(cpp)' module=$(backend)
 endif
 	@echo "Building playground using backend '$(backend)'..."
-	@${MAKE} --no-print-directory -C CitrusPlayground -f Makefile build config=$(config) c=$(c) cpp=$(cpp) backend=$(backend)
+	@${MAKE} --no-print-directory -C CitrusPlayground -f Makefile build config=$(config) c='$(c)' cpp='$(cpp)' backend=$(backend)
 	@echo "Done!"
 
 run-playground:
-ifeq ($(wildcard "Build/playground"),)
-	$(error Playground has not yet been built. Build it using the 'make build-playground command'. See 'make help' for information on that command)
-endif
 ifeq (none,$(backend))
 	$(error "You must specify the backend parameter")
 endif
 ifeq ($(filter $(backend),$(BACKENDS)),)
 	$(error '$(backend)' is not a valid backend! Please refer to 'make help' for help)
-endif
-ifeq ($(wildcard "Build/modules/$(backend)"),)
-	$(error '$(backend)' has no playground built for it with config '$(config)' and target '$(target)'. Build using the 'make build-playground command'. See 'make help' for information on that command)
 endif
 	@Build/playground/$(target)/$(config)/$(backend)/bin/CitrusPlayground
 
@@ -132,4 +132,4 @@ endif
 ifeq ($(filter $(module),$(MODULES)),)
 	$(error '$(module)' is not a valid module! Please refer to 'make help' for help)
 endif
-	@${MAKE} --no-print-directory -C modules -f modulebuild.mk $(module) config=$(config) c=$(c) cpp=$(cpp)
+	@${MAKE} --no-print-directory -C modules -f modulebuild.mk $(module) config=$(config) c='$(c)' cpp='$(cpp)'

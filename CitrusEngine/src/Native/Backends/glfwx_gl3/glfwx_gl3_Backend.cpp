@@ -7,6 +7,8 @@
 
 namespace CitrusEngine {
 
+    bool Backend::initialized = false;
+
     bool Backend::Initialize(){
         Asserts::EngineAssert(!initialized, "Backend already initialized!");
 

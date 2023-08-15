@@ -11,15 +11,17 @@ namespace CitrusEngine {
 
     //Required definitions of static members
     CitrusClient* CitrusClient::instance = nullptr;
+    bool CitrusClient::instanceExists = false;
     EventManager* CitrusClient::eventManager = nullptr;
     Window* CitrusClient::window = nullptr;
 
     CitrusClient::CitrusClient(){
         //Confirm we are initializing the first client
-        Asserts::EngineAssert(instance != nullptr, "Client instance already exists!");
+        Asserts::EngineAssert(!instanceExists, "Client instance already exists!");
 
         //Set singleton instance
         instance = this;
+        instanceExists = true;
 
         //Allow the app to run
         run = true;

@@ -83,7 +83,7 @@ $(OBJDIR)/platform.o: $(SRCDIR)/platform.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(c) $(OPTS) -o "$@" $<
 
-$(OBJDIR)/vulkan.o: $(SRCDIR)/window.c
+$(OBJDIR)/vulkan.o: $(SRCDIR)/vulkan.c
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(c) $(OPTS) -o "$@" $<
 

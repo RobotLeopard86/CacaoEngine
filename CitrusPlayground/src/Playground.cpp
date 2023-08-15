@@ -171,12 +171,12 @@ public:
         //std::stringstream sscam;
         //sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
         std::stringstream ssvs;
-        ssvs << "VSync is currently " << (Window::IsVSyncEnabled() ? "on" : "off");
+        ssvs << "VSync is currently " << (GetWindow()->IsVSyncEnabled() ? "on" : "off");
 
         ImGui::Begin("Simple Test Window");
         ImGui::Text("This is a simple ImGui test window.");
         if(ImGui::Button("Toggle VSync")){
-            Window::SetVSyncEnabled(!Window::IsVSyncEnabled());
+            GetWindow()->SetVSyncEnabled(!GetWindow()->IsVSyncEnabled());
         }
         ImGui::Text("%s", ssvs.str().c_str());
         //ImGui::Text("%s", sscam.str().c_str());
