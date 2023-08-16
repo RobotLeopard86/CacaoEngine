@@ -2,6 +2,10 @@
 
 #include "Graphics/Shader.h"
 
+#include "glad/gl.h"
+
+#include <map>
+
 namespace CitrusEngine {
 
     //OpenGL implementation of Shader (see Shader.h for method details)
@@ -33,5 +37,7 @@ namespace CitrusEngine {
         bool bound;
         std::string vertexShader;
         std::string fragmentShader;
+
+        std::map<const char*, GLint> uniformLocations;
     };
 }
