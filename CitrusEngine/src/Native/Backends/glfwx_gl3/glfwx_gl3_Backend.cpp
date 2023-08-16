@@ -2,8 +2,9 @@
 
 #include "Core/Assert.h"
 
-#include "Native/Common/GLFW/GLFWBackendComponent.h"
 #include "Graphics/Renderer.h"
+
+#include "Native/Common/GLFW/GLFWBackendComponent.h"
 
 namespace CitrusEngine {
 
@@ -17,8 +18,7 @@ namespace CitrusEngine {
             return false;
         }
 
-        //Initialize OpenGL backend
-        Renderer::GetInstance()->InitBackend();
+        //Glad must be initialized after window creation
 
         return true;
     }

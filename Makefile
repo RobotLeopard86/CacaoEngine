@@ -28,9 +28,9 @@ ifndef target
 endif
 
 ifeq (posix,$(SHELLTYPE))
-	builtmods != ls Build/modules
+	builtmods != if [ -d Build/modules ]; then ls Build/modules; fi
 else
-	builtmods= != dir $(subst /,\\,Build/modules)
+	builtmods= != if exist $(subst /,\\,Build/modules) dir $(subst /,\\,Build/modules)
 endif
 
 .PHONY: help build-module build-playground clean-module clean-all run-playground

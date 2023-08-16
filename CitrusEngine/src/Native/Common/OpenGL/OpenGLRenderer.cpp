@@ -30,7 +30,7 @@ namespace CitrusEngine {
     }
 
     void OpenGLRenderer::InitBackend(){
-        Asserts::EngineAssert(backendInitialized, "Glad is already intialized!");
+        Asserts::EngineAssert(!backendInitialized, "Glad is already intialized!");
 
         //Initialize Glad (OpenGL loader)
         int gladLoaderResponse = gladLoaderLoadGL();

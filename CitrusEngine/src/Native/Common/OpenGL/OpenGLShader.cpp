@@ -144,7 +144,7 @@ namespace CitrusEngine {
     }
 
     void OpenGLShader::UploadUniformMat4(std::string uniform, glm::mat4 value) {
-		GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
+        GLint uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
 		if(uniformLocation == -1) {
 			Asserts::EngineAssert(false, "Cannot upload data to nonexistent uniform!");
 			return;

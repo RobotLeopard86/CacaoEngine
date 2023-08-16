@@ -11,16 +11,18 @@
 ## Build System
 Citrus Engine uses GNU Make and Zig as the build system.
 
+## Environment Set Up (**REQUIRED**)
+Run the `setupEnvironment.sh` script in the root directory to set everything up (make sure to set it as executable!).
+
 ## Prerequisites
 * GNU Make
 * Zig
 
-## Tools
-GNU Make should be pre-installed on your GNU/Linux distro. If it isn't, you should be able to install it from your package manager. Windows users can use [Chocolatey](https://chocolatey.org/) to install GNU Make with this command: `choco install make`, and macOS users can install it with brew, with this command: `brew install make`. You will also need Zig's C/C++ compiler, which is the default (but can be overriden with the `c` and `cpp` flags in the top-level Makefile). Download Zig [here](https://ziglang.org/download/). You can use the package manager step. You will need to add Zig to your PATH environment variable so that GNU Make can locate it.
+## Installing Make
+GNU Make should be pre-installed on your GNU/Linux distro. If it isn't, you should be able to install it from your package manager. Windows users can use [Chocolatey](https://chocolatey.org/) to install GNU Make with this command: `choco install make`, and macOS users can install it with brew, with this command: `brew install make`.
 
-## Environment Set Up
-Run the `setupEnvironment.sh` script in the root directory to set everything up (make sure to set it as executable!). **THIS IS REQUIRED BEFORE BUILDING!!!**
-The recommended IDE is Visual Studio Code, which can be downloaded [here](https://code.visualstudio.com). The project comes with a preset `launch.json` file for debugging as well.
+## Installing Zig
+While not required, the default compiler is Zig's C/C++ compiler (but this can be overriden with the `c` and `cpp` flags in the top-level Makefile). Download Zig [here](https://ziglang.org/download/) or install from your package manager. Make sure the `zig` executable is in your PATH environment variable so that Make can locate it.
 
 ## Makefile
 It is **HIGHLY RECOMMENDED** to use `make help` prior to using the Makefile in this project, as it does not function identically to other Make-based projects.

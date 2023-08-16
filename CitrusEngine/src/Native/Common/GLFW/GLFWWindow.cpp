@@ -6,6 +6,8 @@
 
 #include "Events/EventSystem.h"
 
+#include "Graphics/Renderer.h"
+
 #include "GLFWBackendComponent.h"
 
 //GLFW implementation of Window (see Window.h for more details)
@@ -30,6 +32,9 @@ namespace CitrusEngine {
         GLFWwindow* nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, title.c_str(), 0, 0);
 
         if(glfwGetWindowAttrib(nativeWindow, GLFW_CLIENT_API) == GLFW_OPENGL_API) glfwMakeContextCurrent(nativeWindow);
+
+        //Initialize rendering backend
+        Renderer::GetInstance()->InitBackend();
 
         //Create window object
         Window* window = new Window((void*)nativeWindow, glm::i32vec2(initialSizeX, initialSizeY), title);

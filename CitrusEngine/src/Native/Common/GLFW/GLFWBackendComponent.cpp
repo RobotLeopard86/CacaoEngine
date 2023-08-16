@@ -8,11 +8,10 @@ namespace CitrusEngine {
 
     bool GLFWBackendComponent::Initialize() {
         if(!initialized){
-            Logging::EngineLog(LogLevel::Info, "Initializing GLFW backend component...");
             //Initialize GLFW
             initialized = glfwInit();
             if(!initialized){
-                Logging::EngineLog(LogLevel::Error, "GLFW backend component failed to initialize!");
+                Logging::EngineLog(LogLevel::Error, "Failed to initialize GLFW!");
                 return false;
             }
             
@@ -21,7 +20,7 @@ namespace CitrusEngine {
                 Logging::EngineLog(LogLevel::Error, "GLFW encountered an error with code " + std::to_string(errCode) + ", with provided reason \"" + description + "\"!");
             });
         } else {
-            Logging::EngineLog(LogLevel::Warn, "Attempted initialization of GLFW backend component while initialized. Ignoring call.");
+            Logging::EngineLog(LogLevel::Warn, "Attempted initialization of GLFW while initialized. Ignoring call.");
         }
         return initialized;
     }
@@ -31,7 +30,7 @@ namespace CitrusEngine {
             glfwTerminate();
             initialized = false;
         } else {
-            Logging::EngineLog(LogLevel::Warn, "Attempted shutdown of GLFW backend component while uninitialized. Ignoring call.");
+            Logging::EngineLog(LogLevel::Warn, "Attempted shutdown of GLFW while uninitialized. Ignoring call.");
         }
     }
 }
