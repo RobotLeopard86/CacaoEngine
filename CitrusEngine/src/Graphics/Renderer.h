@@ -20,8 +20,6 @@ namespace CitrusEngine {
         virtual void Clear() = 0;
         //Renders some geometry
         virtual void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) = 0;
-        //Set viewport width and height
-        virtual void ResizeViewport(int width, int height) = 0;
         //Initialize rendering backend
         virtual void InitBackend() = 0;
         //Shutdown rendering backed

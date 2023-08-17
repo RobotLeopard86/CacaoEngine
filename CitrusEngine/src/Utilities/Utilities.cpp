@@ -8,7 +8,7 @@ namespace CitrusEngine {
 
     Utilities* Utilities::GetInstance() {
         //Do we have a utilities instance yet?
-        if(!instanceExists){
+        if(!instanceExists || instance == NULL){
             //Create utilities instance
             instance = CreateNativeUtilities();
             instanceExists = true;

@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+#include "Core/Assert.h"
+
 namespace CitrusEngine {
     //Make renderer instance null pointer by default
     Renderer* Renderer::instance = nullptr;
@@ -8,7 +10,7 @@ namespace CitrusEngine {
 
     Renderer* Renderer::GetInstance() {
         //Do we have a renderer instance yet?
-        if(!instanceExists){
+        if(!instanceExists || instance == NULL){
             //Create renderer instance
             instance = CreateNativeRenderer();
             instanceExists = true;

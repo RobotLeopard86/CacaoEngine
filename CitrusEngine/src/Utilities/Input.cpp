@@ -12,7 +12,7 @@ namespace CitrusEngine {
 
     Input* Input::GetInstance() {
         //Do we have a input instance yet?
-        if(!instanceExists){
+        if(!instanceExists || instance == NULL){
             //Create input instance
             instance = new Input();
             instanceExists = true;

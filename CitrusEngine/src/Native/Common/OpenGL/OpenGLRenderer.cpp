@@ -25,10 +25,6 @@ namespace CitrusEngine {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRenderer::ResizeViewport(int width, int height){
-        glViewport(0, 0, width, height);
-    }
-
     void OpenGLRenderer::InitBackend(){
         Asserts::EngineAssert(!backendInitialized, "Glad is already intialized!");
 
