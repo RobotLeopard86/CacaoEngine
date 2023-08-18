@@ -172,21 +172,25 @@ public:
         ImGui::Begin("No window here", NULL, window_flags);
 
         ImGui::Text("This is on an invisible window!");
-        ImGui::Separator();
+        ImGui::Spacing();
         ImGui::Text("Then again, you wouldn't know that...");
 
         ImGui::End();
 
         std::stringstream sscam;
         sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
+        std::stringstream ssrot;
+        ssrot << "Camera rotation: " << std::to_string(currentRot.x) << ", " << std::to_string(currentRot.y) << ", " << std::to_string(currentRot.z) << ".";
         std::stringstream ssvs;
         ssvs << "VSync is currently " << (GetWindow()->IsVSyncEnabled() ? "on" : "off");
 
         ImGui::Begin("Simple Test Window");
         ImGui::Text("This is a simple ImGui test window.");
-        ImGui::Separator();
+        ImGui::Spacing();
         ImGui::Text("%s", sscam.str().c_str());
-        ImGui::Separator();
+        ImGui::Text("%s", ssrot.str().c_str());
+
+        ImGui::Spacing();
         if(ImGui::Button("Toggle VSync")){
             GetWindow()->SetVSyncEnabled(!GetWindow()->IsVSyncEnabled());
         }

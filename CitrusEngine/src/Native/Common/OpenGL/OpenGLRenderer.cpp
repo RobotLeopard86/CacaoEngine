@@ -61,6 +61,7 @@ namespace CitrusEngine {
         mesh->Bind();
         shader->Bind();
 
+        //Upload uniforms
         shader->UploadUniformMat4("transform", glm::translate(glm::mat4(1.0), transform->pos));
         shader->UploadUniformMat4("camview", activeCam->GetViewProjectionMatrix());
 

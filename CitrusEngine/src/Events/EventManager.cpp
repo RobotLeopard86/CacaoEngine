@@ -97,8 +97,6 @@ namespace CitrusEngine {
             for(EventConsumer* consumer : eventTypeConsumers){
                 consumer->Consume(event);
             }
-        } else {
-            Logging::EngineLog(LogLevel::Trace, "No consumers registered for dispatched event of type " + event.GetType() + ", not dispatching.");
         }
     }
 }
