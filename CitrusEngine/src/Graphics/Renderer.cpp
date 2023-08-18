@@ -12,7 +12,7 @@ namespace CitrusEngine {
         //Do we have a renderer instance yet?
         if(!instanceExists || instance == NULL){
             //Create renderer instance
-            instance = CreateNativeRenderer();
+            instance = new Renderer();
             instanceExists = true;
         }
 

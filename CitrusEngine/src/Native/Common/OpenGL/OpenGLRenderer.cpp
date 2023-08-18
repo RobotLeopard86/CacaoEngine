@@ -1,4 +1,4 @@
-#include "OpenGLRenderer.h"
+#include "Graphics/Renderer.h"
 
 #include "Core/Log.h"
 #include "Core/Assert.h"
@@ -9,23 +9,23 @@
 
 #include <string>
 
+//OpenGL implementation of Renderer (see Renderer.h for more details)
+
 namespace CitrusEngine {
 
-    OpenGLRenderer::OpenGLRenderer() {
-        clearColor = glm::vec4(1.0);
-        activeCam = nullptr;
-    }
+    Renderer::Renderer()
+        : clearColor(glm::vec4(1.0f)), activeCam(nullptr) {}
 
-    void OpenGLRenderer::SetClearColor(glm::u8vec3 color) {
+    void Renderer::SetClearColor(glm::u8vec3 color) {
         clearColor = glm::vec4((float(color.r) / 256), (float(color.g) / 256), (float(color.b) / 256), 1.0);
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     }
 
-    void OpenGLRenderer::Clear(){
+    void Renderer::Clear(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRenderer::InitBackend(){
+    void Renderer::InitBackend(){
         Asserts::EngineAssert(!backendInitialized, "Glad is already intialized!");
 
         //Initialize Glad (OpenGL loader)
@@ -45,7 +45,7 @@ namespace CitrusEngine {
         Logging::EngineLog(LogLevel::Trace, msg);
     }
 
-    void OpenGLRenderer::ShutdownBackend(){
+    void Renderer::ShutdownBackend(){
         Asserts::EngineAssert(backendInitialized, "Glad is not intialized!");
 
         //Unload Glad
@@ -54,7 +54,7 @@ namespace CitrusEngine {
         backendInitialized = false;
     }
 
-    void OpenGLRenderer::RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) {
+    void Renderer::RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) {
         Asserts::EngineAssert(activeCam != nullptr, "Cannot render without an active camera!");
 
         //Bind mesh and shader
@@ -79,11 +79,7 @@ namespace CitrusEngine {
         shader->Unbind();
     }
 
-    void OpenGLRenderer::SetCamera(Camera* cam){
+    void Renderer::SetCamera(Camera* cam){
         activeCam = cam;
-    }
-
-    Renderer* Renderer::CreateNativeRenderer(){
-        return new OpenGLRenderer();
     }
 }

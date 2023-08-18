@@ -15,17 +15,17 @@ namespace CitrusEngine {
         virtual ~Renderer() {}
 
         //Sets clear color (takes 8-bit unsigned integer vector (0-255 for red, green, and blue))
-        virtual void SetClearColor(glm::u8vec3 color) = 0;
+        void SetClearColor(glm::u8vec3 color);
         //Clears color and depth buffers
-        virtual void Clear() = 0;
+        void Clear();
         //Renders some geometry
-        virtual void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader) = 0;
+        void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader);
         //Initialize rendering backend
-        virtual void InitBackend() = 0;
+        void InitBackend();
         //Shutdown rendering backed
-        virtual void ShutdownBackend() = 0;
+        void ShutdownBackend();
         //Set the camera to use for rendering
-        virtual void SetCamera(Camera* cam) = 0;
+        void SetCamera(Camera* cam);
 
         //Get the current instance or create one if it doesn't exist
         static Renderer* GetInstance();
@@ -34,11 +34,14 @@ namespace CitrusEngine {
         static Renderer* CreateNativeRenderer();
 
         //Protected constructor so only subclasses can call it
-        Renderer() {}
+        Renderer();
 
         bool backendInitialized = false;
     private:
         static Renderer* instance;
         static bool instanceExists;
+
+        glm::vec4 clearColor;
+        Camera* activeCam;
     };
 }
