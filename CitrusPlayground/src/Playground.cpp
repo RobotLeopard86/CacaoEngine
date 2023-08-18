@@ -72,7 +72,7 @@ public:
         shader = Shader::CreateShader(vertexShaderSource, fragmentShaderSource);
         shader->Compile();
 
-        cam = new PerspectiveCamera(30, 1.7777777777777f);
+        cam = new PerspectiveCamera(60, GetWindow()->GetSize());
         cam->SetPosition({0, 0, -1});
 
         Renderer::GetInstance()->SetClearColor({25, 25, 25});
