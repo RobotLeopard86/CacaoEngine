@@ -11,7 +11,7 @@ endif
 
 INCLUDES := -I../CitrusEngine/src -I../libs/glm -I../libs/spdlog/include -I../libs/glfw/include -I../libs/glad/include -I../libs/boost/include -I../libs -I../libs/imgui
 DEFINES := -DGLFW_INCLUDE_NONE -DCE_GLFW_API=GLFW_OPENGL_API
-LIBS := #-lglfw_x -limgui_glfw -limgui_gl3 -lglad_gl3 -lGL
+LIBS := -lglfw_x -limgui_glfw -limgui_gl3 -lglad_gl3 -lGL
 LIBDIRS := -L/usr/lib64 -L../Build/modules/glfw_x/$(target)/$(config)/bin -L../Build/modules/imgui_glfw/$(target)/$(config)/bin -L../Build/modules/imgui_gl3/$(target)/$(config)/bin -L../Build/modules/glad_gl3/$(target)/$(config)/bin
 MISCOPTS := -std=gnu++20 -c
 CFGFLAGS :=

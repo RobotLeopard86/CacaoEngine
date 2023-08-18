@@ -76,6 +76,20 @@ namespace CitrusEngine {
         compiled = true;
     }
 
+    void OpenGLMesh::Release(){
+        if(!compiled){
+            Logging::EngineLog(LogLevel::Error, "Cannot release uncompiled mesh!");
+            return;
+        }
+        if(bound){
+            Logging::EngineLog(LogLevel::Error, "Cannot release bound mesh!");
+            return;
+        }
+        glDeleteBuffers(1, &vertexBuffer);
+        glDeleteBuffers(1, &indexBuffer);
+        glDeleteVertexArrays(1, &vertexArray);
+    }
+
     void OpenGLMesh::Bind(){
         if(!compiled){
             Logging::EngineLog(LogLevel::Error, "Cannot bind uncompiled mesh!");

@@ -23,6 +23,9 @@ namespace CitrusEngine {
         //Compile shader to be used later
         virtual void Compile() {}
 
+        //Delete shader when no longer needed
+        virtual void Release() {}
+
         //Uniform uploading functions
 
         //Uploads 4x4 float matrix

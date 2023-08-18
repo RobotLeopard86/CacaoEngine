@@ -13,6 +13,9 @@ namespace CitrusEngine {
         //Compile mesh to a form acceptable by the rendering API
         virtual void Compile() {}
 
+        //Release mesh assets when mesh is no longer needed
+        virtual void Release() {}
+
         //Use this mesh
         virtual void Bind() {}
 

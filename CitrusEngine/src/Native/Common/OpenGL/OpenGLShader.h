@@ -16,6 +16,7 @@ namespace CitrusEngine {
         void Bind() override;
         void Unbind() override;
         void Compile() override;
+        void Release() override;
 
         void UploadUniformMat4(std::string uniform, glm::mat4 value) override;
         void UploadUniformMat3(std::string uniform, glm::mat3 value) override;

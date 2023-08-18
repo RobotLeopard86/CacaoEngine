@@ -110,6 +110,19 @@ namespace CitrusEngine {
         compiled = true;
     }
 
+    void OpenGLShader::Release(){
+        if(!compiled){
+            Logging::EngineLog(LogLevel::Error, "Cannot release uncompiled shader!");
+            return;
+        }
+        if(bound){
+            Logging::EngineLog(LogLevel::Error, "Cannot release bound shader!");
+            return;
+        }
+        glDeleteProgram(compiledForm);
+        compiled = false;
+    }
+
     void OpenGLShader::Bind(){
         if(!compiled){
             Logging::EngineLog(LogLevel::Error, "Cannot bind uncompiled shader!");
@@ -133,10 +146,8 @@ namespace CitrusEngine {
             return;
         }
 
-        //Preserve shader program so it doesn't need to be recompiled
-        uint32_t shaderProgram = compiledForm;
-        glDeleteProgram(compiledForm);
-        compiledForm = shaderProgram;
+        //Clear current program
+        glUseProgram(0);
 
         bound = false;
     }

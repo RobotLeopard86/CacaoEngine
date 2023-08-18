@@ -13,6 +13,7 @@ namespace CitrusEngine {
         ~OpenGLMesh() override;
 
         void Compile() override;
+        void Release() override;
         void Bind() override;
         void Unbind() override;
         std::vector<glm::vec3> GetVertices() override { return vertices; }

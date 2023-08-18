@@ -73,7 +73,7 @@ public:
         shader->Compile();
 
         cam = new PerspectiveCamera(30, 1.7777777777777f);
-        cam->SetPosition({-1, 0, 0});
+        cam->SetPosition({0, 0, -1});
 
         Renderer::GetInstance()->SetClearColor({25, 25, 25});
         Renderer::GetInstance()->SetCamera(cam);
@@ -83,6 +83,10 @@ public:
     }
 
     void ClientOnShutdown() override {
+        //Release mesh and shader resources
+        mesh->Release();
+        shader->Release();
+
         delete mesh;
         delete transform;
         delete shader;
@@ -157,10 +161,6 @@ public:
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
-        if(camRotChange != glm::zero<glm::vec3>()) {
-            Logging::ClientLog(LogLevel::Info, "Rotation is " + Vec3ToString(currentRot));
-        }
-
         Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
     }
     void ClientOnFixedTick() override {}
@@ -168,8 +168,8 @@ public:
     void OnImGuiDraw(Event& e){
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 
-        //std::stringstream sscam;
-        //sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
+        std::stringstream sscam;
+        sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
         std::stringstream ssvs;
         ssvs << "VSync is currently " << (GetWindow()->IsVSyncEnabled() ? "on" : "off");
 
@@ -179,7 +179,7 @@ public:
             GetWindow()->SetVSyncEnabled(!GetWindow()->IsVSyncEnabled());
         }
         ImGui::Text("%s", ssvs.str().c_str());
-        //ImGui::Text("%s", sscam.str().c_str());
+        ImGui::Text("%s", sscam.str().c_str());
         ImGui::End();
     }
 private:
