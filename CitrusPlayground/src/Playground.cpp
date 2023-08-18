@@ -168,6 +168,15 @@ public:
     void OnImGuiDraw(Event& e){
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus;
+        ImGui::Begin("No window here", NULL, window_flags);
+
+        ImGui::Text("This is on an invisible window!");
+        ImGui::Separator();
+        ImGui::Text("Then again, you wouldn't know that...");
+
+        ImGui::End();
+
         std::stringstream sscam;
         sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
         std::stringstream ssvs;
@@ -175,11 +184,13 @@ public:
 
         ImGui::Begin("Simple Test Window");
         ImGui::Text("This is a simple ImGui test window.");
+        ImGui::Separator();
+        ImGui::Text("%s", sscam.str().c_str());
+        ImGui::Separator();
         if(ImGui::Button("Toggle VSync")){
             GetWindow()->SetVSyncEnabled(!GetWindow()->IsVSyncEnabled());
         }
         ImGui::Text("%s", ssvs.str().c_str());
-        ImGui::Text("%s", sscam.str().c_str());
         ImGui::End();
     }
 private:

@@ -9,9 +9,9 @@ endif
 
 .PHONY: default build link prebuild dirs
 
-INCLUDES := -I../CitrusEngine/src -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui
+INCLUDES := -I../CitrusEngine/src -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb
 DEFINES :=
-LIBS := -limgui_core
+LIBS := -limgui_core -lstb
 LIBDIRS := -L/usr/lib64 -L../Build/modules/imgui_core/$(target)/$(config)/bin
 MISCOPTS := -std=gnu++20 -c
 CFGFLAGS :=

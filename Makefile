@@ -7,7 +7,7 @@ ifndef module
 endif
 
 CONFIGS := debug release
-MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3
+MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3 stb
 BACKENDS := citrus_backend_glfwx_gl3
 
 ifndef c
@@ -53,6 +53,7 @@ help:
 	@echo "  release"
 	@echo ""
 	@echo "Valid modules:"
+	@echo "  stb (STB utilities library)"
 	@echo "  imgui_core (ImGui library without platform backends)"
 	@echo "  glad_gl3 (Glad OpenGL 3 library)"
 # @echo "  glad_vk (Glad Vulkan library)"
