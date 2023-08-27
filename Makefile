@@ -8,7 +8,7 @@ endif
 
 CONFIGS := debug release
 MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3 stb
-BACKENDS := citrus_backend_glfwx_gl3
+BACKENDS := glfwx_gl3
 
 ifndef c
 	c=zig cc
@@ -106,12 +106,12 @@ endif
 ifeq ($(filter $(backend),$(BACKENDS)),)
 	$(error '$(backend)' is not a valid backend! Please refer to 'make help' for help)
 endif
-ifeq ($(filter $(builtmods),$(backend)),)
+ifeq ($(filter $(builtmods),citrus_backend_$(backend)),)
 	@echo "Backend '$(backend)' has not been built. Building backend and dependencies first..."
-	@${MAKE} --no-print-directory build-module config=$(config) c='$(c)' cpp='$(cpp)' module=$(backend)
+	@${MAKE} --no-print-directory build-module config=$(config) c='$(c)' cpp='$(cpp)' module=citrus_backend_$(backend)
 endif
 	@echo "Building playground using backend '$(backend)'..."
-	@${MAKE} --no-print-directory -C CitrusPlayground -f Makefile build config=$(config) c='$(c)' cpp='$(cpp)' backend=$(backend)
+	@${MAKE} --no-print-directory -C CitrusPlayground -f Makefile build config=$(config) c='$(c)' cpp='$(cpp)' backend=citrus_backend_$(backend)
 	@echo "Done!"
 
 run-playground:
@@ -121,7 +121,7 @@ endif
 ifeq ($(filter $(backend),$(BACKENDS)),)
 	$(error '$(backend)' is not a valid backend! Please refer to 'make help' for help)
 endif
-	@Build/playground/$(target)/$(config)/$(backend)/bin/CitrusPlayground
+	@Build/playground/$(target)/$(config)/citrus_backend_$(backend)/bin/CitrusPlayground
 
 build-module:
 ifeq ($(filter $(config),$(CONFIGS)),)

@@ -9,7 +9,7 @@ namespace CitrusEngine {
 	that is extremely close so that the camera can get super close to things before they disappear.
 	*/
 	PerspectiveCamera::PerspectiveCamera(float fov, glm::vec2 size) 
-		: projectionMatrix(glm::perspective(fov/2, (size.x/size.y), 0.001f, 1000.0f)), viewMatrix(1.0f),
+		: projectionMatrix(glm::perspective(glm::radians(fov), (size.x/size.y), 0.001f, 1000.0f)), viewMatrix(1.0f),
 		position(0.0f), rotation(0.0f), viewProjectionMatrix(0.0f), lookTarget(0.0f) {}
 
 	void PerspectiveCamera::RecalculateViewMatrix() {
