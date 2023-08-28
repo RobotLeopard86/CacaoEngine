@@ -11,7 +11,7 @@ endif
 
 INCLUDES := -I../CitrusEngine/src -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb
 DEFINES :=
-LIBS := -limgui_core -lstb
+LIBS := -limgui_core -lstb -lassimp
 LIBDIRS := -L/usr/lib64 -L../Build/modules/imgui_core/$(target)/$(config)/bin
 MISCOPTS := -std=gnu++20 -c
 CFGFLAGS :=
@@ -62,6 +62,8 @@ else
 	@mkdir $(subst /,\\,$(BINDIR)/tmp)
 endif
 	@$(AR) -x ../Build/modules/imgui_core/$(target)/$(config)/bin/libimgui_core.a --output $(BINDIR)/tmp
+	@$(AR) -x ../Build/modules/stb/$(target)/$(config)/bin/libstb.a --output $(BINDIR)/tmp
+	@$(AR) -x ../Build/modules/assimp/$(target)/$(config)/bin/libassimp.a --output $(BINDIR)/tmp
 	@$(AR) -rcs $(BIN) $(OBJECTS) $(BINDIR)/tmp/*
 ifeq (posix,$(SHELLTYPE))
 	@rm -rf $(BINDIR)/tmp

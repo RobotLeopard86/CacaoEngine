@@ -1,4 +1,4 @@
-MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3 stb
+MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3 stb zlib assimp
 
 .PHONY: default $(MODULES)
 
@@ -14,6 +14,20 @@ stb:
 	@${MAKE} --no-print-directory -f stb.mk build config=$(config) c="$(c)" cpp="$(cpp)"
 	@echo ""
 	@echo "Done building module 'stb'."
+
+zlib:
+	@echo "Building module 'zlib'..."
+	@echo ""
+	@${MAKE} --no-print-directory -f zlib.mk build config=$(config) c="$(c)" cpp="$(cpp)"
+	@echo ""
+	@echo "Done building module 'zlib'."
+
+assimp: zlib
+	@echo "Building module 'assimp'..."
+	@echo ""
+	@${MAKE} --no-print-directory -f assimp.mk build config=$(config) c="$(c)" cpp="$(cpp)"
+	@echo ""
+	@echo "Done building module 'assimp'."
 
 imgui_core:
 	@echo "Building module 'imgui_core'..."
@@ -50,7 +64,7 @@ glad_gl3:
 	@echo ""
 	@echo "Done building module 'glad_gl3'."
 
-citrus_core: imgui_core stb
+citrus_core: imgui_core stb assimp
 	@echo "Building module 'citrus_core'..."
 	@echo ""
 	@${MAKE} --no-print-directory -f citrus_core.mk build config=$(config) c="$(c)" cpp="$(cpp)"

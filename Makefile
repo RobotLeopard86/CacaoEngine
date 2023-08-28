@@ -7,7 +7,7 @@ ifndef module
 endif
 
 CONFIGS := debug release
-MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3 stb
+MODULES := imgui_core glad_gl3 glfw_x imgui_gl3 imgui_glfw citrus_core citrus_backend_glfwx_gl3 stb zlib assimp
 BACKENDS := glfwx_gl3
 
 ifndef c
@@ -54,6 +54,8 @@ help:
 	@echo ""
 	@echo "Valid modules:"
 	@echo "  stb (STB utilities library)"
+	@echo "  zlib (General purpose data compression library)"
+	@echo "  assimp (Model loading library) (dependencies: zlib)"
 	@echo "  imgui_core (ImGui library without platform backends)"
 	@echo "  glad_gl3 (Glad OpenGL 3 library)"
 # @echo "  glad_vk (Glad Vulkan library)"
@@ -67,7 +69,7 @@ help:
 # @echo "  imgui_vk (ImGui backend library for Vulkan) (dependencies: imgui_core, glad_vk)"
 	@echo "  imgui_glfw (ImGui backend library for GLFW) (dependencies: imgui_core)"
 # @echo "  imgui_win (ImGui backend library for Windows)"
-	@echo "  citrus_core (Core Citrus Engine library) (dependencies: imgui_core)"
+	@echo "  citrus_core (Core Citrus Engine library) (dependencies: imgui_core, stb, assimp)"
 	@echo "Valid backend modules:"
 	@echo "  citrus_backend_glfwx_gl3 (Backend using GLFW (X11) and OpenGL 3) (dependencies: citrus_core, imgui_glfw, imgui_gl3, glfw_x)"
 
