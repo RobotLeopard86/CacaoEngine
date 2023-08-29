@@ -29,7 +29,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Entrypoint.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/CitrusClient.o $(OBJDIR)/EventManager.o $(OBJDIR)/OrthographicCamera.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/Renderer.o $(OBJDIR)/ImGuiWrapper.o $(OBJDIR)/Input.o $(OBJDIR)/Utilities.o $(OBJDIR)/Model.o
+OBJECTS := $(OBJDIR)/Entrypoint.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/CitrusClient.o $(OBJDIR)/EventManager.o $(OBJDIR)/Transform.o $(OBJDIR)/OrthographicCamera.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/Renderer.o $(OBJDIR)/ImGuiWrapper.o $(OBJDIR)/Input.o $(OBJDIR)/Utilities.o $(OBJDIR)/Model.o
 
 default:
 	@echo "Citrus Engine citrus_core Module Builder"
@@ -94,6 +94,10 @@ $(OBJDIR)/CitrusClient.o: $(SRCDIR)/Core/CitrusClient.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/EventManager.o: $(SRCDIR)/Events/EventManager.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Transform.o: $(SRCDIR)/Graphics/Transform.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
 

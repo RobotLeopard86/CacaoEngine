@@ -19,5 +19,9 @@ namespace CitrusEngine {
         std::vector<std::string> ListMeshes();
     private:
         std::map<std::string, std::pair<std::vector<glm::vec3>, std::vector<glm::u32vec3>>> meshes;
+
+        enum Orientation {
+            PosX, NegX, PosY, NegY, PosZ, NegZ
+        };
     };
 }

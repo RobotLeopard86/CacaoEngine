@@ -62,7 +62,7 @@ namespace CitrusEngine {
         shader->Bind();
 
         //Upload uniforms
-        shader->UploadUniformMat4("transform", glm::translate(glm::mat4(1.0), transform->pos));
+        shader->UploadUniformMat4("transform", transform->GetTransformationMatrix());
         shader->UploadUniformMat4("camview", activeCam->GetViewProjectionMatrix());
 
         int numIndices = mesh->GetIndices().size() * 3;

@@ -7,7 +7,6 @@
 #include "glm/gtx/rotate_vector.hpp"
 
 #include "Core/Assert.h"
-#include "Core/Log.h"
 
 #include <filesystem>
 #include <ranges>
@@ -52,19 +51,39 @@ namespace CitrusEngine {
             int upAxisSign = 1;
             scene->mMetaData->Get<int>("UpAxisSign", upAxisSign);
 
-            Logging::EngineLog(LogLevel::Info, "Up Axis: " + std::string((upAxisSign > 1 ? "+" : "-")) + std::string((upAxis == 0 ? "X" : (upAxis == 2 ? "Z" : "Y"))));
+            Orientation modelOrientation;
+            //Find model orientation
+            if(upAxis == 0){
+                modelOrientation = (upAxisSign < 1 ? Orientation::NegX : Orientation::PosX);
+            } else if(upAxis == 1){
+                modelOrientation = (upAxisSign < 1 ? Orientation::NegY : Orientation::PosY);
+            } else if(upAxis == 2) {
+                modelOrientation = (upAxisSign < 1 ? Orientation::NegZ : Orientation::PosZ);
+            }
 
             for(int j = 0; j < assimpMesh->mNumVertices; j++){
                 aiVector3D vert = assimpMesh->mVertices[j];
                 glm::vec3 vertex = { vert.x, vert.y, vert.z };
 
-                float axisCorrection = 90.0f * upAxisSign;
-                
-                //Apply up-axis correction
-                if(upAxis == 2){
-                    vertex = glm::rotateX(vertex, glm::radians(axisCorrection));
-                } else if(upAxis == 0){
-                    vertex = glm::rotateZ(vertex, glm::radians(axisCorrection));
+                //Apply axis correction
+                switch(modelOrientation){
+                case Orientation::PosY:
+                    break;
+                case Orientation::NegY:
+                    vertex = glm::rotateZ(vertex, glm::radians(180.0f));
+                    break;
+                case Orientation::PosX:
+                    vertex = glm::rotateZ(vertex, glm::radians(-90.0f));
+                    break;
+                case Orientation::NegX:
+                    vertex = glm::rotateZ(vertex, glm::radians(90.0f));
+                    break;
+                case Orientation::PosZ:
+                    vertex = glm::rotateX(vertex, glm::radians(-90.0f));
+                    break;
+                case Orientation::NegZ:
+                    vertex = glm::rotateX(vertex, glm::radians(90.0f));
+                    break;
                 }
 
                 vertices.push_back(vertex);

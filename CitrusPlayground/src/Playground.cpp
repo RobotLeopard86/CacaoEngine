@@ -44,7 +44,7 @@ public:
         mesh = mdl.ExtractMesh("Shape");
         mesh->Compile();
 
-        transform = new Transform({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
+        transform = new Transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
 
         std::string vertexShaderSource = R"(
             #version 330 core
@@ -181,9 +181,9 @@ public:
         ImGui::End();
 
         std::stringstream sscam;
-        sscam << "Camera is at " << std::to_string(currentPos.x) << ", " << std::to_string(currentPos.y) << ", " << std::to_string(currentPos.z) << ".";
+        sscam << "Camera is at " << Vec3ToString(currentPos);
         std::stringstream ssrot;
-        ssrot << "Camera rotation: " << std::to_string(currentRot.x) << ", " << std::to_string(currentRot.y) << ", " << std::to_string(currentRot.z) << ".";
+        ssrot << "Camera rotation: " << Vec3ToString(currentRot);
         std::stringstream ssvs;
         ssvs << "VSync is currently " << (GetWindow()->IsVSyncEnabled() ? "on" : "off");
 
@@ -199,6 +199,48 @@ public:
         }
         ImGui::Text("%s", ssvs.str().c_str());
         ImGui::End();
+
+        ImGui::SetNextWindowPos(ImVec2(100, 300));
+        ImGui::SetNextWindowSize(ImVec2(300, 130));
+
+        float posBuf[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
+        float rotBuf[3] = { transform->GetRotation().x, transform->GetRotation().y, transform->GetRotation().z };
+        float sclBuf[3] = { transform->GetScale().x, transform->GetScale().y, transform->GetScale().z };
+
+        ImGui::Begin("Palm Tree Controls"); 
+        ImGui::InputFloat3("Position", posBuf);
+        ImGui::InputFloat3("Rotation", rotBuf);
+        ImGui::InputFloat3("Scale", sclBuf);
+        ImGui::Spacing();
+
+        if(ImGui::Button("Uniform Scaling")) ImGui::OpenPopup("Uniform Scaling");
+
+        bool open = true;
+        ImGui::SetNextWindowSize(ImVec2(375, 100));
+        if(ImGui::BeginPopupModal("Uniform Scaling", &open)){
+            static float unifValue = 0.0f;
+            ImGui::InputFloat("New Scale Value", &unifValue);
+
+            if (ImGui::Button("Close")) {
+                unifValue = 0.0f;
+                ImGui::CloseCurrentPopup();
+            }
+            if (ImGui::Button("Save & Close")) {
+                sclBuf[0] = unifValue;
+                sclBuf[1] = unifValue;
+                sclBuf[2] = unifValue;
+                unifValue = 0.0f;
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::End();
+
+        transform->SetPosition({ posBuf[0], posBuf[1], posBuf[2] });
+        transform->SetRotation({ rotBuf[0], rotBuf[1], rotBuf[2] });
+        transform->SetScale({ sclBuf[0], sclBuf[1], sclBuf[2] });
     }
 private:
     Mesh* mesh;
