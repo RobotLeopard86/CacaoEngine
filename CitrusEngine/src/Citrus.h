@@ -15,6 +15,7 @@
 #include "Graphics/Cameras/Camera.h"
 #include "Graphics/Cameras/OrthographicCamera.h"
 #include "Graphics/Cameras/PerspectiveCamera.h"
+#include "Models/Model.h"
 #include "Utilities/Utilities.h"
 #include "Utilities/Input.h"
 

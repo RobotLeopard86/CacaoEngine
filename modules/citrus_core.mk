@@ -9,7 +9,7 @@ endif
 
 .PHONY: default build link prebuild dirs
 
-INCLUDES := -I../CitrusEngine/src -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb
+INCLUDES := -I../CitrusEngine/src -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
 DEFINES :=
 LIBS := -limgui_core -lstb -lassimp
 LIBDIRS := -L/usr/lib64 -L../Build/modules/imgui_core/$(target)/$(config)/bin
@@ -29,7 +29,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Entrypoint.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/CitrusClient.o $(OBJDIR)/EventManager.o $(OBJDIR)/OrthographicCamera.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/Renderer.o $(OBJDIR)/ImGuiWrapper.o $(OBJDIR)/Input.o $(OBJDIR)/Utilities.o
+OBJECTS := $(OBJDIR)/Entrypoint.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/CitrusClient.o $(OBJDIR)/EventManager.o $(OBJDIR)/OrthographicCamera.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/Renderer.o $(OBJDIR)/ImGuiWrapper.o $(OBJDIR)/Input.o $(OBJDIR)/Utilities.o $(OBJDIR)/Model.o
 
 default:
 	@echo "Citrus Engine citrus_core Module Builder"
@@ -118,5 +118,8 @@ $(OBJDIR)/Input.o: $(SRCDIR)/Utilities/Input.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/Utilities.o: $(SRCDIR)/Utilities/Utilities.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+$(OBJDIR)/Model.o: $(SRCDIR)/Models/Model.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

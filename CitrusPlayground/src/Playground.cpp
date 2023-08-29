@@ -16,7 +16,7 @@ public:
     }
 
     void ClientOnStartup() override {
-        vertices.push_back({0.5, 0.5, 0.5});
+        /*vertices.push_back({0.5, 0.5, 0.5});
         vertices.push_back({-0.5, 0.5, 0.5});
         vertices.push_back({0.5, -0.5, 0.5});
         vertices.push_back({-0.5, -0.5, 0.5});
@@ -38,7 +38,10 @@ public:
         indices.push_back({2, 3, 7});
         indices.push_back({2, 6, 7});
 
-        mesh = Mesh::CreateMesh(vertices, indices);
+        mesh = Mesh::CreateMesh(vertices, indices);*/
+        Model mdl = Model("CitrusPlayground/assets/model.fbx");
+
+        mesh = mdl.ExtractMesh("Shape");
         mesh->Compile();
 
         transform = new Transform({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
