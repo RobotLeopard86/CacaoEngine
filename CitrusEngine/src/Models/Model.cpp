@@ -7,6 +7,7 @@
 #include "glm/gtx/rotate_vector.hpp"
 
 #include "Core/Assert.h"
+#include "Core/Log.h"
 
 #include <filesystem>
 #include <ranges>
@@ -51,15 +52,19 @@ namespace CitrusEngine {
             int upAxisSign = 1;
             scene->mMetaData->Get<int>("UpAxisSign", upAxisSign);
 
+            Logging::EngineLog(LogLevel::Info, "Up Axis: " + std::string((upAxisSign > 1 ? "+" : "-")) + std::string((upAxis == 0 ? "X" : (upAxis == 2 ? "Z" : "Y"))));
+
             for(int j = 0; j < assimpMesh->mNumVertices; j++){
                 aiVector3D vert = assimpMesh->mVertices[j];
                 glm::vec3 vertex = { vert.x, vert.y, vert.z };
+
+                float axisCorrection = 90.0f * upAxisSign;
                 
                 //Apply up-axis correction
                 if(upAxis == 2){
-                    vertex = glm::rotateX(vertex, glm::radians(-90.0f));
+                    vertex = glm::rotateX(vertex, glm::radians(axisCorrection));
                 } else if(upAxis == 0){
-                    vertex = glm::rotateZ(vertex, glm::radians(-90.0f));
+                    vertex = glm::rotateZ(vertex, glm::radians(axisCorrection));
                 }
 
                 vertices.push_back(vertex);
