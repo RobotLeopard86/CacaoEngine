@@ -9,7 +9,7 @@ endif
 
 .PHONY: default build link prebuild dirs
 
-INCLUDES := -I../CitrusEngine/src -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/imgui
+INCLUDES := -I../CitrusEngine/include/ -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/imgui
 DEFINES :=
 LIBS := -lcitrus_core -l$(backend)
 LIBDIRS := -L/usr/lib64 -L../Build/modules/citrus_core/$(target)/$(config)/bin -L../Build/modules/$(backend)/$(target)/$(config)/bin
