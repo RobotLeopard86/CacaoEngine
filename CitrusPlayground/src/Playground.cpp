@@ -16,33 +16,13 @@ public:
     }
 
     void ClientOnStartup() override {
-        /*vertices.push_back({0.5, 0.5, 0.5});
-        vertices.push_back({-0.5, 0.5, 0.5});
-        vertices.push_back({0.5, -0.5, 0.5});
-        vertices.push_back({-0.5, -0.5, 0.5});
-        vertices.push_back({0.5, 0.5, -0.5});
-        vertices.push_back({-0.5, 0.5, -0.5});
-        vertices.push_back({0.5, -0.5, -0.5});
-        vertices.push_back({-0.5, -0.5, -0.5});
-
-        indices.push_back({0, 1, 3});
-        indices.push_back({0, 2, 3});
-        indices.push_back({4, 5, 7});
-        indices.push_back({4, 6, 7});
-        indices.push_back({0, 4, 6});
-        indices.push_back({0, 2, 6});
-        indices.push_back({1, 3, 7});
-        indices.push_back({1, 5, 7});
-        indices.push_back({0, 1, 5});
-        indices.push_back({0, 4, 5});
-        indices.push_back({2, 3, 7});
-        indices.push_back({2, 6, 7});
-
-        mesh = Mesh::CreateMesh(vertices, indices);*/
         Model mdl = Model("CitrusPlayground/assets/model.fbx");
 
-        mesh = mdl.ExtractMesh("Shape");
-        mesh->Compile();
+        mesh1 = mdl.ExtractMesh("Trunk");
+        mesh1->Compile();
+
+        mesh2 = mdl.ExtractMesh("Leaf");
+        mesh2->Compile();
 
         transform = new Transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
 
@@ -87,10 +67,12 @@ public:
 
     void ClientOnShutdown() override {
         //Release mesh and shader resources
-        mesh->Release();
+        mesh1->Release();
+        mesh2->Release();
         shader->Release();
 
-        delete mesh;
+        delete mesh1;
+        delete mesh2;
         delete transform;
         delete shader;
         delete cam;
@@ -164,7 +146,8 @@ public:
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
-        Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
+        Renderer::GetInstance()->RenderGeometry(mesh1, transform, shader);
+        Renderer::GetInstance()->RenderGeometry(mesh2, transform, shader);
     }
     void ClientOnFixedTick() override {}
 
@@ -243,7 +226,8 @@ public:
         transform->SetScale({ sclBuf[0], sclBuf[1], sclBuf[2] });
     }
 private:
-    Mesh* mesh;
+    Mesh* mesh1;
+    Mesh* mesh2;
     Transform* transform;
     Shader* shader;
     PerspectiveCamera* cam;

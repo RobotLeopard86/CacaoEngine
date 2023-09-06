@@ -1,4 +1,4 @@
-#include "GLFWBackendComponent.h"
+#include "Native/Common/GLFW/GLFWBackendComponent.h"
 
 #include "Core/Log.h"
 

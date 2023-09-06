@@ -29,9 +29,6 @@ namespace CitrusEngine {
         void UploadUniformInt2(std::string uniform, glm::i32vec2 value) override;
         void UploadUniformInt3(std::string uniform, glm::i32vec3 value) override;
         void UploadUniformInt4(std::string uniform, glm::i32vec4 value) override;
-
-        //Creates shader for the current rendering API
-        static Shader* CreateShader(std::string vertexShader, std::string fragmentShader);
     private:
         uint32_t compiledForm;
         bool compiled;

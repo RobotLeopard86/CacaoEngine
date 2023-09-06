@@ -8,7 +8,7 @@
 
 #include "Graphics/Renderer.h"
 
-#include "GLFWBackendComponent.h"
+#include "Native/Common/GLFW/GLFWBackendComponent.h"
 
 //GLFW implementation of Window (see Window.h for more details)
 

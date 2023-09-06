@@ -1,5 +1,5 @@
-#include "Entrypoint.h"
-#include "Log.h"
+#include "Core/Entrypoint.h"
+#include "Core/Log.h"
 
 int main(){
     //Setup loggers

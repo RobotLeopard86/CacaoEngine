@@ -1,5 +1,5 @@
-#include "Assert.h"
-#include "Log.h"
+#include "Core/Assert.h"
+#include "Core/Log.h"
 
 #include <stdlib.h>
 
