@@ -18,11 +18,8 @@ public:
     void ClientOnStartup() override {
         Model mdl = Model("CitrusPlayground/assets/model.fbx");
 
-        mesh1 = mdl.ExtractMesh("Trunk");
-        mesh1->Compile();
-
-        mesh2 = mdl.ExtractMesh("Leaf");
-        mesh2->Compile();
+        mesh = mdl.ExtractMesh("Shape");
+        mesh->Compile();
 
         transform = new Transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
 
@@ -48,7 +45,7 @@ public:
             in vec3 position;
 
             void main() {
-                color = vec4(position, 1.0);
+                color = vec4(desiredColor, 1.0);
             }
         )";
         
@@ -56,9 +53,9 @@ public:
         shader->Compile();
 
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
-        cam->SetPosition({0, 0, -1});
+        cam->SetPosition({0, 0, -2.5});
 
-        Renderer::GetInstance()->SetClearColor({25, 25, 25});
+        Renderer::GetInstance()->SetClearColor({255, 255, 255});
         Renderer::GetInstance()->SetCamera(cam);
 
         uiDrawConsumer = new EventConsumer(BIND_MEMBER_FUNC(PlaygroundClient::OnImGuiDraw));
@@ -67,12 +64,10 @@ public:
 
     void ClientOnShutdown() override {
         //Release mesh and shader resources
-        mesh1->Release();
-        mesh2->Release();
+        mesh->Release();
         shader->Release();
 
-        delete mesh1;
-        delete mesh2;
+        delete mesh;
         delete transform;
         delete shader;
         delete cam;
@@ -146,8 +141,7 @@ public:
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
-        Renderer::GetInstance()->RenderGeometry(mesh1, transform, shader);
-        Renderer::GetInstance()->RenderGeometry(mesh2, transform, shader);
+        Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
     }
     void ClientOnFixedTick() override {}
 
@@ -190,7 +184,7 @@ public:
         float rotBuf[3] = { transform->GetRotation().x, transform->GetRotation().y, transform->GetRotation().z };
         float sclBuf[3] = { transform->GetScale().x, transform->GetScale().y, transform->GetScale().z };
 
-        ImGui::Begin("Palm Tree Controls"); 
+        ImGui::Begin("Transform Controls"); 
         ImGui::InputFloat3("Position", posBuf);
         ImGui::InputFloat3("Rotation", rotBuf);
         ImGui::InputFloat3("Scale", sclBuf);
@@ -226,8 +220,7 @@ public:
         transform->SetScale({ sclBuf[0], sclBuf[1], sclBuf[2] });
     }
 private:
-    Mesh* mesh1;
-    Mesh* mesh2;
+    Mesh* mesh;
     Transform* transform;
     Shader* shader;
     PerspectiveCamera* cam;
