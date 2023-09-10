@@ -19,10 +19,10 @@ Run the `setupEnvironment.sh` script in the root directory to set everything up 
 * Zig
 
 ## Installing Make
-GNU Make should be pre-installed on your GNU/Linux distro. If it isn't, you should be able to install it from your package manager. Windows users can use [Chocolatey](https://chocolatey.org/) to install GNU Make with this command: `choco install make`, and macOS users can install it with brew, with this command: `brew install make`.
+GNU Make should be pre-installed on your GNU/Linux distro. If it isn't, you should be able to install it from your package manager. Windows users can use [Chocolatey](https://chocolatey.org/) to install it, and you can use Homebrew to install it if on macOS.
 
 ## Installing Zig
-While not required, the default compiler is Zig's C/C++ compiler (but this can be overriden with the `c` and `cpp` flags in the top-level Makefile). Download Zig [here](https://ziglang.org/download/) or install from your package manager. Make sure the `zig` executable is in your PATH environment variable so that Make can locate it.
+While not required, the default compiler is Zig's C/C++ compiler (but this can be overriden with the `c` and `cpp` flags in the top-level Makefile). Download Zig [here](https://ziglang.org/download/) or install from your package manager **(Warning: There is currently not a package available on Debian and derivative distros, so you will likely need to use their standalone package)**. Make sure the `zig` executable is in your PATH environment variable so that Make can locate it.
 
 ## Makefile
 It is **HIGHLY RECOMMENDED** to use `make help` prior to using the Makefile in this project, as it does not function identically to other Make-based projects.
