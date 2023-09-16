@@ -26,8 +26,8 @@ namespace CitrusEngine {
         virtual std::vector<glm::vec3> GetVertices() { return {}; }
 
         //Get indices
-        virtual std::vector<glm::u32vec3> GetIndices() { return {}; }
+        virtual std::vector<glm::uvec3> GetIndices() { return {}; }
 
-        static Mesh* CreateMesh(std::vector<glm::vec3> vertices, std::vector<glm::u32vec3> indices);
+        static Mesh* CreateMesh(std::vector<glm::vec3> vertices, std::vector<glm::uvec3> indices);
     };
 }

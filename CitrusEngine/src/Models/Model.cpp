@@ -44,7 +44,7 @@ namespace CitrusEngine {
             aiMesh* assimpMesh = scene->mMeshes[i];
 
             std::vector<glm::vec3> vertices;
-            std::vector<glm::u32vec3> indices;
+            std::vector<glm::uvec3> indices;
 
             int upAxis = 0;
             scene->mMetaData->Get<int>("UpAxis", upAxis);
@@ -94,22 +94,13 @@ namespace CitrusEngine {
                 indices.push_back({ face.mIndices[0], face.mIndices[1], face.mIndices[2] });
             }
 
-            meshes.insert_or_assign(assimpMesh->mName.length == 0 ? ("Mesh" + std::to_string(i)) : std::string(assimpMesh->mName.C_Str()), std::make_pair(vertices, indices));
+            meshes.insert_or_assign(assimpMesh->mName.length == 0 ? ("Mesh" + std::to_string(i)) : std::string(assimpMesh->mName.C_Str()), Mesh::CreateMesh(vertices, indices));
         }
-    }
-
-    Mesh* Model::ExtractMesh(std::string name){
-        Asserts::EngineAssert(meshes.contains(name), "Model does not contain a mesh named \"" + name + "\"!");
-
-        std::vector<glm::vec3> vertices = meshes.at(name).first;
-        std::vector<glm::u32vec3> indices = meshes.at(name).second;
-
-        return Mesh::CreateMesh(vertices, indices);
     }
 
     std::vector<std::string> Model::ListMeshes(){
         std::vector<std::string> keys;
-        for(std::map<std::string, std::pair<std::vector<glm::vec3>, std::vector<glm::u32vec3>>>::iterator it = meshes.begin(); it != meshes.end(); ++it) {
+        for(std::map<std::string, Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it) {
             keys.push_back(it->first);
         }
         return keys;

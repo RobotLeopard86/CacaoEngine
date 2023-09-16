@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.h"
+#include "Models/Model.h"
 #include "Transform.h"
 #include "Shader.h"
 
@@ -18,8 +18,8 @@ namespace CitrusEngine {
         void SetClearColor(glm::u8vec3 color);
         //Clears color and depth buffers
         void Clear();
-        //Renders some geometry
-        void RenderGeometry(Mesh* mesh, Transform* transform, Shader* shader);
+        //Renders a model
+        void RenderGeometry(Model* model, Transform* transform, Shader* shader);
         //Initialize rendering backend
         void InitBackend();
         //Shutdown rendering backed

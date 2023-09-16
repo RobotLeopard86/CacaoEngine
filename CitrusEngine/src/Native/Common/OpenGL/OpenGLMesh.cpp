@@ -4,11 +4,11 @@
 
 namespace CitrusEngine {
 
-    Mesh* Mesh::CreateMesh(std::vector<glm::vec3> vertices, std::vector<glm::u32vec3> indices) {
+    Mesh* Mesh::CreateMesh(std::vector<glm::vec3> vertices, std::vector<glm::uvec3> indices) {
         return new OpenGLMesh(vertices, indices);
     }
 
-    OpenGLMesh::OpenGLMesh(std::vector<glm::vec3> vertices, std::vector<glm::u32vec3> indices) 
+    OpenGLMesh::OpenGLMesh(std::vector<glm::vec3> vertices, std::vector<glm::uvec3> indices) 
         : vertices(vertices), indices(indices), compiled(false), bound(false) {}
 
     OpenGLMesh::~OpenGLMesh(){
@@ -43,7 +43,7 @@ namespace CitrusEngine {
         unsigned int indexBufferData[numIndices * 3];
         //Populate index buffer
         for(int i = 0; i < numIndices; i++){
-            glm::u32vec3 index = indices.at(i);
+            glm::uvec3 index = indices.at(i);
             indexBufferData[i * 3] = index.x;
             indexBufferData[(i * 3) + 1] = index.y;
             indexBufferData[(i * 3) + 2] = index.z;

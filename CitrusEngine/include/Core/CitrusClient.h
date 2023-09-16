@@ -4,6 +4,8 @@
 
 #include "Events/EventSystem.h"
 
+#include "Utilities/StateManager.h"
+
 #include "Graphics/Window.h"
 
 namespace CitrusEngine {
@@ -43,6 +45,7 @@ namespace CitrusEngine {
         glm::u16vec2 windowSize;
     private:
         static CitrusClient* instance;
+
         static EventManager* eventManager;
         static Window* window;
 
