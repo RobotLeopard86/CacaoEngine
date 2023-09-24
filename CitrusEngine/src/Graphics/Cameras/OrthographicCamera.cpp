@@ -4,8 +4,8 @@
 
 namespace CitrusEngine {
 	//The constructor creates an orthographic camera, with the left, right, top, and bottom values determining the aspect ratio
-	OrthographicCamera::OrthographicCamera(float left, float right, float top, float bottom)
-		: projectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), viewMatrix(1.0f), position(0.0f), rotation(0.0f) {
+	OrthographicCamera::OrthographicCamera(glm::vec2 projection)
+		: projectionMatrix(glm::ortho(-projection.x, projection.x, -projection.y, projection.y, -1.0f, 1.0f)), viewMatrix(1.0f), position(0.0f), rotation(0.0f), projectionBox(projection) {
 		viewProjectionMatrix = projectionMatrix * viewMatrix;
 	}
 
@@ -16,5 +16,17 @@ namespace CitrusEngine {
 		viewMatrix = glm::inverse(transform);
 		//Calculate the view-projection matrix
 		viewProjectionMatrix = projectionMatrix * viewMatrix;
+	}
+
+	void OrthographicCamera::RecalculateProjectionMatrix() {
+		projectionMatrix = glm::ortho(-projectionBox.x, projectionBox.x, -projectionBox.y, projectionBox.y, -1.0f, 1.0f);
+		//Calculate the view-projection matrix
+		viewProjectionMatrix = projectionMatrix * viewMatrix;
+	}
+
+	void OrthographicCamera::ResizeProjectionMatrix(Event& e){
+		WindowResizeEvent wre = Event::EventTypeCast<WindowResizeEvent>(e);
+		projectionBox = (wre.size / 10);
+		RecalculateProjectionMatrix();
 	}
 }

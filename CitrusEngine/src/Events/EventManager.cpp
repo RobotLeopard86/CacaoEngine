@@ -6,6 +6,10 @@
 #include <stdexcept>
 
 namespace CitrusEngine {
+    //Make event manager instance null pointer by default
+    EventManager* EventManager::instance = nullptr;
+    //We don't have an instance by default
+    bool EventManager::instanceExists = false;
 
     EventManager::EventManager(){}
 
@@ -98,5 +102,16 @@ namespace CitrusEngine {
                 consumer->Consume(event);
             }
         }
+    }
+
+    EventManager* EventManager::GetInstance() {
+        //Do we have a event manager instance yet?
+        if(!instanceExists || instance == NULL){
+            //Create event manager instance
+            instance = new EventManager();
+            instanceExists = true;
+        }
+
+        return instance;
     }
 }

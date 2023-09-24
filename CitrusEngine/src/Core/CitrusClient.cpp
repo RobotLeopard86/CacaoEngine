@@ -2,7 +2,6 @@
 #include "Core/Assert.h"
 #include "Core/Log.h"
 #include "Utilities/Utilities.h"
-#include "Graphics/Renderer.h"
 #include "Utilities/Input.h"
 #include "ImGui/ImGuiWrapper.h"
 #include "Core/Backend.h"
@@ -12,7 +11,6 @@ namespace CitrusEngine {
     //Required definitions of static members
     CitrusClient* CitrusClient::instance = nullptr;
     bool CitrusClient::instanceExists = false;
-    EventManager* CitrusClient::eventManager = nullptr;
     Window* CitrusClient::window = nullptr;
 
     CitrusClient::CitrusClient(){
@@ -32,10 +30,9 @@ namespace CitrusEngine {
         dynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::DynamicTickHandler));
 
         //Set up event manager and subscribe consumers
-        eventManager = new EventManager();
-        eventManager->SubscribeConsumer("WindowClose", wceConsumer);
-        eventManager->SubscribeConsumer("FixedTick", fixedTickConsumer);
-        eventManager->SubscribeConsumer("DynamicTick", dynamicTickConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("WindowClose", wceConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("FixedTick", fixedTickConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("DynamicTick", dynamicTickConsumer);
     }
 
     //Base client does not need a destructor
@@ -45,8 +42,7 @@ namespace CitrusEngine {
         //Initialize the backend
         if(!Backend::Initialize()){
             Logging::EngineLog(LogLevel::Fatal, "Backed initialization failed! Shutting down prematurely...");
-            eventManager->Shutdown();
-            delete eventManager;
+            EventManager::GetInstance()->Shutdown();
             delete wceConsumer;
             delete fixedTickConsumer;
             delete dynamicTickConsumer;
@@ -74,17 +70,17 @@ namespace CitrusEngine {
 
             //Dispatch ImGui draw event
             ImGuiDrawEvent uiDrawEvent{};
-            eventManager->Dispatch(uiDrawEvent);
+            EventManager::GetInstance()->Dispatch(uiDrawEvent);
 
             //Render drawn UI into frame
             ImGuiWrapper::ComposeFrame();
 
             //Clear the screen
-            Renderer::GetInstance()->Clear();
+            StateManager::GetInstance()->GetActiveCamera()->Clear();
 
             //Dispatch tick event
             DynamicTickEvent tickEvent{elapsed - oldElapsed};
-            eventManager->Dispatch(tickEvent);
+            EventManager::GetInstance()->Dispatch(tickEvent);
 
             //Render ImGui frame onscreen
             ImGuiWrapper::RenderFrame();
@@ -94,16 +90,19 @@ namespace CitrusEngine {
         }
 
         //Prepare eventManager for freeing by unsubscribing all consumers
-        eventManager->Shutdown();
+        EventManager::GetInstance()->Shutdown();
 
         //Shutdown ImGui
         ImGuiWrapper::Shutdown();
 
         //Close window
         window->Destroy();
+
+        //Shutdown backend
+        Backend::ShutdownRenderer();
+        Backend::Shutdown();
         
         //Free pointers
-        delete eventManager;
         delete wceConsumer;
         delete dynamicTickConsumer;
         delete fixedTickConsumer;

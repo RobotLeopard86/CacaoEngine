@@ -134,7 +134,7 @@ namespace CitrusEngine {
         ImGuiIO& imGuiIO = ImGui::GetIO();
 
         //Resize ImGui viewport
-        glm::i32vec2 windowSize = CitrusClient::GetWindow()->GetSize();
+        glm::ivec2 windowSize = CitrusClient::GetWindow()->GetSize();
         imGuiIO.DisplaySize = ImVec2(windowSize.x, windowSize.y);
 
         //Render ImGui data

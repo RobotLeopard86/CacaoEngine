@@ -21,9 +21,9 @@ namespace CitrusEngine {
         //Called every frame to update the window
         void Update();
         //Get window size (returns integer two-component vector)
-        glm::i32vec2 GetSize() { return size; }
+        glm::ivec2 GetSize() { return size; }
         //Resizes the window
-        void SetSize(glm::i32vec2 newSize) { size = newSize; UpdateWindowSize(); }
+        void SetSize(glm::ivec2 newSize) { size = newSize; UpdateWindowSize(); }
         //Enable/disable VSync
         void SetVSyncEnabled(bool value) { useVSync = value; UpdateVSyncState(); }
         //Returns if VSync is enabled or not
@@ -31,13 +31,13 @@ namespace CitrusEngine {
         //Get native window type (returns void*, must be cast to target window type)
         void* GetNativeWindow() { return nativeWindow; }
     private:
-        Window(void* nativeWindow, glm::i32vec2 size, std::string title)
+        Window(void* nativeWindow, glm::ivec2 size, std::string title)
             : nativeWindow(nativeWindow), size(size), windowTitle(title) {
             SetVSyncEnabled(true);
         }
 
         bool useVSync;
-        glm::i32vec2 size;
+        glm::ivec2 size;
         std::string windowTitle;
 
         void* nativeWindow;

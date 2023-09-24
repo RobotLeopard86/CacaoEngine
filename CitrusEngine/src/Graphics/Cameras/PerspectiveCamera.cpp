@@ -8,9 +8,9 @@ namespace CitrusEngine {
 	and aspect ratio, and a near clipping plane (where objects stop rendering when too close to the camera)
 	that is extremely close so that the camera can get super close to things before they disappear.
 	*/
-	PerspectiveCamera::PerspectiveCamera(float fov, glm::vec2 size) 
-		: projectionMatrix(glm::perspective(glm::radians(fov), (size.x/size.y), 0.001f, 1000.0f)), viewMatrix(1.0f),
-		position(0.0f), rotation(0.0f), viewProjectionMatrix(0.0f), lookTarget(0.0f) {}
+	PerspectiveCamera::PerspectiveCamera(float fov, glm::ivec2 displaySize) 
+		: projectionMatrix(glm::perspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.001f, 100000.0f)), viewMatrix(1.0f),
+		position(0.0f), rotation(0.0f), viewProjectionMatrix(0.0f), lookTarget(0.0f), fov(fov), displaySize(displaySize) {}
 
 	void PerspectiveCamera::RecalculateViewMatrix() {
 		//Figure out where we are looking
@@ -33,5 +33,17 @@ namespace CitrusEngine {
 
 		//Add the position to our look target (originally calculated at 0, 0, 0)
 		lookTarget += position;
+	}
+
+	void PerspectiveCamera::ResizeProjectionMatrix(Event& e){
+		WindowResizeEvent wre = Event::EventTypeCast<WindowResizeEvent>(e);
+		displaySize = wre.size;
+		RecalculateProjectionMatrix();
+	}
+
+	void PerspectiveCamera::RecalculateProjectionMatrix(){
+		projectionMatrix = glm::perspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.001f, 100000.0f);
+		//Calculate the view-projection matrix
+		viewProjectionMatrix = projectionMatrix * viewMatrix;
 	}
 }

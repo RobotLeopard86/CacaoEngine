@@ -16,15 +16,18 @@ namespace CitrusEngine {
 
         //Use this shader
         virtual void Bind() {}
-
         //Don't use this shader
         virtual void Unbind() {}
-
         //Compile shader to be used later
         virtual void Compile() {}
-
         //Delete shader when no longer needed
         virtual void Release() {}
+
+        //Is shader compiled?
+        bool IsCompiled() { return compiled; }
+
+        //Is shader bound?
+        bool IsBound() { return bound; }
 
         //Uniform uploading functions
 
@@ -45,13 +48,16 @@ namespace CitrusEngine {
         //Uploads one integer value
         virtual void UploadUniformInt(std::string uniform, int value) {}
         //Uploads a two-component integer vector
-        virtual void UploadUniformInt2(std::string uniform, glm::i32vec2 value) {}
+        virtual void UploadUniformInt2(std::string uniform, glm::ivec2 value) {}
         //Uploads a three-component integer vector
-        virtual void UploadUniformInt3(std::string uniform, glm::i32vec3 value) {}
+        virtual void UploadUniformInt3(std::string uniform, glm::ivec3 value) {}
         //Uploads a four-component integer vector
-        virtual void UploadUniformInt4(std::string uniform, glm::i32vec4 value) {}
+        virtual void UploadUniformInt4(std::string uniform, glm::ivec4 value) {}
 
         //Creates shader for the current rendering API
         static Shader* CreateShader(std::string vertexShader, std::string fragmentShader);
+    protected:
+        bool compiled;
+        bool bound;
     };
 }

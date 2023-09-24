@@ -22,9 +22,16 @@ namespace CitrusEngine {
         //Dispatches the event to all subscribed consumers for the appropriate event type
         void Dispatch(Event& event);
 
+        //Shutdown the event manager and unsubscribe all consumers
         void Shutdown();
+
+        //Get the current instance or create one if it doesn't exist
+        static EventManager* GetInstance();
     private:
         //Map of event types to list of consumers
         std::map<std::string, std::vector<EventConsumer*>> consumers;
+
+        static EventManager* instance;
+        static bool instanceExists;
     };
 }

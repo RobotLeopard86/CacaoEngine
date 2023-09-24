@@ -9,7 +9,6 @@
 #include "Events/EventSystem.h"
 #include "Graphics/Window.h"
 #include "Graphics/Shader.h"
-#include "Graphics/Renderer.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Transform.h"
 #include "Graphics/Cameras/Camera.h"
@@ -18,6 +17,7 @@
 #include "Models/Model.h"
 #include "Utilities/Utilities.h"
 #include "Utilities/Input.h"
+#include "Utilities/StateManager.h"
 
 //Include ImGui so that it can be used
 #include "imgui/imgui.h"

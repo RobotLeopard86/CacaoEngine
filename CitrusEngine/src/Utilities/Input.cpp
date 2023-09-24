@@ -1,7 +1,5 @@
 #include "Utilities/Input.h"
 
-#include "Core/CitrusClient.h"
-
 #include "Utilities/Utilities.h"
 
 namespace CitrusEngine {
@@ -28,11 +26,11 @@ namespace CitrusEngine {
         mouseButtonUpConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonUpHandler));
         keyDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::KeyDownHandler));
         mouseButtonDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonDownHandler));
-        CitrusClient::GetEventManager()->SubscribeConsumer("MouseMove", cursorPosConsumer);
-        CitrusClient::GetEventManager()->SubscribeConsumer("KeyUp", keyUpConsumer);
-        CitrusClient::GetEventManager()->SubscribeConsumer("MouseRelease", mouseButtonUpConsumer);
-        CitrusClient::GetEventManager()->SubscribeConsumer("KeyDown", keyDownConsumer);
-        CitrusClient::GetEventManager()->SubscribeConsumer("MousePress", mouseButtonDownConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("MouseMove", cursorPosConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("KeyUp", keyUpConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("MouseRelease", mouseButtonUpConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("KeyDown", keyDownConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("MousePress", mouseButtonDownConsumer);
 
         //Initialize cursor pos vector
         cursorPos = glm::dvec2(0.0);

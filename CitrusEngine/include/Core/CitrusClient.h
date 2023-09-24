@@ -35,18 +35,14 @@ namespace CitrusEngine {
         //Gets client package ID
         std::string GetPackageID() { return id; }
 
-        //Gets event manager
-        static EventManager* GetEventManager() { return eventManager; }
-
         //Gets window
         static Window* GetWindow() { return window; }
     protected:
         std::string id;
-        glm::u16vec2 windowSize;
+        glm::uvec2 windowSize;
     private:
         static CitrusClient* instance;
 
-        static EventManager* eventManager;
         static Window* window;
 
         static bool instanceExists;

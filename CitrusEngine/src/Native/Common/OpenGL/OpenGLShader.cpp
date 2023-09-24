@@ -272,7 +272,7 @@ namespace CitrusEngine {
 		glUniform1i(uniformLocation, value);
 	}
 
-	void OpenGLShader::UploadUniformInt2(std::string uniform, glm::i32vec2 value) {
+	void OpenGLShader::UploadUniformInt2(std::string uniform, glm::ivec2 value) {
 		GLint uniformLocation = -1;
         if(auto it = uniformLocations.find(uniform.c_str()); it == uniformLocations.end()){
             uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
@@ -287,7 +287,7 @@ namespace CitrusEngine {
 		glUniform2i(uniformLocation, value.x, value.y);
 	}
 
-	void OpenGLShader::UploadUniformInt3(std::string uniform, glm::i32vec3 value) {
+	void OpenGLShader::UploadUniformInt3(std::string uniform, glm::ivec3 value) {
 		GLint uniformLocation = -1;
         if(auto it = uniformLocations.find(uniform.c_str()); it == uniformLocations.end()){
             uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());
@@ -302,7 +302,7 @@ namespace CitrusEngine {
 		glUniform3i(uniformLocation, value.x, value.y, value.z);
 	}
 
-	void OpenGLShader::UploadUniformInt4(std::string uniform, glm::i32vec4 value) {
+	void OpenGLShader::UploadUniformInt4(std::string uniform, glm::ivec4 value) {
 		GLint uniformLocation = -1;
         if(auto it = uniformLocations.find(uniform.c_str()); it == uniformLocations.end()){
             uniformLocation = glGetUniformLocation(compiledForm, uniform.c_str());

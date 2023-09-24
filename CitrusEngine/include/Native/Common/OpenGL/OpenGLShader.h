@@ -26,13 +26,11 @@ namespace CitrusEngine {
         void UploadUniformFloat3(std::string uniform, glm::vec3 value) override;
         void UploadUniformFloat4(std::string uniform, glm::vec4 value) override;
         void UploadUniformInt(std::string uniform, int value) override;
-        void UploadUniformInt2(std::string uniform, glm::i32vec2 value) override;
-        void UploadUniformInt3(std::string uniform, glm::i32vec3 value) override;
-        void UploadUniformInt4(std::string uniform, glm::i32vec4 value) override;
+        void UploadUniformInt2(std::string uniform, glm::ivec2 value) override;
+        void UploadUniformInt3(std::string uniform, glm::ivec3 value) override;
+        void UploadUniformInt4(std::string uniform, glm::ivec4 value) override;
     private:
         uint32_t compiledForm;
-        bool compiled;
-        bool bound;
         std::string vertexShader;
         std::string fragmentShader;
 

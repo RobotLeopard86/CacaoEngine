@@ -2,11 +2,9 @@
 
 #include "Core/Log.h"
 #include "Core/Assert.h"
-#include "Core/CitrusClient.h"
+#include "Core/Backend.h"
 
 #include "Events/EventSystem.h"
-
-#include "Graphics/Renderer.h"
 
 #include "Native/Common/GLFW/GLFWBackendComponent.h"
 
@@ -34,10 +32,10 @@ namespace CitrusEngine {
         if(glfwGetWindowAttrib(nativeWindow, GLFW_CLIENT_API) == GLFW_OPENGL_API) glfwMakeContextCurrent(nativeWindow);
 
         //Initialize rendering backend
-        Renderer::GetInstance()->InitBackend();
+        Asserts::EngineAssert(Backend::InitRenderer(), "Renderer failed to initialize!");
 
         //Create window object
-        Window* window = new Window((void*)nativeWindow, glm::i32vec2(initialSizeX, initialSizeY), title);
+        Window* window = new Window((void*)nativeWindow, glm::ivec2(initialSizeX, initialSizeY), title);
         nativeWindowLUT.insert_or_assign((void*)nativeWindow, window);
 
         //Register GLFW callbacks
@@ -46,23 +44,23 @@ namespace CitrusEngine {
         glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* glfwWindow, int sizeX, int sizeY){
             Window::nativeWindowLUT.at((void*)glfwWindow)->SetSize({ sizeX, sizeY });
             WindowResizeEvent wre{sizeX, sizeY};
-            CitrusClient::GetEventManager()->Dispatch(wre);
+            EventManager::GetInstance()->Dispatch(wre);
         });
 
         //Called when window closed
         glfwSetWindowCloseCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* glfwWindow){
             WindowCloseEvent wce{};
-            CitrusClient::GetEventManager()->Dispatch(wce);
+            EventManager::GetInstance()->Dispatch(wce);
         });
 
         //Called when window receives/loses focus
         glfwSetWindowFocusCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* glfwWindow, int status){
             if(status == GLFW_TRUE){
                 WindowReceiveFocusEvent wrfe = WindowReceiveFocusEvent{};
-                CitrusClient::GetEventManager()->Dispatch(wrfe);
+                EventManager::GetInstance()->Dispatch(wrfe);
             } else if(status == GLFW_FALSE){
                 WindowLoseFocusEvent wlfe = WindowLoseFocusEvent{};
-                CitrusClient::GetEventManager()->Dispatch(wlfe);
+                EventManager::GetInstance()->Dispatch(wlfe);
             }
         });
 
@@ -70,40 +68,40 @@ namespace CitrusEngine {
         glfwSetKeyCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods){
             if(action == GLFW_PRESS || action == GLFW_REPEAT){
                 KeyDownEvent kde = KeyDownEvent{key};
-                CitrusClient::GetEventManager()->Dispatch(kde);
+                EventManager::GetInstance()->Dispatch(kde);
             } else if(action == GLFW_RELEASE){
                 KeyUpEvent kue = KeyUpEvent{key};
-                CitrusClient::GetEventManager()->Dispatch(kue);
+                EventManager::GetInstance()->Dispatch(kue);
             }
         });
 
         //Called when GLFW receives typing input
         glfwSetCharCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* glfwWindow, unsigned int character){
             KeyTypeEvent kte = KeyTypeEvent{character};
-            CitrusClient::GetEventManager()->Dispatch(kte);
+            EventManager::GetInstance()->Dispatch(kte);
         });
 
         //Called when GLFW receives mouse button input
         glfwSetMouseButtonCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* glfwWindow, int btn, int action, int mods){
             if(action == GLFW_PRESS){
                 MousePressEvent mpe = MousePressEvent{btn};
-                CitrusClient::GetEventManager()->Dispatch(mpe);
+                EventManager::GetInstance()->Dispatch(mpe);
             } else if(action == GLFW_RELEASE){
                 MouseReleaseEvent mre = MouseReleaseEvent{btn};
-                CitrusClient::GetEventManager()->Dispatch(mre);
+                EventManager::GetInstance()->Dispatch(mre);
             }
         });
 
         //Called when GLFW detects mouse movement
         glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* window, double mouseX, double mouseY){
             MouseMoveEvent mme = MouseMoveEvent{mouseX, mouseY};
-            CitrusClient::GetEventManager()->Dispatch(mme);
+            EventManager::GetInstance()->Dispatch(mme);
         });
 
         //Called when GLFW detects mouse scroll input
         glfwSetScrollCallback((GLFWwindow*)nativeWindow, [](GLFWwindow*, double offsetX, double offsetY){
             MouseScrollEvent mse = MouseScrollEvent{offsetX, offsetY};
-            CitrusClient::GetEventManager()->Dispatch(mse);
+            EventManager::GetInstance()->Dispatch(mse);
         });
 
         return window;

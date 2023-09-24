@@ -1,33 +1,33 @@
 #pragma once
 
-#include <vector>
+#include "Vertex.h"
+#include "Shader.h"
+#include "Transform.h"
 
-#include "glm/vec3.hpp"
+#include <vector>
 
 namespace CitrusEngine {
     //Must be implemented per-rendering API
     class Mesh {
     public:
         virtual ~Mesh() {}
+        
+        //Compile the mesh into a usable form for drawing
+        virtual void Compile() = 0;
+        //Release compiled assets from memory
+        virtual void Release() = 0;
+        //Draw the mesh
+        virtual void Draw(Shader* shader, Transform* transform) = 0;
 
-        //Compile mesh to a form acceptable by the rendering API
-        virtual void Compile() {}
+        //Is mesh compiled?
+        bool IsCompiled() { return compiled; }
 
-        //Release mesh assets when mesh is no longer needed
-        virtual void Release() {}
+        //Create a mesh for the native platform
+        static Mesh* Create(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
+    protected:
+        std::vector<Vertex> vertices;
+        std::vector<glm::uvec3> indices;
 
-        //Use this mesh
-        virtual void Bind() {}
-
-        //Don't use this mesh
-        virtual void Unbind() {}
-
-        //Get vertices
-        virtual std::vector<glm::vec3> GetVertices() { return {}; }
-
-        //Get indices
-        virtual std::vector<glm::uvec3> GetIndices() { return {}; }
-
-        static Mesh* CreateMesh(std::vector<glm::vec3> vertices, std::vector<glm::uvec3> indices);
+        bool compiled;
     };
 }

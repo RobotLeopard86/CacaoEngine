@@ -18,4 +18,10 @@ namespace CitrusEngine {
 
         return instance;
     }
+
+    StateManager::StateManager() {}
+
+    void StateManager::SetActiveCamera(Camera * cam){
+        activeCam = cam;
+    }
 }

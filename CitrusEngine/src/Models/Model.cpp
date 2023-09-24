@@ -43,7 +43,7 @@ namespace CitrusEngine {
         for(int i = 0; i < scene->mNumMeshes; i++){
             aiMesh* assimpMesh = scene->mMeshes[i];
 
-            std::vector<glm::vec3> vertices;
+            std::vector<Vertex> vertices;
             std::vector<glm::uvec3> indices;
 
             int upAxis = 0;
@@ -61,31 +61,52 @@ namespace CitrusEngine {
                 modelOrientation = (upAxisSign < 1 ? Orientation::NegZ : Orientation::PosZ);
             }
 
+            bool containsTangentsAndBitangents = assimpMesh->HasTangentsAndBitangents();
+
             for(int j = 0; j < assimpMesh->mNumVertices; j++){
                 aiVector3D vert = assimpMesh->mVertices[j];
-                glm::vec3 vertex = { vert.x, vert.y, vert.z };
+
+                bool containsTexCoords = assimpMesh->HasTextureCoords(j);
+                    
+                glm::vec3 position = { vert.x, vert.y, vert.z };
+                glm::vec2 texCoords = glm::vec2(0.0f);
+                glm::vec3 tangent = glm::vec3(0.0f);
+                glm::vec3 bitangent = glm::vec3(0.0f);
+
+                if(containsTexCoords){
+                    aiVector3D* tc = assimpMesh->mTextureCoords[j];
+                    texCoords = { tc->x, tc->y };
+                }
+
+                if(containsTangentsAndBitangents){
+                    aiVector3D tan = assimpMesh->mTangents[j];
+                    aiVector3D bitan = assimpMesh->mBitangents[j];
+                    tangent = { tan.x, tan.y, tan.z };
+                    bitangent = { bitan.x, bitan.y, bitan.z };
+                }
 
                 //Apply axis correction
                 switch(modelOrientation){
                 case Orientation::PosY:
                     break;
                 case Orientation::NegY:
-                    vertex = glm::rotateZ(vertex, glm::radians(180.0f));
+                    position = glm::rotateZ(position, glm::radians(180.0f));
                     break;
                 case Orientation::PosX:
-                    vertex = glm::rotateZ(vertex, glm::radians(-90.0f));
+                    position = glm::rotateZ(position, glm::radians(-90.0f));
                     break;
                 case Orientation::NegX:
-                    vertex = glm::rotateZ(vertex, glm::radians(90.0f));
+                    position = glm::rotateZ(position, glm::radians(90.0f));
                     break;
                 case Orientation::PosZ:
-                    vertex = glm::rotateX(vertex, glm::radians(-90.0f));
+                    position = glm::rotateX(position, glm::radians(-90.0f));
                     break;
                 case Orientation::NegZ:
-                    vertex = glm::rotateX(vertex, glm::radians(90.0f));
+                    position = glm::rotateX(position, glm::radians(90.0f));
                     break;
                 }
 
+                Vertex vertex{ position, texCoords, tangent, bitangent };
                 vertices.push_back(vertex);
             }
 
@@ -94,8 +115,22 @@ namespace CitrusEngine {
                 indices.push_back({ face.mIndices[0], face.mIndices[1], face.mIndices[2] });
             }
 
-            meshes.insert_or_assign(assimpMesh->mName.length == 0 ? ("Mesh" + std::to_string(i)) : std::string(assimpMesh->mName.C_Str()), Mesh::CreateMesh(vertices, indices));
+            meshes.insert_or_assign(assimpMesh->mName.length == 0 ? ("Mesh" + std::to_string(i)) : std::string(assimpMesh->mName.C_Str()), Mesh::Create(vertices, indices));
         }
+
+        for(auto it = meshes.begin(); it != meshes.end(); it++){
+            it->second->Compile();
+        }
+    }
+
+    Model::~Model(){
+        for(auto it = meshes.begin(); it != meshes.end(); it++){
+            if(it->second->IsCompiled()){
+                it->second->Release();
+                delete it->second;
+            }
+        }
+        meshes.clear();
     }
 
     std::vector<std::string> Model::ListMeshes(){
@@ -104,5 +139,12 @@ namespace CitrusEngine {
             keys.push_back(it->first);
         }
         return keys;
+    }
+
+    void Model::DrawMesh(std::string id, Shader* shader, Transform* transform){
+        Asserts::EngineAssert(meshes.contains(id), "Cannot draw mesh not found in model!");
+
+        Mesh* mesh = meshes.at(id);
+        mesh->Draw(shader, transform);
     }
 }

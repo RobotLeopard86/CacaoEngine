@@ -45,7 +45,7 @@ namespace CitrusEngine {
         WindowResizeEvent(int x, int y) : size(x, y) {}
         WindowResizeEvent() : size(0) {}
 
-        glm::i32vec2 size;
+        glm::ivec2 size;
 
         std::string GetType() { return "WindowResize"; }
     };

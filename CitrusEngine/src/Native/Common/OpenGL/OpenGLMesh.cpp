@@ -1,118 +1,96 @@
 #include "Native/Common/OpenGL/OpenGLMesh.h"
 
-#include "Core/Log.h"
+#include "Core/Assert.h"
+
+#include "Utilities/StateManager.h"
 
 namespace CitrusEngine {
 
-    Mesh* Mesh::CreateMesh(std::vector<glm::vec3> vertices, std::vector<glm::uvec3> indices) {
+    Mesh* Mesh::Create(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices){
         return new OpenGLMesh(vertices, indices);
     }
 
-    OpenGLMesh::OpenGLMesh(std::vector<glm::vec3> vertices, std::vector<glm::uvec3> indices) 
-        : vertices(vertices), indices(indices), compiled(false), bound(false) {}
+    OpenGLMesh::OpenGLMesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices)
+        : vertices(vertices), indices(indices) {}
 
-    OpenGLMesh::~OpenGLMesh(){
-        //Clean up OpenGL objects
-        glDeleteBuffers(1, &vertexBuffer);
-        glDeleteBuffers(1, &indexBuffer);
-        glDeleteVertexArrays(1, &vertexArray);
+    OpenGLMesh::~OpenGLMesh() {
+        if(compiled){
+            //Release OpenGL assets before destruction
+            Release();
+        }
     }
 
-    void OpenGLMesh::Compile() {
-        //Check if the mesh is compiled already
-        if(compiled){
-            Logging::EngineLog(LogLevel::Error, "Cannot compile already compiled mesh!");
-            return;
-        }
+    void OpenGLMesh::Compile(){
+        Asserts::EngineAssert(!compiled, "Cannot compile already compiled mesh!");
 
-        //Unpack mesh data into OpenGL-compatible format
-
-        //Get size of vertex data
-        int numVertices = vertices.size();
-        float vertexBufferData[numVertices * 3];
-        //Populate vertex buffer
-        for(int i = 0; i < numVertices; i++){
-            glm::vec3 vertex = vertices.at(i);
-            vertexBufferData[i * 3] = vertex.x;
-            vertexBufferData[(i * 3) + 1] = vertex.y;
-            vertexBufferData[(i * 3) + 2] = vertex.z;
-        }
-
-        //Get size of index data
-        int numIndices = indices.size();
-        unsigned int indexBufferData[numIndices * 3];
-        //Populate index buffer
-        for(int i = 0; i < numIndices; i++){
-            glm::uvec3 index = indices.at(i);
-            indexBufferData[i * 3] = index.x;
-            indexBufferData[(i * 3) + 1] = index.y;
-            indexBufferData[(i * 3) + 2] = index.z;
-        }
-
-        //Create OpenGL objects and bind them to a vertex array
+        //Generate vertex arrays
         glGenVertexArrays(1, &vertexArray);
         glGenBuffers(1, &vertexBuffer);
         glGenBuffers(1, &indexBuffer);
 
+        //Unpack index buffer data from vec3 to floats
+        unsigned int ibd[indices.size() * 3];
+        for(int i = 0; i < indices.size(); i++){
+            glm::vec3 idx = indices[i];
+            ibd[i * 3] = idx.x;
+            ibd[(i * 3) + 1] = idx.y;
+            ibd[(i * 3) + 2] = idx.z;
+        }
+
+        //Bind vertex array to save buffer setup
         glBindVertexArray(vertexArray);
 
+        //Bind vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (numVertices * 3), vertexBufferData, GL_STATIC_DRAW);
-        
+        //Load vertex buffer with data
+        glBufferData(GL_ARRAY_BUFFER, (vertices.size() * sizeof(Vertex)), &vertices[0], GL_STATIC_DRAW);
+
+        //Bind index buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * (numIndices * 3), indexBufferData, GL_STATIC_DRAW);
+        //Load index buffer with data
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() * 3 * sizeof(unsigned int)), ibd, GL_STATIC_DRAW);
 
-        //Configure OpenGL vertex buffer interpretation
+        //Configure OpenGL vertex buffer layout
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
 
-        //Ensure OpenGL applies state to our vertex array
+        //Ensure OpenGL saves vertex array state
         glBindVertexArray(vertexArray);
 
-        //Release vertex array from OpenGL once it is saved
+        //Unbind vertex array once saved
         glBindVertexArray(0);
 
         compiled = true;
     }
 
     void OpenGLMesh::Release(){
-        if(!compiled){
-            Logging::EngineLog(LogLevel::Error, "Cannot release uncompiled mesh!");
-            return;
-        }
-        if(bound){
-            Logging::EngineLog(LogLevel::Error, "Cannot release bound mesh!");
-            return;
-        }
+        //Delete vertex array assets
         glDeleteBuffers(1, &vertexBuffer);
         glDeleteBuffers(1, &indexBuffer);
         glDeleteVertexArrays(1, &vertexArray);
+
+        compiled = false;
     }
 
-    void OpenGLMesh::Bind(){
-        if(!compiled){
-            Logging::EngineLog(LogLevel::Error, "Cannot bind uncompiled mesh!");
-            return;
-        }
-        if(bound){
-            Logging::EngineLog(LogLevel::Error, "Cannot bind already bound mesh!");
-            return;
-        }
+    void OpenGLMesh::Draw(Shader* shader, Transform* transform){
+        shader->Bind();
+
+        shader->UploadUniformMat4("transform", transform->GetTransformationMatrix());
+        shader->UploadUniformMat4("camview", StateManager::GetInstance()->GetActiveCamera()->GetViewProjectionMatrix());
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
         glBindVertexArray(vertexArray);
-        bound = true;
-    }
-
-    void OpenGLMesh::Unbind(){
-        if(!compiled){
-            Logging::EngineLog(LogLevel::Error, "Cannot unbind uncompiled mesh!");
-            return;
-        }
-        if(!bound){
-            Logging::EngineLog(LogLevel::Error, "Cannot unbind unbound mesh!");
-            return;
-        }
+        glDrawElements(GL_TRIANGLES, (indices.size() * 3), GL_UNSIGNED_INT, nullptr);
         glBindVertexArray(0);
-        bound = false;
+
+        shader->Unbind();
     }
 }

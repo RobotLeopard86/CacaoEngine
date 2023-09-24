@@ -29,7 +29,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Entrypoint.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/CitrusClient.o $(OBJDIR)/EventManager.o $(OBJDIR)/Transform.o $(OBJDIR)/OrthographicCamera.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/Renderer.o $(OBJDIR)/ImGuiWrapper.o $(OBJDIR)/Input.o $(OBJDIR)/Utilities.o $(OBJDIR)/Model.o
+OBJECTS := $(OBJDIR)/Entrypoint.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/CitrusClient.o $(OBJDIR)/EventManager.o $(OBJDIR)/Transform.o $(OBJDIR)/OrthographicCamera.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/StateManager.o $(OBJDIR)/ImGuiWrapper.o $(OBJDIR)/Input.o $(OBJDIR)/Utilities.o $(OBJDIR)/Model.o
 
 default:
 	@echo "Citrus Engine citrus_core Module Builder"
@@ -109,10 +109,6 @@ $(OBJDIR)/PerspectiveCamera.o: $(SRCDIR)/Graphics/Cameras/PerspectiveCamera.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
 
-$(OBJDIR)/Renderer.o: $(SRCDIR)/Graphics/Renderer.cpp
-	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
-
 $(OBJDIR)/ImGuiWrapper.o: $(SRCDIR)/ImGui/ImGuiWrapper.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
@@ -124,6 +120,11 @@ $(OBJDIR)/Input.o: $(SRCDIR)/Utilities/Input.cpp
 $(OBJDIR)/Utilities.o: $(SRCDIR)/Utilities/Utilities.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/StateManager.o: $(SRCDIR)/Utilities/StateManager.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
 $(OBJDIR)/Model.o: $(SRCDIR)/Models/Model.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

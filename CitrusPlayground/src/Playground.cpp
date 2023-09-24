@@ -16,10 +16,7 @@ public:
     }
 
     void ClientOnStartup() override {
-        Model mdl = Model("CitrusPlayground/assets/model.fbx");
-
-        mesh = mdl.ExtractMesh("Shape");
-        mesh->Compile();
+        mdl = new Model("CitrusPlayground/assets/model.fbx");
 
         transform = new Transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
 
@@ -45,7 +42,7 @@ public:
             in vec3 position;
 
             void main() {
-                color = vec4(desiredColor, 1.0);
+                color = vec4(position, 1.0);
             }
         )";
         
@@ -53,21 +50,20 @@ public:
         shader->Compile();
 
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
-        cam->SetPosition({0, 0, -2.5});
+        cam->SetPosition({ 0, 0, -2.5 });
+        cam->SetClearColor({ 255, 255, 255 });
 
-        Renderer::GetInstance()->SetClearColor({255, 255, 255});
-        Renderer::GetInstance()->SetCamera(cam);
+        StateManager::GetInstance()->SetActiveCamera(cam);
 
         uiDrawConsumer = new EventConsumer(BIND_MEMBER_FUNC(PlaygroundClient::OnImGuiDraw));
-        GetEventManager()->SubscribeConsumer("ImGuiDraw", uiDrawConsumer);
+        EventManager::GetInstance()->SubscribeConsumer("ImGuiDraw", uiDrawConsumer);
     }
 
     void ClientOnShutdown() override {
-        //Release mesh and shader resources
-        mesh->Release();
+        //Release shader resources
         shader->Release();
 
-        delete mesh;
+        delete mdl;
         delete transform;
         delete shader;
         delete cam;
@@ -141,7 +137,7 @@ public:
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
-        Renderer::GetInstance()->RenderGeometry(mesh, transform, shader);
+        mdl->DrawMesh("Shape", shader, transform);
     }
     void ClientOnFixedTick() override {}
 
@@ -177,8 +173,8 @@ public:
         ImGui::Text("%s", ssvs.str().c_str());
         ImGui::End();
 
-        ImGui::SetNextWindowPos(ImVec2(100, 300));
-        ImGui::SetNextWindowSize(ImVec2(300, 130));
+        ImGui::SetNextWindowPos(ImVec2(100, 300), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(ImVec2(300, 130), ImGuiCond_Once);
 
         float posBuf[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
         float rotBuf[3] = { transform->GetRotation().x, transform->GetRotation().y, transform->GetRotation().z };
@@ -220,7 +216,7 @@ public:
         transform->SetScale({ sclBuf[0], sclBuf[1], sclBuf[2] });
     }
 private:
-    Mesh* mesh;
+    Model* mdl;
     Transform* transform;
     Shader* shader;
     PerspectiveCamera* cam;
