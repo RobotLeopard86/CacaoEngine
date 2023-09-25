@@ -37,7 +37,7 @@ namespace CitrusEngine {
 		virtual glm::mat4 GetViewProjectionMatrix() = 0;
 
 		//Sets clear color (takes 8-bit unsigned integer vector (0-255 for red, green, and blue))
-        void SetClearColor(glm::uvec3 color) { clearColor = color; }
+        void SetClearColor(glm::uvec3 color) { clearColor = { (float)color.r / 256, (float)color.g / 256, (float)color.b / 256, 1.0f }; }
         //Clears color and depth buffers
         void Clear();
 
@@ -45,6 +45,6 @@ namespace CitrusEngine {
 		virtual void ResizeProjectionMatrix(Event& e) = 0;
 	private:
 		EventConsumer* resizeConsumer;
-		glm::uvec3 clearColor;
+		glm::vec4 clearColor;
 	};
 }
