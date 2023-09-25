@@ -29,7 +29,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/glfwx_gl3_Backend.o $(OBJDIR)/glfwx_gl3_ImGui.o $(OBJDIR)/GLFWBackendComponent.o $(OBJDIR)/GLFWUtilities.o $(OBJDIR)/GLFWWindow.o $(OBJDIR)/OpenGLBackendComponent.o $(OBJDIR)/OpenGLMesh.o $(OBJDIR)/OpenGLMiscImpls.o $(OBJDIR)/OpenGLShader.o
+OBJECTS := $(OBJDIR)/glfwx_gl3_Backend.o $(OBJDIR)/glfwx_gl3_ImGui.o $(OBJDIR)/GLFWBackendComponent.o $(OBJDIR)/GLFWUtilities.o $(OBJDIR)/GLFWWindow.o $(OBJDIR)/OpenGLBackendComponent.o $(OBJDIR)/OpenGLMesh.o $(OBJDIR)/OpenGLMiscImpls.o $(OBJDIR)/OpenGLShader.o $(OBJDIR)/OpenGLTexture.o
 
 default:
 	@echo "Citrus Engine citrus_backend_glfwx_gl3 Module Builder"
@@ -111,5 +111,9 @@ $(OBJDIR)/OpenGLMiscImpls.o: $(SRCDIR)/Native/Common/OpenGL/OpenGLMiscImpls.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/OpenGLShader.o: $(SRCDIR)/Native/Common/OpenGL/OpenGLShader.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/OpenGLTexture.o: $(SRCDIR)/Native/Common/OpenGL/OpenGLTexture.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

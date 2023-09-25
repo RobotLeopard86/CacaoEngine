@@ -9,6 +9,7 @@
 #include "Events/EventSystem.h"
 #include "Graphics/Window.h"
 #include "Graphics/Shader.h"
+#include "Graphics/Texture.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Transform.h"
 #include "Graphics/Cameras/Camera.h"

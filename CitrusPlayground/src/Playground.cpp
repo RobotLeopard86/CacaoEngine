@@ -22,32 +22,39 @@ public:
 
         std::string vertexShaderSource = R"(
             #version 330 core
+            layout(location = 0) in vec3 pos;
+            layout(location = 1) in vec2 tc;
 
-            layout(location=0) in vec3 pos;
-            out vec3 position;
+            out vec2 texCoords;
 
             uniform mat4 transform;
             uniform mat4 camview;
 
             void main() {
-                position = pos;
-                gl_Position = camview * transform * vec4(pos, 1.0);
+                texCoords = tc;    
+                gl_Position = transform * camview * vec4(pos, 1.0);
             }
         )";
         
         std::string fragmentShaderSource = R"(
             #version 330 core
-
             out vec4 color;
-            in vec3 position;
 
-            void main() {
-                color = vec4(position, 1.0);
+            in vec2 texCoords;
+
+            uniform sampler2D tex;
+
+            void main()
+            {    
+                color = texture(tex, texCoords);
             }
         )";
         
-        shader = Shader::CreateShader(vertexShaderSource, fragmentShaderSource);
+        shader = Shader::Create(vertexShaderSource, fragmentShaderSource);
         shader->Compile();
+
+        tex = Texture::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
+        tex->Compile();
 
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
         cam->SetPosition({ 0, 0, -2.5 });
@@ -60,10 +67,12 @@ public:
     }
 
     void ClientOnShutdown() override {
-        //Release shader resources
+        //Release texture and shader resources
         shader->Release();
+        tex->Release();
 
         delete mdl;
+        delete tex;
         delete transform;
         delete shader;
         delete cam;
@@ -137,7 +146,9 @@ public:
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
 
+        tex->Bind();
         mdl->DrawMesh("Shape", shader, transform);
+        tex->Unbind();
     }
     void ClientOnFixedTick() override {}
 
@@ -219,6 +230,7 @@ private:
     Model* mdl;
     Transform* transform;
     Shader* shader;
+    Texture* tex;
     PerspectiveCamera* cam;
 
     std::vector<glm::vec3> vertices;

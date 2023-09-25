@@ -9,7 +9,7 @@ namespace CitrusEngine {
     //OpenGL implementation of Texture (see Texture.h for method details)
     class OpenGLTexture : public Texture {
     public:
-        OpenGLTexture(unsigned char* dataBuf, bool dataFromSTB, glm::ivec2 size);
+        OpenGLTexture(unsigned char* dataBuf, glm::ivec2 size, int numChannels);
         ~OpenGLTexture();
 
         void Bind() override;
@@ -20,8 +20,8 @@ namespace CitrusEngine {
         GLuint compiledForm;
         bool compiled;
         bool bound;
-        bool bufFromSTB;
         unsigned char* dataBuffer;
         glm::ivec2 imgSize;
+        int numImgChannels;
     };
 }

@@ -55,7 +55,7 @@ namespace CitrusEngine {
         virtual void UploadUniformInt4(std::string uniform, glm::ivec4 value) {}
 
         //Creates shader for the current rendering API
-        static Shader* CreateShader(std::string vertexShader, std::string fragmentShader);
+        static Shader* Create(std::string vertexShader, std::string fragmentShader);
     protected:
         bool compiled;
         bool bound;

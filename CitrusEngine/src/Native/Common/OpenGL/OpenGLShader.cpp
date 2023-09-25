@@ -7,7 +7,7 @@
 
 namespace CitrusEngine {
 
-    Shader* Shader::CreateShader(std::string vertexSrc, std::string fragmentSrc){
+    Shader* Shader::Create(std::string vertexSrc, std::string fragmentSrc){
         return new OpenGLShader(vertexSrc, fragmentSrc);
     }
 

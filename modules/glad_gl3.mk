@@ -11,7 +11,7 @@ endif
 
 INCLUDES := -I../libs/glad/include
 DEFINES :=
-LIBS :=
+LIBS := -ldl
 LIBDIRS := -L/usr/lib64
 MISCOPTS := -std=gnu17 -c
 CFGFLAGS :=

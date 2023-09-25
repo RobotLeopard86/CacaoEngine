@@ -61,21 +61,22 @@ namespace CitrusEngine {
                 modelOrientation = (upAxisSign < 1 ? Orientation::NegZ : Orientation::PosZ);
             }
 
+            bool containsTexCoords = assimpMesh->HasTextureCoords(0);
             bool containsTangentsAndBitangents = assimpMesh->HasTangentsAndBitangents();
+            bool containsNormals = assimpMesh->HasNormals();
 
             for(int j = 0; j < assimpMesh->mNumVertices; j++){
                 aiVector3D vert = assimpMesh->mVertices[j];
-
-                bool containsTexCoords = assimpMesh->HasTextureCoords(j);
                     
                 glm::vec3 position = { vert.x, vert.y, vert.z };
                 glm::vec2 texCoords = glm::vec2(0.0f);
                 glm::vec3 tangent = glm::vec3(0.0f);
                 glm::vec3 bitangent = glm::vec3(0.0f);
+                glm::vec3 normal = glm::vec3(0.0f);
 
                 if(containsTexCoords){
-                    aiVector3D* tc = assimpMesh->mTextureCoords[j];
-                    texCoords = { tc->x, tc->y };
+                    aiVector3D tc = assimpMesh->mTextureCoords[0][j];
+                    texCoords = { tc.x, tc.y };
                 }
 
                 if(containsTangentsAndBitangents){
@@ -83,6 +84,11 @@ namespace CitrusEngine {
                     aiVector3D bitan = assimpMesh->mBitangents[j];
                     tangent = { tan.x, tan.y, tan.z };
                     bitangent = { bitan.x, bitan.y, bitan.z };
+                }
+
+                if(containsNormals){
+                    aiVector3D norm = assimpMesh->mNormals[j];
+                    normal = { norm.x, norm.y, norm.z };
                 }
 
                 //Apply axis correction
@@ -106,7 +112,7 @@ namespace CitrusEngine {
                     break;
                 }
 
-                Vertex vertex{ position, texCoords, tangent, bitangent };
+                Vertex vertex{ position, texCoords, tangent, bitangent, normal };
                 vertices.push_back(vertex);
             }
 
