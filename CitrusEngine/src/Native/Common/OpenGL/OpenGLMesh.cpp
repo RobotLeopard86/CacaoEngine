@@ -93,4 +93,10 @@ namespace CitrusEngine {
 
         shader->Unbind();
     }
+
+    void OpenGLMesh::PureDraw(){
+        glBindVertexArray(vertexArray);
+        glDrawElements(GL_TRIANGLES, (indices.size() * 3), GL_UNSIGNED_INT, nullptr);
+        glBindVertexArray(0);
+    }
 }

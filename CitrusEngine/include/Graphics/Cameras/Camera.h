@@ -6,6 +6,8 @@
 
 #include "Utilities/Utilities.h"
 
+#include "Graphics/Skybox.h"
+
 namespace CitrusEngine {
 	//Base camera type
 	class Camera {
@@ -20,6 +22,10 @@ namespace CitrusEngine {
 			EventManager::GetInstance()->UnsubscribeConsumer("WindowResize", resizeConsumer);
 			delete resizeConsumer;
 		}
+
+		enum class ClearMode {
+			Color, Skybox
+		};
 
 		//Get and set position
 		virtual glm::vec3 GetPosition() = 0;
@@ -38,13 +44,19 @@ namespace CitrusEngine {
 
 		//Sets clear color (takes 8-bit unsigned integer vector (0-255 for red, green, and blue))
         void SetClearColor(glm::uvec3 color) { clearColor = { (float)color.r / 256, (float)color.g / 256, (float)color.b / 256, 1.0f }; }
+		//Sets active skybox
+		void SetSkybox(Skybox* skybox) { clearSkybox = skybox; }
         //Clears color and depth buffers
         void Clear();
+
+		ClearMode clearMode;
 
 		//Update camera projection matrix for new aspect ratio
 		virtual void ResizeProjectionMatrix(Event& e) = 0;
 	private:
 		EventConsumer* resizeConsumer;
+
 		glm::vec4 clearColor;
+		Skybox* clearSkybox;
 	};
 }

@@ -13,11 +13,13 @@ namespace CitrusEngine {
         virtual ~Mesh() {}
         
         //Compile the mesh into a usable form for drawing
-        virtual void Compile() = 0;
+        virtual void Compile() {};
         //Release compiled assets from memory
-        virtual void Release() = 0;
+        virtual void Release() {};
         //Draw the mesh
-        virtual void Draw(Shader* shader, Transform* transform) = 0;
+        virtual void Draw(Shader* shader, Transform* transform) {};
+        //Draw the mesh without any modifications (for skybox rendering)
+        virtual void PureDraw() {};
 
         //Is mesh compiled?
         bool IsCompiled() { return compiled; }

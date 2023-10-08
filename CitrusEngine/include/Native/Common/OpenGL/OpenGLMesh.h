@@ -15,6 +15,7 @@ namespace CitrusEngine {
         void Compile() override;
         void Release() override;
         void Draw(Shader* shader, Transform* transform) override;
+        void PureDraw() override;
     private:
         GLuint vertexArray, vertexBuffer, indexBuffer;
 

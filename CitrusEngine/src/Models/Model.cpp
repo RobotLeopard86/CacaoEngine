@@ -153,4 +153,18 @@ namespace CitrusEngine {
         Mesh* mesh = meshes.at(id);
         mesh->Draw(shader, transform);
     }
+
+    void Model::DrawMeshPure(std::string id){
+        Asserts::EngineAssert(meshes.contains(id), "Cannot draw mesh not found in model!");
+
+        Mesh* mesh = meshes.at(id);
+        mesh->PureDraw();
+    }
+
+    Mesh* Model::ExtractMesh(std::string id){
+        Asserts::EngineAssert(meshes.contains(id), "Cannot extract mesh not found in model!");
+
+        Mesh* mesh = meshes.at(id);
+        return mesh;
+    }
 }

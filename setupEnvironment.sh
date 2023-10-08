@@ -15,9 +15,9 @@ cwd=$(pwd)
 mv ./tmp/boost_1_82_0 ./tmp/boost
 cd ./tmp/boost
 echo "Setting up boost build environment..."
-./bootstrap.sh --with-libraries=test,thread,system --prefix="$cwd/libs/boost"
+./bootstrap.sh --without-icu --without-libraries=python --prefix="$cwd/libs/boost"
 echo "Installing boost library to Citrus Engine libraries directory..."
-./b2 install
+./b2 install -j14
 cd $cwd
 
 echo "The default compiler is Zig. Checking for presence of Zig on PATH..."
