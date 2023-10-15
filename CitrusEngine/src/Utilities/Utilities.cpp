@@ -1,4 +1,4 @@
-#include "Utilities/Utilities.h"
+#include "Utilities/Utilities.hpp"
 
 namespace CitrusEngine {
     //Make utilities instance null pointer by default

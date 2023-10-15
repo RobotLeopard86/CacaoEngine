@@ -1,9 +1,9 @@
-#include "Native/Common/OpenGL/OpenGLTexture.h"
+#include "Native/Common/OpenGL/OpenGLTexture.hpp"
 
 #include <filesystem>
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
 
 #include "stb_image.h"
 

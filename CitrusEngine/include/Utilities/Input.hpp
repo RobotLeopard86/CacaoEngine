@@ -2,7 +2,7 @@
 
 #include "glm/vec2.hpp"
 
-#include "Events/EventSystem.h"
+#include "Events/EventSystem.hpp"
 
 #include <map>
 

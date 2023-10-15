@@ -1,7 +1,7 @@
-#include "Events/EventManager.h"
+#include "Events/EventManager.hpp"
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
 
 #include <stdexcept>
 

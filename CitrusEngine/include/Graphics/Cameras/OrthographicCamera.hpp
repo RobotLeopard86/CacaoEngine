@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Camera.h"
+#include "Camera.hpp"
 
 namespace CitrusEngine {
-	//Implement an orthographic camera (method explanations found in Camera.h)
+	//Implement an orthographic camera (method explanations found in Camera.hpp)
 	class OrthographicCamera : public Camera {
 	public:
 		OrthographicCamera(glm::vec2 projection);

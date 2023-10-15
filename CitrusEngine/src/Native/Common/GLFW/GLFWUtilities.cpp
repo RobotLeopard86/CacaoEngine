@@ -1,4 +1,4 @@
-#include "Native/Common/GLFW/GLFWUtilities.h"
+#include "Native/Common/GLFW/GLFWUtilities.hpp"
 
 #include "GLFW/glfw3.h"
 

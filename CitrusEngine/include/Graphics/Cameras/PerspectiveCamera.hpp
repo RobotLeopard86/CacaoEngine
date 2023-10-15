@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Camera.h"
+#include "Camera.hpp"
 
 #include "glm/glm.hpp"
 
 namespace CitrusEngine {
-	//Implement a perspective camera (method explanations found in Camera.h)
+	//Implement a perspective camera (method explanations found in Camera.hpp)
 	class PerspectiveCamera : public Camera {
 	public:
 		PerspectiveCamera(float fov, glm::ivec2 size);

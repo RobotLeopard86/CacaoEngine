@@ -1,6 +1,6 @@
-#include "Native/Common/GLFW/GLFWBackendComponent.h"
+#include "Native/Common/GLFW/GLFWBackendComponent.hpp"
 
-#include "Core/Log.h"
+#include "Core/Log.hpp"
 
 namespace CitrusEngine {
 

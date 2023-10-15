@@ -1,4 +1,4 @@
-#include "Graphics/Cameras/Camera.h"
+#include "Graphics/Cameras/Camera.hpp"
 
 #include "glad/gl.h"
 

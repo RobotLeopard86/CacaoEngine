@@ -1,9 +1,9 @@
-#include "Core/Backend.h"
+#include "Core/Backend.hpp"
 
-#include "Core/Assert.h"
+#include "Core/Assert.hpp"
 
-#include "Native/Common/GLFW/GLFWBackendComponent.h"
-#include "Native/Common/OpenGL/OpenGLBackendComponent.h"
+#include "Native/Common/GLFW/GLFWBackendComponent.hpp"
+#include "Native/Common/OpenGL/OpenGLBackendComponent.hpp"
 
 namespace CitrusEngine {
 

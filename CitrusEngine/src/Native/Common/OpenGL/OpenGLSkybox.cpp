@@ -1,15 +1,15 @@
-#include "Native/Common/OpenGL/OpenGLSkybox.h"
+#include "Native/Common/OpenGL/OpenGLSkybox.hpp"
 
 #include <filesystem>
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
 
-#include "Graphics/Texture.h"
+#include "Graphics/Texture.hpp"
 
-#include "Models/Model.h"
+#include "Models/Model.hpp"
 
-#include "Utilities/StateManager.h"
+#include "Utilities/StateManager.hpp"
 
 #include "stb_image.h"
 

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Utilities/Utilities.h"
+#include "Utilities/Utilities.hpp"
 
 namespace CitrusEngine {
     
-    //GLFW implementation of Utilities (see Utilities.h for method details)
+    //GLFW implementation of Utilities (see Utilities.hpp for method details)
     class GLFWUtilities : public Utilities {
     public:
         GLFWUtilities() {}

@@ -1,10 +1,10 @@
-#include "Core/CitrusClient.h"
-#include "Core/Assert.h"
-#include "Core/Log.h"
-#include "Utilities/Utilities.h"
-#include "Utilities/Input.h"
-#include "ImGui/ImGuiWrapper.h"
-#include "Core/Backend.h"
+#include "Core/CitrusClient.hpp"
+#include "Core/Assert.hpp"
+#include "Core/Log.hpp"
+#include "Utilities/Utilities.hpp"
+#include "Utilities/Input.hpp"
+#include "ImGui/ImGuiWrapper.hpp"
+#include "Core/Backend.hpp"
 
 namespace CitrusEngine {
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Graphics/Mesh.h"
+#include "Graphics/Mesh.hpp"
 
 #include "glad/gl.h"
 
 namespace CitrusEngine {
 
-    //OpenGL implementation of Mesh (see Mesh.h for method details)
+    //OpenGL implementation of Mesh (see Mesh.hpp for method details)
     class OpenGLMesh : public Mesh {
     public:
         OpenGLMesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);

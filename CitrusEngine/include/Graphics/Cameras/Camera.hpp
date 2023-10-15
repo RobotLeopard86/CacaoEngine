@@ -2,11 +2,11 @@
 
 #include "glm/glm.hpp"
 
-#include "Events/EventSystem.h"
+#include "Events/EventSystem.hpp"
 
-#include "Utilities/Utilities.h"
+#include "Utilities/Utilities.hpp"
 
-#include "Graphics/Skybox.h"
+#include "Graphics/Skybox.hpp"
 
 namespace CitrusEngine {
 	//Base camera type

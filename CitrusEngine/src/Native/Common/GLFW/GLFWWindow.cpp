@@ -1,14 +1,14 @@
-#include "Graphics/Window.h"
+#include "Graphics/Window.hpp"
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
-#include "Core/Backend.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
+#include "Core/Backend.hpp"
 
-#include "Events/EventSystem.h"
+#include "Events/EventSystem.hpp"
 
-#include "Native/Common/GLFW/GLFWBackendComponent.h"
+#include "Native/Common/GLFW/GLFWBackendComponent.hpp"
 
-//GLFW implementation of Window (see Window.h for more details)
+//GLFW implementation of Window (see Window.hpp for more details)
 
 //CE_GLFW_API should be set by the backend Makefile compiling this file
 #ifndef CE_GLFW_API

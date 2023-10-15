@@ -1,6 +1,6 @@
-#include "Utilities/Input.h"
+#include "Utilities/Input.hpp"
 
-#include "Utilities/Utilities.h"
+#include "Utilities/Utilities.hpp"
 
 namespace CitrusEngine {
     //Make input instance null pointer by default

@@ -1,4 +1,4 @@
-#include "Models/Model.h"
+#include "Models/Model.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -6,7 +6,7 @@
 
 #include "glm/gtx/rotate_vector.hpp"
 
-#include "Core/Assert.h"
+#include "Core/Assert.hpp"
 
 #include <filesystem>
 #include <ranges>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Shader.h"
+#include "Graphics/Shader.hpp"
 
 #include "glad/gl.h"
 
@@ -8,7 +8,7 @@
 
 namespace CitrusEngine {
 
-    //OpenGL implementation of Shader (see Shader.h for method details)
+    //OpenGL implementation of Shader (see Shader.hpp for method details)
     class OpenGLShader : public Shader {
     public:
         OpenGLShader(std::string vertexSrc, std::string fragmentSrc);

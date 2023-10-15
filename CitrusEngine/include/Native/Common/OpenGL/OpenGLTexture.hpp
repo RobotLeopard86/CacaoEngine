@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Graphics/Texture.h"
+#include "Graphics/Texture.hpp"
 
 #include "glad/gl.h"
 
 namespace CitrusEngine {
 
-    //OpenGL implementation of Texture (see Texture.h for method details)
+    //OpenGL implementation of Texture (see Texture.hpp for method details)
     class OpenGLTexture : public Texture {
     public:
         OpenGLTexture(unsigned char* dataBuf, glm::ivec2 size, int numChannels);

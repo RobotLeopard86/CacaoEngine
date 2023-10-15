@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Graphics/Skybox.h"
+#include "Graphics/Skybox.hpp"
 
 namespace CitrusEngine {
-    //OpenGL implementation of Skybox (see Skybox.h for method details)
+    //OpenGL implementation of Skybox (see Skybox.hpp for method details)
     class OpenGLSkybox : public Skybox {
     public:
         OpenGLSkybox(std::string texturePath);

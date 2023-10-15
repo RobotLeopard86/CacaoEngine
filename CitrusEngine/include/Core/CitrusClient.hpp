@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include "Events/EventSystem.h"
+#include "Events/EventSystem.hpp"
 
-#include "Utilities/StateManager.h"
+#include "Utilities/StateManager.hpp"
 
-#include "Graphics/Window.h"
+#include "Graphics/Window.hpp"
 
 namespace CitrusEngine {
 

@@ -1,8 +1,8 @@
-#include "Native/Common/OpenGL/OpenGLMesh.h"
+#include "Native/Common/OpenGL/OpenGLMesh.hpp"
 
-#include "Core/Assert.h"
+#include "Core/Assert.hpp"
 
-#include "Utilities/StateManager.h"
+#include "Utilities/StateManager.hpp"
 
 namespace CitrusEngine {
 

@@ -1,7 +1,7 @@
-#include "Native/Common/OpenGL/OpenGLShader.h"
+#include "Native/Common/OpenGL/OpenGLShader.hpp"
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
 
 #include "glm/gtc/type_ptr.hpp"
 

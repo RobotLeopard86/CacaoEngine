@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Vertex.h"
-#include "Shader.h"
-#include "Transform.h"
+#include "Vertex.hpp"
+#include "Shader.hpp"
+#include "Transform.hpp"
 
 #include <vector>
 

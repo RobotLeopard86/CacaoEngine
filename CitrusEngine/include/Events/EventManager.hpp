@@ -4,8 +4,8 @@
 #include <functional>
 #include <vector>
 
-#include "Events.h"
-#include "EventConsumer.h"
+#include "Events.hpp"
+#include "EventConsumer.hpp"
 
 namespace CitrusEngine {
 

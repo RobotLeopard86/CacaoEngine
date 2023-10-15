@@ -1,6 +1,6 @@
-#include "Utilities/StateManager.h"
+#include "Utilities/StateManager.hpp"
 
-#include "Core/Assert.h"
+#include "Core/Assert.hpp"
 
 namespace CitrusEngine {
     //Make state manager instance null pointer by default

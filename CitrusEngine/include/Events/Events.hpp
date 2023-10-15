@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
 
 #include "glm/vec2.hpp"
 
@@ -66,7 +66,7 @@ namespace CitrusEngine {
     class KeyDownEvent : public Event { //Parameters: Keycode for key pressed
     public:
         KeyDownEvent(int keycode) : keycode(keycode) {}
-        KeyDownEvent() : keycode(0) {} //0 used because Input.h has no key assigned to it
+        KeyDownEvent() : keycode(0) {} //0 used because Input.hpp has no key assigned to it
 
         int keycode;
 
@@ -75,7 +75,7 @@ namespace CitrusEngine {
     class KeyUpEvent : public Event { //Parameters: Keycode for key released
     public:   
         KeyUpEvent(int keycode) : keycode(keycode) {}
-        KeyUpEvent() : keycode(0) {} //0 used because Input.h has no key assigned to it
+        KeyUpEvent() : keycode(0) {} //0 used because Input.hpp has no key assigned to it
 
         int keycode;
 
@@ -84,7 +84,7 @@ namespace CitrusEngine {
     class KeyTypeEvent : public Event { //Parameters: Keycode for key typed
     public:    
         KeyTypeEvent(unsigned int keycode) : keycode(keycode) {}
-        KeyTypeEvent() : keycode(0) {} //0 used because Input.h has no key assigned to it
+        KeyTypeEvent() : keycode(0) {} //0 used because Input.hpp has no key assigned to it
 
         unsigned int keycode;
 
@@ -95,7 +95,7 @@ namespace CitrusEngine {
     class MousePressEvent : public Event { //Parameters: Button code for button pressed
     public:
         MousePressEvent(int button) : button(button) {}
-        MousePressEvent() : button(9) {} //9 used because Input.h has no button assigned to it
+        MousePressEvent() : button(9) {} //9 used because Input.hpp has no button assigned to it
 
         int button;
 
@@ -104,7 +104,7 @@ namespace CitrusEngine {
     class MouseReleaseEvent : public Event { //Parameters: Button code for button released
     public:
         MouseReleaseEvent(int button) : button(button) {}
-        MouseReleaseEvent() : button(9) {} //9 used because Input.h has no button assigned to it
+        MouseReleaseEvent() : button(9) {} //9 used because Input.hpp has no button assigned to it
 
         int button;
 

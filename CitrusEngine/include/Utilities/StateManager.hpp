@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Cameras/Camera.h"
+#include "Graphics/Cameras/Camera.hpp"
 
 namespace CitrusEngine {
     //Singleton state manager for the engine

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Shader.h"
-#include "Texture.h"
+#include "Shader.hpp"
+#include "Texture.hpp"
 
-#include "Models/Model.h"
+#include "Models/Model.hpp"
 
 namespace CitrusEngine {
     //Must be implemented per-rendering API

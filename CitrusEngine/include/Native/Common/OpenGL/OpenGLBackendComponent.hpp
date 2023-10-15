@@ -1,14 +1,14 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
+#include "glad/gl.h"
 
 namespace CitrusEngine {
 
-    //GLFW version of Backend.h (does not implement Backend.h symbols)
-    //Used to manage the GLFW backend component
-    class GLFWBackendComponent {
+    //OpenGL version of Backend.hpp (does not implement Backend.hpp symbols)
+    //Used to manage the OpenGL backend component
+    class OpenGLBackendComponent {
     public:
-        virtual ~GLFWBackendComponent() {}
+        virtual ~OpenGLBackendComponent() {}
 
         static bool Initialize();
         static void Shutdown();

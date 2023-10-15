@@ -1,6 +1,6 @@
-#include "Native/Common/OpenGL/OpenGLBackendComponent.h"
+#include "Native/Common/OpenGL/OpenGLBackendComponent.hpp"
 
-#include "Core/Log.h"
+#include "Core/Log.hpp"
 
 namespace CitrusEngine {
 

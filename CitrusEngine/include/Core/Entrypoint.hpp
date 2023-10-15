@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CitrusClient.h"
+#include "CitrusClient.hpp"
 
 //Implemented by client
 CitrusEngine::CitrusClient* CreateClient();

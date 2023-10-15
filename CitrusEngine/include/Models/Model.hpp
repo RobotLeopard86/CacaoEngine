@@ -4,7 +4,7 @@
 #include <map>
 #include <utility>
 
-#include "Graphics/Mesh.h"
+#include "Graphics/Mesh.hpp"
 
 namespace CitrusEngine {
     //Internal representation of a model

@@ -1,10 +1,10 @@
-#include "ImGui/ImGuiWrapper.h"
+#include "ImGui/ImGuiWrapper.hpp"
 
-#include "Core/Log.h"
-#include "Core/Assert.h"
-#include "Core/CitrusClient.h"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
+#include "Core/CitrusClient.hpp"
 
-#include "Graphics/Window.h"
+#include "Graphics/Window.hpp"
 
 #include <stdexcept>
 

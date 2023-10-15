@@ -1,6 +1,6 @@
-#include "ImGui/ImGuiWrapper.h"
+#include "ImGui/ImGuiWrapper.hpp"
 
-#include "Core/CitrusClient.h"
+#include "Core/CitrusClient.hpp"
 
 #include "GLFW/glfw3.h"
 
