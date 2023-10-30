@@ -21,7 +21,10 @@ namespace CitrusEngine {
     }
 
     void OpenGLMesh::Compile(){
-        Asserts::EngineAssert(!compiled, "Cannot compile already compiled mesh!");
+        if(compiled){
+			Logging::EngineLog(LogLevel::Error, "Cannot compile already compiled mesh!");
+			return;
+		}
 
         //Generate vertex arrays
         glGenVertexArrays(1, &vertexArray);

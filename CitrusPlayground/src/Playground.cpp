@@ -1,6 +1,4 @@
-#include "CitrusEngine.h"
-
-#include "glm/gtc/matrix_transform.hpp"
+#include "CitrusEngine.hpp"
 
 #include <string>
 #include <sstream>
@@ -53,7 +51,7 @@ public:
         shader = Shader::Create(vertexShaderSource, fragmentShaderSource);
         shader->Compile();
 
-        tex = Texture::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
+        tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
@@ -75,7 +73,7 @@ public:
         delete tex;
         delete transform;
         delete shader;
-        delete cam;
+        //delete cam;
         delete uiDrawConsumer;
     }
 
@@ -230,7 +228,7 @@ private:
     Model* mdl;
     Transform* transform;
     Shader* shader;
-    Texture* tex;
+    Texture2D* tex;
     PerspectiveCamera* cam;
 
     std::vector<glm::vec3> vertices;

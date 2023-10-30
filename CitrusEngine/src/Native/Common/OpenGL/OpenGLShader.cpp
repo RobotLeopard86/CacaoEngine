@@ -20,7 +20,8 @@ namespace CitrusEngine {
 
     void OpenGLShader::Compile() {
         if(compiled){
-            Logging::EngineLog(LogLevel::Warn, "Recompiling already compiled shader...");
+            Logging::EngineLog(LogLevel::Error, "Cannot compile already compiled shader!");
+			return;
         }
 
         //Create vertex shader base

@@ -1,114 +1,151 @@
 #include "Native/Common/OpenGL/OpenGLSkybox.hpp"
 
-#include <filesystem>
-
 #include "Core/Log.hpp"
-#include "Core/Assert.hpp"
-
-#include "Graphics/Texture.hpp"
-
-#include "Models/Model.hpp"
 
 #include "Utilities/StateManager.hpp"
 
-#include "stb_image.h"
-
 #include "glad/gl.h"
+
+#include "glm/gtx/transform.hpp"
 
 namespace CitrusEngine {
 
-    //Initialize static skybox members to nullptr by default
-    Shader* Skybox::skyboxShader = nullptr;
-    Model* Skybox::skybox = nullptr;
-    bool Skybox::staticMembersInitialized = false;
+	//Initialize static resources
+	bool Skybox::isSetup = false;
+	Mesh* Skybox::skyboxMesh = nullptr;
+	Shader* Skybox::skyboxShader = nullptr;
 
-    Skybox* Skybox::Create(std::string texturePath){
-        Asserts::EngineAssert(staticMembersInitialized, "You must initialize common skybox resources before creating a skybox!");
+	Skybox* Skybox::Create(TextureCube tex){
+		return new OpenGLSkybox(tex);
+	}
 
-        return new OpenGLSkybox(texturePath);
-    }
+	OpenGLSkybox::OpenGLSkybox(TextureCube tex){
+		//Create pointer from cubemap
+		texture = new TextureCube(tex);
+		texture->Compile();
+	}
 
-    void Skybox::InitializeResources(std::string modelPath){
-        if(staticMembersInitialized) {
-            Logging::EngineLog(LogLevel::Warn, "Ignoring redundant call to Skybox::InitializeResources, method already called.");
-            return;
-        }
+	OpenGLSkybox::~OpenGLSkybox(){
+		texture->Release();
+		delete texture;
+	}
 
-        Asserts::EngineAssert(std::filesystem::exists(modelPath), "Cannot initialize skybox resources with nonexistent model path!");
+	void Skybox::CommonSetup(){
+		if(isSetup){
+			Logging::EngineLog(LogLevel::Error, "Cannot set up skybox resources which are already set up!");
+			return;
+		}
 
-        //Define shader code
-        std::string vertCode = R"(
-            #version 330 core
+		//Define skybox shader code
 
-            layout(location = 0) in vec3 pos;
-            layout(location = 1) in vec2 tc;
+		std::string skyVert = R"(
+			#version 330 core
 
-            out vec2 texCoords;
+			layout(location=0) in vec3 position;
 
-            uniform mat4 transform;
-            uniform mat4 camview;
+			uniform mat4 projection;
 
-            void main() {
-                texCoords = tc;    
-                gl_Position = transform * camview * vec4(pos, 1.0);
-            }
-        )";
-        std::string fragCode = R"(
-            #version 330 core
-            out vec4 color;
+			out vec3 texCoords;
 
-            in vec2 texCoords;
+			void main() {
+				vec4 pos = projection * vec4(position, 0);
+				gl_Position = pos.xyww;
+				texCoords = position;
+			}
+		)";
 
-            uniform sampler2D tex;
+		std::string skyFrag = R"(
+			#version 330 core
 
-            void main()
-            {    
-                color = texture(tex, texCoords);
-            }
-        )";
+			in vec3 texCoords;
 
-        //Create skybox shader
-        skyboxShader = Shader::Create(vertCode, fragCode);
-        skyboxShader->Compile();
+			out vec4 color;
 
-        //Load skybox model
-        skybox = new Model(modelPath);
+			uniform samplerCube tex;
 
-        staticMembersInitialized = true;
-    }
+			void main() {
+				color = texture(tex, texCoords);
+			}
+		)";
 
-    OpenGLSkybox::OpenGLSkybox(std::string texturePath){
-        bool texExists = std::filesystem::exists(texturePath);
-        Asserts::EngineAssert(texExists, "Cannot create skybox from nonexistent texture file!");
+		//Create and compile skybox shader object
+		skyboxShader = Shader::Create(skyVert, skyFrag);
+		skyboxShader->Compile();
 
-        //Create texture and transform assets
-        tex = Texture::CreateFromFile(texturePath);
-        tex->Compile();
-        transform = new Transform({0, 0, 0}, {0, 0, 0}, {1000, 1000, 1000});
-    }
+		//Define vertex and index data storage for mesh
+		std::vector<Vertex> verts;
+		std::vector<glm::uvec3> inds;
 
-    OpenGLSkybox::~OpenGLSkybox(){
-        //Release texture assets
-        tex->Release();
+		//Add vertices (only position specified because tex coords are done automatically and other data is irrelevant to skyboxes)
+		verts.push_back({ { -1, -1, 1 } });
+		verts.push_back({ { 1, -1, 1 } });
+		verts.push_back({ { -1, 1, 1 } });
+		verts.push_back({ { 1, 1, 1 } });
+		verts.push_back({ { -1, -1, -1 } });
+		verts.push_back({ { 1, -1, -1 } });
+		verts.push_back({ { -1, 1, -1 } });
+		verts.push_back({ { 1, 1, -1 } });
 
-        delete tex;
-        delete transform;
-    }
+		//Add indices
+		inds.push_back({ 2, 6, 7 });
+		inds.push_back({ 2, 3, 7 });
+		inds.push_back({ 0, 4, 5 });
+		inds.push_back({ 0, 1, 5 });
+		inds.push_back({ 0, 2, 6 });
+		inds.push_back({ 0, 4, 6 });
+		inds.push_back({ 1, 3, 7 });
+		inds.push_back({ 1, 5, 7 });
+		inds.push_back({ 0, 2, 3 });
+		inds.push_back({ 0, 1, 3 });
+		inds.push_back({ 4, 6, 7 });
+		inds.push_back({ 4, 5, 7 });
 
-    void OpenGLSkybox::Draw(){
-        skyboxShader->Bind();
+		//Create and compile mesh object
+		skyboxMesh = Mesh::Create(verts, inds);
+		skyboxMesh->Compile();
 
-        glm::mat4 camVPM = StateManager::GetInstance()->GetActiveCamera()->GetViewProjectionMatrix();
-        camVPM = glm::mat4(glm::mat3(camVPM));
+		isSetup = true;
+	}
 
-        skyboxShader->UploadUniformMat4("transform", transform->GetTransformationMatrix());
-        skyboxShader->UploadUniformMat4("camview", camVPM);
+	void Skybox::CommonCleanup(){
+		skyboxShader->Release();
+		skyboxMesh->Release();
 
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(GL_FALSE);
-        skybox->DrawMeshPure("SKYBOX");
-        glDepthMask(GL_TRUE);
+		delete skyboxShader;
+		delete skyboxMesh;
 
-        skyboxShader->Unbind();
-    }
+		isSetup = false;
+	}
+
+	void OpenGLSkybox::Draw(){
+		//Save current GL culling mode and depth func
+		GLint oldGLCull, oldGLDepthFunc;
+		glGetIntegerv(GL_CULL_FACE_MODE, &oldGLCull);
+		glGetIntegerv(GL_DEPTH_FUNC, &oldGLDepthFunc);
+
+		//Bind skybox shader and texture
+		skyboxShader->Bind();
+		texture->Bind();
+
+		//Set culling mode and depth func to be appropriate for skybox rendering
+		glCullFace(GL_FRONT);
+		glDepthFunc(GL_LEQUAL);
+
+		//Create skybox projection
+		glm::mat4 projection = StateManager::GetInstance()->GetActiveCamera()->GetViewProjectionMatrix() * glm::scale(glm::vec3(100.0f));
+
+		//Upload projection to shader
+		skyboxShader->UploadUniformMat4("projection", projection);
+
+		//Render skybox mesh
+		skyboxMesh->PureDraw();
+
+		//Unbind shader and texture
+		texture->Unbind();
+		skyboxShader->Unbind();
+
+		//Restore old culling mode and depth func
+		glCullFace(oldGLCull);
+		glDepthFunc(oldGLDepthFunc);
+	}
 }

@@ -1,10 +1,14 @@
 #include "Core/CitrusClient.hpp"
 #include "Core/Assert.hpp"
+#include "Core/Backend.hpp"
 #include "Core/Log.hpp"
+
 #include "Utilities/Utilities.hpp"
 #include "Utilities/Input.hpp"
+
 #include "ImGui/ImGuiWrapper.hpp"
-#include "Core/Backend.hpp"
+
+#include "Graphics/Skybox.hpp"
 
 namespace CitrusEngine {
 
@@ -55,6 +59,9 @@ namespace CitrusEngine {
         //Initialize ImGui
         ImGuiWrapper::Init();
 
+		//Initialize skybox resources
+		Skybox::CommonSetup();
+
         //Allow client to set up
         ClientOnStartup();
 
@@ -89,11 +96,14 @@ namespace CitrusEngine {
             window->Update();
         }
 
-        //Prepare eventManager for freeing by unsubscribing all consumers
+        //Prepare event manager for freeing by unsubscribing all consumers
         EventManager::GetInstance()->Shutdown();
 
         //Shutdown ImGui
         ImGuiWrapper::Shutdown();
+
+		//Cleanup skybox resources
+		Skybox::CommonCleanup();
 
         //Close window
         window->Destroy();

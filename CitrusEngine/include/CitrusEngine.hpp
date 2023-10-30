@@ -9,7 +9,8 @@
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
 #include "Graphics/Shader.hpp"
-#include "Graphics/Texture.hpp"
+#include "Graphics/Textures/Texture2D.hpp"
+#include "Graphics/Textures/TextureCube.hpp"
 #include "Graphics/Skybox.hpp"
 #include "Graphics/Mesh.hpp"
 #include "Graphics/Transform.hpp"
@@ -21,5 +22,7 @@
 #include "Utilities/Input.hpp"
 #include "Utilities/StateManager.hpp"
 
-//Include ImGui so that it can be used
+//Include ImGui so that it can be used to draw UI
 #include "imgui/imgui.h"
+//Include GLM so that it's types can be used when interfacing with the engine
+#include "glm/glm.hpp"

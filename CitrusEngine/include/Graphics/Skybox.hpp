@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Shader.hpp"
-#include "Texture.hpp"
+#include "Textures/TextureCube.hpp"
 
-#include "Models/Model.hpp"
+#include "Mesh.hpp"
 
 namespace CitrusEngine {
     //Must be implemented per-rendering API
@@ -15,17 +15,18 @@ namespace CitrusEngine {
         virtual void Draw() = 0;
 
         //Create a skybox for the current rendering API
-        static Skybox* Create(std::string texturePath);
+        static Skybox* Create(TextureCube tex);
 
-        //Initialize skybox resources (shader and model) (model expected to have a mesh named "SKYBOX" in all caps)
-        static void InitializeResources(std::string modelPath);
+		//Set up any common skybox resources
+		static void CommonSetup();
+		//Clean up any common skybox resources
+		static void CommonCleanup();
     protected:
-        Transform* transform;
-        Texture* tex;
+        TextureCube* texture;
 
         static Shader* skyboxShader;
-        static Model* skybox;
+        static Mesh* skyboxMesh;
 
-        static bool staticMembersInitialized;
+        static bool isSetup;
     };
 }

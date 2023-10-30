@@ -1,11 +1,7 @@
 #pragma once
 
-#include "glm/vec2.hpp"
-
-#include <string>
-
 namespace CitrusEngine {
-    //Must be implemented per-rendering API
+    //Base texture type
     class Texture {
     public:
         virtual ~Texture() {}
@@ -24,11 +20,6 @@ namespace CitrusEngine {
 
         //Is texture bound?
         bool IsBound() { return bound; }
-
-        //Creates texture for the current rendering API from a file
-        static Texture* CreateFromFile(std::string filePath);
-        //Creates texture for the current rendering API from pre-existing data
-        static Texture* CreateFromData(unsigned char* data, glm::ivec2 size, int numChannels);
     protected:
         bool compiled;
         bool bound;
