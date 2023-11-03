@@ -15,19 +15,18 @@ namespace CitrusEngine {
 	Mesh* Skybox::skyboxMesh = nullptr;
 	Shader* Skybox::skyboxShader = nullptr;
 
-	Skybox* Skybox::Create(TextureCube tex){
+	Skybox* Skybox::Create(TextureCube* tex){
 		return new OpenGLSkybox(tex);
 	}
 
-	OpenGLSkybox::OpenGLSkybox(TextureCube tex){
+	OpenGLSkybox::OpenGLSkybox(TextureCube* tex){
 		//Create pointer from cubemap
-		texture = new TextureCube(tex);
-		texture->Compile();
+		texture = *tex;
+		texture.Compile();
 	}
 
 	OpenGLSkybox::~OpenGLSkybox(){
-		texture->Release();
-		delete texture;
+		texture.Release();
 	}
 
 	void Skybox::CommonSetup(){
@@ -40,31 +39,32 @@ namespace CitrusEngine {
 
 		std::string skyVert = R"(
 			#version 330 core
-
-			layout(location=0) in vec3 position;
-
-			uniform mat4 projection;
+			layout(location=0) in vec3 pos;
 
 			out vec3 texCoords;
 
-			void main() {
-				vec4 pos = projection * vec4(position, 0);
-				gl_Position = pos.xyww;
-				texCoords = position;
-			}
+			uniform mat4 projection;
+
+			void main()
+			{
+				texCoords = pos;
+				vec4 skypos = projection * vec4(pos, 1.0);
+				gl_Position = skypos.xyww;
+			}  
 		)";
 
 		std::string skyFrag = R"(
 			#version 330 core
 
-			in vec3 texCoords;
-
 			out vec4 color;
 
-			uniform samplerCube tex;
+			in vec3 texCoords;
 
-			void main() {
-				color = texture(tex, texCoords);
+			uniform samplerCube skybox;
+
+			void main()
+			{    
+				color = texture(skybox, texCoords);
 			}
 		)";
 
@@ -118,34 +118,27 @@ namespace CitrusEngine {
 	}
 
 	void OpenGLSkybox::Draw(){
-		//Save current GL culling mode and depth func
-		GLint oldGLCull, oldGLDepthFunc;
-		glGetIntegerv(GL_CULL_FACE_MODE, &oldGLCull);
-		glGetIntegerv(GL_DEPTH_FUNC, &oldGLDepthFunc);
-
 		//Bind skybox shader and texture
 		skyboxShader->Bind();
-		texture->Bind();
-
-		//Set culling mode and depth func to be appropriate for skybox rendering
-		glCullFace(GL_FRONT);
-		glDepthFunc(GL_LEQUAL);
+		texture.Bind();
 
 		//Create skybox projection
-		glm::mat4 projection = StateManager::GetInstance()->GetActiveCamera()->GetViewProjectionMatrix() * glm::scale(glm::vec3(100.0f));
+		glm::mat4 projection = glm::scale(glm::vec3(1000.0f)) * glm::mat4(glm::mat3(StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix())) * StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix();
 
 		//Upload projection to shader
 		skyboxShader->UploadUniformMat4("projection", projection);
 
+		//Ensure skybox always drawn
+		glDepthFunc(GL_LEQUAL);
+
 		//Render skybox mesh
 		skyboxMesh->PureDraw();
 
-		//Unbind shader and texture
-		texture->Unbind();
-		skyboxShader->Unbind();
+		//Reset draw mode to make sure other objects draw correctly
+		glDepthFunc(GL_LESS);
 
-		//Restore old culling mode and depth func
-		glCullFace(oldGLCull);
-		glDepthFunc(oldGLDepthFunc);
+		//Unbind shader and texture
+		texture.Unbind();
+		skyboxShader->Unbind();
 	}
 }

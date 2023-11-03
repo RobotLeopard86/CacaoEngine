@@ -18,6 +18,8 @@ namespace CitrusEngine {
         void Release() override;
     private:
         GLuint compiledForm;
-		std::map<CubeFace, GLenum> faceFormats;
+
+		//Same order as TextureCube::faces
+		std::vector<GLenum> faceFormats;
     };
 }

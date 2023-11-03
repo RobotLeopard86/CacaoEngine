@@ -37,16 +37,16 @@ namespace CitrusEngine {
 		negZFace.dataBuffer = stbi_load(negZ.c_str(), &negZFace.size.x, &negZFace.size.y, &negZFace.numChannels, 0);
 
 		//Store cubemap faces
-		faces.insert_or_assign(CubeFace::PosX, posXFace);
-		faces.insert_or_assign(CubeFace::NegX, negXFace);
-		faces.insert_or_assign(CubeFace::PosY, posYFace);
-		faces.insert_or_assign(CubeFace::NegY, negYFace);
-		faces.insert_or_assign(CubeFace::PosZ, posZFace);
-		faces.insert_or_assign(CubeFace::NegZ, negZFace);
+		faces.push_back(posXFace);
+		faces.push_back(negXFace);
+		faces.push_back(posYFace);
+		faces.push_back(negYFace);
+		faces.push_back(posZFace);
+		faces.push_back(negZFace);
 
 		//Determine face formats
 		for(int i = 0; i < 5; i++){
-			int numChannels = faces.at(static_cast<CubeFace>(i)).numChannels;
+			int numChannels = faces[i].numChannels;
 
 			GLenum format;
 			if(numChannels == 1) {
@@ -57,7 +57,7 @@ namespace CitrusEngine {
 				format = GL_RGBA;
 			}
 
-			faceFormats.insert_or_assign(static_cast<CubeFace>(i), format);
+			faceFormats.push_back(format);
 		}
 	}
 
@@ -66,7 +66,7 @@ namespace CitrusEngine {
 		if(compiled) Release();
 
 		for(auto it = faces.begin(); it != faces.end(); it++){
-			delete it->second.dataBuffer;
+			delete (*it).dataBuffer;
 		}
 	}
 
@@ -85,7 +85,7 @@ namespace CitrusEngine {
 		//Load image data into texture object from faces
 		for(int i = 0; i < 5; i++){
 			//Load image data into texture object
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, faceFormats.at(static_cast<CubeFace>(i)), faces.at(static_cast<CubeFace>(i)).size.x, faces.at(static_cast<CubeFace>(i)).size.y, 0, faceFormats.at(static_cast<CubeFace>(i)), GL_UNSIGNED_BYTE, faces.at(static_cast<CubeFace>(i)).dataBuffer);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, faceFormats[i], faces[i].size.x, faces[i].size.y, 0, faceFormats[i], GL_UNSIGNED_BYTE, faces[i].dataBuffer);
 
 			//Apply texture filtering
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

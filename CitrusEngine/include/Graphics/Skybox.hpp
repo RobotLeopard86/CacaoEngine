@@ -15,14 +15,14 @@ namespace CitrusEngine {
         virtual void Draw() = 0;
 
         //Create a skybox for the current rendering API
-        static Skybox* Create(TextureCube tex);
+        static Skybox* Create(TextureCube* tex);
 
 		//Set up any common skybox resources
 		static void CommonSetup();
 		//Clean up any common skybox resources
 		static void CommonCleanup();
     protected:
-        TextureCube* texture;
+        TextureCube texture;
 
         static Shader* skyboxShader;
         static Mesh* skyboxMesh;

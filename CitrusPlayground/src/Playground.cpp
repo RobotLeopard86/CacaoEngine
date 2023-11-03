@@ -54,6 +54,11 @@ public:
         tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
+		skyTex = TextureCube::CreateFromFile("CitrusPlayground/assets/sky/left.png", "CitrusPlayground/assets/sky/right.png", "CitrusPlayground/assets/sky/top.png", "CitrusPlayground/assets/sky/bottom.png", "CitrusPlayground/assets/sky/front.png", "CitrusPlayground/assets/sky/back.png");
+		skyTex->Compile();
+
+		sky = Skybox::Create(skyTex);
+
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
         cam->SetPosition({ 0, 0, -2.5 });
         cam->SetClearColor({ 255, 255, 255 });
@@ -68,12 +73,14 @@ public:
         //Release texture and shader resources
         shader->Release();
         tex->Release();
+		skyTex->Release();
 
         delete mdl;
         delete tex;
         delete transform;
         delete shader;
-        //delete cam;
+		delete sky;
+		delete skyTex;
         delete uiDrawConsumer;
     }
 
@@ -147,6 +154,8 @@ public:
         tex->Bind();
         mdl->DrawMesh("Shape", shader, transform);
         tex->Unbind();
+
+		sky->Draw();
     }
     void ClientOnFixedTick() override {}
 
@@ -229,6 +238,8 @@ private:
     Transform* transform;
     Shader* shader;
     Texture2D* tex;
+	TextureCube* skyTex;
+	Skybox* sky;
     PerspectiveCamera* cam;
 
     std::vector<glm::vec3> vertices;
