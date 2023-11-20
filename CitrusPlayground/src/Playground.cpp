@@ -54,7 +54,7 @@ public:
         tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
-		skyTex = TextureCube::CreateFromFile("CitrusPlayground/assets/sky/left.png", "CitrusPlayground/assets/sky/right.png", "CitrusPlayground/assets/sky/top.png", "CitrusPlayground/assets/sky/bottom.png", "CitrusPlayground/assets/sky/front.png", "CitrusPlayground/assets/sky/back.png");
+		skyTex = TextureCube::CreateFromFile("CitrusPlayground/assets/sky/right.png", "CitrusPlayground/assets/sky/left.png", "CitrusPlayground/assets/sky/top.png", "CitrusPlayground/assets/sky/bottom.png", "CitrusPlayground/assets/sky/front.png", "CitrusPlayground/assets/sky/back.png");
 		skyTex->Compile();
 
 		sky = Skybox::Create(skyTex);

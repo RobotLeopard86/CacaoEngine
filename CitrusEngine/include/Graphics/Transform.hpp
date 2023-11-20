@@ -8,7 +8,9 @@ namespace CitrusEngine {
     class Transform {
     public:
         Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
-            : pos(position), rot(rotation), scale(scale), transMat(1.0) {}
+            : pos(position), rot(rotation), scale(scale), transMat(1.0) {
+				RecalculateTransformationMatrix();
+			}
 
         //Self-explanatory getters and setters
         glm::vec3 GetPosition() { return pos; }

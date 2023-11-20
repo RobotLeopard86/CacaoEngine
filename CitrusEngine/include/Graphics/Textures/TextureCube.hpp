@@ -10,11 +10,14 @@
 namespace CitrusEngine {
 
 	//Cubemap image data
-	struct CubemapFace {
+	class CubemapFace {
 	public:
 		unsigned char* dataBuffer;
 		glm::ivec2 size;
 		int numChannels;
+
+		CubemapFace(std::string path);
+		~CubemapFace();
 	};
 
 	//Cubemap texture
@@ -36,6 +39,6 @@ namespace CitrusEngine {
         static TextureCube* CreateFromFile(std::string posX, std::string negX, std::string posY, std::string negY, std::string posZ, std::string negZ);
     protected:
 		//Order: +X, -X, +Y, -Y, +Z, -Z
-        std::vector<CubemapFace> faces;
+        CubemapFace *px, *nx, *py, *ny, *pz, *nz;
     };
 }

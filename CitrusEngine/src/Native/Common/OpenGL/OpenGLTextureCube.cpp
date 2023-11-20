@@ -15,6 +15,17 @@ namespace CitrusEngine {
 		return new OpenGLTextureCube(posX, negX, posY, negY, posZ, negZ);
 	}
 
+	CubemapFace::CubemapFace(std::string path){
+		stbi_set_flip_vertically_on_load(true);
+		dataBuffer = stbi_load(path.c_str(), &size.x, &size.y, &numChannels, 3);
+
+		Logging::EngineLog(LogLevel::Trace, "Yeah so I made a face");
+	}
+
+	CubemapFace::~CubemapFace(){
+		stbi_image_free(dataBuffer);
+	}
+
 	OpenGLTextureCube::OpenGLTextureCube(std::string posX, std::string negX, std::string posY, std::string negY, std::string posZ, std::string negZ) {
 		compiled = false;
 		bound = false;
@@ -27,47 +38,26 @@ namespace CitrusEngine {
 		Asserts::EngineAssert(std::filesystem::exists(posZ), "Cannot create cube texture because +Z face can not be created from nonexistent file!");
 		Asserts::EngineAssert(std::filesystem::exists(negZ), "Cannot create cube texture because -Z face can not be created from nonexistent file!");
 
-		//Create cubemap face objects
-		CubemapFace posXFace, negXFace, posYFace, negYFace, posZFace, negZFace;
-		posXFace.dataBuffer = stbi_load(posX.c_str(), &posXFace.size.x, &posXFace.size.y, &posXFace.numChannels, 0);
-		negXFace.dataBuffer = stbi_load(negX.c_str(), &negXFace.size.x, &negXFace.size.y, &negXFace.numChannels, 0);
-		posYFace.dataBuffer = stbi_load(posY.c_str(), &posYFace.size.x, &posYFace.size.y, &posYFace.numChannels, 0);
-		negYFace.dataBuffer = stbi_load(negY.c_str(), &negYFace.size.x, &negYFace.size.y, &negYFace.numChannels, 0);
-		posZFace.dataBuffer = stbi_load(posZ.c_str(), &posZFace.size.x, &posZFace.size.y, &posZFace.numChannels, 0);
-		negZFace.dataBuffer = stbi_load(negZ.c_str(), &negZFace.size.x, &negZFace.size.y, &negZFace.numChannels, 0);
-
-		//Store cubemap faces
-		faces.push_back(posXFace);
-		faces.push_back(negXFace);
-		faces.push_back(posYFace);
-		faces.push_back(negYFace);
-		faces.push_back(posZFace);
-		faces.push_back(negZFace);
-
-		//Determine face formats
-		for(int i = 0; i < 5; i++){
-			int numChannels = faces[i].numChannels;
-
-			GLenum format;
-			if(numChannels == 1) {
-				format = GL_RED;
-			} else if(numChannels == 3) {
-				format = GL_RGB;
-			} else if(numChannels == 4) {
-				format = GL_RGBA;
-			}
-
-			faceFormats.push_back(format);
-		}
+		//Store cubemap faces (created as they are added to vector)
+		px = new CubemapFace(posX);
+		nx = new CubemapFace(negX);
+		py = new CubemapFace(posY);
+		ny = new CubemapFace(negY);
+		pz = new CubemapFace(posZ);
+		nz = new CubemapFace(negZ);
 	}
 
 	OpenGLTextureCube::~OpenGLTextureCube(){
 		if(bound) Unbind();
 		if(compiled) Release();
 
-		for(auto it = faces.begin(); it != faces.end(); it++){
-			delete (*it).dataBuffer;
-		}
+		//Delete cubemap face pointers
+		delete px;
+		delete nx;
+		delete py;
+		delete ny;
+		delete pz;
+		delete nz;
 	}
 
 	void OpenGLTextureCube::Compile(){
@@ -83,19 +73,20 @@ namespace CitrusEngine {
 		glBindTexture(GL_TEXTURE_CUBE_MAP, compiledForm);
 
 		//Load image data into texture object from faces
-		for(int i = 0; i < 5; i++){
-			//Load image data into texture object
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, faceFormats[i], faces[i].size.x, faces[i].size.y, 0, faceFormats[i], GL_UNSIGNED_BYTE, faces[i].dataBuffer);
 
-			//Apply texture filtering
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, (px->numChannels == 3 ? GL_RGB : (px->numChannels == 4 ? GL_RGBA : GL_RED)), px->size.x, px->size.y, 0, (px->numChannels == 3 ? GL_RGB : (px->numChannels == 4 ? GL_RGBA : GL_RED)), GL_UNSIGNED_BYTE, px->dataBuffer);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, (nx->numChannels == 3 ? GL_RGB : (nx->numChannels == 4 ? GL_RGBA : GL_RED)), nx->size.x, nx->size.y, 0, (nx->numChannels == 3 ? GL_RGB : (nx->numChannels == 4 ? GL_RGBA : GL_RED)), GL_UNSIGNED_BYTE, nx->dataBuffer);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, (py->numChannels == 3 ? GL_RGB : (py->numChannels == 4 ? GL_RGBA : GL_RED)), py->size.x, py->size.y, 0, (py->numChannels == 3 ? GL_RGB : (py->numChannels == 4 ? GL_RGBA : GL_RED)), GL_UNSIGNED_BYTE, py->dataBuffer);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, (ny->numChannels == 3 ? GL_RGB : (ny->numChannels == 4 ? GL_RGBA : GL_RED)), ny->size.x, ny->size.y, 0, (ny->numChannels == 3 ? GL_RGB : (ny->numChannels == 4 ? GL_RGBA : GL_RED)), GL_UNSIGNED_BYTE, ny->dataBuffer);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, (pz->numChannels == 3 ? GL_RGB : (pz->numChannels == 4 ? GL_RGBA : GL_RED)), pz->size.x, pz->size.y, 0, (pz->numChannels == 3 ? GL_RGB : (pz->numChannels == 4 ? GL_RGBA : GL_RED)), GL_UNSIGNED_BYTE, pz->dataBuffer);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, (nz->numChannels == 3 ? GL_RGB : (nz->numChannels == 4 ? GL_RGBA : GL_RED)), nz->size.x, nz->size.y, 0, (nz->numChannels == 3 ? GL_RGB : (nz->numChannels == 4 ? GL_RGBA : GL_RED)), GL_UNSIGNED_BYTE, nz->dataBuffer);
 
-			//Configure texture wrapping mode
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		}
+		//Apply texture parameters
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 		//Unbind texture object since we're done with it for now
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);

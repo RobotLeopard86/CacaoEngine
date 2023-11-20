@@ -39,31 +39,39 @@ namespace CitrusEngine {
 
 		std::string skyVert = R"(
 			#version 330 core
-			layout(location=0) in vec3 pos;
 
+			layout(location=0) in vec3 pos;
 			out vec3 texCoords;
 
 			uniform mat4 projection;
 
+			mat4 scale(float scaleFactor) {
+				return mat4(
+					vec4(scaleFactor, 0.0, 0.0, 0.0),
+					vec4(0.0, scaleFactor, 0.0, 0.0),
+					vec4(0.0, 0.0, scaleFactor, 0.0),
+					vec4(0.0, 0.0, 0.0, 1.0)
+				);
+			}
+
 			void main()
 			{
-				texCoords = pos;
-				vec4 skypos = projection * vec4(pos, 1.0);
+				texCoords = normalize(pos);
+				vec4 skypos = scale(1000) * projection * vec4(pos, 1.0);
 				gl_Position = skypos.xyww;
-			}  
+			}
 		)";
 
 		std::string skyFrag = R"(
 			#version 330 core
 
 			out vec4 color;
-
 			in vec3 texCoords;
 
 			uniform samplerCube skybox;
 
 			void main()
-			{    
+			{
 				color = texture(skybox, texCoords);
 			}
 		)";
@@ -123,9 +131,9 @@ namespace CitrusEngine {
 		texture.Bind();
 
 		//Create skybox projection
-		glm::mat4 projection = glm::scale(glm::vec3(1000.0f)) * glm::mat4(glm::mat3(StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix())) * StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix();
+		glm::mat4 projection = glm::mat4(glm::mat3(StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix())) * StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix();
 
-		//Upload projection to shader
+		//Upload projection and size to shader
 		skyboxShader->UploadUniformMat4("projection", projection);
 
 		//Ensure skybox always drawn
