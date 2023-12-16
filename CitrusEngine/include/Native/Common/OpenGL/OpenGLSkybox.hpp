@@ -6,7 +6,6 @@ namespace CitrusEngine {
 	class OpenGLSkybox : public Skybox {
 	public:
 		OpenGLSkybox(TextureCube* tex);
-		~OpenGLSkybox();
 
 		void Draw() override;
 	};

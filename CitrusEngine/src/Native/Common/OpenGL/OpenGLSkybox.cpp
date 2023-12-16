@@ -21,12 +21,7 @@ namespace CitrusEngine {
 
 	OpenGLSkybox::OpenGLSkybox(TextureCube* tex){
 		//Create pointer from cubemap
-		texture = *tex;
-		texture.Compile();
-	}
-
-	OpenGLSkybox::~OpenGLSkybox(){
-		texture.Release();
+		texture = tex;
 	}
 
 	void Skybox::CommonSetup(){
@@ -126,9 +121,15 @@ namespace CitrusEngine {
 	}
 
 	void OpenGLSkybox::Draw(){
+		//Confirm that texture is compiled
+		if(!texture->IsCompiled()){
+			Logging::EngineLog(LogLevel::Warn, "Skybox texture compilation required prior to draw, compiling now...");
+			texture->Compile();
+		}
+
 		//Bind skybox shader and texture
 		skyboxShader->Bind();
-		texture.Bind();
+		texture->Bind();
 
 		//Create skybox projection
 		glm::mat4 projection = glm::mat4(glm::mat3(StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix())) * StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix();
@@ -146,7 +147,7 @@ namespace CitrusEngine {
 		glDepthFunc(GL_LESS);
 
 		//Unbind shader and texture
-		texture.Unbind();
+		texture->Unbind();
 		skyboxShader->Unbind();
 	}
 }

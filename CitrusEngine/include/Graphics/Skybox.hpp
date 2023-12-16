@@ -22,7 +22,7 @@ namespace CitrusEngine {
 		//Clean up any common skybox resources
 		static void CommonCleanup();
     protected:
-        TextureCube texture;
+        TextureCube* texture;
 
         static Shader* skyboxShader;
         static Mesh* skyboxMesh;

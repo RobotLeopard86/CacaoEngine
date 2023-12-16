@@ -17,9 +17,7 @@ namespace CitrusEngine {
 
 	CubemapFace::CubemapFace(std::string path){
 		stbi_set_flip_vertically_on_load(true);
-		dataBuffer = stbi_load(path.c_str(), &size.x, &size.y, &numChannels, 3);
-
-		Logging::EngineLog(LogLevel::Trace, "Yeah so I made a face");
+		dataBuffer = stbi_load(path.c_str(), &size.x, &size.y, &numChannels, 0);
 	}
 
 	CubemapFace::~CubemapFace(){
