@@ -10,7 +10,6 @@
 #include "Graphics/Window.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
-#include "Graphics/Textures/TextureCube.hpp"
 #include "Graphics/Skybox.hpp"
 #include "Graphics/Mesh.hpp"
 #include "Graphics/Transform.hpp"

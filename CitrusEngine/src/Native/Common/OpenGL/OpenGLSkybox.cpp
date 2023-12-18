@@ -12,16 +12,98 @@ namespace CitrusEngine {
 
 	//Initialize static resources
 	bool Skybox::isSetup = false;
-	Mesh* Skybox::skyboxMesh = nullptr;
 	Shader* Skybox::skyboxShader = nullptr;
 
-	Skybox* Skybox::Create(TextureCube* tex){
-		return new OpenGLSkybox(tex);
+	Skybox* Skybox::Create(Texture2D* tex){
+		return new OpenGLSkybox(tex, {
+			{ 0.375, 0 },
+			{ 0.625, 0 },
+			{ 0.625, 0.25 },
+			{ 0.375, 0.25 },
+			{ 0.375, 0.25 },
+			{ 0.625, 0.25 },
+			{ 0.625, 0.5 },
+			{ 0.375, 0.5 },
+			{ 0.375, 0.5 },
+			{ 0.625, 0.5 },
+			{ 0.625, 0.75 },
+			{ 0.375, 0.75 },
+			{ 0.375, 0.75 },
+			{ 0.625, 0.75 },
+			{ 0.625, 1 },
+			{ 0.375, 1 },
+			{ 0.125, 0.5 },
+			{ 0.375, 0.5 },
+			{ 0.375, 0.75 },
+			{ 0.125, 0.75 },
+			{ 0.625, 0.5 },
+			{ 0.875, 0.5 },
+			{ 0.875, 0.75 },
+			{ 0.625, 0.75 }
+		});
 	}
 
-	OpenGLSkybox::OpenGLSkybox(TextureCube* tex){
-		//Create pointer from cubemap
+	Skybox* Skybox::CreateWithCustomTexCoords(Texture2D* tex, std::vector<glm::vec2> texCoords){
+		return new OpenGLSkybox(tex, texCoords);
+	}
+
+	OpenGLSkybox::OpenGLSkybox(Texture2D* tex, std::vector<glm::vec2> tcs){
 		texture = tex;
+		texCoords = tcs;
+
+		//Build mesh
+		//Define vertex and index data storage for mesh
+		std::vector<Vertex> verts;
+		std::vector<glm::uvec3> inds;
+
+		//Add vertices (with positions and texture coordinates, other info irrelevant to skyboxes)
+		verts.push_back({ { -1, -1, 1 }, tcs[0] });
+		verts.push_back({ { -1, 1, 1 }, tcs[1] });
+		verts.push_back({ { -1, 1, -1 }, tcs[2] });
+		verts.push_back({ { -1, -1, -1 }, tcs[3] });
+		verts.push_back({ { -1, -1, -1 }, tcs[4] });
+		verts.push_back({ { -1, 1, -1 }, tcs[5] });
+		verts.push_back({ { 1, 1, -1 }, tcs[6] });
+		verts.push_back({ { 1, -1, -1 }, tcs[7] });
+		verts.push_back({ { 1, -1, -1 }, tcs[8] });
+		verts.push_back({ { 1, 1, -1 }, tcs[9] });
+		verts.push_back({ { 1, 1, 1 }, tcs[10] });
+		verts.push_back({ { 1, -1, 1 }, tcs[11] });
+		verts.push_back({ { 1, -1, 1 }, tcs[12] });
+		verts.push_back({ { 1, 1, 1 }, tcs[13] });
+		verts.push_back({ { -1, 1, 1 }, tcs[14] });
+		verts.push_back({ { -1, -1, 1 }, tcs[15] });
+		verts.push_back({ { -1, -1, -1 }, tcs[16] });
+		verts.push_back({ { 1, -1, -1 }, tcs[17] });
+		verts.push_back({ { 1, -1, 1 }, tcs[18] });
+		verts.push_back({ { -1, -1, 1 }, tcs[19] });
+		verts.push_back({ { 1, 1, -1 }, tcs[20] });
+		verts.push_back({ { -1, 1, -1 }, tcs[21] });
+		verts.push_back({ { -1, 1, 1 }, tcs[22] });
+		verts.push_back({ { 1, 1, 1 }, tcs[23] });
+
+		//Add indices
+		inds.push_back({ 0, 1, 2 });
+		inds.push_back({ 0, 2, 3 });
+		inds.push_back({ 4, 5, 6 });
+		inds.push_back({ 4, 6, 7 });
+		inds.push_back({ 8, 9, 10 });
+		inds.push_back({ 8, 10, 11 });
+		inds.push_back({ 12, 13, 14 });
+		inds.push_back({ 12, 14, 15 });
+		inds.push_back({ 16, 17, 18 });
+		inds.push_back({ 16, 18, 19 });
+		inds.push_back({ 20, 21, 22 });
+		inds.push_back({ 20, 22, 23 });
+
+		//Create and compile mesh object
+		mesh = Mesh::Create(verts, inds);
+		mesh->Compile();
+	}
+
+	OpenGLSkybox::~OpenGLSkybox() {
+		if(mesh->IsCompiled()) mesh->Release();
+		delete mesh;
 	}
 
 	void Skybox::CommonSetup(){
@@ -36,23 +118,15 @@ namespace CitrusEngine {
 			#version 330 core
 
 			layout(location=0) in vec3 pos;
-			out vec3 texCoords;
+			layout(location=1) in vec2 tc;
+			out vec2 texCoords;
 
 			uniform mat4 projection;
 
-			mat4 scale(float scaleFactor) {
-				return mat4(
-					vec4(scaleFactor, 0.0, 0.0, 0.0),
-					vec4(0.0, scaleFactor, 0.0, 0.0),
-					vec4(0.0, 0.0, scaleFactor, 0.0),
-					vec4(0.0, 0.0, 0.0, 1.0)
-				);
-			}
-
 			void main()
 			{
-				texCoords = normalize(pos);
-				vec4 skypos = scale(1000) * projection * vec4(pos, 1.0);
+				texCoords = tc;
+				vec4 skypos = projection * vec4(pos, 1.0);
 				gl_Position = skypos.xyww;
 			}
 		)";
@@ -61,9 +135,9 @@ namespace CitrusEngine {
 			#version 330 core
 
 			out vec4 color;
-			in vec3 texCoords;
+			in vec2 texCoords;
 
-			uniform samplerCube skybox;
+			uniform sampler2D skybox;
 
 			void main()
 			{
@@ -75,47 +149,13 @@ namespace CitrusEngine {
 		skyboxShader = Shader::Create(skyVert, skyFrag);
 		skyboxShader->Compile();
 
-		//Define vertex and index data storage for mesh
-		std::vector<Vertex> verts;
-		std::vector<glm::uvec3> inds;
-
-		//Add vertices (only position specified because tex coords are done automatically and other data is irrelevant to skyboxes)
-		verts.push_back({ { -1, -1, 1 } });
-		verts.push_back({ { 1, -1, 1 } });
-		verts.push_back({ { -1, 1, 1 } });
-		verts.push_back({ { 1, 1, 1 } });
-		verts.push_back({ { -1, -1, -1 } });
-		verts.push_back({ { 1, -1, -1 } });
-		verts.push_back({ { -1, 1, -1 } });
-		verts.push_back({ { 1, 1, -1 } });
-
-		//Add indices
-		inds.push_back({ 2, 6, 7 });
-		inds.push_back({ 2, 3, 7 });
-		inds.push_back({ 0, 4, 5 });
-		inds.push_back({ 0, 1, 5 });
-		inds.push_back({ 0, 2, 6 });
-		inds.push_back({ 0, 4, 6 });
-		inds.push_back({ 1, 3, 7 });
-		inds.push_back({ 1, 5, 7 });
-		inds.push_back({ 0, 2, 3 });
-		inds.push_back({ 0, 1, 3 });
-		inds.push_back({ 4, 6, 7 });
-		inds.push_back({ 4, 5, 7 });
-
-		//Create and compile mesh object
-		skyboxMesh = Mesh::Create(verts, inds);
-		skyboxMesh->Compile();
-
 		isSetup = true;
 	}
 
 	void Skybox::CommonCleanup(){
 		skyboxShader->Release();
-		skyboxMesh->Release();
 
 		delete skyboxShader;
-		delete skyboxMesh;
 
 		isSetup = false;
 	}
@@ -127,7 +167,7 @@ namespace CitrusEngine {
 			texture->Compile();
 		}
 
-		//Bind skybox shader and texture
+		//Bind skybox shader  and texture
 		skyboxShader->Bind();
 		texture->Bind();
 
@@ -141,7 +181,7 @@ namespace CitrusEngine {
 		glDepthFunc(GL_LEQUAL);
 
 		//Render skybox mesh
-		skyboxMesh->PureDraw();
+		mesh->PureDraw();
 
 		//Reset draw mode to make sure other objects draw correctly
 		glDepthFunc(GL_LESS);
