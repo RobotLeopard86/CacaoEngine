@@ -25,7 +25,7 @@ namespace CitrusEngine {
     private:
         glm::vec3 pos, rot, scale;
 
-        glm::mat4 posMat, rotMat, sclMat, transMat;
+        glm::mat4 transMat;
 
         void RecalculateTransformationMatrix();
     };

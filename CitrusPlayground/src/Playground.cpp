@@ -60,7 +60,7 @@ public:
 		sky = Skybox::Create(skyTex);
 
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
-        cam->SetPosition({ 0, 0, -2.5 });
+        cam->SetPosition({ 0, 0, -3 });
         cam->SetClearColor({ 255, 255, 255 });
 
         StateManager::GetInstance()->SetActiveCamera(cam);
@@ -150,6 +150,13 @@ public:
 
         cam->SetRotation(currentRot);
         cam->SetPosition(currentPos);
+		
+		glm::vec3 cubeRot = transform->GetRotation();
+		cubeRot.y += (timestep * 5000);
+		if(cubeRot.y > 360) {
+            cubeRot.y = 0.0f;
+        }
+		transform->SetRotation(cubeRot);
 
         tex->Bind();
         mdl->DrawMesh("Shape", shader, transform);
@@ -175,6 +182,8 @@ public:
         sscam << "Camera is at " << Vec3ToString(currentPos);
         std::stringstream ssrot;
         ssrot << "Camera rotation: " << Vec3ToString(currentRot);
+		std::stringstream ssclt;
+        ssclt << "Camera look target: " << Vec3ToString(cam->GetLookTarget());
         std::stringstream ssvs;
         ssvs << "VSync is currently " << (GetWindow()->IsVSyncEnabled() ? "on" : "off");
 
@@ -183,6 +192,7 @@ public:
         ImGui::Spacing();
         ImGui::Text("%s", sscam.str().c_str());
         ImGui::Text("%s", ssrot.str().c_str());
+		ImGui::Text("%s", ssclt.str().c_str());
 
         ImGui::Spacing();
         if(ImGui::Button("Toggle VSync")){

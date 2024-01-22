@@ -82,18 +82,23 @@ namespace CitrusEngine {
     }
 
     void OpenGLMesh::Draw(Shader* shader, Transform* transform){
-        shader->Bind();
+        //Bind shader
+		shader->Bind();
 
+		//Upload uniforms
         shader->UploadUniformMat4("transform", transform->GetTransformationMatrix());
         shader->UploadUniformMat4("camview", StateManager::GetInstance()->GetActiveCamera()->GetViewProjectionMatrix());
 
+		//Enable face depth sorting
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
+		//Draw object
         glBindVertexArray(vertexArray);
         glDrawElements(GL_TRIANGLES, (indices.size() * 3), GL_UNSIGNED_INT, nullptr);
         glBindVertexArray(0);
-
+		
+		//Unbind shader
         shader->Unbind();
     }
 
