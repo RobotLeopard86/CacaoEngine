@@ -60,7 +60,7 @@ public:
 		sky = Skybox::Create(skyTex);
 
         cam = new PerspectiveCamera(75, GetWindow()->GetSize());
-        cam->SetPosition({ 0, 0, -3 });
+        cam->SetPosition({ 0, 0, 3 });
         cam->SetClearColor({ 255, 255, 255 });
 
         StateManager::GetInstance()->SetActiveCamera(cam);
@@ -104,15 +104,15 @@ public:
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_C)){
             camRotChange.z -= 0.5f;
         }
-        currentRot = cam->GetRotation();
+        currentRot = cam->GetRotation().ToVec3();
         glm::vec3 pastRot = glm::vec3(currentRot);
         currentRot += camRotChange;
         
-        if(currentRot.x < 0){
-            currentRot.x = 360.0f;
+        if(currentRot.x < -90){
+            currentRot.x = -90.0f;
         }
-        if(currentRot.x > 360) {
-            currentRot.x = 0.0f;
+        if(currentRot.x > 90) {
+            currentRot.x = 90.0f;
         }
         if(currentRot.y < 0){
             currentRot.y = 360.0f;
@@ -148,53 +148,48 @@ public:
         }
         currentPos = cam->GetPosition() + posChange;
 
-        cam->SetRotation(currentRot);
+        cam->SetRotation(Orientation(currentRot));
         cam->SetPosition(currentPos);
-		
-		glm::vec3 cubeRot = transform->GetRotation();
-		cubeRot.y += (timestep * 5000);
-		if(cubeRot.y > 360) {
-            cubeRot.y = 0.0f;
-        }
-		transform->SetRotation(cubeRot);
 
         tex->Bind();
         mdl->DrawMesh("Shape", shader, transform);
         tex->Unbind();
 
-		sky->Draw();
+		//sky->Draw();
     }
     void ClientOnFixedTick() override {}
 
     void OnImGuiDraw(Event& e){
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus;
-        ImGui::Begin("No window here", NULL, window_flags);
-
-        ImGui::Text("This is on an invisible window!");
-        ImGui::Spacing();
-        ImGui::Text("Then again, you wouldn't know that...");
-
-        ImGui::End();
-
         std::stringstream sscam;
         sscam << "Camera is at " << Vec3ToString(currentPos);
-        std::stringstream ssrot;
-        ssrot << "Camera rotation: " << Vec3ToString(currentRot);
+		std::stringstream sstilt;
+        sstilt << "Camera tilt: " << currentRot.x;
+        std::stringstream sspan;
+        sspan << "Camera pan: " << currentRot.y;
 		std::stringstream ssclt;
-        ssclt << "Camera look target: " << Vec3ToString(cam->GetLookTarget());
-        std::stringstream ssvs;
+        ssclt << "Camera look target: " << Vec3ToString(cam->GetPosition() - cam->GetFrontVector());
+		std::stringstream ssf;
+        ssf << "Camera front vec: " << Vec3ToString(cam->GetFrontVector());
+		std::stringstream ssu;
+        ssu << "Camera up vec: " << Vec3ToString(cam->GetUpVector());
+		std::stringstream ssr;
+        ssr << "Camera right vec: " << Vec3ToString(cam->GetRightVector());
+		std::stringstream ssvs;
         ssvs << "VSync is currently " << (GetWindow()->IsVSyncEnabled() ? "on" : "off");
 
-        ImGui::Begin("Simple Test Window");
-        ImGui::Text("This is a simple ImGui test window.");
-        ImGui::Spacing();
+        ImGui::Begin("Camera Debug Info");
         ImGui::Text("%s", sscam.str().c_str());
-        ImGui::Text("%s", ssrot.str().c_str());
+        ImGui::Text("%s", sstilt.str().c_str());
+		ImGui::Text("%s", sspan.str().c_str());
 		ImGui::Text("%s", ssclt.str().c_str());
+		ImGui::Text("%s", ssf.str().c_str());
+		ImGui::Text("%s", ssu.str().c_str());
+		ImGui::Text("%s", ssr.str().c_str());
+		ImGui::End();
 
-        ImGui::Spacing();
+		ImGui::Begin("VSync Management");
         if(ImGui::Button("Toggle VSync")){
             GetWindow()->SetVSyncEnabled(!GetWindow()->IsVSyncEnabled());
         }

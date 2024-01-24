@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Camera.hpp"
+//THIS IS CURRENTLY UNSUPPORTED!!!
+
+/*#include "Camera.hpp"
 
 namespace CitrusEngine {
 	//Implement an orthographic camera (method explanations found in Camera.hpp)
@@ -10,8 +12,8 @@ namespace CitrusEngine {
 
 		glm::vec3 GetPosition() override { return position; }
 		void SetPosition(glm::vec3 pos) override { position = pos; position.y *= -1; RecalculateViewMatrix(); }
-		glm::vec3 GetRotation() override { return glm::vec3(0, 0, rotation); }
-		void SetRotation(glm::vec3 rot) override { rotation = rot.z; RecalculateViewMatrix(); }
+		Orientation GetRotation() override { return glm::vec3(0, 0, rotation); }
+		void SetRotation(Orientation rot) override { rotation = rot.roll; RecalculateViewMatrix(); }
 
 		glm::mat4 GetProjectionMatrix() override { return projectionMatrix; }
 		glm::mat4 GetViewMatrix() override { return viewMatrix; }
@@ -26,10 +28,10 @@ namespace CitrusEngine {
 		glm::vec2 projectionBox;
 
 		glm::vec3 position;
-		//Orthographic cameras only use Z rotation
+		//Orthographic cameras only use roll
 		float rotation;
 
 		void RecalculateViewMatrix();
 		void RecalculateProjectionMatrix();
 	};
-}
+}*/

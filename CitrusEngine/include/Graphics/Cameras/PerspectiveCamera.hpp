@@ -12,8 +12,8 @@ namespace CitrusEngine {
 
 		glm::vec3 GetPosition() override { return position; }
 		void SetPosition(glm::vec3 pos) override { position = pos; RecalculateViewMatrix(); }
-		glm::vec3 GetRotation() override { return rotation; }
-		void SetRotation(glm::vec3 rot) override { rotation = rot; RecalculateViewMatrix(); }
+		Orientation GetRotation() override { return rotation; }
+		void SetRotation(Orientation rot) override { rotation = rot; RecalculateViewMatrix(); }
 
 		float GetFOV() { return fov; }
 		void SetFOV(float newFov) { fov = newFov; RecalculateProjectionMatrix(); }
@@ -22,19 +22,18 @@ namespace CitrusEngine {
 		glm::mat4 GetViewMatrix() override { return viewMatrix; }
 		glm::mat4 GetViewProjectionMatrix() override { return viewProjectionMatrix; }
 
-		void ResizeProjectionMatrix(Event& e) override;
+		glm::vec3 GetFrontVector() { return frontVec; }
+		glm::vec3 GetUpVector() { return upVec; }
+		glm::vec3 GetRightVector() { return rightVec; }
 
-		//Get where the camera is looking
-		const glm::vec3& GetLookTarget() const { return lookTarget; }
+		void ResizeProjectionMatrix(Event& e) override;
 	private:
-		glm::mat4 projectionMatrix;
-		glm::mat4 viewMatrix;
-		glm::mat4 viewProjectionMatrix;
+		glm::mat4 projectionMatrix, viewMatrix, viewProjectionMatrix;
 
 		glm::vec3 position;
-		glm::vec3 rotation;
+		glm::vec3 frontVec, upVec, rightVec;
 
-		glm::vec3 lookTarget;
+		Orientation rotation;
 
 		glm::ivec2 displaySize;
 
@@ -44,7 +43,7 @@ namespace CitrusEngine {
 		void RecalculateViewMatrix();
 		//Recalculate the projection matrix based on a new FOV and display size
 		void RecalculateProjectionMatrix();
-		//Recalculate where the camera is looking
-		void RecalculateLookTarget();
+		//Recalculate camera orientation vectors
+		void RecalculateCameraVectors();
 	};
 }

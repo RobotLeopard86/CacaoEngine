@@ -9,6 +9,26 @@
 #include "Graphics/Skybox.hpp"
 
 namespace CitrusEngine {
+	//Camera orientation vector type (in degrees)
+	struct Orientation {
+		//Angle up/down from the X/Z plane
+		float tilt;
+		//Angle around the Y axis
+		float pan;
+		//Angle around the camera's front axis
+		float roll;
+
+		Orientation(glm::vec3 rot){
+			tilt = rot.x;
+			pan = rot.y;
+			roll = rot.z;
+		}
+
+		glm::vec3 ToVec3() {
+			return { tilt, pan, roll };
+		}
+	};
+
 	//Base camera type
 	class Camera {
 	public:
@@ -28,8 +48,8 @@ namespace CitrusEngine {
 		virtual void SetPosition(glm::vec3 pos) = 0;
 
 		//Get and set rotation
-		virtual glm::vec3 GetRotation() = 0;
-		virtual void SetRotation(glm::vec3 rot) = 0;
+		virtual Orientation GetRotation() = 0;
+		virtual void SetRotation(Orientation rot) = 0;
 
 		//Get projection matrix (transforms vertices according to how the camera sees them)
 		virtual glm::mat4 GetProjectionMatrix() = 0;
