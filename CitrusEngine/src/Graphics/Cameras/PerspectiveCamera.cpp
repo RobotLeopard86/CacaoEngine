@@ -16,7 +16,7 @@ namespace CitrusEngine {
 		//Figure out where we are looking
 		RecalculateCameraVectors();
 		//Look at our target from our position, with a straight up vector (where "up" is)
-		viewMatrix = glm::lookAt(position, position - frontVec, upVec);
+		viewMatrix = glm::lookAt(position, position + frontVec, upVec);
 		//Calculate the view-projection matrix
 		viewProjectionMatrix = projectionMatrix * viewMatrix;
 	}
@@ -27,17 +27,16 @@ namespace CitrusEngine {
 		float pan = glm::radians(rotation.pan);
 
 		//Calculate front vector
-		frontVec.x = cos(tilt) * sin(pan);
+		frontVec.x = cos(tilt) * cos(pan);
 		frontVec.y = sin(tilt);
-		frontVec.z = cos(tilt) * cos(pan);
-
-		//Calculate up vector
-		upVec.x = cos((M_PI / 2) + tilt) * sin(M_PI + pan);
-		upVec.y = sin((M_PI / 2) + tilt);
-		upVec.z = cos((M_PI / 2) + tilt) * cos(M_PI + pan);
+		frontVec.z = cos(tilt) * sin(pan);
+		frontVec = glm::normalize(frontVec);
 
 		//Calculate right vector
-		rightVec = glm::normalize(glm::cross(upVec, frontVec));
+		rightVec = glm::normalize(glm::cross(frontVec, {0, 1, 0}));
+
+		//Calculate up vector
+		upVec = glm::normalize(glm::cross(rightVec, frontVec));
 	}
 
 	void PerspectiveCamera::ResizeProjectionMatrix(Event& e){

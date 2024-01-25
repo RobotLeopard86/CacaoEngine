@@ -25,6 +25,7 @@ namespace CitrusEngine {
 		glm::vec3 GetFrontVector() { return frontVec; }
 		glm::vec3 GetUpVector() { return upVec; }
 		glm::vec3 GetRightVector() { return rightVec; }
+		glm::vec3 GetLookTarget() { return position + frontVec; }
 
 		void ResizeProjectionMatrix(Event& e) override;
 	private:

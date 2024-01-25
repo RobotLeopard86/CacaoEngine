@@ -54,7 +54,7 @@ namespace CitrusEngine {
         }
 
         //Create window
-        window = Window::Create(id, windowSize.x, windowSize.y);
+        window = Window::Create(windowTitle, windowSize.x, windowSize.y);
 
         //Initialize ImGui
         ImGuiWrapper::Init();

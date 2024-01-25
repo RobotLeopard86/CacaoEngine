@@ -32,13 +32,10 @@ namespace CitrusEngine {
         void DynamicTickHandler(Event& e);
         void FixedTickHandler(Event& e);
 
-        //Gets client package ID
-        std::string GetPackageID() { return id; }
-
         //Gets window
         static Window* GetWindow() { return window; }
     protected:
-        std::string id;
+        std::string windowTitle;
         glm::uvec2 windowSize;
     private:
         static CitrusClient* instance;

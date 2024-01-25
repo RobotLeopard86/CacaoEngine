@@ -7,7 +7,7 @@ using namespace CitrusEngine;
 
 class PlaygroundClient : public CitrusClient {
 public:
-    PlaygroundClient() { id = "citrus-playground"; windowSize = {1280, 720}; }
+    PlaygroundClient() { windowTitle = "Citrus Playground"; windowSize = {1280, 720}; }
 
     std::string Vec3ToString(glm::vec3 vec){
         return "{ X: " + std::to_string(vec.x) + ", Y: " + std::to_string(vec.y) + ", Z: " + std::to_string(vec.z) + " }";
@@ -25,12 +25,13 @@ public:
 
             out vec2 texCoords;
 
-            uniform mat4 transform;
-            uniform mat4 camview;
+            uniform mat4 model;
+            uniform mat4 view;
+			uniform mat4 projection;
 
             void main() {
                 texCoords = tc;    
-                gl_Position = transform * camview * vec4(pos, 1.0);
+                gl_Position = projection * view * model * vec4(pos, 1.0f);
             }
         )";
         
@@ -59,7 +60,7 @@ public:
 
 		sky = Skybox::Create(skyTex);
 
-        cam = new PerspectiveCamera(75, GetWindow()->GetSize());
+        cam = new PerspectiveCamera(45, GetWindow()->GetSize());
         cam->SetPosition({ 0, 0, 3 });
         cam->SetClearColor({ 255, 255, 255 });
 
@@ -108,11 +109,11 @@ public:
         glm::vec3 pastRot = glm::vec3(currentRot);
         currentRot += camRotChange;
         
-        if(currentRot.x < -90){
-            currentRot.x = -90.0f;
+        if(currentRot.x < -89.99){
+            currentRot.x = -89.99f;
         }
-        if(currentRot.x > 90) {
-            currentRot.x = 90.0f;
+        if(currentRot.x > 89.99) {
+            currentRot.x = 89.99f;
         }
         if(currentRot.y < 0){
             currentRot.y = 360.0f;
@@ -129,23 +130,24 @@ public:
 
         glm::vec3 posChange = glm::vec3(0.0f);
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_W)){
-            posChange.z += 0.01f;
+            posChange += cam->GetFrontVector() * 1000.0f * float(timestep);
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_S)){
-            posChange.z -= 0.01f;
-        }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
-            posChange.x += 0.01f;
+            posChange -= cam->GetFrontVector() * 1000.0f * float(timestep);
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_D)){
-            posChange.x -= 0.01f;
+            posChange += cam->GetRightVector() * 1000.0f * float(timestep);
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
-            posChange.y -= 0.01f;
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
+            posChange -= cam->GetRightVector() * 1000.0f * float(timestep);
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
-            posChange.y += 0.01f;
+            posChange += cam->GetUpVector() * 1000.0f * float(timestep);
         }
+        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
+            posChange -= cam->GetUpVector() * 1000.0f * float(timestep);
+        }
+
         currentPos = cam->GetPosition() + posChange;
 
         cam->SetRotation(Orientation(currentRot));
@@ -169,7 +171,7 @@ public:
         std::stringstream sspan;
         sspan << "Camera pan: " << currentRot.y;
 		std::stringstream ssclt;
-        ssclt << "Camera look target: " << Vec3ToString(cam->GetPosition() - cam->GetFrontVector());
+        ssclt << "Camera look target: " << Vec3ToString(cam->GetLookTarget());
 		std::stringstream ssf;
         ssf << "Camera front vec: " << Vec3ToString(cam->GetFrontVector());
 		std::stringstream ssu;

@@ -86,8 +86,9 @@ namespace CitrusEngine {
 		shader->Bind();
 
 		//Upload uniforms
-        shader->UploadUniformMat4("transform", transform->GetTransformationMatrix());
-        shader->UploadUniformMat4("camview", StateManager::GetInstance()->GetActiveCamera()->GetViewProjectionMatrix());
+        shader->UploadUniformMat4("model", transform->GetTransformationMatrix());
+        shader->UploadUniformMat4("view", StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix());
+		shader->UploadUniformMat4("projection", StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix());
 
 		//Enable face depth sorting
         glEnable(GL_DEPTH_TEST);
