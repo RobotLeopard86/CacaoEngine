@@ -55,7 +55,7 @@ public:
         tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
-		skyTex = Texture2D::CreateFromFile("CitrusPlayground/assets/sky/sky2.png");
+		skyTex = Texture2D::CreateFromFile("CitrusPlayground/assets/sky/sky.png");
 		skyTex->Compile();
 
 		sky = Skybox::Create(skyTex);
@@ -191,6 +191,9 @@ public:
 		ImGui::Text("%s", ssr.str().c_str());
 		ImGui::End();
 
+		ImGui::SetNextWindowPos(ImVec2(110, 300), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(ImVec2(175, 75), ImGuiCond_Once);
+
 		ImGui::Begin("VSync Management");
         if(ImGui::Button("Toggle VSync")){
             GetWindow()->SetVSyncEnabled(!GetWindow()->IsVSyncEnabled());
@@ -198,7 +201,7 @@ public:
         ImGui::Text("%s", ssvs.str().c_str());
         ImGui::End();
 
-        ImGui::SetNextWindowPos(ImVec2(100, 300), ImGuiCond_Once);
+        ImGui::SetNextWindowPos(ImVec2(110, 400), ImGuiCond_Once);
         ImGui::SetNextWindowSize(ImVec2(300, 130), ImGuiCond_Once);
 
         float posBuf[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
