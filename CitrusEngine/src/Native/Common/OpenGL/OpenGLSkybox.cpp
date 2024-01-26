@@ -122,11 +122,12 @@ namespace CitrusEngine {
 			out vec2 texCoords;
 
 			uniform mat4 projection;
+			uniform mat4 view;
 
 			void main()
 			{
 				texCoords = tc;
-				vec4 skypos = projection * vec4(pos, 1.0);
+				vec4 skypos = projection * view * vec4(pos, 1.0);
 				gl_Position = skypos.xyww;
 			}
 		)";
@@ -171,11 +172,12 @@ namespace CitrusEngine {
 		skyboxShader->Bind();
 		texture->Bind();
 
-		//Create skybox projection
-		glm::mat4 projection = glm::mat4(glm::mat3(StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix())) * StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix();
+		//Create skybox version of view matrix
+		glm::mat4 skyView = glm::mat4(glm::mat3(StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix()));
 
 		//Upload projection and size to shader
-		skyboxShader->UploadUniformMat4("projection", projection);
+		skyboxShader->UploadUniformMat4("projection", StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix());
+		skyboxShader->UploadUniformMat4("view", skyView);
 
 		//Ensure skybox always drawn
 		glDepthFunc(GL_LEQUAL);

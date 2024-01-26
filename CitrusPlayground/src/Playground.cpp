@@ -55,12 +55,12 @@ public:
         tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
-		skyTex = Texture2D::CreateFromFile("CitrusPlayground/assets/sky/skybox.png");
+		skyTex = Texture2D::CreateFromFile("CitrusPlayground/assets/sky/sky2.png");
 		skyTex->Compile();
 
 		sky = Skybox::Create(skyTex);
 
-        cam = new PerspectiveCamera(45, GetWindow()->GetSize());
+        cam = new PerspectiveCamera(60, GetWindow()->GetSize());
         cam->SetPosition({ 0, 0, 3 });
         cam->SetClearColor({ 255, 255, 255 });
 
@@ -88,10 +88,10 @@ public:
     void ClientOnDynamicTick(double timestep) override {
         glm::vec3 camRotChange = glm::vec3(0.0f);
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_J)){
-            camRotChange.y += 0.5f;
+            camRotChange.y -= 0.5f;
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_K)){
-            camRotChange.y -= 0.5f;
+            camRotChange.y += 0.5f;
         }
         if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Y)){
             camRotChange.x += 0.5f;
@@ -157,7 +157,7 @@ public:
         mdl->DrawMesh("Shape", shader, transform);
         tex->Unbind();
 
-		//sky->Draw();
+		sky->Draw();
     }
     void ClientOnFixedTick() override {}
 
