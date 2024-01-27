@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Shader.hpp"
-#include "Textures/Texture2D.hpp"
+#include "Textures/Cubemap.hpp"
 #include "Mesh.hpp"
 
 #include "glm/vec2.hpp"
@@ -14,24 +14,18 @@ namespace CitrusEngine {
     public:
         virtual ~Skybox() {}
 
-        //Draw this skybox
+        //Draw this skyboxn
         virtual void Draw() = 0;
 
         //Create a skybox for the current rendering API
-        static Skybox* Create(Texture2D* tex);
-		
-		//Create a skybox for the current rendering API (using custom texture coordinates)
-		//Texture coordinates are by vertex. Index 0 of the vector is vertex 0, index 1 is vertex 1, etc.
-        static Skybox* CreateWithCustomTexCoords(Texture2D* tex, std::vector<glm::vec2> texCoords);
+        static Skybox* Create(Cubemap* tex);
 
 		//Set up any common skybox resources
 		static void CommonSetup();
 		//Clean up any common skybox resources
 		static void CommonCleanup();
     protected:
-        Texture2D* texture;
-		std::vector<glm::vec2> texCoords;
-		Mesh* mesh;
+        Cubemap* texture;
 
         static Shader* skyboxShader;
 

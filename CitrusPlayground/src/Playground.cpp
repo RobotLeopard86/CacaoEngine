@@ -55,7 +55,7 @@ public:
         tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
-		skyTex = Texture2D::CreateFromFile("CitrusPlayground/assets/sky/sky.png");
+		skyTex = Cubemap::CreateFromFiles({"CitrusPlayground/assets/sky/right.jpg", "CitrusPlayground/assets/sky/left.jpg", "CitrusPlayground/assets/sky/top.jpg", "CitrusPlayground/assets/sky/bottom.jpg", "CitrusPlayground/assets/sky/front.jpg", "CitrusPlayground/assets/sky/back.jpg"});
 		skyTex->Compile();
 
 		sky = Skybox::Create(skyTex);
@@ -247,7 +247,8 @@ private:
     Model* mdl;
     Transform* transform;
     Shader* shader;
-    Texture2D* tex, *skyTex;
+    Texture2D* tex;
+	Cubemap* skyTex;
 	Skybox* sky;
     PerspectiveCamera* cam;
 
