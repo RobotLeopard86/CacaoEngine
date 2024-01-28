@@ -12,7 +12,7 @@ namespace Citrus {
     std::shared_ptr<spdlog::logger> Logging::engineLogger = nullptr;
     std::shared_ptr<spdlog::logger> Logging::clientLogger = nullptr;
 
-    void Logging::Setup(){
+    void Logging::Init(){
         //Create logging "sinks" (outputs)
         std::vector<spdlog::sink_ptr> sinks;
 
@@ -43,11 +43,11 @@ namespace Citrus {
         clientLogger->set_level(spdlog::level::trace);
     }
 
-    void Logging::EngineLog(LogLevel level, std::string message){
+    void Logging::EngineLog(std::string message, LogLevel level){
         //Make sure that logging is setup
         if(engineLogger == nullptr){
             //If not, set logging up
-            Setup();
+            Init();
         }
 
         //Send a different log level based on tre one specified
@@ -70,11 +70,11 @@ namespace Citrus {
         }
     }
 
-    void Logging::ClientLog(LogLevel level, std::string message){
+    void Logging::ClientLog(std::string message, LogLevel level){
         //Make sure that logging is setup
         if(clientLogger == nullptr){
             //If not, set logging up
-            Setup();
+            Init();
         }
 
         //Send a different log level based on tre one specified

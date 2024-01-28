@@ -8,7 +8,7 @@ int main(int argc, char** argv){
 	Citrus::Logging::EngineLog("Welcome to Citrus Engine!");
 
 	//Start the engine (this call will yield until engine stops)
-	Engine::GetInstance()->Run();
+	Citrus::Engine::GetInstance()->Run();
 
 	Citrus::Logging::EngineLog("Shutdown complete!");
 

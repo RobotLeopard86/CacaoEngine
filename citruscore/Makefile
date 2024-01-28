@@ -1,0 +1,117 @@
+SHELLTYPE := posix
+ifeq (.exe,$(findstring .exe,$(ComSpec)))
+  SHELLTYPE := msdos
+endif
+
+ifndef c
+	c=zig cc
+endif
+
+ifndef cpp
+	cpp=zig c++
+endif
+
+ifndef target
+	target=$(shell $(cpp) -dumpmachine)
+endif
+
+ifndef config
+  config=debug
+endif
+
+.PHONY: build link prebuild dirs clean
+
+INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
+DEFINES :=
+LIBS :=
+LIBDIRS := -L/usr/lib64
+MISCOPTS := -std=gnu++20 -c
+CFGFLAGS :=
+
+SRCDIR := src
+OBJDIR := build/$(target)/$(config)/obj
+BINDIR := build/$(target)/$(config)/bin
+BIN := $(BINDIR)/libcitruscore.a
+
+ifeq ($(config),debug)
+	CFGFLAGS += -g -DCE_ENV_DEBUG
+else ifeq ($(config),release)
+	CFGFLAGS += -O2 -s -DCE_ENV_RELEASE
+endif
+
+OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
+
+OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o
+
+default: build
+
+dirs:
+ifeq (posix,$(SHELLTYPE))
+	@mkdir -p $(OBJDIR)
+else
+	@mkdir $(subst /,\\,$(OBJDIR))
+endif
+ifeq (posix,$(SHELLTYPE))
+	@mkdir -p $(BINDIR)
+else
+	@mkdir $(subst /,\\,$(BINDIR))
+endif
+
+clean:
+ifeq (posix,$(SHELLTYPE))
+	@rm -rf build
+else
+	@if exist $(build) rmdir /s /q $(build)
+endif 
+
+prebuild:
+	@echo "Module 'citrus_core' build: Compile Objects (1/2)"
+
+link:
+	@echo ""
+	@echo "Module 'citrus_core' build: Link Library (2/2)"
+	@echo "Linking '$(BIN)'..."
+ifeq (posix,$(SHELLTYPE))
+	@mkdir -p $(BINDIR)/tmp
+else
+	@mkdir $(subst /,\\,$(BINDIR)/tmp)
+endif
+	@$(AR) -x ../Build/modules/imgui_core/$(target)/$(config)/bin/libimgui_core.a --output $(BINDIR)/tmp
+	@$(AR) -x ../Build/modules/stb/$(target)/$(config)/bin/libstb.a --output $(BINDIR)/tmp
+	@$(AR) -x ../Build/modules/assimp/$(target)/$(config)/bin/libassimp.a --output $(BINDIR)/tmp
+	@$(AR) -rcs $(BIN) $(OBJECTS) $(BINDIR)/tmp/*
+ifeq (posix,$(SHELLTYPE))
+	@rm -rf $(BINDIR)/tmp
+else
+	@if exist $(subst /,\\,$(BINDIR)/tmp) rmdir /s /q $(subst /,\\,$(BINDIR)/tmp)
+endif
+
+build: dirs prebuild $(OBJECTS) link
+	@:
+
+# Files
+###########
+
+$(OBJDIR)/Startup.o: $(SRCDIR)/Core/Startup.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Log.o: $(SRCDIR)/Core/Log.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Assert.o: $(SRCDIR)/Core/Assert.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Engine.o: $(SRCDIR)/Core/Engine.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/EventManager.o: $(SRCDIR)/Events/EventManager.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Input.o: $(SRCDIR)/Utilities/Input.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<

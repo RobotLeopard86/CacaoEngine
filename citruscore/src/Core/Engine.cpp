@@ -1,13 +1,11 @@
 #include "Core/Engine.hpp"
 #include "Core/Log.hpp"
-
-#include <thread>
-#include <chrono>
+#include "Events/EventSystem.hpp"
 
 namespace Citrus {
 	//Required static variable initialization
-	static Engine* instance = nullptr;
-	static bool instanceExists = false;
+	Engine* Engine::instance = nullptr;
+	bool Engine::instanceExists = false;
 
 	//Singleton accessor
 	Engine* Engine::GetInstance() {
@@ -21,40 +19,45 @@ namespace Citrus {
 		return instance;
 	}
 
-	void Engine::FixedTickHandler(boost::asio::io_context& io){
-		//Run the fixed tick code
-		OnFixedTick();
-
-		//Schedule the next fixed tick
-		io.post([&io]() {
-			FixedTickHandler(io);	
-		})
-	}
-
 	void Engine::Run(){
 		//Make sure the engine will run
 		run.store(true);
 
-		//Set up the fixed tick clock
-		boost::asio::io_context io;
-		boost::asio::steady_timer timer(io, std::chrono::milliseconds(fixedTickRate));
-		timer.async_wait([&io](boost::system::error_code ec) {
-			if(!ec) FixedTickHandler(io);
-		});
+		//Register our dynamic and fixed tick consumers
+		Logging::EngineLog("Setting up event manager...");
+		EventManager::GetInstance()->SubscribeConsumer("DynamicTick", new EventConsumer([](Event& e) {
+			DataEvent<float>& de = static_cast<DataEvent<float>&>(e);
+			OnDynamicTick(de.GetData());
+			return;
+		}));
+		EventManager::GetInstance()->SubscribeConsumer("FixedTick", new EventConsumer([](Event& e) {
+			OnFixedTick();
+			return;
+		}));
 
-		//Start the fixed tick clock
-		std::thread fixedTickThread([&io]() {
-			io.run();
-		});
+		//Run client startup hook
+		Logging::EngineLog("Running client startup hook...");
+		OnStartup();
 
+		Logging::EngineLog("Engine startup complete!");
 		//Engine run loop
 		while(run){
-			//Run dynamic tick
-			OnDynamicTick();
+			DataEvent<float> dte = DataEvent<float>{ "DynamicTick" , 0.0f };
+			EventManager::GetInstance()->Dispatch(dte);
 		}
 
-		//Join the fixed tick thread
-		fixedTickThread.join();
+		Logging::EngineLog("Shutting down engine...");
+
+		//Run client shutdown hook
+		Logging::EngineLog("Running client shutdown hook...");
+		OnShutdown();
+
+		//Shutdown event manager
+		EventManager::GetInstance()->Shutdown();
+	}
+
+	void Engine::Stop() {
+		run.store(false);
 	}
 
 }
