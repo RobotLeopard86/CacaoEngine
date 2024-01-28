@@ -12,20 +12,20 @@ namespace CitrusEngine {
 	//Camera orientation vector type (in degrees)
 	struct Orientation {
 		//Angle up/down from the X/Z plane
-		float tilt;
+		float pitch;
 		//Angle around the Y axis
-		float pan;
+		float yaw;
 		//Angle around the camera's front axis
 		float roll;
 
 		Orientation(glm::vec3 rot){
-			tilt = rot.x;
-			pan = rot.y;
+			pitch = rot.x;
+			yaw = rot.y;
 			roll = rot.z;
 		}
 
-		glm::vec3 ToVec3() {
-			return { tilt, pan, roll };
+		operator glm::vec3() {
+			return { pitch, yaw, roll };
 		}
 	};
 

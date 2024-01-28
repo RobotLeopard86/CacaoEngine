@@ -1,6 +1,6 @@
 #pragma once
 
-#include "boost/asio.hpp"
+#include <atomic>
 
 namespace Citrus {
 	//Singleton representing the engine
@@ -11,6 +11,9 @@ namespace Citrus {
 
 		//Run the engine
 		void Run();
+
+		//Stop the engine
+		void Stop();
 	private:
 		//Singleton members
 		static Engine* instance;
@@ -18,12 +21,6 @@ namespace Citrus {
 
 		//Should the engine run?
 		std::atomic_bool run;
-
-		//Fixed tick rate (milliseconds)
-		constexpr int fixedTickRate = 50;
-
-		//Fixed tick handler
-		void FixedTickHandler(boost::asio::io_context& io);
 	};
 }
 
@@ -32,13 +29,13 @@ namespace Citrus {
 //This is so they are optional to implement
 
 //Runs once on engine startup
-void OnStartup() {}
+void OnStartup();
 
 //Runs once on engine shutdown
-void OnShutdown() {}
+void OnShutdown();
 
 //Runs every fixed tick
-void OnFixedTick() {}
+void OnFixedTick();
 
 //Runs every dynamic tick
-void OnDynamicTick() {}
+void OnDynamicTick(float timestep);

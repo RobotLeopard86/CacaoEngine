@@ -1,18 +1,14 @@
 #pragma once
 
 #include "glm/vec2.hpp"
-
+#include <map>
 #include "Events/EventSystem.hpp"
 
-#include <map>
-
-namespace CitrusEngine {
-    //Input singleton
-    class Input {
-    public:
-        virtual ~Input() {}
-
-        //Returns a two-component vector of doubles representing the current cursor position
+namespace Citrus {
+	//Input utility singleton
+	class Input {
+	public:
+		//Returns a two-component vector of doubles representing the current cursor position
         glm::dvec2 GetCursorPos();
         //Returns a boolean representing whether the given key is pressed
         bool IsKeyPressed(int key);
@@ -21,21 +17,15 @@ namespace CitrusEngine {
 
         //Get the current instance or create one if it doesn't exist
         static Input* GetInstance(); 
+	private:
+		//Singleton data
+		static Input* instance;
+		static bool instanceExists;
 
-        //Event handlers
-        void CursorPosChangeHandler(Event& e);
-        void KeyUpHandler(Event& e);
-        void MouseButtonUpHandler(Event& e);
-        void KeyDownHandler(Event& e);
-        void MouseButtonDownHandler(Event& e);
-    private:
-        static Input* instance;
-        static bool instanceExists;
+		//Private constructor
+		Input();
 
-        //Private constructor so only the singleton initializer can call it
-        Input();
-
-        //Event consumers
+		//Event consumers
         EventConsumer* cursorPosConsumer;
         EventConsumer* keyUpConsumer;
         EventConsumer* mouseButtonUpConsumer;
@@ -46,7 +36,7 @@ namespace CitrusEngine {
         glm::dvec2 cursorPos;
         std::map<int, bool> keyStateMap;
         std::map<int, bool> mouseButtonStateMap;
-    };
+	};
 }
 
 //Define key and mouse button codes (taken from GLFW)

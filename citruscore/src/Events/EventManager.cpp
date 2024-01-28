@@ -1,0 +1,117 @@
+#include "Events/EventManager.hpp"
+
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
+
+#include <stdexcept>
+
+namespace Citrus {
+    //Make event manager instance null pointer by default
+    EventManager* EventManager::instance = nullptr;
+    //We don't have an instance by default
+    bool EventManager::instanceExists = false;
+
+    EventManager::EventManager(){}
+
+    void EventManager::Shutdown(){
+        Logging::EngineLog("Event manager shutting down!");
+
+        std::map<std::string, std::vector<EventConsumer*>> consumersCopy;
+
+        //Copy all consumer data to a map to avoid modifying the original map during unsubscription
+        for(auto it = consumers.begin(); it != consumers.end(); it++){
+            consumersCopy.insert_or_assign(it->first, it->second);
+        }
+
+        //Unsubscribe all consumers
+        for(auto it = consumersCopy.begin(); it != consumersCopy.end(); it++){
+            for(auto it2 = it->second.begin(); it2 != it->second.end(); it2++){
+                UnsubscribeConsumer(it->first, *it2);
+            }
+        }
+
+        //Clear data
+        consumers.clear();
+        consumersCopy.clear();
+    }
+
+    void EventManager::SubscribeConsumer(std::string type, EventConsumer* consumer){
+        std::vector<EventConsumer*> insertValue;
+
+        //Retrieve list of existing consumers if it exists
+        if(consumers.contains(type)){
+            try {
+                insertValue = consumers.at(type);
+            } catch(std::out_of_range) {}
+        }
+        insertValue.push_back(consumer);
+
+        //Apply changes to consumer map
+        consumers.insert_or_assign(type, insertValue);
+    }
+
+    void EventManager::UnsubscribeConsumer(std::string type, EventConsumer* consumer){
+        std::vector<EventConsumer*> insertValue;
+
+        //Retrieve list of existing consumers
+        if(consumers.contains(type)) {
+            try {
+                insertValue = consumers.at(type);
+            } catch(std::out_of_range) {
+                return;
+            }
+
+            //Get index of selected consumer
+            std::vector<EventConsumer*>::iterator consumerIndex = insertValue.end();
+
+            for(auto iterator = insertValue.begin(); iterator != insertValue.end(); iterator++){
+                if((*iterator) == consumer){
+                    consumerIndex = iterator;
+                    break;
+                }
+            }
+
+            if(consumerIndex == insertValue.end()){
+                Logging::EngineLog("Cannot unsubscribe consumer which was not subscribed!", LogLevel::Error);
+                return;
+            }
+
+            insertValue.erase(consumerIndex);
+        } else {
+            Logging::EngineLog("Cannot unsubscribe consumer from event type with no consumers!", LogLevel::Error);
+            return;
+        }
+        
+        consumers.insert_or_assign(type, insertValue);
+    }
+
+	void EventManager::Dispatch(Event& event){
+        //Check if event type has registered consumers
+        if(consumers.contains(event.GetType())){
+            std::vector<EventConsumer*> eventTypeConsumers;
+
+            //Locate consumers for event type in consumer map
+            try {
+                eventTypeConsumers = consumers.at(event.GetType());
+            } catch(std::out_of_range){
+                return;
+            }
+
+            //Send event to each registered consumer
+            for(EventConsumer* consumer : eventTypeConsumers){
+                consumer->Consume(event);
+            }
+        }
+    }
+
+    EventManager* EventManager::GetInstance() {
+        //Do we have a event manager instance yet?
+        if(!instanceExists || instance == NULL){
+            //Create event manager instance
+            instance = new EventManager();
+            instanceExists = true;
+        }
+
+        return instance;
+    }
+}
