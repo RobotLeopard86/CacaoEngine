@@ -1,7 +1,7 @@
 #include "Core/Entrypoint.hpp"
 #include "Core/Log.hpp"
 
-int main(){
+int main(int argc, char** argv){
     //Setup loggers
     CitrusEngine::Logging::Setup();
 
