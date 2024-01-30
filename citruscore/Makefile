@@ -41,7 +41,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o
+OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o
 
 default: build
 
@@ -65,11 +65,11 @@ else
 endif 
 
 prebuild:
-	@echo "Module 'citrus_core' build: Compile Objects (1/2)"
+	@echo "Citrus Core build: Compile Objects (1/2)"
 
 link:
 	@echo ""
-	@echo "Module 'citrus_core' build: Link Library (2/2)"
+	@echo "Citrus Core build: Link Library (2/2)"
 	@echo "Linking '$(BIN)'..."
 ifeq (posix,$(SHELLTYPE))
 	@mkdir -p $(BINDIR)/tmp
@@ -113,5 +113,17 @@ $(OBJDIR)/EventManager.o: $(SRCDIR)/Events/EventManager.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/Input.o: $(SRCDIR)/Utilities/Input.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Transform.o: $(SRCDIR)/3D/Transform.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/Model.o: $(SRCDIR)/3D/Model.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/PerspectiveCamera.o: $(SRCDIR)/Cameras/PerspectiveCamera.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

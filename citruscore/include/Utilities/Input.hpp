@@ -32,6 +32,13 @@ namespace Citrus {
         EventConsumer* keyDownConsumer;
         EventConsumer* mouseButtonDownConsumer;
 
+		//Event consumer functions
+		void CursorPosChangeHandler(Event& e);
+		void KeyUpHandler(Event& e);
+		void KeyDownHandler(Event& e);
+		void MouseButtonDownHandler(Event& e);
+		void MouseButtonUpHandler(Event& e);
+
         //Input data storage
         glm::dvec2 cursorPos;
         std::map<int, bool> keyStateMap;

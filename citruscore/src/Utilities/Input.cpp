@@ -1,6 +1,6 @@
 #include "Utilities/Input.hpp"
 
-#include "Utilities/Utilities.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 namespace Citrus {
     //Make input instance null pointer by default
@@ -55,27 +55,27 @@ namespace Citrus {
     }
 
     void Input::CursorPosChangeHandler(Event& e){
-        MouseMoveEvent mme = Event::EventTypeCast<MouseMoveEvent>(e);
-        cursorPos = mme.position;
+		DataEvent<glm::vec2>& mme = static_cast<DataEvent<glm::vec2>&>(e);
+        cursorPos = mme.GetData();
     }
 
     void Input::KeyUpHandler(Event& e){
-        KeyUpEvent kue = Event::EventTypeCast<KeyUpEvent>(e);
-        keyStateMap.insert_or_assign(kue.keycode, false);
+		DataEvent<int>& kue = static_cast<DataEvent<int>&>(e);
+        keyStateMap.insert_or_assign(kue.GetData(), false);
     }
 
     void Input::KeyDownHandler(Event& e){
-        KeyDownEvent kde = Event::EventTypeCast<KeyDownEvent>(e);
-        keyStateMap.insert_or_assign(kde.keycode, true);
+		DataEvent<int>& kde = static_cast<DataEvent<int>&>(e);
+        keyStateMap.insert_or_assign(kde.GetData(), true);
     }
 
     void Input::MouseButtonUpHandler(Event& e){
-        MouseReleaseEvent mre = Event::EventTypeCast<MouseReleaseEvent>(e);
-        mouseButtonStateMap.insert_or_assign(mre.button, false);
+		DataEvent<int>& mre = static_cast<DataEvent<int>&>(e);
+        mouseButtonStateMap.insert_or_assign(mre.GetData(), false);
     }
 
     void Input::MouseButtonDownHandler(Event& e){
-        MousePressEvent mpe = Event::EventTypeCast<MousePressEvent>(e);
-        mouseButtonStateMap.insert_or_assign(mpe.button, true);
+		DataEvent<int>& mpe = static_cast<DataEvent<int>&>(e);
+        mouseButtonStateMap.insert_or_assign(mpe.GetData(), true);
     }
 }

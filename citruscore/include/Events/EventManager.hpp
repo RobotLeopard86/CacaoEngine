@@ -11,8 +11,6 @@ namespace Citrus {
 
     class EventManager {
     public:
-        EventManager();
-
         //Subscribes a consumer for events of the given type to be dispatched to
         void SubscribeConsumer(std::string type, EventConsumer* consumer);
 
@@ -30,6 +28,8 @@ namespace Citrus {
     private:
         //Map of event types to list of consumers
         std::map<std::string, std::vector<EventConsumer*>> consumers;
+
+		EventManager();
 
         static EventManager* instance;
         static bool instanceExists;

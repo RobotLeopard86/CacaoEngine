@@ -1,6 +1,8 @@
 #pragma once
 
 #include <atomic>
+#include <chrono>
+#include <string>
 
 namespace Citrus {
 	//Singleton representing the engine
@@ -21,6 +23,11 @@ namespace Citrus {
 
 		//Should the engine run?
 		std::atomic_bool run;
+
+		Engine();
+
+		//Engine start time (used for calculating elapsed time)
+		std::chrono::time_point<std::chrono::steady_clock> lastFrame;
 	};
 }
 
@@ -38,4 +45,7 @@ void OnShutdown();
 void OnFixedTick();
 
 //Runs every dynamic tick
-void OnDynamicTick(float timestep);
+void OnDynamicTick(double timestep);
+
+//Get the target window title
+std::string GetWindowTitle();

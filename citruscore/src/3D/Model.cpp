@@ -51,14 +51,14 @@ namespace Citrus {
             int upAxisSign = 1;
             scene->mMetaData->Get<int>("UpAxisSign", upAxisSign);
 
-            Orientation modelOrientation;
+            ModelOrientation modelOrientation;
             //Find model orientation
             if(upAxis == 0){
-                modelOrientation = (upAxisSign < 1 ? Orientation::NegX : Orientation::PosX);
+                modelOrientation = (upAxisSign < 1 ? ModelOrientation::NegX : ModelOrientation::PosX);
             } else if(upAxis == 1){
-                modelOrientation = (upAxisSign < 1 ? Orientation::NegY : Orientation::PosY);
+                modelOrientation = (upAxisSign < 1 ? ModelOrientation::NegY : ModelOrientation::PosY);
             } else if(upAxis == 2) {
-                modelOrientation = (upAxisSign < 1 ? Orientation::NegZ : Orientation::PosZ);
+                modelOrientation = (upAxisSign < 1 ? ModelOrientation::NegZ : ModelOrientation::PosZ);
             }
 
             bool containsTexCoords = assimpMesh->HasTextureCoords(0);
@@ -93,21 +93,21 @@ namespace Citrus {
 
                 //Apply axis correction
                 switch(modelOrientation){
-                case Orientation::PosY:
+                case ModelOrientation::PosY:
                     break;
-                case Orientation::NegY:
+                case ModelOrientation::NegY:
                     position = glm::rotateZ(position, glm::radians(180.0f));
                     break;
-                case Orientation::PosX:
+                case ModelOrientation::PosX:
                     position = glm::rotateZ(position, glm::radians(-90.0f));
                     break;
-                case Orientation::NegX:
+                case ModelOrientation::NegX:
                     position = glm::rotateZ(position, glm::radians(90.0f));
                     break;
-                case Orientation::PosZ:
+                case ModelOrientation::PosZ:
                     position = glm::rotateX(position, glm::radians(-90.0f));
                     break;
-                case Orientation::NegZ:
+                case ModelOrientation::NegZ:
                     position = glm::rotateX(position, glm::radians(90.0f));
                     break;
                 }
