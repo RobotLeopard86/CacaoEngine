@@ -1,6 +1,7 @@
 #include "Core/Engine.hpp"
 #include "Core/Log.hpp"
 #include "Events/EventSystem.hpp"
+#include "Graphics/Window.hpp"
 
 namespace Citrus {
 	//Required static variable initialization
@@ -26,7 +27,7 @@ namespace Citrus {
 		//Register our dynamic and fixed tick consumers
 		Logging::EngineLog("Setting up event manager...");
 		EventManager::GetInstance()->SubscribeConsumer("DynamicTick", new EventConsumer([](Event& e) {
-			DataEvent<float>& de = static_cast<DataEvent<float>&>(e);
+			DataEvent<double>& de = static_cast<DataEvent<double>&>(e);
 			OnDynamicTick(de.GetData());
 			return;
 		}));
@@ -35,14 +36,25 @@ namespace Citrus {
 			return;
 		}));
 
+		//Open the window
+		Window::GetInstance()->Open(GetWindowTitle(), 1280, 720);
+
 		//Run client startup hook
 		Logging::EngineLog("Running client startup hook...");
 		OnStartup();
 
 		Logging::EngineLog("Engine startup complete!");
+
+		lastFrame = std::chrono::steady_clock::now();
+
 		//Engine run loop
 		while(run){
-			DataEvent<float> dte = DataEvent<float>{ "DynamicTick" , 0.0f };
+			//Calculate time step
+			double timestep = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - lastFrame).count();
+			lastFrame = std::chrono::steady_clock::now();
+
+			//Dispatch dynamic tick event
+			DataEvent<double> dte = DataEvent<double>{ "DynamicTick" , timestep };
 			EventManager::GetInstance()->Dispatch(dte);
 		}
 
@@ -51,6 +63,9 @@ namespace Citrus {
 		//Run client shutdown hook
 		Logging::EngineLog("Running client shutdown hook...");
 		OnShutdown();
+
+		//Close window
+		Window::GetInstance()->Close();
 
 		//Shutdown event manager
 		EventManager::GetInstance()->Shutdown();

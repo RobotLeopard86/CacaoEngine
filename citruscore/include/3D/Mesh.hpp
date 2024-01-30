@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vertex.hpp"
-#include "Shader.hpp"
 #include "Transform.hpp"
 
 #include <vector>
@@ -12,6 +11,8 @@ namespace Citrus {
     public:
         Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
         
+		//Draw this mesh
+		void Draw() {};
         //Compile the mesh into a usable form for drawing
         void Compile() {};
         //Release compiled assets from memory

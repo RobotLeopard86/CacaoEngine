@@ -13,11 +13,11 @@ namespace Citrus {
 		transMat = glm::translate(transMat, pos);
 
 		//Rotate X
-		transMat = glm::rotate(transMat, glm::radians(rot.x), { 1.0, 0.0, 0.0 });
+		transMat = glm::rotate(transMat, glm::radians(rot.pitch), { 1.0, 0.0, 0.0 });
 		//Rotate Y
-		transMat = glm::rotate(transMat, glm::radians(rot.y), { 0.0, 1.0, 0.0 });
+		transMat = glm::rotate(transMat, glm::radians(rot.yaw), { 0.0, 1.0, 0.0 });
 		//Rotate Z
-		transMat = glm::rotate(transMat, glm::radians(rot.z), { 0.0, 0.0, 1.0 });
+		transMat = glm::rotate(transMat, glm::radians(rot.roll), { 0.0, 0.0, 1.0 });
 
 		//Scale
 		transMat = glm::scale(transMat, scale);
