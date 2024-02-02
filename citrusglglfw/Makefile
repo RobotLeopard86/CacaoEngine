@@ -21,10 +21,10 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../citruscore/include -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
+INCLUDES := -Iinclude -I../citruscore/include -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
 DEFINES := -DGLFW_INCLUDE_NONE
-LIBS := -l:libglad_gl3.a
-LIBDIRS := -L/usr/lib64 -Lbuild/$(target)/$(config)/link
+LIBS := -l:libglad_gl3.a -l:libglfw_x.a
+LIBDIRS := -L/usr/lib64 -L../Build/modules/glad_gl3/$(target)/$(config)/bin -L../Build/modules/glfw_x/$(target)/$(config)/bin
 MISCOPTS := -std=gnu++20 -c
 CFGFLAGS :=
 
@@ -39,9 +39,7 @@ else ifeq ($(config),release)
 	CFGFLAGS += -O2 -s -DCE_ENV_RELEASE
 endif
 
-ifeq 
-
-OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
+OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(MISCOPTS) $(CFGFLAGS)
 
 OBJECTS := $(OBJDIR)/Window.o
 
@@ -58,11 +56,6 @@ ifeq (posix,$(SHELLTYPE))
 else
 	@mkdir $(subst /,\\,$(BINDIR))
 endif
-ifeq (posix,$(SHELLTYPE))
-	@mkdir -p build/$(target)/$(config)/link
-else
-	@mkdir $(subst /,\\,build/$(target)/$(config)/link)
-endif
 
 clean:
 ifeq (posix,$(SHELLTYPE))
@@ -78,12 +71,7 @@ link:
 	@echo ""
 	@echo "Citrus GLFW+OpenGL Backend build: Link Library (2/2)"
 	@echo "Linking '$(BIN)'..."
-ifeq (posix,$(SHELLTYPE))
-	@mkdir -p $(BINDIR)/tmp
-else
-	@mkdir $(subst /,\\,$(BINDIR)/tmp)
-endif
-	@$(cpp) $(OBJECTS) $(CFGFLAGS) $(LIBDIRS) $(LIBS) $(subst -c,,$(MISCOPTS)) -o $(BIN)
+	@$(cpp) -shared $(OBJECTS) $(CFGFLAGS) $(LIBDIRS) $(LIBS) $(subst -c,,$(MISCOPTS)) -o $(BIN)
 
 build: dirs prebuild $(OBJECTS) link
 	@:

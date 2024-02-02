@@ -4,6 +4,8 @@
 #include <chrono>
 #include <string>
 
+#include "BS_thread_pool.hpp"
+
 namespace Citrus {
 	//Singleton representing the engine
 	class Engine {
@@ -24,7 +26,10 @@ namespace Citrus {
 		//Should the engine run?
 		std::atomic_bool run;
 
-		Engine();
+		//Thread pool
+		BS::thread_pool threadPool;
+
+		Engine() {}
 
 		//Engine start time (used for calculating elapsed time)
 		std::chrono::time_point<std::chrono::steady_clock> lastFrame;
