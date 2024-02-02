@@ -35,6 +35,14 @@ namespace Citrus {
 			OnFixedTick();
 			return;
 		}));
+		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
+			this->Stop();
+			return;
+		}));
+
+		//Start the thread pool
+		Logging::EngineLog("Starting thread pool...");
+		threadPool.reset(std::thread::hardware_concurrency() - 2); //Minus 2 because of (eventual) event thread and render thread
 
 		//Open the window
 		Window::GetInstance()->Open(GetWindowTitle(), 1280, 720);
@@ -56,6 +64,9 @@ namespace Citrus {
 			//Dispatch dynamic tick event
 			DataEvent<double> dte = DataEvent<double>{ "DynamicTick" , timestep };
 			EventManager::GetInstance()->Dispatch(dte);
+
+			//Update window
+			Window::GetInstance()->Update();
 		}
 
 		Logging::EngineLog("Shutting down engine...");

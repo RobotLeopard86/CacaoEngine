@@ -47,7 +47,7 @@ namespace Citrus {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 		//Create window
-		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), glfwGetPrimaryMonitor(), NULL);
+		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
 		Asserts::EngineAssert(nativeWindow != NULL, "Failed to open the window!");
 
 		//Set window VSync state
@@ -57,51 +57,62 @@ namespace Citrus {
 		size = { initialSizeX, initialSizeY };
 
 		//Register window callbacks
-		glfwSetCursorPosCallback(nativeWindow, [](GLFWwindow* win, int x, int y){
-			EventManager::GetInstance()->Dispatch(DataEvent<glm::vec2>("MouseMove", { x, y }));
+		glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double x, double y){
+			DataEvent<glm::vec2> mme("MouseMove", { x, y });
+			EventManager::GetInstance()->Dispatch(mme);
 		});
-		glfwSetScrollCallback(nativeWindow, [](GLFWwindow* win, int offX, int offY){
-			EventManager::GetInstance()->Dispatch(DataEvent<glm::vec2>("MouseScroll", { offX, offY }));
+		glfwSetScrollCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double offX, double offY){
+			DataEvent<glm::vec2> mse("MouseScroll", { offX, offY });
+			EventManager::GetInstance()->Dispatch(mse);
 		});
-		glfwSetWindowSizeCallback(nativeWindow, [](GLFWwindow* win, int x, int y){
+		glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int x, int y){
 			Window::GetInstance()->SetSize({ x, y });
-			EventManager::GetInstance()->Dispatch(DataEvent<glm::vec2>("WindowResize", { x, y }));
+			DataEvent<glm::ivec2> wre("WindowResize", { x, y });
+			EventManager::GetInstance()->Dispatch(wre);
 		});
-		glfwSetWindowFocusCallback(nativeWindow, [](GLFWwindow* win, int entered){
-			EventManager::GetInstance()->Dispatch(Event{(entered ? "WindowFocus" : "WindowUnfocus")});
+		glfwSetWindowFocusCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int entered){
+			Event e((entered ? "WindowFocus" : "WindowUnfocus"));
+			EventManager::GetInstance()->Dispatch(e);
 		});
-		glfwSetKeyCallback(nativeWindow, [](GLFWwindow* win, int key, int scan, int action, int mods){
+		glfwSetKeyCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int key, int scan, int action, int mods){
 			switch(action) {
-			case GLFW_PRESS:
-				EventManager::GetInstance()->Dispatch(DataEvent<int>("KeyDown", key));
-				break;
-			case GLFW_RELEASE:
-				EventManager::GetInstance()->Dispatch(DataEvent<int>("KeyUp", key));
-				break;
-			default:
+			case GLFW_PRESS: {
+				DataEvent<int> kde("KeyDown", key);
+				EventManager::GetInstance()->Dispatch(kde);
 				break;
 			}
-		});
-		glfwSetMouseButtonCallback(nativeWindow, [](GLFWwindow* win, int btn, int action, int mods){
-			switch(action) {
-			case GLFW_PRESS:
-				EventManager::GetInstance()->Dispatch(DataEvent<int>("MousePress", btn));
-				break;
-			case GLFW_RELEASE:
-				EventManager::GetInstance()->Dispatch(DataEvent<int>("MouseRekease", btn));
-				break;
-			default:
+			case GLFW_RELEASE: {
+				DataEvent<int> kue("KeyUp", key);
+				EventManager::GetInstance()->Dispatch(kue);
 				break;
 			}
+			}
 		});
-		glfwSetCharCallback(nativeWindow, [](GLFWwindow* win, unsigned int code){
-			EventManager::GetInstance()->Dispatch(DataEvent<unsigned int>("KeyType", code));
+		glfwSetMouseButtonCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int btn, int action, int mods){
+			switch(action) {
+			case GLFW_PRESS: {
+				DataEvent<int> mpe("MousePress", btn);
+				EventManager::GetInstance()->Dispatch(mpe);
+				break;
+			}
+			case GLFW_RELEASE: {
+				DataEvent<int> mre("MouseRelease", btn);
+				EventManager::GetInstance()->Dispatch(mre);
+				break;
+			}
+			}
 		});
-		glfwSetWindowCloseCallback(nativeWindow, [](GLFWwindow* win){
-			EventManager::GetInstance()->Dispatch(Event{"WindowClose"});
+		glfwSetCharCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, unsigned int code){
+			DataEvent<unsigned int> kte("KeyType", code);
+			EventManager::GetInstance()->Dispatch(kte);
+		});
+		glfwSetWindowCloseCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win){
+			Event e("WindowClose");
+			EventManager::GetInstance()->Dispatch(e);
 		});
 
 		//Initialize OpenGL
+		glfwMakeContextCurrent((GLFWwindow*)nativeWindow);
 		Asserts::EngineAssert(gladLoaderLoadGL() != 0, "Could not load Glad!");
 
 		isOpen = true;
@@ -111,7 +122,7 @@ namespace Citrus {
 		Asserts::EngineAssert(isOpen, "Can't close window, it's not open!");
 
 		//Destroy the window
-		glfwDestroyWindow(nativeWindow);
+		glfwDestroyWindow((GLFWwindow*)nativeWindow);
 
 		//Clean up GLFW
 		glfwTerminate();
@@ -124,14 +135,15 @@ namespace Citrus {
 	}
 
 	void Window::UpdateWindowSize(){
-		glfwSetWindowSize(nativeWindow, size.x, size.y);
+		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
 	}
 
 	void Window::Update(){
+		Asserts::EngineAssert(isOpen, "Can't update window, it's not open!");
 		//Have GLFW check for events
 		glfwPollEvents();
 
 		//Swap buffers
-		glfwSwapBuffers();
+		glfwSwapBuffers((GLFWwindow*)nativeWindow);
 	}
 }

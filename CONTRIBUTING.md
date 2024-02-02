@@ -11,9 +11,6 @@
 ## Build System
 Citrus Engine uses GNU Make and Zig as the build system.
 
-## Environment Set Up (**REQUIRED**)
-Run the `setupEnvironment.sh` script in the root directory to set everything up (make sure to set it as executable!).
-
 ## Prerequisites
 * GNU Make
 * Zig

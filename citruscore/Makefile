@@ -21,7 +21,7 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
+INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
 DEFINES :=
 LIBS :=
 LIBDIRS := -L/usr/lib64
