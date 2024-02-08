@@ -41,7 +41,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o
+OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o $(OBJDIR)/LogicPhase.o $(OBJDIR)/ProcessPhase.o $(OBJDIR)/RenderPhase.o
 
 default: build
 
@@ -129,5 +129,17 @@ $(OBJDIR)/PerspectiveCamera.o: $(SRCDIR)/Cameras/PerspectiveCamera.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/WorldManager.o: $(SRCDIR)/World/WorldManager.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/LogicPhase.o: $(SRCDIR)/Pipeline/LogicPhase.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/ProcessPhase.o: $(SRCDIR)/Pipeline/ProcessPhase.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/RenderPhase.o: $(SRCDIR)/Pipeline/RenderPhase.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

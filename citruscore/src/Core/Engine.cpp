@@ -2,6 +2,11 @@
 #include "Core/Log.hpp"
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
+#include "Pipeline/LogicPhase.hpp"
+#include "Pipeline/ProcessPhase.hpp"
+#include "Pipeline/RenderPhase.hpp"
+
+#include <future>
 
 namespace Citrus {
 	//Required static variable initialization
@@ -33,7 +38,7 @@ namespace Citrus {
 
 		//Start the thread pool
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 2); //Minus 3 because of frame pipeline threads
+		threadPool.reset(std::thread::hardware_concurrency() - 3); //Minus 3 because of frame pipeline threads
 
 		//Open the window
 		Window::GetInstance()->Open(GetWindowTitle(), 1280, 720);
@@ -53,11 +58,15 @@ namespace Citrus {
 			if(timestep < 50) continue;
 			lastFrame = std::chrono::steady_clock::now();
 
-			//Print timestep DEBUG
-			Logging::EngineLog(std::string("Timestep: ") + std::to_string(timestep));
+			//Run frame pipeline
+			std::future<void> logic = LogicPhase::GetInstance()->Run();
+			std::future<void> process = ProcessPhase::GetInstance()->Run();
+			std::future<void> render = RenderPhase::GetInstance()->Run();
 
-			//Update window
-			Window::GetInstance()->Update();
+			//Wait for all stages to finish
+			logic.wait();
+			process.wait();
+			render.wait();
 		}
 
 		Logging::EngineLog("Shutting down engine...");

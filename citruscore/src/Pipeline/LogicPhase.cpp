@@ -22,8 +22,10 @@ namespace Citrus {
 		return instance;
 	}
 
-	void LogicPhase::IsScriptRegistered(Script& script){
-		auto it = std::find(scripts.cbegin(), scripts.cend(), script);
+	bool LogicPhase::IsScriptRegistered(Script& script){
+		auto it = std::find_if(scripts.cbegin(), scripts.cend(), [script](std::reference_wrapper<Script> value){
+			return static_cast<Script>(script) == value.get();
+		});
 		return it != scripts.cend();
 	}
 
@@ -42,12 +44,14 @@ namespace Citrus {
 			return;
 		}
 
-		scripts.erase(std::find(scripts.cbegin(), scripts.cend(), script));
+		scripts.erase(std::find_if(scripts.cbegin(), scripts.cend(), [script](std::reference_wrapper<Script> value){
+			return static_cast<Script>(script) == value.get();
+		}));
 	}
 
-	void LogicPhase::Run() {
+	void LogicPhase::_Run() {
 		//Freeze input state for this frame
-		Input::FreezeFrameInputState();
+		Input::GetInstance()->FreezeFrameInputState();
 
 		//Run all scripts
 		for(Script& s : scripts){
