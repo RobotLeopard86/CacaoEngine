@@ -1,6 +1,7 @@
 # Don't send builds
 Build
 citruscore/build
+citrusglglfw/build
 
 # Don't send auto-created logs
 citrus-engine.log
@@ -10,3 +11,7 @@ citrus-engine.log
 
 # Don't send boost files
 libs/boost
+
+# Don't send testing files
+a.cpp
+a

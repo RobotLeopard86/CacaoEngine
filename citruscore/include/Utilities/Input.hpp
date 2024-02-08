@@ -1,8 +1,11 @@
 #pragma once
 
 #include "glm/vec2.hpp"
-#include <map>
+
 #include "Events/EventSystem.hpp"
+#include "Flushable.hpp"
+
+#include <map>
 
 namespace Citrus {
 	//Input utility singleton
@@ -14,6 +17,9 @@ namespace Citrus {
         bool IsKeyPressed(int key);
         //Returns a boolean representing whether the given mouse button is pressed
         bool IsMouseButtonPressed(int button);
+
+		//Flush the input state
+		void FreezeFrameInputState();
 
         //Get the current instance or create one if it doesn't exist
         static Input* GetInstance(); 
@@ -40,9 +46,13 @@ namespace Citrus {
 		void MouseButtonUpHandler(Event& e);
 
         //Input data storage
-        glm::dvec2 cursorPos;
-        std::map<int, bool> keyStateMap;
-        std::map<int, bool> mouseButtonStateMap;
+        glm::dvec2 _cursorPos;
+        std::map<int, bool> _keyStateMap;
+        std::map<int, bool> _mouseButtonStateMap;
+
+		//Flushables for temporary holding
+		Flushable<glm::dvec2> cursorPos;
+		Flushable<std::map<int, bool>> keyStateMap, mouseButtonStateMap;
 	};
 }
 

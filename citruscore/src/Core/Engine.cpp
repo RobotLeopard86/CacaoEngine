@@ -26,15 +26,6 @@ namespace Citrus {
 
 		//Register our dynamic and fixed tick consumers
 		Logging::EngineLog("Setting up event manager...");
-		EventManager::GetInstance()->SubscribeConsumer("DynamicTick", new EventConsumer([](Event& e) {
-			DataEvent<double>& de = static_cast<DataEvent<double>&>(e);
-			OnDynamicTick(de.GetData());
-			return;
-		}));
-		EventManager::GetInstance()->SubscribeConsumer("FixedTick", new EventConsumer([](Event& e) {
-			OnFixedTick();
-			return;
-		}));
 		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
 			this->Stop();
 			return;
@@ -42,7 +33,7 @@ namespace Citrus {
 
 		//Start the thread pool
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 2); //Minus 2 because of (eventual) event thread and render thread
+		threadPool.reset(std::thread::hardware_concurrency() - 2); //Minus 3 because of frame pipeline threads
 
 		//Open the window
 		Window::GetInstance()->Open(GetWindowTitle(), 1280, 720);
@@ -57,13 +48,13 @@ namespace Citrus {
 
 		//Engine run loop
 		while(run){
-			//Calculate time step
-			double timestep = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - lastFrame).count();
+			//Make sure we're only ticking every 50 ms
+			double timestep = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastFrame).count();
+			if(timestep < 50) continue;
 			lastFrame = std::chrono::steady_clock::now();
 
-			//Dispatch dynamic tick event
-			DataEvent<double> dte = DataEvent<double>{ "DynamicTick" , timestep };
-			EventManager::GetInstance()->Dispatch(dte);
+			//Print timestep DEBUG
+			Logging::EngineLog(std::string("Timestep: ") + std::to_string(timestep));
 
 			//Update window
 			Window::GetInstance()->Update();

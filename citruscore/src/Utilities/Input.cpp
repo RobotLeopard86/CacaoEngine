@@ -19,13 +19,15 @@ namespace Citrus {
         return instance;
     }
 
-    Input::Input() {
+    Input::Input() 
+		: cursorPos(_cursorPos), keyStateMap(_keyStateMap), mouseButtonStateMap(_mouseButtonStateMap) {
         //Subscribe consumers for input state change events
         cursorPosConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::CursorPosChangeHandler));
         keyUpConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::KeyUpHandler));
         mouseButtonUpConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonUpHandler));
         keyDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::KeyDownHandler));
         mouseButtonDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonDownHandler));
+		inputFlushConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::InputFlushHandler));
         EventManager::GetInstance()->SubscribeConsumer("MouseMove", cursorPosConsumer);
         EventManager::GetInstance()->SubscribeConsumer("KeyUp", keyUpConsumer);
         EventManager::GetInstance()->SubscribeConsumer("MouseRelease", mouseButtonUpConsumer);
@@ -33,25 +35,25 @@ namespace Citrus {
         EventManager::GetInstance()->SubscribeConsumer("MousePress", mouseButtonDownConsumer);
 
         //Initialize cursor pos vector
-        cursorPos = glm::dvec2(0.0);
+        _cursorPos = glm::dvec2(0.0);
     }
 
     bool Input::IsKeyPressed(int key){
-        if(keyStateMap.find(key) != keyStateMap.end()){
-            return keyStateMap.at(key);
+        if(_keyStateMap.find(key) != _keyStateMap.end()){
+            return _keyStateMap.at(key);
         }
         return false;
     }
 
     bool Input::IsMouseButtonPressed(int button){
-        if(mouseButtonStateMap.find(button) != mouseButtonStateMap.end()){
-            return mouseButtonStateMap.at(button);
+        if(_mouseButtonStateMap.find(button) != _mouseButtonStateMap.end()){
+            return _mouseButtonStateMap.at(button);
         }
         return false;
     }
 
     glm::dvec2 Input::GetCursorPos(){
-        return cursorPos;
+        return _cursorPos;
     }
 
     void Input::CursorPosChangeHandler(Event& e){
@@ -61,21 +63,27 @@ namespace Citrus {
 
     void Input::KeyUpHandler(Event& e){
 		DataEvent<int>& kue = static_cast<DataEvent<int>&>(e);
-        keyStateMap.insert_or_assign(kue.GetData(), false);
+        keyStateMap->insert_or_assign(kue.GetData(), false);
     }
 
     void Input::KeyDownHandler(Event& e){
 		DataEvent<int>& kde = static_cast<DataEvent<int>&>(e);
-        keyStateMap.insert_or_assign(kde.GetData(), true);
+        keyStateMap->insert_or_assign(kde.GetData(), true);
     }
 
     void Input::MouseButtonUpHandler(Event& e){
 		DataEvent<int>& mre = static_cast<DataEvent<int>&>(e);
-        mouseButtonStateMap.insert_or_assign(mre.GetData(), false);
+        mouseButtonStateMap->insert_or_assign(mre.GetData(), false);
     }
 
     void Input::MouseButtonDownHandler(Event& e){
 		DataEvent<int>& mpe = static_cast<DataEvent<int>&>(e);
-        mouseButtonStateMap.insert_or_assign(mpe.GetData(), true);
+        mouseButtonStateMap->insert_or_assign(mpe.GetData(), true);
     }
+
+	void Input::FreezeFrameInputState(){
+		cursorPos.Flush();
+		keyStateMap.Flush();
+		mouseButtonStateMap.Flush();
+	}
 }

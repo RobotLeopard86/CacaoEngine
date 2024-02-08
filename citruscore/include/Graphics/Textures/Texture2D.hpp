@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseTexture.hpp"
+#include "Texture.hpp"
 
 #include "glm/vec2.hpp"
 

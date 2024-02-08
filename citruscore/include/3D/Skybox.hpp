@@ -15,7 +15,7 @@ namespace Citrus {
 		Skybox(Cubemap* tex);
 
         //Draw this skyboxn
-        void Draw() = 0;
+        void Draw();
 
 		//Set up any common skybox resources
 		static void CommonSetup();
