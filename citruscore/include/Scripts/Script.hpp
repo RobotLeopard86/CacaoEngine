@@ -17,6 +17,10 @@ namespace Citrus {
 			if(active && !prevActive) OnAwake();
 		}
 		const bool IsActive() { return active; }
+		
+		const bool operator==(Script rhs) {
+            return (this == &rhs);
+        }
 	private:
 		//Should this script run?
 		//Private because we need to run the OnAwake method when this script is activated

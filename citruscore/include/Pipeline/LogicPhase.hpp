@@ -3,6 +3,7 @@
 #include "Scripts/Script.hpp"
 
 #include <vector>
+#include <future>
 
 namespace Citrus {
 	//Manager for the logic phase of the frame pipeline
@@ -11,8 +12,12 @@ namespace Citrus {
 		//Get the instance or create one if it doesn't exist.
 		static LogicPhase* GetInstance();
 
-		//Run this phase
-		void Run();
+		//Run this phase asynchronously
+		std::future<void> Run() {
+			return std::async(std::launch::async, [this](){
+				this->Run();
+			});
+		}
 		
 		//Register a script for use during the logic phase
 		//Script will not be run if its active value is false
@@ -22,15 +27,18 @@ namespace Citrus {
 		void UnregisterScript(Script& script);
 
 		//Check if a script is to be used
-		void IsScriptRegistered(Script& script);
+		bool IsScriptRegistered(Script& script);
 	private:
 		//Singleton members
 		static LogicPhase* instance;
 		static bool instanceExists;
 
 		//Registered scripts
-		std::vector<Script&> scripts;
+		std::vector<std::reference_wrapper<Script>> scripts;
+
+		//Actual run code
+		void _Run();
 
 		LogicPhase() {}
-	}
+	};
 }

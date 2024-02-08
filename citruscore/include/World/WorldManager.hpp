@@ -30,6 +30,8 @@ namespace Citrus {
 
 		//Commit active world data for processing
 		void Commit();
+
+		bool HasCommitOccurred() { return commitedWorldExists; }
 	private:
 		//Singleton members
 		static WorldManager* instance;

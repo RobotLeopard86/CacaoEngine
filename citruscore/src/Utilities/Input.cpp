@@ -27,7 +27,6 @@ namespace Citrus {
         mouseButtonUpConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonUpHandler));
         keyDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::KeyDownHandler));
         mouseButtonDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonDownHandler));
-		inputFlushConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::InputFlushHandler));
         EventManager::GetInstance()->SubscribeConsumer("MouseMove", cursorPosConsumer);
         EventManager::GetInstance()->SubscribeConsumer("KeyUp", keyUpConsumer);
         EventManager::GetInstance()->SubscribeConsumer("MouseRelease", mouseButtonUpConsumer);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include <future>
 
 #include "RenderJob.hpp"
 
@@ -11,9 +12,13 @@ namespace Citrus {
 		//Get the instance or create one if it doesn't exist.
 		static RenderPhase* GetInstance();
 
-		//Run this phase
+		//Run this phase asynchronously
 		//Requires at least one render job to be in queue
-		void Run();
+		std::future<void> Run() {
+			return std::async(std::launch::async, [this](){
+				this->Run();
+			});
+		}
 
 		//Enqueue a job for rendering
 		void QueueJob(RenderJob job) {
@@ -27,6 +32,8 @@ namespace Citrus {
 		//Render job queue
 		std::queue<RenderJob> renderQueue;
 
+		void _Run();
+
 		RenderPhase() {}
-	}
+	};
 }
