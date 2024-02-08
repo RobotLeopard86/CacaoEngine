@@ -10,6 +10,7 @@
 
 namespace Citrus {
     //Must be implemented per-rendering API
+	//Shader class
     class Shader {
     public:
 		Shader(std::string vertexShader, std::string fragmentShader);

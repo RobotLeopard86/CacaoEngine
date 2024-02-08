@@ -18,6 +18,9 @@ namespace Citrus {
 
 		//Stop the engine
 		void Stop();
+
+		//Access the thread pool
+		BS::thread_pool& GetThreadPool() { return threadPool; }
 	private:
 		//Singleton members
 		static Engine* instance;
@@ -37,20 +40,12 @@ namespace Citrus {
 }
 
 //Client code hooks
-//These are set to nothing by default
-//This is so they are optional to implement
 
 //Runs once on engine startup
 void OnStartup();
 
 //Runs once on engine shutdown
 void OnShutdown();
-
-//Runs every fixed tick
-void OnFixedTick();
-
-//Runs every dynamic tick
-void OnDynamicTick(double timestep);
 
 //Get the target window title
 std::string GetWindowTitle();

@@ -1,7 +1,8 @@
 #pragma once
 
 namespace Citrus {
-	template <typename T>
+	//Utility class for storing temporary data and writing it back to an original object later
+	template<typename T>
 	class Flushable {
 	public:
 		explicit Flushable(T& obj) : originalObject(obj), mod(obj) {}
@@ -9,6 +10,11 @@ namespace Citrus {
 		//Access the local copy
 		T* operator->() {
 			return &mod;
+		}
+
+		//Overwrite the local copy with new data
+		void operator=(T newDat){
+			mod = newDat;
 		}
 
 		//Flush changes to the original object

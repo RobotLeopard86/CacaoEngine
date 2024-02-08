@@ -7,11 +7,12 @@ Citrus Engine is a game engine developed by RobotLeopard86, as well as any other
 ## Planned Features
 * 2D and 3D rendering capabilties
 * Level editor
-* C++, Python, and node-based scripting
-* Support for Windows, macOS, and most popular GNU/Linux distros
+* C++, C#, and Python scripting
+* Support for Windows, macOS, and GNU/Linux
 * AI engine
-* Full controller support
-* Package repository and manager
+* Physics system
+* Support for multiple windowing systems and rendering APIs
+* Controller support
 
 More features may come in the future, so stay tuned!
 
