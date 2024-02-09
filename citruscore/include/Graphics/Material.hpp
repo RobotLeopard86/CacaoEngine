@@ -13,7 +13,9 @@ namespace Citrus {
 		Shader* shader;
 
 		//Access the stored shader data to modify it
-		ShaderData& operator->(){
+		template<class T>
+		T& AccessData(){
+			static_assert(std::is_base_of<ShaderData, T>(), "Must access this data using a subclass of ShaderData!");
 			return shaderData;
 		}
 	private:

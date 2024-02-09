@@ -34,6 +34,10 @@ namespace Citrus {
 
 		void _Run();
 
+		//Needs backend implementation
+		//Execute a render command
+		void ExecuteRenderCmd(RenderCmd cmd);
+
 		RenderPhase() {}
 	};
 }

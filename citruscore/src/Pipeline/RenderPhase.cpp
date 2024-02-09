@@ -20,7 +20,19 @@ namespace Citrus {
 
 	void RenderPhase::_Run(){
 		if(!renderQueue.empty()){
+			//Get next job
+			RenderJob job = renderQueue.front();
+			renderQueue.pop();
 
+			//Execute job commands
+			for(RenderCmd cmd : job.renderCmds){
+				//Validate that this command is good to go
+				if(!cmd.material.shader->IsCompiled()) continue;
+				if(!cmd.mesh->IsCompiled()) continue;
+
+				//Execute the command
+				ExecuteRenderCmd(cmd);
+			}
 		}
 		//Update window
 		Window::GetInstance()->Update();
