@@ -71,11 +71,6 @@ link:
 	@echo ""
 	@echo "Citrus Core build: Link Library (2/2)"
 	@echo "Linking '$(BIN)'..."
-ifeq (posix,$(SHELLTYPE))
-	@mkdir -p $(BINDIR)/tmp
-else
-	@mkdir $(subst /,\\,$(BINDIR)/tmp)
-endif
 	@$(cpp) -shared $(OBJECTS) $(CFGFLAGS) $(LIBDIRS) $(LIBS) $(subst -c,,$(MISCOPTS)) -o $(BIN)
 
 build: dirs prebuild $(OBJECTS) link

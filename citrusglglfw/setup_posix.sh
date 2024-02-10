@@ -18,6 +18,7 @@ fi
 
 echo "Building GLFW..."
 cd ../libs/glfw
+rm -rf build
 mkdir -p build && cd build
 if [ "$(uname)" == "Darwin" ]; then
 	cmake .. -GNinja -DGLFW_VULKAN_STATIC=ON -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=ON
@@ -48,6 +49,16 @@ zig c++ backends/imgui_impl_glfw.cpp -Ibackends -I. -c -o imguiglfw.o
 ar -rcs libimgui_gl_glfw.a imguigl3.o imguiglfw.o
 rm imguigl3.o imguiglfw.o
 mv libimgui_gl_glfw.a ../generated
+
+echo "Building SPIRV-Cross..."
+cd ../spirv-cross
+rm -rf build
+mkdir -p build && cd build
+cmake .. -GNinja -DSPIRV_CROSS_STATIC=ON -DSPIRV_CROSS_SHARED=OFF -DSPIRV_CROSS_CLI=OFF
+ninja
+cp ./libspirv-cross*.a ../../generated
+cd ../
+rm -rf build
 
 cd ../../citrusglglfw
 
