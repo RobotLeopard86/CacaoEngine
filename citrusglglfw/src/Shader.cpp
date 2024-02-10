@@ -4,5 +4,7 @@
 #include "glad/gl.h"
 
 namespace Citrus {
-	Shader::Shader()
+	Shader::Shader() {
+		
+	}
 }

@@ -14,3 +14,6 @@
 [submodule "libs/assimp"]
 	path = libs/assimp
 	url = https://github.com/assimp/assimp
+[submodule "libs/spirv-cross"]
+	path = libs/spirv-cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross

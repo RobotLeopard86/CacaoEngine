@@ -18,6 +18,10 @@ namespace Citrus {
 			static_assert(std::is_base_of<ShaderData, T>(), "Must access this data using a subclass of ShaderData!");
 			return shaderData;
 		}
+
+		//The shader can't be changed after destruction. Create a new material to do so.
+		Material(Shader& shader)
+			: shader(shader) {}
 	private:
 		//Data storage
 		ShaderData shaderData;
