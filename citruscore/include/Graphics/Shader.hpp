@@ -1,6 +1,7 @@
 #pragma once
 
-#include <string>
+#include <vector>
+#include <filesystem>
 
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
@@ -13,7 +14,10 @@ namespace Citrus {
 	//Shader class
     class Shader {
     public:
-		Shader(std::string vertexShader, std::string fragmentShader);
+		//Create a shader from raw SPIR-V code loaded separately
+		Shader(const std::vector<char>& rawVertCode, const std::vector<char>& rawFragCode);
+		//Create a shader from file paths
+		Shader(std::filesystem::path vertex, std::filesystem::path fragment);
 
         //Use this shader
         void Bind() {}
@@ -57,5 +61,7 @@ namespace Citrus {
     protected:
         bool compiled;
         bool bound;
+
+		std::string vertCode, fragCode;
     };
 }

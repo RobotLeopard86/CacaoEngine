@@ -21,10 +21,10 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../citruscore/include -I../libs/spdlog/include -I../libs/glm -I../libs/boost/include -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
+INCLUDES := -Iinclude -I../citruscore/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
 DEFINES := -DGLFW_INCLUDE_NONE
-LIBS := -l:libglad_gl3.a -l:libglfw_x.a
-LIBDIRS := -L/usr/lib64 -L../Build/modules/glad_gl3/$(target)/$(config)/bin -L../Build/modules/glfw_x/$(target)/$(config)/bin
+LIBS := -l:libglad_gl.a -l:libglfw.so -l:libimgui_gl_glfw.a
+LIBDIRS := -L/usr/lib64 -L../libs/generated
 MISCOPTS := -std=gnu++20 -c
 CFGFLAGS :=
 
@@ -41,7 +41,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Window.o
+OBJECTS := $(OBJDIR)/Window.o $(OBJDIR)/Shader.o
 
 default: build
 
@@ -80,5 +80,8 @@ build: dirs prebuild $(OBJECTS) link
 ###########
 
 $(OBJDIR)/Window.o: $(SRCDIR)/Window.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+$(OBJDIR)/Shader.o: $(SRCDIR)/Shader.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

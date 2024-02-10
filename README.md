@@ -16,9 +16,9 @@ Citrus Engine is a game engine developed by RobotLeopard86, as well as any other
 
 More features may come in the future, so stay tuned!
 
+## Building
+See the [build instructions page](BUILD.md) for information.
+
 ## Licenses
 Citrus Engine is licensed under the Apache License 2.0, which can be found in the root directory. All third-party licenses are present in the `licenses` folder.  
-Note: Assimp comes with other libraries as dependencies, including zlib which is built separately, and the licenses for those libraries are available in their directories within the assimp library directory.
-
-## Contributing
-Please visit the [contributing page](CONTRIBUTING.md) for details.
+Note: Assimp comes with other libraries as dependencies and the licenses for those libraries are available in their directories within the assimp library directory.
