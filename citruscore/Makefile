@@ -21,17 +21,17 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs/boost/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../assimp_generated
+INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
 DEFINES :=
-LIBS :=
-LIBDIRS := -L/usr/lib64
+LIBS := -l:libassimp.a -l:libdraco.a -l:libstb_image.a -l:libimgui.a
+LIBDIRS := -L/usr/lib64 -L../libs/generated
 MISCOPTS := -std=gnu++20 -c
 CFGFLAGS :=
 
 SRCDIR := src
 OBJDIR := build/$(target)/$(config)/obj
 BINDIR := build/$(target)/$(config)/bin
-BIN := $(BINDIR)/libcitruscore.a
+BIN := $(BINDIR)/libcitruscore.so
 
 ifeq ($(config),debug)
 	CFGFLAGS += -g -DCE_ENV_DEBUG
@@ -76,15 +76,7 @@ ifeq (posix,$(SHELLTYPE))
 else
 	@mkdir $(subst /,\\,$(BINDIR)/tmp)
 endif
-	@$(AR) -x ../Build/modules/imgui_core/$(target)/$(config)/bin/libimgui_core.a --output $(BINDIR)/tmp
-	@$(AR) -x ../Build/modules/stb/$(target)/$(config)/bin/libstb.a --output $(BINDIR)/tmp
-	@$(AR) -x ../Build/modules/assimp/$(target)/$(config)/bin/libassimp.a --output $(BINDIR)/tmp
-	@$(AR) -rcs $(BIN) $(OBJECTS) $(BINDIR)/tmp/*
-ifeq (posix,$(SHELLTYPE))
-	@rm -rf $(BINDIR)/tmp
-else
-	@if exist $(subst /,\\,$(BINDIR)/tmp) rmdir /s /q $(subst /,\\,$(BINDIR)/tmp)
-endif
+	@$(cpp) -shared $(OBJECTS) $(CFGFLAGS) $(LIBDIRS) $(LIBS) $(subst -c,,$(MISCOPTS)) -o $(BIN)
 
 build: dirs prebuild $(OBJECTS) link
 	@:

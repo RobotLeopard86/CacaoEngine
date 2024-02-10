@@ -3,14 +3,14 @@ Build
 citruscore/build
 citrusglglfw/build
 
+# Don't send generated library files
+libs/generated
+
 # Don't send auto-created logs
 citrus-engine.log
 
 # Don't send VS Code files
 .vscode
-
-# Don't send boost files
-libs/boost
 
 # Don't send testing files
 a.cpp

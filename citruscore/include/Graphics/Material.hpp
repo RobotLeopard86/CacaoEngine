@@ -10,7 +10,7 @@ namespace Citrus {
 	class Material {
 	public:
 		//Current shader
-		Shader* shader;
+		Shader& shader;
 
 		//Access the stored shader data to modify it
 		template<class T>
