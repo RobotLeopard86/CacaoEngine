@@ -2,7 +2,7 @@
 
 #include "GLFW/glfw3.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     Utilities* Utilities::CreateNativeUtilities(){
         return new GLFWUtilities();

@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     void Asserts::EngineAssert(bool condition, std::string errorMsg){
         if(!condition){
             Logging::EngineLog(LogLevel::Error, "Failed Assertion - " + errorMsg);

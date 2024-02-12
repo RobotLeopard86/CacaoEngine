@@ -4,7 +4,7 @@
 
 #include "glad/gl.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //OpenGL implementation of Cubemap (see Cubemap.hpp for method details)
     class OpenGLCubemap : public Cubemap {

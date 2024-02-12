@@ -4,7 +4,7 @@
 
 #include "glad/gl.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //OpenGL implementation of Mesh (see Mesh.hpp for method details)
     class OpenGLMesh : public Mesh {

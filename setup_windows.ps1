@@ -54,7 +54,7 @@ mv libimgui.a ../generated
 cd ../..
 
 clear
-Write-Host "Citrus Engine setup is complete!"
+Write-Host "Cacao Engine setup is complete!"
 Write-Host "===================================="
 Write-Host
 Write-Host "Some components may require additional dependencies to be built."

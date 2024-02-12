@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Make event manager instance null pointer by default
     EventManager* EventManager::instance = nullptr;
     //We don't have an instance by default

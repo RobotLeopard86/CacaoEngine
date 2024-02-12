@@ -2,7 +2,7 @@
 
 #include "glad/gl.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
 	//OpenGL implementation of Skybox (see Skybox.hpp for method details)
 	class OpenGLSkybox : public Skybox {

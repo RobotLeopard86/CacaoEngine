@@ -2,7 +2,7 @@
 
 #include "Core/Log.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     bool GLFWBackendComponent::initialized = false;
 

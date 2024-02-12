@@ -2,8 +2,8 @@
 
 #include "imgui.h"
 
-namespace CitrusEngine {
-    //Citrus Engine ImGui wrapper
+namespace CacaoEngine {
+    //Cacao Engine ImGui wrapper
     class ImGuiWrapper {
     public:
         //Initialize the wrapper

@@ -2,13 +2,13 @@
 
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
-#include "Core/CitrusClient.hpp"
+#include "Core/CacaoClient.hpp"
 
 #include "Graphics/Window.hpp"
 
 #include <stdexcept>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //Initialize static variables
     bool ImGuiWrapper::initialized = false;
@@ -134,7 +134,7 @@ namespace CitrusEngine {
         ImGuiIO& imGuiIO = ImGui::GetIO();
 
         //Resize ImGui viewport
-        glm::ivec2 windowSize = CitrusClient::GetWindow()->GetSize();
+        glm::ivec2 windowSize = CacaoClient::GetWindow()->GetSize();
         imGuiIO.DisplaySize = ImVec2(windowSize.x, windowSize.y);
 
         //Render ImGui data

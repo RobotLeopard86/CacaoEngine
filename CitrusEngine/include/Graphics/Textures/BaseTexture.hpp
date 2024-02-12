@@ -1,6 +1,6 @@
 #pragma once
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Base texture type
     class Texture {
     public:

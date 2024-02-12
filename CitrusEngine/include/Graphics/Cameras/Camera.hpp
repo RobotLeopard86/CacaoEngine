@@ -8,7 +8,7 @@
 
 #include "Graphics/Skybox.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 	//Camera orientation vector type (in degrees)
 	struct Orientation {
 		//Angle up/down from the X/Z plane

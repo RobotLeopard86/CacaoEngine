@@ -9,7 +9,7 @@
 
 #include <filesystem>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
 	Texture2D* Texture2D::CreateFromFile(std::string filePath) {
 		Asserts::EngineAssert(std::filesystem::exists(filePath), "Cannot create 2D texture from nonexistent file!");

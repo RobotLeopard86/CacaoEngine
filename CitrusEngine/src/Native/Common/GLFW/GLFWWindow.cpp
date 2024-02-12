@@ -15,7 +15,7 @@
     #error "You must define CE_GLFW_API when compiling this file! Visit https://www.glfw.org/docs/latest/window_guide.html#GLFW_CLIENT_API_hint to see the options."
 #endif
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     std::map<void*, Window*> Window::nativeWindowLUT = std::map<void*, Window*>();
 

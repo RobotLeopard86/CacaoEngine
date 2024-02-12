@@ -2,7 +2,7 @@
 
 #include "Utilities/Utilities.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Make input instance null pointer by default
     Input* Input::instance = nullptr;
     //We don't have an instance by default

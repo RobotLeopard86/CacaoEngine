@@ -56,7 +56,7 @@ mv libimgui.a ../generated
 cd ../..
 
 clear
-echo "Citrus Engine setup is complete!"
+echo "Cacao Engine setup is complete!"
 echo "===================================="
 echo
 echo "Some components may require additional dependencies to be built."

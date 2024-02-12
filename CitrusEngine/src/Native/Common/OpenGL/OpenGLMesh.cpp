@@ -4,7 +4,7 @@
 
 #include "Utilities/StateManager.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     Mesh* Mesh::Create(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices){
         return new OpenGLMesh(vertices, indices);

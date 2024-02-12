@@ -1,6 +1,6 @@
 #include "ImGui/ImGuiWrapper.hpp"
 
-#include "Core/CitrusClient.hpp"
+#include "Core/CacaoClient.hpp"
 
 #include "GLFW/glfw3.h"
 
@@ -9,10 +9,10 @@
 
 //GLFW+X11+OpenGL3 ImGui Backend
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     bool ImGuiWrapper::InitImGuiBackend(){
-        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)CitrusClient::GetWindow()->GetNativeWindow(), true);
+        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)CacaoClient::GetWindow()->GetNativeWindow(), true);
         return ImGui_ImplOpenGL3_Init("#version 330");
     }
 
@@ -31,6 +31,6 @@ namespace CitrusEngine {
     }
 
     void ImGuiWrapper::ImGuiBackendPostViewport(){
-        glfwMakeContextCurrent((GLFWwindow*)CitrusClient::GetWindow()->GetNativeWindow());
+        glfwMakeContextCurrent((GLFWwindow*)CacaoClient::GetWindow()->GetNativeWindow());
     }
 }

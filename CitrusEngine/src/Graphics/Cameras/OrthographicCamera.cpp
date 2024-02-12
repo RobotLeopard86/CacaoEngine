@@ -4,7 +4,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 	//The constructor creates an orthographic camera, with the left, right, top, and bottom values determining the aspect ratio
 	OrthographicCamera::OrthographicCamera(glm::vec2 projection)
 		: projectionMatrix(glm::ortho(-projection.x, projection.x, -projection.y, projection.y, -1.0f, 1.0f)), viewMatrix(1.0f), position(0.0f), rotation(0.0f), projectionBox(projection) {

@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
 	//Cubemap texture
     //Must be implemented per-rendering API

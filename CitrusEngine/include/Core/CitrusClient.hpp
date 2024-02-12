@@ -8,13 +8,13 @@
 
 #include "Graphics/Window.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //Singleton client
-    class CitrusClient {
+    class CacaoClient {
     public:
-        CitrusClient();
-        virtual ~CitrusClient();
+        CacaoClient();
+        virtual ~CacaoClient();
         
         //Runs the client
         void Run();
@@ -38,7 +38,7 @@ namespace CitrusEngine {
         std::string windowTitle;
         glm::uvec2 windowSize;
     private:
-        static CitrusClient* instance;
+        static CacaoClient* instance;
 
         static Window* window;
 

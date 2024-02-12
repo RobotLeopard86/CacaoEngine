@@ -2,7 +2,7 @@
 
 #include "glad/gl.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     void Camera::Clear() {
         glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);

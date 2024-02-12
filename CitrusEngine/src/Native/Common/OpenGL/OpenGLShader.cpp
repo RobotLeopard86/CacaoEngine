@@ -5,7 +5,7 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     Shader* Shader::Create(std::string vertexSrc, std::string fragmentSrc){
         return new OpenGLShader(vertexSrc, fragmentSrc);

@@ -7,7 +7,7 @@
 #include "Events.hpp"
 #include "EventConsumer.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     class EventManager {
     public:

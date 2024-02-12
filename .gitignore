@@ -1,13 +1,12 @@
 # Don't send builds
-Build
-citruscore/build
-citrusglglfw/build
+cacaocore/build
+cacaoglglfw/build
 
 # Don't send generated library files
 libs/generated
 
 # Don't send auto-created logs
-citrus-engine.log
+cacao-engine.log
 
 # Don't send VS Code files
 .vscode
