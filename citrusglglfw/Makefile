@@ -21,11 +21,11 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../citruscore/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
+INCLUDES := -Iinclude -I../citruscore/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/assimp/include -I../libs/generated
 DEFINES := -DGLFW_INCLUDE_NONE
-LIBS := -l:libglad_gl.a -l:libglfw.so -l:libimgui_gl_glfw.a
-LIBDIRS := -L/usr/lib64 -L../libs/generated
-MISCOPTS := -std=gnu++20 -c
+LIBS := -l:libglad_gl.a -lglfw -l:libimgui_gl_glfw.a
+LIBDIRS := -L../libs/generated
+MISCOPTS := -std=c++20 -c
 CFGFLAGS :=
 
 SRCDIR := src

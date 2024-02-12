@@ -8,5 +8,6 @@ namespace Citrus {
 	struct GLShaderData {
 		GLint gpuID;
 		std::map<const char*, GLint> uniformLocations;
+		std::string vertexCode, fragmentCode;
 	};
 }

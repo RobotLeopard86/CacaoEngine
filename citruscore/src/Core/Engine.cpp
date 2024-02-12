@@ -41,11 +41,7 @@ namespace Citrus {
 		threadPool.reset(std::thread::hardware_concurrency() - 3); //Minus 3 because of frame pipeline threads
 
 		//Open the window
-		Window::GetInstance()->Open(GetWindowTitle(), 1280, 720);
-
-		//Run client startup hook
-		Logging::EngineLog("Running client startup hook...");
-		OnStartup();
+		Window::GetInstance()->Open("Citrus", 1280, 720);
 
 		Logging::EngineLog("Engine startup complete!");
 
@@ -67,13 +63,16 @@ namespace Citrus {
 			logic.wait();
 			process.wait();
 			render.wait();
+
+			//Update window
+			Window::GetInstance()->Update();
 		}
 
 		Logging::EngineLog("Shutting down engine...");
 
-		//Run client shutdown hook
-		Logging::EngineLog("Running client shutdown hook...");
-		OnShutdown();
+		//Shutdown render phase system
+		Logging::EngineLog("Shutting down render system...");
+		RenderPhase::GetInstance()->Shutdown();
 
 		//Close window
 		Window::GetInstance()->Close();

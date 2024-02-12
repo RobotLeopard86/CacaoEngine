@@ -21,17 +21,17 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
+INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
 DEFINES :=
-LIBS := -l:libassimp.a -l:libdraco.a -l:libstb_image.a -l:libimgui.a
-LIBDIRS := -L/usr/lib64 -L../libs/generated
-MISCOPTS := -std=gnu++20 -c
+LIBS :=
+LIBDIRS :=
+MISCOPTS := -std=c++20 -c
 CFGFLAGS :=
 
 SRCDIR := src
 OBJDIR := build/$(target)/$(config)/obj
 BINDIR := build/$(target)/$(config)/bin
-BIN := $(BINDIR)/libcitruscore.so
+BIN := $(BINDIR)/libcitruscore.a
 
 ifeq ($(config),debug)
 	CFGFLAGS += -g -DCE_ENV_DEBUG
@@ -39,7 +39,7 @@ else ifeq ($(config),release)
 	CFGFLAGS += -O2 -s -DCE_ENV_RELEASE
 endif
 
-OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(LIBS) $(MISCOPTS) $(CFGFLAGS)
+OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(MISCOPTS) $(CFGFLAGS)
 
 OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o $(OBJDIR)/LogicPhase.o $(OBJDIR)/ProcessPhase.o $(OBJDIR)/RenderPhase.o
 
@@ -71,7 +71,7 @@ link:
 	@echo ""
 	@echo "Citrus Core build: Link Library (2/2)"
 	@echo "Linking '$(BIN)'..."
-	@$(cpp) -shared $(OBJECTS) $(CFGFLAGS) $(LIBDIRS) $(LIBS) $(subst -c,,$(MISCOPTS)) -o $(BIN)
+	@ar -rcs $(BIN) $(OBJECTS)
 
 build: dirs prebuild $(OBJECTS) link
 	@:
