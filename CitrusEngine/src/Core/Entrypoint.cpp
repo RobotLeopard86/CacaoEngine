@@ -3,12 +3,12 @@
 
 int main(int argc, char** argv){
     //Setup loggers
-    CitrusEngine::Logging::Setup();
+    CacaoEngine::Logging::Setup();
 
     //Create client
-    CitrusEngine::CitrusClient* client = CreateClient();
+    CacaoEngine::CacaoClient* client = CreateClient();
 
-    CitrusEngine::Logging::EngineLog(CitrusEngine::LogLevel::Info, "Welcome to Citrus Engine!");
+    CacaoEngine::Logging::EngineLog(CacaoEngine::LogLevel::Info, "Welcome to Cacao Engine!");
 
     //Run client
     client->Run();

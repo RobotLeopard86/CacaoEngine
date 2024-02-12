@@ -5,7 +5,7 @@
 #include <functional>
 #include <vector>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //EventConsumer wraps a function consumer
     class EventConsumer {

@@ -6,7 +6,7 @@
 
 #include <filesystem>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //Required definitions of static members
     std::shared_ptr<spdlog::logger> Logging::engineLogger = nullptr;
@@ -20,14 +20,14 @@ namespace CitrusEngine {
         sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 
         //Get logfile path
-        std::string logfilepath = std::filesystem::current_path().string() + "/citrus-engine.log";
+        std::string logfilepath = std::filesystem::current_path().string() + "/cacao-engine.log";
 
         //File output sink
         sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfilepath, true));
 
         //Create engine and client loggers that write to both defined sinks
-        engineLogger = std::make_shared<spdlog::logger>("citrusengine", begin(sinks), end(sinks));
-        clientLogger = std::make_shared<spdlog::logger>("citrusclient", begin(sinks), end(sinks));
+        engineLogger = std::make_shared<spdlog::logger>("cacaoengine", begin(sinks), end(sinks));
+        clientLogger = std::make_shared<spdlog::logger>("cacaoclient", begin(sinks), end(sinks));
 
         //Register loggers with spdlog so that they use the defined pattern
         spdlog::register_logger(engineLogger);

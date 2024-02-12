@@ -1,9 +1,9 @@
 #pragma once
 
-//This file serves as an include for client applications and is not used in the Citrus Engine internal codebase
+//This file serves as an include for client applications and is not used in the Cacao Engine internal codebase
 
 #include "Core/Entrypoint.hpp"
-#include "Core/CitrusClient.hpp"
+#include "Core/CacaoClient.hpp"
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
 #include "Events/EventSystem.hpp"

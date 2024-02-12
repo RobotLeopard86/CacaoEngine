@@ -4,7 +4,7 @@
 
 /*#include "Camera.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 	//Implement an orthographic camera (method explanations found in Camera.hpp)
 	class OrthographicCamera : public Camera {
 	public:

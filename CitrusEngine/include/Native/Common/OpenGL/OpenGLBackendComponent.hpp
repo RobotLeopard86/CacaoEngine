@@ -2,7 +2,7 @@
 
 #include "glad/gl.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //OpenGL version of Backend.hpp (does not implement Backend.hpp symbols)
     //Used to manage the OpenGL backend component

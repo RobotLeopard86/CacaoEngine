@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Must be implemented per-rendering API
     class Mesh {
     public:

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //Class for controlling the backend
     class Backend {

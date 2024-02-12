@@ -8,7 +8,7 @@
 
 #include "glm/gtx/transform.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
 	//Initialize static resources
 	bool Skybox::isSetup = false;

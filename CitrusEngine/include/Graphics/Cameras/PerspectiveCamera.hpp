@@ -4,7 +4,7 @@
 
 #include "glm/glm.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 	//Implement a perspective camera (method explanations found in Camera.hpp)
 	class PerspectiveCamera : public Camera {
 	public:

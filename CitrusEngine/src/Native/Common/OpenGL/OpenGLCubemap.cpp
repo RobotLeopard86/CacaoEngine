@@ -9,7 +9,7 @@
 
 #include <filesystem>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
 	Cubemap* Cubemap::CreateFromFiles(std::vector<std::string> filePaths) {
 		for(std::string tex : filePaths){

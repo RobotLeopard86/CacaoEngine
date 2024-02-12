@@ -8,7 +8,7 @@
 #include "glm/mat4x4.hpp"
 #include "glm/mat3x3.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Must be implemented per-rendering API
     class Shader {
     public:

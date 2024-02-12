@@ -8,7 +8,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     
     //All subclasses of Event MUST have a default constructor with zero arguments
     class Event {

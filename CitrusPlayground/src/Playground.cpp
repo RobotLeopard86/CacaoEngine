@@ -1,20 +1,20 @@
-#include "CitrusEngine.hpp"
+#include "CacaoEngine.hpp"
 
 #include <string>
 #include <sstream>
 
-using namespace CitrusEngine;
+using namespace CacaoEngine;
 
-class PlaygroundClient : public CitrusClient {
+class PlaygroundClient : public CacaoClient {
 public:
-    PlaygroundClient() { windowTitle = "Citrus Playground"; windowSize = {1280, 720}; }
+    PlaygroundClient() { windowTitle = "Cacao Playground"; windowSize = {1280, 720}; }
 
     std::string Vec3ToString(glm::vec3 vec){
         return "{ X: " + std::to_string(vec.x) + ", Y: " + std::to_string(vec.y) + ", Z: " + std::to_string(vec.z) + " }";
     }
 
     void ClientOnStartup() override {
-        mdl = new Model("CitrusPlayground/assets/model.fbx");
+        mdl = new Model("CacaoPlayground/assets/model.fbx");
 
         transform = new Transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
 
@@ -52,10 +52,10 @@ public:
         shader = Shader::Create(vertexShaderSource, fragmentShaderSource);
         shader->Compile();
 
-        tex = Texture2D::CreateFromFile("CitrusPlayground/assets/model.fbm/color.png");
+        tex = Texture2D::CreateFromFile("CacaoPlayground/assets/model.fbm/color.png");
         tex->Compile();
 
-		skyTex = Cubemap::CreateFromFiles({"CitrusPlayground/assets/sky/right.jpg", "CitrusPlayground/assets/sky/left.jpg", "CitrusPlayground/assets/sky/top.jpg", "CitrusPlayground/assets/sky/bottom.jpg", "CitrusPlayground/assets/sky/front.jpg", "CitrusPlayground/assets/sky/back.jpg"});
+		skyTex = Cubemap::CreateFromFiles({"CacaoPlayground/assets/sky/right.jpg", "CacaoPlayground/assets/sky/left.jpg", "CacaoPlayground/assets/sky/top.jpg", "CacaoPlayground/assets/sky/bottom.jpg", "CacaoPlayground/assets/sky/front.jpg", "CacaoPlayground/assets/sky/back.jpg"});
 		skyTex->Compile();
 
 		sky = Skybox::Create(skyTex);
@@ -87,22 +87,22 @@ public:
 
     void ClientOnDynamicTick(double timestep) override {
         glm::vec3 camRotChange = glm::vec3(0.0f);
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_J)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_J)){
             camRotChange.y -= 0.5f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_K)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_K)){
             camRotChange.y += 0.5f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Y)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_Y)){
             camRotChange.x += 0.5f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_U)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_U)){
             camRotChange.x -= 0.5f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_X)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)){
             camRotChange.z += 0.5f;
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_C)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_C)){
             camRotChange.z -= 0.5f;
         }
         currentRot = cam->GetRotation().ToVec3();
@@ -129,22 +129,22 @@ public:
         }
 
         glm::vec3 posChange = glm::vec3(0.0f);
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_W)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)){
             posChange += cam->GetFrontVector() * 1000.0f * float(timestep);
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_S)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_S)){
             posChange -= cam->GetFrontVector() * 1000.0f * float(timestep);
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_D)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_D)){
             posChange += cam->GetRightVector() * 1000.0f * float(timestep);
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_A)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_A)){
             posChange -= cam->GetRightVector() * 1000.0f * float(timestep);
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_E)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_E)){
             posChange += cam->GetUpVector() * 1000.0f * float(timestep);
         }
-        if(Input::GetInstance()->IsKeyPressed(CITRUS_KEY_Q)){
+        if(Input::GetInstance()->IsKeyPressed(CACAO_KEY_Q)){
             posChange -= cam->GetUpVector() * 1000.0f * float(timestep);
         }
 
@@ -260,6 +260,6 @@ private:
     EventConsumer* uiDrawConsumer;
 };
 
-CitrusClient* CreateClient() {
+CacaoClient* CreateClient() {
     return new PlaygroundClient();
 }

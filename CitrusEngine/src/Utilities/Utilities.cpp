@@ -1,6 +1,6 @@
 #include "Utilities/Utilities.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Make utilities instance null pointer by default
     Utilities* Utilities::instance = nullptr;
     //We don't have an instance by default

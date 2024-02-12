@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     enum LogLevel {
         Trace=0, //Debug information, usually unneeded (e.g. renderer backend info)
         Info=1, //Information (e.g. engine starting)

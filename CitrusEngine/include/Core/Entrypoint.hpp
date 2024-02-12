@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CitrusClient.hpp"
+#include "CacaoClient.hpp"
 
 //Implemented by client
-CitrusEngine::CitrusClient* CreateClient();
+CacaoEngine::CacaoClient* CreateClient();

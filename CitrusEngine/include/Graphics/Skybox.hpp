@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Must be implemented per-rendering API
     class Skybox {
     public:

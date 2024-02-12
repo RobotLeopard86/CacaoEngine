@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
 	//2D texture
     //Must be implemented per-rendering API

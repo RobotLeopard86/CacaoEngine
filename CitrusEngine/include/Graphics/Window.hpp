@@ -6,7 +6,7 @@
 
 #include "glm/vec2.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     
     //Platform-agnostic window class
     class Window {

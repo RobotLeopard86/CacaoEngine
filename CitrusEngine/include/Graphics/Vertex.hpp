@@ -2,7 +2,7 @@
 
 #include "glm/glm.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     struct Vertex {
         const glm::vec3 position;
         const glm::vec2 texCoords;

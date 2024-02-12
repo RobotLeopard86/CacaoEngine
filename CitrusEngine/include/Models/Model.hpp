@@ -6,7 +6,7 @@
 
 #include "Graphics/Mesh.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Internal representation of a model
     class Model {
     public:

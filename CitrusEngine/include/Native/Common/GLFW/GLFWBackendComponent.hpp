@@ -2,7 +2,7 @@
 
 #include "GLFW/glfw3.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //GLFW version of Backend.hpp (does not implement Backend.hpp symbols)
     //Used to manage the GLFW backend component

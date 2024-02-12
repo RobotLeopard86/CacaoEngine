@@ -5,7 +5,7 @@
 #include "Native/Common/GLFW/GLFWBackendComponent.hpp"
 #include "Native/Common/OpenGL/OpenGLBackendComponent.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //Neither backend nor renderer are initialized by default
     bool Backend::initialized = false;

@@ -2,7 +2,7 @@
 
 #include "Core/Assert.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
     //Make state manager instance null pointer by default
     StateManager* StateManager::instance = nullptr;
     //We don't have an instance by default

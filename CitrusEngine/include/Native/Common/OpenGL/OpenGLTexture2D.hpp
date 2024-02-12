@@ -4,7 +4,7 @@
 
 #include "glad/gl.h"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //OpenGL implementation of Texture2D (see Texture2D.hpp for method details)
     class OpenGLTexture2D : public Texture2D {

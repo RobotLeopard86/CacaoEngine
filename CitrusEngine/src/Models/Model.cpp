@@ -11,7 +11,7 @@
 #include <filesystem>
 #include <ranges>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     Model::Model(std::string filePath){
         //Confirm that provided file path exists

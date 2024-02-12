@@ -1,4 +1,4 @@
-#include "Core/CitrusClient.hpp"
+#include "Core/CacaoClient.hpp"
 #include "Core/Assert.hpp"
 #include "Core/Backend.hpp"
 #include "Core/Log.hpp"
@@ -10,14 +10,14 @@
 
 #include "Graphics/Skybox.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //Required definitions of static members
-    CitrusClient* CitrusClient::instance = nullptr;
-    bool CitrusClient::instanceExists = false;
-    Window* CitrusClient::window = nullptr;
+    CacaoClient* CacaoClient::instance = nullptr;
+    bool CacaoClient::instanceExists = false;
+    Window* CacaoClient::window = nullptr;
 
-    CitrusClient::CitrusClient(){
+    CacaoClient::CacaoClient(){
         //Confirm we are initializing the first client
         Asserts::EngineAssert(!instanceExists, "Client instance already exists!");
 
@@ -29,9 +29,9 @@ namespace CitrusEngine {
         run = true;
 
         //Set up event consumers
-        wceConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::Shutdown));
-        fixedTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::FixedTickHandler));
-        dynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CitrusClient::DynamicTickHandler));
+        wceConsumer = new EventConsumer(BIND_MEMBER_FUNC(CacaoClient::Shutdown));
+        fixedTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CacaoClient::FixedTickHandler));
+        dynamicTickConsumer = new EventConsumer(BIND_MEMBER_FUNC(CacaoClient::DynamicTickHandler));
 
         //Set up event manager and subscribe consumers
         EventManager::GetInstance()->SubscribeConsumer("WindowClose", wceConsumer);
@@ -40,9 +40,9 @@ namespace CitrusEngine {
     }
 
     //Base client does not need a destructor
-    CitrusClient::~CitrusClient() {}
+    CacaoClient::~CacaoClient() {}
 
-    void CitrusClient::Run(){
+    void CacaoClient::Run(){
         //Initialize the backend
         if(!Backend::Initialize()){
             Logging::EngineLog(LogLevel::Fatal, "Backed initialization failed! Shutting down prematurely...");
@@ -118,7 +118,7 @@ namespace CitrusEngine {
         delete fixedTickConsumer;
     }
 
-    void CitrusClient::Shutdown(Event& e){
+    void CacaoClient::Shutdown(Event& e){
         //Allow client to shut down
         ClientOnShutdown();
 
@@ -129,12 +129,12 @@ namespace CitrusEngine {
         run = false;
     }
 
-    void CitrusClient::FixedTickHandler(Event& e){
+    void CacaoClient::FixedTickHandler(Event& e){
         ClientOnFixedTick();
         e.handled = true;
     }
 
-    void CitrusClient::DynamicTickHandler(Event& e){
+    void CacaoClient::DynamicTickHandler(Event& e){
         DynamicTickEvent cdte = Event::EventTypeCast<DynamicTickEvent>(e);
         ClientOnDynamicTick(cdte.timestep);
         e.handled = true;

@@ -6,7 +6,7 @@
 
 #include <map>
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 
     //OpenGL implementation of Shader (see Shader.hpp for method details)
     class OpenGLShader : public Shader {

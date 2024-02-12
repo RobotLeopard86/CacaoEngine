@@ -2,7 +2,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-namespace CitrusEngine {
+namespace CacaoEngine {
 	/*
 	The constructor creates the perspective projection matrix using the provided FOV (field of view)
 	and aspect ratio, and a near clipping plane (where objects stop rendering when too close to the camera)
