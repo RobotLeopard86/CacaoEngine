@@ -12,7 +12,6 @@
 #include "3D/Transform.hpp"
 #include "3D/Vertex.hpp"
 #include "3D/Skybox.hpp"
-#include "World/Actor.hpp"
 #include "World/Entity.hpp"
 #include "World/World.hpp"
 #include "World/WorldManager.hpp"

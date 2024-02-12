@@ -11,7 +11,3 @@ citrus-engine.log
 
 # Don't send VS Code files
 .vscode
-
-# Don't send testing files
-a.cpp
-a

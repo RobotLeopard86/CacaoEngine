@@ -38,14 +38,3 @@ namespace Citrus {
 		std::chrono::time_point<std::chrono::steady_clock> lastFrame;
 	};
 }
-
-//Client code hooks
-
-//Runs once on engine startup
-void OnStartup();
-
-//Runs once on engine shutdown
-void OnShutdown();
-
-//Get the target window title
-std::string GetWindowTitle();

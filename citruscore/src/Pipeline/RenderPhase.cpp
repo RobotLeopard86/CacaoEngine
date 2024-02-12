@@ -27,7 +27,7 @@ namespace Citrus {
 			//Execute job commands
 			for(RenderCmd cmd : job.renderCmds){
 				//Validate that this command is good to go
-				if(!cmd.material.shader.IsCompiled()) continue;
+				if(!cmd.material.shader->IsCompiled()) continue;
 				if(!cmd.mesh->IsCompiled()) continue;
 
 				//Execute the command

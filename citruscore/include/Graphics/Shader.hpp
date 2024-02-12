@@ -2,12 +2,14 @@
 
 #include <vector>
 #include <filesystem>
+#include <map>
+#include <any>
 
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
-#include "glm/mat4x4.hpp"
-#include "glm/mat3x3.hpp"
+#include "Core/Log.hpp"
+#include "Core/Assert.hpp"
+
+#include "spirv_cross.hpp"
+#include "glm/glm.hpp"
 
 namespace Citrus {
     //Must be implemented per-rendering API
@@ -15,18 +17,24 @@ namespace Citrus {
     class Shader {
     public:
 		//Create a shader from raw SPIR-V code loaded separately
-		Shader(const std::vector<char>& rawVertCode, const std::vector<char>& rawFragCode);
+		Shader(const std::vector<uint32_t>& vertex, const std::vector<uint32_t>& fragment);
 		//Create a shader from file paths
 		Shader(std::filesystem::path vertex, std::filesystem::path fragment);
 
+		~Shader() {
+			if(compiled && bound) Unbind();
+			if(compiled) Release();
+			free(nativeData);
+		}
+
         //Use this shader
-        void Bind() {}
+        void Bind();
         //Don't use this shader
-        void Unbind() {}
+        void Unbind();
         //Compile shader to be used later
-        void Compile() {}
+        void Compile();
         //Delete shader when no longer needed
-        void Release() {}
+        void Release();
 
         //Is shader compiled?
         bool IsCompiled() { return compiled; }
@@ -34,34 +42,55 @@ namespace Citrus {
         //Is shader bound?
         bool IsBound() { return bound; }
 
-        //Uniform uploading functions
-
-        //Uploads 4x4 float matrix
-        virtual void UploadUniformMat4(std::string uniform, glm::mat4 value) {}
-        //Uploads 3x3 float matrix
-        virtual void UploadUniformMat3(std::string uniform, glm::mat3 value) {}
-        //Uploads one boolean value
-        virtual void UploadUniformBoolean(std::string uniform, bool value) {}
-        //Uploads one float value
-        virtual void UploadUniformFloat(std::string uniform, float value) {}
-        //Uploads a two-component float vector
-        virtual void UploadUniformFloat2(std::string uniform, glm::vec2 value) {}
-        //Uploads a three-component float vector
-        virtual void UploadUniformFloat3(std::string uniform, glm::vec3 value) {}
-        //Uploads a four-component float vector
-        virtual void UploadUniformFloat4(std::string uniform, glm::vec4 value) {}
-        //Uploads one integer value
-        virtual void UploadUniformInt(std::string uniform, int value) {}
-        //Uploads a two-component integer vector
-        virtual void UploadUniformInt2(std::string uniform, glm::ivec2 value) {}
-        //Uploads a three-component integer vector
-        virtual void UploadUniformInt3(std::string uniform, glm::ivec3 value) {}
-        //Uploads a four-component integer vector
-        virtual void UploadUniformInt4(std::string uniform, glm::ivec4 value) {}
+		//Read-only access to native data
+		const int const* GetNativeData() { return nativeData; }
     protected:
         bool compiled;
         bool bound;
 
-		std::string vertCode, fragCode;
+		//This should be a struct, NOT A CLASS WITH METHODS
+		void* nativeData;
     };
+
+	//Shader data system
+
+	//Shader data entry
+	struct ShaderDataEntry {
+		//Actual data
+		std::any data;
+
+		//Data for rendering system
+		//If type of data changes, these values MUST be updated
+
+		//Base type (e.g. int, float)
+		spirv_cross::TypeID type;
+
+		//Data size (x for number of vector components, y for number of vectors in a matrix)
+		//Example: a vec3 would be {3, 1}, a mat4 would be {4, 4}, and a scalar would be {1, 1}
+		glm::ivec2 size;
+	};
+
+	struct ShaderData {
+	public:
+		ShaderDataEntry& operator[](std::string item){
+			if(!data.contains(item)) {
+				data.insert_or_assign(item, ShaderDataEntry{});
+			}
+			return data.at(item);
+		}
+
+		bool EntryExists(std::string item){
+			return data.contains(item);
+		}
+
+		void RemoveEntry(std::string entry){
+			if(!data.contains(entry)){
+				Logging::EngineLog("Can't remove nonexistent shader data entry!", LogLevel::Error);
+				return;
+			}
+			data.erase(entry);
+		}
+	private:
+		std::map<std::string, ShaderDataEntry> data;
+	};
 }

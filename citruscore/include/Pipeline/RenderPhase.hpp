@@ -3,6 +3,8 @@
 #include <queue>
 #include <future>
 
+#include "glm/mat4x4.hpp"
+
 #include "RenderJob.hpp"
 
 namespace Citrus {
@@ -24,6 +26,15 @@ namespace Citrus {
 		void QueueJob(RenderJob job) {
 			renderQueue.push(job);
 		}
+
+		//Shuts down the render phase
+		//Calling GetInstance again will re-create the instance
+		void Shutdown() {
+			BeforeShutdown();
+			free(nativeData);
+			instanceExists = false;
+			delete this;
+		}
 	private:
 		//Singleton members
 		static RenderPhase* instance;
@@ -37,7 +48,11 @@ namespace Citrus {
 		//Needs backend implementation
 		//Execute a render command
 		void ExecuteRenderCmd(RenderCmd cmd);
+		void Prerender(glm::mat4 pm, glm::mat4 vm);
+		void BeforeShutdown();
 
-		RenderPhase() {}
+		void* nativeData;
+
+		RenderPhase();
 	};
 }
