@@ -28,10 +28,6 @@ namespace Cacao {
 		//Access a world
 		World& AccessWorld(std::string name);
 
-		//Commit active world data for processing
-		void Commit();
-
-		bool HasCommitOccurred() { return commitedWorldExists; }
 	private:
 		//Singleton members
 		static WorldManager* instance;
@@ -42,12 +38,6 @@ namespace Cacao {
 
 		//Active world ID
 		std::string activeWorld;
-
-		//World which is committed for processing
-		World commitedWorld;
-
-		//Is there a committed world?
-		bool commitedWorldExists = false;
 
 		WorldManager() {}
 	};

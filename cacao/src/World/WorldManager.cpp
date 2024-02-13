@@ -56,11 +56,4 @@ namespace Cacao {
 
 		return worlds[name];
 	}
-
-	void WorldManager::Commit(){
-		Asserts::EngineAssert(worlds.contains(activeWorld), "Can't commit world state for a world that doesn't exist!");
-
-		commitedWorld = World(worlds[activeWorld]);
-		commitedWorldExists = true;
-	}
 }

@@ -4,15 +4,11 @@ ifeq (.exe,$(findstring .exe,$(ComSpec)))
 endif
 
 ifndef c
-	c=zig cc
+  c=clang
 endif
 
 ifndef cpp
-	cpp=zig c++
-endif
-
-ifndef target
-	target=$(shell $(cpp) -dumpmachine)
+  cpp=clang++
 endif
 
 ifndef config
@@ -23,15 +19,15 @@ endif
 
 INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
 DEFINES :=
-LIBS :=
-LIBDIRS :=
+LIBS := -lassimp -lstb_image -l$(backend)
+LIBDIRS := -L../libs/generated -L../$(backend)/build/$(config)/bin
 MISCOPTS := -std=c++20 -c
 CFGFLAGS :=
 
 SRCDIR := src
-OBJDIR := build/$(target)/$(config)/obj
-BINDIR := build/$(target)/$(config)/bin
-BIN := $(BINDIR)/libcacaocore.a
+OBJDIR := build/$(config)/obj
+BINDIR := build/$(backend)/$(config)/bin
+BIN := $(BINDIR)/cacao
 
 ifeq ($(config),debug)
 	CFGFLAGS += -g -DCE_ENV_DEBUG
@@ -39,9 +35,9 @@ else ifeq ($(config),release)
 	CFGFLAGS += -O2 -s -DCE_ENV_RELEASE
 endif
 
-OPTS := $(INCLUDES) $(DEFINES) $(LIBDIRS) $(MISCOPTS) $(CFGFLAGS)
+OPTS := $(INCLUDES) $(DEFINES) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o $(OBJDIR)/LogicPhase.o $(OBJDIR)/ProcessPhase.o $(OBJDIR)/RenderPhase.o
+OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o
 
 default: build
 
@@ -65,15 +61,19 @@ else
 endif 
 
 prebuild:
-	@echo "Cacao Core build: Compile Objects (1/2)"
+ifeq (,$(backend))
+	@echo "Specify the backend parameter! This should be one of the backends listed in BACKENDS.txt."
+	@false
+endif
+	@echo "Cacao Engine build: Compile Objects (1/2)"
 
 link:
 	@echo ""
-	@echo "Cacao Core build: Link Library (2/2)"
+	@echo "Cacao Engine build: Link Executable (2/2)"
 	@echo "Linking '$(BIN)'..."
-	@ar -rcs $(BIN) $(OBJECTS)
+	@$(cpp) $(OBJECTS) $(CFGFLAGS) $(LIBDIRS) $(LIBS) $(subst -c,,$(MISCOPTS)) -o $(BIN)
 
-build: dirs prebuild $(OBJECTS) link
+build: prebuild dirs $(OBJECTS) link
 	@:
 
 # Files
@@ -116,17 +116,5 @@ $(OBJDIR)/PerspectiveCamera.o: $(SRCDIR)/Cameras/PerspectiveCamera.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/WorldManager.o: $(SRCDIR)/World/WorldManager.cpp
-	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
-
-$(OBJDIR)/LogicPhase.o: $(SRCDIR)/Pipeline/LogicPhase.cpp
-	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
-
-$(OBJDIR)/ProcessPhase.o: $(SRCDIR)/Pipeline/ProcessPhase.cpp
-	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
-
-$(OBJDIR)/RenderPhase.o: $(SRCDIR)/Pipeline/RenderPhase.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

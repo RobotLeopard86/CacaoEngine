@@ -10,9 +10,9 @@ if ! [ -f $(which ninja) ]; then
 	echo "Error: Ninja not found in path."
 	exit 1
 fi
-echo "Checking for Zig in PATH..."
-if ! [ -f $(which zig) ]; then
-	echo "Error: Zig not found in path."
+echo "Checking for Clang in PATH..."
+if ! [ -f $(which clang) ]; then
+	echo "Error: Clang not found in path."
 	exit 1
 fi
 
@@ -28,18 +28,18 @@ mkdir -p libs/generated
 echo "Building Assimp..."
 cd libs/assimp
 mkdir -p build && cd build
-cmake .. -GNinja -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_DRACO=ON -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF 
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=ON -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF 
 ninja
-cp lib/libassimp.a lib/libdraco.a ../../generated
+cp bin/libassimp.so.5.2.5 ../../generated/libassimp.so
 cp -R include/assimp ../../generated
-cp revision.h draco/draco_features.h contrib/zlib/zconf.h ../../generated
+cp revision.h contrib/zlib/zconf.h ../../generated
 
 cd ../
 rm -rf build
 
 echo "Building stb..."
 cd ../stb
-zig cc stb_image.c -c -o stb_image.o
+clang stb_image.c -c -o stb_image.o
 ar -rcs libstb_image.a stb_image.o
 rm stb_image.o
 mv libstb_image.a ../generated
@@ -47,7 +47,7 @@ echo "Building ImGui..."
 cd ../imgui
 imguisrc="imgui.cpp imgui_tables.cpp imgui_draw.cpp imgui_widgets.cpp imgui_demo.cpp"
 for src in $imguisrc; do
-	zig c++ $src -c -o $(echo $src | sed 's/\.cpp/\.o/g')
+	clang++ $src -c -o $(echo $src | sed 's/\.cpp/\.o/g')
 done
 ar -rcs libimgui.a ./*.o
 rm ./*.o

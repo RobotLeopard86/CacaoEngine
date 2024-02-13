@@ -2,6 +2,7 @@
 
 #include "Entity.hpp"
 #include "3D/Skybox.hpp"
+#include "Graphics/Cameras/Camera.hpp"
 
 #include <optional>
 
@@ -12,7 +13,7 @@ namespace Cacao {
 		//Entities at the top level of the world
 		std::vector<Entity> topLevelEntities;
 
-		//Optional pointer to a skybox
+		//Optional skybox
 		std::optional<Skybox*> skybox;
 	};
 }
