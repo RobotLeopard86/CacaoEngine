@@ -1,6 +1,5 @@
 # Don't send builds
-cacaocore/build
-cacaoglglfw/build
+*/build
 
 # Don't send generated library files
 libs/generated

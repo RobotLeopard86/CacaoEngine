@@ -2,9 +2,6 @@
 #include "Core/Log.hpp"
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
-#include "Pipeline/LogicPhase.hpp"
-#include "Pipeline/ProcessPhase.hpp"
-#include "Pipeline/RenderPhase.hpp"
 
 #include <future>
 
@@ -54,25 +51,11 @@ namespace Cacao {
 			if(timestep < 50) continue;
 			lastFrame = std::chrono::steady_clock::now();
 
-			//Run frame pipeline
-			std::future<void> logic = LogicPhase::GetInstance()->Run();
-			std::future<void> process = ProcessPhase::GetInstance()->Run();
-			std::future<void> render = RenderPhase::GetInstance()->Run();
-
-			//Wait for all stages to finish
-			logic.wait();
-			process.wait();
-			render.wait();
-
 			//Update window
 			Window::GetInstance()->Update();
 		}
 
 		Logging::EngineLog("Shutting down engine...");
-
-		//Shutdown render phase system
-		Logging::EngineLog("Shutting down render system...");
-		RenderPhase::GetInstance()->Shutdown();
 
 		//Close window
 		Window::GetInstance()->Close();

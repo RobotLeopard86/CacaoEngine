@@ -47,7 +47,7 @@ namespace Cacao {
 		Shader(vbuf, fbuf);
 	}
 
-	Shader::Shader(const std::vector<uint32_t>& vertex, const std::vector<uint32_t>& fragment)
+	Shader::Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment)
 		:compiled(false), bound(false) {
 		//Create native data
 		nativeData = new GLShaderData();
