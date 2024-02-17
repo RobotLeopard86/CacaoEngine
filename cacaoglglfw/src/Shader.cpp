@@ -83,7 +83,7 @@ namespace Cacao {
 		nd->fragmentCode = fragGLSL.compile();
 
 		//Create reflection objects
-		spv_reflect::ShaderModule vsm{}, fsm{};
+		SpvReflectShaderModule vsm, fsm;
 		Asserts::EngineAssert(spvReflectCreateShaderModule(vertex.size(), vertex.data(), &vsm) == SPV_REFLECT_RESULT_SUCCESS, "Couldn't create vertex shader reflection object!");
 		Asserts::EngineAssert(spvReflectCreateShaderModule(fragment.size(), fragment.data(), &fsm) == SPV_REFLECT_RESULT_SUCCESS, "Couldn't create fragment shader reflection object!");
 
@@ -95,10 +95,10 @@ namespace Cacao {
 		//Vertex shader
 		res = spvReflectEnumeratePushConstantBlocks(&vsm, &blocksCount, NULL);
 		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Vertex shader reflection uniform enumeration failed!");
-		std::vector<SpvReflectBlockVariable*> pushConstants(count);
-		res = spvReflectEnumeratePushConstantBlocks(&vsm, &blocksCount, pushConstants.data());
+		std::vector<SpvReflectBlockVariable*> pushConstantsV(blocksCount);
+		res = spvReflectEnumeratePushConstantBlocks(&vsm, &blocksCount, pushConstantsV.data());
 		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Vertex shader reflection uniform enumeration failed!");
-		for(SpvReflectBlockVariable* pc : pushConstants){
+		for(SpvReflectBlockVariable* pc : pushConstantsV){
 			//Is this the shader data block?
 			if(std::string(pc->type_description->type_name) != "ShaderData") continue;
 
@@ -108,7 +108,7 @@ namespace Cacao {
 			sdSize += pc->size;
 
 			//Set vertex data description
-			vertexDataDesc = *(pc->type_description.struct_type_description);
+			vertexDataDesc = *(pc->type_description->struct_type_description);
 
 			break;
 		}
@@ -116,10 +116,10 @@ namespace Cacao {
 		//Fragment shader
 		res = spvReflectEnumeratePushConstantBlocks(&fsm, &blocksCount, NULL);
 		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Fragment shader reflection uniform enumeration failed!");
-		std::vector<SpvReflectBlockVariable*> pushConstants(count);
-		res = spvReflectEnumeratePushConstantBlocks(&fsm, &blocksCount, pushConstants.data());
+		std::vector<SpvReflectBlockVariable*> pushConstantsF(blocksCount);
+		res = spvReflectEnumeratePushConstantBlocks(&fsm, &blocksCount, pushConstantsF.data());
 		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Fragment shader reflection uniform enumeration failed!");
-		for(SpvReflectBlockVariable* pc : pushConstants){
+		for(SpvReflectBlockVariable* pc : pushConstantsF){
 			//Is this the shader data block?
 			if(std::string(pc->type_description->type_name) != "ShaderData") continue;
 
@@ -129,7 +129,7 @@ namespace Cacao {
 			sdSize += pc->size;
 
 			//Set fragment data description
-			fragmentDataDesc = *(pc->type_description.struct_type_description);
+			fragmentDataDesc = *(pc->type_description->struct_type_description);
 
 			break;
 		}

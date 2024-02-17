@@ -37,7 +37,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Window.o $(OBJDIR)/Shader.o
+OBJECTS := $(OBJDIR)/Window.o $(OBJDIR)/Shader.o $(OBJDIR)/Mesh.o
 
 default: build
 
@@ -79,5 +79,8 @@ $(OBJDIR)/Window.o: $(SRCDIR)/Window.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
 $(OBJDIR)/Shader.o: $(SRCDIR)/Shader.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+$(OBJDIR)/Mesh.o: $(SRCDIR)/Mesh.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

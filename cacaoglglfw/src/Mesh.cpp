@@ -1,35 +1,27 @@
-#include "Native/Common/OpenGL/OpenGLMesh.hpp"
-
+#include "3D/Mesh.hpp"
+#include "GLMeshData.hpp"
+#include "Core/Log.hpp"
 #include "Core/Assert.hpp"
 
-#include "Utilities/StateManager.hpp"
+#include "glad/gl.h"
 
-namespace CacaoEngine {
+//For my sanity
+#define nd ((GLMeshData*)nativeData)
 
-	Mesh* Mesh::Create(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices){
-		return new OpenGLMesh(vertices, indices);
-	}
-
-	OpenGLMesh::OpenGLMesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices)
+namespace Cacao {
+	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices)
 		: vertices(vertices), indices(indices) {}
 
-	OpenGLMesh::~OpenGLMesh() {
+	void Mesh::Compile(){
 		if(compiled){
-			//Release OpenGL assets before destruction
-			Release();
-		}
-	}
-
-	void OpenGLMesh::Compile(){
-		if(compiled){
-			Logging::EngineLog(LogLevel::Error, "Cannot compile already compiled mesh!");
+			Logging::EngineLog("Cannot compile already compiled mesh!", LogLevel::Error);
 			return;
 		}
 
 		//Generate vertex arrays
-		glGenVertexArrays(1, &vertexArray);
-		glGenBuffers(1, &vertexBuffer);
-		glGenBuffers(1, &indexBuffer);
+		glGenVertexArrays(1, &nd->vao);
+		glGenBuffers(1, &nd->vao);
+		glGenBuffers(1, &nd->ibo);
 
 		//Unpack index buffer data from vec3 to floats
 		unsigned int ibd[indices.size() * 3];
@@ -41,15 +33,15 @@ namespace CacaoEngine {
 		}
 
 		//Bind vertex array to save buffer setup
-		glBindVertexArray(vertexArray);
+		glBindVertexArray(nd->vao);
 
 		//Bind vertex buffer
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, nd->vbo);
 		//Load vertex buffer with data
 		glBufferData(GL_ARRAY_BUFFER, (vertices.size() * sizeof(Vertex)), &vertices[0], GL_STATIC_DRAW);
 
 		//Bind index buffer
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nd->ibo);
 		//Load index buffer with data
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() * 3 * sizeof(unsigned int)), ibd, GL_STATIC_DRAW);
 
@@ -64,7 +56,7 @@ namespace CacaoEngine {
 		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
 
 		//Ensure OpenGL saves vertex array state
-		glBindVertexArray(vertexArray);
+		glBindVertexArray(nd->vao);
 
 		//Unbind vertex array once saved
 		glBindVertexArray(0);
@@ -72,34 +64,19 @@ namespace CacaoEngine {
 		compiled = true;
 	}
 
-	void OpenGLMesh::Release(){
+	void Mesh::Release(){
 		//Delete vertex array assets
-		glDeleteBuffers(1, &vertexBuffer);
-		glDeleteBuffers(1, &indexBuffer);
-		glDeleteVertexArrays(1, &vertexArray);
+		glDeleteBuffers(1, &nd->vbo);
+		glDeleteBuffers(1, &nd->ibo);
+		glDeleteVertexArrays(1, &nd->vao);
 
 		compiled = false;
 	}
 
-	void OpenGLMesh::Draw(Shader* shader, Transform* transform){
-		//Bind shader
-		shader->Bind();
-
-		//Upload uniforms
-		shader->UploadUniformMat4("model", transform->GetTransformationMatrix());
-		shader->UploadUniformMat4("view", StateManager::GetInstance()->GetActiveCamera()->GetViewMatrix());
-		shader->UploadUniformMat4("projection", StateManager::GetInstance()->GetActiveCamera()->GetProjectionMatrix());
-
-		//Enable face depth sorting
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-
+	void Mesh::Draw(){
 		//Draw object
 		glBindVertexArray(nd->vao);
 		glDrawElements(GL_TRIANGLES, (indices.size() * 3), GL_UNSIGNED_INT, nullptr);
 		glBindVertexArray(0);
-		
-		//Unbind shader
-		shader->Unbind();
 	}
 }
