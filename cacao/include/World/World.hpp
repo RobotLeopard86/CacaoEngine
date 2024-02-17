@@ -2,7 +2,7 @@
 
 #include "Entity.hpp"
 #include "3D/Skybox.hpp"
-#include "Graphics/Cameras/Camera.hpp"
+#include "Utilities/Tree.hpp"
 
 #include <optional>
 
@@ -11,7 +11,7 @@ namespace Cacao {
 	struct World {
 	public:
 		//Entities at the top level of the world
-		std::vector<Entity> topLevelEntities;
+		Tree<Entity> worldTree;
 
 		//Optional skybox
 		std::optional<Skybox*> skybox;

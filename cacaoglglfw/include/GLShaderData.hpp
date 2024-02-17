@@ -1,13 +1,18 @@
 #pragma once
 
 #include "glad/gl.h"
-#include <map>
+#include <string>
 
 namespace Cacao {
 	//Struct for data required for an OpenGL shader
-	struct GLShaderData {
-		GLint gpuID;
-		std::map<const char*, GLint> uniformLocations;
+	struct GLShaderData : public NativeData {
+		GLuint gpuID;
+		GLuint ubo;
+		bool uboInUse;
 		std::string vertexCode, fragmentCode;
+
+		~GLShaderData() {
+			if(uboInUse) glDeleteBuffers(1, &ubo);
+		}
 	};
 }
