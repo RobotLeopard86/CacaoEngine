@@ -2,6 +2,7 @@
 
 #include "Vertex.hpp"
 #include "Transform.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 #include <vector>
 
@@ -12,11 +13,11 @@ namespace Cacao {
         Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
         
 		//Draw this mesh
-		void Draw() {};
+		void Draw();
         //Compile the mesh into a usable form for drawing
-        void Compile() {};
+        void Compile();
         //Release compiled assets from memory
-        void Release() {};
+        void Release();
 
         //Is mesh compiled?
         bool IsCompiled() { return compiled; }
@@ -26,6 +27,6 @@ namespace Cacao {
 
         bool compiled;
 
-		void* nativeData;
+		NativeData* nativeData;
     };
 }

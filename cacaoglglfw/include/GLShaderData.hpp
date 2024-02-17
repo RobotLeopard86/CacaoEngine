@@ -1,6 +1,9 @@
 #pragma once
 
 #include "glad/gl.h"
+
+#include "Utilities/MiscUtils.hpp"
+
 #include <string>
 
 namespace Cacao {

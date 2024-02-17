@@ -7,15 +7,13 @@
 
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 #include "spirv_cross.hpp"
 #include "spirv_reflect.h"
 #include "glm/glm.hpp"
 
 namespace Cacao {
-	//Empty native data struct
-	struct NativeData {};
-
 	//Shader data system
 
 	//Shader data entry
