@@ -31,8 +31,18 @@ mkdir -p build && cd build
 cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=ON -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF 
 ninja
 cp bin/libassimp.so.5.2.5 ../../generated/libassimp.so
-cp -R include/assimp ../../generated
 cp revision.h contrib/zlib/zconf.h ../../generated
+cp -R include/assimp ../../generated
+
+cd ../
+rm -rf build
+
+echo "Building yaml-cpp..."
+cd ../yaml-cpp
+mkdir -p build && cd build
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=OFF -DYAML_BUILD_TOOLS=OFF -DYAML_CPP_INSTALL=OFF
+ninja
+cp libyaml-cpp.a ../../generated
 
 cd ../
 rm -rf build

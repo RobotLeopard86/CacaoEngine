@@ -2,7 +2,7 @@
 
 namespace Cacao {
 	//Base class representing a game script
-	class Script {
+	class Script : public Component {
 	public:
 		//Runs every tick
 		virtual void OnTick() {}
@@ -21,9 +21,5 @@ namespace Cacao {
 		const bool operator==(Script rhs) {
             return (this == &rhs);
         }
-	private:
-		//Should this script run?
-		//Private because we need to run the OnAwake method when this script is activated
-		bool active;
 	};
 }

@@ -27,7 +27,6 @@ namespace Cacao {
 
 		//Access a world
 		World& AccessWorld(std::string name);
-
 	private:
 		//Singleton members
 		static WorldManager* instance;

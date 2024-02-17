@@ -9,48 +9,12 @@
 #include "Core/Assert.hpp"
 
 #include "spirv_cross.hpp"
+#include "spirv_reflect.h"
 #include "glm/glm.hpp"
 
 namespace Cacao {
-    //Must be implemented per-rendering API
-	//Shader class
-    class Shader {
-    public:
-		//Create a shader from raw SPIR-V code loaded separately
-		Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment);
-		//Create a shader from file paths
-		Shader(std::filesystem::path vertex, std::filesystem::path fragment);
-
-		~Shader() {
-			if(compiled && bound) Unbind();
-			if(compiled) Release();
-			free(nativeData);
-		}
-
-        //Use this shader
-        void Bind();
-        //Don't use this shader
-        void Unbind();
-        //Compile shader to be used later
-        void Compile();
-        //Delete shader when no longer needed
-        void Release();
-
-        //Is shader compiled?
-        bool IsCompiled() { return compiled; }
-
-        //Is shader bound?
-        bool IsBound() { return bound; }
-
-		//Read-only access to native data
-		const void* GetNativeData() { return nativeData; }
-    protected:
-        bool compiled;
-        bool bound;
-
-		//This should be a struct, NOT A CLASS WITH METHODS
-		void* nativeData;
-    };
+	//Empty native data struct
+	struct NativeData {};
 
 	//Shader data system
 
@@ -93,4 +57,50 @@ namespace Cacao {
 	private:
 		std::map<std::string, ShaderDataEntry> data;
 	};
+
+    //Must be implemented per-rendering API
+	//Shader class
+    class Shader {
+    public:
+		//Create a shader from raw SPIR-V code loaded separately
+		Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment);
+		//Create a shader from file paths
+		Shader(std::filesystem::path vertex, std::filesystem::path fragment);
+
+		~Shader() {
+			if(compiled && bound) Unbind();
+			if(compiled) Release();
+			delete nativeData;
+		}
+
+        //Use this shader
+        void Bind();
+        //Don't use this shader
+        void Unbind();
+        //Compile shader to be used later
+        void Compile();
+        //Delete shader when no longer needed
+        void Release();
+
+        //Is shader compiled?
+        bool IsCompiled() { return compiled; }
+
+        //Is shader bound?
+        bool IsBound() { return bound; }
+
+		//Read-only access to native data
+		const NativeData* GetNativeData() { return nativeData; }
+
+		//Upload uniform data
+		void UploadUniformData(ShaderData& data);
+
+		//If this variable is true, the shader will be expected to take in lighting data
+		bool lit;
+    private:
+        bool compiled;
+        bool bound;
+		NativeData* nativeData;
+
+		SpvReflectTypeDescription vertexDataDesc, fragmentDataDesc;
+    };
 }

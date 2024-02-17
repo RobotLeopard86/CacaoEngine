@@ -5,6 +5,7 @@
 
 #include "glad/gl.h"
 #include "spirv_glsl.hpp"
+#include "spirv_reflect.h"
 
 #include <fstream>
 #include <utility>
@@ -63,7 +64,6 @@ namespace Cacao {
 
 		//Load vertex shader
 		spirv_cross::CompilerGLSL vertGLSL(std::move(vertex));
-		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
 
 		//Compile vertex shader to GLSL
 		vertGLSL.set_common_options(options);
@@ -81,6 +81,68 @@ namespace Cacao {
 		//Compile fragment shader to GLSL
 		fragGLSL.set_common_options(options);
 		nd->fragmentCode = fragGLSL.compile();
+
+		//Create reflection objects
+		spv_reflect::ShaderModule vsm{}, fsm{};
+		Asserts::EngineAssert(spvReflectCreateShaderModule(vertex.size(), vertex.data(), &vsm) == SPV_REFLECT_RESULT_SUCCESS, "Couldn't create vertex shader reflection object!");
+		Asserts::EngineAssert(spvReflectCreateShaderModule(fragment.size(), fragment.data(), &fsm) == SPV_REFLECT_RESULT_SUCCESS, "Couldn't create fragment shader reflection object!");
+
+		//Check for shader data
+		uint32_t sdSize = -1;
+		SpvReflectResult res;
+		uint32_t blocksCount;
+
+		//Vertex shader
+		res = spvReflectEnumeratePushConstantBlocks(&vsm, &blocksCount, NULL);
+		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Vertex shader reflection uniform enumeration failed!");
+		std::vector<SpvReflectBlockVariable*> pushConstants(count);
+		res = spvReflectEnumeratePushConstantBlocks(&vsm, &blocksCount, pushConstants.data());
+		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Vertex shader reflection uniform enumeration failed!");
+		for(SpvReflectBlockVariable* pc : pushConstants){
+			//Is this the shader data block?
+			if(std::string(pc->type_description->type_name) != "ShaderData") continue;
+
+			//Add this info the shader data size
+			//sdSize starts at -1 to denote no data, so we increment it before adding the data size
+			if(sdSize == -1) sdSize++;
+			sdSize += pc->size;
+
+			//Set vertex data description
+			vertexDataDesc = *(pc->type_description.struct_type_description);
+
+			break;
+		}
+
+		//Fragment shader
+		res = spvReflectEnumeratePushConstantBlocks(&fsm, &blocksCount, NULL);
+		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Fragment shader reflection uniform enumeration failed!");
+		std::vector<SpvReflectBlockVariable*> pushConstants(count);
+		res = spvReflectEnumeratePushConstantBlocks(&fsm, &blocksCount, pushConstants.data());
+		Asserts::EngineAssert(res == SPV_REFLECT_RESULT_SUCCESS, "Fragment shader reflection uniform enumeration failed!");
+		for(SpvReflectBlockVariable* pc : pushConstants){
+			//Is this the shader data block?
+			if(std::string(pc->type_description->type_name) != "ShaderData") continue;
+
+			//Add this info the shader data size
+			//sdSize starts at -1 to denote no data, so we increment it before adding the data size
+			if(sdSize == -1) sdSize++;
+			sdSize += pc->size;
+
+			//Set fragment data description
+			fragmentDataDesc = *(pc->type_description.struct_type_description);
+
+			break;
+		}
+
+		//Set up UBO if necessary
+		nd->uboInUse = (sdSize != -1);
+		if(nd->uboInUse) {
+			glGenBuffers(1, &(nd->ubo));
+			glBindBuffer(GL_UNIFORM_BUFFER, nd->ubo);
+			glBufferData(GL_UNIFORM_BUFFER, sdSize, NULL, GL_STATIC_DRAW);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			glBindBufferRange(GL_UNIFORM_BUFFER, 1, nd->ubo, 0, sdSize);
+		}
 	}
 
 	void Shader::Compile(){
@@ -172,10 +234,15 @@ namespace Cacao {
         glDeleteShader(compiledVertexShader);
         glDeleteShader(compiledFragmentShader);
 
-		//Configure rendering UBO
+		//Configure rendering UBOs
 		unsigned int ubi = glGetUniformBlockIndex(program, "CacaoData");
-		Asserts::EngineAssert(ubi != GL_INVALID_INDEX, "Cacao Engine shader does not contain the CacaoData uniform block!");
+		Asserts::EngineAssert(ubi != GL_INVALID_INDEX, "Shader does not contain the CacaoData uniform block!");
 		glUniformBlockBinding(program, ubi, 0);
+		if(nd->uboInUse){
+			unsigned int sdubi = glGetUniformBlockIndex(program, "ShaderData");
+			Asserts::EngineAssert(sdubi != GL_INVALID_INDEX, "Shader has custom data but does not contain the ShaderData uniform block!");
+			glUniformBlockBinding(program, sdubi, 1);
+		}
 
         nd->gpuID = program;
         compiled = true;

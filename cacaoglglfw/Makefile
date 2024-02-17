@@ -17,9 +17,9 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/assimp/include -I../libs/generated
+INCLUDES := -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/spirv-reflect -I../libs/assimp/include -I../libs/generated
 DEFINES := -DGLFW_INCLUDE_NONE
-LIBS := -lglad_gl -lglfw -limgui_gl_glfw -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
+LIBS := -lglad_gl -lglfw -limgui_gl_glfw -lspirv-reflect-static -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
 LIBDIRS := -L../libs/generated
 MISCOPTS := -std=c++20 -c -fPIC
 CFGFLAGS :=
@@ -37,7 +37,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Window.o $(OBJDIR)/Shader.o $(OBJDIR)/RenderPhaseImpl.o
+OBJECTS := $(OBJDIR)/Window.o $(OBJDIR)/Shader.o
 
 default: build
 
@@ -79,8 +79,5 @@ $(OBJDIR)/Window.o: $(SRCDIR)/Window.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
 $(OBJDIR)/Shader.o: $(SRCDIR)/Shader.cpp
-	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
-	@$(cpp) $(OPTS) -o "$@" $<
-$(OBJDIR)/RenderPhaseImpl.o: $(SRCDIR)/RenderPhaseImpl.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<
