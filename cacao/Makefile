@@ -26,7 +26,7 @@ CFGFLAGS :=
 
 SRCDIR := src
 OBJDIR := build/$(config)/obj
-BINDIR := build/$(backend)/$(config)/bin
+BINDIR := build/$(config)/bin-$(backend)
 BIN := $(BINDIR)/cacao
 
 ifeq ($(config),debug)
