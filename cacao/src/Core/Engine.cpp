@@ -2,8 +2,7 @@
 #include "Core/Log.hpp"
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
-
-#include <future>
+#include "Control/DynTickController.hpp"
 
 namespace Cacao {
 	//Required static variable initialization
@@ -26,7 +25,11 @@ namespace Cacao {
 		//Make sure the engine will run
 		run.store(true);
 
-		//Register our dynamic and fixed tick consumers
+		//Set some default engine config values
+		cfg.fixedTickRate = 50;
+		cfg.targetDynTPS = 60;
+
+		//Register the window close consumer
 		Logging::EngineLog("Setting up event manager...");
 		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
 			this->Stop();
@@ -35,10 +38,13 @@ namespace Cacao {
 
 		//Start the thread pool
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 3); //Minus 3 because of frame pipeline threads
+		threadPool.reset(std::thread::hardware_concurrency() - 2); //Subtract two for the dynamic and fixed tick controllers
 
 		//Open the window
-		Window::GetInstance()->Open("Cacao", 1280, 720);
+		Window::GetInstance()->Open("Cacao Engine", 1280, 720);
+
+		//Start the dynamic tick controller
+		DynTickController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
 
@@ -56,6 +62,9 @@ namespace Cacao {
 		}
 
 		Logging::EngineLog("Shutting down engine...");
+
+		//Stop the dynamic tick controller
+		DynTickController::GetInstance()->Stop();
 
 		//Close window
 		Window::GetInstance()->Close();

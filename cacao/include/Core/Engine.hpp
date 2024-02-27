@@ -6,6 +6,8 @@
 
 #include "BS_thread_pool.hpp"
 
+#include "EngineConfig.hpp"
+
 namespace Cacao {
 	//Singleton representing the engine
 	class Engine {
@@ -21,6 +23,9 @@ namespace Cacao {
 
 		//Access the thread pool
 		BS::thread_pool& GetThreadPool() { return threadPool; }
+
+		//Engine config properties
+		EngineConfig cfg;
 	private:
 		//Singleton members
 		static Engine* instance;
