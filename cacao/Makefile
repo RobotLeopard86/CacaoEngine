@@ -17,7 +17,7 @@ endif
 
 .PHONY: build link prebuild dirs clean
 
-INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
+INCLUDES := -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs/spirv-reflect -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
 DEFINES :=
 LIBS := -lassimp -lstb_image -l$(backend)
 LIBDIRS := -L../libs/generated -L../$(backend)/build/$(config)/bin
@@ -37,7 +37,7 @@ endif
 
 OPTS := $(INCLUDES) $(DEFINES) $(MISCOPTS) $(CFGFLAGS)
 
-OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o
+OBJECTS := $(OBJDIR)/Startup.o $(OBJDIR)/Log.o $(OBJDIR)/Assert.o $(OBJDIR)/Engine.o $(OBJDIR)/EventManager.o $(OBJDIR)/Input.o $(OBJDIR)/Model.o $(OBJDIR)/Transform.o $(OBJDIR)/PerspectiveCamera.o $(OBJDIR)/WorldManager.o $(OBJDIR)/DynTickController.o
 
 default: build
 
@@ -116,5 +116,9 @@ $(OBJDIR)/PerspectiveCamera.o: $(SRCDIR)/Cameras/PerspectiveCamera.cpp
 	@$(cpp) $(OPTS) -o "$@" $<
 
 $(OBJDIR)/WorldManager.o: $(SRCDIR)/World/WorldManager.cpp
+	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
+	@$(cpp) $(OPTS) -o "$@" $<
+
+$(OBJDIR)/DynTickController.o: $(SRCDIR)/Control/DynTickController.cpp
 	@echo "Compiling object $(notdir $@)... (source: $(notdir $<))"
 	@$(cpp) $(OPTS) -o "$@" $<

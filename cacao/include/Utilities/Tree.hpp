@@ -13,6 +13,11 @@ namespace Cacao {
 		T& operator->(){
 			return node;
 		}
+
+		//Separate function so the node itself can be returned
+		T& val() {
+			return node;
+		}
 	private:
 		T node;
 	};

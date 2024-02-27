@@ -21,7 +21,7 @@ namespace Cacao {
 
         //Is mesh compiled?
         bool IsCompiled() { return compiled; }
-    protected:
+    private:
         std::vector<Vertex> vertices;
         std::vector<glm::uvec3> indices;
 
