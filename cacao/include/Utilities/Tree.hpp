@@ -14,7 +14,7 @@ namespace Cacao {
 			return node;
 		}
 
-		//Separate function so the node itself can be returned
+		//Separate function so the node itself can be returned to be used as a value
 		T& val() {
 			return node;
 		}
