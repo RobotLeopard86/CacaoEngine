@@ -1,0 +1,46 @@
+# Create definitions
+includes = -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs/spirv-reflect -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
+libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-reflect-static -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
+opts = -std=c++20
+
+cflags = $includes $opts -c -fPIC
+soflags = $includes $opts $libs -shared -fuse-ld=lld -L../selected-backend-bin -lcacaobackend -fPIC
+ldflags = $includes $opts $libs -Lbuild -lcacao -Wl,-rpath,"." -fuse-ld=lld
+
+objdir = ./build/obj
+
+# Set Ninja build directory
+builddir = ./build
+
+# Create rules
+rule compile
+    command = clang++ -c $in $cflags -o $out
+    description = Compile C++: $in -> $out
+
+# Link Cacao API shared library
+rule linkso
+    command = clang++ $in $soflags -shared -o $out
+    description = Link Shared Library: $out
+
+# Link Cacao loader
+rule linkld
+    command = clang++ $in $ldflags -o $out
+    description = Link Executable: $out
+
+# Compile objects
+build $objdir/Log.o: compile src/Core/Log.cpp
+build $objdir/Assert.o: compile src/Core/Assert.cpp
+build $objdir/Engine.o: compile src/Core/Engine.cpp
+build $objdir/EventManager.o: compile src/Events/EventManager.cpp
+build $objdir/Input.o: compile src/Utilities/Input.cpp
+build $objdir/Model.o: compile src/3D/Model.cpp
+build $objdir/Transform.o: compile src/3D/Transform.cpp
+build $objdir/PerspectiveCamera.o: compile src/Cameras/PerspectiveCamera.cpp
+build $objdir/WorldManager.o: compile src/World/WorldManager.cpp
+build $objdir/DynTickController.o: compile src/Control/DynTickController.cpp
+
+# Link API library
+build ./build/libcacao.so: linkso $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o || $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o
+
+# Link loader
+build ./build/cacao: linkld src/Core/Startup.cpp || ./build/libcacao.so

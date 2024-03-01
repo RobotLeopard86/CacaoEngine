@@ -9,3 +9,6 @@ cacao-engine.log
 
 # Don't send VS Code files
 .vscode
+
+# Don't send selected backend bin symlink
+selected-backend-bin
