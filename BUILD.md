@@ -17,7 +17,7 @@ Cacao Engine contains dependencies which are built through CMake using the Ninja
 Cacao Engine uses Ninja and Clang as the build system.
 
 ## Building
-Simply `cd` to the directory of the component you wish to build. **IMPORTANT:** For the engine core, ensure to create a symlink (or shortcut, not sure yet if that works) to the `build` directory of your desired backend in the rooot project directory named exactly `selected-backend-bin`.
+Simply `cd` to the directory of the component you wish to build. **IMPORTANT:** For the engine core, ensure to create a symlink (or shortcut, not sure yet if that works) to the `build` directory of your desired backend in the root project directory named exactly `selected-backend-bin`.
 
 ## Contributing Your Changes
 To contribute your changes, simply fork the repository, make your changes, and submit a pull request. It's that simple.

@@ -1,10 +1,10 @@
 # Create definitions
-includes = -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs/spirv-reflect -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
-libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-reflect-static -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
+includes = -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/dynalo/include -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs/yaml-cpp/include -I../libs/spirv-reflect -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
+libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-reflect-static -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl -ldl -lyaml-cpp
 opts = -std=c++20
 
 cflags = $includes $opts -c -fPIC
-soflags = $includes $opts $libs -shared -fuse-ld=lld -L../selected-backend-bin -lcacaobackend -fPIC
+soflags = $includes $opts $libs -shared -fuse-ld=lld -Wl,-rpath,"." -L../selected-backend-bin -lcacaobackend -fPIC
 ldflags = $includes $opts $libs -Lbuild -lcacao -Wl,-rpath,"." -fuse-ld=lld
 
 objdir = ./build/obj

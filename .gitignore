@@ -12,3 +12,10 @@ cacao-engine.log
 
 # Don't send selected backend bin symlink
 selected-backend-bin
+
+# Don't send playground binaries
+playground/cacao
+playground/cacao.exe
+playground/libcacao*
+playground/cacao.dll
+playground/cacaobackend.dll
