@@ -23,3 +23,6 @@
 [submodule "libs/spirv-reflect"]
 	path = libs/spirv-reflect
 	url = https://github.com/KhronosGroup/SPIRV-Reflect
+[submodule "libs/dynalo"]
+	path = libs/dynalo
+	url = https://github.com/maddouri/dynalo
