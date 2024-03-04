@@ -86,6 +86,12 @@ namespace Cacao {
 		//Close window
 		Window::GetInstance()->Close();
 
+		//Let game module close
+		//We dont' explictly close the library because the destructor does that for us
+		//Doing it now would actually cause a runtime error
+		auto gameStopFunc = lib.get_function<void(void)>("_CacaoExiting");
+		gameStopFunc();
+
 		//Shutdown event manager
 		EventManager::GetInstance()->Shutdown();
 	}

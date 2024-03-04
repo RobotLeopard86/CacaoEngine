@@ -21,23 +21,23 @@ if not (backendLinux or backendMac or backendWin) or not (cacaoLibLinux or cacao
 	exit(1)
 
 if backendLinux and cacaoLibLinux and cacaoExeUnix:
-	shutil.copy2('selected-backend-bin/libcacaobackend.so', 'playground')
-	shutil.copy2('cacao/build/libcacao.so', 'playground')
-	shutil.copy2('cacao/build/cacao', 'playground')
+	shutil.copy2('selected-backend-bin/libcacaobackend.so', 'cacaoplayground')
+	shutil.copy2('cacao/build/libcacao.so', 'cacaoplayground')
+	shutil.copy2('cacao/build/cacao', 'cacaoplayground')
 	print("Updated!")
 	exit(0)
 
 if backendMac and cacaoLibMac and cacaoExeUnix:
-	shutil.copy2('selected-backend-bin/libcacaobackend.dylib', 'playground')
-	shutil.copy2('cacao/build/libcacao.dylib', 'playground')
-	shutil.copy2('cacao/build/cacao', 'playground')
+	shutil.copy2('selected-backend-bin/libcacaobackend.dylib', 'cacaoplayground')
+	shutil.copy2('cacao/build/libcacao.dylib', 'cacaoplayground')
+	shutil.copy2('cacao/build/cacao', 'cacaoplayground')
 	print("Updated!")
 	exit(0)
 
 if backendWin and cacaoLibWin and cacaoExeWin:
-	shutil.copy2('selected-backend-bin/cacaobackend.dll', 'playground')
-	shutil.copy2('cacao/build/cacao.dll', 'playground')
-	shutil.copy2('cacao/build/cacao.exe', 'playground')
+	shutil.copy2('selected-backend-bin/cacaobackend.dll', 'cacaoplayground')
+	shutil.copy2('cacao/build/cacao.dll', 'cacaoplayground')
+	shutil.copy2('cacao/build/cacao.exe', 'cacaoplayground')
 	print("Updated!")
 	exit(0)
 
