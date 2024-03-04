@@ -31,6 +31,10 @@ namespace Cacao {
 				return;
 			}
 		}
+
+		std::string GetKind() override final {
+			return "SCRIPT";
+		}
 		
 		const bool operator==(Script rhs) {
             return (this == &rhs);

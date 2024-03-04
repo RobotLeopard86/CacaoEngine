@@ -3,6 +3,8 @@
 #include <thread>
 #include <chrono>
 
+#include "Scripts/Script.hpp"
+
 namespace Cacao {
 	//Controller for running dynamic ticks
 	class DynTickController {
@@ -26,6 +28,9 @@ namespace Cacao {
 		bool isRunning;
 
 		std::jthread* thread;
+		
+		std::vector<std::shared_ptr<Component>> tickScriptList;
+		double timestep;
 
 		DynTickController() 
 			: isRunning(false), thread(nullptr) {}

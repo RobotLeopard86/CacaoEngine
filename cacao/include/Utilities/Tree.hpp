@@ -18,6 +18,9 @@ namespace Cacao {
 		T& val() {
 			return node;
 		}
+
+		TreeItem(T value)
+			: node(value) {}
 	private:
 		T node;
 	};

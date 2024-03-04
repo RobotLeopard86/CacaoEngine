@@ -4,9 +4,6 @@
 #include "Core/Engine.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "World/WorldManager.hpp"
-#include "Scripts/Script.hpp"
-
-#include <typeinfo>
 
 namespace Cacao {
 	//Required static variable initialization
@@ -22,7 +19,6 @@ namespace Cacao {
 			instanceExists = true;
 			instance->isRunning = false;
 		}
-
 		return instance;
 	}
 
@@ -57,25 +53,24 @@ namespace Cacao {
 		while(!stopTkn.stop_requested()){
 			//Get time at tick start and calculate ideal run time
 			std::chrono::steady_clock::time_point tickStart = std::chrono::steady_clock::now();
-			std::chrono::steady_clock::time_point idealStopTime = tickStart + std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::seconds(1)/Engine::GetInstance()->cfg.targetDynTPS);
+			std::chrono::steady_clock::time_point idealStopTime = tickStart + (std::chrono::milliseconds(1000)/Engine::GetInstance()->cfg.targetDynTPS);
 			
 			//Find all scripts that need to be run
-			std::vector<std::reference_wrapper<Script>> scriptsToRun;
+			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->AccessWorld(WorldManager::GetInstance()->GetActiveWorld());
-			BS::multi_future<void> fsFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [scriptsToRun, activeWorld](unsigned int index) {
+			BS::multi_future<void> fsFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [this, activeWorld](unsigned int index) {
 				//Create script locator function for an entity
-				auto scriptLocator = [scriptsToRun](TreeItem<Entity>& e) {
+				auto scriptLocator = [this](TreeItem<Entity>& e) {
 					//Sneaky recursive lambda trick
-					auto impl = [scriptsToRun](TreeItem<Entity>& e, auto& implRef) mutable {
+					auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
 						//Stop if this component is inactive
 						if(!e.val().active) return;
 
 						//Check for script components
-						for(Component& c : e.val().components){
-							if(typeid(c) == typeid(Script&) && c.IsActive()) {
-								//Cast to script and add to list
-								Script& asScript = static_cast<Script&>(c);
-								scriptsToRun.push_back(asScript);
+						for(std::shared_ptr<Component>& c : e.val().components){
+							if(c->GetKind() == "SCRIPT" && c->IsActive()) {
+								//Add to list
+								this->tickScriptList.push_back(c);
 							}
 						}
 
@@ -94,12 +89,19 @@ namespace Cacao {
 			//Wait for work to be completed
 			fsFuture.wait();
 
-			//Check elapsed time
+			//Execute scripts
+			for(std::shared_ptr<Component>& s : tickScriptList){
+				Script* script = static_cast<Script*>(s.get());
+				script->OnTick(timestep);
+			}
+
+			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();
-			
+			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count())/1000);
+
 			//If we stopped before the ideal max time, wait until that point
 			//Otherwise, run the next tick immediately
-			if(tickEnd < idealStopTime) std::this_thread::sleep_for(idealStopTime - tickEnd);
+			if(tickEnd < idealStopTime) std::this_thread::sleep_until(idealStopTime);
 		}
 	}
 }

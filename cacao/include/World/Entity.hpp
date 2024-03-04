@@ -11,6 +11,8 @@
 #include "Component.hpp"
 #include "Core/Log.hpp"
 
+#include <memory>
+
 #include "uuid_v4.h"
 
 namespace Cacao {
@@ -20,7 +22,7 @@ namespace Cacao {
 		Transform transform;
 
 		//Components on this entity
-		std::vector<Component> components;
+		std::vector<std::shared_ptr<Component>> components;
 
 		//Is this entity active?
 		bool active;
