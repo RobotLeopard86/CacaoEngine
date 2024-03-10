@@ -60,16 +60,6 @@ cp ./libspirv-cross*.a ../../generated
 cd ../
 rm -rf build
 
-echo "Building SPIRV-Reflect..."
-cd ../spirv-reflect
-rm -rf build
-mkdir -p build && cd build
-cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_POSITION_INDEPENDENT_CODE=ON -GNinja -DSPIRV_REFLECT_EXECUTABLE=OFF -DSPIRV_REFLECT_STATIC_LIB=ON
-ninja
-cp ./libspirv-reflect-static.a ../../generated
-cd ../
-rm -rf build
-
 cd ../../cacaoglglfw
 
 echo "GLFW + OpenGL backend setup is complete!"

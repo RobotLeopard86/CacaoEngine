@@ -43,8 +43,8 @@ namespace Cacao {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
 		//Create window
 		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);

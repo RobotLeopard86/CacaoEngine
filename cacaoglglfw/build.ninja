@@ -1,5 +1,5 @@
 # Create definitions
-includes = -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/spirv-reflect -I../libs/assimp/include -I../libs/generated
+includes = -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/assimp/include -I../libs/generated
 defines = -DGLFW_INCLUDE_NONE
 libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-reflect-static -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
 opts = -std=c++20 -fPIC
@@ -26,5 +26,7 @@ build $objdir/Mesh.o: compile src/Mesh.cpp
 build $objdir/Shader.o: compile src/Shader.cpp
 build $objdir/Window.o: compile src/Window.cpp
 
+objects = $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o
+
 # Link library
-build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o
+build ./build/libcacaobackend.so: link $objects || $objects

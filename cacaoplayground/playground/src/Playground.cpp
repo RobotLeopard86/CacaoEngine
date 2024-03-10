@@ -26,7 +26,7 @@ extern "C" {
 
 		Cacao::WorldManager::GetInstance()->CreateWorld("Playground");
 		Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
-		Cacao::World& world = Cacao::WorldManager::GetInstance()->AccessWorld("Playground");
+		Cacao::World& world = Cacao::WorldManager::GetInstance()->GetWorld("Playground");
 		cam = new Cacao::PerspectiveCamera(60, glm::ivec2(1280, 720));
 		world.cam = cam;
 
