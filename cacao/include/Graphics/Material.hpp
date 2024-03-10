@@ -10,6 +10,6 @@ namespace Cacao {
 		Shader* shader;
 
 		//Data storage
-		ShaderData shaderData;
+		ShaderUploadData data;
 	};
 }

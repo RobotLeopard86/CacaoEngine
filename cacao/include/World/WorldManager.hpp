@@ -25,8 +25,8 @@ namespace Cacao {
 		//Get the ID of the active world
 		std::string GetActiveWorld();
 
-		//Access a world
-		World& AccessWorld(std::string name);
+		//Get a reference to a world
+		World& GetWorld(std::string name);
 	private:
 		//Singleton members
 		static WorldManager* instance;

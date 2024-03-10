@@ -10,60 +10,49 @@
 #include "Utilities/MiscUtils.hpp"
 
 #include "spirv_cross.hpp"
-#include "spirv_reflect.h"
 #include "glm/glm.hpp"
 
 namespace Cacao {
 	//Shader data system
 
-	//Shader data entry
-	struct ShaderDataEntry {
-		//Actual data
-		std::any data;
-
-		//Data for rendering system
-		//If type of data changes, these values MUST be updated
-
+	//Shader data item information
+	struct ShaderItemInfo {
 		//Base type (e.g. int, float)
 		spirv_cross::TypeID type;
 
 		//Data size (x for number of vector components, y for number of vectors in a matrix)
 		//Example: a vec3 would be {3, 1}, a mat4 would be {4, 4}, and a scalar would be {1, 1}
 		glm::ivec2 size;
+
+		//Name of entry
+		std::string entryName;
 	};
 
-	struct ShaderData {
-	public:
-		ShaderDataEntry& operator[](std::string item){
-			if(!data.contains(item)) {
-				data.insert_or_assign(item, ShaderDataEntry{});
-			}
-			return data.at(item);
-		}
+	//Represents the layout of shader data
+	using ShaderSpec = std::vector<ShaderItemInfo>;
 
-		bool EntryExists(std::string item){
-			return data.contains(item);
-		}
+	//Item to upload to a shader
+	struct ShaderUploadItem {
+		//Name of target entry in shader spec
+		std::string target;
 
-		void RemoveEntry(std::string entry){
-			if(!data.contains(entry)){
-				Logging::EngineLog("Can't remove nonexistent shader data entry!", LogLevel::Error);
-				return;
-			}
-			data.erase(entry);
-		}
-	private:
-		std::map<std::string, ShaderDataEntry> data;
-	};
+		//Actual data
+		//During upload, this will be attempted to cast to the type specified in the shader item
+		//If this cast fails, an error will be thrown
+		std::any data;
+	}
+
+	//Data to upload to a shader
+	using ShaderUploadData = std::vector<ShaderUploadItem>;
 
     //Must be implemented per-rendering API
 	//Shader class
     class Shader {
     public:
 		//Create a shader from raw SPIR-V code loaded separately
-		Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment);
+		Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment, ShaderSpec spec);
 		//Create a shader from file paths
-		Shader(std::filesystem::path vertex, std::filesystem::path fragment);
+		Shader(std::filesystem::path vertex, std::filesystem::path fragment, ShaderSpec spec);
 
 		~Shader() {
 			if(compiled && bound) Unbind();
@@ -89,8 +78,15 @@ namespace Cacao {
 		//Read-only access to native data
 		const NativeData* GetNativeData() { return nativeData; }
 
-		//Upload uniform data
-		void UploadUniformData(ShaderData& data);
+		//Read-only access to the shader spec
+		const ShaderSpec& GetSpec() const { return specification; }
+
+		//Upload data to the shader
+		//WARNING: Will temporarily bind shader
+		void UploadData(ShaderUploadData& data);
+
+		//Upload Cacao Engine built-in data to the shader
+		void UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform);
 
 		//If this variable is true, the shader will be expected to take in lighting data
 		bool lit;
@@ -98,7 +94,6 @@ namespace Cacao {
         bool compiled;
         bool bound;
 		NativeData* nativeData;
-
-		SpvReflectTypeDescription vertexDataDesc, fragmentDataDesc;
+		const ShaderSpec specification;
     };
 }

@@ -20,9 +20,6 @@
 [submodule "libs/yaml-cpp"]
 	path = libs/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
-[submodule "libs/spirv-reflect"]
-	path = libs/spirv-reflect
-	url = https://github.com/KhronosGroup/SPIRV-Reflect
 [submodule "libs/dynalo"]
 	path = libs/dynalo
 	url = https://github.com/maddouri/dynalo

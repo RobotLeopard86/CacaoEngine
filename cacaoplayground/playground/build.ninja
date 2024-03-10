@@ -1,5 +1,5 @@
 # Create definitions
-includes = -I../../cacao/include -I../../libs/spdlog/include -I../../libs/bsthreadpool -I../../libs/uuid_v4 -I../../libs/glm -I../../libs -I../../libs/spirv-cross -I../../libs/spirv-reflect -I../../libs/generated
+includes = -I../../cacao/include -I../../libs/spdlog/include -I../../libs/bsthreadpool -I../../libs/uuid_v4 -I../../libs/glm -I../../libs -I../../libs/spirv-cross -I../../libs/generated
 libs = -L.. -lcacao
 opts = -std=c++20 -fPIC -g
 
