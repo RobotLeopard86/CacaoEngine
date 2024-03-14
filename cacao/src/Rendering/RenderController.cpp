@@ -36,6 +36,7 @@ namespace Cacao {
 		}
 		//Stop run thread
 		thread->request_stop();
+		fqCvar.notify_one();
 		thread->join();
 
 		//Delete thread object
