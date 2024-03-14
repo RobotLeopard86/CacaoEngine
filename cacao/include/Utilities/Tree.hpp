@@ -10,11 +10,7 @@ namespace Cacao {
 	public:
 		std::vector<TreeItem<T>> children;
 
-		T& operator->(){
-			return node;
-		}
-
-		//Separate function so the node itself can be returned to be used as a value
+		//Access the node
 		T& val() {
 			return node;
 		}

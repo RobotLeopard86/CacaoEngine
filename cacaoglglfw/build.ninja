@@ -2,7 +2,7 @@
 includes = -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs/uuid_v4 -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/assimp/include -I../libs/generated
 defines = -DGLFW_INCLUDE_NONE
 libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
-opts = -std=c++20 -fPIC
+opts = -std=c++20 -fPIC -g
 
 cflags = $includes $defines $opts -c
 lflags = $includes $defines $opts $libs -shared -fuse-ld=lld
@@ -28,6 +28,7 @@ build $objdir/Window.o: compile src/Window.cpp
 build $objdir/Cubemap.o: compile src/Cubemap.cpp
 build $objdir/Texture2D.o: compile src/Texture2D.cpp
 build $objdir/Skybox.o: compile src/Skybox.cpp
+build $objdir/Renderer.o: compile src/Renderer.cpp
 
 # Link library
-build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o
+build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o

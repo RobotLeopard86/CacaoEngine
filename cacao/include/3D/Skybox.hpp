@@ -5,6 +5,7 @@
 #include "Mesh.hpp"
 
 #include "glm/vec2.hpp"
+#include "glm/mat4x4.hpp"
 
 #include <array>
 
@@ -15,7 +16,7 @@ namespace Cacao {
 		Skybox(Cubemap* tex);
 
         //Draw this skyboxn
-        void Draw();
+        void Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 
 		//Set up any common skybox resources
 		static void CommonSetup();

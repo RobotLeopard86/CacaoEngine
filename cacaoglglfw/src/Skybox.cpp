@@ -1,7 +1,6 @@
 #include "3D/Skybox.hpp"
 
 #include "Core/Log.hpp"
-#include "World/WorldManager.hpp"
 #include "GLSkyboxData.hpp"
 
 #include "glad/gl.h"
@@ -78,15 +77,14 @@ namespace Cacao {
 		isSetup = false;
 	}
 
-	void Skybox::Draw(){
+	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 		//Confirm that texture is compiled
 		if(!texture->IsCompiled()){
 			Logging::EngineLog("Skybox texture has not been compiled! Aborting draw.", LogLevel::Error);
 		}
 
 		//Create skybox matrices
-		Camera* activeCam = WorldManager::GetInstance()->GetWorld(WorldManager::GetInstance()->GetActiveWorld()).cam;
-		glm::mat4 skyView = glm::mat4(glm::mat3(activeCam->GetViewMatrix()));
+		glm::mat4 skyView = glm::mat4(glm::mat3(viewMatrix));
 		glm::mat4 skyTransform(1.0);
 		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.pitch), { 1.0, 0.0, 0.0 });
 		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.yaw), { 0.0, 1.0, 0.0 });
@@ -97,7 +95,7 @@ namespace Cacao {
 		texture->Bind(0);
 
 		//Upload data to shader
-		skyboxShader->UploadCacaoData(activeCam->GetProjectionMatrix(), skyView, skyTransform);
+		skyboxShader->UploadCacaoData(projectionMatrix, skyView, skyTransform);
 		ShaderUploadData sud;
 		ShaderUploadItem skySamplerID;
 		skySamplerID.data = 0;
