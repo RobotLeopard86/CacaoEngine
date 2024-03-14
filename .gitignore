@@ -6,6 +6,7 @@ libs/generated
 
 # Don't send auto-created logs
 cacao-engine.log
+.ninja_log
 
 # Don't send VS Code files
 .vscode
@@ -14,8 +15,12 @@ cacao-engine.log
 selected-backend-bin
 
 # Don't send playground binaries
-playground/cacao
-playground/cacao.exe
-playground/libcacao*
-playground/cacao.dll
-playground/cacaobackend.dll
+cacaoplayground/cacao
+cacaoplayground/cacao.exe
+cacaoplayground/libcacaobackend.so
+cacaoplayground/libcacao.so
+cacaoplayground/cacao.dll
+cacaoplayground/cacaobackend.dll
+*.so
+*.dll
+*.exe

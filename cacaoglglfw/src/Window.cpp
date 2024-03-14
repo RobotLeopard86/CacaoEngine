@@ -142,8 +142,16 @@ namespace Cacao {
 		Asserts::EngineAssert(isOpen, "Can't update window, it's not open!");
 		//Have GLFW check for events
 		glfwPollEvents();
+	}
 
-		//Swap buffers
+	void Window::Present(){
+		Asserts::EngineAssert(isOpen, "Can't present to closed window!");
+		//Have GLFW check for events
 		glfwSwapBuffers((GLFWwindow*)nativeWindow);
+	}
+
+	void Window::SetTitle(std::string title){
+		Asserts::EngineAssert(isOpen, "Can't set window title, it's not open!");
+		glfwSetWindowTitle((GLFWwindow*)nativeWindow, title.c_str());
 	}
 }
