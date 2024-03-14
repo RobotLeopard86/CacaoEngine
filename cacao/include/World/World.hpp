@@ -33,6 +33,10 @@ namespace Cacao {
 			//Search for the object
 			return entitySearchRunner(worldTree.children, checkUUID);
 		}
+
+		World(Camera* camera) {
+			cam = camera;
+		}
 	private:
 		//Recursive function for actually running a entity search
 		template<typename P>

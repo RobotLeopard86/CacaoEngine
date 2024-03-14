@@ -19,16 +19,16 @@ namespace Cacao {
 	//An object in the world
 	class Entity {
 	public:
-		Transform transform;
+		//UUID
+		const UUIDv4::UUID uuid;
 
 		//Components on this entity
 		std::vector<std::shared_ptr<Component>> components;
+		
+		Transform transform;
 
 		//Is this entity active?
 		bool active;
-
-		//UUID
-		const UUIDv4::UUID uuid;
 
 		Entity()
 			: uuid(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID()), transform(glm::vec3{0}, glm::vec3{0}, glm::vec3{1}), active(true) {}

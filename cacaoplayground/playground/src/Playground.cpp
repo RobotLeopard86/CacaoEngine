@@ -24,11 +24,9 @@ extern "C" {
 	void _CacaoLaunch() {
 		Cacao::Logging::ClientLog("Hi!");
 
-		Cacao::WorldManager::GetInstance()->CreateWorld("Playground");
+		Cacao::WorldManager::GetInstance()->CreateWorld<Cacao::PerspectiveCamera>("Playground");
 		Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
 		Cacao::World& world = Cacao::WorldManager::GetInstance()->GetWorld("Playground");
-		cam = new Cacao::PerspectiveCamera(60, glm::ivec2(1280, 720));
-		world.cam = cam;
 
 		std::shared_ptr<SussyScript> ss = std::make_shared<SussyScript>();
 		ss->SetActive(true);

@@ -12,8 +12,18 @@ namespace Cacao {
 		//Get the instance or create one if it doesn't exist.
 		static WorldManager* GetInstance();
 
-		//Create an empty world
-		void CreateWorld(std::string name);
+		//Create an empty world with a camera
+		//Defined in the header file to allow usage by the client
+		template<typename T>
+		void CreateWorld(std::string name){
+			static_assert(std::is_base_of<Camera, T>(), "You must create a world with a type extending Camera!");
+			if(worlds.contains(name)) {
+				Logging::EngineLog("Not adding world because one with the specified name already exists!", LogLevel::Warn);
+				return;
+			}
+
+			worlds.insert_or_assign(name, World{new T()});
+		}
 
 		//Remove a world from the manager
 		//This will also delete the world instance itself

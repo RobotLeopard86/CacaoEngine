@@ -14,5 +14,5 @@ namespace Cacao {
 		static bool instanceExists;
 
 		RenderController() {}
-	}
+	};
 }
