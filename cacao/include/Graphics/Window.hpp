@@ -16,8 +16,10 @@ namespace Cacao {
         void Close();
 		//Is the window open?
 		bool IsOpen() { return isOpen; }
-        //Called every frame to update the window
+        //Check for updated state and events from the OS
         void Update();
+		//Present the currently drawn image to the window
+		void Present();
         //Get window size (returns integer two-component vector)
         glm::ivec2 GetSize() { if(!isOpen) return glm::ivec2{0}; return size; }
         //Resizes the window
@@ -28,6 +30,8 @@ namespace Cacao {
         bool IsVSyncEnabled() { if(!isOpen) return false; return useVSync; }
         //Get native window type (returns void*, must be cast to target window type)
         void* GetNativeWindow() { if(!isOpen) return NULL; return nativeWindow; }
+		//Set new window title
+		void SetTitle(std::string title);
 
 		//Get window instance
 		static Window* GetInstance();
