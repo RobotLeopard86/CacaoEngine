@@ -3,6 +3,7 @@
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
 #include "Control/DynTickController.hpp"
+#include "Graphics/Rendering/RenderController.hpp"
 
 #include "yaml-cpp/yaml.h"
 #include "dynalo/dynalo.hpp"
@@ -60,8 +61,9 @@ namespace Cacao {
 		auto launchFunc = lib.get_function<void(void)>("_CacaoLaunch");
 		launchFunc();
 
-		//Start the dynamic tick controller
+		//Start the dynamic tick and rendering controller
 		DynTickController::GetInstance()->Start();
+		RenderController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
 
@@ -82,6 +84,7 @@ namespace Cacao {
 
 		//Stop the dynamic tick controller
 		DynTickController::GetInstance()->Stop();
+		RenderController::GetInstance()->Stop();
 
 		//Close window
 		Window::GetInstance()->Close();

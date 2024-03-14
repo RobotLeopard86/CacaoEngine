@@ -4,6 +4,8 @@
 #include "Core/Engine.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "World/WorldManager.hpp"
+#include "Graphics/Rendering/RenderController.hpp"
+#include "Graphics/Rendering/MeshComponent.hpp"
 
 namespace Cacao {
 	//Required static variable initialization
@@ -94,6 +96,50 @@ namespace Cacao {
 				Script* script = static_cast<Script*>(s.get());
 				script->OnTick(timestep);
 			}
+
+			//Accumulate things to render
+			Frame f;
+			BS::multi_future<void> roFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [f, activeWorld](unsigned int index) {
+				//Create script locator function for an entity
+				auto renderLocator = [f](TreeItem<Entity>& e) {
+					//Sneaky recursive lambda trick
+					auto impl = [f](TreeItem<Entity>& e, auto& implRef) mutable {
+						//Stop if this component is inactive
+						if(!e.val().active) return;
+
+						//Check for script components
+						for(std::shared_ptr<Component>& c : e.val().components){
+							if(c->GetKind() == "MESH" && c->IsActive()) {
+								//Add to list
+								RenderObject ro;
+								MeshComponent& meshComp = static_cast<MeshComponent&>(*c);
+								ro.mesh = meshComp.mesh;
+								ro.material = *meshComp.mat;
+								ro.transformMatrix = e.val().transform.GetTransformationMatrix();
+								f.objects.push_back(ro);
+							}
+						}
+
+						//Recurse through children
+						for(TreeItem<Entity>& child : e.children){
+							implRef(child, implRef);
+						}
+					};
+					return impl(e, impl);
+				};
+
+				//Execute the script locator
+				TreeItem<Entity>& ent = const_cast<TreeItem<Entity>&>(activeWorld.worldTree.children.at(index)); //We have to use const_cast because at() returns a const reference
+				renderLocator(ent);
+			});
+			//Wait for work to be completed
+			roFuture.wait();
+
+			//Send frame to render controller
+			f.projection = activeWorld.cam->GetProjectionMatrix();
+			f.view = activeWorld.cam->GetViewMatrix();
+			f.skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(*(activeWorld.skybox.value())) : std::nullopt);
+			RenderController::GetInstance()->EnqueueFrame(f);
 
 			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();

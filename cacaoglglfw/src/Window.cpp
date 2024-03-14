@@ -113,7 +113,12 @@ namespace Cacao {
 
 		//Initialize OpenGL
 		glfwMakeContextCurrent((GLFWwindow*)nativeWindow);
-		Asserts::EngineAssert(gladLoaderLoadGL() != 0, "Could not load Glad!");
+		int gladResult = gladLoadGL(glfwGetProcAddress);
+		Asserts::EngineAssert(gladResult != 0, "Could not load Glad!");
+		Logging::EngineLog(std::string("Loaded OpenGL version ") + std::to_string(GLAD_VERSION_MAJOR(gladResult)) + "." + std::to_string(GLAD_VERSION_MINOR(gladResult)), LogLevel::Trace);
+
+		//Release context for usage by the render controller thread
+		glfwMakeContextCurrent(NULL);
 
 		isOpen = true;
 	}
