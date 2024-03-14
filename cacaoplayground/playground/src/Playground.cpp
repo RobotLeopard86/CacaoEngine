@@ -22,7 +22,7 @@ extern "C" {
 	static Cacao::PerspectiveCamera* cam;
 
 	void _CacaoLaunch() {
-		Cacao::Logging::ClientLog("Hi!");
+		Cacao::Window::GetInstance()->SetTitle("Cacao Playground");
 
 		Cacao::WorldManager::GetInstance()->CreateWorld<Cacao::PerspectiveCamera>("Playground");
 		Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
