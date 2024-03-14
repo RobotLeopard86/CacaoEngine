@@ -20,15 +20,6 @@ namespace Cacao {
 		return instance;
 	}
 
-	void WorldManager::CreateWorld(std::string name){
-		if(worlds.contains(name)) {
-			Logging::EngineLog("Not adding world because one with the specified name already exists!", LogLevel::Warn);
-			return;
-		}
-
-		worlds.insert_or_assign(name, World{});
-	}
-
 	void WorldManager::RemoveWorld(std::string name){
 		if(!worlds.contains(name)) {
 			Logging::EngineLog("Can't remove world because one with the specified name doesn't exist!", LogLevel::Error);
@@ -51,9 +42,9 @@ namespace Cacao {
 		return activeWorld;
 	}
 
-	World& WorldManager::AccessWorld(std::string name){
-		Asserts::EngineAssert(worlds.contains(name), "Can't access a world that doesn't exist!");
+	World& WorldManager::GetWorld(std::string name){
+		Asserts::EngineAssert(worlds.contains(name), "Can't get access to a world that doesn't exist!");
 
-		return worlds[name];
+		return worlds.at(name);
 	}
 }

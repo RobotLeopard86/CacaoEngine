@@ -4,9 +4,9 @@ namespace Cacao {
     //Base texture type
     class Texture {
     public:
-        //Use this texture
-        virtual void Bind() {}
-        //Don't use this texture
+        //Attach this texture to the specified slot
+        virtual void Bind(int slot) {}
+        //Detach this texture
         virtual void Unbind() {}
         //Compile texture to be used later
         virtual void Compile() {}
@@ -21,5 +21,6 @@ namespace Cacao {
     protected:
         bool compiled;
         bool bound;
+		int currentSlot;
     };
 }

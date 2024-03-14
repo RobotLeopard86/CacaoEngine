@@ -1,8 +1,7 @@
 #pragma once
 
-#pragma once
-
 #include "Texture.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 #include "glm/vec2.hpp"
 
@@ -17,18 +16,23 @@ namespace Cacao {
     public:
 		//Order of faces: +X, -X, +Y, -Y, +Z, -Z
         Cubemap(std::vector<std::string> filePaths);
+
+		~Cubemap(){
+			if(bound) Unbind();
+			if(compiled) Release();
+		}
 		
-        //Use this cubemap
-        void Bind() {}
-        //Don't use this cubemap
-        void Unbind() {}
+        //Attach this cubemap to the specified slot
+        void Bind(int slot) override;
+        //Detach this cubemap
+        void Unbind() override;
         //Compile cubemap to be used later
-        void Compile() {}
+        void Compile() override;
         //Delete cubemap when no longer needed
-        void Release() {}
+        void Release() override;
     protected:
         std::vector<std::string> textures;
 
-		void* nativeData;
+		NativeData* nativeData;
     };
 }

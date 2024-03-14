@@ -1,6 +1,6 @@
 # Create definitions
 includes = -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/dynalo/include -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs/yaml-cpp/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
-libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-reflect-static -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl -ldl -lyaml-cpp
+libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl -ldl -lyaml-cpp
 opts = -std=c++20 -g
 
 cflags = $includes $opts -c -fPIC
@@ -38,12 +38,10 @@ build $objdir/Transform.o: compile src/3D/Transform.cpp
 build $objdir/PerspectiveCamera.o: compile src/Cameras/PerspectiveCamera.cpp
 build $objdir/WorldManager.o: compile src/World/WorldManager.cpp
 build $objdir/DynTickController.o: compile src/Control/DynTickController.cpp
-build $objdir/RenderController.o: compile src/Control/RenderController.cpp
-
-objects = $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o
+build $objdir/RenderController.o: compile src/Rendering/RenderController.cpp
 
 # Link API library
-build ./build/libcacao.so: linkso $objects || $objects
+build ./build/libcacao.so: linkso $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o || $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o
 
 # Link loader
 build ./build/cacao: linkld src/Core/Startup.cpp || ./build/libcacao.so

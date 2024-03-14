@@ -278,11 +278,14 @@ namespace Cacao {
 			}
 
 			//Get ID of currently bound shader (to restore later)
-			GLint currentlyBound;
-			glGetIntegerv(GL_CURRENT_PROGRAM, &currentlyBound);
+			//Only do this if we are not currently bound
+			GLint currentlyBound = -1;
+			if(!bound) {
+				glGetIntegerv(GL_CURRENT_PROGRAM, &currentlyBound);
 
-			//Bind shader
-			Bind();
+				//Bind shader
+				Bind();
+			}
 
 			//Attempt to cast data to correct type and upload it
 			//it is so annoying that this is how this must be done
@@ -293,11 +296,11 @@ namespace Cacao {
 					case 1:
 						glUniform1i(uniformLocation, std::any_cast<bool>(item.data));
 					case 2:
-						glUniform2iv(uniformLocation, glm::value_ptr(std::any_cast<glm::bvec2>(item.data)));
+						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec2(std::any_cast<glm::ivec2>(item.data))));
 					case 3:
-						glUniform3iv(uniformLocation, glm::value_ptr(std::any_cast<glm::bvec3>(item.data)));
+						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec3(std::any_cast<glm::ivec3>(item.data))));
 					case 4:
-						glUniform4iv(uniformLocation, glm::value_ptr(std::any_cast<glm::bvec4>(item.data)));
+						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec4(std::any_cast<glm::ivec4>(item.data))));
 					}
 					break;
 				case SpvType::Int:
@@ -305,11 +308,23 @@ namespace Cacao {
 					case 1:
 						glUniform1i(uniformLocation, std::any_cast<int>(item.data));
 					case 2:
-						glUniform2iv(uniformLocation, glm::value_ptr(std::any_cast<glm::ivec2>(item.data)));
+						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec2>(item.data)));
 					case 3:
-						glUniform3iv(uniformLocation, glm::value_ptr(std::any_cast<glm::ivec3>(item.data)));
+						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec3>(item.data)));
 					case 4:
-						glUniform4iv(uniformLocation, glm::value_ptr(std::any_cast<glm::ivec4>(item.data)));
+						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec4>(item.data)));
+					}
+					break;
+				case SpvType::SampledImage:
+					switch(dims){
+					case 1:
+						glUniform1i(uniformLocation, std::any_cast<int>(item.data));
+					case 2:
+						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec2>(item.data)));
+					case 3:
+						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec3>(item.data)));
+					case 4:
+						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec4>(item.data)));
 					}
 					break;
 				case SpvType::Int64:
@@ -317,11 +332,11 @@ namespace Cacao {
 					case 1:
 						glUniform1i64ARB(uniformLocation, std::any_cast<int64_t>(item.data));
 					case 2:
-						glUniform2i64vARB(uniformLocation, glm::value_ptr(std::any_cast<glm::i64vec2>(item.data)));
+						glUniform2i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec2>(item.data)));
 					case 3:
-						glUniform3i64vARB(uniformLocation, glm::value_ptr(std::any_cast<glm::i64vec3>(item.data)));
+						glUniform3i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec3>(item.data)));
 					case 4:
-						glUniform4i64vARB(uniformLocation, glm::value_ptr(std::any_cast<glm::i64vec4>(item.data)));
+						glUniform4i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec4>(item.data)));
 					}
 					break;
 				case SpvType::UInt:
@@ -329,11 +344,11 @@ namespace Cacao {
 					case 1:
 						glUniform1ui(uniformLocation, std::any_cast<unsigned int>(item.data));
 					case 2:
-						glUniform2uiv(uniformLocation, glm::value_ptr(std::any_cast<glm::uvec2>(item.data)));
+						glUniform2uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec2>(item.data)));
 					case 3:
-						glUniform3uiv(uniformLocation, glm::value_ptr(std::any_cast<glm::uvec3>(item.data)));
+						glUniform3uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec3>(item.data)));
 					case 4:
-						glUniform4uiv(uniformLocation, glm::value_ptr(std::any_cast<glm::uvec4>(item.data)));
+						glUniform4uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec4>(item.data)));
 					}
 					break;
 				case SpvType::UInt64:
@@ -341,11 +356,11 @@ namespace Cacao {
 					case 1:
 						glUniform1ui64ARB(uniformLocation, std::any_cast<uint64_t>(item.data));
 					case 2:
-						glUniform2ui64vARB(uniformLocation, glm::value_ptr(std::any_cast<glm::u64vec2>(item.data)));
+						glUniform2ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec2>(item.data)));
 					case 3:
-						glUniform3ui64vARB(uniformLocation, glm::value_ptr(std::any_cast<glm::u64vec3>(item.data)));
+						glUniform3ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec3>(item.data)));
 					case 4:
-						glUniform4ui64vARB(uniformLocation, glm::value_ptr(std::any_cast<glm::u64vec4>(item.data)));
+						glUniform4ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec4>(item.data)));
 					}
 					break;
 				case SpvType::Float:
@@ -353,29 +368,29 @@ namespace Cacao {
 					case 1:
 						glUniform1f(uniformLocation, std::any_cast<float>(item.data));
 					case 2:
-						glUniform2fv(uniformLocation, glm::value_ptr(std::any_cast<glm::vec2>(item.data)));
+						glUniform2fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec2>(item.data)));
 					case 3:
-						glUniform3fv(uniformLocation, glm::value_ptr(std::any_cast<glm::vec3>(item.data)));
+						glUniform3fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec3>(item.data)));
 					case 4:
-						glUniform4fv(uniformLocation, glm::value_ptr(std::any_cast<glm::vec4>(item.data)));
+						glUniform4fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec4>(item.data)));
 					case 6:
-						glUniformMatrix2fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat2>(item.data)));
+						glUniformMatrix2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2>(item.data)));
 					case 7:
-						glUniformMatrix2x3fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat2x3>(item.data)));
+						glUniformMatrix2x3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2x3>(item.data)));
 					case 8:
-						glUniformMatrix2x4fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat2x4>(item.data)));
+						glUniformMatrix2x4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2x4>(item.data)));
 					case 10:
-						glUniformMatrix3x2fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat3x2>(item.data)));
+						glUniformMatrix3x2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3x2>(item.data)));
 					case 11:
-						glUniformMatrix3fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat3>(item.data)));
+						glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3>(item.data)));
 					case 12:
-						glUniformMatrix3x4fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat3x4>(item.data)));
+						glUniformMatrix3x4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3x4>(item.data)));
 					case 14:
-						glUniformMatrix4x2fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat4x2>(item.data)));
+						glUniformMatrix4x2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4x2>(item.data)));
 					case 15:
-						glUniformMatrix4x3fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat4x3>(item.data)));
+						glUniformMatrix4x3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4x3>(item.data)));
 					case 16:
-						glUniformMatrix4fv(uniformLocation, glm::value_ptr(std::any_cast<glm::mat4>(item.data)));
+						glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4>(item.data)));
 					}
 					break;
 				case SpvType::Double:
@@ -383,29 +398,29 @@ namespace Cacao {
 					case 1:
 						glUniform1d(uniformLocation, std::any_cast<double>(item.data));
 					case 2:
-						glUniform2dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dvec2>(item.data)));
+						glUniform2dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec2>(item.data)));
 					case 3:
-						glUniform3dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dvec3>(item.data)));
+						glUniform3dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec3>(item.data)));
 					case 4:
-						glUniform4dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dvec4>(item.data)));
+						glUniform4dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec4>(item.data)));
 					case 6:
-						glUniformMatrix2dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat2>(item.data)));
+						glUniformMatrix2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2>(item.data)));
 					case 7:
-						glUniformMatrix2x3dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data)));
+						glUniformMatrix2x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data)));
 					case 8:
-						glUniformMatrix2x4dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data)));
+						glUniformMatrix2x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data)));
 					case 10:
-						glUniformMatrix3x2dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data)));
+						glUniformMatrix3x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data)));
 					case 11:
-						glUniformMatrix3dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat3>(item.data)));
+						glUniformMatrix3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3>(item.data)));
 					case 12:
-						glUniformMatrix3x4dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data)));
+						glUniformMatrix3x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data)));
 					case 14:
-						glUniformMatrix4x2dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data)));
+						glUniformMatrix4x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data)));
 					case 15:
-						glUniformMatrix4x3dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data)));
+						glUniformMatrix4x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data)));
 					case 16:
-						glUniformMatrix4dv(uniformLocation, glm::value_ptr(std::any_cast<glm::dmat4>(item.data)));
+						glUniformMatrix4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4>(item.data)));
 					}
 					break;
 				}
@@ -414,9 +429,11 @@ namespace Cacao {
 				return;
 			}
 
-			//Restore previous shader
-			Unbind();
-			glUseProgram(currentlyBound);
+			//Restore previous shader (only if we weren't bound before)
+			if(currentlyBound != -1){
+				Unbind();
+				glUseProgram(currentlyBound);
+			}
 		}
 	}
 

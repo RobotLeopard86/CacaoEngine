@@ -52,13 +52,13 @@ namespace Cacao {
 		Asserts::EngineAssert(launchRoot["launch"].IsScalar(), "Launch config does not contain the \"launch\" parameter!");
 		Asserts::EngineAssert(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), "Specified launch target does not contain a launch module!");
 		dynalo::library lib(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());
-		
-		//Launch game module
-		auto launchFunc = lib.get_function<void(void)>("_CacaoLaunch");
-		launchFunc();
 
 		//Open the window
 		Window::GetInstance()->Open("Cacao Engine", 1280, 720);
+
+		//Launch game module
+		auto launchFunc = lib.get_function<void(void)>("_CacaoLaunch");
+		launchFunc();
 
 		//Start the dynamic tick controller
 		DynTickController::GetInstance()->Start();

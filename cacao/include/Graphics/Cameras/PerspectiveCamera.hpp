@@ -8,7 +8,8 @@ namespace Cacao {
 	//Implement a perspective camera (method explanations found in Camera.hpp)
 	class PerspectiveCamera : public Camera {
 	public:
-		PerspectiveCamera(float fov, glm::ivec2 size);
+		//May only be created when the window is open, as the camera requires the window dimensions
+		PerspectiveCamera(float fov = 60);
 
 		glm::vec3 GetPosition() override { return position; }
 		void SetPosition(glm::vec3 pos) override { position = pos; RecalculateViewMatrix(); }

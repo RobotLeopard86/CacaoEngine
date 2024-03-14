@@ -38,9 +38,10 @@ namespace Cacao {
 
 		//Actual data
 		//During upload, this will be attempted to cast to the type specified in the shader item
-		//If this cast fails, an error will be thrown
+		//If this cast fails, an error will be thrown and the upload will be aborted
+		//If you are targeting an image, use an integer here to specify the texture slot, and then use that same slot in your texture bind call
 		std::any data;
-	}
+	};
 
 	//Data to upload to a shader
 	using ShaderUploadData = std::vector<ShaderUploadItem>;
