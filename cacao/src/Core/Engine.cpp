@@ -42,6 +42,9 @@ namespace Cacao {
 			return;
 		}));
 
+		//Open the window
+		Window::GetInstance()->Open("Cacao Engine", 1280, 720);
+
 		//Load the game module
 		Logging::EngineLog("Loading game module...");
 		EngineAssert(std::filesystem::exists("launchconfig.cacao.yml"), "No launch config file exists!");
@@ -50,9 +53,6 @@ namespace Cacao {
 		EngineAssert(launchRoot["launch"].IsScalar(), "Launch config does not contain the \"launch\" parameter!");
 		EngineAssert(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), "Specified launch target does not contain a launch module!");
 		dynalo::library lib(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());
-
-		//Open the window
-		Window::GetInstance()->Open("Cacao Engine", 1280, 720);
 
 		//Start the thread pool (subtract two threads for the dedicated dynamic tick and render controllers)
 		Logging::EngineLog("Setting up thread pool graphics contexts...");
