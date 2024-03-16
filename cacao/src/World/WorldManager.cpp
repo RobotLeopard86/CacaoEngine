@@ -43,7 +43,7 @@ namespace Cacao {
 	}
 
 	World& WorldManager::GetWorld(std::string name){
-		Asserts::EngineAssert(worlds.contains(name), "Can't get access to a world that doesn't exist!");
+		EngineAssert(worlds.contains(name), "Can't get access to a world that doesn't exist!");
 
 		return worlds.at(name);
 	}

@@ -18,7 +18,7 @@
 #include "Graphics/Shader.hpp"
 #include "Graphics/Window.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
-#include "Graphics/Textures/Texture.hpp"
+#include "Graphics/Textures/Texture2D.hpp"
 #include "Graphics/Cameras/PerspectiveCamera.hpp"
 #include "Utilities/Flushable.hpp"
 #include "Utilities/Input.hpp"

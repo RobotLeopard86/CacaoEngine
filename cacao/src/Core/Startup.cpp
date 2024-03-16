@@ -1,8 +1,10 @@
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 #include <iostream>
 #include <filesystem>
+#include <cstdlib>
 
 int main(int argc, char** argv){
 	//Change to executable directory

@@ -1,12 +1,14 @@
 #pragma once
 
 #include <atomic>
-#include <chrono>
 #include <string>
+#include <map>
 
+#define BS_THREAD_POOL_ENABLE_PAUSE
 #include "BS_thread_pool.hpp"
 
 #include "EngineConfig.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 namespace Cacao {
 	//Singleton representing the engine
@@ -24,6 +26,15 @@ namespace Cacao {
 		//Access the thread pool
 		BS::thread_pool& GetThreadPool() { return threadPool; }
 
+		//Request any native data needed for a graphics context
+		//Should only be called by thread pools, hence the poolID name
+		//Do not use this function otherwise (it will yell at you in the console)
+		NativeData* RequestGraphicsContext(size_t poolID);
+		
+		//Set up a graphics context for use
+		//Backed implementation required
+		void SetupGraphicsContext(NativeData* context);
+
 		//Engine config properties
 		EngineConfig cfg;
 	private:
@@ -39,7 +50,11 @@ namespace Cacao {
 
 		Engine() {}
 
-		//Engine start time (used for calculating elapsed time)
-		std::chrono::time_point<std::chrono::steady_clock> lastFrame;
+		//List of loaned graphics contexts
+		std::map<size_t, NativeData*> loanedContexts;
+
+		//Backend implementation required
+		NativeData* _CreateGraphicsContext();
+		void _DeleteGraphicsContext(NativeData* context);
 	};
 }

@@ -19,7 +19,7 @@ namespace Cacao {
 		nativeData = new GLCubemapData();
 
 		for(std::string tex : filePaths){
-			Asserts::EngineAssert(std::filesystem::exists(tex), "Cannot create cubemap from nonexistent file!");
+			EngineAssert(std::filesystem::exists(tex), "Cannot create cubemap from nonexistent file!");
 		}
 
 		textures = filePaths;
