@@ -37,7 +37,7 @@ extern "C" {
 
 		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(bob));
 
-		Cacao::Engine::GetInstance()->cfg.targetDynTPS = 5;
+		Cacao::Engine::GetInstance()->cfg.targetDynTPS = 30;
 	}
 
 	void _CacaoExiting() {

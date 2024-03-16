@@ -18,17 +18,17 @@
 namespace Cacao {
 	Shader::Shader(std::filesystem::path vertex, std::filesystem::path fragment, ShaderSpec spec) {
 		//Validate that these paths exist
-		Asserts::EngineAssert(std::filesystem::exists(vertex), "Cannot create a shader from a non-existent file!");
-		Asserts::EngineAssert(std::filesystem::exists(fragment), "Cannot create a shader from a non-existent file!");
+		EngineAssert(std::filesystem::exists(vertex), "Cannot create a shader from a non-existent file!");
+		EngineAssert(std::filesystem::exists(fragment), "Cannot create a shader from a non-existent file!");
 
 		//Load SPIR-V code
 
 		//Open file streams
 		//Start at end of file to easily determine necessary buffer size
 		std::ifstream vertStream(vertex, std::ios::ate | std::ios::binary);
-		Asserts::EngineAssert(vertStream.is_open(), "Cannot open vertex shader code file!");
+		EngineAssert(vertStream.is_open(), "Cannot open vertex shader code file!");
 		std::ifstream fragStream(vertex, std::ios::ate | std::ios::binary);
-		Asserts::EngineAssert(fragStream.is_open(), "Cannot open fragment shader code file!");
+		EngineAssert(fragStream.is_open(), "Cannot open fragment shader code file!");
 
 		//Allocate data buffers
 		size_t vfs = (size_t) vertStream.tellg();
@@ -181,7 +181,7 @@ namespace Cacao {
 
 		//Link Cacao data UBO
 		GLuint cacaoUBOIndex = glGetUniformBlockIndex(program, "CacaoData");
-		Asserts::EngineAssert(cacaoUBOIndex != GL_INVALID_INDEX, "Shaders are required to contain the CacaoData uniform block!");
+		EngineAssert(cacaoUBOIndex != GL_INVALID_INDEX, "Shaders are required to contain the CacaoData uniform block!");
 		glUniformBlockBinding(program, cacaoUBOIndex, 0);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, nd->cacaoDataUBO); 
 
@@ -258,7 +258,7 @@ namespace Cacao {
 
 			//Obtain uniform location
 			GLint uniformLocation = glGetUniformLocation(nd->gpuID, item.target.c_str());
-			Asserts::EngineAssert(uniformLocation != -1, "Requested uniform does not exist in shader!");
+			EngineAssert(uniformLocation != -1, "Requested uniform does not exist in shader!");
 
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];

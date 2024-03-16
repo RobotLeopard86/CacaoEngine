@@ -30,7 +30,7 @@ namespace Cacao {
 
 		bool HasData() { return data.has_value(); }
 		T GetData() {
-			Asserts::EngineAssert(HasData(), "Cannot access event data which does not exist!");
+			EngineAssert(HasData(), "Cannot access event data which does not exist!");
 			return data.value();
 		}
 	private:

@@ -27,28 +27,28 @@ namespace Cacao {
 	}
 
 	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY){
-		Asserts::EngineAssert(!isOpen, "Can't open the window, it's already open!");
+		EngineAssert(!isOpen, "Can't open the window, it's already open!");
 
 		//Initialize GLFW
-		Asserts::EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
+		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
 
 		//Set error callback
 		glfwSetErrorCallback([](int ec, const char* message){
 			//Always false assertion
-			Asserts::EngineAssert(false, std::string("GLFW error ") + std::to_string(ec) + ": " + message);
+			EngineAssert(false, std::string("GLFW error ") + std::to_string(ec) + ": " + message);
 		});
 
 		//Set window initialization hints
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
 		//Create window
 		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
-		Asserts::EngineAssert(nativeWindow != NULL, "Failed to open the window!");
+		EngineAssert(nativeWindow != NULL, "Failed to open the window!");
 
 		//Set window VSync state
 		SetVSyncEnabled(true);
@@ -114,8 +114,7 @@ namespace Cacao {
 		//Initialize OpenGL
 		glfwMakeContextCurrent((GLFWwindow*)nativeWindow);
 		int gladResult = gladLoadGL(glfwGetProcAddress);
-		Asserts::EngineAssert(gladResult != 0, "Could not load Glad!");
-		Logging::EngineLog(std::string("Loaded OpenGL version ") + std::to_string(GLAD_VERSION_MAJOR(gladResult)) + "." + std::to_string(GLAD_VERSION_MINOR(gladResult)), LogLevel::Trace);
+		EngineAssert(gladResult != 0, "Could not load Glad!");
 
 		//Release context for usage by the render controller thread
 		glfwMakeContextCurrent(NULL);
@@ -124,7 +123,7 @@ namespace Cacao {
 	}
 
 	void Window::Close() {
-		Asserts::EngineAssert(isOpen, "Can't close window, it's not open!");
+		EngineAssert(isOpen, "Can't close window, it's not open!");
 
 		//Destroy the window
 		glfwDestroyWindow((GLFWwindow*)nativeWindow);
@@ -144,19 +143,19 @@ namespace Cacao {
 	}
 
 	void Window::Update(){
-		Asserts::EngineAssert(isOpen, "Can't update window, it's not open!");
+		EngineAssert(isOpen, "Can't update window, it's not open!");
 		//Have GLFW check for events
 		glfwPollEvents();
 	}
 
 	void Window::Present(){
-		Asserts::EngineAssert(isOpen, "Can't present to closed window!");
+		EngineAssert(isOpen, "Can't present to closed window!");
 		//Have GLFW check for events
 		glfwSwapBuffers((GLFWwindow*)nativeWindow);
 	}
 
 	void Window::SetTitle(std::string title){
-		Asserts::EngineAssert(isOpen, "Can't set window title, it's not open!");
+		EngineAssert(isOpen, "Can't set window title, it's not open!");
 		glfwSetWindowTitle((GLFWwindow*)nativeWindow, title.c_str());
 	}
 }

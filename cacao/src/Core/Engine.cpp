@@ -42,65 +42,98 @@ namespace Cacao {
 			return;
 		}));
 
-		//Start the thread pool
-		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 2); //Subtract two for the dynamic and fixed tick controllers
-
 		//Load the game module
-		Asserts::EngineAssert(std::filesystem::exists("launchconfig.cacao.yml"), "No launch config file exists!");
+		Logging::EngineLog("Loading game module...");
+		EngineAssert(std::filesystem::exists("launchconfig.cacao.yml"), "No launch config file exists!");
 		YAML::Node launchRoot = YAML::LoadFile("launchconfig.cacao.yml");
-		Asserts::EngineAssert(launchRoot.IsMap(), "Launch config is not a map!");
-		Asserts::EngineAssert(launchRoot["launch"].IsScalar(), "Launch config does not contain the \"launch\" parameter!");
-		Asserts::EngineAssert(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), "Specified launch target does not contain a launch module!");
+		EngineAssert(launchRoot.IsMap(), "Launch config is not a map!");
+		EngineAssert(launchRoot["launch"].IsScalar(), "Launch config does not contain the \"launch\" parameter!");
+		EngineAssert(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), "Specified launch target does not contain a launch module!");
 		dynalo::library lib(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());
 
 		//Open the window
 		Window::GetInstance()->Open("Cacao Engine", 1280, 720);
 
+		//Start the thread pool (subtract two threads for the dedicated dynamic tick and render controllers)
+		Logging::EngineLog("Setting up thread pool graphics contexts...");
+		for(size_t i = 0; i < std::thread::hardware_concurrency() - 2; i++){
+			loanedContexts.insert_or_assign(i, _CreateGraphicsContext());
+		}
+		Logging::EngineLog("Starting thread pool...");
+		threadPool.reset(std::thread::hardware_concurrency() - 2, [](){
+			//Get and set up a graphics context
+			NativeData* graphicsContext = Engine::GetInstance()->RequestGraphicsContext(BS::this_thread::get_index().value());
+			Engine::GetInstance()->SetupGraphicsContext(graphicsContext);
+		});
+
+		//Set up common skybox resources
+		threadPool.submit_task([]() {
+			Skybox::CommonSetup();
+		}).wait();
+
 		//Launch game module
+		Logging::EngineLog("Running game module startup hook...");
 		auto launchFunc = lib.get_function<void(void)>("_CacaoLaunch");
 		launchFunc();
 
 		//Start the dynamic tick and rendering controller
+		Logging::EngineLog("Starting controllers...");
 		DynTickController::GetInstance()->Start();
 		RenderController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
 
-		lastFrame = std::chrono::steady_clock::now();
-
-		//Engine run loop
+		//Engine run loop (for now this mostly does nothing)
 		while(run){
-			//Make sure we're only ticking every 50 ms
-			double timestep = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastFrame).count();
-			if(timestep < 50) continue;
-			lastFrame = std::chrono::steady_clock::now();
-
 			//Update window
 			Window::GetInstance()->Update();
 		}
 
 		Logging::EngineLog("Shutting down engine...");
 
-		//Stop the dynamic tick controller
+		//Stop the dynamic tick and rendering controllers
+		Logging::EngineLog("Stopping controllers...");
 		DynTickController::GetInstance()->Stop();
 		RenderController::GetInstance()->Stop();
+
+		//Cleanup common skybox resources
+		threadPool.submit_task([]() {
+			Skybox::CommonCleanup();
+		}).wait();
+
+		//"Stop" thread pool (really we just pause it so no new tasks can come in, actual thread pool destruction happens at program exit)
+		//This is necessary so that we can clean up any thread pool resources
+		Logging::EngineLog("Stopping thread pool...");
+		threadPool.pause();
+		Logging::EngineLog("Destroying thread pool graphics contexts...");
+		for(auto it : loanedContexts){
+			_DeleteGraphicsContext(it.second);
+			delete it.second;
+		}
+		loanedContexts.clear();
+
+		//Let game module close
+		//We don't explictly close the library because the destructor does that for us
+		//Doing it now would actually cause a runtime error
+		Logging::EngineLog("Running game module shutdown hook...");
+		auto gameStopFunc = lib.get_function<void(void)>("_CacaoExiting");
+		gameStopFunc();
 
 		//Close window
 		Window::GetInstance()->Close();
 
-		//Let game module close
-		//We dont' explictly close the library because the destructor does that for us
-		//Doing it now would actually cause a runtime error
-		auto gameStopFunc = lib.get_function<void(void)>("_CacaoExiting");
-		gameStopFunc();
-
 		//Shutdown event manager
+		Logging::EngineLog("Shutting down event manager...");
 		EventManager::GetInstance()->Shutdown();
 	}
 
 	void Engine::Stop() {
 		run.store(false);
+	}
+
+	NativeData* Engine::RequestGraphicsContext(size_t poolID){
+		EngineAssert(loanedContexts.contains(poolID), "No graphics context loaned to specified pool ID! You have been yelled at in the console, as you were warned.");
+		return loanedContexts[poolID];
 	}
 
 }
