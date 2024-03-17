@@ -15,7 +15,7 @@ namespace Cacao {
 
         //Get all mesh names
         std::vector<std::string> ListMeshes();
-        //Retrieve a mesh by name (will modify value stored in model if modified and will be destroyed when the model is)
+        //Retrieve a mesh by name (will modify value stored in model if modified but will NOT be deleted when model is)
         Mesh* ExtractMesh(std::string id);
     private:
         std::map<std::string, Mesh*> meshes;

@@ -51,9 +51,9 @@ namespace Cacao {
     class Shader {
     public:
 		//Create a shader from raw SPIR-V code loaded separately
-		Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment, ShaderSpec spec);
+		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
 		//Create a shader from file paths
-		Shader(std::filesystem::path vertex, std::filesystem::path fragment, ShaderSpec spec);
+		Shader(std::string vertex, std::string fragment, ShaderSpec spec);
 
 		~Shader() {
 			if(compiled && bound) Unbind();

@@ -33,8 +33,6 @@ extern "C" {
 		}
 
 		void Launch() {
-			Cacao::Window::GetInstance()->SetTitle("Cacao Playground");
-
 			Cacao::WorldManager::GetInstance()->CreateWorld<Cacao::PerspectiveCamera>("Playground");
 			Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
 			Cacao::World& world = Cacao::WorldManager::GetInstance()->GetWorld("Playground");
@@ -42,27 +40,52 @@ extern "C" {
 			std::shared_ptr<SussyScript> ss = std::make_shared<SussyScript>();
 			ss->SetActive(true);
 
-			Cacao::Entity bob;
+			Cacao::ShaderSpec spec;
+			shader = new Cacao::Shader("assets/shaders/color.vert.spv", "assets/shaders/color.frag.spv", spec);
+			std::future<void> shaderFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
+				this->shader->Compile();
+			});
+
+			Cacao::Model m("assets/models/icosphere.obj");
+			mesh = m.ExtractMesh("Icosphere");
+			std::future<void> meshFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
+				this->mesh->Compile();
+			});
+
+			std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
+			mc->SetActive(true);
+			mc->mesh = mesh;
+			mc->mat = mat;
+
+			mat->shader = shader;
+
+			meshFuture.wait();
+			shaderFuture.wait();
+
 			bob.active = true;
 			bob.components.push_back(ss);
+			bob.components.push_back(mc);
 
 			world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(bob));
-
-			Cacao::Engine::GetInstance()->cfg.targetDynTPS = 30;
 		}
 
 		void Cleanup() {
-			//delete sky;
-			//skyTex->Release();
-			//delete skyTex;
+			delete mat;
+			Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
+				this->shader->Release();
+				this->mesh->Release();
+			}).wait();
+			delete shader;
+			delete mesh;
 			delete this;
 		}
 	private:
 		static PlaygroundApp* instance;
 		static bool instanceExists;
 
-		Cacao::Cubemap* skyTex;
-		Cacao::Skybox* sky;
+		Cacao::Shader* shader;
+		Cacao::Material* mat;
+		Cacao::Mesh* mesh;
 
 		Cacao::Entity bob;
 	};

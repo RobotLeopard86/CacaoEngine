@@ -52,6 +52,7 @@ namespace Cacao {
 
 	void DynTickController::Run(std::stop_token stopTkn) {
 		//Run while we haven't been asked to stop
+		timestep = 0.0;
 		while(!stopTkn.stop_requested()){
 			//Get time at tick start and calculate ideal run time
 			std::chrono::steady_clock::time_point tickStart = std::chrono::steady_clock::now();

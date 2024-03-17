@@ -19,6 +19,7 @@
 #include "Graphics/Window.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
+#include "Graphics/Rendering/MeshComponent.hpp"
 #include "Graphics/Cameras/PerspectiveCamera.hpp"
 #include "Utilities/Flushable.hpp"
 #include "Utilities/Input.hpp"

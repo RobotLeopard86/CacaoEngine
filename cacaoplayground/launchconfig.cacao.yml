@@ -1,1 +1,11 @@
+# Path where the launch module binary can be found (e.g. "launch.so", "launch.dll") relative to the executable directory
 launch: playground/build
+
+# Target number of dynamic ticks per second (not a hard constraint)
+dynamicTPS: 30
+
+# Window title
+title: Cacao Playground
+
+# Working directory relative to the executable directory
+workingDir: playground

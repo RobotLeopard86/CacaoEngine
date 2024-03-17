@@ -6,51 +6,64 @@
 #include "glad/gl.h"
 #include "spirv_glsl.hpp"
 #include "spirv_cross.hpp"
+#include "spirv_parser.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/matrix.hpp"
 
-#include <fstream>
+#include <cstdio>
+#include <cstring>
 #include <utility>
 
 //For my sanity
 #define nd ((GLShaderData*)nativeData)
 
 namespace Cacao {
-	Shader::Shader(std::filesystem::path vertex, std::filesystem::path fragment, ShaderSpec spec) {
+	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec) {
 		//Validate that these paths exist
-		EngineAssert(std::filesystem::exists(vertex), "Cannot create a shader from a non-existent file!");
-		EngineAssert(std::filesystem::exists(fragment), "Cannot create a shader from a non-existent file!");
+		EngineAssert(std::filesystem::exists(vertexPath), "Cannot create a shader from a non-existent file!");
+		EngineAssert(std::filesystem::exists(fragmentPath), "Cannot create a shader from a non-existent file!");
 
 		//Load SPIR-V code
 
 		//Open file streams
-		//Start at end of file to easily determine necessary buffer size
-		std::ifstream vertStream(vertex, std::ios::ate | std::ios::binary);
-		EngineAssert(vertStream.is_open(), "Cannot open vertex shader code file!");
-		std::ifstream fragStream(vertex, std::ios::ate | std::ios::binary);
-		EngineAssert(fragStream.is_open(), "Cannot open fragment shader code file!");
+		FILE* vf = fopen(vertexPath.c_str(), "rb");
+		EngineAssert(vf, "Failed to open vertex shader file!");
+		FILE* ff = fopen(fragmentPath.c_str(), "rb");
+		EngineAssert(ff, "Failed to open fragment shader file!");
 
-		//Allocate data buffers
-		size_t vfs = (size_t) vertStream.tellg();
-		std::vector<uint32_t> vbuf(vfs);
-		size_t ffs = (size_t) fragStream.tellg();
-		std::vector<uint32_t> fbuf(ffs);
+		//Get size of shader files
+		fseek(vf, 0, SEEK_END);
+		long vlen = ftell(vf) / sizeof(uint32_t);
+		rewind(vf);
+		fseek(ff, 0, SEEK_END);
+		long flen = ftell(ff) / sizeof(uint32_t);
+		rewind(ff);
 
-		//Read data into buffers
-		vertStream.seekg(0);
-		vertStream.read(reinterpret_cast<char*>(vbuf.data()), vfs);
-		fragStream.seekg(0);
-		fragStream.read(reinterpret_cast<char*>(vbuf.data()), ffs);
+		//Load shader data into vectors
+		std::vector<uint32_t> vbuf(vlen);
+		std::vector<uint32_t> fbuf(flen);
+		if(fread(vbuf.data(), sizeof(uint32_t), vlen, vf) != size_t(vlen)) {
+			//Clean up file streams before forced assertion exit
+			fclose(vf);
+			fclose(ff);
+			EngineAssert(false, "Failed to read vertex shader data from file!");
+		}
+		if(fread(fbuf.data(), sizeof(uint32_t), flen, ff) != size_t(flen)) {
+			//Clean up file streams before forced assertion exit
+			fclose(vf);
+			fclose(ff);
+			EngineAssert(false, "Failed to read fragment shader data from file!");
+		}
 
-		//Close streams
-		vertStream.close();
-		fragStream.close();
+		//Close file streams
+		fclose(vf);
+		fclose(ff);
 
 		//Construct shader with loaded code
 		Shader(vbuf, fbuf, spec);
 	}
 
-	Shader::Shader(std::vector<uint32_t> vertex, std::vector<uint32_t> fragment, ShaderSpec spec)
+	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
 		:compiled(false), bound(false), specification(spec) {
 		//Create native data
 		nativeData = new GLShaderData();
@@ -63,15 +76,21 @@ namespace Cacao {
 		options.version = 330;
 		options.enable_420pack_extension = false;
 
+		//Parse SPIR-V IR
+		spirv_cross::Parser vertParse(std::move(vertex));
+		vertParse.parse();
+		spirv_cross::Parser fragParse(std::move(fragment));
+		fragParse.parse();
+
 		//Load vertex shader
-		spirv_cross::CompilerGLSL vertGLSL(std::move(vertex));
+		spirv_cross::CompilerGLSL vertGLSL(std::move(vertParse.get_parsed_ir()));
 
 		//Compile vertex shader to GLSL
 		vertGLSL.set_common_options(options);
 		nd->vertexCode = vertGLSL.compile();
 
 		//Load fragment shader
-		spirv_cross::CompilerGLSL fragGLSL(std::move(fragment));
+		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
 		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
 
 		//Remove image decorations
@@ -239,7 +258,7 @@ namespace Cacao {
 
 		//Create a map for quicker reference later
 		std::map<std::string, ShaderItemInfo> foundItems;
-		for(ShaderUploadItem item : data) {
+		for(ShaderUploadItem& item : data) {
 			//Attempt to locate item in shader spec
 			bool found = false;
 			if(!foundItems.contains(item.target)) {
@@ -268,7 +287,7 @@ namespace Cacao {
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4*info.size.y)-(4-info.size.x);
-			if(info.size.x == 1 && info.size.y < 2){
+			if(info.size.x == 1 && info.size.y >= 2){
 				Logging::EngineLog("Shaders cannot have data with one column and 2+ rows, data upload aborted!", LogLevel::Error);
 				return;
 			}
@@ -294,138 +313,188 @@ namespace Cacao {
 				case SpvType::Boolean:
 					switch(dims){
 					case 1:
-						glUniform1i(uniformLocation, std::any_cast<bool>(item.data));
+						glUniform1i(uniformLocation, std::any_cast<bool>(item.data));\
+						break;
 					case 2:
 						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec2(std::any_cast<glm::ivec2>(item.data))));
+						break;
 					case 3:
 						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec3(std::any_cast<glm::ivec3>(item.data))));
+						break;
 					case 4:
 						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec4(std::any_cast<glm::ivec4>(item.data))));
+						break;
 					}
 					break;
 				case SpvType::Int:
 					switch(dims){
 					case 1:
 						glUniform1i(uniformLocation, std::any_cast<int>(item.data));
+						break;
 					case 2:
 						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec2>(item.data)));
+						break;
 					case 3:
 						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec3>(item.data)));
+						break;
 					case 4:
 						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec4>(item.data)));
+						break;
 					}
 					break;
 				case SpvType::SampledImage:
 					switch(dims){
 					case 1:
 						glUniform1i(uniformLocation, std::any_cast<int>(item.data));
+						break;
 					case 2:
 						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec2>(item.data)));
+						break;
 					case 3:
 						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec3>(item.data)));
+						break;
 					case 4:
 						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec4>(item.data)));
+						break;
 					}
 					break;
 				case SpvType::Int64:
 					switch(dims){
 					case 1:
 						glUniform1i64ARB(uniformLocation, std::any_cast<int64_t>(item.data));
+						break;
 					case 2:
 						glUniform2i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec2>(item.data)));
+						break;
 					case 3:
 						glUniform3i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec3>(item.data)));
+						break;
 					case 4:
 						glUniform4i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec4>(item.data)));
+						break;
 					}
 					break;
 				case SpvType::UInt:
 					switch(dims){
 					case 1:
 						glUniform1ui(uniformLocation, std::any_cast<unsigned int>(item.data));
+						break;
 					case 2:
 						glUniform2uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec2>(item.data)));
+						break;
 					case 3:
 						glUniform3uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec3>(item.data)));
+						break;
 					case 4:
 						glUniform4uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec4>(item.data)));
+						break;
 					}
 					break;
 				case SpvType::UInt64:
 					switch(dims){
 					case 1:
 						glUniform1ui64ARB(uniformLocation, std::any_cast<uint64_t>(item.data));
+						break;
 					case 2:
 						glUniform2ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec2>(item.data)));
+						break;
 					case 3:
 						glUniform3ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec3>(item.data)));
+						break;
 					case 4:
 						glUniform4ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec4>(item.data)));
+						break;
 					}
 					break;
 				case SpvType::Float:
 					switch(dims){
 					case 1:
 						glUniform1f(uniformLocation, std::any_cast<float>(item.data));
+						break;
 					case 2:
 						glUniform2fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec2>(item.data)));
+						break;
 					case 3:
 						glUniform3fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec3>(item.data)));
+						break;
 					case 4:
 						glUniform4fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec4>(item.data)));
+						break;
 					case 6:
 						glUniformMatrix2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2>(item.data)));
+						break;
 					case 7:
 						glUniformMatrix2x3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2x3>(item.data)));
+						break;
 					case 8:
 						glUniformMatrix2x4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2x4>(item.data)));
+						break;
 					case 10:
 						glUniformMatrix3x2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3x2>(item.data)));
+						break;
 					case 11:
 						glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3>(item.data)));
+						break;
 					case 12:
 						glUniformMatrix3x4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3x4>(item.data)));
+						break;
 					case 14:
 						glUniformMatrix4x2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4x2>(item.data)));
+						break;
 					case 15:
 						glUniformMatrix4x3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4x3>(item.data)));
+						break;
 					case 16:
 						glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4>(item.data)));
+						break;
 					}
 					break;
 				case SpvType::Double:
 					switch(dims){
 					case 1:
 						glUniform1d(uniformLocation, std::any_cast<double>(item.data));
+						break;
 					case 2:
 						glUniform2dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec2>(item.data)));
+						break;
 					case 3:
 						glUniform3dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec3>(item.data)));
+						break;
 					case 4:
 						glUniform4dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec4>(item.data)));
+						break;
 					case 6:
 						glUniformMatrix2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2>(item.data)));
+						break;
 					case 7:
 						glUniformMatrix2x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data)));
+						break;
 					case 8:
 						glUniformMatrix2x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data)));
+						break;
 					case 10:
 						glUniformMatrix3x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data)));
+						break;
 					case 11:
 						glUniformMatrix3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3>(item.data)));
+						break;
 					case 12:
 						glUniformMatrix3x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data)));
+						break;
 					case 14:
 						glUniformMatrix4x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data)));
+						break;
 					case 15:
 						glUniformMatrix4x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data)));
+						break;
 					case 16:
 						glUniformMatrix4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4>(item.data)));
+						break;
 					}
 					break;
 				}
 			} catch(const std::bad_cast&) {
-				Logging::EngineLog("Failed cast of shader upload value to type specified in target, data upload aborted!");
+				Logging::EngineLog("Failed cast of shader upload value to type specified in target, data upload aborted!", LogLevel::Error);
 				return;
 			}
 

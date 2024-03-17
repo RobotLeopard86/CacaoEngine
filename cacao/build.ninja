@@ -1,6 +1,6 @@
 # Create definitions
 includes = -Iinclude -I../libs/spdlog/include -I../libs/glm -I../libs/dynalo/include -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs/spirv-cross -I../libs/yaml-cpp/include -I../libs -I../libs/imgui -I../libs/stb -I../libs/assimp/include -I../libs/generated
-libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl -ldl -lyaml-cpp
+libs = -L../libs/generated -lglad_gl -lglfw -limgui_gl_glfw -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl -ldl -lyaml-cpp -lassimp
 opts = -std=c++20 -g
 
 cflags = $includes $opts -c -fPIC

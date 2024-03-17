@@ -7,6 +7,7 @@ cflags = $includes $opts -c
 lflags = $includes $opts $libs -shared -fuse-ld=lld
 
 objdir = ./build/obj
+spvdir = ./assets/shaders
 
 # Set Ninja build directory
 builddir = ./build
@@ -20,8 +21,16 @@ rule link
     command = clang++ $in $lflags -o $out
     description = Link Shared Library: $out
 
+rule spv
+    command = glslc $in -o $out
+    description = Compile Shader: $in -> $out
+
 # Compile objects
 build $objdir/Playground.o: compile src/Playground.cpp
 
 # Link library
 build ./build/launch.so: link $objdir/Playground.o || $objdir/Playground.o
+
+# Compile shaders
+build $spvdir/color.vert.spv: spv src/shaders/color.vert
+build $spvdir/color.frag.spv: spv src/shaders/color.frag
