@@ -130,12 +130,6 @@ namespace Cacao {
     }
 
     Model::~Model(){
-        for(auto it = meshes.begin(); it != meshes.end(); it++){
-            if(it->second->IsCompiled()){
-                it->second->Release();
-                delete it->second;
-            }
-        }
         meshes.clear();
     }
 

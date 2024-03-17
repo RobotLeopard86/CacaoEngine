@@ -40,7 +40,7 @@ rm -rf build
 echo "Building yaml-cpp..."
 cd ../yaml-cpp
 mkdir -p build && cd build
-cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=OFF -DYAML_BUILD_TOOLS=OFF -DYAML_CPP_INSTALL=OFF
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=OFF -DYAML_BUILD_TOOLS=OFF -DYAML_CPP_INSTALL=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 ninja
 cp libyaml-cpp.a ../../generated
 
@@ -49,15 +49,16 @@ rm -rf build
 
 echo "Building stb..."
 cd ../stb
-clang stb_image.c -c -o stb_image.o
+clang -fPIC stb_image.c -c -o stb_image.o
 ar -rcs libstb_image.a stb_image.o
 rm stb_image.o
 mv libstb_image.a ../generated
+
 echo "Building ImGui..."
 cd ../imgui
 imguisrc="imgui.cpp imgui_tables.cpp imgui_draw.cpp imgui_widgets.cpp imgui_demo.cpp"
 for src in $imguisrc; do
-	clang++ $src -c -o $(echo $src | sed 's/\.cpp/\.o/g')
+	clang++ -fPIC $src -c -o $(echo $src | sed 's/\.cpp/\.o/g')
 done
 ar -rcs libimgui.a ./*.o
 rm ./*.o

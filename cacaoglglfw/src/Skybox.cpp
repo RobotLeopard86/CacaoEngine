@@ -98,7 +98,7 @@ namespace Cacao {
 		skyboxShader->UploadCacaoData(projectionMatrix, skyView, skyTransform);
 		ShaderUploadData sud;
 		ShaderUploadItem skySamplerID;
-		skySamplerID.data = 0;
+		skySamplerID.data = std::any(int(0));
 		skySamplerID.target = "skybox";
 		sud.push_back(skySamplerID);
 		skyboxShader->UploadData(sud);

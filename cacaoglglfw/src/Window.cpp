@@ -26,7 +26,7 @@ namespace Cacao {
 		return instance;
 	}
 
-	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY){
+	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY, bool startVisible){
 		EngineAssert(!isOpen, "Can't open the window, it's already open!");
 
 		//Initialize GLFW
@@ -45,6 +45,9 @@ namespace Cacao {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+		//Set initial window visibility
+		if(!startVisible) glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 		//Create window
 		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
@@ -140,6 +143,14 @@ namespace Cacao {
 
 	void Window::UpdateWindowSize(){
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
+	}
+
+	void Window::UpdateVisibilityState() {
+		if(isVisible) {
+			glfwShowWindow((GLFWwindow*)nativeWindow);
+		} else {
+			glfwHideWindow((GLFWwindow*)nativeWindow);
+		}
 	}
 
 	void Window::Update(){

@@ -11,7 +11,7 @@ namespace Cacao {
     class Window {
     public:
         //Open the window
-		void Open(std::string title, int initialSizeX, int initialSizeY);
+		void Open(std::string title, int initialSizeX, int initialSizeY, bool startVisible);
         //Close the window
         void Close();
 		//Is the window open?
@@ -32,6 +32,10 @@ namespace Cacao {
         void* GetNativeWindow() { if(!isOpen) return NULL; return nativeWindow; }
 		//Set new window title
 		void SetTitle(std::string title);
+		//Show/hide the window
+        void SetWindowVisibility(bool value) { if(!isOpen) return; isVisible = value; UpdateVisibilityState(); }
+        //Returns if the window is visible
+        bool IsWindowVisible() { if(!isOpen) return false; return isVisible; }
 
 		//Get window instance
 		static Window* GetInstance();
@@ -43,6 +47,7 @@ namespace Cacao {
 		static bool instanceExists;
 
 		bool isOpen;
+		bool isVisible;
 
         bool useVSync;
         glm::ivec2 size;
@@ -52,5 +57,6 @@ namespace Cacao {
 
         void UpdateVSyncState();
         void UpdateWindowSize();
+		void UpdateVisibilityState();
     };
 }

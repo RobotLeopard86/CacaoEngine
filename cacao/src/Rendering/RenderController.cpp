@@ -69,6 +69,9 @@ namespace Cacao {
 				//Render the frame
 				Render(next);
 
+				//Present rendered frame to window
+				Window::GetInstance()->Present();
+
 				//Remove frame from the queue
 				frameQueue.pop();
 				framesDone++;
@@ -76,9 +79,6 @@ namespace Cacao {
 
 			//Release lock
 			lock.unlock();
-
-			//Present rendered frame to window
-			Window::GetInstance()->Present();
 		}
 	}
 }
