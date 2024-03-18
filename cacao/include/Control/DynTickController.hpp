@@ -1,9 +1,12 @@
 #pragma once
 
 #include <thread>
+#include <map>
+#include <vector>
 #include <chrono>
 
 #include "Scripts/Script.hpp"
+#include "Graphics/Rendering/RenderObjects.hpp"
 
 namespace Cacao {
 	//Controller for running dynamic ticks
@@ -30,6 +33,7 @@ namespace Cacao {
 		std::jthread* thread;
 		
 		std::vector<std::shared_ptr<Component>> tickScriptList;
+		std::vector<RenderObject> tickRenderList;
 		double timestep;
 
 		DynTickController() 

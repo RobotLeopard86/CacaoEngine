@@ -20,6 +20,7 @@ namespace Cacao {
 		~Cubemap(){
 			if(bound) Unbind();
 			if(compiled) Release();
+			delete nativeData;
 		}
 		
         //Attach this cubemap to the specified slot

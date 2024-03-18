@@ -6,7 +6,7 @@
 #include "Graphics/Window.hpp"
 
 namespace Cacao {
-	void RenderController::Render(Frame frame){
+	void RenderController::Render(Frame& frame){
 		//Clear the screen
 		glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f); //This color is an obnoxious neon alligator green
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -21,7 +21,7 @@ namespace Cacao {
 			obj.material.shader->Bind();
 
 			//Configure OpenGL depth behavior
-			glDepthFunc(GL_LESS);
+			glDepthFunc(GL_LESS);;
 
 			//Draw the mesh
 			obj.mesh->Draw();

@@ -46,10 +46,11 @@ namespace Cacao {
             std::vector<Vertex> vertices;
             std::vector<glm::uvec3> indices;
 
-            int upAxis = 0;
-            scene->mMetaData->Get<int>("UpAxis", upAxis);
-            int upAxisSign = 1;
-            scene->mMetaData->Get<int>("UpAxisSign", upAxisSign);
+            int upAxis = 1, upAxisSign = 1;
+            if(scene->mMetaData){
+				scene->mMetaData->Get<int>("UpAxis", upAxis);
+            	scene->mMetaData->Get<int>("UpAxisSign", upAxisSign);
+			}
 
             ModelOrientation modelOrientation;
             //Find model orientation
@@ -122,10 +123,6 @@ namespace Cacao {
             }
 
             meshes.insert_or_assign(assimpMesh->mName.length == 0 ? ("Mesh" + std::to_string(i)) : std::string(assimpMesh->mName.C_Str()), new Mesh(vertices, indices));
-        }
-
-        for(auto it = meshes.begin(); it != meshes.end(); it++){
-            it->second->Compile();
         }
     }
 

@@ -36,7 +36,7 @@ namespace Cacao {
 		}
 		//Stop run thread
 		thread->request_stop();
-		fqCvar.notify_one();
+		cvar.notify_one();
 		thread->join();
 
 		//Delete thread object
@@ -55,16 +55,15 @@ namespace Cacao {
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
 
-			//Wait while the frame queue is empty
-			fqCvar.wait(lock, [this, stopTkn](){
+			//Wait while the frame or render context job queue is empty
+			cvar.wait(lock, [this, stopTkn](){
 				return (stopTkn.stop_requested() || !this->frameQueue.empty());
 			});
 
 			//Process frames
-			int framesDone = 0;
 			while(!frameQueue.empty()) {
 				//Acquire the next frame
-				Frame next = frameQueue.front();
+				Frame& next = frameQueue.front();
 
 				//Render the frame
 				Render(next);
@@ -74,7 +73,6 @@ namespace Cacao {
 
 				//Remove frame from the queue
 				frameQueue.pop();
-				framesDone++;
 			}
 
 			//Release lock

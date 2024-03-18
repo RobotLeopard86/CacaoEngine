@@ -6,7 +6,6 @@
 #include <vector>
 
 namespace Cacao {
-
     //EventConsumer wraps a function consumer
     class EventConsumer {
     public:
