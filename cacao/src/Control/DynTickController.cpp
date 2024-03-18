@@ -99,25 +99,21 @@ namespace Cacao {
 			}
 
 			//Accumulate things to render
-			Frame f;
-			BS::multi_future<void> roFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [f, activeWorld](unsigned int index) {
+			tickRenderList.clear();
+			BS::multi_future<void> roFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [this, activeWorld](unsigned int index) {
 				//Create script locator function for an entity
-				auto renderLocator = [f](TreeItem<Entity>& e) {
+				auto renderLocator = [this](TreeItem<Entity>& e) {
 					//Sneaky recursive lambda trick
-					auto impl = [f](TreeItem<Entity>& e, auto& implRef) mutable {
+					auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
 						//Stop if this component is inactive
 						if(!e.val().active) return;
 
-						//Check for script components
+						//Check for mesh components
 						for(std::shared_ptr<Component>& c : e.val().components){
 							if(c->GetKind() == "MESH" && c->IsActive()) {
 								//Add to list
-								RenderObject ro;
-								MeshComponent& meshComp = static_cast<MeshComponent&>(*c);
-								ro.mesh = meshComp.mesh;
-								ro.material = *meshComp.mat;
-								ro.transformMatrix = e.val().transform.GetTransformationMatrix();
-								f.objects.push_back(ro);
+								MeshComponent* mc = static_cast<MeshComponent*>(c.get());
+								this->tickRenderList.push_back(RenderObject(e.val().transform.GetTransformationMatrix(), mc->mesh, mc->mat));
 							}
 						}
 
@@ -129,17 +125,21 @@ namespace Cacao {
 					return impl(e, impl);
 				};
 
-				//Execute the script locator
+				//Execute the mesh locator
 				TreeItem<Entity>& ent = const_cast<TreeItem<Entity>&>(activeWorld.worldTree.children.at(index)); //We have to use const_cast because at() returns a const reference
 				renderLocator(ent);
 			});
 			//Wait for work to be completed
 			roFuture.wait();
 
-			//Send frame to render controller
+			//Create frame
+			Frame f;
 			f.projection = activeWorld.cam->GetProjectionMatrix();
 			f.view = activeWorld.cam->GetViewMatrix();
 			f.skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(*(activeWorld.skybox.value())) : std::nullopt);
+			f.objects = tickRenderList;
+
+			//Send frame to render controller
 			RenderController::GetInstance()->EnqueueFrame(f);
 
 			//Check elapsed time and set timestep

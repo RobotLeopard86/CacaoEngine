@@ -14,6 +14,9 @@ namespace Cacao {
     class Skybox {
     public:
 		Skybox(Cubemap* tex);
+		~Skybox() {
+			delete nativeData;
+		}
 
         //Draw this skyboxn
         void Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);

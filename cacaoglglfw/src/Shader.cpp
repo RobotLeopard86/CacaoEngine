@@ -18,7 +18,8 @@
 #define nd ((GLShaderData*)nativeData)
 
 namespace Cacao {
-	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec) {
+	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec) 
+		:compiled(false), bound(false), specification(spec) {
 		//Validate that these paths exist
 		EngineAssert(std::filesystem::exists(vertexPath), "Cannot create a shader from a non-existent file!");
 		EngineAssert(std::filesystem::exists(fragmentPath), "Cannot create a shader from a non-existent file!");
@@ -59,8 +60,42 @@ namespace Cacao {
 		fclose(vf);
 		fclose(ff);
 
-		//Construct shader with loaded code
-		Shader(vbuf, fbuf, spec);
+		//Create native data
+		nativeData = new GLShaderData();
+		
+		//Convert SPIR-V to GLSL
+
+		//Create common options
+		spirv_cross::CompilerGLSL::Options options;
+		options.es = false;
+		options.version = 330;
+		options.enable_420pack_extension = false;
+
+		//Parse SPIR-V IR
+		spirv_cross::Parser vertParse(std::move(vbuf));
+		vertParse.parse();
+		spirv_cross::Parser fragParse(std::move(fbuf));
+		fragParse.parse();
+
+		//Load vertex shader
+		spirv_cross::CompilerGLSL vertGLSL(std::move(vertParse.get_parsed_ir()));
+
+		//Compile vertex shader to GLSL
+		vertGLSL.set_common_options(options);
+		nd->vertexCode = vertGLSL.compile();
+
+		//Load fragment shader
+		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
+		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
+
+		//Remove image decorations
+		for(auto& img : fragRes.sampled_images){
+			fragGLSL.unset_decoration(img.id, spv::DecorationDescriptorSet);
+		}
+
+		//Compile fragment shader to GLSL
+		fragGLSL.set_common_options(options);
+		nd->fragmentCode = fragGLSL.compile();
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)

@@ -52,12 +52,13 @@ extern "C" {
 				this->mesh->Compile();
 			});
 
+			mat = new Cacao::Material();
+			mat->shader = shader;
+
 			std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
 			mc->SetActive(true);
 			mc->mesh = mesh;
 			mc->mat = mat;
-
-			mat->shader = shader;
 
 			meshFuture.wait();
 			shaderFuture.wait();

@@ -6,6 +6,7 @@
 #include <queue>
 #include <condition_variable>
 #include <mutex>
+#include <vector>
 
 namespace Cacao {
 	//Controller for rendering frames
@@ -22,12 +23,12 @@ namespace Cacao {
 
 		//Enqueue a frame for rendering
 		void EnqueueFrame(Frame& frame) {
-			//Add a task to the queue
+			//Add a frame to the queue
 			{
 				std::lock_guard guard(fqMutex);
 				frameQueue.push(frame);
 			}
-			fqCvar.notify_one();
+			cvar.notify_one();
 		}
 	private:
 		//Singleton members
@@ -41,8 +42,8 @@ namespace Cacao {
 		void Run(std::stop_token stopTkn);
 
 		//To be implemented by backend
-		void Render(Frame frame);
 		void Init();
+		void Render(Frame& frame);
 
 		bool isRunning;
 		std::jthread* thread;
@@ -52,6 +53,6 @@ namespace Cacao {
 
 		//Thread safety constructs
 		std::mutex fqMutex;
-		std::condition_variable fqCvar;
+		std::condition_variable cvar;
 	};
 }

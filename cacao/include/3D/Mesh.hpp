@@ -11,6 +11,10 @@ namespace Cacao {
     class Mesh {
     public:
         Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
+		~Mesh() {
+			if(compiled) Release();
+			delete nativeData;
+		}
         
 		//Draw this mesh
 		void Draw();

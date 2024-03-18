@@ -19,6 +19,7 @@ namespace Cacao {
 			if(compiled) Release();
 
 			delete dataBuffer;
+			delete nativeData;
 		}
 
         //Attach this texture to the specified slot
