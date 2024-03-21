@@ -161,7 +161,6 @@ namespace Cacao {
 
 	void Window::Present(){
 		EngineAssert(isOpen, "Can't present to closed window!");
-		//Have GLFW check for events
 		glfwSwapBuffers((GLFWwindow*)nativeWindow);
 	}
 

@@ -1,5 +1,6 @@
 # Don't send builds
 */build
+cacaoplayground/*/build
 
 # Don't send generated library files
 libs/generated

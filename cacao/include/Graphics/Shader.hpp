@@ -87,6 +87,7 @@ namespace Cacao {
 		void UploadData(ShaderUploadData& data);
 
 		//Upload Cacao Engine built-in data to the shader
+		//Only call from rendering thread
 		void UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform);
 
 		//If this variable is true, the shader will be expected to take in lighting data

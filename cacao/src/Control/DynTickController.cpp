@@ -60,7 +60,7 @@ namespace Cacao {
 			
 			//Find all scripts that need to be run
 			tickScriptList.clear();
-			World& activeWorld = WorldManager::GetInstance()->GetWorld(WorldManager::GetInstance()->GetActiveWorld());
+			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
 			BS::multi_future<void> fsFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [this, activeWorld](unsigned int index) {
 				//Create script locator function for an entity
 				auto scriptLocator = [this](TreeItem<Entity>& e) {
