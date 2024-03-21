@@ -33,7 +33,10 @@ namespace Cacao {
 		void SetActiveWorld(std::string name);
 
 		//Get the ID of the active world
-		std::string GetActiveWorld();
+		std::string GetActiveWorldID();
+
+		//Get a reference to the active world
+		World& GetActiveWorld();
 
 		//Get a reference to a world
 		World& GetWorld(std::string name);

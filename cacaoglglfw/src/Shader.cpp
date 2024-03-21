@@ -62,6 +62,7 @@ namespace Cacao {
 
 		//Create native data
 		nativeData = new GLShaderData();
+		nd->uboLinked = false;
 		
 		//Convert SPIR-V to GLSL
 
@@ -102,6 +103,7 @@ namespace Cacao {
 		:compiled(false), bound(false), specification(spec) {
 		//Create native data
 		nativeData = new GLShaderData();
+		nd->uboLinked = false;
 		
 		//Convert SPIR-V to GLSL
 
@@ -233,12 +235,6 @@ namespace Cacao {
 		glBufferData(GL_UNIFORM_BUFFER, 3*sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		//Link Cacao data UBO
-		GLuint cacaoUBOIndex = glGetUniformBlockIndex(program, "CacaoData");
-		EngineAssert(cacaoUBOIndex != GL_INVALID_INDEX, "Shaders are required to contain the CacaoData uniform block!");
-		glUniformBlockBinding(program, cacaoUBOIndex, 0);
-		glBindBufferBase(GL_UNIFORM_BUFFER, 0, nd->cacaoDataUBO); 
-
         nd->gpuID = program;
         compiled = true;
 	}
@@ -254,6 +250,7 @@ namespace Cacao {
         }
         glDeleteProgram(nd->gpuID);
         compiled = false;
+		nd->uboLinked = false;
     }
 
     void Shader::Bind(){
@@ -311,7 +308,9 @@ namespace Cacao {
 			}
 
 			//Obtain uniform location
-			GLint uniformLocation = glGetUniformLocation(nd->gpuID, item.target.c_str());
+			std::stringstream ulocPath;
+			ulocPath << "shader." << item.target;
+			GLint uniformLocation = glGetUniformLocation(nd->gpuID, ulocPath.str().c_str());
 			EngineAssert(uniformLocation != -1, "Requested uniform does not exist in shader!");
 
 			//Grab shader item info
@@ -542,6 +541,17 @@ namespace Cacao {
 	}
 
 	void Shader::UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform){
+		//Link UBO
+		if(!nd->uboLinked){
+			//Link Cacao data UBO
+			GLuint cacaoUBOIndex = glGetUniformBlockIndex(nd->gpuID, "CacaoData");
+			EngineAssert(cacaoUBOIndex != GL_INVALID_INDEX, "Shaders are required to contain the CacaoData uniform block!");
+			glUniformBlockBinding(nd->gpuID, cacaoUBOIndex, 0);
+			glBindBufferBase(GL_UNIFORM_BUFFER, 0, nd->cacaoDataUBO); 
+
+			nd->uboLinked = true;
+		}
+
 		//Bind UBO
 		glBindBuffer(GL_UNIFORM_BUFFER, nd->cacaoDataUBO);
 

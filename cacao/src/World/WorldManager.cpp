@@ -38,7 +38,7 @@ namespace Cacao {
 		activeWorld = name;
 	}
 
-	std::string WorldManager::GetActiveWorld(){
+	std::string WorldManager::GetActiveWorldID(){
 		return activeWorld;
 	}
 
@@ -46,5 +46,9 @@ namespace Cacao {
 		EngineAssert(worlds.contains(name), "Can't get access to a world that doesn't exist!");
 
 		return worlds.at(name);
+	}
+
+	World& WorldManager::GetActiveWorld(){
+		return GetWorld(GetActiveWorldID());
 	}
 }
