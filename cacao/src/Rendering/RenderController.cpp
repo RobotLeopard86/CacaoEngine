@@ -1,6 +1,7 @@
 #include "Graphics/Rendering/RenderController.hpp"
 
 #include "Graphics/Window.hpp"
+#include "Core/Engine.hpp"
 
 namespace Cacao {
 	//Required static variable initialization
@@ -19,49 +20,23 @@ namespace Cacao {
 		return instance;
 	}
 
-	void RenderController::Start(){
-		if(isRunning) {
-			Logging::EngineLog("Cannot start the already started rendering controller!", LogLevel::Error);
-			return;
-		}
-		isRunning = true;
-		//Create thread to run controller
-		thread = new std::jthread(BIND_MEMBER_FUNC(RenderController::Run));
-	}
-
-	void RenderController::Stop(){
-		if(!isRunning) {
-			Logging::EngineLog("Cannot stop the not started rendering controller!", LogLevel::Error);
-			return;
-		}
-		//Stop run thread
-		thread->request_stop();
-		cvar.notify_one();
-		thread->join();
-
-		//Delete thread object
-		delete thread;
-		thread = nullptr;
-
-		isRunning = false;
-	}
-
-	void RenderController::Run(std::stop_token stopTkn) {
+	void RenderController::Run() {
 		//Initialize the backend
 		Init();
 
-		//Run while we haven't been asked to stop
-		while(!stopTkn.stop_requested()){
+		//Run while the window is open
+		while(Engine::GetInstance()->IsRunning()){
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
 
 			//Wait while the frame or render context job queue is empty
-			cvar.wait(lock, [this, stopTkn](){
-				return (stopTkn.stop_requested() || !this->frameQueue.empty());
+			cvar.wait(lock, [this](){
+				if(Window::GetInstance()->IsOpen()) Window::GetInstance()->Update();
+				return (Engine::GetInstance()->IsRunning() || !this->frameQueue.empty());
 			});
 
 			//Process frames
-			while(!frameQueue.empty()) {
+			while(!frameQueue.empty() && Engine::GetInstance()->IsRunning()) {
 				//Acquire the next frame
 				Frame& next = frameQueue.front();
 
@@ -70,6 +45,7 @@ namespace Cacao {
 
 				//Present rendered frame to window
 				Window::GetInstance()->Present();
+				Window::GetInstance()->Update();
 
 				//Remove frame from the queue
 				frameQueue.pop();
