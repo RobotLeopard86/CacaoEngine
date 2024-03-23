@@ -66,7 +66,7 @@ namespace Cacao {
 		//Show window
 		Window::GetInstance()->SetWindowVisibility(true);
 
-		//Start the thread pool (subtract two threads for the dedicated dynamic tick and render controllers)
+		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
 		Logging::EngineLog("Setting up thread pool graphics contexts...");
 		for(size_t i = 0; i < std::thread::hardware_concurrency() - 2; i++){
 			loanedContexts.insert_or_assign(i, _CreateGraphicsContext());
@@ -91,22 +91,17 @@ namespace Cacao {
 		//Start the dynamic tick and rendering controller
 		Logging::EngineLog("Starting controllers...");
 		DynTickController::GetInstance()->Start();
-		RenderController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
 
-		//Engine run loop (for now this mostly does nothing)
-		while(run){
-			//Update window
-			Window::GetInstance()->Update();
-		}
+		//Run the rendering controller on the main thread
+		RenderController::GetInstance()->Run();
 
 		Logging::EngineLog("Shutting down engine...");
 
 		//Stop the dynamic tick and rendering controllers
 		Logging::EngineLog("Stopping controllers...");
 		DynTickController::GetInstance()->Stop();
-		RenderController::GetInstance()->Stop();
 
 		//Cleanup common skybox resources
 		threadPool.submit_task([]() {

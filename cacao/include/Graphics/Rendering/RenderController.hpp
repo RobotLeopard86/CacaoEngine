@@ -15,11 +15,8 @@ namespace Cacao {
 		//Get the instance or create one if it doesn't exist.
 		static RenderController* GetInstance();
 
-		//Start the controller
-		void Start();
-
-		//Stop the controller
-		void Stop();
+		//Run the tick controller on the calling thread
+		void Run();
 
 		//Enqueue a frame for rendering
 		void EnqueueFrame(Frame& frame) {
@@ -35,18 +32,11 @@ namespace Cacao {
 		static RenderController* instance;
 		static bool instanceExists;
 
-		RenderController() 
-			: isRunning(false), thread(nullptr) {}
-
-		//Run the tick controller
-		void Run(std::stop_token stopTkn);
+		RenderController() {}
 
 		//To be implemented by backend
 		void Init();
 		void Render(Frame& frame);
-
-		bool isRunning;
-		std::jthread* thread;
 
 		//Queue of frames to render
 		std::queue<Frame> frameQueue;

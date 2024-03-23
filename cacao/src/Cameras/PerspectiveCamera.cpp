@@ -42,8 +42,7 @@ namespace Cacao {
 	}
 
 	void PerspectiveCamera::ResizeProjectionMatrix(Event& e){
-		DataEvent<glm::vec2>& wre = static_cast<DataEvent<glm::vec2>&>(e);
-		displaySize = wre.GetData();
+		displaySize = Window::GetInstance()->GetSize();
 		RecalculateProjectionMatrix();
 	}
 

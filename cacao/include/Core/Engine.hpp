@@ -35,6 +35,9 @@ namespace Cacao {
 		//Backed implementation required
 		void SetupGraphicsContext(NativeData* context);
 
+		//Is the engine running?
+		bool IsRunning() { return run; }
+
 		//Engine config properties
 		EngineConfig cfg;
 	private:
