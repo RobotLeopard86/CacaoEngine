@@ -22,6 +22,6 @@ cacaoplayground/libcacaobackend.so
 cacaoplayground/libcacao.so
 cacaoplayground/cacao.dll
 cacaoplayground/cacaobackend.dll
-*.so
+*.so*
 *.dll
 *.exe

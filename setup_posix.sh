@@ -28,7 +28,7 @@ mkdir -p libs/generated
 echo "Building Assimp..."
 cd libs/assimp
 mkdir -p build && cd build
-cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=ON -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=ON -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF
 ninja
 cp bin/libassimp.so.5.2.5 ../../generated/libassimp.so
 cp revision.h contrib/zlib/zconf.h ../../generated
@@ -49,9 +49,9 @@ rm -rf build
 
 echo "Building stb..."
 cd ../stb
-clang -fPIC stb_image.c -c -o stb_image.o
-ar -rcs libstb_image.a stb_image.o
-rm stb_image.o
+clang -fPIC stb.c -c -o stb.o
+ar -rcs libstb_image.a stb.o
+rm *.o
 mv libstb_image.a ../generated
 
 echo "Building ImGui..."
