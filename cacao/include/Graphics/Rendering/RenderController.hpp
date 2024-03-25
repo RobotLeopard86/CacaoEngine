@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderObjects.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 #include <thread>
 #include <queue>
@@ -27,16 +28,23 @@ namespace Cacao {
 			}
 			cvar.notify_one();
 		}
+
+		//Initialize backend
+		void Init();
+		//Shutdown backend
+		void Shutdown();
 	private:
 		//Singleton members
 		static RenderController* instance;
 		static bool instanceExists;
 
-		RenderController() {}
+		RenderController()
+			: initialized(false) {}
 
-		//To be implemented by backend
-		void Init();
-		void Render(Frame& frame);
+		bool initialized;
+
+		void ProcessFrame(Frame& frame);
+		NativeData* nativeData;
 
 		//Queue of frames to render
 		std::queue<Frame> frameQueue;

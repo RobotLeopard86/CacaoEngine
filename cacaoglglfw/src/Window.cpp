@@ -52,12 +52,18 @@ namespace Cacao {
 		//Create window
 		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
 		EngineAssert(nativeWindow != NULL, "Failed to open the window!");
+		isOpen = true;
+
+		//Initialize OpenGL
+		glfwMakeContextCurrent((GLFWwindow*)nativeWindow);
+		int gladResult = gladLoadGL(glfwGetProcAddress);
+		EngineAssert(gladResult != 0, "Failed to load OpenGL!");
 
 		//Set window VSync state
 		SetVSyncEnabled(true);
 
 		//Set window object size parameters
-		size = { initialSizeX, initialSizeY };
+		SetSize({ initialSizeX, initialSizeY });
 
 		//Register window callbacks
 		glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double x, double y){
@@ -114,14 +120,6 @@ namespace Cacao {
 			EventManager::GetInstance()->Dispatch(e);
 		});
 
-		//Initialize OpenGL
-		glfwMakeContextCurrent((GLFWwindow*)nativeWindow);
-		int gladResult = gladLoadGL(glfwGetProcAddress);
-		EngineAssert(gladResult != 0, "Could not load Glad!");
-
-		//Release context for usage by the render controller thread
-		glfwMakeContextCurrent(NULL);
-
 		isOpen = true;
 	}
 
@@ -143,6 +141,11 @@ namespace Cacao {
 
 	void Window::UpdateWindowSize(){
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
+
+		//Resize GL viewport
+		int fbx, fby;
+		glfwGetFramebufferSize((GLFWwindow*)nativeWindow, &fbx, &fby);
+		glViewport(0, 0, fbx, fby);
 	}
 
 	void Window::UpdateVisibilityState() {

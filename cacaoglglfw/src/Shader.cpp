@@ -316,9 +316,6 @@ namespace Cacao {
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];
 
-			//For quicker access
-			using SpvType = spirv_cross::SPIRType::BaseType;
-
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4*info.size.y)-(4-info.size.x);
 			if(info.size.x == 1 && info.size.y >= 2){
