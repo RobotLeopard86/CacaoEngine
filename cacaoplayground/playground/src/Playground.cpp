@@ -54,6 +54,8 @@ extern "C" {
 		void OnTick(double timestep) override {
 			Cacao::Logging::ClientLog(std::string("Okay so ello from tick ") + std::to_string(count) + ", where it's been " + std::to_string(timestep * 1000) + " milliseconds.");
 			count++;
+			std::shared_ptr<Cacao::Component> comp = Cacao::WorldManager::GetInstance()->GetActiveWorld().FindEntityByUUID(PlaygroundApp::GetInstance()->GetBobUUID()).value().get().components[1];
+			Cacao::MeshComponent* mc = static_cast<Cacao::MeshComponent*>(comp.get());
 		}
 	private:
 		int count;

@@ -7,6 +7,6 @@
 namespace Cacao {
 	//Struct for data required for an OpenGL mesh
 	struct GLMeshData : public NativeData {
-		GLuint vao, vbo, ibo;
+		GLuint vbo, ibo;
 	};
 }

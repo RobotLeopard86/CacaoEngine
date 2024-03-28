@@ -2,8 +2,6 @@
 #include "GLMeshData.hpp"
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
-#include "Core/Engine.hpp"
-#include "Events/EventSystem.hpp"
 
 #include "glad/gl.h"
 
@@ -12,25 +10,18 @@
 
 namespace Cacao {
 	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices)
-		: vertices(vertices), indices(indices), compiled(false) {
+		: vertices(vertices), indices(indices) {
 		//Create native data
 		nativeData = new GLMeshData();
 	}
 
 	void Mesh::Compile(){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			DataEvent<Mesh*> de("MeshCompile", this);
-			EventManager::GetInstance()->Dispatch(de);
-			return;
-		} 
-
 		if(compiled){
 			Logging::EngineLog("Cannot compile already compiled mesh!", LogLevel::Error);
 			return;
 		}
 
-		//Generate vertex arrays and buffers
-		glGenVertexArrays(1, &nd->vao);
+		//Generate vertex arrays
 		glGenBuffers(1, &nd->vbo);
 		glGenBuffers(1, &nd->ibo);
 
@@ -43,9 +34,6 @@ namespace Cacao {
 			ibd[(i * 3) + 2] = idx.z;
 		}
 
-		//Bind VAO
-		glBindVertexArray(nd->vao);
-
 		//Bind vertex buffer
 		glBindBuffer(GL_ARRAY_BUFFER, nd->vbo);
 		//Load vertex buffer with data
@@ -56,42 +44,46 @@ namespace Cacao {
 		//Load index buffer with data
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() * 3 * sizeof(unsigned int)), ibd, GL_STATIC_DRAW);
 
-		//Save VAO and unbind
-		glBindVertexArray(nd->vao);
-		glBindVertexArray(0);
+		//Unbind buffers
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		compiled = true;
 	}
 
 	void Mesh::Release(){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			DataEvent<Mesh*> de("MeshRelease", this);
-			EventManager::GetInstance()->Dispatch(de);
-			return;
-		} 
-
-		if(!compiled){
-			Logging::EngineLog("Cannot release uncompiled mesh!", LogLevel::Error);
-			return;
-		}
-
 		//Delete vertex array assets
 		glDeleteBuffers(1, &nd->vbo);
 		glDeleteBuffers(1, &nd->ibo);
-		glDeleteVertexArrays(1, &nd->vao);
 
 		compiled = false;
 	}
 
 	void Mesh::Draw(){
-		if(!compiled){
-			Logging::EngineLog("Cannot draw uncompiled mesh!", LogLevel::Error);
-			return;
-		}
+		//Create and bind temporary vertex array
+		GLuint vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
+		//Bind buffers
+		glBindBuffer(GL_ARRAY_BUFFER, nd->vbo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nd->ibo);
+
+		//Configure vertex buffer layout
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
 
 		//Draw object
-		glBindVertexArray(nd->vao);
 		glDrawElements(GL_TRIANGLES, (indices.size() * 3), GL_UNSIGNED_INT, nullptr);
+
+		//Clean up temporary VAO
 		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &vao);
 	}
 }

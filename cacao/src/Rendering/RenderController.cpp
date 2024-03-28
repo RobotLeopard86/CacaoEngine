@@ -21,9 +21,10 @@ namespace Cacao {
 	}
 
 	void RenderController::Run() {
-		EngineAssert(initialized, "Cannot run uninitialized render controller!");
+		//Initialize the backend
+		Init();
 
-		//Run while the engine is
+		//Run while the window is open
 		while(Engine::GetInstance()->IsRunning()){
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
@@ -39,10 +40,10 @@ namespace Cacao {
 				//Acquire the next frame
 				Frame& next = frameQueue.front();
 
-				//Process the frame
-				ProcessFrame(next);
+				//Render the frame
+				Render(next);
 
-				//Present frame to window
+				//Present rendered frame to window
 				Window::GetInstance()->Present();
 				Window::GetInstance()->Update();
 
