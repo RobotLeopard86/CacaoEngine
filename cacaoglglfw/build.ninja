@@ -1,5 +1,5 @@
 # Create definitions
-includes = -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs -I../libs/glad/include -I../libs/glfw/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/assimp/include -I../libs/generated
+includes = -Iinclude -I../cacao/include -I../libs/spdlog/include -I../libs/glm -I../libs/uuid_v4 -I../libs/bsthreadpool -I../libs -I../libs/glad/include -I../libs/imgui -I../libs/stb -I../libs/spirv-cross -I../libs/assimp/include -I../libs/generated
 defines = -DGLFW_INCLUDE_NONE
 libs = -L../libs/generated -lglad_gl -lglfw -lstb_image -limgui_gl_glfw -lspirv-cross-c -lspirv-cross-core -lspirv-cross-cpp -lspirv-cross-glsl -lspirv-cross-reflect -lspirv-cross-util -lspirv-cross-hlsl -lspirv-cross-msl
 opts = -std=c++20 -fPIC -g

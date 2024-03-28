@@ -38,9 +38,6 @@ namespace Cacao {
 		//Is the engine running?
 		bool IsRunning() { return run; }
 
-		//Retrieve thread ID of the engine thread
-		std::thread::id GetThreadID() { return threadID; }
-
 		//Engine config properties
 		EngineConfig cfg;
 	private:
@@ -53,9 +50,6 @@ namespace Cacao {
 
 		//Thread pool
 		BS::thread_pool threadPool;
-
-		//Thread ID
-		std::thread::id threadID;
 
 		Engine() {}
 

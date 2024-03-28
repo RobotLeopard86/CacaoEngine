@@ -15,8 +15,6 @@
 namespace Cacao {
 	//Shader data system
 
-	using SpvType = spirv_cross::SPIRType::BaseType;
-
 	//Shader data item information
 	struct ShaderItemInfo {
 		//Base type (e.g. int, float)

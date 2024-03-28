@@ -31,9 +31,6 @@ namespace Cacao {
 		//Make sure the engine will run
 		run.store(true);
 
-		//Set the engine thread ID
-		threadID = std::this_thread::get_id();
-
 		//Set some default engine config values
 		cfg.fixedTickRate = 50;
 		cfg.targetDynTPS = 60;
@@ -47,10 +44,6 @@ namespace Cacao {
 
 		//Open the window
 		Window::GetInstance()->Open("Cacao Engine", 1280, 720, false);
-
-		//Initialize rendering backend
-		Logging::EngineLog("Initializing rendering backend...");
-		RenderController::GetInstance()->Init();
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");
@@ -132,10 +125,6 @@ namespace Cacao {
 			delete it.second;
 		}
 		loanedContexts.clear();
-
-		//Shutdown rendering backend
-		Logging::EngineLog("Shuttind down rendering backend...");
-		RenderController::GetInstance()->Shutdown();
 
 		//Close window
 		Window::GetInstance()->Close();
