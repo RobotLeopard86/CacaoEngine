@@ -94,7 +94,7 @@ namespace Cacao {
 			//Invoke OpenGL on the main thread
 			InvokeGL([this]() {
 				this->Release();
-			}).wait();
+			});
 			return;
 		}
 		if(!compiled){

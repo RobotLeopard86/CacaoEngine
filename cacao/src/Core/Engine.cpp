@@ -92,12 +92,12 @@ namespace Cacao {
 		Logging::EngineLog("Running game module startup hook...");
 		auto launchFunc = lib.get_function<void(void)>("_CacaoLaunch");
 		auto exitFunc = lib.get_function<void(void)>("_CacaoExiting");
+		auto cleanupFunc = lib.get_function<void(void)>("_CacaoGraphicsCleanup");
 		launchFunc();
 
 		//Start the dynamic tick controller
 		Logging::EngineLog("Starting controllers...");
 		DynTickController::GetInstance()->Start([exitFunc](){
-			exitFunc();
 			Skybox::CommonCleanup();
 		});
 
@@ -110,10 +110,11 @@ namespace Cacao {
 
 		//Stop the dynamic tick controller
 		Logging::EngineLog("Stopping controllers...");
-		std::future<void> dtcStop = std::async(std::launch::async, [](){DynTickController::GetInstance()->Stop();});
+		DynTickController::GetInstance()->Stop();
 
 		//Shut down rendering backend
 		Logging::EngineLog("Shutting down rendering backend...");
+		cleanupFunc();
 		RenderController::GetInstance()->Shutdown();
 
 		//"Stop" thread pool (really we just pause it so no new tasks can come in, actual thread pool destruction happens at program exit)
@@ -127,8 +128,8 @@ namespace Cacao {
 		}
 		loanedContexts.clear();
 
-		//Wait for dynamic tick controller stop
-		dtcStop.wait();
+		//Call game module exit hook
+		exitFunc();
 
 		//Close window
 		Window::GetInstance()->Close();
