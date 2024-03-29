@@ -4,11 +4,36 @@
 #include "GLFW/glfw3.h"
 
 #include "Graphics/Window.hpp"
+#include "Events/EventSystem.hpp"
+#include "GLUtils.hpp"
 
 namespace Cacao {
-	void RenderController::Render(Frame& frame){
+	static float what;
+	static bool lighten;
+
+	//Queue of OpenGL jobs to process
+	static std::queue<GLJob> glQueue;
+
+	void RenderController::ProcessFrame(Frame& frame){
+		//Process OpenGL jobs
+		while(!glQueue.empty()){
+			//Acquire next job
+			GLJob& job = glQueue.front();
+
+			//Run job
+			job.func();
+
+			//Mark job as done
+			job.status->set_value();
+
+			//Remove job from queue
+			glQueue.pop();
+		}
+
 		//Clear the screen
-		glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f); //This color is an obnoxious neon alligator green
+		what += 0.01f * (lighten ? 1 : -1);
+		if(what > 1 || what < 0) lighten = !lighten;
+		glClearColor(0.765625f * what, 1.0f * what, 0.1015625f * what, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Render main scene
@@ -21,7 +46,8 @@ namespace Cacao {
 			obj.material.shader->Bind();
 
 			//Configure OpenGL depth behavior
-			glDepthFunc(GL_LESS);;
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
 
 			//Draw the mesh
 			obj.mesh->Draw();
@@ -35,7 +61,37 @@ namespace Cacao {
 	}
 
 	void RenderController::Init() {
-		//Take control of the OpenGL context
-		glfwMakeContextCurrent((GLFWwindow*)Window::GetInstance()->GetNativeWindow());
+		EngineAssert(!isInitialized, "Render controller is already initialized!");
+
+		what = 0;
+
+		//Register OpenGL event consumer
+		EventManager::GetInstance()->SubscribeConsumer("OpenGL", new EventConsumer([](Event& e){
+			DataEvent<GLJob&>& oglEvent = static_cast<DataEvent<GLJob&>&>(e);
+			glQueue.push(oglEvent.GetData());
+		}));
+
+		isInitialized = true;
+	}
+
+	void RenderController::Shutdown() {
+		EngineAssert(isInitialized, "Render controller is not initialized!");
+
+		//Take care of any remaining OpenGL jobs
+		while(!glQueue.empty()){
+			//Acquire next job
+			GLJob& job = glQueue.front();
+
+			//Run job
+			job.func();
+
+			//Mark job as done
+			job.status->set_value();
+
+			//Remove job from queue
+			glQueue.pop();
+		}
+
+		isInitialized = false;
 	}
 }

@@ -34,11 +34,6 @@ namespace Cacao {
 		//Get view matrix (transforms vertices according to where the camera is looking)
 		virtual glm::mat4 GetViewMatrix() = 0;
 
-		//Sets clear color (takes 8-bit unsigned integer vector (0-255 for red, green, and blue))
-        void SetClearColor(glm::uvec3 color) { clearColor = { (float)color.r / 256, (float)color.g / 256, (float)color.b / 256, 1.0f }; }
-        //Clears color and depth buffers
-        void Clear();
-
 		//Update camera projection matrix for new aspect ratio
 		virtual void ResizeProjectionMatrix(Event& e) = 0;
 	private:

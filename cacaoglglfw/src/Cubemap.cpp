@@ -2,12 +2,15 @@
 
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
+#include "Core/Engine.hpp"
 #include "GLCubemapData.hpp"
+#include "GLUtils.hpp"
 
 #include "stb_image.h"
 
 #include "glad/gl.h"
 
+#include <future>
 #include <filesystem>
 
 //For my sanity
@@ -26,10 +29,16 @@ namespace Cacao {
 		currentSlot = -1;
 	}
 
-	void Cubemap::Compile(){
+	std::future<void> Cubemap::Compile(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			return InvokeGL([this]() {
+				this->Compile();
+			});
+		}
 		if(compiled){
             Logging::EngineLog("Cannot compile already compiled cubemap!", LogLevel::Error);
-			return;
+			return {};
         }
 
 		//Create texture object
@@ -75,9 +84,19 @@ namespace Cacao {
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		
 		compiled = true;
+
+		//Return an empty future
+		return {};
 	}
 
 	void Cubemap::Release() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			InvokeGL([this]() {
+				this->Release();
+			}).wait();
+			return;
+		}
 		if(!compiled){
             Logging::EngineLog("Cannot release uncompiled cubemap!", LogLevel::Error);
             return;
@@ -91,6 +110,10 @@ namespace Cacao {
 	}
 
 	void Cubemap::Bind(int slot){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot bind cubemap in non-rendering thread!", LogLevel::Error);
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot bind uncompiled cubemap!", LogLevel::Error);
             return;
@@ -107,6 +130,10 @@ namespace Cacao {
     }
 
     void Cubemap::Unbind(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot bind cubemap in non-rendering thread!", LogLevel::Error);
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot unbind uncompiled cubemap!", LogLevel::Error);
             return;

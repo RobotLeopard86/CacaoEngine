@@ -119,9 +119,6 @@ namespace Cacao {
 		int gladResult = gladLoadGL(glfwGetProcAddress);
 		EngineAssert(gladResult != 0, "Could not load Glad!");
 
-		//Release context for usage by the render controller thread
-		glfwMakeContextCurrent(NULL);
-
 		isOpen = true;
 	}
 

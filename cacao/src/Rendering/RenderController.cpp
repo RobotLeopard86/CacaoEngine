@@ -21,8 +21,7 @@ namespace Cacao {
 	}
 
 	void RenderController::Run() {
-		//Initialize the backend
-		Init();
+		EngineAssert(isInitialized, "Render controller must be initialized prior to running!");
 
 		//Run while the window is open
 		while(Engine::GetInstance()->IsRunning()){
@@ -41,7 +40,7 @@ namespace Cacao {
 				Frame& next = frameQueue.front();
 
 				//Render the frame
-				Render(next);
+				ProcessFrame(next);
 
 				//Present rendered frame to window
 				Window::GetInstance()->Present();

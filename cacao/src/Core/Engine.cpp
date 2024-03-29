@@ -30,6 +30,7 @@ namespace Cacao {
 	void Engine::Run(){
 		//Make sure the engine will run
 		run.store(true);
+		threadID = std::this_thread::get_id();
 
 		//Set some default engine config values
 		cfg.fixedTickRate = 50;
@@ -66,6 +67,10 @@ namespace Cacao {
 		//Show window
 		Window::GetInstance()->SetWindowVisibility(true);
 
+		//Initialize rendering backend
+		Logging::EngineLog("Initializing rendering backend...");
+		RenderController::GetInstance()->Init();
+
 		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
 		Logging::EngineLog("Setting up thread pool graphics contexts...");
 		for(size_t i = 0; i < std::thread::hardware_concurrency() - 2; i++){
@@ -86,11 +91,15 @@ namespace Cacao {
 		//Launch game module
 		Logging::EngineLog("Running game module startup hook...");
 		auto launchFunc = lib.get_function<void(void)>("_CacaoLaunch");
+		auto exitFunc = lib.get_function<void(void)>("_CacaoExiting");
 		launchFunc();
 
-		//Start the dynamic tick and rendering controller
+		//Start the dynamic tick controller
 		Logging::EngineLog("Starting controllers...");
-		DynTickController::GetInstance()->Start();
+		DynTickController::GetInstance()->Start([exitFunc](){
+			exitFunc();
+			Skybox::CommonCleanup();
+		});
 
 		Logging::EngineLog("Engine startup complete!");
 
@@ -99,21 +108,13 @@ namespace Cacao {
 
 		Logging::EngineLog("Shutting down engine...");
 
-		//Stop the dynamic tick and rendering controllers
+		//Stop the dynamic tick controller
 		Logging::EngineLog("Stopping controllers...");
-		DynTickController::GetInstance()->Stop();
+		std::future<void> dtcStop = std::async(std::launch::async, [](){DynTickController::GetInstance()->Stop();});
 
-		//Cleanup common skybox resources
-		threadPool.submit_task([]() {
-			Skybox::CommonCleanup();
-		}).wait();
-
-		//Let game module close
-		//We don't explictly close the library because the destructor does that for us
-		//Doing it now would actually cause a runtime error
-		Logging::EngineLog("Running game module shutdown hook...");
-		auto gameStopFunc = lib.get_function<void(void)>("_CacaoExiting");
-		gameStopFunc();
+		//Shut down rendering backend
+		Logging::EngineLog("Shutting down rendering backend...");
+		RenderController::GetInstance()->Shutdown();
 
 		//"Stop" thread pool (really we just pause it so no new tasks can come in, actual thread pool destruction happens at program exit)
 		//This is necessary so that we can clean up any thread pool resources
@@ -125,6 +126,9 @@ namespace Cacao {
 			delete it.second;
 		}
 		loanedContexts.clear();
+
+		//Wait for dynamic tick controller stop
+		dtcStop.wait();
 
 		//Close window
 		Window::GetInstance()->Close();

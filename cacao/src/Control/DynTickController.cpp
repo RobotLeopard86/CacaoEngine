@@ -3,6 +3,7 @@
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Utilities/Input.hpp"
 #include "World/WorldManager.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 #include "Graphics/Rendering/MeshComponent.hpp"
@@ -24,12 +25,13 @@ namespace Cacao {
 		return instance;
 	}
 
-	void DynTickController::Start(){
+	void DynTickController::Start(std::function<void()> onShutdown){
 		if(isRunning) {
 			Logging::EngineLog("Cannot start the already started dynamic tick controller!", LogLevel::Error);
 			return;
 		}
 		isRunning = true;
+		shutdownHook = onShutdown;
 		//Create thread to run controller
 		thread = new std::jthread(BIND_MEMBER_FUNC(DynTickController::Run));
 	}
@@ -58,6 +60,9 @@ namespace Cacao {
 			std::chrono::steady_clock::time_point tickStart = std::chrono::steady_clock::now();
 			std::chrono::steady_clock::time_point idealStopTime = tickStart + (std::chrono::milliseconds(1000)/Engine::GetInstance()->cfg.targetDynTPS);
 			
+			//Freeze input state
+			Input::GetInstance()->FreezeFrameInputState();
+
 			//Find all scripts that need to be run
 			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
@@ -150,5 +155,7 @@ namespace Cacao {
 			//Otherwise, run the next tick immediately
 			if(tickEnd < idealStopTime) std::this_thread::sleep_until(idealStopTime);
 		}
+
+		shutdownHook();
 	}
 }
