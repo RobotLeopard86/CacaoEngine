@@ -139,7 +139,13 @@ namespace Cacao {
 	}
 
 	void Window::UpdateWindowSize(){
+		//Update GLFW window size
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
+
+		//Update OpenGL framebuffer size
+		int fbx, fby;
+		glfwGetFramebufferSize((GLFWwindow*)nativeWindow, &fbx, &fby);
+		glViewport(0, 0, fbx, fby);
 	}
 
 	void Window::UpdateVisibilityState() {
