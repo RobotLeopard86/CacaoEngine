@@ -256,7 +256,7 @@ namespace Cacao {
 			//Invoke OpenGL on the main thread
 			InvokeGL([this]() {
 				this->Release();
-			}).wait();
+			});
 			return;
 		}
         if(!compiled){
@@ -310,6 +310,13 @@ namespace Cacao {
     }
 
 	void Shader::UploadData(ShaderUploadData& data) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			InvokeGL([this, data]() {
+				this->UploadData(const_cast<ShaderUploadData&>(data));
+			});
+			return;
+		}
 		if(!compiled){
             Logging::EngineLog("Cannot upload data to uncompiled shader!", LogLevel::Error);
             return;
@@ -568,6 +575,18 @@ namespace Cacao {
 	}
 
 	void Shader::UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			InvokeGL([this, projection, view, transform]() {
+				this->UploadCacaoData(projection, view, transform);
+			});
+			return;
+		}
+		if(!compiled){
+            Logging::EngineLog("Cannot upload Cacao Engine data to uncompiled shader!", LogLevel::Error);
+            return;
+        }
+
 		//Link UBO
 		if(!nd->uboLinked){
 			//Link Cacao data UBO

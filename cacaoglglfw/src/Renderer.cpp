@@ -60,17 +60,14 @@ namespace Cacao {
 		if(frame.skybox.has_value()) frame.skybox.value().Draw(frame.projection, frame.view);
 	}
 
+	void EnqueueGLJob(GLJob& job) {
+		glQueue.push(job);
+	}
+
 	void RenderController::Init() {
 		EngineAssert(!isInitialized, "Render controller is already initialized!");
 
 		what = 0;
-
-		//Register OpenGL event consumer
-		EventManager::GetInstance()->SubscribeConsumer("OpenGL", new EventConsumer([](Event& e){
-			DataEvent<GLJob&>& oglEvent = static_cast<DataEvent<GLJob&>&>(e);
-			glQueue.push(oglEvent.GetData());
-		}));
-
 		isInitialized = true;
 	}
 

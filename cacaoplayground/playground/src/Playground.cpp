@@ -17,8 +17,13 @@ public:
 
 	void Launch();
 
-	void Cleanup() {
+	void GPUCleanup() {
 		delete mat;
+		shader->Release();
+		mesh->Release();
+	}
+
+	void Cleanup() {
 		delete shader;
 		delete mesh;
 		delete this;
@@ -206,6 +211,7 @@ void PlaygroundApp::Launch() {
 	bob.active = true;
 	bob.components.push_back(ss);
 	bob.components.push_back(mc);
+	bob.transform.SetPosition({3, 0, 0});
 
 	world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(bob));
 }
@@ -215,7 +221,9 @@ extern "C" {
 		PlaygroundApp::GetInstance()->Launch();
 	}
 
-	void _CacaoExiting() {
+	void _CacaoGraphicsCleanup() {
 		PlaygroundApp::GetInstance()->Cleanup();
 	}
+
+	void _CacaoExiting() {}
 }
