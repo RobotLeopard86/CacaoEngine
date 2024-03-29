@@ -11,7 +11,7 @@ namespace Cacao {
         //Detach this texture
         virtual void Unbind() {}
         //Compile texture to be used later
-        virtual std::future<void> Compile() { return {}; }
+        virtual std::shared_future<void> Compile() { return {}; }
         //Delete texture when no longer needed
         virtual void Release() {}
 

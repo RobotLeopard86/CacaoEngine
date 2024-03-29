@@ -28,7 +28,7 @@ namespace Cacao {
         //Detach this cubemap
         void Unbind() override;
         //Compile cubemap to be used later
-        std::future<void> Compile() override;
+        std::shared_future<void> Compile() override;
         //Delete cubemap when no longer needed
         void Release() override;
     protected:

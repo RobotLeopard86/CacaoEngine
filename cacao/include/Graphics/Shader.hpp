@@ -67,7 +67,7 @@ namespace Cacao {
         //Don't use this shader
         void Unbind();
         //Compile shader to be used later
-        std::future<void> Compile();
+        std::shared_future<void> Compile();
         //Delete shader when no longer needed
         void Release();
 

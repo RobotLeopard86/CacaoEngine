@@ -20,7 +20,7 @@ namespace Cacao {
 		nativeData = new GLMeshData();
 	}
 
-	std::future<void> Mesh::Compile(){
+	std::shared_future<void> Mesh::Compile(){
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
