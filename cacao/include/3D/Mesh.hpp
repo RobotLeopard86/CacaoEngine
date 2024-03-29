@@ -5,6 +5,7 @@
 #include "Utilities/MiscUtils.hpp"
 
 #include <vector>
+#include <future>
 
 namespace Cacao {
     //Must be implemented per-rendering API
@@ -19,7 +20,7 @@ namespace Cacao {
 		//Draw this mesh
 		void Draw();
         //Compile the mesh into a usable form for drawing
-        void Compile();
+        std::future<void> Compile();
         //Release compiled assets from memory
         void Release();
 

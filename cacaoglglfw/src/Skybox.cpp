@@ -1,7 +1,11 @@
 #include "3D/Skybox.hpp"
 
 #include "Core/Log.hpp"
+#include "Core/Engine.hpp"
 #include "GLSkyboxData.hpp"
+#include "GLUtils.hpp"
+
+#include <future>
 
 #include "glad/gl.h"
 
@@ -63,6 +67,7 @@ namespace Cacao {
 		std::vector<uint32_t> f(fsCode, std::end(fsCode));
 
 		//Create and compile skybox shader object
+		//Compile future is intentionally discarded as it will be done by the time this is used
 		skyboxShader = new Shader(v, f, spec);
 		skyboxShader->Compile();
 
@@ -78,6 +83,11 @@ namespace Cacao {
 	}
 
 	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot draw skybox in non-rendering thread!", LogLevel::Error);
+			return;
+		}
+
 		//Confirm that texture is compiled
 		if(!texture->IsCompiled()){
 			Logging::EngineLog("Skybox texture has not been compiled! Aborting draw.", LogLevel::Error);

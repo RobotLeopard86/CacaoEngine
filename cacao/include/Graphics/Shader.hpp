@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <map>
 #include <any>
+#include <future>
 
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
@@ -66,7 +67,7 @@ namespace Cacao {
         //Don't use this shader
         void Unbind();
         //Compile shader to be used later
-        void Compile();
+        std::future<void> Compile();
         //Delete shader when no longer needed
         void Release();
 

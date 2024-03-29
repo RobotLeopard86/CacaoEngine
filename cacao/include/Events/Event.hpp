@@ -4,7 +4,6 @@
 #include "Core/Assert.hpp"
 
 #include <string>
-#include <optional>
 
 namespace Cacao {
 	//Event class
@@ -24,16 +23,14 @@ namespace Cacao {
     class DataEvent : public Event {
     public:
 		DataEvent(std::string eventType, T eventData) 
-			: Event(eventType) {
-			data = std::make_optional<T>(eventData);
+			: Event(eventType), data(eventData) {
+			static_assert(std::is_trivially_copy_constructible_v<T>, "Type used in data event must be trivally copy-contructible!");
 		}
 
-		bool HasData() { return data.has_value(); }
 		T GetData() {
-			EngineAssert(HasData(), "Cannot access event data which does not exist!");
-			return data.value();
+			return data;
 		}
 	private:
-		std::optional<T> data;
+		T data;
     };
 }

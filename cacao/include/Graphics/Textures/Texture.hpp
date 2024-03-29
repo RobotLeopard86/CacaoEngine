@@ -1,5 +1,7 @@
 #pragma once
 
+#include <future>
+
 namespace Cacao {
     //Base texture type
     class Texture {
@@ -9,15 +11,15 @@ namespace Cacao {
         //Detach this texture
         virtual void Unbind() {}
         //Compile texture to be used later
-        virtual void Compile() {}
+        virtual std::future<void> Compile() { return {}; }
         //Delete texture when no longer needed
         virtual void Release() {}
 
         //Is texture compiled?
-        bool IsCompiled() { return compiled; }
+        bool IsCompiled() const { return compiled; }
 
         //Is texture bound?
-        bool IsBound() { return bound; }
+        bool IsBound() const { return bound; }
     protected:
         bool compiled;
         bool bound;

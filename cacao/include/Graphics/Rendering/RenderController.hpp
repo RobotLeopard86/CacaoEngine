@@ -27,16 +27,21 @@ namespace Cacao {
 			}
 			cvar.notify_one();
 		}
+
+		//Initialize the backend
+		void Init();
+
+		//Shutdown the backend
+		void Shutdown();
 	private:
 		//Singleton members
 		static RenderController* instance;
 		static bool instanceExists;
 
-		RenderController() {}
+		RenderController() 
+			: isInitialized(false) {}
 
-		//To be implemented by backend
-		void Init();
-		void Render(Frame& frame);
+		void ProcessFrame(Frame& frame);
 
 		//Queue of frames to render
 		std::queue<Frame> frameQueue;
@@ -44,5 +49,7 @@ namespace Cacao {
 		//Thread safety constructs
 		std::mutex fqMutex;
 		std::condition_variable cvar;
+
+		bool isInitialized;
 	};
 }

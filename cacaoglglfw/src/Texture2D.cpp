@@ -2,12 +2,15 @@
 
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
+#include "Core/Engine.hpp"
 #include "GLTexture2DData.hpp"
+#include "GLUtils.hpp"
 
 #include "stb_image.h"
 
 #include "glad/gl.h"
 
+#include <future>
 #include <filesystem>
 
 //For my sanity
@@ -38,10 +41,16 @@ namespace Cacao {
         }
 	}
 
-	void Texture2D::Compile(){
+	std::future<void> Texture2D::Compile(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			return InvokeGL([this]() {
+				this->Compile();
+			});
+		}
 		if(compiled){
             Logging::EngineLog("Cannot compile already compiled texture!", LogLevel::Error);
-			return;
+			return {};
         }
 
 		//Create texture object
@@ -71,9 +80,19 @@ namespace Cacao {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		
 		compiled = true;
+
+		//Return an empty future
+		return {};
 	}
 
 	void Texture2D::Release() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			InvokeGL([this]() {
+				this->Release();
+			}).wait();
+			return;
+		}
 		if(!compiled){
             Logging::EngineLog("Cannot release uncompiled texture!", LogLevel::Error);
             return;
@@ -87,6 +106,10 @@ namespace Cacao {
 	}
 
 	void Texture2D::Bind(int slot){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot bind texture in non-rendering thread!", LogLevel::Error);
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot bind uncompiled texture!", LogLevel::Error);
             return;
@@ -103,6 +126,10 @@ namespace Cacao {
     }
 
     void Texture2D::Unbind(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot bind texture in non-rendering thread!", LogLevel::Error);
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot unbind uncompiled texture!", LogLevel::Error);
             return;

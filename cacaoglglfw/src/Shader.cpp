@@ -2,6 +2,8 @@
 #include "GLShaderData.hpp"
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
+#include "Core/Engine.hpp"
+#include "GLUtils.hpp"
 
 #include "glad/gl.h"
 #include "spirv_glsl.hpp"
@@ -13,6 +15,7 @@
 #include <cstdio>
 #include <cstring>
 #include <utility>
+#include <future>
 
 //For my sanity
 #define nd ((GLShaderData*)nativeData)
@@ -140,10 +143,16 @@ namespace Cacao {
 		nd->fragmentCode = fragGLSL.compile();
 	}
 
-	void Shader::Compile(){
+	std::future<void> Shader::Compile(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			return InvokeGL([this]() {
+				this->Compile();
+			});
+		}
 		if(compiled){
             Logging::EngineLog("Not compiling already compiled shader!", LogLevel::Warn);
-			return;
+			return {};
         }
 
         //Create vertex shader base
@@ -167,7 +176,7 @@ namespace Cacao {
             glDeleteShader(compiledVertexShader);
             //Log error
             Logging::EngineLog(std::string("Vertex shader compilation failure: ") + infoLog.data(), LogLevel::Error);
-            return;
+            return {};
         }
 
         //Create fragment shader base
@@ -192,7 +201,7 @@ namespace Cacao {
             glDeleteShader(compiledFragmentShader);
             //Log error
             Logging::EngineLog(std::string("Fragment shader compilation failure: ") + infoLog.data(), LogLevel::Error);
-            return;
+            return {};
         }
 
         //Create shader program
@@ -220,7 +229,7 @@ namespace Cacao {
             glDeleteShader(compiledFragmentShader);
             //Log error
             Logging::EngineLog(std::string("Shader program linking failure: ") + infoLog.data(), LogLevel::Error);
-            return;
+            return {};
         }
 
         //Detach and delete linked shaders
@@ -237,9 +246,19 @@ namespace Cacao {
 
         nd->gpuID = program;
         compiled = true;
+
+		//Return an empty future
+		return {};
 	}
 
 	void Shader::Release(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			//Invoke OpenGL on the main thread
+			InvokeGL([this]() {
+				this->Release();
+			}).wait();
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot release uncompiled shader!", LogLevel::Error);
             return;
@@ -254,6 +273,10 @@ namespace Cacao {
     }
 
     void Shader::Bind(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot bind shader in non-rendering thread!", LogLevel::Error);
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot bind uncompiled shader!", LogLevel::Error);
             return;
@@ -267,6 +290,10 @@ namespace Cacao {
     }
 
     void Shader::Unbind(){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+			Logging::EngineLog("Cannot unbind shader in non-rendering thread!", LogLevel::Error);
+			return;
+		}
         if(!compiled){
             Logging::EngineLog("Cannot unbind uncompiled shader!", LogLevel::Error);
             return;
