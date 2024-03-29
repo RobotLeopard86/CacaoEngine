@@ -20,7 +20,7 @@ namespace Cacao {
 		//Draw this mesh
 		void Draw();
         //Compile the mesh into a usable form for drawing
-        std::future<void> Compile();
+        std::shared_future<void> Compile();
         //Release compiled assets from memory
         void Release();
 

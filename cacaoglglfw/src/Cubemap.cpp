@@ -29,7 +29,7 @@ namespace Cacao {
 		currentSlot = -1;
 	}
 
-	std::future<void> Cubemap::Compile(){
+	std::shared_future<void> Cubemap::Compile(){
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {

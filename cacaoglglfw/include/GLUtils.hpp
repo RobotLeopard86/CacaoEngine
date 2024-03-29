@@ -23,10 +23,10 @@ namespace Cacao {
 		}
 	};
 
-	inline std::future<void> InvokeGL(std::function<void()> job){
+	inline std::shared_future<void> InvokeGL(std::function<void()> job){
 		GLJob glJob(job);
 		DataEvent<GLJob&> event("OpenGL", glJob);
 		EventManager::GetInstance()->Dispatch(event);
-		return glJob.status->get_future();
+		return glJob.status->get_future().share();
 	}
 }

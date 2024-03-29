@@ -143,7 +143,7 @@ namespace Cacao {
 		nd->fragmentCode = fragGLSL.compile();
 	}
 
-	std::future<void> Shader::Compile(){
+	std::shared_future<void> Shader::Compile(){
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {

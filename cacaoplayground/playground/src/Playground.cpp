@@ -208,13 +208,6 @@ void PlaygroundApp::Launch() {
 	bob.components.push_back(mc);
 
 	world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(bob));
-
-	glm::vec4 v1 = {-0.5f, -0.5f, -1.0f, 1.0f};
-	glm::mat4 matrix = ((world.cam->GetProjectionMatrix() * world.cam->GetViewMatrix()) * bob.transform.GetTransformationMatrix());
-	Cacao::Logging::ClientLog(std::string("Initial V1 value:") + Vec4ToString(v1));
-	Cacao::Logging::ClientLog(std::string("Matrix: ") + Mat4ToString(matrix));
-	glm::vec4 expectedV1 = matrix * v1;
-	Cacao::Logging::ClientLog(std::string("Expected V1 value:") + Vec4ToString(expectedV1));
 }
 
 extern "C" {

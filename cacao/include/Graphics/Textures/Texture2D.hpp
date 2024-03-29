@@ -27,7 +27,7 @@ namespace Cacao {
         //Detach this texture
         void Unbind() override;
         //Compile texture to be used later
-        std::future<void> Compile() override;
+        std::shared_future<void> Compile() override;
         //Delete texture when no longer needed
         void Release() override;
     protected:
