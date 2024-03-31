@@ -16,6 +16,9 @@
 namespace Cacao {
 	//Shader data system
 
+	//For convienience
+	using SpvType = spirv_cross::SPIRType::BaseType;
+
 	//Shader data item information
 	struct ShaderItemInfo {
 		//Base type (e.g. int, float)
@@ -40,7 +43,7 @@ namespace Cacao {
 		//Actual data
 		//During upload, this will be attempted to cast to the type specified in the shader item
 		//If this cast fails, an error will be thrown and the upload will be aborted
-		//If you are targeting an image, use an integer here to specify the texture slot, and then use that same slot in your texture bind call
+		//If you are targeting an image, use that texture pointer here (a texture slot will be auto-selected and this texture will be bound)
 		std::any data;
 	};
 

@@ -24,28 +24,17 @@ namespace Cacao {
 		: orientation({0, 0, 0}) {
 		//Create native data
 		nativeData = new GLSkyboxData();
+		nd->vaoReady = false;
 
 		//Set texture
 		texture = tex;
+	}
 
-		//Set up OpenGL VAO
-
-		//Generate vertex array and buffer
-		glGenVertexArrays(1, &(nd->vao));
-		glGenBuffers(1, &(nd->vbo));
-		glBindVertexArray(nd->vao);
-		glBindBuffer(GL_ARRAY_BUFFER, nd->vbo);
-
-		//Load vertex data
-		glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVerts), &skyboxVerts, GL_STATIC_DRAW);
-
-		//Set up attributes
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-		//Bind VAO and unbind it again to save data
-		glBindVertexArray(nd->vao);
-		glBindVertexArray(0);
+	Skybox::Skybox(const Skybox& other) 
+		: orientation(other.orientation), texture(other.texture) {
+		//Copy native data
+		nativeData = new GLSkyboxData();
+		*nativeData = *(other.nativeData);
 	}
 
 	void Skybox::CommonSetup(){
@@ -59,7 +48,7 @@ namespace Cacao {
 		ShaderItemInfo skySamplerInfo;
 		skySamplerInfo.entryName = "skybox";
 		skySamplerInfo.size = {1, 1};
-		skySamplerInfo.type = spirv_cross::SPIRType::SampledImage;
+		skySamplerInfo.type = SpvType::SampledImage;
 		spec.push_back(skySamplerInfo);
 
 		//Create temporary data objects
@@ -98,6 +87,28 @@ namespace Cacao {
 			Logging::EngineLog("Skybox texture has not been compiled! Aborting draw.", LogLevel::Error);
 		}
 
+		//Set up OpenGL VAO if not already
+		if(!nd->vaoReady) {
+			//Generate vertex array and buffer
+			glGenVertexArrays(1, &(nd->vao));
+			glGenBuffers(1, &(nd->vbo));
+			glBindVertexArray(nd->vao);
+			glBindBuffer(GL_ARRAY_BUFFER, nd->vbo);
+
+			//Load vertex data
+			glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVerts), &skyboxVerts, GL_STATIC_DRAW);
+
+			//Set up attributes
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+			//Bind VAO and unbind it again to save data
+			glBindVertexArray(nd->vao);
+			glBindVertexArray(0);
+
+			nd->vaoReady = true;
+		}
+
 		//Create skybox matrices
 		glm::mat4 skyView = glm::mat4(glm::mat3(viewMatrix));
 		glm::mat4 skyTransform(1.0);
@@ -107,15 +118,14 @@ namespace Cacao {
 
 		//Bind skybox shader and texture
 		skyboxShader->Bind();
-		texture->Bind(0);
 
 		//Upload data to shader
 		skyboxShader->UploadCacaoData(projectionMatrix, skyView, skyTransform);
 		ShaderUploadData sud;
-		ShaderUploadItem skySamplerID;
-		skySamplerID.data = std::any(int(0));
-		skySamplerID.target = "skybox";
-		sud.push_back(skySamplerID);
+		ShaderUploadItem skySampler;
+		skySampler.data = std::any(texture);
+		skySampler.target = "skybox";
+		sud.push_back(skySampler);
 		skyboxShader->UploadData(sud);
 
 		//Ensure skybox always drawn
