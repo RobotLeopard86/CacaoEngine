@@ -8,6 +8,8 @@
 #include "Graphics/Rendering/RenderController.hpp"
 #include "Graphics/Rendering/MeshComponent.hpp"
 
+#include <mutex>
+
 namespace Cacao {
 	//Required static variable initialization
 	DynTickController* DynTickController::instance = nullptr;
@@ -107,22 +109,25 @@ namespace Cacao {
 
 			//Accumulate things to render
 			tickRenderList.clear();
+			std::mutex rlMutex{};
 			BS::multi_future<void> roFuture;
 			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item](){
+				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, &item, &rlMutex](){
 					//Create script locator function for an entity
-					auto renderLocator = [this](TreeItem<Entity>& e) {
+					auto renderLocator = [this, &rlMutex](TreeItem<Entity>& e) {
 						//Sneaky recursive lambda trick
-						auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [this, &rlMutex](TreeItem<Entity>& e, auto& implRef) mutable {
 							//Stop if this component is inactive
 							if(!e.val().active) return;
 
 							//Check for mesh components
 							for(std::shared_ptr<Component>& c : e.val().components){
 								if(c->GetKind() == "MESH" && c->IsActive()) {
-									//Add to list
+									//Add to list (once lock is available)
 									MeshComponent* mc = static_cast<MeshComponent*>(c.get());
+									rlMutex.lock();
 									this->tickRenderList.push_back(RenderObject(e.val().transform.GetTransformationMatrix(), mc->mesh, mc->mat));
+									rlMutex.unlock();
 								}
 							}
 
@@ -140,9 +145,6 @@ namespace Cacao {
 			}
 			//Wait for work to be completed
 			roFuture.wait();
-
-			static int objectCount;
-			objectCount = tickRenderList.size();
 
 			//Create frame
 			Frame f;
