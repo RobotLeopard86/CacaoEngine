@@ -1,4 +1,6 @@
 #include "Graphics/Shader.hpp"
+#include "Graphics/Textures/Cubemap.hpp"
+#include "Graphics/Textures/Texture2D.hpp"
 #include "GLShaderData.hpp"
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
@@ -21,6 +23,9 @@
 #define nd ((GLShaderData*)nativeData)
 
 namespace Cacao {
+	//A required static member initialization
+	GLuint GLShaderData::uboIndexCounter = 0;
+
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec) 
 		:compiled(false), bound(false), specification(spec) {
 		//Validate that these paths exist
@@ -65,7 +70,6 @@ namespace Cacao {
 
 		//Create native data
 		nativeData = new GLShaderData();
-		nd->uboLinked = false;
 		
 		//Convert SPIR-V to GLSL
 
@@ -106,7 +110,6 @@ namespace Cacao {
 		:compiled(false), bound(false), specification(spec) {
 		//Create native data
 		nativeData = new GLShaderData();
-		nd->uboLinked = false;
 		
 		//Convert SPIR-V to GLSL
 
@@ -244,6 +247,16 @@ namespace Cacao {
 		glBufferData(GL_UNIFORM_BUFFER, 3*sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+		//Link Cacao data UBO
+		GLuint cacaoUBOIndex = glGetUniformBlockIndex(program, "CacaoData");
+		EngineAssert(cacaoUBOIndex != GL_INVALID_INDEX, "Shaders are required to contain the CacaoData uniform block!");
+		glUniformBlockBinding(program, cacaoUBOIndex, GLShaderData::uboIndexCounter);
+		glBindBufferBase(GL_UNIFORM_BUFFER, GLShaderData::uboIndexCounter, nd->cacaoDataUBO); 
+
+		//Increment UBO index counter
+		GLShaderData::uboIndexCounter++;
+
+		//Set GPU ID and compiled values
         nd->gpuID = program;
         compiled = true;
 
@@ -269,7 +282,6 @@ namespace Cacao {
         }
         glDeleteProgram(nd->gpuID);
         compiled = false;
-		nd->uboLinked = false;
     }
 
     void Shader::Bind(){
@@ -341,17 +353,14 @@ namespace Cacao {
 				return;
 			}
 
-			//Obtain uniform location
-			std::stringstream ulocPath;
-			ulocPath << "shader." << item.target;
-			GLint uniformLocation = glGetUniformLocation(nd->gpuID, ulocPath.str().c_str());
-			EngineAssert(uniformLocation != -1, "Requested uniform does not exist in shader!");
-
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];
 
-			//For quicker access
-			using SpvType = spirv_cross::SPIRType::BaseType;
+			//Obtain uniform location
+			std::stringstream ulocPath;
+			ulocPath << (info.type == SpvType::SampledImage ? "" : "shader.") << item.target;
+			GLint uniformLocation = glGetUniformLocation(nd->gpuID, ulocPath.str().c_str());
+			EngineAssert(uniformLocation != -1, "Requested uniform does not exist in shader!");
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4*info.size.y)-(4-info.size.x);
@@ -373,6 +382,8 @@ namespace Cacao {
 				//Bind shader
 				Bind();
 			}
+
+			int imageSlotCounter = 0;
 
 			//Attempt to cast data to correct type and upload it
 			//it is so annoying that this is how this must be done
@@ -411,20 +422,30 @@ namespace Cacao {
 					}
 					break;
 				case SpvType::SampledImage:
-					switch(dims){
-					case 1:
-						glUniform1i(uniformLocation, std::any_cast<int>(item.data));
-						break;
-					case 2:
-						glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec2>(item.data)));
-						break;
-					case 3:
-						glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec3>(item.data)));
-						break;
-					case 4:
-						glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec4>(item.data)));
-						break;
+					//Confirm valid dimensions
+					if(dims != 1) {
+						Logging::EngineLog("Cannot have arrays or matrices of textures in shader, data upload aborted!", LogLevel::Error);
+						return;
 					}
+
+					//Bind texture to the next available slot
+					//Done in its own scope to avoid compiler error
+					if(item.data.type() == typeid(Texture2D*)) {
+						Texture2D* tex = std::any_cast<Texture2D*>(item.data);
+						tex->Bind(imageSlotCounter);
+					} else if(item.data.type() == typeid(Cubemap*)) {
+						Cubemap* tex = std::any_cast<Cubemap*>(item.data);
+						tex->Bind(imageSlotCounter);
+					} else {
+						Logging::EngineLog("Non-texture value supplied to texture uniform, data upload aborted!", LogLevel::Error);
+						return;
+					}
+
+					//Upload slot ID to shader
+					glUniform1i(uniformLocation, imageSlotCounter);
+
+					//Increment slot counter
+					imageSlotCounter++;
 					break;
 				case SpvType::Int64:
 					switch(dims){
@@ -586,17 +607,6 @@ namespace Cacao {
             Logging::EngineLog("Cannot upload Cacao Engine data to uncompiled shader!", LogLevel::Error);
             return;
         }
-
-		//Link UBO
-		if(!nd->uboLinked){
-			//Link Cacao data UBO
-			GLuint cacaoUBOIndex = glGetUniformBlockIndex(nd->gpuID, "CacaoData");
-			EngineAssert(cacaoUBOIndex != GL_INVALID_INDEX, "Shaders are required to contain the CacaoData uniform block!");
-			glUniformBlockBinding(nd->gpuID, cacaoUBOIndex, 0);
-			glBindBufferBase(GL_UNIFORM_BUFFER, 0, nd->cacaoDataUBO); 
-
-			nd->uboLinked = true;
-		}
 
 		//Bind UBO
 		glBindBuffer(GL_UNIFORM_BUFFER, nd->cacaoDataUBO);

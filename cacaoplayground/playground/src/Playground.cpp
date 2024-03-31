@@ -2,6 +2,8 @@
 
 #include <chrono>
 
+#define ICOSPHERE_COUNT 4
+
 class PlaygroundApp {
 public:
 	static PlaygroundApp* GetInstance() {
@@ -19,18 +21,21 @@ public:
 
 	void GPUCleanup() {
 		delete mat;
+		delete sky;
 		shader->Release();
 		mesh->Release();
+		skyTex->Release();
 	}
 
 	void Cleanup() {
 		delete shader;
 		delete mesh;
+		delete skyTex;
 		delete this;
 	}
 
-	UUIDv4::UUID GetBobUUID() {
-		return bob.uuid;
+	Cacao::Skybox* GetSky() {
+		return sky;
 	}
 private:
 	static PlaygroundApp* instance;
@@ -39,17 +44,12 @@ private:
 	Cacao::Shader* shader;
 	Cacao::Material* mat;
 	Cacao::Mesh* mesh;
+	Cacao::Cubemap* skyTex;
+	Cacao::Skybox* sky;
 
-	Cacao::Entity bob;
+	Cacao::Entity cameraManager;
+	std::vector<Cacao::Entity> icospheres;
 };
-
-std::string Vec3ToString(const glm::vec3& vec, bool format = true){
-	std::stringstream ss;
-	if(format) ss << "{ ";
-	ss << vec.x << ", " << vec.y << ", " << vec.z;
-	if(format) ss << " }";
-	return ss.str();
-}
 
 class SussyScript : public Cacao::Script {
 public:
@@ -131,9 +131,12 @@ public:
         cam->SetRotation(Orientation(currentRot));
         cam->SetPosition(currentPos);
 
-		std::stringstream msg;
-		msg << "Camera position updated to " << Vec3ToString(currentPos);
-		Cacao::Logging::ClientLog(msg.str());
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_L)) {
+			std::stringstream ci;
+			glm::vec3 lt = cam->GetLookTarget();
+			ci << "Camera Looking At " << lt.x << ", " << lt.y << ", " << lt.z;
+			Cacao::Logging::ClientLog(ci.str());
+		}
 	}
 private:
 	int count;
@@ -142,40 +145,6 @@ private:
 
 PlaygroundApp* PlaygroundApp::instance = nullptr;
 bool PlaygroundApp::instanceExists = false;
-
-std::string Vec4ToString(const glm::vec4& vec, bool format = true){
-	std::stringstream ss;
-	if(format) ss << "{ ";
-	ss << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w;
-	if(format) ss << " }";
-	return ss.str();
-}
-
-std::string MatRow(std::string vecVal, int longest){
-	std::stringstream ss;
-	ss << "| " << vecVal;
-	for(int i = 0; i < (longest - 2 - vecVal.size()); i++) ss << " ";
-	ss << " |\n";
-	return ss.str();
-}
-
-std::string Mat4ToString(const glm::mat4& mat){
-	std::stringstream ss;
-	std::string r1 = Vec4ToString(mat[0], false), r2 = Vec4ToString(mat[1], false), r3 = Vec4ToString(mat[2], false), r4 = Vec4ToString(mat[3], false);
-	int longest = r1.size();
-	if(r2.size() > longest) longest = r2.size();
-	if(r3.size() > longest) longest = r2.size();
-	if(r4.size() > longest) longest = r2.size();
-	longest += 2;
-	for(int i = 0; i < longest; i++) ss << "=";
-	ss << "\n";
-	ss << MatRow(r1, longest);
-	ss << MatRow(r2, longest);
-	ss << MatRow(r3, longest);
-	ss << MatRow(r4, longest);
-	for(int i = 0; i < longest; i++) ss << "=";
-	return ss.str();
-}
 
 void PlaygroundApp::Launch() {
 	Cacao::WorldManager::GetInstance()->CreateWorld<Cacao::PerspectiveCamera>("Playground");
@@ -191,6 +160,11 @@ void PlaygroundApp::Launch() {
 		this->shader->Compile();
 	});
 
+	skyTex = new Cacao::Cubemap({ "assets/sky/right.jpg", "assets/sky/left.jpg", "assets/sky/top.jpg", "assets/sky/bottom.jpg", "assets/sky/front.jpg", "assets/sky/back.jpg" });
+	std::future<void> skyTexFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
+		this->skyTex->Compile();
+	});
+
 	Cacao::Model cube("assets/models/icosphere.obj");
 	mesh = cube.ExtractMesh("Icosphere");
 	std::future<void> meshFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
@@ -200,20 +174,37 @@ void PlaygroundApp::Launch() {
 	mat = new Cacao::Material();
 	mat->shader = shader;
 
-	std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
-	mc->SetActive(true);
-	mc->mesh = mesh;
-	mc->mat = mat;
+	sky = new Cacao::Skybox(skyTex);
 
 	meshFuture.wait();
 	shaderFuture.wait();
+	skyTexFuture.wait();
 
-	bob.active = true;
-	bob.components.push_back(ss);
-	bob.components.push_back(mc);
-	bob.transform.SetPosition({3, 0, 0});
+	cameraManager.active = true;
+	cameraManager.components.push_back(ss);
+	world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(cameraManager));
 
-	world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(bob));
+	std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(-3, 3);
+	
+	for(int i = 0; i < ICOSPHERE_COUNT; i++){
+		icospheres.push_back({});
+		std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
+		mc->SetActive(true);
+		mc->mesh = mesh;
+		mc->mat = mat;
+		icospheres[i].components.push_back(mc);
+		int x = dist(rng), y = dist(rng), z = dist(rng);
+		icospheres[i].transform.SetPosition({ x, y, z });
+		icospheres[i].active = true;
+		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[i]));
+		std::stringstream isl;
+		isl << "Icosphere #" << (i + 1) << " At " << x << ", " << y << ", " << z;
+		Cacao::Logging::ClientLog(isl.str());
+	}
+
+	world.skybox = sky;
 }
 
 extern "C" {

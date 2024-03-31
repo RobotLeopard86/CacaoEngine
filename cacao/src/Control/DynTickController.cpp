@@ -66,34 +66,36 @@ namespace Cacao {
 			//Find all scripts that need to be run
 			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
-			BS::multi_future<void> fsFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [this, activeWorld](unsigned int index) {
-				//Create script locator function for an entity
-				auto scriptLocator = [this](TreeItem<Entity>& e) {
-					//Sneaky recursive lambda trick
-					auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
-						//Stop if this component is inactive
-						if(!e.val().active) return;
+			BS::multi_future<void> fsFuture;
+			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
+				fsFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item](){
+					//Create script locator function for an entity
+					auto renderLocator = [this](TreeItem<Entity>& e) {
+						//Sneaky recursive lambda trick
+						auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
+							//Stop if this component is inactive
+							if(!e.val().active) return;
 
-						//Check for script components
-						for(std::shared_ptr<Component>& c : e.val().components){
-							if(c->GetKind() == "SCRIPT" && c->IsActive()) {
-								//Add to list
-								this->tickScriptList.push_back(c);
+							//Check for mesh components
+							for(std::shared_ptr<Component>& c : e.val().components){
+								if(c->GetKind() == "SCRIPT" && c->IsActive()) {
+									//Add to list
+									this->tickScriptList.push_back(c);
+								}
 							}
-						}
 
-						//Recurse through children
-						for(TreeItem<Entity>& child : e.children){
-							implRef(child, implRef);
-						}
+							//Recurse through children
+							for(TreeItem<Entity>& child : e.children){
+								implRef(child, implRef);
+							}
+						};
+						return impl(e, impl);
 					};
-					return impl(e, impl);
-				};
 
-				//Execute the script locator
-				TreeItem<Entity>& ent = const_cast<TreeItem<Entity>&>(activeWorld.worldTree.children.at(index)); //We have to use const_cast because at() returns a const reference
-				scriptLocator(ent);
-			});
+					//Execute the mesh locator (const_cast required because we get a const reference by default and we don't want that)
+					renderLocator(const_cast<TreeItem<Entity>&>(item));
+				}));
+			}
 			//Wait for work to be completed
 			fsFuture.wait();
 
@@ -105,43 +107,48 @@ namespace Cacao {
 
 			//Accumulate things to render
 			tickRenderList.clear();
-			BS::multi_future<void> roFuture = Engine::GetInstance()->GetThreadPool().submit_loop<unsigned int>(0, activeWorld.worldTree.children.size(), [this, activeWorld](unsigned int index) {
-				//Create script locator function for an entity
-				auto renderLocator = [this](TreeItem<Entity>& e) {
-					//Sneaky recursive lambda trick
-					auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
-						//Stop if this component is inactive
-						if(!e.val().active) return;
+			BS::multi_future<void> roFuture;
+			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
+				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item](){
+					//Create script locator function for an entity
+					auto renderLocator = [this](TreeItem<Entity>& e) {
+						//Sneaky recursive lambda trick
+						auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
+							//Stop if this component is inactive
+							if(!e.val().active) return;
 
-						//Check for mesh components
-						for(std::shared_ptr<Component>& c : e.val().components){
-							if(c->GetKind() == "MESH" && c->IsActive()) {
-								//Add to list
-								MeshComponent* mc = static_cast<MeshComponent*>(c.get());
-								this->tickRenderList.push_back(RenderObject(e.val().transform.GetTransformationMatrix(), mc->mesh, mc->mat));
+							//Check for mesh components
+							for(std::shared_ptr<Component>& c : e.val().components){
+								if(c->GetKind() == "MESH" && c->IsActive()) {
+									//Add to list
+									MeshComponent* mc = static_cast<MeshComponent*>(c.get());
+									this->tickRenderList.push_back(RenderObject(e.val().transform.GetTransformationMatrix(), mc->mesh, mc->mat));
+								}
 							}
-						}
 
-						//Recurse through children
-						for(TreeItem<Entity>& child : e.children){
-							implRef(child, implRef);
-						}
+							//Recurse through children
+							for(TreeItem<Entity>& child : e.children){
+								implRef(child, implRef);
+							}
+						};
+						return impl(e, impl);
 					};
-					return impl(e, impl);
-				};
 
-				//Execute the mesh locator
-				TreeItem<Entity>& ent = const_cast<TreeItem<Entity>&>(activeWorld.worldTree.children.at(index)); //We have to use const_cast because at() returns a const reference
-				renderLocator(ent);
-			});
+					//Execute the mesh locator (const_cast required because we get a const reference by default and we don't want that)
+					renderLocator(const_cast<TreeItem<Entity>&>(item));
+				}));
+			}
 			//Wait for work to be completed
 			roFuture.wait();
+
+			static int objectCount;
+			objectCount = tickRenderList.size();
 
 			//Create frame
 			Frame f;
 			f.projection = activeWorld.cam->GetProjectionMatrix();
 			f.view = activeWorld.cam->GetViewMatrix();
-			f.skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(*(activeWorld.skybox.value())) : std::nullopt);
+			f.skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(Skybox(*(activeWorld.skybox.value()))) : std::nullopt);
 			f.objects = tickRenderList;
 
 			//Send frame to render controller

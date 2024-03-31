@@ -8,9 +8,6 @@
 #include "GLUtils.hpp"
 
 namespace Cacao {
-	static float what;
-	static bool lighten;
-
 	//Queue of OpenGL jobs to process
 	static std::queue<GLJob> glQueue;
 
@@ -31,9 +28,7 @@ namespace Cacao {
 		}
 
 		//Clear the screen
-		what += 0.01f * (lighten ? 1 : -1);
-		if(what > 1 || what < 0) lighten = !lighten;
-		glClearColor(0.765625f * what, 1.0f * what, 0.1015625f * what, 1.0f);
+		glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Render main scene
@@ -67,7 +62,6 @@ namespace Cacao {
 	void RenderController::Init() {
 		EngineAssert(!isInitialized, "Render controller is already initialized!");
 
-		what = 0;
 		isInitialized = true;
 	}
 
