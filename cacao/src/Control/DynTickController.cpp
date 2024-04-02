@@ -68,21 +68,24 @@ namespace Cacao {
 			//Find all scripts that need to be run
 			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
-			BS::multi_future<void> fsFuture;
+			std::mutex slMutex{};
+			BS::multi_future<void> slFuture;
 			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				fsFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item](){
+				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item, &slMutex](){
 					//Create script locator function for an entity
-					auto renderLocator = [this](TreeItem<Entity>& e) {
+					auto renderLocator = [this, &slMutex](TreeItem<Entity>& e) {
 						//Sneaky recursive lambda trick
-						auto impl = [this](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [this, &slMutex](TreeItem<Entity>& e, auto& implRef) mutable {
 							//Stop if this component is inactive
 							if(!e.val().active) return;
 
 							//Check for mesh components
 							for(std::shared_ptr<Component>& c : e.val().components){
 								if(c->GetKind() == "SCRIPT" && c->IsActive()) {
-									//Add to list
+									//Add to list (once lock is available)
+									slMutex.lock();
 									this->tickScriptList.push_back(c);
+									slMutex.unlock();
 								}
 							}
 
@@ -94,12 +97,12 @@ namespace Cacao {
 						return impl(e, impl);
 					};
 
-					//Execute the mesh locator (const_cast required because we get a const reference by default and we don't want that)
+					//Execute the script locator (const_cast required because we get a const reference by default and we don't want that)
 					renderLocator(const_cast<TreeItem<Entity>&>(item));
 				}));
 			}
 			//Wait for work to be completed
-			fsFuture.wait();
+			slFuture.wait();
 
 			//Execute scripts
 			for(std::shared_ptr<Component>& s : tickScriptList){
