@@ -19,7 +19,7 @@ namespace Cacao {
 		}
 		Skybox(const Skybox& other);
 
-        //Draw this skyboxn
+        //Draw this skybox
         void Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 
 		//Set up any common skybox resources
@@ -28,6 +28,8 @@ namespace Cacao {
 		static void CommonCleanup();
 
 		Orientation orientation;
+
+		Cubemap* GetTexture() { return texture; }
     private:
         Cubemap* texture;
 

@@ -7,6 +7,8 @@
 #define BS_THREAD_POOL_ENABLE_PAUSE
 #include "BS_thread_pool.hpp"
 
+#include "dynalo/dynalo.hpp"
+
 #include "EngineConfig.hpp"
 #include "Utilities/MiscUtils.hpp"
 
@@ -57,6 +59,9 @@ namespace Cacao {
 		//Engine thread ID
 		std::thread::id threadID;
 
+		//Game library
+		dynalo::library* gameLib;
+
 		Engine() {}
 
 		//List of loaned graphics contexts
@@ -65,5 +70,12 @@ namespace Cacao {
 		//Backend implementation required
 		NativeData* _CreateGraphicsContext();
 		void _DeleteGraphicsContext(NativeData* context);
+
+		//Run the core startup and shutdown systems of the engine on separate thread (main thread handles rendering)
+		void CoreStartup();
+		void CoreShutdown();
+
+		//Startup and shutdown synchronization flags
+		std::atomic_bool threadPoolReady, gameCleanupDone;
 	};
 }

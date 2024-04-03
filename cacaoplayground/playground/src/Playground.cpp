@@ -20,33 +20,27 @@ public:
 
 	void Launch();
 
-	void GPUCleanup() {
-		delete mat;
-		delete sky;
+	void Cleanup() {
 		shader->Release();
 		mesh->Release();
 		skyTex->Release();
-	}
-
-	void Cleanup() {
-		delete shader;
-		delete mesh;
-		delete skyTex;
+		delete mat;
 		delete this;
 	}
 
-	Cacao::Skybox* GetSky() {
+	Cacao::Asset<Cacao::Skybox>& GetSky() {
 		return sky;
 	}
 private:
 	static PlaygroundApp* instance;
 	static bool instanceExists;
 
-	Cacao::Shader* shader;
 	Cacao::Material* mat;
-	Cacao::Mesh* mesh;
-	Cacao::Cubemap* skyTex;
-	Cacao::Skybox* sky;
+
+	Cacao::Asset<Cacao::Shader> shader;
+	Cacao::Asset<Cacao::Mesh> mesh;
+	Cacao::Asset<Cacao::Cubemap> skyTex;
+	Cacao::Asset<Cacao::Skybox> sky;
 
 	Cacao::Entity cameraManager;
 	std::vector<Cacao::Entity> icospheres;
@@ -156,30 +150,21 @@ void PlaygroundApp::Launch() {
 	ss->SetActive(true);
 
 	Cacao::ShaderSpec spec;
-	shader = new Cacao::Shader("assets/shaders/color.vert.spv", "assets/shaders/color.frag.spv", spec);
-	std::future<void> shaderFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
-		this->shader->Compile();
-	});
+	std::future<Cacao::Asset<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.vert.spv", "assets/shaders/color.frag.spv", spec);
 
-	skyTex = new Cacao::Cubemap({ "assets/sky/right.jpg", "assets/sky/left.jpg", "assets/sky/top.jpg", "assets/sky/bottom.jpg", "assets/sky/front.jpg", "assets/sky/back.jpg" });
-	std::future<void> skyTexFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
-		this->skyTex->Compile();
-	});
-
-	Cacao::Model cube("assets/models/icosphere.obj");
-	mesh = cube.ExtractMesh("Icosphere");
-	std::future<void> meshFuture = Cacao::Engine::GetInstance()->GetThreadPool().submit_task([this]() {
-		this->mesh->Compile();
-	});
-
-	mat = new Cacao::Material();
-	mat->shader = shader;
-
-	sky = new Cacao::Skybox(skyTex);
+	std::future<Cacao::Asset<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox({ "assets/sky/right.jpg", "assets/sky/left.jpg", "assets/sky/top.jpg", "assets/sky/bottom.jpg", "assets/sky/front.jpg", "assets/sky/back.jpg" });
+	std::future<Cacao::Asset<Cacao::Mesh>> meshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj", "Icosphere");
 
 	meshFuture.wait();
+	skyFuture.wait();
 	shaderFuture.wait();
-	skyTexFuture.wait();
+
+	shader = shaderFuture.get();
+	mesh = meshFuture.get();
+	sky = skyFuture.get();
+
+	mat = new Cacao::Material();
+	mat->shader = shader();
 
 	cameraManager.active = true;
 	cameraManager.components.push_back(ss);
@@ -193,19 +178,16 @@ void PlaygroundApp::Launch() {
 		icospheres.push_back({});
 		std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
 		mc->SetActive(true);
-		mc->mesh = mesh;
+		mc->mesh = mesh();
 		mc->mat = mat;
 		icospheres[i].components.push_back(mc);
 		int x = dist(rng), y = dist(rng), z = dist(rng);
 		icospheres[i].transform.SetPosition({ x, y, z });
 		icospheres[i].active = true;
 		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[i]));
-		std::stringstream isl;
-		isl << "Icosphere #" << (i + 1) << " At " << x << ", " << y << ", " << z;
-		Cacao::Logging::ClientLog(isl.str());
 	}
 
-	world.skybox = sky;
+	world.skybox = sky();
 }
 
 extern "C" {
@@ -213,9 +195,7 @@ extern "C" {
 		PlaygroundApp::GetInstance()->Launch();
 	}
 
-	void _CacaoGraphicsCleanup() {
+	void _CacaoExiting() {
 		PlaygroundApp::GetInstance()->Cleanup();
 	}
-
-	void _CacaoExiting() {}
 }

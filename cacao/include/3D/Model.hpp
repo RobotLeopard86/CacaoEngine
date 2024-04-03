@@ -17,6 +17,8 @@ namespace Cacao {
         std::vector<std::string> ListMeshes();
         //Retrieve a mesh by name (will modify value stored in model if modified but will NOT be deleted when model is)
         Mesh* ExtractMesh(std::string id);
+		//Check if a mesh is in the model
+		bool HasMesh(std::string id);
     private:
         std::map<std::string, Mesh*> meshes;
 

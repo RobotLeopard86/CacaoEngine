@@ -144,4 +144,8 @@ namespace Cacao {
         Mesh* mesh = meshes.at(id);
         return mesh;
     }
+
+	bool Model::HasMesh(std::string id){
+        return meshes.contains(id);
+    }
 }
