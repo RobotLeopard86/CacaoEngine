@@ -24,3 +24,4 @@
 #include "Utilities/Flushable.hpp"
 #include "Utilities/Input.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Utilities/AssetManager.hpp"

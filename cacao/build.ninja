@@ -39,9 +39,10 @@ build $objdir/PerspectiveCamera.o: compile src/Cameras/PerspectiveCamera.cpp
 build $objdir/WorldManager.o: compile src/World/WorldManager.cpp
 build $objdir/DynTickController.o: compile src/Control/DynTickController.cpp
 build $objdir/RenderController.o: compile src/Rendering/RenderController.cpp
+build $objdir/AssetManager.o: compile src/Utilities/AssetManager.cpp
 
 # Link API library
-build ./build/libcacao.so: linkso $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o || $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o
+build ./build/libcacao.so: linkso $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o $objdir/AssetManager.o || $objdir/Log.o $objdir/Assert.o $objdir/Engine.o $objdir/EventManager.o $objdir/Input.o $objdir/Model.o $objdir/Transform.o $objdir/PerspectiveCamera.o $objdir/WorldManager.o $objdir/DynTickController.o $objdir/RenderController.o $objdir/AssetManager.o
 
 # Link loader
 build ./build/cacao: linkld src/Core/Startup.cpp || ./build/libcacao.so
