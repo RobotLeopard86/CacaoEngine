@@ -23,7 +23,7 @@ public:
 	void Cleanup() {
 		shader->Release();
 		mesh->Release();
-		skyTex->Release();
+		sky->GetTexture()->Release();
 		delete mat;
 		delete this;
 	}
@@ -39,7 +39,6 @@ private:
 
 	Cacao::Asset<Cacao::Shader> shader;
 	Cacao::Asset<Cacao::Mesh> mesh;
-	Cacao::Asset<Cacao::Cubemap> skyTex;
 	Cacao::Asset<Cacao::Skybox> sky;
 
 	Cacao::Entity cameraManager;

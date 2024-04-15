@@ -25,11 +25,10 @@ rule link
 build $objdir/Mesh.o: compile src/Mesh.cpp
 build $objdir/Shader.o: compile src/Shader.cpp
 build $objdir/Window.o: compile src/Window.cpp
-build $objdir/GPU.o: compile src/GPU.cpp
 build $objdir/Cubemap.o: compile src/Cubemap.cpp
 build $objdir/Texture2D.o: compile src/Texture2D.cpp
 build $objdir/Skybox.o: compile src/Skybox.cpp
 build $objdir/Renderer.o: compile src/Renderer.cpp
 
 # Link library
-build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o $objdir/GPU.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o $objdir/GPU.o
+build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o

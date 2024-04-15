@@ -27,13 +27,13 @@ namespace Cacao {
 		return instance;
 	}
 
-	void DynTickController::Start(std::function<void()> onShutdown){
+	void DynTickController::Start(){
 		if(isRunning) {
 			Logging::EngineLog("Cannot start the already started dynamic tick controller!", LogLevel::Error);
 			return;
 		}
 		isRunning = true;
-		shutdownHook = onShutdown;
+
 		//Create thread to run controller
 		thread = new std::jthread(BIND_MEMBER_FUNC(DynTickController::Run));
 	}
@@ -167,7 +167,5 @@ namespace Cacao {
 			//Otherwise, run the next tick immediately
 			if(tickEnd < idealStopTime) std::this_thread::sleep_until(idealStopTime);
 		}
-
-		shutdownHook();
 	}
 }

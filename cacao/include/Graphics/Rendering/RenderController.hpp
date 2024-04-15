@@ -33,6 +33,11 @@ namespace Cacao {
 
 		//Shutdown the backend
 		void Shutdown();
+
+		//Force the controller to wake up
+		void ForceWakeup() {
+			wakeupForceFlag.store(true);
+		}
 	private:
 		//Singleton members
 		static RenderController* instance;
@@ -41,7 +46,11 @@ namespace Cacao {
 		RenderController() 
 			: isInitialized(false) {}
 
+		//Process a frame for drawing
 		void ProcessFrame(Frame& frame);
+
+		//Update the graphics state
+		void UpdateGraphicsState();
 
 		//Queue of frames to render
 		std::queue<Frame> frameQueue;
@@ -49,6 +58,7 @@ namespace Cacao {
 		//Thread safety constructs
 		std::mutex fqMutex;
 		std::condition_variable cvar;
+		std::atomic_bool wakeupForceFlag;
 
 		bool isInitialized;
 	};

@@ -28,15 +28,6 @@ namespace Cacao {
 		//Access the thread pool
 		BS::thread_pool& GetThreadPool() { return threadPool; }
 
-		//Request any native data needed for a graphics context
-		//Should only be called by thread pools, hence the poolID name
-		//Do not use this function otherwise (it will yell at you in the console)
-		NativeData* RequestGraphicsContext(size_t poolID);
-		
-		//Set up a graphics context for use
-		//Backed implementation required
-		void SetupGraphicsContext(NativeData* context);
-
 		//Is the engine running?
 		bool IsRunning() { return run; }
 
@@ -64,18 +55,8 @@ namespace Cacao {
 
 		Engine() {}
 
-		//List of loaned graphics contexts
-		std::map<size_t, NativeData*> loanedContexts;
-
-		//Backend implementation required
-		NativeData* _CreateGraphicsContext();
-		void _DeleteGraphicsContext(NativeData* context);
-
 		//Run the core startup and shutdown systems of the engine on separate thread (main thread handles rendering)
 		void CoreStartup();
 		void CoreShutdown();
-
-		//Startup and shutdown synchronization flags
-		std::atomic_bool threadPoolReady, gameCleanupDone;
 	};
 }

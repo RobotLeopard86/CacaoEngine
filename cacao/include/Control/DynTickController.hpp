@@ -16,7 +16,7 @@ namespace Cacao {
 		static DynTickController* GetInstance();
 
 		//Start the controller
-		void Start(std::function<void()> shutdownHook);
+		void Start();
 
 		//Stop the controller
 		void Stop();
@@ -31,7 +31,6 @@ namespace Cacao {
 		bool isRunning;
 
 		std::jthread* thread;
-		std::function<void()> shutdownHook;
 		
 		std::vector<std::shared_ptr<Component>> tickScriptList;
 		std::vector<RenderObject> tickRenderList;
