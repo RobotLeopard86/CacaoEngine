@@ -45,7 +45,16 @@ namespace Cacao {
 		}
 		if(launchRoot["workingDir"].IsScalar() && std::filesystem::exists(launchRoot["workingDir"].Scalar())) std::filesystem::current_path(launchRoot["workingDir"].Scalar());
 	
-		threadPoolReady.wait(false);
+		//Register the window close consumer
+		Logging::EngineLog("Setting up event manager...");
+		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
+			this->Stop();
+			return;
+		}));
+
+		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
+		Logging::EngineLog("Starting thread pool...");
+		threadPool.reset(std::thread::hardware_concurrency() - 1);
 
 		//Set up common skybox resources
 		threadPool.submit_task([]() {
@@ -57,30 +66,34 @@ namespace Cacao {
 		auto launchFunc = gameLib->get_function<void(void)>("_CacaoLaunch");
 		launchFunc();
 
+		//Start the dynamic tick controller
+		Logging::EngineLog("Starting dynamic tick controller...");
+		DynTickController::GetInstance()->Start();
+
 		Logging::EngineLog("Engine startup complete!");
 	}
 
 	void Engine::CoreShutdown() {
+		//Stop the dynamic tick controller
+		Logging::EngineLog("Stopping controllers...");
+		DynTickController::GetInstance()->Stop();
+
 		//Call game module exit hook
 		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
 		exitFunc();
-
-		gameCleanupDone.store(true);
-		gameCleanupDone.notify_one();
 
 		//"Stop" thread pool (really we just pause it so no new tasks can come in, actual thread pool destruction happens at program exit)
 		//This is necessary so that we can clean up any thread pool resources
 		Logging::EngineLog("Stopping thread pool...");
 		threadPool.pause();
+
+		//Notify the render controller to wake up so shutdown can proceed
+		RenderController::GetInstance()->ForceWakeup();
 	}
 
 	void Engine::Run(){
 		//Make sure the engine will run
 		run.store(true);
-
-		//Set synchronization flags
-		threadPoolReady.store(false);
-		gameCleanupDone.store(false);
 
 		//Set thread ID
 		threadID = std::this_thread::get_id();
@@ -89,17 +102,6 @@ namespace Cacao {
 		cfg.fixedTickRate = 50;
 		cfg.targetDynTPS = 60;
 
-		//Register the window close consumer
-		Logging::EngineLog("Setting up event manager...");
-		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
-			this->Stop();
-			return;
-		}));
-
-		//Start the core startup runner
-		auto startupFunc = BIND_MEMBER_FUNC(Engine::CoreStartup);
-		std::future<void> startup = std::async(std::launch::async, startupFunc);
-
 		//Open the window
 		Window::GetInstance()->Open("Cacao Engine", 1280, 720, true);
 
@@ -107,46 +109,14 @@ namespace Cacao {
 		Logging::EngineLog("Initializing rendering backend...");
 		RenderController::GetInstance()->Init();
 
-		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
-		Logging::EngineLog("Setting up thread pool graphics contexts...");
-		for(size_t i = 0; i < std::thread::hardware_concurrency() - 2; i++){
-			loanedContexts.insert_or_assign(i, _CreateGraphicsContext());
-		}
-		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 2, [](){
-			//Get and set up a graphics context
-			NativeData* graphicsContext = Engine::GetInstance()->RequestGraphicsContext(BS::this_thread::get_index().value());
-			Engine::GetInstance()->SetupGraphicsContext(graphicsContext);
-		});
-		threadPoolReady.store(true);
-		threadPoolReady.notify_one();
-
-		//Start the dynamic tick controller
-		Logging::EngineLog("Starting controllers...");
-		auto engineShutdown = BIND_MEMBER_FUNC(Engine::CoreShutdown);
-		DynTickController::GetInstance()->Start([engineShutdown](){
-			engineShutdown();
+		//Asynchronously run core startup
+		//We never use this future as we don't intend to wait on it, but we have to do this because std::async has [[nodiscard]]
+		std::future<void> startup = std::async(std::launch::async, [this]() {
+			this->CoreStartup();
 		});
 
 		//Run the rendering controller on the main thread
 		RenderController::GetInstance()->Run();
-
-		Logging::EngineLog("Shutting down engine...");
-
-		//Stop the dynamic tick controller
-		Logging::EngineLog("Stopping controllers...");
-		DynTickController::GetInstance()->Stop();
-
-		//Wait for game exit function to complete
-		gameCleanupDone.wait(false);
-
-		//Destroy thread pool contexts
-		Logging::EngineLog("Destroying thread pool graphics contexts...");
-		for(auto it : loanedContexts){
-			_DeleteGraphicsContext(it.second);
-			delete it.second;
-		}
-		loanedContexts.clear();
 
 		//Shut down rendering backend
 		Logging::EngineLog("Shutting down rendering backend...");
@@ -161,12 +131,12 @@ namespace Cacao {
 	}
 
 	void Engine::Stop() {
-		run.store(false);
-	}
+		Logging::EngineLog("Shutting down engine...");
 
-	NativeData* Engine::RequestGraphicsContext(size_t poolID){
-		EngineAssert(loanedContexts.contains(poolID), "No graphics context loaned to specified pool ID! You have been yelled at in the console, as you were warned.");
-		return loanedContexts[poolID];
+		//Run engine shutdown
+		CoreShutdown();
+
+		run.store(false);
 	}
 
 }

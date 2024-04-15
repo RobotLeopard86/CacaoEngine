@@ -23,16 +23,19 @@ namespace Cacao {
 	void RenderController::Run() {
 		EngineAssert(isInitialized, "Render controller must be initialized prior to running!");
 
-		//Run while the window is open
+		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()){
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
 
-			//Wait while the frame or render context job queue is empty
+			//Wait while the frame queue is empty
 			cvar.wait(lock, [this](){
 				if(Window::GetInstance()->IsOpen()) Window::GetInstance()->Update();
-				return (Engine::GetInstance()->IsRunning() || !this->frameQueue.empty());
+				this->UpdateGraphicsState();
+				return (Engine::GetInstance()->IsRunning() || !this->frameQueue.empty()) || this->wakeupForceFlag;
 			});
+
+			if(wakeupForceFlag) wakeupForceFlag.store(false);
 
 			//Process frames
 			while(!frameQueue.empty() && Engine::GetInstance()->IsRunning()) {
