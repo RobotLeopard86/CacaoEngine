@@ -25,22 +25,20 @@ namespace Cacao {
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()){
+			//Update window and graphics state
+			Window::GetInstance()->Update();
+			UpdateGraphicsState();
+	
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
 
-			//Wait while the frame queue is empty
-			cvar.wait(lock, [this](){
-				if(Window::GetInstance()->IsOpen()) Window::GetInstance()->Update();
-				this->UpdateGraphicsState();
-				return (Engine::GetInstance()->IsRunning() || !this->frameQueue.empty()) || this->wakeupForceFlag;
-			});
-
-			if(wakeupForceFlag) wakeupForceFlag.store(false);
-
-			//Process frames
-			while(!frameQueue.empty() && Engine::GetInstance()->IsRunning()) {
+			//Process frame if it exists
+			if(!frameQueue.empty()) {
 				//Acquire the next frame
 				Frame& next = frameQueue.front();
+
+				//Release lock
+				lock.unlock();
 
 				//Render the frame
 				ProcessFrame(next);
@@ -50,11 +48,14 @@ namespace Cacao {
 				Window::GetInstance()->Update();
 
 				//Remove frame from the queue
+				lock.lock();
 				frameQueue.pop();
+				lock.unlock();
+			} else {
+				//Release lock and wait for a bit to avoid wasting CPU cycles
+				lock.unlock();
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			}
-
-			//Release lock
-			lock.unlock();
 		}
 	}
 }
