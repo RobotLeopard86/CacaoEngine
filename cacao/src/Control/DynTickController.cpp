@@ -149,7 +149,7 @@ namespace Cacao {
 			//Wait for work to be completed
 			roFuture.wait();
 
-			//Create frame
+			//Create frame object
 			Frame f;
 			f.projection = activeWorld.cam->GetProjectionMatrix();
 			f.view = activeWorld.cam->GetViewMatrix();

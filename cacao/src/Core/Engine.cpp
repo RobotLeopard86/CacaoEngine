@@ -86,9 +86,6 @@ namespace Cacao {
 		//This is necessary so that we can clean up any thread pool resources
 		Logging::EngineLog("Stopping thread pool...");
 		threadPool.pause();
-
-		//Notify the render controller to wake up so shutdown can proceed
-		RenderController::GetInstance()->ForceWakeup();
 	}
 
 	void Engine::Run(){

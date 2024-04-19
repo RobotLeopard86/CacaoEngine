@@ -21,11 +21,8 @@ namespace Cacao {
 		//Enqueue a frame for rendering
 		void EnqueueFrame(Frame& frame) {
 			//Add a frame to the queue
-			{
-				std::lock_guard guard(fqMutex);
-				frameQueue.push(frame);
-			}
-			cvar.notify_one();
+			std::lock_guard guard(fqMutex);
+			frameQueue.push(frame);
 		}
 
 		//Initialize the backend
@@ -33,11 +30,6 @@ namespace Cacao {
 
 		//Shutdown the backend
 		void Shutdown();
-
-		//Force the controller to wake up
-		void ForceWakeup() {
-			wakeupForceFlag.store(true);
-		}
 	private:
 		//Singleton members
 		static RenderController* instance;
@@ -57,8 +49,6 @@ namespace Cacao {
 
 		//Thread safety constructs
 		std::mutex fqMutex;
-		std::condition_variable cvar;
-		std::atomic_bool wakeupForceFlag;
 
 		bool isInitialized;
 	};

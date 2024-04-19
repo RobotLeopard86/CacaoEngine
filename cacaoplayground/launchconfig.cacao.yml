@@ -2,7 +2,7 @@
 launch: playground/build
 
 # Target number of dynamic ticks per second (not a hard constraint)
-dynamicTPS: 30
+dynamicTPS: 75
 
 # Window title
 title: Cacao Playground
