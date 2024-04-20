@@ -17,7 +17,8 @@
 #define nd ((GLCubemapData*)nativeData)
 
 namespace Cacao {
-	Cubemap::Cubemap(std::vector<std::string> filePaths) {
+	Cubemap::Cubemap(std::vector<std::string> filePaths) 
+		: Texture(false) {
 		//Create native data
 		nativeData = new GLCubemapData();
 

@@ -27,7 +27,7 @@ namespace Cacao {
 	GLuint GLShaderData::uboIndexCounter = 0;
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec) 
-		:compiled(false), bound(false), specification(spec) {
+		: Asset(false), bound(false), specification(spec) {
 		//Validate that these paths exist
 		EngineAssert(std::filesystem::exists(vertexPath), "Cannot create a shader from a non-existent file!");
 		EngineAssert(std::filesystem::exists(fragmentPath), "Cannot create a shader from a non-existent file!");
@@ -107,7 +107,7 @@ namespace Cacao {
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
-		:compiled(false), bound(false), specification(spec) {
+		: Asset(false), bound(false), specification(spec) {
 		//Create native data
 		nativeData = new GLShaderData();
 		

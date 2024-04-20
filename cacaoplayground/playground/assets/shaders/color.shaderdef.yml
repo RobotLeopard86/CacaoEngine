@@ -1,0 +1,7 @@
+vertex: assets/shaders/color.vert.spv
+fragment: assets/shaders/color.frag.spv
+spec:
+  - name: testy
+    type: uint64
+    sizex: 1
+    sizey: 1

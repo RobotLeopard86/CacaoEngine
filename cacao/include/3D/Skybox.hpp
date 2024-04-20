@@ -8,16 +8,29 @@
 #include "glm/mat4x4.hpp"
 
 #include <array>
+#include <future>
 
 namespace Cacao {
     //Must be implemented per-rendering API
-    class Skybox {
+    class Skybox : public Asset {
     public:
+		//Warning: deletes cubemap provided when deleted if not copy-constructed
 		Skybox(Cubemap* tex);
 		~Skybox() {
+			if(textureOwner) delete texture;
 			delete nativeData;
 		}
-		Skybox(const Skybox& other);
+		Skybox(const Skybox& other)
+			: Asset(other.compiled), textureOwner(false), texture(other.texture), orientation(other.orientation) {
+			_InitCopyND();
+		}
+
+		//Utility compile and release functions which are forwarded to the texture
+        std::shared_future<void> Compile() override { return texture->Compile(); }
+        void Release() override { texture->Release(); }
+		bool IsCompiled() override { return texture->IsCompiled(); }
+
+		std::string GetType() override { return "SKYBOX"; }
 
         //Draw this skybox
         void Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
@@ -28,10 +41,12 @@ namespace Cacao {
 		static void CommonCleanup();
 
 		Orientation orientation;
-
-		Cubemap* GetTexture() { return texture; }
     private:
+		bool textureOwner;
         Cubemap* texture;
+
+		//Initialize native data on copy
+		void _InitCopyND();
 
         static Shader* skyboxShader;
 		static constexpr float skyboxVerts[] = {

@@ -11,11 +11,16 @@ namespace Cacao {
 	//Queue of OpenGL jobs to process
 	static std::queue<GLJob> glQueue;
 
+	//Queue mutex
+	static std::mutex queueMutex;
+
 	void RenderController::UpdateGraphicsState() {
 		//Process OpenGL jobs
 		while(!glQueue.empty()){
 			//Acquire next job
+			queueMutex.lock();
 			GLJob& job = glQueue.front();
+			queueMutex.unlock();
 
 			//Run job
 			job.func();
@@ -24,7 +29,9 @@ namespace Cacao {
 			job.status->set_value();
 
 			//Remove job from queue
+			queueMutex.lock();
 			glQueue.pop();
+			queueMutex.unlock();
 		}
 	}
 
@@ -64,7 +71,9 @@ namespace Cacao {
 	}
 
 	void EnqueueGLJob(GLJob& job) {
+		queueMutex.lock();
 		glQueue.push(job);
+		queueMutex.unlock();
 	}
 
 	void RenderController::Init() {

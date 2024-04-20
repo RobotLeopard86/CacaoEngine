@@ -9,6 +9,7 @@
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Utilities/Asset.hpp"
 
 #include "spirv_cross.hpp"
 #include "glm/glm.hpp"
@@ -52,7 +53,7 @@ namespace Cacao {
 
     //Must be implemented per-rendering API
 	//Shader class
-    class Shader {
+    class Shader : public Asset {
     public:
 		//Create a shader from raw SPIR-V code loaded separately
 		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
@@ -70,12 +71,9 @@ namespace Cacao {
         //Don't use this shader
         void Unbind();
         //Compile shader to be used later
-        std::shared_future<void> Compile();
+        std::shared_future<void> Compile() override;
         //Delete shader when no longer needed
-        void Release();
-
-        //Is shader compiled?
-        bool IsCompiled() { return compiled; }
+        void Release() override;
 
         //Is shader bound?
         bool IsBound() { return bound; }
@@ -94,10 +92,8 @@ namespace Cacao {
 		//Only call from rendering thread
 		void UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform);
 
-		//If this variable is true, the shader will be expected to take in lighting data
-		bool lit;
+		std::string GetType() override { return "SHADER"; }
     private:
-        bool compiled;
         bool bound;
 		NativeData* nativeData;
 		const ShaderSpec specification;
