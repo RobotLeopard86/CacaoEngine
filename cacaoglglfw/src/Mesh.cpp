@@ -15,7 +15,7 @@
 
 namespace Cacao {
 	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices)
-		: vertices(vertices), indices(indices), compiled(false) {
+		: vertices(vertices), indices(indices), Asset(false) {
 		//Create native data
 		nativeData = new GLMeshData();
 	}

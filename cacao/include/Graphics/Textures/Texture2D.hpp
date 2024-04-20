@@ -30,6 +30,8 @@ namespace Cacao {
         std::shared_future<void> Compile() override;
         //Delete texture when no longer needed
         void Release() override;
+
+		std::string GetType() override { return "2DTEX"; }
     protected:
         unsigned char* dataBuffer;
         glm::ivec2 imgSize;

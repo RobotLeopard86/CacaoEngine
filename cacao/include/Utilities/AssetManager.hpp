@@ -5,72 +5,48 @@
 #include "Graphics/Shader.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
+#include "Asset.hpp"
 
 #include <future>
 
 namespace Cacao {
-	//Manager for an asset type
-	template<typename T>
-	class Asset {
-	public:
-		//Give an asset to the manager
-		//The manager will now own the object and manage its lifetime
-		Asset(T* subject) {
-			managed = subject;
-		}
-		~Asset() {
-			if(managed != NULL) delete managed;
-		}
-		//Prevent copying
-		Asset(Asset&) = delete;
-		Asset& operator=(const Asset&) = delete;
-		
-		//Steal managed object from original when moved
-		Asset(Asset&& other) 
-			: managed(other.managed) {
-			other.managed = NULL;
-		}
-		Asset& operator=(Asset&& other) {
-			managed = other.managed;
-			other.managed = NULL;
-			return *this;
-		};
-
-		//Necessary default constructor
-		//TO BE USED ONLY FOR DEFAULT CONSTRUCTION, DO NOT USE INTENTIONALLY
-		Asset()
-			: managed(NULL) {}
-
-		//Acces the contained object
-		T* operator->() { return managed; }
-		T* operator()() { return managed; }
-	private:
-		T* managed;
-	};
-
 	//Game asset manager
 	class AssetManager {
 	public:
 		//Get the instance or create one if it doesn't exist.
 		static AssetManager* GetInstance();
 
-		//Load a shader with paths to compiled SPIR-V shader files and a shader specification
-		std::future<Asset<Shader>> LoadShader(std::string vertexPath, std::string fragmentPath, ShaderSpec specification);
+		//Load a shader with a path to a shader definition file
+		std::future<AssetHandle<Shader>> LoadShader(std::string definitionPath);
 
 		//Load a 2D texture from a file
-		std::future<Asset<Texture2D>> LoadTexture2D(std::string path);
-		//Load a cubemap from files
-		std::future<Asset<Cubemap>> LoadCubemap(std::vector<std::string> texturePaths);
+		std::future<AssetHandle<Texture2D>> LoadTexture2D(std::string path);
+		//Load a cubemap from a cubemap definition file
+		std::future<AssetHandle<Cubemap>> LoadCubemap(std::string definitionPath);
 
-		//Load a skybox with a cubemap created from files
-		std::future<Asset<Skybox>> LoadSkybox(std::vector<std::string> texturePaths);
+		//Load a skybox with a cubemap created from a cubemap definition file
+		std::future<AssetHandle<Skybox>> LoadSkybox(std::string definitionPath);
 
 		//Load a mesh from a model file
-		std::future<Asset<Mesh>> LoadMesh(std::string modelPath, std::string meshID);
+		//Location format: <model path>:<mesh ID>
+		std::future<AssetHandle<Mesh>> LoadMesh(std::string location);
+
+		//Remove an asset from the cache by ID
+		//Generally should not be used (exists for assets to deregister themselves)
+		void UncacheAsset(std::string assetID) {
+			if(!assetCache.contains(assetID)) {
+				Logging::EngineLog("Unable to remove uncached asset from cache!", LogLevel::Error);
+				return;
+			}
+			assetCache.erase(assetID);
+		}
 	private:
 		//Singleton members
 		static AssetManager* instance;
 		static bool instanceExists;
+
+		//Asset cache
+		std::map<std::string, std::weak_ptr<Asset>> assetCache;
 
 		AssetManager() {}
 	};

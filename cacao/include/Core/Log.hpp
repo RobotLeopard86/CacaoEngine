@@ -24,7 +24,6 @@ namespace Cacao {
 		//Client logs
         static void ClientLog(std::string message, LogLevel level = LogLevel::Info);
     private:
-        static std::shared_ptr<spdlog::logger> engineLogger;
-        static std::shared_ptr<spdlog::logger> clientLogger;
+        static std::shared_ptr<spdlog::logger> engineStdout, engineLogfile, clientStdout, clientLogfile;
     };
 }

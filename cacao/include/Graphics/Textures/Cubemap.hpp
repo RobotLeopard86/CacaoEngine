@@ -31,6 +31,8 @@ namespace Cacao {
         std::shared_future<void> Compile() override;
         //Delete cubemap when no longer needed
         void Release() override;
+
+		std::string GetType() override { return "CUBEMAP"; }
     protected:
         std::vector<std::string> textures;
 

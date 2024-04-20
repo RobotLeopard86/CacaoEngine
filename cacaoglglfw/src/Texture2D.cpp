@@ -17,7 +17,8 @@
 #define nd ((GLTexture2DData*)nativeData)
 
 namespace Cacao {
-	Texture2D::Texture2D(std::string filePath) {
+	Texture2D::Texture2D(std::string filePath)
+		: Texture(false) {
 		//Create native data
 		nativeData = new GLTexture2DData();
 
@@ -27,7 +28,6 @@ namespace Cacao {
 		//Load image
 		dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 0);
 
-		compiled = false;
 		bound = false;
 		currentSlot = -1;
 
