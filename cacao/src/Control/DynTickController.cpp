@@ -150,11 +150,11 @@ namespace Cacao {
 			roFuture.wait();
 
 			//Create frame object
-			Frame f;
-			f.projection = activeWorld.cam->GetProjectionMatrix();
-			f.view = activeWorld.cam->GetViewMatrix();
-			f.skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(Skybox(*(activeWorld.skybox.value()))) : std::nullopt);
-			f.objects = tickRenderList;
+			std::shared_ptr<Frame> f = std::make_shared<Frame>();
+			f->projection = activeWorld.cam->GetProjectionMatrix();
+			f->view = activeWorld.cam->GetViewMatrix();
+			f->skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(Skybox(*(activeWorld.skybox.value()))) : std::nullopt);
+			f->objects = tickRenderList;
 
 			//Send frame to render controller
 			RenderController::GetInstance()->EnqueueFrame(f);
