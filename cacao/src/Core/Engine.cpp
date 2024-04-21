@@ -39,6 +39,7 @@ namespace Cacao {
 		gameLib = new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());
 		cfg.fixedTickRate = (launchRoot["fixedTickRate"].IsScalar() ? std::stoi(launchRoot["fixedTickRate"].Scalar()) : cfg.fixedTickRate);
 		cfg.targetDynTPS = (launchRoot["dynamicTPS"].IsScalar() ? std::stoi(launchRoot["dynamicTPS"].Scalar()) : cfg.targetDynTPS);
+		cfg.maxFrameLag = (launchRoot["maxFrameLag"].IsScalar() ? std::stoi(launchRoot["maxFrameLag"].Scalar()) : cfg.maxFrameLag);
 		if(launchRoot["title"].IsScalar()) Window::GetInstance()->SetTitle(launchRoot["title"].Scalar());
 		if(launchRoot["dimensions"].IsMap() && launchRoot["dimensions"]["x"].IsScalar() && launchRoot["dimensions"]["y"].IsScalar()) {
 			Window::GetInstance()->SetSize({ std::stoi(launchRoot["dimensions"]["x"].Scalar()), std::stoi(launchRoot["dimensions"]["y"].Scalar()) });
@@ -99,6 +100,7 @@ namespace Cacao {
 		//Set some default engine config values
 		cfg.fixedTickRate = 50;
 		cfg.targetDynTPS = 60;
+		cfg.maxFrameLag = 10;
 
 		//Open the window
 		Window::GetInstance()->Open("Cacao Engine", 1280, 720, true);
