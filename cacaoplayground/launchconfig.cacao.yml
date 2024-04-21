@@ -9,3 +9,6 @@ title: Cacao Playground
 
 # Working directory relative to the executable directory
 workingDir: playground
+
+# Maximum number of frames that the engine can be behind in rendering
+maxFrameLag: 8

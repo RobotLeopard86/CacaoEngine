@@ -8,5 +8,8 @@ namespace Cacao {
 
 		//How many milliseconds should elapse between fixed ticks
 		int fixedTickRate;
+
+		//Maximum number of frames that the engine can be behind in rendering
+		int maxFrameLag;
 	};
 }

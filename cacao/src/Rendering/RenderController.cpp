@@ -32,6 +32,14 @@ namespace Cacao {
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
 
+			//Discard frames if we're too far behind
+			int maxFrameLag = Engine::GetInstance()->cfg.maxFrameLag;
+			if(frameQueue.size() > maxFrameLag){
+				while(frameQueue.size() > 1){
+					frameQueue.pop();
+				}
+			}
+
 			//Process frame if it exists
 			if(!frameQueue.empty()) {
 				{
