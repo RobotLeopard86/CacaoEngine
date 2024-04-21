@@ -34,23 +34,24 @@ namespace Cacao {
 
 			//Process frame if it exists
 			if(!frameQueue.empty()) {
-				//Acquire the next frame
-				Frame& next = frameQueue.front();
+				{
+					std::stringstream msg;
+					msg << "There are " << frameQueue.size() << " items in the queue";
+					Logging::EngineLog(msg.str());
+				}
+
+				//Acquire the next frame and pop it
+				std::shared_ptr<Frame> next = frameQueue.front();
+				frameQueue.pop();
 
 				//Release lock
 				lock.unlock();
 
 				//Render the frame
-				ProcessFrame(next);
+				ProcessFrame(*next);
 
 				//Present rendered frame to window
 				Window::GetInstance()->Present();
-				Window::GetInstance()->Update();
-
-				//Remove frame from the queue
-				lock.lock();
-				frameQueue.pop();
-				lock.unlock();
 			} else {
 				//Release lock and wait for a bit to avoid wasting CPU cycles
 				lock.unlock();

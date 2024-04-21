@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderObjects.hpp"
+#include "Core/Engine.hpp"
 
 #include <thread>
 #include <queue>
@@ -19,10 +20,19 @@ namespace Cacao {
 		void Run();
 
 		//Enqueue a frame for rendering
-		void EnqueueFrame(Frame& frame) {
-			//Add a frame to the queue
-			std::lock_guard guard(fqMutex);
-			frameQueue.push(frame);
+		void EnqueueFrame(std::shared_ptr<Frame>& frame) {
+			if(!Engine::GetInstance()->IsShuttingDown()) {
+				//Add a frame to the queue
+				std::lock_guard guard(fqMutex);
+				frameQueue.push(frame);
+			}
+		}
+
+		//Clear the render queue
+		void ClearRenderQueue() {
+			std::unique_lock<std::mutex> lock(fqMutex);
+			while(!frameQueue.empty()) frameQueue.pop();
+			lock.unlock();
 		}
 
 		//Initialize the backend
@@ -45,7 +55,7 @@ namespace Cacao {
 		void UpdateGraphicsState();
 
 		//Queue of frames to render
-		std::queue<Frame> frameQueue;
+		std::queue<std::shared_ptr<Frame>> frameQueue;
 
 		//Thread safety constructs
 		std::mutex fqMutex;

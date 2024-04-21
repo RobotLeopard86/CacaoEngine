@@ -31,6 +31,9 @@ namespace Cacao {
 		//Is the engine running?
 		bool IsRunning() { return run; }
 
+		//Is the engine shutting down?
+		bool IsShuttingDown() { return shuttingDown; }
+
 		//Get the thread ID of the engine
 		std::thread::id GetThreadID() { return threadID; }
 
@@ -43,6 +46,9 @@ namespace Cacao {
 
 		//Should the engine run?
 		std::atomic_bool run;
+
+		//Is shutdown running?
+		std::atomic_bool shuttingDown;
 
 		//Thread pool
 		BS::thread_pool threadPool;

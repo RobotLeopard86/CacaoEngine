@@ -91,6 +91,7 @@ namespace Cacao {
 	void Engine::Run(){
 		//Make sure the engine will run
 		run.store(true);
+		shuttingDown.store(false);
 
 		//Set thread ID
 		threadID = std::this_thread::get_id();
@@ -129,6 +130,10 @@ namespace Cacao {
 
 	void Engine::Stop() {
 		Logging::EngineLog("Shutting down engine...");
+		shuttingDown.store(true);
+
+		//Clear the render queue
+		RenderController::GetInstance()->ClearRenderQueue();
 
 		//Run engine shutdown
 		CoreShutdown();
