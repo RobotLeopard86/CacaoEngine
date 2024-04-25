@@ -23,7 +23,12 @@ namespace Cacao {
 			queueMutex.unlock();
 
 			//Run job
-			job.func();
+			//In case it throws an exception, send it back to the caller
+			try {
+				job.func();
+			} catch(...) {
+				job.status->set_exception(std::current_exception());
+			}
 
 			//Mark job as done
 			job.status->set_value();

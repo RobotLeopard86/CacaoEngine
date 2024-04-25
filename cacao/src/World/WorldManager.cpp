@@ -1,7 +1,7 @@
 #include "World/WorldManager.hpp"
 
 #include "Core/Log.hpp"
-#include "Core/Assert.hpp"
+#include "Core/Exception.hpp"
 
 namespace Cacao {
 	//Required static variable initialization
@@ -21,20 +21,12 @@ namespace Cacao {
 	}
 
 	void WorldManager::RemoveWorld(std::string name){
-		if(!worlds.contains(name)) {
-			Logging::EngineLog("Can't remove world because one with the specified name doesn't exist!", LogLevel::Error);
-			return;
-		}
-
+		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't remove world because one with the specified name doesn't exist!")
 		worlds.erase(name);
 	}
 
 	void WorldManager::SetActiveWorld(std::string name){
-		if(!worlds.contains(name)) {
-			Logging::EngineLog("Can't set active world to a world that doesn't exist!", LogLevel::Error);
-			return;
-		}
-
+		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't set active world to a nonexistent one!")
 		activeWorld = name;
 	}
 
@@ -43,7 +35,7 @@ namespace Cacao {
 	}
 
 	World& WorldManager::GetWorld(std::string name){
-		EngineAssert(worlds.contains(name), "Can't get access to a world that doesn't exist!");
+		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't get access to a nonexistent world!")
 
 		return worlds.at(name);
 	}

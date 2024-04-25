@@ -2,6 +2,7 @@
 
 #include "Graphics/Window.hpp"
 #include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 
 namespace Cacao {
 	//Required static variable initialization
@@ -21,7 +22,7 @@ namespace Cacao {
 	}
 
 	void RenderController::Run() {
-		EngineAssert(isInitialized, "Render controller must be initialized prior to running!");
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!")
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()){

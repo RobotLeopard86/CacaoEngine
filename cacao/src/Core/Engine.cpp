@@ -1,5 +1,6 @@
 #include "Core/Engine.hpp"
 #include "Core/Log.hpp"
+#include "Core/Exception.hpp"
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
 #include "Control/DynTickController.hpp"
@@ -27,13 +28,25 @@ namespace Cacao {
 	}
 
 	void Engine::CoreStartup() {
+		//Register some basic exception codes
+		Exception::RegisterExceptionCode(0, "NoCategory");
+		Exception::RegisterExceptionCode(1, "FileNotFound");
+		Exception::RegisterExceptionCode(2, "NonexistentValue");
+		Exception::RegisterExceptionCode(3, "InvalidYAML");
+		Exception::RegisterExceptionCode(4, "BadInitState");
+		Exception::RegisterExceptionCode(5, "NullValue");
+		Exception::RegisterExceptionCode(6, "BadState");
+		Exception::RegisterExceptionCode(7, "FileOpenFailure");
+		Exception::RegisterExceptionCode(8, "EventManager");
+		Exception::RegisterExceptionCode(9, "ContainerValue");
+
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");
-		EngineAssert(std::filesystem::exists("launchconfig.cacao.yml"), "No launch config file exists!");
+		CheckException(std::filesystem::exists("launchconfig.cacao.yml"), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch config file exists!")
 		YAML::Node launchRoot = YAML::LoadFile("launchconfig.cacao.yml");
-		EngineAssert(launchRoot.IsMap(), "Launch config is not a map!");
-		EngineAssert(launchRoot["launch"].IsScalar(), "Launch config does not contain the \"launch\" parameter!");
-		EngineAssert(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), "Specified launch target does not contain a launch module!");
+		CheckException(launchRoot.IsMap(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config is not a map!")
+		CheckException(launchRoot["launch"].IsScalar(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config does not contain the \"launch\" parameter or it isn't a scalar!")
+		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!")
 
 		//Load game module and module config
 		gameLib = new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());

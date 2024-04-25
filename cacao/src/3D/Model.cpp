@@ -6,7 +6,7 @@
 
 #include "glm/gtx/rotate_vector.hpp"
 
-#include "Core/Assert.hpp"
+#include "Core/Exception.hpp"
 
 #include <filesystem>
 #include <ranges>
@@ -15,9 +15,7 @@ namespace Cacao {
 
     Model::Model(std::string filePath){
         //Confirm that provided file path exists
-        if(!std::filesystem::exists(filePath) && !std::filesystem::exists(std::filesystem::current_path().string() + "/" + filePath)){
-            EngineAssert(false, "Cannot load nonexistent model file \"" + filePath + "\"!");
-        }
+		CheckException(std::filesystem::exists(filePath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), ("Cannot load nonexistent model file \"" + filePath + "\"!"))
 
         //Create Assimp importer
         Assimp::Importer importer;
@@ -36,8 +34,8 @@ namespace Cacao {
         const aiScene* scene = importer.ReadFile(filePath, aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_SortByPType);
 
         //Perform checks
-        EngineAssert(scene != NULL, std::string("Model loading failed: ") + importer.GetErrorString());
-        EngineAssert(scene->HasMeshes(), "Model file does not contain any meshes!");
+		CheckException(scene != NULL, Exception::GetExceptionCodeFromMeaning("NullValue"), (std::string("Model loading failed, Assimp error: ") + importer.GetErrorString()))
+		CheckException(scene->HasMeshes(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Model file does not contain any meshes!")
 
         //Load meshes data
         for(int i = 0; i < scene->mNumMeshes; i++){
@@ -139,7 +137,7 @@ namespace Cacao {
     }
 
     Mesh* Model::ExtractMesh(std::string id){
-        EngineAssert(meshes.contains(id), "Cannot extract mesh not found in model!");
+        CheckException(meshes.contains(id), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot extract mesh that model does not contain!")
 
         Mesh* mesh = meshes.at(id);
         return mesh;

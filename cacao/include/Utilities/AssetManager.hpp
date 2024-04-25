@@ -5,6 +5,7 @@
 #include "Graphics/Shader.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
+#include "Core/Exception.hpp"
 #include "Asset.hpp"
 
 #include <future>
@@ -34,10 +35,7 @@ namespace Cacao {
 		//Remove an asset from the cache by ID
 		//Generally should not be used (exists for assets to deregister themselves)
 		void UncacheAsset(std::string assetID) {
-			if(!assetCache.contains(assetID)) {
-				Logging::EngineLog("Unable to remove uncached asset from cache!", LogLevel::Error);
-				return;
-			}
+			CheckException(assetCache.contains(assetID), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Unable to remove uncached asset from cache!")
 			assetCache.erase(assetID);
 		}
 	private:

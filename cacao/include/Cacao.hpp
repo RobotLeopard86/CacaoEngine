@@ -5,6 +5,7 @@
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 #include "Events/EventSystem.hpp"
 #include "3D/Mesh.hpp"
 #include "3D/Model.hpp"
