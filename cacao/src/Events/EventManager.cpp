@@ -1,7 +1,7 @@
 #include "Events/EventManager.hpp"
 
 #include "Core/Log.hpp"
-#include "Core/Assert.hpp"
+#include "Core/Exception.hpp"
 
 #include <stdexcept>
 
@@ -71,15 +71,11 @@ namespace Cacao {
                 }
             }
 
-            if(consumerIndex == insertValue.end()){
-                Logging::EngineLog("Cannot unsubscribe consumer which was not subscribed!", LogLevel::Error);
-                return;
-            }
+			CheckException(consumerIndex != insertValue.end(), Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot unsubscribe consumer which was not subscribed!")
 
             insertValue.erase(consumerIndex);
         } else {
-            Logging::EngineLog("Cannot unsubscribe consumer from event type with no consumers!", LogLevel::Error);
-            return;
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot unsubscribe consumer from event type with no consumers!")
         }
         
         consumers.insert_or_assign(type, insertValue);

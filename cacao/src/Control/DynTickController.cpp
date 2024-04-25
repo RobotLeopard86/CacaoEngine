@@ -2,6 +2,7 @@
 
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Input.hpp"
 #include "World/WorldManager.hpp"
@@ -28,10 +29,7 @@ namespace Cacao {
 	}
 
 	void DynTickController::Start(){
-		if(isRunning) {
-			Logging::EngineLog("Cannot start the already started dynamic tick controller!", LogLevel::Error);
-			return;
-		}
+		CheckException(!isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot start the already started dynamic tick controller!")
 		isRunning = true;
 
 		//Create thread to run controller
@@ -39,10 +37,7 @@ namespace Cacao {
 	}
 
 	void DynTickController::Stop(){
-		if(!isRunning) {
-			Logging::EngineLog("Cannot stop the not started dynamic tick controller!", LogLevel::Error);
-			return;
-		}
+		CheckException(isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop the unstarted dynamic tick controller!")
 		//Stop run thread
 		thread->request_stop();
 		thread->join();
