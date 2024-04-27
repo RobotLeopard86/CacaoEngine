@@ -23,7 +23,7 @@ namespace Cacao {
 	std::shared_future<void> Mesh::Compile() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			return InvokeGL([ this ]() {
+			return InvokeGL([this]() {
 				this->Compile();
 			});
 		}
@@ -35,12 +35,12 @@ namespace Cacao {
 		glGenBuffers(1, &nd->ibo);
 
 		//Unpack index buffer data from vec3 to floats
-		unsigned int ibd[ indices.size() * 3 ];
+		std::vector<unsigned int> ibd(indices.size() * 3);
 		for(int i = 0; i < indices.size(); i++) {
-			glm::vec3 idx = indices[ i ];
-			ibd[ i * 3 ] = idx.x;
-			ibd[ (i * 3) + 1 ] = idx.y;
-			ibd[ (i * 3) + 2 ] = idx.z;
+			glm::vec3 idx = indices[i];
+			ibd[i * 3] = idx.x;
+			ibd[(i * 3) + 1] = idx.y;
+			ibd[(i * 3) + 2] = idx.z;
 		}
 
 		//Bind vertex array
@@ -49,7 +49,7 @@ namespace Cacao {
 		//Bind vertex buffer
 		glBindBuffer(GL_ARRAY_BUFFER, nd->vbo);
 		//Load vertex buffer with data
-		glBufferData(GL_ARRAY_BUFFER, (vertices.size() * sizeof(Vertex)), &vertices[ 0 ], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, (vertices.size() * sizeof(Vertex)), &vertices[0], GL_STATIC_DRAW);
 
 		//Configure vertex buffer layout
 		glEnableVertexAttribArray(0);
@@ -64,7 +64,7 @@ namespace Cacao {
 		//Bind index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nd->ibo);
 		//Load index buffer with data
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() * 3 * sizeof(unsigned int)), ibd, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() * 3 * sizeof(unsigned int)), &ibd[0], GL_STATIC_DRAW);
 
 		//Save vertex array state
 		glBindVertexArray(nd->vao);
@@ -80,7 +80,7 @@ namespace Cacao {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
-				InvokeGL([ this ]() {
+				InvokeGL([this]() {
 					this->Release();
 				}).get();
 				return;

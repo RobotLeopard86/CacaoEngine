@@ -150,7 +150,7 @@ namespace Cacao {
 	std::shared_future<void> Shader::Compile() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			return InvokeGL([ this ]() {
+			return InvokeGL([this]() {
 				this->Compile();
 			});
 		}
@@ -172,7 +172,7 @@ namespace Cacao {
 			GLint maxLen = 0;
 			glGetShaderiv(compiledVertexShader, GL_INFO_LOG_LENGTH, &maxLen);
 			std::vector<GLchar> infoLog(maxLen);
-			glGetShaderInfoLog(compiledVertexShader, maxLen, &maxLen, &infoLog[ 0 ]);
+			glGetShaderInfoLog(compiledVertexShader, maxLen, &maxLen, &infoLog[0]);
 			//Clean up resources
 			glDeleteShader(compiledVertexShader);
 			//Throw exception
@@ -196,7 +196,7 @@ namespace Cacao {
 			GLint maxLen = 0;
 			glGetShaderiv(compiledFragmentShader, GL_INFO_LOG_LENGTH, &maxLen);
 			std::vector<GLchar> infoLog(maxLen);
-			glGetShaderInfoLog(compiledFragmentShader, maxLen, &maxLen, &infoLog[ 0 ]);
+			glGetShaderInfoLog(compiledFragmentShader, maxLen, &maxLen, &infoLog[0]);
 			//Clean up resources
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
@@ -223,7 +223,7 @@ namespace Cacao {
 			GLint maxLen = 0;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLen);
 			std::vector<GLchar> infoLog(maxLen);
-			glGetProgramInfoLog(program, maxLen, &maxLen, &infoLog[ 0 ]);
+			glGetProgramInfoLog(program, maxLen, &maxLen, &infoLog[0]);
 			//Clean up resources
 			glDeleteProgram(program);
 			glDeleteShader(compiledVertexShader);
@@ -266,7 +266,7 @@ namespace Cacao {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
-				InvokeGL([ this ]() {
+				InvokeGL([this]() {
 					this->Release();
 				}).get();
 				return;
@@ -275,44 +275,25 @@ namespace Cacao {
 			}
 		}
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!");
-		if(bound) {
-			Logging::EngineLog("Cannot release bound shader!", LogLevel::Error);
-			return;
-		}
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound shader!");
+
 		glDeleteProgram(nd->gpuID);
 		compiled = false;
 	}
 
 	void Shader::Bind() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Logging::EngineLog("Cannot bind shader in non-rendering thread!", LogLevel::Error);
-			return;
-		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot bind uncompiled shader!", LogLevel::Error);
-			return;
-		}
-		if(bound) {
-			Logging::EngineLog("Cannot bind already bound shader!", LogLevel::Error);
-			return;
-		}
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind shader in non-rendering thread!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
+
 		glUseProgram(nd->gpuID);
 		bound = true;
 	}
 
 	void Shader::Unbind() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Logging::EngineLog("Cannot unbind shader in non-rendering thread!", LogLevel::Error);
-			return;
-		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot unbind uncompiled shader!", LogLevel::Error);
-			return;
-		}
-		if(!bound) {
-			Logging::EngineLog("Cannot unbind unbound shader!", LogLevel::Error);
-			return;
-		}
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind shader in non-rendering thread!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!");
 
 		//Clear current program
 		glUseProgram(0);
@@ -323,7 +304,7 @@ namespace Cacao {
 	void Shader::UploadData(ShaderUploadData& data) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			InvokeGL([ this, data ]() {
+			InvokeGL([this, data]() {
 				this->UploadData(const_cast<ShaderUploadData&>(data));
 			});
 			return;
@@ -347,7 +328,7 @@ namespace Cacao {
 			CheckException(found, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Can't locate targeted item in shader specification!")
 
 			//Grab shader item info
-			ShaderItemInfo info = foundItems[ item.target ];
+			ShaderItemInfo info = foundItems[item.target];
 
 			//Obtain uniform location
 			std::stringstream ulocPath;
@@ -357,8 +338,8 @@ namespace Cacao {
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
-			CheckException(info.size.x == 1 && info.size.y >= 2, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!")
-			CheckException(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!")
+			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!")
+			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!")
 
 			//Get ID of currently bound shader (to restore later)
 			//Only do this if we are not currently bound
@@ -410,7 +391,7 @@ namespace Cacao {
 						break;
 					case SpvType::SampledImage:
 						//Confirm valid dimensions
-						CheckException(dims != 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!")
+						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!")
 
 						//Bind texture to the next available slot
 						//Done in its own scope to avoid compiler error
@@ -580,7 +561,7 @@ namespace Cacao {
 	void Shader::UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			InvokeGL([ this, projection, view, transform ]() {
+			InvokeGL([this, projection, view, transform]() {
 				this->UploadCacaoData(projection, view, transform);
 			});
 			return;

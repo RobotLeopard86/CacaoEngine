@@ -28,12 +28,17 @@ namespace Cacao {
 			//In case it throws an exception, send it back to the caller
 			try {
 				job.func();
+
+				//Mark job as done
+				job.status->set_value();
 			} catch(...) {
+				try {
+					std::rethrow_exception(std::current_exception());
+				} catch(const std::exception& e) {
+					Logging::EngineLog(e.what(), LogLevel::Error);
+				}
 				job.status->set_exception(std::current_exception());
 			}
-
-			//Mark job as done
-			job.status->set_value();
 
 			//Remove job from queue
 			queueMutex.lock();
@@ -44,7 +49,7 @@ namespace Cacao {
 
 	void RenderController::ProcessFrame(Frame& frame) {
 		//Send the frame into the GL queue
-		std::shared_future<void> frameJob = InvokeGL([ &frame ]() {
+		std::shared_future<void> frameJob = InvokeGL([&frame]() {
 			//Clear the screen
 			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

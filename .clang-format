@@ -90,7 +90,7 @@ SpacesInLineCommentPrefix:
     Minimum: 0
     Maximum: 0
 SpacesInParentheses: false
-SpacesInSquareBrackets: true
+SpacesInSquareBrackets: false
 Standard:        c++20
 TabWidth:        4
 UseTab:          Always

@@ -101,31 +101,18 @@ namespace Cacao {
 				std::rethrow_exception(std::current_exception());
 			}
 		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot release uncompiled cubemap!", LogLevel::Error);
-			return;
-		}
-		if(bound) {
-			Logging::EngineLog("Cannot release bound cubemap!", LogLevel::Error);
-			return;
-		}
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled cubemap!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound cubemap!");
+
 		glDeleteTextures(1, &(nd->gpuID));
 		compiled = false;
 	}
 
 	void Cubemap::Bind(int slot) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Logging::EngineLog("Cannot bind cubemap in non-rendering thread!", LogLevel::Error);
-			return;
-		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot bind uncompiled cubemap!", LogLevel::Error);
-			return;
-		}
-		if(bound) {
-			Logging::EngineLog("Cannot bind already bound cubemap!", LogLevel::Error);
-			return;
-		}
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind cubemap in non-rendering thread!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled cubemap!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound cubemap!");
+
 		//Bind the texture to the requested slot
 		currentSlot = slot;
 		glActiveTexture(GL_TEXTURE0 + slot);
@@ -134,18 +121,10 @@ namespace Cacao {
 	}
 
 	void Cubemap::Unbind() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Logging::EngineLog("Cannot bind cubemap in non-rendering thread!", LogLevel::Error);
-			return;
-		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot unbind uncompiled cubemap!", LogLevel::Error);
-			return;
-		}
-		if(!bound) {
-			Logging::EngineLog("Cannot unbind unbound cubemap!", LogLevel::Error);
-			return;
-		}
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind cubemap in non-rendering thread!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled cubemap!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound cubemap!");
+
 		//Unbind the texture from its current slot
 		glActiveTexture(GL_TEXTURE0 + currentSlot);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);

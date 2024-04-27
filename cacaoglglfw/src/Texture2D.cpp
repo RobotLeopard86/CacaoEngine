@@ -1,8 +1,8 @@
 #include "Graphics/Textures/Texture2D.hpp"
 
-#include "Core/Assert.hpp"
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 #include "GLTexture2DData.hpp"
 #include "GLUtils.hpp"
 
@@ -94,31 +94,18 @@ namespace Cacao {
 				std::rethrow_exception(std::current_exception());
 			}
 		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot release uncompiled texture!", LogLevel::Error);
-			return;
-		}
-		if(bound) {
-			Logging::EngineLog("Cannot release bound texture!", LogLevel::Error);
-			return;
-		}
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled texture!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound texture!");
+
 		glDeleteTextures(1, &(nd->gpuID));
 		compiled = false;
 	}
 
 	void Texture2D::Bind(int slot) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Logging::EngineLog("Cannot bind texture in non-rendering thread!", LogLevel::Error);
-			return;
-		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot bind uncompiled texture!", LogLevel::Error);
-			return;
-		}
-		if(bound) {
-			Logging::EngineLog("Cannot bind already bound texture!", LogLevel::Error);
-			return;
-		}
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind texture in non-rendering thread!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled texture!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!");
+
 		//Bind the texture to the requested slot
 		currentSlot = slot;
 		glActiveTexture(GL_TEXTURE0 + slot);
@@ -127,18 +114,10 @@ namespace Cacao {
 	}
 
 	void Texture2D::Unbind() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Logging::EngineLog("Cannot bind texture in non-rendering thread!", LogLevel::Error);
-			return;
-		}
-		if(!compiled) {
-			Logging::EngineLog("Cannot unbind uncompiled texture!", LogLevel::Error);
-			return;
-		}
-		if(!bound) {
-			Logging::EngineLog("Cannot unbind unbound texture!", LogLevel::Error);
-			return;
-		}
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind texture in non-rendering thread!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled texture!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound texture!");
+
 		//Unbind the texture from its current slot
 		glActiveTexture(GL_TEXTURE0 + currentSlot);
 		glBindTexture(GL_TEXTURE_2D, 0);
