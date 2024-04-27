@@ -4,5 +4,5 @@
 
 namespace Cacao {
 	void EngineAssert(bool condition, std::string errorMsg);
-	void ClientAssert(bool condition, std::string errorMsg); 
+	void ClientAssert(bool condition, std::string errorMsg);
 }

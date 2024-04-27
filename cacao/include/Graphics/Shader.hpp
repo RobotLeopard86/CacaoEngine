@@ -51,10 +51,10 @@ namespace Cacao {
 	//Data to upload to a shader
 	using ShaderUploadData = std::vector<ShaderUploadItem>;
 
-    //Must be implemented per-rendering API
+	//Must be implemented per-rendering API
 	//Shader class
-    class Shader : public Asset {
-    public:
+	class Shader : public Asset {
+	  public:
 		//Create a shader from raw SPIR-V code loaded separately
 		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
 		//Create a shader from file paths
@@ -66,23 +66,29 @@ namespace Cacao {
 			delete nativeData;
 		}
 
-        //Use this shader
-        void Bind();
-        //Don't use this shader
-        void Unbind();
-        //Compile shader to be used later
-        std::shared_future<void> Compile() override;
-        //Delete shader when no longer needed
-        void Release() override;
+		//Use this shader
+		void Bind();
+		//Don't use this shader
+		void Unbind();
+		//Compile shader to be used later
+		std::shared_future<void> Compile() override;
+		//Delete shader when no longer needed
+		void Release() override;
 
-        //Is shader bound?
-        bool IsBound() { return bound; }
+		//Is shader bound?
+		bool IsBound() {
+			return bound;
+		}
 
 		//Read-only access to native data
-		const NativeData* GetNativeData() { return nativeData; }
+		const NativeData* GetNativeData() {
+			return nativeData;
+		}
 
 		//Read-only access to the shader spec
-		const ShaderSpec& GetSpec() const { return specification; }
+		const ShaderSpec& GetSpec() const {
+			return specification;
+		}
 
 		//Upload data to the shader
 		//WARNING: Will temporarily bind shader
@@ -92,10 +98,13 @@ namespace Cacao {
 		//Only call from rendering thread
 		void UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform);
 
-		std::string GetType() override { return "SHADER"; }
-    private:
-        bool bound;
+		std::string GetType() override {
+			return "SHADER";
+		}
+
+	  private:
+		bool bound;
 		NativeData* nativeData;
 		const ShaderSpec specification;
-    };
+	};
 }

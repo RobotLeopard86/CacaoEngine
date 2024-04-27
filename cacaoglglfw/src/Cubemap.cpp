@@ -3,6 +3,7 @@
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 #include "GLCubemapData.hpp"
 #include "GLUtils.hpp"
 
@@ -17,39 +18,36 @@
 #define nd ((GLCubemapData*)nativeData)
 
 namespace Cacao {
-	Cubemap::Cubemap(std::vector<std::string> filePaths) 
-		: Texture(false) {
+	Cubemap::Cubemap(std::vector<std::string> filePaths)
+	  : Texture(false) {
 		//Create native data
 		nativeData = new GLCubemapData();
 
-		for(std::string tex : filePaths){
-			EngineAssert(std::filesystem::exists(tex), "Cannot create cubemap from nonexistent file!");
+		for(std::string tex : filePaths) {
+			CheckException(std::filesystem::exists(tex), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create cubemap from nonexistent file!");
 		}
 
 		textures = filePaths;
 		currentSlot = -1;
 	}
 
-	std::shared_future<void> Cubemap::Compile(){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+	std::shared_future<void> Cubemap::Compile() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			return InvokeGL([this]() {
+			return InvokeGL([ this ]() {
 				this->Compile();
 			});
 		}
-		if(compiled){
-            Logging::EngineLog("Cannot compile already compiled cubemap!", LogLevel::Error);
-			return {};
-        }
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!");
 
 		//Create texture object
 		glGenTextures(1, &(nd->gpuID));
-		
+
 		//Bind texture object so we can work on it
 		glBindTexture(GL_TEXTURE_CUBE_MAP, nd->gpuID);
 
 		//Load image data into texture object
-		for(unsigned int i = 0; i < textures.size(); i++){
+		for(unsigned int i = 0; i < textures.size(); i++) {
 			//Define fields for image loading
 			int width, height, numChannels;
 
@@ -57,7 +55,7 @@ namespace Cacao {
 			stbi_set_flip_vertically_on_load(true);
 
 			//Load texture data from file
-			unsigned char *data = stbi_load(textures[i].c_str(), &width, &height, &numChannels, 0);
+			unsigned char* data = stbi_load(textures[ i ].c_str(), &width, &height, &numChannels, 0);
 
 			//Make sure we have data
 			if(data) {
@@ -83,7 +81,7 @@ namespace Cacao {
 
 		//Unbind texture object since we're done with it for now
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-		
+
 		compiled = true;
 
 		//Return an empty future
@@ -91,62 +89,67 @@ namespace Cacao {
 	}
 
 	void Cubemap::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			InvokeGL([this]() {
-				this->Release();
-			});
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
+			try {
+				InvokeGL([ this ]() {
+					this->Release();
+				}).get();
+				return;
+			} catch(...) {
+				std::rethrow_exception(std::current_exception());
+			}
+		}
+		if(!compiled) {
+			Logging::EngineLog("Cannot release uncompiled cubemap!", LogLevel::Error);
 			return;
 		}
-		if(!compiled){
-            Logging::EngineLog("Cannot release uncompiled cubemap!", LogLevel::Error);
-            return;
-        }
-        if(bound){
-            Logging::EngineLog("Cannot release bound cubemap!", LogLevel::Error);
-            return;
-        }
-        glDeleteTextures(1, &(nd->gpuID));
-        compiled = false;
+		if(bound) {
+			Logging::EngineLog("Cannot release bound cubemap!", LogLevel::Error);
+			return;
+		}
+		glDeleteTextures(1, &(nd->gpuID));
+		compiled = false;
 	}
 
-	void Cubemap::Bind(int slot){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+	void Cubemap::Bind(int slot) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			Logging::EngineLog("Cannot bind cubemap in non-rendering thread!", LogLevel::Error);
 			return;
 		}
-        if(!compiled){
-            Logging::EngineLog("Cannot bind uncompiled cubemap!", LogLevel::Error);
-            return;
-        }
-        if(bound){
-            Logging::EngineLog("Cannot bind already bound cubemap!", LogLevel::Error);
-            return;
-        }
+		if(!compiled) {
+			Logging::EngineLog("Cannot bind uncompiled cubemap!", LogLevel::Error);
+			return;
+		}
+		if(bound) {
+			Logging::EngineLog("Cannot bind already bound cubemap!", LogLevel::Error);
+			return;
+		}
 		//Bind the texture to the requested slot
 		currentSlot = slot;
 		glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, nd->gpuID);
-        bound = true;
-    }
+		glBindTexture(GL_TEXTURE_CUBE_MAP, nd->gpuID);
+		bound = true;
+	}
 
-    void Cubemap::Unbind(){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+	void Cubemap::Unbind() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			Logging::EngineLog("Cannot bind cubemap in non-rendering thread!", LogLevel::Error);
 			return;
 		}
-        if(!compiled){
-            Logging::EngineLog("Cannot unbind uncompiled cubemap!", LogLevel::Error);
-            return;
-        }
-        if(!bound){
-            Logging::EngineLog("Cannot unbind unbound cubemap!", LogLevel::Error);
-            return;
-        }
+		if(!compiled) {
+			Logging::EngineLog("Cannot unbind uncompiled cubemap!", LogLevel::Error);
+			return;
+		}
+		if(!bound) {
+			Logging::EngineLog("Cannot unbind unbound cubemap!", LogLevel::Error);
+			return;
+		}
 		//Unbind the texture from its current slot
 		glActiveTexture(GL_TEXTURE0 + currentSlot);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		currentSlot = -1;
-        bound = false;
-    }
+		bound = false;
+	}
 }

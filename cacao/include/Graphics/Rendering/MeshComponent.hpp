@@ -9,8 +9,10 @@
 
 namespace Cacao {
 	class MeshComponent : public Component {
-	public:
-		std::string GetKind() override { return "MESH"; }
+	  public:
+		std::string GetKind() override {
+			return "MESH";
+		}
 
 		Mesh* mesh;
 		Material* mat;

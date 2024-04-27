@@ -12,7 +12,7 @@
 namespace Cacao {
 	//Controller for rendering frames
 	class RenderController {
-	public:
+	  public:
 		//Get the instance or create one if it doesn't exist.
 		static RenderController* GetInstance();
 
@@ -40,13 +40,14 @@ namespace Cacao {
 
 		//Shutdown the backend
 		void Shutdown();
-	private:
+
+	  private:
 		//Singleton members
 		static RenderController* instance;
 		static bool instanceExists;
 
-		RenderController() 
-			: isInitialized(false) {}
+		RenderController()
+		  : isInitialized(false) {}
 
 		//Process a frame for drawing
 		void ProcessFrame(Frame& frame);

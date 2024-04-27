@@ -10,23 +10,22 @@
 
 //Quick utility to check for a condition and throw an exception if false
 //Write first argument as a normal condition, it will be wrapped in parentheses
-#define CheckException(condition, exceptionCode, exceptionDescription) if(!(condition)) {\
-	Exception e{exceptionDescription, exceptionCode};\
-	Logging::EngineLog(e.what(), LogLevel::Error);\
-	throw e;\
+#define CheckException(condition, exceptionCode, exceptionDescription) \
+	if(!(condition)) {                                                 \
+		throw Exception {exceptionDescription, exceptionCode};         \
 	}
 
 namespace Cacao {
 	//A Cacao Engine exception
 	class Exception : public std::exception {
-	public:
+	  public:
 		Exception(std::string description, unsigned int exceptionCode)
-			: error(description), code(exceptionCode) {
+		  : error(description), code(exceptionCode) {
 			std::stringstream s;
 			s << "Cacao Exception - \"" << error << "\" (Code " << code << ": " << GetCodeMeaning() << ")";
 			detailedMsg = s.str();
 		}
-		
+
 		//Get a detailed exception string, inherited from std::exception
 		const char* what() const noexcept override {
 			return detailedMsg.c_str();
@@ -38,9 +37,15 @@ namespace Cacao {
 		}
 
 		//Utility methods
-		const std::string& GetRawError() { return error; }
-		unsigned int GetRawCode() { return code; }
-		const std::string& GetCodeMeaning() { return exceptionCodeMap[code]; }
+		const std::string& GetRawError() {
+			return error;
+		}
+		unsigned int GetRawCode() {
+			return code;
+		}
+		const std::string& GetCodeMeaning() {
+			return exceptionCodeMap[ code ];
+		}
 
 		//Register an exception code
 		//Returns a boolean of whether the operation succeeded
@@ -54,15 +59,15 @@ namespace Cacao {
 
 		//Get the meaning of an exception code
 		//Returns an empty string if no code found
-		static std::string GetExceptionCodeMeaning(unsigned int code){
+		static std::string GetExceptionCodeMeaning(unsigned int code) {
 			if(!exceptionCodeMap.contains(code)) return "";
-			return exceptionCodeMap[code];
+			return exceptionCodeMap[ code ];
 		}
 
 		//Get the code of an exception from meaning
 		//Returns maximum integer value if no meaning found
-		static unsigned int GetExceptionCodeFromMeaning(std::string meaning){
-			auto ecmEntry = std::find_if(exceptionCodeMap.cbegin(), exceptionCodeMap.cend(), [meaning](const std::pair<unsigned int, std::string>& kv){
+		static unsigned int GetExceptionCodeFromMeaning(std::string meaning) {
+			auto ecmEntry = std::find_if(exceptionCodeMap.cbegin(), exceptionCodeMap.cend(), [ meaning ](const std::pair<unsigned int, std::string>& kv) {
 				return kv.second.compare(meaning) == 0;
 			});
 			return (ecmEntry != exceptionCodeMap.cend() ? ecmEntry->first : INT_MAX);
@@ -76,7 +81,8 @@ namespace Cacao {
 			exceptionCodeMap.erase(code);
 			return true;
 		}
-	private:
+
+	  private:
 		std::string error;
 		unsigned int code;
 

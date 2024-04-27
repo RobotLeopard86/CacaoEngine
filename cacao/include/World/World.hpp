@@ -11,7 +11,7 @@
 namespace Cacao {
 	//Represents a world
 	class World {
-	public:
+	  public:
 		//Entities at the top level of the world
 		Tree<Entity> worldTree;
 
@@ -26,7 +26,7 @@ namespace Cacao {
 		//Returns an optional because an entity may or may not be found
 		std::optional<std::reference_wrapper<Entity>> FindEntityByUUID(UUIDv4::UUID uuid) {
 			//Create a function to check if the UUID matches
-			auto checkUUID = [uuid](Entity& e) {
+			auto checkUUID = [ uuid ](Entity& e) {
 				return uuid == e.uuid;
 			};
 
@@ -37,10 +37,11 @@ namespace Cacao {
 		World(Camera* camera) {
 			cam = camera;
 		}
-	private:
+
+	  private:
 		//Recursive function for actually running a entity search
 		template<typename P>
-		std::optional<std::reference_wrapper<Entity>> entitySearchRunner(std::vector<TreeItem<Entity>>& target, P predicate){
+		std::optional<std::reference_wrapper<Entity>> entitySearchRunner(std::vector<TreeItem<Entity>>& target, P predicate) {
 			//Iterate through all children
 			for(auto& child : target) {
 				//Does this child pass the predicate?

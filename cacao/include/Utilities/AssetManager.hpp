@@ -13,7 +13,7 @@
 namespace Cacao {
 	//Game asset manager
 	class AssetManager {
-	public:
+	  public:
 		//Get the instance or create one if it doesn't exist.
 		static AssetManager* GetInstance();
 
@@ -38,7 +38,8 @@ namespace Cacao {
 			CheckException(assetCache.contains(assetID), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Unable to remove uncached asset from cache!")
 			assetCache.erase(assetID);
 		}
-	private:
+
+	  private:
 		//Singleton members
 		static AssetManager* instance;
 		static bool instanceExists;

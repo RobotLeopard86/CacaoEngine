@@ -2,6 +2,7 @@
 
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 #include "GLSkyboxData.hpp"
 #include "GLUtils.hpp"
 
@@ -20,8 +21,8 @@ namespace Cacao {
 	bool Skybox::isSetup = false;
 	Shader* Skybox::skyboxShader = nullptr;
 
-	Skybox::Skybox(Cubemap* tex) 
-		: orientation({0, 0, 0}), Asset(false), textureOwner(true) {
+	Skybox::Skybox(Cubemap* tex)
+	  : orientation({0, 0, 0}), Asset(false), textureOwner(true) {
 		//Create native data
 		nativeData = new GLSkyboxData();
 		nd->vaoReady = false;
@@ -36,11 +37,8 @@ namespace Cacao {
 		nd->vaoReady = false;
 	}
 
-	void Skybox::CommonSetup(){
-		if(isSetup){
-			Logging::EngineLog("Cannot set up skybox resources which are already set up!", LogLevel::Error);
-			return;
-		}
+	void Skybox::CommonSetup() {
+		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!")
 
 		//Define skybox shader specification
 		ShaderSpec spec;
@@ -62,10 +60,10 @@ namespace Cacao {
 		isSetup = true;
 	}
 
-	void Skybox::CommonCleanup(){
+	void Skybox::CommonCleanup() {
 		//Temporary shader pointer for capturing
 		Shader* shader = skyboxShader;
-		GLJob job([shader]() {
+		GLJob job([ shader ]() {
 			shader->Release();
 			while(shader->IsCompiled()) {}
 			delete shader;
@@ -75,16 +73,21 @@ namespace Cacao {
 		isSetup = false;
 	}
 
-	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
-			Logging::EngineLog("Cannot draw skybox in non-rendering thread!", LogLevel::Error);
-			return;
+	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
+			try {
+				InvokeGL([ this, projectionMatrix, viewMatrix ]() {
+					this->Draw(projectionMatrix, viewMatrix);
+				}).get();
+				return;
+			} catch(...) {
+				std::rethrow_exception(std::current_exception());
+			}
 		}
 
 		//Confirm that texture is compiled
-		if(!texture->IsCompiled()){
-			Logging::EngineLog("Skybox texture has not been compiled! Aborting draw.", LogLevel::Error);
-		}
+		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!")
 
 		//Set up OpenGL VAO if not already
 		if(!nd->vaoReady) {
@@ -111,9 +114,9 @@ namespace Cacao {
 		//Create skybox matrices
 		glm::mat4 skyView = glm::mat4(glm::mat3(viewMatrix));
 		glm::mat4 skyTransform(1.0);
-		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.pitch), { 1.0, 0.0, 0.0 });
-		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.yaw), { 0.0, 1.0, 0.0 });
-		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.roll), { 0.0, 0.0, 1.0 });
+		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.pitch), {1.0, 0.0, 0.0});
+		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.yaw), {0.0, 1.0, 0.0});
+		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.roll), {0.0, 0.0, 1.0});
 
 		//Bind skybox shader and texture
 		skyboxShader->Bind();

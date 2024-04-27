@@ -8,21 +8,21 @@
 namespace Cacao {
 	//Singleton for managing global world state
 	class WorldManager {
-	public:
+	  public:
 		//Get the instance or create one if it doesn't exist.
 		static WorldManager* GetInstance();
 
 		//Create an empty world with a camera
 		//Defined in the header file to allow usage by the client
 		template<typename T>
-		void CreateWorld(std::string name){
+		void CreateWorld(std::string name) {
 			static_assert(std::is_base_of<Camera, T>(), "You must create a world with a type extending Camera!");
 			if(worlds.contains(name)) {
 				Logging::EngineLog("Not adding world because one with the specified name already exists!", LogLevel::Warn);
 				return;
 			}
 
-			worlds.insert_or_assign(name, World{new T()});
+			worlds.insert_or_assign(name, World {new T()});
 		}
 
 		//Remove a world from the manager
@@ -40,7 +40,8 @@ namespace Cacao {
 
 		//Get a reference to a world
 		World& GetWorld(std::string name);
-	private:
+
+	  private:
 		//Singleton members
 		static WorldManager* instance;
 		static bool instanceExists;
