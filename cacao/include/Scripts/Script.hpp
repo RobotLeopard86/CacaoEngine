@@ -5,10 +5,10 @@
 namespace Cacao {
 	//Base class representing a game script
 	class Script : public Component {
-	public:
+	  public:
 		//Runs every tick
 		virtual void OnTick(double timestep) {}
-		
+
 		//Runs every fixed tick
 		virtual void OnFixedTick() {}
 
@@ -26,7 +26,7 @@ namespace Cacao {
 				OnActivate();
 				return;
 			}
-			if(!active && prevActive){
+			if(!active && prevActive) {
 				OnDeactivate();
 				return;
 			}
@@ -35,9 +35,9 @@ namespace Cacao {
 		std::string GetKind() override final {
 			return "SCRIPT";
 		}
-		
+
 		const bool operator==(Script rhs) {
-            return (this == &rhs);
-        }
+			return (this == &rhs);
+		}
 	};
 }

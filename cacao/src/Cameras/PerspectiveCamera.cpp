@@ -10,9 +10,8 @@ namespace Cacao {
 	and aspect ratio, and a near clipping plane (where objects stop rendering when too close to the camera)
 	that is extremely close so that the camera can get super close to things before they disappear.
 	*/
-	PerspectiveCamera::PerspectiveCamera(float fov) 
-		: projectionMatrix(1.0f), viewMatrix(1.0f),
-		position(0.0f), rotation(glm::vec3{0.0f}), viewProjectionMatrix(0.0f), frontVec(0.0f), upVec(0.0f), rightVec(0.0f), fov(fov), displaySize(Window::GetInstance()->GetSize()) {
+	PerspectiveCamera::PerspectiveCamera(float fov)
+	  : projectionMatrix(1.0f), viewMatrix(1.0f), position(0.0f), rotation(glm::vec3 {0.0f}), viewProjectionMatrix(0.0f), frontVec(0.0f), upVec(0.0f), rightVec(0.0f), fov(fov), displaySize(Window::GetInstance()->GetSize()) {
 		RecalculateProjectionMatrix();
 	}
 
@@ -41,12 +40,12 @@ namespace Cacao {
 		upVec = glm::normalize(glm::cross(rightVec, frontVec));
 	}
 
-	void PerspectiveCamera::ResizeProjectionMatrix(Event& e){
+	void PerspectiveCamera::ResizeProjectionMatrix(Event& e) {
 		displaySize = Window::GetInstance()->GetSize();
 		RecalculateProjectionMatrix();
 	}
 
-	void PerspectiveCamera::RecalculateProjectionMatrix(){
+	void PerspectiveCamera::RecalculateProjectionMatrix() {
 		projectionMatrix = glm::perspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.001f, 100000.0f);
 	}
 }

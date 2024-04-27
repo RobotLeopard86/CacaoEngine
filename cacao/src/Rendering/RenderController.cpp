@@ -12,7 +12,7 @@ namespace Cacao {
 	//Singleton accessor
 	RenderController* RenderController::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL){
+		if(!instanceExists || instance == NULL) {
 			//Create instance
 			instance = new RenderController();
 			instanceExists = true;
@@ -25,18 +25,18 @@ namespace Cacao {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!")
 
 		//Run while the engine does
-		while(Engine::GetInstance()->IsRunning()){
+		while(Engine::GetInstance()->IsRunning()) {
 			//Update window and graphics state
 			Window::GetInstance()->Update();
 			UpdateGraphicsState();
-	
+
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
 
 			//Discard frames if we're too far behind
 			int maxFrameLag = Engine::GetInstance()->cfg.maxFrameLag;
-			if(frameQueue.size() > maxFrameLag){
-				while(frameQueue.size() > 1){
+			if(frameQueue.size() > maxFrameLag) {
+				while(frameQueue.size() > 1) {
 					frameQueue.pop();
 				}
 			}

@@ -7,7 +7,7 @@ namespace Cacao {
 	//Item in a tree
 	template<typename T>
 	class TreeItem {
-	public:
+	  public:
 		std::vector<TreeItem<T>> children;
 
 		//Access the node
@@ -16,15 +16,16 @@ namespace Cacao {
 		}
 
 		TreeItem(T value)
-			: node(value) {}
-	private:
+		  : node(value) {}
+
+	  private:
 		T node;
 	};
 
 	//A tree class with children, useful if there isn't one root node in your tree
 	template<typename T>
 	class Tree {
-	public:
+	  public:
 		std::vector<TreeItem<T>> children;
 	};
 }

@@ -22,7 +22,7 @@ namespace Cacao {
 		Material material;
 
 		RenderObject(glm::mat4 transform, Mesh* mesh, Material* mat)
-			: transformMatrix(transform), mesh(mesh), material(*mat) {}
+		  : transformMatrix(transform), mesh(mesh), material(*mat) {}
 	};
 
 	//An entire frame

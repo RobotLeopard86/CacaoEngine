@@ -15,7 +15,7 @@
 namespace Cacao {
 	//Singleton representing the engine
 	class Engine {
-	public:
+	  public:
 		//Get an instance of the engine, or create one if it doesn't exist
 		static Engine* GetInstance();
 
@@ -26,20 +26,29 @@ namespace Cacao {
 		void Stop();
 
 		//Access the thread pool
-		BS::thread_pool& GetThreadPool() { return threadPool; }
+		BS::thread_pool& GetThreadPool() {
+			return threadPool;
+		}
 
 		//Is the engine running?
-		bool IsRunning() { return run; }
+		bool IsRunning() {
+			return run;
+		}
 
 		//Is the engine shutting down?
-		bool IsShuttingDown() { return shuttingDown; }
+		bool IsShuttingDown() {
+			return shuttingDown;
+		}
 
 		//Get the thread ID of the engine
-		std::thread::id GetThreadID() { return threadID; }
+		std::thread::id GetThreadID() {
+			return threadID;
+		}
 
 		//Engine config properties
 		EngineConfig cfg;
-	private:
+
+	  private:
 		//Singleton members
 		static Engine* instance;
 		static bool instanceExists;
@@ -64,5 +73,9 @@ namespace Cacao {
 		//Run the core startup and shutdown systems of the engine on separate thread (main thread handles rendering)
 		void CoreStartup();
 		void CoreShutdown();
+
+		//To be implemented by backend
+		//Register backend-specific exception codes
+		void RegisterBackendExceptions();
 	};
 }

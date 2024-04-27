@@ -6,10 +6,10 @@
 #define ICOSPHERE_RANGE 5
 
 class PlaygroundApp {
-public:
+  public:
 	static PlaygroundApp* GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL){
+		if(!instanceExists || instance == NULL) {
 			//Create instance
 			instance = new PlaygroundApp();
 			instanceExists = true;
@@ -31,7 +31,8 @@ public:
 	Cacao::AssetHandle<Cacao::Skybox>& GetSky() {
 		return sky;
 	}
-private:
+
+  private:
 	static PlaygroundApp* instance;
 	static bool instanceExists;
 
@@ -46,7 +47,7 @@ private:
 };
 
 class SussyScript : public Cacao::Script {
-public:
+  public:
 	void OnActivate() override {
 		Cacao::Logging::ClientLog("I'm awake!");
 	}
@@ -58,72 +59,72 @@ public:
 		Cacao::PerspectiveCamera* cam = static_cast<Cacao::PerspectiveCamera*>(world.cam);
 		count++;
 		glm::vec3 camRotChange = glm::vec3(0.0f);
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_J)){
-            camRotChange.y -= 0.5f;
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_K)){
-            camRotChange.y += 0.5f;
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Y)){
-            camRotChange.x += 0.5f;
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_U)){
-            camRotChange.x -= 0.5f;
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)){
-            camRotChange.z += 0.5f;
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_C)){
-            camRotChange.z -= 0.5f;
-        }
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_J)) {
+			camRotChange.y -= 0.5f;
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_K)) {
+			camRotChange.y += 0.5f;
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Y)) {
+			camRotChange.x += 0.5f;
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_U)) {
+			camRotChange.x -= 0.5f;
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)) {
+			camRotChange.z += 0.5f;
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_C)) {
+			camRotChange.z -= 0.5f;
+		}
 
-        currentRot = cam->GetRotation();
-        glm::vec3 pastRot = glm::vec3(currentRot);
-        currentRot += camRotChange;
-        
-        if(currentRot.x < -89.99){
-            currentRot.x = -89.99f;
-        }
-        if(currentRot.x > 89.99) {
-            currentRot.x = 89.99f;
-        }
-        if(currentRot.y < 0){
-            currentRot.y = 360.0f;
-        }
-        if(currentRot.y > 360) {
-            currentRot.y = 0.0f;
-        }
-        if(currentRot.z < 0){
-            currentRot.z = 360.0f;
-        }
-        if(currentRot.z > 360) {
-            currentRot.z = 0.0f;
-        }
+		currentRot = cam->GetRotation();
+		glm::vec3 pastRot = glm::vec3(currentRot);
+		currentRot += camRotChange;
 
-        glm::vec3 posChange = glm::vec3(0.0f);
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)){
-            posChange += cam->GetFrontVector() * 5.0f * float(timestep);
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_S)){
-            posChange -= cam->GetFrontVector() * 5.0f * float(timestep);
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_D)){
-            posChange += cam->GetRightVector() * 5.0f * float(timestep);
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_A)){
-            posChange -= cam->GetRightVector() * 5.0f * float(timestep);
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_E)){
-            posChange += cam->GetUpVector() * 5.0f * float(timestep);
-        }
-        if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Q)){
-            posChange -= cam->GetUpVector() * 5.0f * float(timestep);
-        }
+		if(currentRot.x < -89.99) {
+			currentRot.x = -89.99f;
+		}
+		if(currentRot.x > 89.99) {
+			currentRot.x = 89.99f;
+		}
+		if(currentRot.y < 0) {
+			currentRot.y = 360.0f;
+		}
+		if(currentRot.y > 360) {
+			currentRot.y = 0.0f;
+		}
+		if(currentRot.z < 0) {
+			currentRot.z = 360.0f;
+		}
+		if(currentRot.z > 360) {
+			currentRot.z = 0.0f;
+		}
 
-        currentPos = cam->GetPosition() + posChange;
+		glm::vec3 posChange = glm::vec3(0.0f);
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)) {
+			posChange += cam->GetFrontVector() * 5.0f * float(timestep);
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_S)) {
+			posChange -= cam->GetFrontVector() * 5.0f * float(timestep);
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_D)) {
+			posChange += cam->GetRightVector() * 5.0f * float(timestep);
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_A)) {
+			posChange -= cam->GetRightVector() * 5.0f * float(timestep);
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_E)) {
+			posChange += cam->GetUpVector() * 5.0f * float(timestep);
+		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Q)) {
+			posChange -= cam->GetUpVector() * 5.0f * float(timestep);
+		}
 
-        cam->SetRotation(Orientation(currentRot));
-        cam->SetPosition(currentPos);
+		currentPos = cam->GetPosition() + posChange;
+
+		cam->SetRotation(Orientation(currentRot));
+		cam->SetPosition(currentPos);
 
 		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_L)) {
 			std::stringstream ci;
@@ -132,7 +133,8 @@ public:
 			Cacao::Logging::ClientLog(ci.str());
 		}
 	}
-private:
+
+  private:
 	int count;
 	glm::vec3 currentRot, currentPos;
 };
@@ -168,31 +170,31 @@ void PlaygroundApp::Launch() {
 	world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(cameraManager));
 
 	std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(-ICOSPHERE_RANGE, ICOSPHERE_RANGE);
-	
-	for(int i = 0; i < ICOSPHERE_COUNT; i++){
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> dist(-ICOSPHERE_RANGE, ICOSPHERE_RANGE);
+
+	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
 		icospheres.push_back({});
 		std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
 		mc->SetActive(true);
 		mc->mesh = mesh.GetManagedAsset().get();
 		mc->mat = mat;
-		icospheres[i].components.push_back(mc);
+		icospheres[ i ].components.push_back(mc);
 		int x = dist(rng), y = dist(rng), z = dist(rng);
-		icospheres[i].transform.SetPosition({ x, y, z });
-		icospheres[i].active = true;
-		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[i]));
+		icospheres[ i ].transform.SetPosition({x, y, z});
+		icospheres[ i ].active = true;
+		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[ i ]));
 	}
 
 	world.skybox = sky.GetManagedAsset().get();
 }
 
 extern "C" {
-	void _CacaoLaunch() {
-		PlaygroundApp::GetInstance()->Launch();
-	}
+void _CacaoLaunch() {
+	PlaygroundApp::GetInstance()->Launch();
+}
 
-	void _CacaoExiting() {
-		PlaygroundApp::GetInstance()->Cleanup();
-	}
+void _CacaoExiting() {
+	PlaygroundApp::GetInstance()->Cleanup();
+}
 }

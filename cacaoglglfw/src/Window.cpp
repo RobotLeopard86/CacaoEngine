@@ -4,7 +4,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/vec2.hpp"
 
-#include "Core/Assert.hpp"
+#include "Core/Exception.hpp"
 #include "Core/Log.hpp"
 #include "Events/EventSystem.hpp"
 
@@ -17,7 +17,7 @@ namespace Cacao {
 	//Singleton accessor
 	Window* Window::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL){
+		if(!instanceExists || instance == NULL) {
 			//Create instance
 			instance = new Window();
 			instanceExists = true;
@@ -26,21 +26,21 @@ namespace Cacao {
 		return instance;
 	}
 
-	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY, bool startVisible){
-		EngineAssert(!isOpen, "Can't open the window, it's already open!");
+	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY, bool startVisible) {
+		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
 
 		//Initialize GLFW
 		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
 
 		//Set error callback
-		glfwSetErrorCallback([](int ec, const char* message){
-			//Always false assertion
-			EngineAssert(false, std::string("GLFW error ") + std::to_string(ec) + ": " + message);
+		glfwSetErrorCallback([](int ec, const char* message) {
+			//Always false exception
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLFW"), std::string("(GLFW error ") + std::to_string(ec) + ") " + message);
 		});
 
 		//Set window initialization hints
 #ifdef __APPLE__
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -57,59 +57,59 @@ namespace Cacao {
 		SetVSyncEnabled(true);
 
 		//Set window object size parameters
-		size = { initialSizeX, initialSizeY };
+		size = {initialSizeX, initialSizeY};
 
 		//Register window callbacks
-		glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double x, double y){
-			DataEvent<glm::vec2> mme("MouseMove", { x, y });
+		glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double x, double y) {
+			DataEvent<glm::vec2> mme("MouseMove", {x, y});
 			EventManager::GetInstance()->Dispatch(mme);
 		});
-		glfwSetScrollCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double offX, double offY){
-			DataEvent<glm::vec2> mse("MouseScroll", { offX, offY });
+		glfwSetScrollCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double offX, double offY) {
+			DataEvent<glm::vec2> mse("MouseScroll", {offX, offY});
 			EventManager::GetInstance()->Dispatch(mse);
 		});
-		glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int x, int y){
-			Window::GetInstance()->SetSize({ x, y });
-			DataEvent<glm::ivec2> wre("WindowResize", { x, y });
+		glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int x, int y) {
+			Window::GetInstance()->SetSize({x, y});
+			DataEvent<glm::ivec2> wre("WindowResize", {x, y});
 			EventManager::GetInstance()->Dispatch(wre);
 		});
-		glfwSetWindowFocusCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int entered){
+		glfwSetWindowFocusCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int entered) {
 			Event e((entered ? "WindowFocus" : "WindowUnfocus"));
 			EventManager::GetInstance()->Dispatch(e);
 		});
-		glfwSetKeyCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int key, int scan, int action, int mods){
+		glfwSetKeyCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int key, int scan, int action, int mods) {
 			switch(action) {
-			case GLFW_PRESS: {
-				DataEvent<int> kde("KeyDown", key);
-				EventManager::GetInstance()->Dispatch(kde);
-				break;
-			}
-			case GLFW_RELEASE: {
-				DataEvent<int> kue("KeyUp", key);
-				EventManager::GetInstance()->Dispatch(kue);
-				break;
-			}
+				case GLFW_PRESS: {
+					DataEvent<int> kde("KeyDown", key);
+					EventManager::GetInstance()->Dispatch(kde);
+					break;
+				}
+				case GLFW_RELEASE: {
+					DataEvent<int> kue("KeyUp", key);
+					EventManager::GetInstance()->Dispatch(kue);
+					break;
+				}
 			}
 		});
-		glfwSetMouseButtonCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int btn, int action, int mods){
+		glfwSetMouseButtonCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int btn, int action, int mods) {
 			switch(action) {
-			case GLFW_PRESS: {
-				DataEvent<int> mpe("MousePress", btn);
-				EventManager::GetInstance()->Dispatch(mpe);
-				break;
-			}
-			case GLFW_RELEASE: {
-				DataEvent<int> mre("MouseRelease", btn);
-				EventManager::GetInstance()->Dispatch(mre);
-				break;
-			}
+				case GLFW_PRESS: {
+					DataEvent<int> mpe("MousePress", btn);
+					EventManager::GetInstance()->Dispatch(mpe);
+					break;
+				}
+				case GLFW_RELEASE: {
+					DataEvent<int> mre("MouseRelease", btn);
+					EventManager::GetInstance()->Dispatch(mre);
+					break;
+				}
 			}
 		});
-		glfwSetCharCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, unsigned int code){
+		glfwSetCharCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, unsigned int code) {
 			DataEvent<unsigned int> kte("KeyType", code);
 			EventManager::GetInstance()->Dispatch(kte);
 		});
-		glfwSetWindowCloseCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win){
+		glfwSetWindowCloseCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win) {
 			Event e("WindowClose");
 			EventManager::GetInstance()->Dispatch(e);
 		});
@@ -117,13 +117,13 @@ namespace Cacao {
 		//Initialize OpenGL
 		glfwMakeContextCurrent((GLFWwindow*)nativeWindow);
 		int gladResult = gladLoadGL(glfwGetProcAddress);
-		EngineAssert(gladResult != 0, "Could not load Glad!");
+		EngineAssert(gladResult != 0, "Failed to load OpenGL!");
 
 		isOpen = true;
 	}
 
 	void Window::Close() {
-		EngineAssert(isOpen, "Can't close window, it's not open!");
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
 		//Destroy the window
 		glfwDestroyWindow((GLFWwindow*)nativeWindow);
@@ -134,11 +134,11 @@ namespace Cacao {
 		isOpen = false;
 	}
 
-	void Window::UpdateVSyncState(){
+	void Window::UpdateVSyncState() {
 		glfwSwapInterval(useVSync);
 	}
 
-	void Window::UpdateWindowSize(){
+	void Window::UpdateWindowSize() {
 		//Update GLFW window size
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
 
@@ -156,19 +156,19 @@ namespace Cacao {
 		}
 	}
 
-	void Window::Update(){
-		EngineAssert(isOpen, "Can't update window, it's not open!");
+	void Window::Update() {
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 		//Have GLFW check for events
 		glfwPollEvents();
 	}
 
-	void Window::Present(){
-		EngineAssert(isOpen, "Can't present to closed window!");
+	void Window::Present() {
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't present frame to a closed window!");
 		glfwSwapBuffers((GLFWwindow*)nativeWindow);
 	}
 
-	void Window::SetTitle(std::string title){
-		EngineAssert(isOpen, "Can't set window title, it's not open!");
+	void Window::SetTitle(std::string title) {
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 		glfwSetWindowTitle((GLFWwindow*)nativeWindow, title.c_str());
 	}
 }

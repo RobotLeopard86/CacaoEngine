@@ -11,7 +11,7 @@
 namespace Cacao {
 	//Controller for running dynamic ticks
 	class DynTickController {
-	public:
+	  public:
 		//Get the instance or create one if it doesn't exist.
 		static DynTickController* GetInstance();
 
@@ -20,7 +20,8 @@ namespace Cacao {
 
 		//Stop the controller
 		void Stop();
-	private:
+
+	  private:
 		//Singleton members
 		static DynTickController* instance;
 		static bool instanceExists;
@@ -31,12 +32,12 @@ namespace Cacao {
 		bool isRunning;
 
 		std::jthread* thread;
-		
+
 		std::vector<std::shared_ptr<Component>> tickScriptList;
 		std::vector<RenderObject> tickRenderList;
 		double timestep;
 
-		DynTickController() 
-			: isRunning(false), thread(nullptr) {}
+		DynTickController()
+		  : isRunning(false), thread(nullptr) {}
 	};
 }

@@ -18,7 +18,7 @@
 
 namespace Cacao {
 	Texture2D::Texture2D(std::string filePath)
-		: Texture(false) {
+	  : Texture(false) {
 		//Create native data
 		nativeData = new GLTexture2DData();
 
@@ -33,29 +33,26 @@ namespace Cacao {
 
 		//Determine image format
 		if(numImgChannels == 1) {
-            nd->format = GL_RED;
-        } else if(numImgChannels == 3) {
-            nd->format = GL_RGB;
-        } else if(numImgChannels == 4) {
-            nd->format = GL_RGBA;
-        }
+			nd->format = GL_RED;
+		} else if(numImgChannels == 3) {
+			nd->format = GL_RGB;
+		} else if(numImgChannels == 4) {
+			nd->format = GL_RGBA;
+		}
 	}
 
-	std::shared_future<void> Texture2D::Compile(){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+	std::shared_future<void> Texture2D::Compile() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			return InvokeGL([this]() {
+			return InvokeGL([ this ]() {
 				this->Compile();
 			});
 		}
-		if(compiled){
-            Logging::EngineLog("Cannot compile already compiled texture!", LogLevel::Error);
-			return {};
-        }
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
 
 		//Create texture object
 		glGenTextures(1, &(nd->gpuID));
-		
+
 		//Bind texture object so we can work on it
 		glBindTexture(GL_TEXTURE_2D, nd->gpuID);
 
@@ -78,7 +75,7 @@ namespace Cacao {
 
 		//Unbind texture object since we're done with it for now
 		glBindTexture(GL_TEXTURE_2D, 0);
-		
+
 		compiled = true;
 
 		//Return an empty future
@@ -86,62 +83,66 @@ namespace Cacao {
 	}
 
 	void Texture2D::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
-			//Invoke OpenGL on the main thread
-			InvokeGL([this]() {
-				this->Release();
-			});
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
+			try {
+				InvokeGL([ this ]() {
+					this->Release();
+				}).get();
+				return;
+			} catch(...) {
+				std::rethrow_exception(std::current_exception());
+			}
+		}
+		if(!compiled) {
+			Logging::EngineLog("Cannot release uncompiled texture!", LogLevel::Error);
 			return;
 		}
-		if(!compiled){
-            Logging::EngineLog("Cannot release uncompiled texture!", LogLevel::Error);
-            return;
-        }
-        if(bound){
-            Logging::EngineLog("Cannot release bound texture!", LogLevel::Error);
-            return;
-        }
-        glDeleteTextures(1, &(nd->gpuID));
-        compiled = false;
+		if(bound) {
+			Logging::EngineLog("Cannot release bound texture!", LogLevel::Error);
+			return;
+		}
+		glDeleteTextures(1, &(nd->gpuID));
+		compiled = false;
 	}
 
-	void Texture2D::Bind(int slot){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+	void Texture2D::Bind(int slot) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			Logging::EngineLog("Cannot bind texture in non-rendering thread!", LogLevel::Error);
 			return;
 		}
-        if(!compiled){
-            Logging::EngineLog("Cannot bind uncompiled texture!", LogLevel::Error);
-            return;
-        }
-        if(bound){
-            Logging::EngineLog("Cannot bind already bound texture!", LogLevel::Error);
-            return;
-        }
+		if(!compiled) {
+			Logging::EngineLog("Cannot bind uncompiled texture!", LogLevel::Error);
+			return;
+		}
+		if(bound) {
+			Logging::EngineLog("Cannot bind already bound texture!", LogLevel::Error);
+			return;
+		}
 		//Bind the texture to the requested slot
 		currentSlot = slot;
 		glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, nd->gpuID);
-        bound = true;
-    }
+		glBindTexture(GL_TEXTURE_2D, nd->gpuID);
+		bound = true;
+	}
 
-    void Texture2D::Unbind(){
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()){
+	void Texture2D::Unbind() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			Logging::EngineLog("Cannot bind texture in non-rendering thread!", LogLevel::Error);
 			return;
 		}
-        if(!compiled){
-            Logging::EngineLog("Cannot unbind uncompiled texture!", LogLevel::Error);
-            return;
-        }
-        if(!bound){
-            Logging::EngineLog("Cannot unbind unbound texture!", LogLevel::Error);
-            return;
-        }
+		if(!compiled) {
+			Logging::EngineLog("Cannot unbind uncompiled texture!", LogLevel::Error);
+			return;
+		}
+		if(!bound) {
+			Logging::EngineLog("Cannot unbind unbound texture!", LogLevel::Error);
+			return;
+		}
 		//Unbind the texture from its current slot
 		glActiveTexture(GL_TEXTURE0 + currentSlot);
-        glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		currentSlot = -1;
-        bound = false;
-    }
+		bound = false;
+	}
 }

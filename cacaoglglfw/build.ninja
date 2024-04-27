@@ -28,7 +28,7 @@ build $objdir/Window.o: compile src/Window.cpp
 build $objdir/Cubemap.o: compile src/Cubemap.cpp
 build $objdir/Texture2D.o: compile src/Texture2D.cpp
 build $objdir/Skybox.o: compile src/Skybox.cpp
-build $objdir/Renderer.o: compile src/Renderer.cpp
+build $objdir/OpenGL.o: compile src/OpenGL.cpp
 
 # Link library
-build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/Renderer.o
+build ./build/libcacaobackend.so: link $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/OpenGL.o || $objdir/Mesh.o $objdir/Shader.o $objdir/Window.o $objdir/Cubemap.o $objdir/Texture2D.o $objdir/Skybox.o $objdir/OpenGL.o

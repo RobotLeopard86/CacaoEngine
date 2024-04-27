@@ -6,6 +6,8 @@
 #include "Graphics/Window.hpp"
 #include "Events/EventSystem.hpp"
 #include "GLUtils.hpp"
+#include "Core/Engine.hpp"
+#include "Core/Exception.hpp"
 
 namespace Cacao {
 	//Queue of OpenGL jobs to process
@@ -16,7 +18,7 @@ namespace Cacao {
 
 	void RenderController::UpdateGraphicsState() {
 		//Process OpenGL jobs
-		while(!glQueue.empty()){
+		while(!glQueue.empty()) {
 			//Acquire next job
 			queueMutex.lock();
 			GLJob& job = glQueue.front();
@@ -40,15 +42,15 @@ namespace Cacao {
 		}
 	}
 
-	void RenderController::ProcessFrame(Frame& frame){
+	void RenderController::ProcessFrame(Frame& frame) {
 		//Send the frame into the GL queue
-		std::shared_future<void> frameJob = InvokeGL([&frame](){
+		std::shared_future<void> frameJob = InvokeGL([ &frame ]() {
 			//Clear the screen
 			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			//Render main scene
-			for(RenderObject& obj : frame.objects){
+			for(RenderObject& obj : frame.objects) {
 				//Upload material data to shader
 				obj.material.shader->UploadData(obj.material.data);
 				obj.material.shader->UploadCacaoData(frame.projection, frame.view, obj.transformMatrix);
@@ -82,16 +84,15 @@ namespace Cacao {
 	}
 
 	void RenderController::Init() {
-		EngineAssert(!isInitialized, "Render controller is already initialized!");
-
+		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
 		isInitialized = true;
 	}
 
 	void RenderController::Shutdown() {
-		EngineAssert(isInitialized, "Render controller is not initialized!");
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uinitialized render controller!")
 
 		//Take care of any remaining OpenGL jobs
-		while(!glQueue.empty()){
+		while(!glQueue.empty()) {
 			//Acquire next job
 			GLJob& job = glQueue.front();
 
@@ -106,5 +107,14 @@ namespace Cacao {
 		}
 
 		isInitialized = false;
+	}
+
+	void Engine::RegisterBackendExceptions() {
+		Exception::RegisterExceptionCode(100, "BadCompileState");
+		Exception::RegisterExceptionCode(101, "BadBindState");
+		Exception::RegisterExceptionCode(102, "GLFWError");
+		Exception::RegisterExceptionCode(103, "OpenGLError");
+		Exception::RegisterExceptionCode(104, "UniformUploadFailure");
+		Exception::RegisterExceptionCode(105, "RenderThread");
 	}
 }

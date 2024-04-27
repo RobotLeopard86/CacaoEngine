@@ -11,31 +11,34 @@
 namespace Cacao {
 
 	//Cubemap texture
-    //Must be implemented per-rendering API
-    class Cubemap : public Texture {
-    public:
+	//Must be implemented per-rendering API
+	class Cubemap : public Texture {
+	  public:
 		//Order of faces: +X, -X, +Y, -Y, +Z, -Z
-        Cubemap(std::vector<std::string> filePaths);
+		Cubemap(std::vector<std::string> filePaths);
 
-		~Cubemap(){
+		~Cubemap() {
 			if(bound) Unbind();
 			if(compiled) Release();
 			delete nativeData;
 		}
-		
-        //Attach this cubemap to the specified slot
-        void Bind(int slot) override;
-        //Detach this cubemap
-        void Unbind() override;
-        //Compile cubemap to be used later
-        std::shared_future<void> Compile() override;
-        //Delete cubemap when no longer needed
-        void Release() override;
 
-		std::string GetType() override { return "CUBEMAP"; }
-    protected:
-        std::vector<std::string> textures;
+		//Attach this cubemap to the specified slot
+		void Bind(int slot) override;
+		//Detach this cubemap
+		void Unbind() override;
+		//Compile cubemap to be used later
+		std::shared_future<void> Compile() override;
+		//Delete cubemap when no longer needed
+		void Release() override;
+
+		std::string GetType() override {
+			return "CUBEMAP";
+		}
+
+	  protected:
+		std::vector<std::string> textures;
 
 		NativeData* nativeData;
-    };
+	};
 }

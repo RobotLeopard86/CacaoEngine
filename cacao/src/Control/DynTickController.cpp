@@ -19,7 +19,7 @@ namespace Cacao {
 	//Singleton accessor
 	DynTickController* DynTickController::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL){
+		if(!instanceExists || instance == NULL) {
 			//Create instance
 			instance = new DynTickController();
 			instanceExists = true;
@@ -28,7 +28,7 @@ namespace Cacao {
 		return instance;
 	}
 
-	void DynTickController::Start(){
+	void DynTickController::Start() {
 		CheckException(!isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot start the already started dynamic tick controller!")
 		isRunning = true;
 
@@ -36,7 +36,7 @@ namespace Cacao {
 		thread = new std::jthread(BIND_MEMBER_FUNC(DynTickController::Run));
 	}
 
-	void DynTickController::Stop(){
+	void DynTickController::Stop() {
 		CheckException(isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop the unstarted dynamic tick controller!")
 		//Stop run thread
 		thread->request_stop();
@@ -52,30 +52,30 @@ namespace Cacao {
 	void DynTickController::Run(std::stop_token stopTkn) {
 		//Run while we haven't been asked to stop
 		timestep = 0.0;
-		while(!stopTkn.stop_requested()){
+		while(!stopTkn.stop_requested()) {
 			//Get time at tick start and calculate ideal run time
 			std::chrono::steady_clock::time_point tickStart = std::chrono::steady_clock::now();
-			std::chrono::steady_clock::time_point idealStopTime = tickStart + (std::chrono::milliseconds(1000)/Engine::GetInstance()->cfg.targetDynTPS);
-			
+			std::chrono::steady_clock::time_point idealStopTime = tickStart + (std::chrono::milliseconds(1000) / Engine::GetInstance()->cfg.targetDynTPS);
+
 			//Freeze input state
 			Input::GetInstance()->FreezeFrameInputState();
 
 			//Find all scripts that need to be run
 			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
-			std::mutex slMutex{};
+			std::mutex slMutex {};
 			BS::multi_future<void> slFuture;
 			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item, &slMutex](){
+				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([ this, item, &slMutex ]() {
 					//Create script locator function for an entity
-					auto renderLocator = [this, &slMutex](TreeItem<Entity>& e) {
+					auto renderLocator = [ this, &slMutex ](TreeItem<Entity>& e) {
 						//Sneaky recursive lambda trick
-						auto impl = [this, &slMutex](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [ this, &slMutex ](TreeItem<Entity>& e, auto& implRef) mutable {
 							//Stop if this component is inactive
 							if(!e.val().active) return;
 
 							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e.val().components){
+							for(std::shared_ptr<Component>& c : e.val().components) {
 								if(c->GetKind() == "SCRIPT" && c->IsActive()) {
 									//Add to list (once lock is available)
 									slMutex.lock();
@@ -85,7 +85,7 @@ namespace Cacao {
 							}
 
 							//Recurse through children
-							for(TreeItem<Entity>& child : e.children){
+							for(TreeItem<Entity>& child : e.children) {
 								implRef(child, implRef);
 							}
 						};
@@ -100,26 +100,26 @@ namespace Cacao {
 			slFuture.wait();
 
 			//Execute scripts
-			for(std::shared_ptr<Component>& s : tickScriptList){
+			for(std::shared_ptr<Component>& s : tickScriptList) {
 				Script* script = static_cast<Script*>(s.get());
 				script->OnTick(timestep);
 			}
 
 			//Accumulate things to render
 			tickRenderList.clear();
-			std::mutex rlMutex{};
+			std::mutex rlMutex {};
 			BS::multi_future<void> roFuture;
 			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, &item, &rlMutex](){
+				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([ this, &item, &rlMutex ]() {
 					//Create script locator function for an entity
-					auto renderLocator = [this, &rlMutex](TreeItem<Entity>& e) {
+					auto renderLocator = [ this, &rlMutex ](TreeItem<Entity>& e) {
 						//Sneaky recursive lambda trick
-						auto impl = [this, &rlMutex](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [ this, &rlMutex ](TreeItem<Entity>& e, auto& implRef) mutable {
 							//Stop if this component is inactive
 							if(!e.val().active) return;
 
 							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e.val().components){
+							for(std::shared_ptr<Component>& c : e.val().components) {
 								if(c->GetKind() == "MESH" && c->IsActive()) {
 									//Add to list (once lock is available)
 									MeshComponent* mc = static_cast<MeshComponent*>(c.get());
@@ -130,7 +130,7 @@ namespace Cacao {
 							}
 
 							//Recurse through children
-							for(TreeItem<Entity>& child : e.children){
+							for(TreeItem<Entity>& child : e.children) {
 								implRef(child, implRef);
 							}
 						};
@@ -156,7 +156,7 @@ namespace Cacao {
 
 			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();
-			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count())/1000);
+			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count()) / 1000);
 
 			//If we stopped before the ideal max time, wait until that point
 			//Otherwise, run the next tick immediately

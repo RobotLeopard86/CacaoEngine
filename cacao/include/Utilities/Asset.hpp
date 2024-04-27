@@ -9,27 +9,32 @@
 namespace Cacao {
 	//Base asset type
 	class Asset {
-	public:
+	  public:
 		//Compile asset to be used later
-        virtual std::shared_future<void> Compile() { 
+		virtual std::shared_future<void> Compile() {
 			Logging::EngineLog("Cannot compile base asset type!");
 			return {};
 		}
-        //Delete asset when no longer needed
-        virtual void Release() {
+		//Delete asset when no longer needed
+		virtual void Release() {
 			Logging::EngineLog("Cannot release base asset type!");
 		}
 		//Check if compiled
-		virtual bool IsCompiled() { return compiled; }
+		virtual bool IsCompiled() {
+			return compiled;
+		}
 
 		//Get asset type
-		virtual std::string GetType() { return "N/A"; }
-	protected:
+		virtual std::string GetType() {
+			return "N/A";
+		}
+
+	  protected:
 		bool compiled;
 
 		//Constructor for initialization purposes
 		Asset(bool initiallyCompiled)
-			: compiled(initiallyCompiled) {}
+		  : compiled(initiallyCompiled) {}
 	};
 
 	//Actually runs the uncaching, can't be implemented here due to cyclical references
@@ -40,16 +45,16 @@ namespace Cacao {
 	//Handle to an asset
 	template<typename T>
 	class AssetHandle {
-	public:
+	  public:
 		//Construct an asset handle with an ID and asset
 		AssetHandle(const std::string& id, std::shared_ptr<T> asset)
-			: id(id), asset(asset) {
+		  : id(id), asset(asset) {
 			static_assert(std::is_base_of<Asset, T>(), "Cannot construct asset handle with non-subclass of Asset!");
 		}
 
 		//Construct a "null" handle (used for failed asset load calls)
 		AssetHandle()
-			: id("NULL_HANDLE_DONT_USE"), asset(nullptr) {}
+		  : id("NULL_HANDLE_DONT_USE"), asset(nullptr) {}
 
 		//Remove from asset cache if this is the last handle
 		~AssetHandle() {
@@ -74,8 +79,11 @@ namespace Cacao {
 		}
 
 		//Get the ID of the asset
-		std::string GetID() { return id; }
-	private:
+		std::string GetID() {
+			return id;
+		}
+
+	  private:
 		std::shared_ptr<T> asset;
 		std::string id;
 	};

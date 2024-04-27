@@ -9,9 +9,9 @@
 namespace Cacao {
 	//Base camera type
 	class Camera {
-	public:
+	  public:
 		Camera()
-			: clearColor(1) {
+		  : clearColor(1) {
 			resizeConsumer = new EventConsumer(BIND_MEMBER_FUNC(Camera::ResizeProjectionMatrix));
 			EventManager::GetInstance()->SubscribeConsumer("WindowResize", resizeConsumer);
 		}
@@ -36,7 +36,8 @@ namespace Cacao {
 
 		//Update camera projection matrix for new aspect ratio
 		virtual void ResizeProjectionMatrix(Event& e) = 0;
-	private:
+
+	  private:
 		EventConsumer* resizeConsumer;
 
 		glm::vec4 clearColor;
