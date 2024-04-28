@@ -35,6 +35,26 @@ fi
 cd ../
 rm -rf build
 
+echo "Building OpenAL..."
+cd ../openal-soft
+rm -rf build
+mkdir -p build && cd build
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DALSOFT_DLOPEN=OFF -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_INSTALL=OFF -DBUILD_SHARED_LIBS=OFF
+ninja
+cp libopenal.so.1.23.1 ../../generated/libopenal.so
+cd ../
+rm -rf build
+
+echo "Building Alure..."
+cd ../alure
+rm -rf build
+mkdir -p build && cd build
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DALURE_BUILD_SHARED=OFF -DALURE_BUILD_EXAMPLES=OFF -DALURE_ENABLE_OPUS=OFF -DALURE_ENABLE_SNDFILE=OFF -DALURE_INSTALL=OFF -DALURE_ENABLE_VORBIS=OFF -DOGG_INCLUDE_DIR=../generated -DOGG_LIBRARY=../../generated/libogg.a -DVORBIS_INCLUDE_DIR=../vorbis/include -DVORBIS_LIBRARY=../../generated/libvorbis.a -DVORBISFILE_LIBRARY=../../generated/libvorbisfile.a -DOPENAL_INCLUDE_DIR=../../openal-soft/include -DOPENAL_LIBRARY=../../generated/libopenal.so
+ninja
+cp libalure2_s.a config.h ../../generated
+cd ../
+rm -rf build
+
 echo "Building Glad..."
 cd ../glad
 clang -fPIC src/gl.c -Iinclude -c -o gl.o
@@ -60,6 +80,6 @@ cp ./libspirv-cross*.a ../../generated
 cd ../
 rm -rf build
 
-cd ../../cacaoglglfw
+cd ../../cacaoglalglfw
 
 echo "GLFW + OpenGL backend setup is complete!"

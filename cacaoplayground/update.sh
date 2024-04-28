@@ -1,7 +1,7 @@
 #!/bin/sh
 
-ninja -C ../cacaoglglfw -t clean
-ninja -C ../cacaoglglfw
+ninja -C ../cacaoglalglfw -t clean
+ninja -C ../cacaoglalglfw
 ninja -C ../cacao -t clean
 ninja -C ../cacao
 (cd ..; python scripts/update_playground.py)

@@ -44,7 +44,7 @@ namespace Cacao {
 			return code;
 		}
 		const std::string& GetCodeMeaning() {
-			return exceptionCodeMap[ code ];
+			return exceptionCodeMap[code];
 		}
 
 		//Register an exception code
@@ -61,13 +61,13 @@ namespace Cacao {
 		//Returns an empty string if no code found
 		static std::string GetExceptionCodeMeaning(unsigned int code) {
 			if(!exceptionCodeMap.contains(code)) return "";
-			return exceptionCodeMap[ code ];
+			return exceptionCodeMap[code];
 		}
 
 		//Get the code of an exception from meaning
 		//Returns maximum integer value if no meaning found
 		static unsigned int GetExceptionCodeFromMeaning(std::string meaning) {
-			auto ecmEntry = std::find_if(exceptionCodeMap.cbegin(), exceptionCodeMap.cend(), [ meaning ](const std::pair<unsigned int, std::string>& kv) {
+			auto ecmEntry = std::find_if(exceptionCodeMap.cbegin(), exceptionCodeMap.cend(), [meaning](const std::pair<unsigned int, std::string>& kv) {
 				return kv.second.compare(meaning) == 0;
 			});
 			return (ecmEntry != exceptionCodeMap.cend() ? ecmEntry->first : INT_MAX);

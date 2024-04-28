@@ -63,7 +63,7 @@ namespace Cacao {
 	void Skybox::CommonCleanup() {
 		//Temporary shader pointer for capturing
 		Shader* shader = skyboxShader;
-		GLJob job([ shader ]() {
+		GLJob job([shader]() {
 			shader->Release();
 			while(shader->IsCompiled()) {}
 			delete shader;
@@ -77,7 +77,7 @@ namespace Cacao {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
-				InvokeGL([ this, projectionMatrix, viewMatrix ]() {
+				InvokeGL([this, projectionMatrix, viewMatrix]() {
 					this->Draw(projectionMatrix, viewMatrix);
 				}).get();
 				return;

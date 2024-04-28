@@ -26,7 +26,7 @@ namespace Cacao {
 		//Returns an optional because an entity may or may not be found
 		std::optional<std::reference_wrapper<Entity>> FindEntityByUUID(UUIDv4::UUID uuid) {
 			//Create a function to check if the UUID matches
-			auto checkUUID = [ uuid ](Entity& e) {
+			auto checkUUID = [uuid](Entity& e) {
 				return uuid == e.uuid;
 			};
 

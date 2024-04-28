@@ -34,7 +34,7 @@ namespace Cacao {
 	std::shared_future<void> Cubemap::Compile() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL on the main thread
-			return InvokeGL([ this ]() {
+			return InvokeGL([this]() {
 				this->Compile();
 			});
 		}
@@ -55,7 +55,7 @@ namespace Cacao {
 			stbi_set_flip_vertically_on_load(true);
 
 			//Load texture data from file
-			unsigned char* data = stbi_load(textures[ i ].c_str(), &width, &height, &numChannels, 0);
+			unsigned char* data = stbi_load(textures[i].c_str(), &width, &height, &numChannels, 0);
 
 			//Make sure we have data
 			if(data) {
@@ -93,7 +93,7 @@ namespace Cacao {
 			//Invoke OpenGL on the main thread
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
-				InvokeGL([ this ]() {
+				InvokeGL([this]() {
 					this->Release();
 				}).get();
 				return;

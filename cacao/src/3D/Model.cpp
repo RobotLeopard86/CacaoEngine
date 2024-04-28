@@ -39,7 +39,7 @@ namespace Cacao {
 
 		//Load meshes data
 		for(int i = 0; i < scene->mNumMeshes; i++) {
-			aiMesh* assimpMesh = scene->mMeshes[ i ];
+			aiMesh* assimpMesh = scene->mMeshes[i];
 
 			std::vector<Vertex> vertices;
 			std::vector<glm::uvec3> indices;
@@ -65,7 +65,7 @@ namespace Cacao {
 			bool containsNormals = assimpMesh->HasNormals();
 
 			for(int j = 0; j < assimpMesh->mNumVertices; j++) {
-				aiVector3D vert = assimpMesh->mVertices[ j ];
+				aiVector3D vert = assimpMesh->mVertices[j];
 
 				glm::vec3 position = {vert.x, vert.y, vert.z};
 				glm::vec2 texCoords = glm::vec2(0.0f);
@@ -74,19 +74,19 @@ namespace Cacao {
 				glm::vec3 normal = glm::vec3(0.0f);
 
 				if(containsTexCoords) {
-					aiVector3D tc = assimpMesh->mTextureCoords[ 0 ][ j ];
+					aiVector3D tc = assimpMesh->mTextureCoords[0][j];
 					texCoords = {tc.x, tc.y};
 				}
 
 				if(containsTangentsAndBitangents) {
-					aiVector3D tan = assimpMesh->mTangents[ j ];
-					aiVector3D bitan = assimpMesh->mBitangents[ j ];
+					aiVector3D tan = assimpMesh->mTangents[j];
+					aiVector3D bitan = assimpMesh->mBitangents[j];
 					tangent = {tan.x, tan.y, tan.z};
 					bitangent = {bitan.x, bitan.y, bitan.z};
 				}
 
 				if(containsNormals) {
-					aiVector3D norm = assimpMesh->mNormals[ j ];
+					aiVector3D norm = assimpMesh->mNormals[j];
 					normal = {norm.x, norm.y, norm.z};
 				}
 
@@ -116,8 +116,8 @@ namespace Cacao {
 			}
 
 			for(int j = 0; j < assimpMesh->mNumFaces; j++) {
-				aiFace face = assimpMesh->mFaces[ j ];
-				indices.push_back({face.mIndices[ 0 ], face.mIndices[ 1 ], face.mIndices[ 2 ]});
+				aiFace face = assimpMesh->mFaces[j];
+				indices.push_back({face.mIndices[0], face.mIndices[1], face.mIndices[2]});
 			}
 
 			meshes.insert_or_assign(assimpMesh->mName.length == 0 ? ("Mesh" + std::to_string(i)) : std::string(assimpMesh->mName.C_Str()), new Mesh(vertices, indices));
