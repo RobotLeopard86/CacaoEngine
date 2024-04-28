@@ -66,11 +66,11 @@ namespace Cacao {
 			std::mutex slMutex {};
 			BS::multi_future<void> slFuture;
 			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([ this, item, &slMutex ]() {
+				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item, &slMutex]() {
 					//Create script locator function for an entity
-					auto renderLocator = [ this, &slMutex ](TreeItem<Entity>& e) {
+					auto renderLocator = [this, &slMutex](TreeItem<Entity>& e) {
 						//Sneaky recursive lambda trick
-						auto impl = [ this, &slMutex ](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [this, &slMutex](TreeItem<Entity>& e, auto& implRef) mutable {
 							//Stop if this component is inactive
 							if(!e.val().active) return;
 
@@ -110,11 +110,11 @@ namespace Cacao {
 			std::mutex rlMutex {};
 			BS::multi_future<void> roFuture;
 			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([ this, &item, &rlMutex ]() {
+				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, &item, &rlMutex]() {
 					//Create script locator function for an entity
-					auto renderLocator = [ this, &rlMutex ](TreeItem<Entity>& e) {
+					auto renderLocator = [this, &rlMutex](TreeItem<Entity>& e) {
 						//Sneaky recursive lambda trick
-						auto impl = [ this, &rlMutex ](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [this, &rlMutex](TreeItem<Entity>& e, auto& implRef) mutable {
 							//Stop if this component is inactive
 							if(!e.val().active) return;
 

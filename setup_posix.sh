@@ -28,7 +28,7 @@ mkdir -p libs/generated
 echo "Building Assimp..."
 cd libs/assimp
 mkdir -p build && cd build
-cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=ON -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_SHARED_LIBS=ON -DASSIMP_BUILD_ZLIB=ON -DASSIMP_NO_EXPORT=ON -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=ON -DASSIMP_INSTALL=OFF -DASSIMP_BUILD_SAMPLES=OFF -DASSIMP_BUILD_TESTS=OFF
 ninja
 cp bin/libassimp.so.5.2.5 ../../generated/libassimp.so
 cp revision.h contrib/zlib/zconf.h ../../generated
@@ -63,6 +63,27 @@ done
 ar -rcs libimgui.a ./*.o
 rm ./*.o
 mv libimgui.a ../generated
+
+echo "Building Ogg..."
+cd ../ogg
+rm -rf build
+mkdir -p build && cd build
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja
+ninja
+cp -R libogg.a include/ogg ../include/ogg ../../generated
+rm ../../generated/Makefile.am
+cd ../
+rm -rf build
+
+echo "Building Vorbis..."
+cd ../vorbis
+rm -rf build
+mkdir -p build && cd build
+cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja -DBUILD_TESTING=OFF -DOGG_INCLUDE_DIR=../../generated -DOGG_LIBRARY=../../generated/libogg.a
+ninja
+cp lib/libvorbis*.a ../../generated
+cd ../
+rm -rf build
 
 cd ../..
 

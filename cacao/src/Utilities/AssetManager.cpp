@@ -236,5 +236,19 @@ namespace Cacao {
 			//Return asset handle
 			return AssetHandle<Mesh>(location, asset);
 		});
+
+		std::future<AssetHandle<Sound>> AssetManager::LoadSound(std::string path) {
+			return Engine::GetInstance()->GetThreadPool().submit_task([this, path]() {
+				CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load sound from nonexistent file!")
+				//First check if asset is already cached and return the cached one if so
+				if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("SOUND") == 0) return AssetHandle<Sound>(path, std::dynamic_pointer_cast<Sound>(this->assetCache[path].lock()));
+
+				//Construct an asset, add it to cache, and return a handle
+				std::shared_ptr<Sound> asset = std::make_shared<Sound>(path);
+				asset->Compile().get();
+				this->assetCache.insert_or_assign(path, std::weak_ptr<Sound> {asset});
+				return AssetHandle<Texture2D>(path, asset);
+			});
+		}
 	}
 }
