@@ -39,5 +39,8 @@ namespace Cacao {
 		const bool operator==(Script rhs) {
 			return (this == &rhs);
 		}
+
+		//Virtual destructor
+		virtual ~Script() {}
 	};
 }

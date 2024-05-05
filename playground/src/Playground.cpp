@@ -46,7 +46,7 @@ class PlaygroundApp {
 	std::vector<Cacao::Entity> icospheres;
 };
 
-class SussyScript : public Cacao::Script {
+class SussyScript final : public Cacao::Script {
   public:
 	void OnActivate() override {
 		Cacao::Logging::ClientLog("I'm awake!");
@@ -79,7 +79,6 @@ class SussyScript : public Cacao::Script {
 		}
 
 		currentRot = cam->GetRotation();
-		glm::vec3 pastRot = glm::vec3(currentRot);
 		currentRot += camRotChange;
 
 		if(currentRot.x < -89.99) {
@@ -179,11 +178,11 @@ void PlaygroundApp::Launch() {
 		mc->SetActive(true);
 		mc->mesh = mesh.GetManagedAsset().get();
 		mc->mat = mat;
-		icospheres[ i ].components.push_back(mc);
+		icospheres[i].components.push_back(mc);
 		int x = dist(rng), y = dist(rng), z = dist(rng);
-		icospheres[ i ].transform.SetPosition({x, y, z});
-		icospheres[ i ].active = true;
-		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[ i ]));
+		icospheres[i].transform.SetPosition({x, y, z});
+		icospheres[i].active = true;
+		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[i]));
 	}
 
 	world.skybox = sky.GetManagedAsset().get();

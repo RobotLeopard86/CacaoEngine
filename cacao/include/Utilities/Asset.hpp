@@ -29,6 +29,9 @@ namespace Cacao {
 			return "N/A";
 		}
 
+		//Virtual destructor
+		virtual ~Asset() {}
+
 	  protected:
 		bool compiled;
 
@@ -48,13 +51,13 @@ namespace Cacao {
 	  public:
 		//Construct an asset handle with an ID and asset
 		AssetHandle(const std::string& id, std::shared_ptr<T> asset)
-		  : id(id), asset(asset) {
+		  : asset(asset), id(id) {
 			static_assert(std::is_base_of<Asset, T>(), "Cannot construct asset handle with non-subclass of Asset!");
 		}
 
 		//Construct a "null" handle (used for failed asset load calls)
 		AssetHandle()
-		  : id("NULL_HANDLE_DONT_USE"), asset(nullptr) {}
+		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME") {}
 
 		//Remove from asset cache if this is the last handle
 		~AssetHandle() {

@@ -9,7 +9,7 @@ namespace Cacao {
 	class Transform {
 	  public:
 		Transform(glm::vec3 position, Orientation rotation, glm::vec3 scale)
-		  : pos(position), rot(rotation), scale(scale), transMat(1.0) {
+		  : pos(position), scale(scale), rot(rotation), transMat(1.0) {
 			RecalculateTransformationMatrix();
 		}
 

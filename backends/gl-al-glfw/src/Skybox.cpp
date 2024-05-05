@@ -22,13 +22,10 @@ namespace Cacao {
 	Shader* Skybox::skyboxShader = nullptr;
 
 	Skybox::Skybox(Cubemap* tex)
-	  : orientation({0, 0, 0}), Asset(false), textureOwner(true) {
+	  : Asset(false), orientation({0, 0, 0}), textureOwner(true), texture(tex) {
 		//Create native data
 		nativeData = new GLSkyboxData();
 		nd->vaoReady = false;
-
-		//Set texture
-		texture = tex;
 	}
 
 	void Skybox::_InitCopyND() {

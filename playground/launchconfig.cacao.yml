@@ -1,5 +1,5 @@
 # Path where the launch module binary can be found (e.g. "launch.so", "launch.dll") relative to the executable directory
-launch: playground/build
+launch: .
 
 # Target number of dynamic ticks per second (not a hard constraint)
 dynamicTPS: 75

@@ -10,10 +10,10 @@
 
 namespace Cacao {
 	//Must be implemented per-rendering API
-	class Mesh : public Asset {
+	class Mesh final : public Asset {
 	  public:
 		Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
-		~Mesh() {
+		~Mesh() final {
 			if(compiled) Release();
 			delete nativeData;
 		}

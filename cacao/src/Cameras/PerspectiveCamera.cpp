@@ -11,7 +11,7 @@ namespace Cacao {
 	that is extremely close so that the camera can get super close to things before they disappear.
 	*/
 	PerspectiveCamera::PerspectiveCamera(float fov)
-	  : projectionMatrix(1.0f), viewMatrix(1.0f), position(0.0f), rotation(glm::vec3 {0.0f}), viewProjectionMatrix(0.0f), frontVec(0.0f), upVec(0.0f), rightVec(0.0f), fov(fov), displaySize(Window::GetInstance()->GetSize()) {
+	  : projectionMatrix(1.0f), viewMatrix(1.0f), viewProjectionMatrix(0.0f), position(0.0f), frontVec(0.0f), upVec(0.0f), rightVec(0.0f), rotation(glm::vec3 {0.0f}), displaySize(Window::GetInstance()->GetSize()), fov(fov) {
 		RecalculateProjectionMatrix();
 	}
 

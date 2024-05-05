@@ -1,0 +1,4 @@
+[wrap-git]
+url = https://gitlab.xiph.org/xiph/vorbis.git
+depth = 1
+revision = v1.3.7

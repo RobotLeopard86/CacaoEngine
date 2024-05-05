@@ -40,7 +40,7 @@ namespace Cacao {
 			CheckException(dfNode["fragment"].IsScalar(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing shader definition: File does not contain required 'fragment' attribute or it is not a scalar!")
 			CheckException(std::filesystem::exists(dfNode["vertex"].Scalar()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing shader definition: 'vertex' attribute references nonexistent file!")
 			CheckException(std::filesystem::exists(dfNode["fragment"].Scalar()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing shader definition: 'fragment' attribute references nonexistent file!")
-			CheckException(dfNode["spec"] && dfNode["spec"].IsSequence(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing shader definition: 'spec' attribute is not a sequence!")
+			CheckException(!dfNode["spec"] || (dfNode["spec"] && dfNode["spec"].IsSequence()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing shader definition: 'spec' attribute is not a sequence!")
 
 			//Validate and try to build spec
 			int specEntryCounter = 1;
@@ -236,19 +236,19 @@ namespace Cacao {
 			//Return asset handle
 			return AssetHandle<Mesh>(location, asset);
 		});
-
-		std::future<AssetHandle<Sound>> AssetManager::LoadSound(std::string path) {
-			return Engine::GetInstance()->GetThreadPool().submit_task([this, path]() {
-				CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load sound from nonexistent file!")
-				//First check if asset is already cached and return the cached one if so
-				if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("SOUND") == 0) return AssetHandle<Sound>(path, std::dynamic_pointer_cast<Sound>(this->assetCache[path].lock()));
-
-				//Construct an asset, add it to cache, and return a handle
-				std::shared_ptr<Sound> asset = std::make_shared<Sound>(path);
-				asset->Compile().get();
-				this->assetCache.insert_or_assign(path, std::weak_ptr<Sound> {asset});
-				return AssetHandle<Texture2D>(path, asset);
-			});
-		}
 	}
+
+	/*std::future<AssetHandle<Sound>> AssetManager::LoadSound(std::string path) {
+		return Engine::GetInstance()->GetThreadPool().submit_task([this, path]() {
+			CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load sound from nonexistent file!")
+			//First check if asset is already cached and return the cached one if so
+			if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("SOUND") == 0) return AssetHandle<Sound>(path, std::dynamic_pointer_cast<Sound>(this->assetCache[path].lock()));
+
+			//Construct an asset, add it to cache, and return a handle
+			std::shared_ptr<Sound> asset = std::make_shared<Sound>(path);
+			asset->Compile().get();
+			this->assetCache.insert_or_assign(path, std::weak_ptr<Sound> {asset});
+			return AssetHandle<Sound>(path, asset);
+		});
+	}*/
 }

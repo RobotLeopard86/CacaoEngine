@@ -34,7 +34,7 @@ namespace Cacao {
 		std::future<AssetHandle<Mesh>> LoadMesh(std::string location);
 
 		//Load a sound from a file
-		std::future<AssetHandle<Sound>> LoadSound(std::string path);
+		//std::future<AssetHandle<Sound>> LoadSound(std::string path);
 
 		//Remove an asset from the cache by ID
 		//Generally should not be used (exists for assets to deregister themselves)

@@ -11,10 +11,10 @@ namespace Cacao {
 
 	//2D texture
 	//Must be implemented per-rendering API
-	class Texture2D : public Texture {
+	class Texture2D final : public Texture {
 	  public:
 		Texture2D(std::string filePath);
-		~Texture2D() {
+		~Texture2D() final {
 			if(bound) Unbind();
 			if(compiled) Release();
 
