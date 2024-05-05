@@ -2,7 +2,7 @@
 #### A C++ game engine  
 
 ## About
-Cacao Engine is a game engine developed by RobotLeopard86, as well as any other contributors. It is written in C++ and built using Ninja.
+Cacao Engine is a game engine developed by RobotLeopard86. It is written in C++ and uses Meson as the build system.
 
 ## Planned Features
 * 2D and 3D rendering capabilties

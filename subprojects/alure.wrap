@@ -1,0 +1,4 @@
+[wrap-git]
+url = https://github.com/kcat/alure
+depth = 1
+revision = master

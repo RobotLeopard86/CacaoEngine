@@ -21,7 +21,7 @@ namespace Cacao {
 			delete nativeData;
 		}
 		Skybox(const Skybox& other)
-		  : Asset(other.compiled), textureOwner(false), texture(other.texture), orientation(other.orientation) {
+		  : Asset(other.compiled), orientation(other.orientation), textureOwner(false), texture(other.texture) {
 			_InitCopyND();
 		}
 

@@ -16,6 +16,9 @@ namespace Cacao {
 			return "_BASECOMPONENT";
 		}
 
+		//Virtual destructor
+		virtual ~Component() {}
+
 	  protected:
 		//Is this component active?
 		//The value of this boolean should be ignored if the entity active state is false

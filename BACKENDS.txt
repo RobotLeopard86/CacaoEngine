@@ -1,8 +1,0 @@
-List of Cacao Engine backends:
-
-cacaoglalglfw:
-	What: OpenGL (3.3 Core Profile) + GLFW + OpenAL.
-	Support: Windows, Mac, and Linux
-	Additional Dependencies: Refer to https://www.glfw.org/docs/latest/compile_guide.html#compile_deps for the most up-to-date information
-	on GLFW dependencies. When targeting Linux, Cacao Engine will build for both X11 and Wayland, so install both sets of dependencies. As
-	an additional note, on Fedora Linux, GLFW requires the `wayland-protocols-devel` package, though this is not listed on their website.

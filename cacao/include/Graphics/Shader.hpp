@@ -53,14 +53,14 @@ namespace Cacao {
 
 	//Must be implemented per-rendering API
 	//Shader class
-	class Shader : public Asset {
+	class Shader final : public Asset {
 	  public:
 		//Create a shader from raw SPIR-V code loaded separately
 		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
 		//Create a shader from file paths
 		Shader(std::string vertex, std::string fragment, ShaderSpec spec);
 
-		~Shader() {
+		~Shader() final {
 			if(compiled && bound) Unbind();
 			if(compiled) Release();
 			delete nativeData;

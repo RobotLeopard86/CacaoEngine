@@ -13,8 +13,8 @@ namespace Cacao {
 
 		~GLSkyboxData() {
 			if(vaoReady) {
-				//Copy VAO and VBO names so they can be used even if object is deleted
-				GLuint vertexArray, vertexBuffer;
+				//Copy VAO and VBO names so they can be deleted even if object is first
+				GLuint vertexArray = vao, vertexBuffer = vbo;
 				GLJob job([vertexArray, vertexBuffer]() {
 					glDeleteBuffers(1, &vertexBuffer);
 					glDeleteVertexArrays(1, &vertexArray);

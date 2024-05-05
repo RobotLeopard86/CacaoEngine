@@ -66,9 +66,9 @@ namespace Cacao {
 			return;
 		}));
 
-		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
+		//Start the thread pool (subtract two threads for the dedicated dynamic tick and audio controllers)
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 1);
+		threadPool.reset(std::thread::hardware_concurrency() - 2);
 
 		//Set up common skybox resources
 		threadPool.submit_task([]() {
@@ -81,8 +81,8 @@ namespace Cacao {
 		auto launchFunc = gameLib->get_function<void(void)>("_CacaoLaunch");
 		launchFunc();
 
-		//Start the dynamic tick controller
-		Logging::EngineLog("Starting dynamic tick controller...");
+		//Start controllers
+		Logging::EngineLog("Starting controllers...");
 		DynTickController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");

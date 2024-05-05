@@ -1,10 +1,3 @@
-# Don't send builds
-*/build
-cacaoplayground/*/build
-
-# Don't send generated library files
-libs/generated
-
 # Don't send auto-created logs
 cacao-engine.log
 .ninja_log
@@ -12,16 +5,12 @@ cacao-engine.log
 # Don't send VS Code files
 .vscode
 
-# Don't send selected backend bin symlink
-selected-backend-bin
-
-# Don't send playground binaries
-cacaoplayground/cacao
-cacaoplayground/cacao.exe
-cacaoplayground/libcacaobackend.so
-cacaoplayground/libcacao.so
-cacaoplayground/cacao.dll
-cacaoplayground/cacaobackend.dll
-*.so
-*.dll
-*.exe
+# Don't send Wrap-downloaded things
+subprojects/alure
+subprojects/assimp
+subprojects/glfw
+subprojects/ogg
+subprojects/openal-soft
+subprojects/spirv-cross
+subprojects/vorbis
+subprojects/yaml

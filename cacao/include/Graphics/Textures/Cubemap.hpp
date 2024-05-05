@@ -12,12 +12,12 @@ namespace Cacao {
 
 	//Cubemap texture
 	//Must be implemented per-rendering API
-	class Cubemap : public Texture {
+	class Cubemap final : public Texture {
 	  public:
 		//Order of faces: +X, -X, +Y, -Y, +Z, -Z
 		Cubemap(std::vector<std::string> filePaths);
 
-		~Cubemap() {
+		~Cubemap() final {
 			if(bound) Unbind();
 			if(compiled) Release();
 			delete nativeData;
