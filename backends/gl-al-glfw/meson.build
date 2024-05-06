@@ -66,9 +66,9 @@ vorbisfile_dep = vorbis_sp.dependency('vorbisfile')
 run_command('ninja', 'install', '-C', meson.project_build_root() / 'subprojects/vorbis/__CMake_build', check: true)
 
 if host_machine.system() == 'windows'
-  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / 'subprojects\\vorbis\\.cmakeinstall', meson.project_build_root() / '.cmakeinstall', check: true)
+  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / 'subprojects\\vorbis\\.cmakeinstall', meson.project_build_root(), check: true)
 else
-	run_command('cp', '-r', meson.project_build_root() / 'subprojects/vorbis/.cmakeinstall', meson.project_build_root() / '.cmakeinstall', check: true)
+	run_command('cp', '-r', meson.project_build_root() / 'subprojects/vorbis/.cmakeinstall', meson.project_build_root(), check: true)
 endif
 
 alsoft_opts = cmake.subproject_options()
@@ -105,9 +105,9 @@ alure_dep = cmake.subproject('alure', options: alure_opts, required: true).depen
 run_command('ninja', 'install', '-C', meson.project_build_root() / 'subprojects/alure/__CMake_build', check: true)
 
 if host_machine.system() == 'windows'
-  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / 'subprojects\\alure\\.cmakeinstall', meson.project_build_root() / '.cmakeinstall', check: true)
+  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / 'subprojects\\alure\\.cmakeinstall', meson.project_build_root(), check: true)
 else
-	run_command('cp', '-r', meson.project_build_root() / 'subprojects/alure/.cmakeinstall', meson.project_build_root() / '.cmakeinstall', check: true)
+	run_command('cp', '-r', meson.project_build_root() / 'subprojects/alure/.cmakeinstall', meson.project_build_root(), check: true)
 endif
 
 include_dirs = [
