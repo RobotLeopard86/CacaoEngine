@@ -90,7 +90,7 @@ namespace Cacao {
 			try {
 				eventTypeConsumers = consumers.at(event.GetType());
 			} catch(std::out_of_range) {
-				return;
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "No consumers exist for the specified event type!");
 			}
 
 			//Send event to each registered consumer
@@ -98,6 +98,41 @@ namespace Cacao {
 				consumer->Consume(event);
 			}
 		}
+	}
+
+	std::shared_ptr<EventSignal> EventManager::DispatchSignaled(Event& event) {
+		//Create signal
+		std::shared_ptr<EventSignal> signal = std::make_shared<EventSignal>();
+
+		//Check if event type has registered consumers
+		if(consumers.contains(event.GetType())) {
+			std::vector<EventConsumer*> eventTypeConsumers;
+
+			//Locate consumers for event type in consumer map
+			try {
+				eventTypeConsumers = consumers.at(event.GetType());
+			} catch(std::out_of_range) {
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "No consumers exist for the specified event type!");
+			}
+
+			std::vector<SignalEventConsumer*> sec;//No, not the Securities & Exchange Commision.
+
+			//Check that each consumer is signal-processing
+			for(EventConsumer* consumer : eventTypeConsumers) {
+				try {
+					sec.push_back(dynamic_cast<SignalEventConsumer*>(consumer));
+				} catch(std::bad_cast) {
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot dispatch signaled event to non-signal-processing consumer!");
+				}
+			}
+
+			//Send event and signal to each registered consumer
+			for(SignalEventConsumer* consumer : sec) {
+				consumer->ConsumeWithSignal(event, *signal.get());
+			}
+		}
+
+		return signal;
 	}
 
 	EventManager* EventManager::GetInstance() {

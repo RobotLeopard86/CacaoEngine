@@ -4,6 +4,7 @@
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
 #include "Control/DynTickController.hpp"
+#include "Audio/AudioController.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 
 #include "yaml-cpp/yaml.h"
@@ -84,6 +85,7 @@ namespace Cacao {
 		//Start controllers
 		Logging::EngineLog("Starting controllers...");
 		DynTickController::GetInstance()->Start();
+		AudioController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
 	}
@@ -92,6 +94,7 @@ namespace Cacao {
 		//Stop the dynamic tick controller
 		Logging::EngineLog("Stopping controllers...");
 		DynTickController::GetInstance()->Stop();
+		AudioController::GetInstance()->Stop();
 
 		//Call game module exit hook
 		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
