@@ -1,0 +1,5 @@
+[wrap-git]
+url = https://github.com/RobotLeopard86/Cacao-AL-Bundle
+depth = 1
+clone-recursive = true
+revision = main

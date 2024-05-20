@@ -5,7 +5,6 @@ stb_dep = subproject('stb', required: true).get_variable('stb_dep')
 
 spv_opts = cmake.subproject_options()
 spv_opts.add_cmake_defines({
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
 	'SPIRV_CROSS_STATIC': 'ON',
 	'SPIRV_CROSS_SHARED': 'OFF',
 	'SPIRV_CROSS_CLI': 'OFF',
@@ -24,7 +23,6 @@ spv_msl = spv_sp.dependency('spirv-cross-msl')
 glfw_opts = cmake.subproject_options()
 glfw_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'ON',
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
 	'GLFW_BUILD_TESTS': 'OFF',
 	'GLFW_BUILD_DOCSS': 'OFF',
 	'GLFW_BUILD_EXAMPLES': 'OFF'
@@ -37,78 +35,30 @@ if host_machine.system() == 'linux'
 endif
 glfw_dep = cmake.subproject('glfw', options: glfw_opts, required: true).dependency('glfw')
 
-cmake_install_dir = meson.project_build_root() / '.cmakeinstall'
-
-ogg_opts = cmake.subproject_options()
-ogg_opts.add_cmake_defines({
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
-})
-ogg_dep = cmake.subproject('ogg', options: ogg_opts, required: true).dependency('ogg')
-run_command('ninja', 'install', '-C', meson.project_build_root() / 'subprojects/ogg/__CMake_build', check: true)
-
-if host_machine.system() == 'windows'
-	run_command('cmd', '/c', 'mkdir', meson.project_build_root() / 'subprojects\\vorbis', check: true)
-  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / '.cmakeinstall', meson.project_build_root() / 'subprojects\\vorbis\\.cmakeinstall', check: true)
-else
-	run_command('mkdir', '-p', meson.project_build_root() / 'subprojects/vorbis', check: true)
-  	run_command('cp', '-r', meson.project_build_root() / '.cmakeinstall', meson.project_build_root() / 'subprojects/vorbis/.cmakeinstall', check: true)
-endif
-
-vorbis_opts = cmake.subproject_options()
-vorbis_opts.add_cmake_defines({
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / 'subprojects/vorbis/.cmakeinstall',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
-})
-vorbis_sp = cmake.subproject('vorbis', options: vorbis_opts, required: true)
-vorbis_dep = vorbis_sp.dependency('vorbis')
-vorbisfile_dep = vorbis_sp.dependency('vorbisfile')
-run_command('ninja', 'install', '-C', meson.project_build_root() / 'subprojects/vorbis/__CMake_build', check: true)
-
-if host_machine.system() == 'windows'
-  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / 'subprojects\\vorbis\\.cmakeinstall', meson.project_build_root(), check: true)
-else
-	run_command('cp', '-r', meson.project_build_root() / 'subprojects/vorbis/.cmakeinstall', meson.project_build_root(), check: true)
-endif
-
-alsoft_opts = cmake.subproject_options()
-alsoft_opts.add_cmake_defines({
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
+albundle_opts = cmake.subproject_options()
+albundle_opts.add_cmake_defines({
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'BUILD_TESTING': 'OFF',
 	'ALSOFT_DLOPEN': 'OFF',
 	'ALSOFT_EXAMPLES': 'OFF',
 	'ALSOFT_NO_CONFIG_UTIL': 'ON',
-	'ALSOFT_UTILS': 'OFF',
 	'ALSOFT_EAX': 'OFF',
+	'ALSOFT_UTILS': 'OFF',
 	'ALSOFT_RTKIT': 'OFF',
-})
-alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
-run_command('ninja', 'install', '-C', meson.project_build_root() / 'subprojects/openal-soft/__CMake_build', check: true)
-
-if host_machine.system() == 'windows'
-	run_command('cmd', '/c', 'mkdir', meson.project_build_root() / 'subprojects\\alure', check: true)
-  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / '.cmakeinstall', meson.project_build_root() / 'subprojects\\alure\\.cmakeinstall', check: true)
-else
-	run_command('mkdir', '-p', meson.project_build_root() / 'subprojects/alure', check: true)
-  	run_command('cp', '-r', meson.project_build_root() / '.cmakeinstall', meson.project_build_root() / 'subprojects/alure/.cmakeinstall', check: true)
-endif
-
-alure_opts = cmake.subproject_options()
-alure_opts.add_cmake_defines({
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / 'subprojects/alure/.cmakeinstall',
 	'ALURE_BUILD_SHARED': 'OFF',
 	'ALURE_BUILD_STATIC': 'ON',
 	'ALURE_ENABLE_OPUS': 'OFF',
 	'ALURE_ENABLE_SNDFILE': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
+	'ALURE_ENABLE_VORBIS': 'ON',
+	'ALURE_INSTALL': 'OFF',
+	'ALURE_BUILD_EXAMPLES': 'OFF'
 })
-alure_dep = cmake.subproject('alure', options: alure_opts, required: true).dependency('alure2_s')
-run_command('ninja', 'install', '-C', meson.project_build_root() / 'subprojects/alure/__CMake_build', check: true)
-
-if host_machine.system() == 'windows'
-  	run_command('cmd', '/c', 'xcopy', '/s', '/e', '/q', '/y', meson.project_build_root() / 'subprojects\\alure\\.cmakeinstall', meson.project_build_root(), check: true)
-else
-	run_command('cp', '-r', meson.project_build_root() / 'subprojects/alure/.cmakeinstall', meson.project_build_root(), check: true)
-endif
+albundle = cmake.subproject('albundle', options: albundle_opts, required: true)
+vorbisfile_dep = albundle.dependency('vorbisfile')
+vorbis_dep = albundle.dependency('vorbis')
+ogg_dep = albundle.dependency('ogg')
+alsoft_dep = albundle.dependency('OpenAL')
+alure_dep = albundle.dependency('alure2_s')
 
 include_dirs = [
 	'../../cacao/include',
@@ -127,7 +77,8 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	'src/Cubemap.cpp',
 	'src/Shader.cpp',
 	'src/Mesh.cpp',
-	'src/Skybox.cpp'
+	'src/Skybox.cpp',
+	'src/Audio.cpp'
 ], dependencies: [
 	spv_core,
 	spv_c,
@@ -146,5 +97,8 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	glad_dep,
 	stb_dep
 ], override_options: [ 'b_lundef=false' ])
+
+ninja = find_program('ninja')
+run_command([ ninja, '-C', meson.project_build_root()/'subprojects/albundle/__CMake_build', 'openal-soft/CMakeFiles/build_version'], check: true)
 
 subdir_done()

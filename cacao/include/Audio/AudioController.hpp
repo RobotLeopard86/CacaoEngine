@@ -15,18 +15,28 @@ namespace Cacao {
 		//Stop the controller
 		void Stop();
 
+		//Run the controller
+		void Run(std::stop_token stopTkn);
+
 	  private:
 		//Singleton members
 		static AudioController* instance;
 		static bool instanceExists;
 
-		//Run the tick controller
-		void Run(std::stop_token stopTkn);
+		//Backend functions
+
+		//Initialize the controller
+		void Init();
+		//Run the controller
+		void RunImpl(std::stop_token& stopTkn);
+		//Shutdown the controller
+		void Shutdown();
 
 		bool isRunning;
 
 		std::jthread* thread;
 
-		AudioController() {}
-	}
+		AudioController()
+		  : isRunning(false), thread(nullptr) {}
+	};
 }

@@ -7,7 +7,8 @@ shaders = [
 shader_targets = []
 
 foreach shader : shaders
-	shader_targets += custom_target('shader @0@'.format(shader),
+	split = shader.split('/')
+	shader_targets += custom_target('shader @0@'.format(split[-1]),
 		command: [glslc, '@INPUT@', '-o', '@OUTPUT@'],
 		input: shader,
 		output: '@PLAINNAME@.spv',
@@ -15,8 +16,14 @@ foreach shader : shaders
 	)
 endforeach
 
-shared_module('launch', name_prefix: '', dependencies: cacao_dep, sources: 'src/Playground.cpp', build_by_default: true)
+launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep, sources: 'src/Playground.cpp', build_by_default: true)
 
-run_target('bundle_playground', command: ['python', meson.project_source_root()/'playground'/'bundle.py', meson.project_build_root(), backend])
+run_target('bundle_playground', command: ['python', meson.project_source_root()/'playground'/'bundle.py', meson.project_build_root(), backend], depends: [
+	launch_module
+])
+
+run_target('run_playground', command: ['python', meson.project_source_root()/'playground'/'buildandrun.py', meson.project_build_root(), backend], depends: [
+	launch_module
+])
 
 subdir_done()
