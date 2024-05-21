@@ -1,0 +1,9 @@
+[submodule "libs/spdlog"]
+	path = libs/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "libs/glm"]
+	path = libs/glm
+	url = https://github.com/g-truc/glm
+[submodule "libs/dynalo"]
+	path = libs/dynalo
+	url = https://github.com/maddouri/dynalo
