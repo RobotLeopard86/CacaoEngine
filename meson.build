@@ -8,7 +8,7 @@ if backend == '__DEFAULT__'
 endif
 
 if host_machine.system() == 'windows'
-	add_global_arguments(['-DNOMINMAX'], language: ['c', 'cpp'])
+	add_global_arguments(['-DNOMINMAX','-D_ITERATOR_DEBUG_LEVEL=0','-D_CRT_SECURE_NO_WARNINGS'], language: ['c', 'cpp'])
 endif
 
 subsystem = 'console'
