@@ -10,6 +10,7 @@
 
 #include "glad/gl.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
 
 //For my sanity
