@@ -22,7 +22,7 @@ run_target('bundle_playground', command: ['python', meson.project_source_root()/
 	launch_module
 ])
 
-run_target('run_playground', command: ['python', meson.project_source_root()/'playground'/'buildandrun.py', meson.project_build_root(), backend], depends: [
+run_target('run_playground', command: ['python', meson.project_source_root()/'playground'/'bundleandrun.py', meson.project_build_root(), backend], depends: [
 	launch_module
 ])
 

@@ -9,6 +9,9 @@ namespace Cacao {
 		//Get the instance or create one if it doesn't exist.
 		static AudioObjectHolder* GetInstance();
 
+		//Audio device manager
+		alure::DeviceManager devMgr;
+
 		//Audio device
 		alure::Device dev;
 
@@ -23,5 +26,6 @@ namespace Cacao {
 }
 
 //Useful defines for ease of access
+#define audioDevMgr AudioObjectHolder::GetInstance()->devMgr
 #define audioDev AudioObjectHolder::GetInstance()->dev
 #define audioCtx AudioObjectHolder::GetInstance()->ctx

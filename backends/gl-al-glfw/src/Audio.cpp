@@ -24,16 +24,16 @@ namespace Cacao {
 	}
 
 	void AudioController::Init() {
-		//Create the device and context
-		audioDev = alure::DeviceManager::getInstance().openPlayback();
-		Logging::EngineLog(std::string("Opened audio device \"") + audioDev.getName() + std::string("\" for playback!"));
+		//Create the device handle (from the system default device) and context
+		audioDevMgr = alure::DeviceManager::getInstance();
+		audioDev = audioDevMgr.openPlayback(audioDevMgr.defaultDeviceName(alure::DefaultDeviceType::Basic));
 		audioCtx = audioDev.createContext();
-
-		//Set the context as current
-		alure::Context::MakeCurrent(audioCtx);
 	}
 
 	void AudioController::RunImpl(std::stop_token& stopTkn) {
+		//Set the context as current
+		alure::Context::MakeCurrent(audioCtx);
+
 		while(!stopTkn.stop_requested()) {
 			audioCtx.update();
 		}
