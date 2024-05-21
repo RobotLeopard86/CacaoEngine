@@ -4,6 +4,7 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
 
 #include "Core/Exception.hpp"
