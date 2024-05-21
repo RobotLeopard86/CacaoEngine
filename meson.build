@@ -6,6 +6,17 @@ backend = get_option('use_backend')
 if backend == '__DEFAULT__'
 	error('A backend must be specified!')
 endif
+
+if host_machine.system() == 'windows'
+	add_global_arguments(['-DNOMINMAX'], language: ['c', 'cpp'])
+endif
+
+subsystem = 'console'
+if get_option('windows_noconsole') and host_machine.system() == 'windows'
+	add_project_arguments(['-DCACAO_USE_WINMAIN'], language: 'cpp')
+	subsystem = 'windows'
+endif
+
 subdir('backends' / backend)
 
 subdir('cacao')

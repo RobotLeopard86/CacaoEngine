@@ -46,13 +46,6 @@ spv_glsl = spv_sp.dependency('spirv-cross-glsl')
 spv_hlsl = spv_sp.dependency('spirv-cross-hlsl')
 spv_msl = spv_sp.dependency('spirv-cross-msl')
 
-subsystem = 'console'
-
-if get_option('windows_noconsole') and host_machine.system() == 'windows'
-	add_project_arguments(['-DCACAO_USE_WINMAIN'], language: 'cpp')
-	subsystem = 'windows'
-endif
-
 includes = [
 	'include',
 	'../libs/spdlog/include',
