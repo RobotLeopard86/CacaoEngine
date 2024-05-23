@@ -25,6 +25,9 @@ namespace Cacao {
 		//Components on this entity
 		std::vector<std::shared_ptr<Component>> components;
 
+		//Child entities
+		std::vector<std::shared_ptr<Entity>> children;
+
 		Transform transform;
 
 		//Is this entity active?

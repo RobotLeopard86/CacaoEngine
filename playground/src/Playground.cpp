@@ -42,8 +42,8 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Mesh> mesh;
 	Cacao::AssetHandle<Cacao::Skybox> sky;
 
-	Cacao::Entity cameraManager;
-	std::vector<Cacao::Entity> icospheres;
+	std::shared_ptr<Cacao::Entity> cameraManager;
+	std::vector<std::shared_ptr<Cacao::Entity>> icospheres;
 };
 
 class SussyScript final : public Cacao::Script {
@@ -164,25 +164,25 @@ void PlaygroundApp::Launch() {
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
-	cameraManager.active = true;
-	cameraManager.components.push_back(ss);
-	world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(cameraManager));
+	cameraManager->active = true;
+	cameraManager->components.push_back(ss);
+	world.topLevelEntities.push_back(cameraManager);
 
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(-ICOSPHERE_RANGE, ICOSPHERE_RANGE);
 
 	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
-		icospheres.push_back({});
+		icospheres.push_back(std::make_shared<Entity>());
 		std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
 		mc->SetActive(true);
 		mc->mesh = mesh.GetManagedAsset().get();
 		mc->mat = mat;
-		icospheres[i].components.push_back(mc);
+		icospheres[i]->components.push_back(mc);
 		int x = dist(rng), y = dist(rng), z = dist(rng);
-		icospheres[i].transform.SetPosition({x, y, z});
-		icospheres[i].active = true;
-		world.worldTree.children.push_back(Cacao::TreeItem<Cacao::Entity>(icospheres[i]));
+		icospheres[i]->transform.SetPosition({x, y, z});
+		icospheres[i]->active = true;
+		world.topLevelEntities.push_back(icospheres[i]);
 	}
 
 	world.skybox = sky.GetManagedAsset().get();
