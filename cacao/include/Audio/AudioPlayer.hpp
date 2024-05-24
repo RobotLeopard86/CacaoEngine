@@ -10,9 +10,9 @@ namespace Cacao {
 		bool isLooping;
 		float gain;
 
-		AssetHandle<Sound> sound;
+		//Play the sound
+		void Play();
 
-		AudioPlayer(const UUIDv4::UUID& owner)
-		  : Component(owner) {}
+		AssetHandle<Sound> sound;
 	};
 }

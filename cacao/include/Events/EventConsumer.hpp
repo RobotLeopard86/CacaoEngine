@@ -27,6 +27,10 @@ namespace Cacao {
 		virtual ~EventConsumer() {}
 
 	  protected:
+		//Here so the signal event consumer can initialize itself with a different consumer type
+		EventConsumer() {}
+
+	  private:
 		std::function<void(Event&)> consumer;
 	};
 
@@ -35,13 +39,13 @@ namespace Cacao {
 	//Extension to an event consumer that can work with signals
 	class SignalEventConsumer : public EventConsumer {
 	  public:
-		SignalEventConsumer(std::function<void(Event&)> consumer)
-		  : EventConsumer(consumer) {}
+		SignalEventConsumer(std::function<void(Event&, std::promise<void>&)> consumer)
+		  : EventConsumer(), consumer(consumer) {}
 
 		void ConsumeWithSignal(Event& event, EventSignal& signal) {
-			signalPromise = std::promise<void>();
+			std::promise<void> signalPromise = std::promise<void>();
 			signal.push_back(signalPromise.get_future());
-			consumer(event);
+			consumer(event, signalPromise);
 		}
 
 		//Make the default consume function throw an exception because this kind requires the signal method to be used
@@ -50,6 +54,6 @@ namespace Cacao {
 		}
 
 	  private:
-		std::promise<void> signalPromise;
+		std::function<void(Event&, std::promise<void>&)> consumer;
 	};
 }

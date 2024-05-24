@@ -89,7 +89,7 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	spv_msl,
 ], pic: true)
 
-executable('cacaoengine', 'src/Core/Startup.cpp', build_by_default: true, win_subsystem: subsystem, include_directories: includes, 
+cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', build_by_default: true, win_subsystem: subsystem, include_directories: includes, 
 	build_rpath: '.', link_with: [ libcacao, libbackend ], export_dynamic: true)
 
 subdir_done()

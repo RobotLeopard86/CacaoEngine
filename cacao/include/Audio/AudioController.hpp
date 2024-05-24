@@ -45,6 +45,7 @@ namespace Cacao {
 		void Shutdown();
 
 		bool isRunning;
+		bool isInitialized;
 
 		std::jthread* thread;
 
@@ -52,6 +53,6 @@ namespace Cacao {
 		bool has3DAudioTarget;
 
 		AudioController()
-		  : isRunning(false), thread(nullptr) {}
+		  : isRunning(false), isInitialized(false), thread(nullptr) {}
 	};
 }

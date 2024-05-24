@@ -65,17 +65,18 @@ namespace Cacao {
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
 			std::mutex slMutex {};
 			BS::multi_future<void> slFuture;
-			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, item, &slMutex]() {
+			for(int i = 0; i < activeWorld.topLevelEntities.size(); i++) {
+				std::shared_ptr<Entity> ent = activeWorld.topLevelEntities[i];
+				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, ent, &slMutex]() {
 					//Create script locator function for an entity
-					auto renderLocator = [this, &slMutex](TreeItem<Entity>& e) {
+					auto scriptLocator = [this, &slMutex](std::shared_ptr<Entity> e) {
 						//Sneaky recursive lambda trick
-						auto impl = [this, &slMutex](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [this, &slMutex](std::shared_ptr<Entity> e, auto& implRef) mutable {
 							//Stop if this component is inactive
-							if(!e.val().active) return;
+							if(!e->active) return;
 
 							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e.val().components) {
+							for(std::shared_ptr<Component>& c : e->components) {
 								if(c->GetKind() == "SCRIPT" && c->IsActive()) {
 									//Add to list (once lock is available)
 									slMutex.lock();
@@ -85,15 +86,15 @@ namespace Cacao {
 							}
 
 							//Recurse through children
-							for(TreeItem<Entity>& child : e.children) {
+							for(std::shared_ptr<Entity> child : e->children) {
 								implRef(child, implRef);
 							}
 						};
 						return impl(e, impl);
 					};
 
-					//Execute the script locator (const_cast required because we get a const reference by default and we don't want that)
-					renderLocator(const_cast<TreeItem<Entity>&>(item));
+					//Execute the script locator
+					scriptLocator(ent);
 				}));
 			}
 			//Wait for work to be completed
@@ -109,36 +110,37 @@ namespace Cacao {
 			tickRenderList.clear();
 			std::mutex rlMutex {};
 			BS::multi_future<void> roFuture;
-			for(TreeItem<Entity>& item : activeWorld.worldTree.children) {
-				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, &item, &rlMutex]() {
-					//Create script locator function for an entity
-					auto renderLocator = [this, &rlMutex](TreeItem<Entity>& e) {
+			for(int i = 0; i < activeWorld.topLevelEntities.size(); i++) {
+				std::shared_ptr<Entity> ent = activeWorld.topLevelEntities[i];
+				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, ent, &rlMutex]() {
+					//Create mesh locator function for an entity
+					auto meshLocator = [this, &rlMutex](std::shared_ptr<Entity> e) {
 						//Sneaky recursive lambda trick
-						auto impl = [this, &rlMutex](TreeItem<Entity>& e, auto& implRef) mutable {
+						auto impl = [this, &rlMutex](std::shared_ptr<Entity> e, auto& implRef) mutable {
 							//Stop if this component is inactive
-							if(!e.val().active) return;
+							if(!e->active) return;
 
 							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e.val().components) {
+							for(std::shared_ptr<Component>& c : e->components) {
 								if(c->GetKind() == "MESH" && c->IsActive()) {
 									//Add to list (once lock is available)
-									MeshComponent* mc = static_cast<MeshComponent*>(c.get());
+									MeshComponent* mc = std::dynamic_pointer_cast<MeshComponent>(c).get();
 									rlMutex.lock();
-									this->tickRenderList.push_back(RenderObject(e.val().transform.GetTransformationMatrix(), mc->mesh, mc->mat));
+									this->tickRenderList.push_back(RenderObject(e->transform.GetTransformationMatrix(), mc->mesh, mc->mat));
 									rlMutex.unlock();
 								}
 							}
 
 							//Recurse through children
-							for(TreeItem<Entity>& child : e.children) {
+							for(std::shared_ptr<Entity> child : e->children) {
 								implRef(child, implRef);
 							}
 						};
 						return impl(e, impl);
 					};
 
-					//Execute the mesh locator (const_cast required because we get a const reference by default and we don't want that)
-					renderLocator(const_cast<TreeItem<Entity>&>(item));
+					//Execute the mesh locator
+					meshLocator(ent);
 				}));
 			}
 			//Wait for work to be completed
