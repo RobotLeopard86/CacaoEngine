@@ -164,6 +164,7 @@ void PlaygroundApp::Launch() {
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
+	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
 	cameraManager->active = true;
 	cameraManager->components.push_back(ss);
 	world.topLevelEntities.push_back(cameraManager);
@@ -173,7 +174,10 @@ void PlaygroundApp::Launch() {
 	std::uniform_int_distribution<std::mt19937::result_type> dist(-ICOSPHERE_RANGE, ICOSPHERE_RANGE);
 
 	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
-		icospheres.push_back(std::make_shared<Entity>());
+		std::stringstream ss;
+		ss << "Icosphere #" << (i + 1);
+		Cacao::Logging::ClientLog(ss.str());
+		icospheres.push_back(std::make_shared<Cacao::Entity>(ss.str()));
 		std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
 		mc->SetActive(true);
 		mc->mesh = mesh.GetManagedAsset().get();

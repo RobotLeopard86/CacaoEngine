@@ -78,7 +78,8 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	'src/Shader.cpp',
 	'src/Mesh.cpp',
 	'src/Skybox.cpp',
-	'src/Audio.cpp'
+	'src/Audio.cpp',
+	'src/Sound.cpp'
 ], dependencies: [
 	spv_core,
 	spv_c,

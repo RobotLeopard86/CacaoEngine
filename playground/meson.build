@@ -19,11 +19,13 @@ endforeach
 launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep, sources: 'src/Playground.cpp', build_by_default: true)
 
 run_target('bundle_playground', command: ['python', meson.project_source_root()/'playground'/'bundle.py', meson.project_build_root(), backend], depends: [
-	launch_module
+	launch_module,
+	cacao_exe
 ])
 
 run_target('run_playground', command: ['python', meson.project_source_root()/'playground'/'bundleandrun.py', meson.project_build_root(), backend], depends: [
-	launch_module
+	launch_module,
+	cacao_exe
 ])
 
 subdir_done()

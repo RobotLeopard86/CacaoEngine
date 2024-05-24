@@ -12,6 +12,7 @@
 #include "Core/Log.hpp"
 
 #include <memory>
+#include <string>
 
 #include "uuid_v4.h"
 
@@ -33,7 +34,10 @@ namespace Cacao {
 		//Is this entity active?
 		bool active;
 
-		Entity()
-		  : uuid(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID()), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), active(true) {}
+		//Human-readable name
+		std::string name;
+
+		Entity(std::string name)
+		  : uuid(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID()), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), active(true), name(name) {}
 	};
 }
