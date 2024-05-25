@@ -9,19 +9,20 @@ namespace Cacao {
 	struct ALPlayerData : public NativeData {
 		alure::Source src;
 		SignalEventConsumer* consumer;
-		bool didRegisterConsumer;
+		bool isSetup;
 
 		//If the consumer was registered, unregister and free it
-		void TryDeleteConsumer() {
-			if(didRegisterConsumer) {
+		void TryDelete() {
+			if(isSetup) {
 				EventManager::GetInstance()->UnsubscribeConsumer("AudioContextDestruction", consumer);
 				delete consumer;
-				didRegisterConsumer = false;
+				src.destroy();
+				isSetup = false;
 			}
 		}
 
 		~ALPlayerData() {
-			TryDeleteConsumer();
+			TryDelete();
 		}
 	};
 }
