@@ -113,14 +113,4 @@ namespace Cacao {
 
 		isInitialized = false;
 	}
-
-	void Engine::RegisterBackendExceptions() {
-		Exception::RegisterExceptionCode(100, "BadCompileState");
-		Exception::RegisterExceptionCode(101, "BadBindState");
-		Exception::RegisterExceptionCode(102, "GLFWError");
-		Exception::RegisterExceptionCode(103, "OpenGLError");
-		Exception::RegisterExceptionCode(104, "OpenALError");
-		Exception::RegisterExceptionCode(105, "UniformUploadFailure");
-		Exception::RegisterExceptionCode(106, "RenderThread");
-	}
 }

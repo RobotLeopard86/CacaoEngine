@@ -27,3 +27,5 @@
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Asset.hpp"
 #include "Utilities/AssetManager.hpp"
+#include "Audio/Sound.hpp"
+#include "Audio/AudioPlayer.hpp"

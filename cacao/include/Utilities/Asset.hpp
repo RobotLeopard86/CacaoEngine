@@ -51,13 +51,13 @@ namespace Cacao {
 	  public:
 		//Construct an asset handle with an ID and asset
 		AssetHandle(const std::string& id, std::shared_ptr<T> asset)
-		  : asset(asset), id(id) {
+		  : asset(asset), id(id), isNullHandle(false) {
 			static_assert(std::is_base_of<Asset, T>(), "Cannot construct asset handle with non-subclass of Asset!");
 		}
 
 		//Construct a "null" handle (used for failed asset load calls)
 		AssetHandle()
-		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME") {}
+		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME"), isNullHandle(false) {}
 
 		//Remove from asset cache if this is the last handle
 		~AssetHandle() {
@@ -86,8 +86,14 @@ namespace Cacao {
 			return id;
 		}
 
+		//Is this handle a null handle?
+		bool IsNull() {
+			return isNullHandle;
+		}
+
 	  private:
 		std::shared_ptr<T> asset;
 		std::string id;
+		bool isNullHandle;
 	};
 }

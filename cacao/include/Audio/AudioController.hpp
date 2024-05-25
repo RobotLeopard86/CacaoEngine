@@ -30,6 +30,10 @@ namespace Cacao {
 			return has3DAudioTarget && !target3DAudio.expired();
 		}
 
+		bool IsAudioSystemInitialized() {
+			return isInitialized;
+		}
+
 	  private:
 		//Singleton members
 		static AudioController* instance;

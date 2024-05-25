@@ -41,8 +41,10 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Shader> shader;
 	Cacao::AssetHandle<Cacao::Mesh> mesh;
 	Cacao::AssetHandle<Cacao::Skybox> sky;
+	Cacao::AssetHandle<Cacao::Sound> bgm;
 
 	std::shared_ptr<Cacao::Entity> cameraManager;
+	std::shared_ptr<Cacao::AudioPlayer> audioPlayer;
 	std::vector<std::shared_ptr<Cacao::Entity>> icospheres;
 };
 
@@ -57,7 +59,6 @@ class SussyScript final : public Cacao::Script {
 	void OnTick(double timestep) override {
 		Cacao::World& world = Cacao::WorldManager::GetInstance()->GetActiveWorld();
 		Cacao::PerspectiveCamera* cam = static_cast<Cacao::PerspectiveCamera*>(world.cam);
-		count++;
 		glm::vec3 camRotChange = glm::vec3(0.0f);
 		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_J)) {
 			camRotChange.y -= 0.5f;
@@ -124,17 +125,9 @@ class SussyScript final : public Cacao::Script {
 
 		cam->SetRotation(Orientation(currentRot));
 		cam->SetPosition(currentPos);
-
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_L)) {
-			std::stringstream ci;
-			glm::vec3 lt = cam->GetLookTarget();
-			ci << "Camera Looking At " << lt.x << ", " << lt.y << ", " << lt.z;
-			Cacao::Logging::ClientLog(ci.str());
-		}
 	}
 
   private:
-	int count;
 	glm::vec3 currentRot, currentPos;
 };
 
@@ -152,21 +145,26 @@ void PlaygroundApp::Launch() {
 	std::future<Cacao::AssetHandle<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> meshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj:Icosphere");
-
-	meshFuture.wait();
-	skyFuture.wait();
-	shaderFuture.wait();
+	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.mp3");
 
 	shader = shaderFuture.get();
 	mesh = meshFuture.get();
 	sky = skyFuture.get();
+	bgm = bgmFuture.get();
 
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
+	audioPlayer = std::make_shared<Cacao::AudioPlayer>();
+	audioPlayer->is3D = false;
+	audioPlayer->isLooping = true;
+	audioPlayer->gain = 1.0;
+	audioPlayer->sound = bgm;
+
 	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
 	cameraManager->active = true;
 	cameraManager->components.push_back(ss);
+	cameraManager->components.push_back(audioPlayer);
 	world.topLevelEntities.push_back(cameraManager);
 
 	std::random_device dev;
@@ -190,6 +188,8 @@ void PlaygroundApp::Launch() {
 	}
 
 	world.skybox = sky.GetManagedAsset().get();
+
+	audioPlayer->Play();
 }
 
 extern "C" {

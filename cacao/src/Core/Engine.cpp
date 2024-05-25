@@ -72,20 +72,28 @@ namespace Cacao {
 		threadPool.reset(std::thread::hardware_concurrency() - 2);
 
 		//Set up common skybox resources
-		threadPool.submit_task([]() {
-					  Skybox::CommonSetup();
-				  })
-			.wait();
+		std::future<void> skySetup = threadPool.submit_task([]() {
+			Skybox::CommonSetup();
+		});
+		skySetup.wait();
+
+		//Start audio controller
+		Logging::EngineLog("Starting audio controller...");
+		AudioController::GetInstance()->Start();
+
+		//Since the audio controller is super important, we wait until it comes online
+		while(!AudioController::GetInstance()->IsAudioSystemInitialized()) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		}
 
 		//Launch game module
 		Logging::EngineLog("Running game module startup hook...");
 		auto launchFunc = gameLib->get_function<void(void)>("_CacaoLaunch");
 		launchFunc();
 
-		//Start controllers
-		Logging::EngineLog("Starting controllers...");
+		//Start dynamic tick controller
+		Logging::EngineLog("Starting dynamic tick controller...");
 		DynTickController::GetInstance()->Start();
-		AudioController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
 	}
