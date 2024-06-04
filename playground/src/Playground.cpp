@@ -139,8 +139,11 @@ void PlaygroundApp::Launch() {
 	Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
 	Cacao::World& world = Cacao::WorldManager::GetInstance()->GetWorld("Playground");
 
-	std::shared_ptr<SussyScript> ss = std::make_shared<SussyScript>();
-	ss->SetActive(true);
+	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
+	cameraManager->active = true;
+	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
+	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
+	world.topLevelEntities.push_back(cameraManager);
 
 	std::future<Cacao::AssetHandle<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
@@ -155,17 +158,11 @@ void PlaygroundApp::Launch() {
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
-	audioPlayer = std::make_shared<Cacao::AudioPlayer>();
-	audioPlayer->is3D = false;
-	audioPlayer->isLooping = true;
-	audioPlayer->gain = 1.0;
+	audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(audioPlayerUUID);
+	audioPlayer->Set3DSpatializationEnabled(false);
+	audioPlayer->SetLooping(true);
+	audioPlayer->SetGain(1.0f);
 	audioPlayer->sound = bgm;
-
-	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
-	cameraManager->active = true;
-	cameraManager->components.push_back(ss);
-	cameraManager->components.push_back(audioPlayer);
-	world.topLevelEntities.push_back(cameraManager);
 
 	std::random_device dev;
 	std::mt19937 rng(dev());
@@ -173,17 +170,18 @@ void PlaygroundApp::Launch() {
 
 	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
 		std::stringstream ss;
-		ss << "Icosphere #" << (i + 1);
-		Cacao::Logging::ClientLog(ss.str());
+		ss << "Icosphere" << i;
 		icospheres.push_back(std::make_shared<Cacao::Entity>(ss.str()));
-		std::shared_ptr<Cacao::MeshComponent> mc = std::make_shared<Cacao::MeshComponent>();
+		std::shared_ptr<Cacao::MeshComponent> mc = icospheres[i]->GetComponent<Cacao::MeshComponent>(icospheres[i]->MountComponent<Cacao::MeshComponent>());
 		mc->SetActive(true);
 		mc->mesh = mesh.GetManagedAsset().get();
 		mc->mat = mat;
-		icospheres[i]->components.push_back(mc);
+		mc.reset();
+
 		int x = dist(rng), y = dist(rng), z = dist(rng);
 		icospheres[i]->transform.SetPosition({x, y, z});
 		icospheres[i]->active = true;
+
 		world.topLevelEntities.push_back(icospheres[i]);
 	}
 

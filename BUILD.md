@@ -2,6 +2,7 @@
 
 ## VERY IMPORTANT
 * Cacao Engine is currently only known to build correctly on x86_64 GNU/Linux. While it may build on other platforms, it has not been tested.
+* Cacao Engine is currently only known to build correctly using Clang and LLD. While it may build with other compilers/linkers, it has not been tested.
 * This project contains Git submodules. Make sure to clone recursively.
 
 ## Prerequisites

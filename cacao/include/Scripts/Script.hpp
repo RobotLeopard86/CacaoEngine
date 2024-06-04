@@ -20,13 +20,13 @@ namespace Cacao {
 
 		//Get and set the active state
 		void SetActive(bool val) override final {
-			bool prevActive = active;
-			active = val;
-			if(active && !prevActive) {
+			bool prevActive = this->IsActive();
+			_SetActiveInternal(val);
+			if(this->IsActive() && !prevActive) {
 				OnActivate();
 				return;
 			}
-			if(!active && prevActive) {
+			if(!this->IsActive() && prevActive) {
 				OnDeactivate();
 				return;
 			}

@@ -40,6 +40,7 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(7, "FileOpenFailure");
 		Exception::RegisterExceptionCode(8, "EventManager");
 		Exception::RegisterExceptionCode(9, "ContainerValue");
+		Exception::RegisterExceptionCode(10, "WrongType");
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");

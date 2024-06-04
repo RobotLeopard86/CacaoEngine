@@ -75,8 +75,8 @@ namespace Cacao {
 							//Stop if this component is inactive
 							if(!e->active) return;
 
-							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e->components) {
+							//Check for scripts
+							for(std::shared_ptr<Component>& c : e->GetComponentsAsList()) {
 								if(c->GetKind() == "SCRIPT" && c->IsActive()) {
 									//Add to list (once lock is available)
 									slMutex.lock();
@@ -121,7 +121,7 @@ namespace Cacao {
 							if(!e->active) return;
 
 							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e->components) {
+							for(std::shared_ptr<Component>& c : e->GetComponentsAsList()) {
 								if(c->GetKind() == "MESH" && c->IsActive()) {
 									//Add to list (once lock is available)
 									MeshComponent* mc = std::dynamic_pointer_cast<MeshComponent>(c).get();
