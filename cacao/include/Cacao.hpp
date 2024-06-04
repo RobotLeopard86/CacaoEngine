@@ -16,6 +16,7 @@
 #include "World/Entity.hpp"
 #include "World/World.hpp"
 #include "World/WorldManager.hpp"
+#include "Scripts/Script.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/Window.hpp"
 #include "Graphics/Textures/Cubemap.hpp"

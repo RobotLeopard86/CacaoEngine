@@ -17,7 +17,8 @@
 #define s_nd(s_hndl) ((ALSoundData*)s_hndl->GetNativeData(true))
 
 namespace Cacao {
-	AudioPlayer::AudioPlayer() {
+	AudioPlayer::AudioPlayer()
+	  : sound(), is3D(false), isLooping(false), gain(1.0f) {
 		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to create audio source!");
 
 		//Create native data
@@ -25,6 +26,7 @@ namespace Cacao {
 
 		//Create audio source object
 		nd->src = audioCtx.createSource();
+		nd->src.setRelative(true);
 
 		//Register releaser on audio context destruction
 		nd->consumer = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
@@ -40,13 +42,10 @@ namespace Cacao {
 		CheckException(!sound.IsNull(), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot play sound that doesn't exist!")
 		CheckException(!nd->src.isPlaying(), Exception::GetExceptionCodeFromMeaning("AudioError"), "Cannot play sound from player that is already playing a sound!")
 
-		//Configure source properties
-		nd->src.setGain(gain);
-		nd->src.set3DSpatialize(is3D ? alure::Spatialize::On : alure::Spatialize::Off);
-		nd->src.setLooping(isLooping);
-
 		//Start playing sound buffer
 		nd->src.play(s_nd(sound)->data);
+
+		isPlaying = true;
 	}
 
 	void AudioPlayer::Stop() {
@@ -54,5 +53,22 @@ namespace Cacao {
 
 		//Stop playing sound
 		nd->src.stop();
+		isPlaying = false;
+	}
+
+	void AudioPlayer::RefreshPlayState() {
+		isPlaying = nd->src.isPlaying();
+	}
+
+	void AudioPlayer::On3DChange() {
+		nd->src.set3DSpatialize(is3D ? alure::Spatialize::On : alure::Spatialize::Off);
+	}
+
+	void AudioPlayer::OnLoopChange() {
+		nd->src.setLooping(isLooping);
+	}
+
+	void AudioPlayer::OnGainChange() {
+		nd->src.setGain(gain);
 	}
 }
