@@ -19,6 +19,9 @@ More features may come in the future, so stay tuned!
 ## Building
 See the [build instructions page](BUILD.md) for information.
 
+## Branching Scheme
+Cacao Engine uses two branches, `main` and `dev`. `main` should be considered stable and should **NEVER** be pushed to on its own. `dev` is where main work can happen and is allowed to be unstable and break. Only once `dev` is in a stable state can it be merged into `main` via a pull request.
+
 ## Licenses
 Cacao Engine is licensed under the Apache License 2.0, which can be found in the root directory. All third-party licenses are present in the `licenses` folder.
-Note: Assimp comes with other libraries as dependencies and the licenses for those libraries are available in their directories within the assimp library directory.
+Any third-party code used by these libraries should have their licenses located within the appropriate project directory (these may not be downloaded until build-time by Meson).
