@@ -81,7 +81,7 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	'src/Audio.cpp',
 	'src/Sound.cpp',
 	'src/AudioPlayer.cpp',
-	'src/Errors.cpp'
+	'src/Exceptioncodes.cpp'
 ], dependencies: [
 	spv_core,
 	spv_c,
