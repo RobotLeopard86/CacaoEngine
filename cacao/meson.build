@@ -59,6 +59,10 @@ cxx = meson.get_compiler('cpp')
 libm = cxx.find_library('m', required: false)
 libdl = cxx.find_library('dl', required: false)
 
+glslc_text_cmd = [ glslc, '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@']
+custom_target('sky_vertex', command: glslc_text_cmd, input: 'shaders/skybox.vert', output: '@PLAINNAME@.txt', build_always_stale: true, build_by_default: true)
+custom_target('sky_frag', command: glslc_text_cmd, input: 'shaders/skybox.frag', output: '@PLAINNAME@.txt', build_always_stale: true, build_by_default: true)
+
 libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	'src/Core/Log.cpp',
 	'src/Core/Assert.cpp',

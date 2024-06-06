@@ -11,7 +11,7 @@
 * CMake (for dependencies)
 * (reccommended but optional) Clang
 * (reccommended but optional) LLD
-* GLSLC (for playground)
+* GLSLC (for shaders)
 
 ## 1. Environment Set-Up
 To build Cacao Engine, the prerequisites listed above are required. You can install Meson as listed on their website [here](https://mesonbuild.com/SimpleStart.html#installing-meson). CMake is also simple. On Linux, it should be available in your package manager. For Windows and macOS users, you can get CMake on their website's [download page](https://cmake.org/download/#latest). Clang and LLD, though optional, are reccommended and are the compilers that Cacao Engine is designed to work on. Like CMake, they should be available in your Linux package manager, and can be downloaded on Windows and macOS from [the LLVM website](https://releases.llvm.org/). Finally, GLSLC is available as part of the Vulkan SDK (download that [here](https://vulkan.lunarg.com/sdk/home)), or can be downloaded standalone from the [project GitHub](https://github.com/google/shaderc/blob/main/downloads.md).

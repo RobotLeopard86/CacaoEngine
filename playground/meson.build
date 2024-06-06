@@ -1,20 +1,6 @@
-glslc = find_program('glslc')
-
-shaders = [
-	'src/shaders/color.vert',
-	'src/shaders/color.frag'
-]
-shader_targets = []
-
-foreach shader : shaders
-	split = shader.split('/')
-	shader_targets += custom_target('shader @0@'.format(split[-1]),
-		command: [glslc, '@INPUT@', '-o', '@OUTPUT@'],
-		input: shader,
-		output: '@PLAINNAME@.spv',
-		build_by_default: true
-	)
-endforeach
+glslc_spv_cmd = [ glslc, '-mfmt=bin', '-o', '@OUTPUT@', '@INPUT@']
+custom_target('playground_shaders:color.vert', command: glslc_spv_cmd, input: 'src/shaders/color.vert', output: '@PLAINNAME@.spv', build_always_stale: true, build_by_default: true)
+custom_target('playground_shaders:color.frag', command: glslc_spv_cmd, input: 'src/shaders/color.frag', output: '@PLAINNAME@.spv', build_always_stale: true, build_by_default: true)
 
 launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep, sources: 'src/Playground.cpp', build_by_default: true)
 

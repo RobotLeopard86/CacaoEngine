@@ -1,14 +1,14 @@
 #include "Graphics/Shader.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
-#include "GLShaderData.hpp"
+#include "ESShaderData.hpp"
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
-#include "GLUtils.hpp"
+#include "ESUtils.hpp"
 
-#include "glad/gl.h"
+#include "glad/gles2.h"
 #include "spirv_glsl.hpp"
 #include "spirv_cross.hpp"
 #include "spirv_parser.hpp"
@@ -19,13 +19,14 @@
 #include <cstring>
 #include <utility>
 #include <future>
+#include <iostream>
 
 //For my sanity
-#define nd ((GLShaderData*)nativeData)
+#define nd ((ESShaderData*)nativeData)
 
 namespace Cacao {
 	//A required static member initialization
-	GLuint GLShaderData::uboIndexCounter = 0;
+	GLuint ESShaderData::uboIndexCounter = 0;
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
 	  : Asset(false), bound(false), specification(spec) {
@@ -70,14 +71,14 @@ namespace Cacao {
 		fclose(ff);
 
 		//Create native data
-		nativeData = new GLShaderData();
+		nativeData = new ESShaderData();
 
 		//Convert SPIR-V to GLSL
 
 		//Create common options
 		spirv_cross::CompilerGLSL::Options options;
-		options.es = false;
-		options.version = 330;
+		options.es = true;
+		options.version = 300;
 		options.enable_420pack_extension = false;
 
 		//Parse SPIR-V IR
@@ -110,14 +111,14 @@ namespace Cacao {
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
 	  : Asset(false), bound(false), specification(spec) {
 		//Create native data
-		nativeData = new GLShaderData();
+		nativeData = new ESShaderData();
 
 		//Convert SPIR-V to GLSL
 
 		//Create common options
 		spirv_cross::CompilerGLSL::Options options;
-		options.es = false;
-		options.version = 330;
+		options.es = true;
+		options.version = 300;
 		options.enable_420pack_extension = false;
 
 		//Parse SPIR-V IR
@@ -149,7 +150,7 @@ namespace Cacao {
 
 	std::shared_future<void> Shader::Compile() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL ES on the main thread
 			return InvokeGL([this]() {
 				this->Compile();
 			});
@@ -176,7 +177,7 @@ namespace Cacao {
 			//Clean up resources
 			glDeleteShader(compiledVertexShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGLError"), std::string("Vertex shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Vertex shader compilation failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -201,7 +202,7 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGLError"), std::string("Fragment shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Fragment shader compilation failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -229,7 +230,7 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGLError"), std::string("Shader linking failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Shader linking failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -248,11 +249,11 @@ namespace Cacao {
 		//Link Cacao data UBO
 		GLuint cacaoUBOIndex = glGetUniformBlockIndex(program, "CacaoData");
 		CheckException(cacaoUBOIndex != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the CacaoData uniform block!")
-		glUniformBlockBinding(program, cacaoUBOIndex, GLShaderData::uboIndexCounter);
-		glBindBufferBase(GL_UNIFORM_BUFFER, GLShaderData::uboIndexCounter, nd->cacaoDataUBO);
+		glUniformBlockBinding(program, cacaoUBOIndex, ESShaderData::uboIndexCounter);
+		glBindBufferBase(GL_UNIFORM_BUFFER, ESShaderData::uboIndexCounter, nd->cacaoDataUBO);
 
 		//Increment UBO index counter
-		GLShaderData::uboIndexCounter++;
+		ESShaderData::uboIndexCounter++;
 
 		//Set GPU ID and compiled values
 		nd->gpuID = program;
@@ -264,7 +265,7 @@ namespace Cacao {
 
 	void Shader::Release() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Try to invoke OpenGL and throw any exceptions back to the initial caller
+			//Try to invoke OpenGL ES and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
 					this->Release();
@@ -303,7 +304,7 @@ namespace Cacao {
 
 	void Shader::UploadData(ShaderUploadData& data) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL ES on the main thread
 			InvokeGL([this, data]() {
 				this->UploadData(const_cast<ShaderUploadData&>(data));
 			});
@@ -335,6 +336,10 @@ namespace Cacao {
 			ulocPath << (info.type == SpvType::SampledImage ? "" : "shader.") << item.target;
 			GLint uniformLocation = glGetUniformLocation(nd->gpuID, ulocPath.str().c_str());
 			CheckException(uniformLocation != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the requested uniform!")
+
+			//Confirm that spec does not contain types that OpenGL ES doesn't support
+			CheckException(info.type != SpvType::Double, Exception::GetExceptionCodeFromMeaning("UnsupportedType"), "OpenGL ES does not support double-precision types for shaders!")
+			CheckException(info.type != SpvType::Int64 && info.type != SpvType::UInt64, Exception::GetExceptionCodeFromMeaning("UnsupportedType"), "OpenGL ES does not support 64-bit types for shaders!")
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
@@ -411,22 +416,6 @@ namespace Cacao {
 						//Increment slot counter
 						imageSlotCounter++;
 						break;
-					case SpvType::Int64:
-						switch(dims) {
-							case 1:
-								glUniform1i64ARB(uniformLocation, std::any_cast<int64_t>(item.data));
-								break;
-							case 2:
-								glUniform2i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec2>(item.data)));
-								break;
-							case 3:
-								glUniform3i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec3>(item.data)));
-								break;
-							case 4:
-								glUniform4i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec4>(item.data)));
-								break;
-						}
-						break;
 					case SpvType::UInt:
 						switch(dims) {
 							case 1:
@@ -440,22 +429,6 @@ namespace Cacao {
 								break;
 							case 4:
 								glUniform4uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec4>(item.data)));
-								break;
-						}
-						break;
-					case SpvType::UInt64:
-						switch(dims) {
-							case 1:
-								glUniform1ui64ARB(uniformLocation, std::any_cast<uint64_t>(item.data));
-								break;
-							case 2:
-								glUniform2ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec2>(item.data)));
-								break;
-							case 3:
-								glUniform3ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec3>(item.data)));
-								break;
-							case 4:
-								glUniform4ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec4>(item.data)));
 								break;
 						}
 						break;
@@ -502,49 +475,6 @@ namespace Cacao {
 								break;
 						}
 						break;
-					case SpvType::Double:
-						switch(dims) {
-							case 1:
-								glUniform1d(uniformLocation, std::any_cast<double>(item.data));
-								break;
-							case 2:
-								glUniform2dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec2>(item.data)));
-								break;
-							case 3:
-								glUniform3dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec3>(item.data)));
-								break;
-							case 4:
-								glUniform4dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec4>(item.data)));
-								break;
-							case 6:
-								glUniformMatrix2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2>(item.data)));
-								break;
-							case 7:
-								glUniformMatrix2x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data)));
-								break;
-							case 8:
-								glUniformMatrix2x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data)));
-								break;
-							case 10:
-								glUniformMatrix3x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data)));
-								break;
-							case 11:
-								glUniformMatrix3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3>(item.data)));
-								break;
-							case 12:
-								glUniformMatrix3x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data)));
-								break;
-							case 14:
-								glUniformMatrix4x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data)));
-								break;
-							case 15:
-								glUniformMatrix4x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data)));
-								break;
-							case 16:
-								glUniformMatrix4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4>(item.data)));
-								break;
-						}
-						break;
 				}
 			} catch(const std::bad_cast&) {
 				CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Failed cast of shader upload value to type specified in target!")
@@ -560,7 +490,7 @@ namespace Cacao {
 
 	void Shader::UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL ES on the main thread
 			InvokeGL([this, projection, view, transform]() {
 				this->UploadCacaoData(projection, view, transform);
 			});

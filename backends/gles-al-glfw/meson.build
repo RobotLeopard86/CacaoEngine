@@ -75,7 +75,7 @@ include_dirs = [
 ]
 
 libbackend = shared_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/OpenGL.cpp',
+	'src/GLES.cpp',
 	'src/Window.cpp',
 	'src/Texture2D.cpp',
 	'src/Cubemap.cpp',
