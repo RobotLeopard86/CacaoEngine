@@ -158,17 +158,31 @@ namespace Cacao {
 		}
 	}
 
-	void Window::UpdateModeState() {
+	void Window::UpdateModeState(WindowMode lastMode) {
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* modeInfo = glfwGetVideoMode(monitor);
 		switch(mode) {
 			case WindowMode::Window:
-				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, 0, 0, size.x, size.y, GLFW_DONT_CARE);
+				if(lastMode == WindowMode::Borderless) {
+					//Exiting borderless is weird so we go to fullscreen for a sec to fix that
+					glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
+				}
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, windowedPosition.x, windowedPosition.y, size.x, size.y, GLFW_DONT_CARE);
+				glfwSetWindowAttrib((GLFWwindow*)nativeWindow, GLFW_DECORATED, GLFW_TRUE);
 				break;
 			case WindowMode::Fullscreen:
-				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, glfwGetPrimaryMonitor(), 0, 0, size.x, size.y, GLFW_DONT_CARE);
+				if(lastMode == WindowMode::Window) {
+					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+				}
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
 				break;
 			case WindowMode::Borderless:
-				const GLFWvidmode* monitorVidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, glfwGetPrimaryMonitor(), 0, 0, monitorVidMode->width, monitorVidMode->height, monitorVidMode->refreshRate);
+				if(lastMode == WindowMode::Window) {
+					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+				}
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
+				glfwSetWindowAttrib((GLFWwindow*)nativeWindow, GLFW_DECORATED, GLFW_FALSE);
+				glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
 				break;
 		}
 	}

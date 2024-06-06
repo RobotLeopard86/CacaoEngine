@@ -84,8 +84,9 @@ namespace Cacao {
 		//Set the current window mode
 		void SetMode(WindowMode newMode) {
 			if(!isOpen) return;
+			WindowMode last = mode;
 			mode = newMode;
-			UpdateModeState();
+			UpdateModeState(last);
 		}
 
 		//Get window instance
@@ -108,11 +109,15 @@ namespace Cacao {
 
 		WindowMode mode;
 
+		//The last known window position
+		//Used for switching between modes
+		glm::ivec2 windowedPosition;
+
 		void* nativeWindow;
 
 		void UpdateVSyncState();
 		void UpdateWindowSize();
 		void UpdateVisibilityState();
-		void UpdateModeState();
+		void UpdateModeState(WindowMode lastMode);
 	};
 }
