@@ -26,8 +26,10 @@ namespace Cacao {
 		return instance;
 	}
 
-	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY, bool startVisible) {
+	void Window::Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode) {
 		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
+
+		size = initialSize;
 
 		//Initialize GLFW
 		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
@@ -50,14 +52,14 @@ namespace Cacao {
 		if(!startVisible) glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 		//Create window
-		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
+		nativeWindow = glfwCreateWindow(initialSize.x, initialSize.y, windowTitle.c_str(), NULL, NULL);
 		EngineAssert(nativeWindow != NULL, "Failed to open the window!");
+
+		//Set the window mode
+		SetMode(mode);
 
 		//Set window VSync state
 		SetVSyncEnabled(true);
-
-		//Set window object size parameters
-		size = {initialSizeX, initialSizeY};
 
 		//Register window callbacks
 		glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double x, double y) {
@@ -153,6 +155,21 @@ namespace Cacao {
 			glfwShowWindow((GLFWwindow*)nativeWindow);
 		} else {
 			glfwHideWindow((GLFWwindow*)nativeWindow);
+		}
+	}
+
+	void Window::UpdateModeState() {
+		switch(mode) {
+			case WindowMode::Window:
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, 0, 0, size.x, size.y, GLFW_DONT_CARE);
+				break;
+			case WindowMode::Fullscreen:
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, glfwGetPrimaryMonitor(), 0, 0, size.x, size.y, GLFW_DONT_CARE);
+				break;
+			case WindowMode::Borderless:
+				const GLFWvidmode* monitorVidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, glfwGetPrimaryMonitor(), 0, 0, monitorVidMode->width, monitorVidMode->height, monitorVidMode->refreshRate);
+				break;
 		}
 	}
 

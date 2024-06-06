@@ -129,7 +129,7 @@ namespace Cacao {
 		cfg.maxFrameLag = 10;
 
 		//Open the window
-		Window::GetInstance()->Open("Cacao Engine", 1280, 720, true);
+		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, true, WindowMode::Window);
 
 		//Initialize rendering backend
 		Logging::EngineLog("Initializing rendering backend...");
