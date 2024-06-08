@@ -60,15 +60,12 @@ class SussyScript final : public Cacao::Script {
 	void OnTick(double timestep) override {
 		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_LEFT_CONTROL) && !usedCtrl) {
 			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_F)) {
-				Cacao::Logging::ClientLog("CTRL+F");
 				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Fullscreen);
 				usedCtrl = true;
 			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_B)) {
-				Cacao::Logging::ClientLog("CTRL+O");
 				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Borderless);
 				usedCtrl = true;
 			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)) {
-				Cacao::Logging::ClientLog("CTRL+H");
 				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Window);
 				usedCtrl = true;
 			}

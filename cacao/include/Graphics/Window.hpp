@@ -119,5 +119,11 @@ namespace Cacao {
 		void UpdateWindowSize();
 		void UpdateVisibilityState();
 		void UpdateModeState(WindowMode lastMode);
+
+		//For changing the window size from implementation without generating more resize events
+		friend void ChangeSize(Window* win, glm::ivec2 size) {
+			win->size = size;
+		}
+		friend struct WindowResizer;
 	};
 }

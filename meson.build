@@ -23,8 +23,16 @@ endif
 
 glslc = find_program('glslc')
 
-subdir('backends' / backend)
+glslc_text_cmd = [ glslc, '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@']
+skyvert = custom_target('sky_vertex', command: glslc_text_cmd, input: 'cacao/shaders/skybox.vert', output: '@PLAINNAME@.txt')
+skyfrag = custom_target('sky_frag', command: glslc_text_cmd, input: 'cacao/shaders/skybox.frag', output: '@PLAINNAME@.txt')
 
+skyshaders_dep = declare_dependency(sources: [
+	skyvert,
+	skyfrag
+])
+
+subdir('backends' / backend)
 subdir('cacao')
 
 cacao_dep = declare_dependency(include_directories: [
@@ -43,7 +51,8 @@ cacao_dep = declare_dependency(include_directories: [
 	spv_util,
 	spv_glsl,
 	spv_hlsl,
-	spv_msl
+	spv_msl,
+	skyshaders_dep
 ], link_with: [
 	libbackend,
 	libcacao

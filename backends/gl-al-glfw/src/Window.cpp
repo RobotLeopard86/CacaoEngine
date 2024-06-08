@@ -14,6 +14,15 @@ namespace Cacao {
 	Window* Window::instance = nullptr;
 	bool Window::instanceExists = false;
 
+	//Simple friend struct to set window size without function that causes more size events
+	struct WindowResizer {
+		friend Window;
+
+		void Resize(glm::ivec2 size) {
+			ChangeSize(Window::GetInstance(), size);
+		}
+	};
+
 	//Singleton accessor
 	Window* Window::GetInstance() {
 		//Do we have an instance yet?
@@ -24,6 +33,13 @@ namespace Cacao {
 		}
 
 		return instance;
+	}
+
+	//Utility for resizing the GL viewport
+	void ResizeGLViewport(GLFWwindow* win) {
+		int fbx, fby;
+		glfwGetFramebufferSize(win, &fbx, &fby);
+		glViewport(0, 0, fbx, fby);
 	}
 
 	void Window::Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode) {
@@ -71,7 +87,10 @@ namespace Cacao {
 			EventManager::GetInstance()->Dispatch(mse);
 		});
 		glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int x, int y) {
-			Window::GetInstance()->SetSize({x, y});
+			if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
+				WindowResizer().Resize({x, y});
+			}
+			ResizeGLViewport(win);
 			DataEvent<glm::ivec2> wre("WindowResize", {x, y});
 			EventManager::GetInstance()->Dispatch(wre);
 		});
@@ -145,9 +164,7 @@ namespace Cacao {
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
 
 		//Update OpenGL framebuffer size
-		int fbx, fby;
-		glfwGetFramebufferSize((GLFWwindow*)nativeWindow, &fbx, &fby);
-		glViewport(0, 0, fbx, fby);
+		ResizeGLViewport((GLFWwindow*)nativeWindow);
 	}
 
 	void Window::UpdateVisibilityState() {
@@ -168,7 +185,6 @@ namespace Cacao {
 					glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
 				}
 				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, windowedPosition.x, windowedPosition.y, size.x, size.y, GLFW_DONT_CARE);
-				glfwSetWindowAttrib((GLFWwindow*)nativeWindow, GLFW_DECORATED, GLFW_TRUE);
 				break;
 			case WindowMode::Fullscreen:
 				if(lastMode == WindowMode::Window) {
@@ -181,7 +197,6 @@ namespace Cacao {
 					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
 				}
 				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
-				glfwSetWindowAttrib((GLFWwindow*)nativeWindow, GLFW_DECORATED, GLFW_FALSE);
 				glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
 				break;
 		}

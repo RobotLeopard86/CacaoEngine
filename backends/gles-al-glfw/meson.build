@@ -102,7 +102,8 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	alsoft_dep,
 	alure_dep,
 	glad_dep,
-	stb_dep
+	stb_dep,
+	skyshaders_dep
 ], override_options: [ 'b_lundef=false' ])
 
 ninja = find_program('ninja')

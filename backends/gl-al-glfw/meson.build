@@ -1,6 +1,6 @@
 cmake = import('cmake')
 
-glad_dep = subproject('glad', required: true, default_options: [ 'what=gles' ]).get_variable('glad_dep')
+glad_dep = subproject('glad', required: true, default_options: [ 'what=gl' ]).get_variable('glad_dep')
 stb_dep = subproject('stb', required: true).get_variable('stb_dep')
 
 spv_opts = cmake.subproject_options()
@@ -102,7 +102,8 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	alsoft_dep,
 	alure_dep,
 	glad_dep,
-	stb_dep
+	stb_dep,
+	skyshaders_dep
 ], override_options: [ 'b_lundef=false' ])
 
 ninja = find_program('ninja')
