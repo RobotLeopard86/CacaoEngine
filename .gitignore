@@ -10,4 +10,4 @@ subprojects/*
 !subprojects/*.wrap
 
 # Don't send Python crap from utility scripts
-playground/__pycache__
+scripts/__pycache__

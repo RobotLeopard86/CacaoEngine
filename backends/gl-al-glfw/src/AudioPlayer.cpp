@@ -18,7 +18,7 @@
 
 namespace Cacao {
 	AudioPlayer::AudioPlayer()
-	  : sound(), is3D(false), isLooping(false), gain(1.0f) {
+	  : sound(), is3D(false), isLooping(false), gain(1.0f), isPlaying(false), isConnected(false) {
 		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to create audio source!");
 
 		//Create native data

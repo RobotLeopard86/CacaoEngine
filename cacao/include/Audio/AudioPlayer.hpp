@@ -9,8 +9,16 @@ namespace Cacao {
 	  public:
 		AudioPlayer();
 		~AudioPlayer() {
+			if(isConnected) Disconnect();
 			delete nativeData;
 		}
+
+		//Connect to the audio system
+		//Required for all functionality
+		void Connect();
+
+		//Disconnect from the audio system
+		void Disconnect();
 
 		//Play the sound
 		void Play();
@@ -64,5 +72,6 @@ namespace Cacao {
 		void RefreshPlayState();
 
 		bool isPlaying;
+		bool isConnected;
 	};
 }

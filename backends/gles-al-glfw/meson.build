@@ -22,7 +22,7 @@ spv_msl = spv_sp.dependency('spirv-cross-msl')
 
 glfw_opts = cmake.subproject_options()
 glfw_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'ON',
+	'BUILD_SHARED_LIBS': 'OFF',
 	'GLFW_BUILD_TESTS': 'OFF',
 	'GLFW_BUILD_DOCS': 'OFF',
 	'GLFW_BUILD_EXAMPLES': 'OFF'
@@ -74,19 +74,7 @@ include_dirs = [
 	include_directories('../../cacao')
 ]
 
-libbackend = shared_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/GLES.cpp',
-	'src/Window.cpp',
-	'src/Texture2D.cpp',
-	'src/Cubemap.cpp',
-	'src/Shader.cpp',
-	'src/Mesh.cpp',
-	'src/Skybox.cpp',
-	'src/Audio.cpp',
-	'src/Sound.cpp',
-	'src/AudioPlayer.cpp',
-	'src/ExceptionCodes.cpp'
-], dependencies: [
+backend_deplist = [
 	spv_core,
 	spv_c,
 	spv_cpp,
@@ -103,8 +91,29 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	alure_dep,
 	glad_dep,
 	stb_dep,
-	skyshaders_dep
-], override_options: [ 'b_lundef=false' ])
+	skyshaders_dep,
+	meson.get_compiler('cpp').find_library('atomic', required: true)
+]
+
+pipewire_check = run_command([python, meson.global_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()
+if pipewire_check == 0
+	find_program('pkg-config')
+	backend_deplist += dependency('libpipewire-0.3', method: 'pkg-config')
+endif
+
+libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
+	'src/GLES.cpp',
+	'src/Window.cpp',
+	'src/Texture2D.cpp',
+	'src/Cubemap.cpp',
+	'src/Shader.cpp',
+	'src/Mesh.cpp',
+	'src/Skybox.cpp',
+	'src/Audio.cpp',
+	'src/Sound.cpp',
+	'src/AudioPlayer.cpp',
+	'src/ExceptionCodes.cpp'
+], dependencies: backend_deplist)
 
 ninja = find_program('ninja')
 run_command([ ninja, '-C', meson.project_build_root()/'subprojects/albundle/__CMake_build', 'openal-soft/CMakeFiles/build_version'], check: true)

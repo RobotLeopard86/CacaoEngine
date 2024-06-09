@@ -1,5 +1,6 @@
 #include "Audio/AudioController.hpp"
 #include "AudioObjectHolder.hpp"
+#include "Audio/AudioPlayer.hpp"
 #include "Events/EventSystem.hpp"
 #include "Utilities/MiscUtils.hpp"
 

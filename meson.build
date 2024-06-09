@@ -32,6 +32,8 @@ skyshaders_dep = declare_dependency(sources: [
 	skyfrag
 ])
 
+python = find_program('python')
+
 subdir('backends' / backend)
 subdir('cacao')
 

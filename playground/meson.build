@@ -8,12 +8,12 @@ launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep
 	colorfrag
 ], build_by_default: true)
 
-run_target('bundle_playground', command: ['python', meson.project_source_root()/'playground'/'bundle.py', meson.project_build_root(), backend], depends: [
+run_target('bundle_playground', command: [python, meson.global_source_root()/'scripts'/'bundle_playground.py'], depends: [
 	launch_module,
 	cacao_exe
 ])
 
-run_target('run_playground', command: ['python', meson.project_source_root()/'playground'/'bundleandrun.py', meson.project_build_root(), backend], depends: [
+run_target('run_playground', command: [python, meson.global_source_root()/'scripts'/'playground_bundleandrun.py'], depends: [
 	launch_module,
 	cacao_exe
 ])
