@@ -69,6 +69,28 @@ namespace Cacao {
 				}
 			}
 
+			//Process the next audio job if there is one
+			jobQueueMutex.lock();
+			if(!audioJobs.empty()) {
+				//Fetch the next task and unlock
+				Task next = audioJobs.front();
+				audioJobs.pop();
+				jobQueueMutex.unlock();
+
+				//Run the task
+				try {
+					//next.func();
+
+					//Mark task as done
+					next.status->set_value();
+				} catch(...) {
+					next.status->set_exception(std::current_exception());
+				}
+			} else {
+				//Unlock immediately as there's nothing to do
+				jobQueueMutex.unlock();
+			}
+
 			//Update audio context
 			audioCtx.update();
 		}
@@ -100,5 +122,20 @@ namespace Cacao {
 
 		target3DAudio = entity;
 		has3DAudioTarget = true;
+	}
+
+	std::shared_future<void> AudioController::RunAudioThreadJob(std::function<void()> job) {
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Can't run job on audio thread when audio controller is uninitialized!");
+
+		//Acquire a lock on the job queue
+		jobQueueMutex.lock();
+
+		//Add the task to the queue
+		Task task = audioJobs.emplace(job);
+
+		//Release the lock
+		jobQueueMutex.unlock();
+
+		return task.status->get_future().share();
 	}
 }

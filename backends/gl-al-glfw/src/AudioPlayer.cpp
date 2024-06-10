@@ -18,57 +18,81 @@
 
 namespace Cacao {
 	AudioPlayer::AudioPlayer()
-	  : sound(), is3D(false), isLooping(false), gain(1.0f), isPlaying(false), isConnected(false) {
+	  : sound(), is3D(false), isLooping(false), gain(1.0f), isPlaying(false) {
 		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to create audio source!");
 
 		//Create native data
 		nativeData = new ALPlayerData();
 
-		//Create audio source object
-		nd->src = audioCtx.createSource();
-		nd->src.setRelative(true);
+		//Run audio-specific code on audio thread
+		std::shared_future<void> setupJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			//Create audio source object
+			alure::Context::MakeCurrent(audioCtx);
+			nd->src = audioCtx.createSource();
+			nd->src.setRelative(true);
 
-		//Register releaser on audio context destruction
-		nd->consumer = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
-			//Release data
-			nd->TryDelete();
+			//Register releaser on audio context destruction
+			nd->consumer = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
+				//Release data
+				nd->TryDelete();
 
-			p.set_value();
+				p.set_value();
+			});
+			nd->isSetup = true;
 		});
-		nd->isSetup = true;
+		setupJob.wait();
 	}
 
 	void AudioPlayer::Play() {
 		CheckException(!sound.IsNull(), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot play sound that doesn't exist!")
-		CheckException(!nd->src.isPlaying(), Exception::GetExceptionCodeFromMeaning("AudioError"), "Cannot play sound from player that is already playing a sound!")
+		CheckException(!isPlaying, Exception::GetExceptionCodeFromMeaning("AudioError"), "Cannot play sound from player that is already playing a sound!")
 
-		//Start playing sound buffer
-		nd->src.play(s_nd(sound)->data);
+		std::shared_future<void> playJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			//Start playing sound buffer
+			nd->src.play(s_nd(sound)->data);
 
-		isPlaying = true;
+			isPlaying = true;
+		});
+		playJob.wait();
 	}
 
 	void AudioPlayer::Stop() {
-		CheckException(nd->src.isPlaying(), Exception::GetExceptionCodeFromMeaning("AudioError"), "Cannot stop sound of player that is not playing a sound!")
+		CheckException(isPlaying, Exception::GetExceptionCodeFromMeaning("AudioError"), "Cannot stop sound of player that is not playing a sound!")
 
-		//Stop playing sound
-		nd->src.stop();
-		isPlaying = false;
+		std::shared_future<void> stopJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			//Start playing sound buffer
+			nd->src.stop();
+
+			isPlaying = true;
+		});
+		stopJob.wait();
 	}
 
 	void AudioPlayer::RefreshPlayState() {
-		isPlaying = nd->src.isPlaying();
+		std::shared_future<void> refreshJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			this->isPlaying = nd->src.isPlaying();
+		});
+		refreshJob.wait();
 	}
 
 	void AudioPlayer::On3DChange() {
-		nd->src.set3DSpatialize(is3D ? alure::Spatialize::On : alure::Spatialize::Off);
+		std::shared_future<void> changeJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			nd->src.set3DSpatialize(this->is3D ? alure::Spatialize::On : alure::Spatialize::Off);
+		});
+		changeJob.wait();
 	}
 
 	void AudioPlayer::OnLoopChange() {
-		nd->src.setLooping(isLooping);
+		std::shared_future<void> changeJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			nd->src.setLooping(this->isLooping);
+		});
+		changeJob.wait();
 	}
 
 	void AudioPlayer::OnGainChange() {
-		nd->src.setGain(gain);
+		std::shared_future<void> changeJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			nd->src.setGain(this->gain);
+		});
+		changeJob.wait();
 	}
 }

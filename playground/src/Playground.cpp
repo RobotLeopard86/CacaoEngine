@@ -159,27 +159,27 @@ void PlaygroundApp::Launch() {
 	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
 	cameraManager->active = true;
 	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
-	//UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
+	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
 	world.topLevelEntities.push_back(cameraManager);
 
 	std::future<Cacao::AssetHandle<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> meshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj:Icosphere");
-	//std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.mp3");
+	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.mp3");
 
 	shader = shaderFuture.get();
 	mesh = meshFuture.get();
 	sky = skyFuture.get();
-	//bgm = bgmFuture.get();
+	bgm = bgmFuture.get();
 
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
-	/*audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(audioPlayerUUID);
+	audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(audioPlayerUUID);
 	audioPlayer->Set3DSpatializationEnabled(false);
 	audioPlayer->SetLooping(true);
 	audioPlayer->SetGain(1.0f);
-	audioPlayer->sound = bgm;*/
+	audioPlayer->sound = bgm;
 
 	std::random_device dev;
 	std::mt19937 rng(dev());
@@ -204,7 +204,7 @@ void PlaygroundApp::Launch() {
 
 	world.skybox = sky.GetManagedAsset().get();
 
-	//audioPlayer->Play();
+	audioPlayer->Play();
 }
 
 extern "C" {

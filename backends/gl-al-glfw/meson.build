@@ -113,7 +113,7 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'src/Sound.cpp',
 	'src/AudioPlayer.cpp',
 	'src/ExceptionCodes.cpp'
-], dependencies: backend_deplist)
+], dependencies: backend_deplist, cpp_args: '-DAL_LIBTYPE_STATIC')
 
 ninja = find_program('ninja')
 run_command([ ninja, '-C', meson.project_build_root()/'subprojects/albundle/__CMake_build', 'openal-soft/CMakeFiles/build_version'], check: true)

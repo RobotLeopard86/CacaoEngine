@@ -2,6 +2,10 @@
 
 #include "Sound.hpp"
 #include "World/Entity.hpp"
+#include "Utilities/Task.hpp"
+
+#include <queue>
+#include <mutex>
 
 namespace Cacao {
 	//Controls the playback of audio
@@ -18,6 +22,9 @@ namespace Cacao {
 
 		//Run the controller
 		void Run(std::stop_token stopTkn);
+
+		//Run something on the audio thread
+		std::shared_future<void> RunAudioThreadJob(std::function<void()> job);
 
 		//Set the entity to be used as a reference for 3D audio spatialization
 		//This maintains a non-owning reference, so if the entity is freed then 3D audio
@@ -53,8 +60,13 @@ namespace Cacao {
 
 		std::jthread* thread;
 
+		//3D audio stuff
 		std::weak_ptr<Entity> target3DAudio;
 		bool has3DAudioTarget;
+
+		//Audio job queue
+		std::queue<Task> audioJobs;
+		std::mutex jobQueueMutex;
 
 		AudioController()
 		  : isRunning(false), isInitialized(false), thread(nullptr) {}

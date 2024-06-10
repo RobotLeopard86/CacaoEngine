@@ -11,4 +11,4 @@ title: Cacao Playground
 workingDir: playground
 
 # Maximum number of frames that the engine can be behind in rendering
-maxFrameLag: 8
+maxFrameLag: 2

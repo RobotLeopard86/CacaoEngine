@@ -10,37 +10,32 @@
 #include "Core/Exception.hpp"
 
 namespace Cacao {
-	//Queue of OpenGL jobs to process
-	static std::queue<GLJob> glQueue;
+	//Queue of OpenGL tasks to process
+	static std::queue<Task> glQueue;
 
 	//Queue mutex
 	static std::mutex queueMutex;
 
 	void RenderController::UpdateGraphicsState() {
-		//Process OpenGL jobs
+		//Process OpenGL tasks
 		while(!glQueue.empty()) {
-			//Acquire next job
+			//Acquire next task
 			queueMutex.lock();
-			GLJob& job = glQueue.front();
+			Task& task = glQueue.front();
 			queueMutex.unlock();
 
-			//Run job
+			//Run task
 			//In case it throws an exception, send it back to the caller
 			try {
-				job.func();
+				task.func();
 
-				//Mark job as done
-				job.status->set_value();
+				//Mark task as done
+				task.status->set_value();
 			} catch(...) {
-				try {
-					std::rethrow_exception(std::current_exception());
-				} catch(const std::exception& e) {
-					Logging::EngineLog(e.what(), LogLevel::Error);
-				}
-				job.status->set_exception(std::current_exception());
+				task.status->set_exception(std::current_exception());
 			}
 
-			//Remove job from queue
+			//Remove task from queue
 			queueMutex.lock();
 			glQueue.pop();
 			queueMutex.unlock();
@@ -49,7 +44,7 @@ namespace Cacao {
 
 	void RenderController::ProcessFrame(Frame& frame) {
 		//Send the frame into the GL queue
-		std::shared_future<void> frameJob = InvokeGL([&frame]() {
+		std::shared_future<void> frameTask = InvokeGL([&frame]() {
 			//Clear the screen
 			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -78,13 +73,13 @@ namespace Cacao {
 			if(frame.skybox.has_value()) frame.skybox.value().Draw(frame.projection, frame.view);
 		});
 
-		//Update the graphics state (will guarantee that the job is processed, so it doesn't need to be waited on)
+		//Update the graphics state (will guarantee that the task is processed, so it doesn't need to be waited on)
 		UpdateGraphicsState();
 	}
 
-	void EnqueueGLJob(GLJob& job) {
+	void EnqueueGLJob(Task& task) {
 		queueMutex.lock();
-		glQueue.push(job);
+		glQueue.push(task);
 		queueMutex.unlock();
 	}
 
@@ -96,18 +91,18 @@ namespace Cacao {
 	void RenderController::Shutdown() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uinitialized render controller!")
 
-		//Take care of any remaining OpenGL jobs
+		//Take care of any remaining OpenGL tasks
 		while(!glQueue.empty()) {
-			//Acquire next job
-			GLJob& job = glQueue.front();
+			//Acquire next task
+			Task& task = glQueue.front();
 
-			//Run job
-			job.func();
+			//Run task
+			task.func();
 
-			//Mark job as done
-			job.status->set_value();
+			//Mark task as done
+			task.status->set_value();
 
-			//Remove job from queue
+			//Remove task from queue
 			glQueue.pop();
 		}
 

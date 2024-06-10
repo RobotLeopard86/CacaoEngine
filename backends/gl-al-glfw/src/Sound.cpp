@@ -27,32 +27,36 @@ namespace Cacao {
 		CheckException(!this->compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
 		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
 
-		//Create sound buffer
-		nd->data = audioCtx.getBuffer(this->path);
+		std::shared_future<void> compileJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			//Create sound buffer
+			nd->data = audioCtx.getBuffer(this->path);
 
-		//Register releaser on audio context destruction
-		nd->consumer = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
-			//Release data
-			this->Release();
+			//Register releaser on audio context destruction
+			nd->releaseConsumer = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
+				//Release data
+				this->Release();
 
-			p.set_value();
+				p.set_value();
+			});
+
+			this->compiled = true;
 		});
-		nd->didRegisterConsumer = true;
-
-		this->compiled = true;
-
-		//Since we don't really need a future here and the thread pool hangs if we try to use it, we just make a fake future that is already resolved
-		std::promise<void> promise;
-		promise.set_value();
-		return promise.get_future().share();
+		return compileJob;
 	}
 
 	void Sound::Release() {
 		CheckException(this->compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled sound!");
 
-		//Unregister audio context destruction consumer
-		nd->TryDeleteConsumer();
+		std::shared_future<void> releaseJob = AudioController::GetInstance()->RunAudioThreadJob([this]() {
+			//Unregister audio context destruction consumer
+			EventManager::GetInstance()->UnsubscribeConsumer("AudioContextDestruction", nd->releaseConsumer);
+			delete nd->releaseConsumer;
 
-		this->compiled = false;
+			//Delete data
+			audioCtx.removeBuffer(nd->data);
+
+			this->compiled = false;
+		});
+		releaseJob.wait();
 	}
 }
