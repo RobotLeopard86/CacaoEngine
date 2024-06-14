@@ -20,7 +20,6 @@ assimp_opts.add_cmake_defines({
 	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'ON',
 	'ASSIMP_BUILD_SAMPLES': 'OFF',
 	'ASSIMP_BUILD_TESTS': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
 })
 assimp_opts.set_install(true)
 
@@ -45,6 +44,26 @@ spv_util = spv_sp.dependency('spirv-cross-util')
 spv_glsl = spv_sp.dependency('spirv-cross-glsl')
 spv_hlsl = spv_sp.dependency('spirv-cross-hlsl')
 spv_msl = spv_sp.dependency('spirv-cross-msl')
+
+audio_opts = cmake.subproject_options()
+audio_opts.add_cmake_defines({
+    'BUILD_SHARED_LIBS': 'OFF',
+    'OP_DISABLE_HTTP': 'ON',
+    'OP_DISABLE_EXAMPLES': 'ON',
+    'OP_DISABLE_DOCS': 'ON',
+    'OPUS_BUILD_SHARED_LIBRARY': 'OFF',
+    'OPUS_BUILD_TESTING': 'OFF',
+    'OPUS_CUSTOM_MODES': 'ON',
+    'OPUS_BUILD_PROGRAMS': 'OFF',
+    'INSTALL_MANPAGES': 'OFF',
+    'BUILD_PROGRAMS': 'OFF',
+    'BUILD_DOCS': 'OFF',
+    'BUILD_CXXLIBS': 'ON',
+    'BUILD_TESTING': 'OFF',
+    'BUILD_EXAMPLES': 'OFF',
+    'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
+})
+audio_dep = cmake.subproject('audiolibs', options: audio_opts, required: true).dependency('AudioLibs')
 
 includes = [
 	'include',
@@ -87,7 +106,8 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	spv_glsl,
 	spv_hlsl,
 	spv_msl,
-	skyshaders_dep
+	skyshaders_dep,
+    audio_dep
 ], pic: true)
 
 cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', build_by_default: true, win_subsystem: subsystem, include_directories: includes, 
