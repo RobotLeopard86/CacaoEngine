@@ -54,7 +54,8 @@ cacao_dep = declare_dependency(include_directories: [
 	spv_glsl,
 	spv_hlsl,
 	spv_msl,
-	skyshaders_dep
+	skyshaders_dep,
+	alsoft_dep
 ], link_with: [
 	libbackend,
 	libcacao

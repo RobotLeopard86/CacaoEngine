@@ -4,6 +4,9 @@
 #include "World/Entity.hpp"
 #include "Utilities/Task.hpp"
 
+#include "AL/al.h"
+#include "AL/alc.h"
+
 #include <queue>
 #include <mutex>
 
@@ -23,9 +26,6 @@ namespace Cacao {
 		//Run the controller
 		void Run(std::stop_token stopTkn);
 
-		//Run something on the audio thread
-		std::shared_future<void> RunAudioThreadJob(std::function<void()> job);
-
 		//Set the entity to be used as a reference for 3D audio spatialization
 		//This maintains a non-owning reference, so if the entity is freed then 3D audio
 		//will be played from the last known position and rotation
@@ -37,6 +37,12 @@ namespace Cacao {
 			return has3DAudioTarget && !target3DAudio.expired();
 		}
 
+		//Set the global gain (must be positive)
+		void SetGlobalGain(float value);
+
+		//Get the global gain value
+		float GetGlobalGain();
+
 		bool IsAudioSystemInitialized() {
 			return isInitialized;
 		}
@@ -46,27 +52,18 @@ namespace Cacao {
 		static AudioController* instance;
 		static bool instanceExists;
 
-		//Backend functions
-
-		//Initialize the controller
-		void Init();
-		//Run the controller
-		void RunImpl(std::stop_token& stopTkn);
-		//Shutdown the controller
-		void Shutdown();
-
 		bool isRunning;
 		bool isInitialized;
 
 		std::jthread* thread;
 
+		//Audio context and device
+		ALCdevice* dev;
+		ALCcontext* ctx;
+
 		//3D audio stuff
 		std::weak_ptr<Entity> target3DAudio;
 		bool has3DAudioTarget;
-
-		//Audio job queue
-		std::queue<Task> audioJobs;
-		std::mutex jobQueueMutex;
 
 		AudioController()
 		  : isRunning(false), isInitialized(false), thread(nullptr) {}

@@ -13,7 +13,7 @@
 #define CheckException(condition, exceptionCode, exceptionDescription) \
 	if(!(condition)) {                                                 \
 		Cacao::Exception ex {exceptionDescription, exceptionCode};     \
-		Cacao::Logging::EngineLog(ex.what());                          \
+		Cacao::Logging::EngineLog(ex.what(), LogLevel::Error);         \
 		throw ex;                                                      \
 	}
 

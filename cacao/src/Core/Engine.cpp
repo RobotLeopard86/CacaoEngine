@@ -30,7 +30,7 @@ namespace Cacao {
 
 	void Engine::CoreStartup() {
 		//Register some basic exception codes
-		Exception::RegisterExceptionCode(0, "IO");
+		Exception::RegisterExceptionCode(0, "External");
 		Exception::RegisterExceptionCode(1, "FileNotFound");
 		Exception::RegisterExceptionCode(2, "NonexistentValue");
 		Exception::RegisterExceptionCode(3, "InvalidYAML");
@@ -41,6 +41,8 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(8, "EventManager");
 		Exception::RegisterExceptionCode(9, "ContainerValue");
 		Exception::RegisterExceptionCode(10, "WrongType");
+		Exception::RegisterExceptionCode(11, "IO");
+		Exception::RegisterExceptionCode(12, "BadCompileState");
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");

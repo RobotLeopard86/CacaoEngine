@@ -63,7 +63,30 @@ audio_opts.add_cmake_defines({
     'BUILD_EXAMPLES': 'OFF',
     'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
 })
-audio_dep = cmake.subproject('audiolibs', options: audio_opts, required: true).dependency('AudioLibs')
+audio_sp = cmake.subproject('audiolibs', options: audio_opts, required: true)
+ogg = audio_sp.dependency('ogg')
+vorbis = audio_sp.dependency('vorbis')
+vorbisfile = audio_sp.dependency('vorbisfile')
+opus = audio_sp.dependency('opus')
+opusfile = audio_sp.dependency('opusfile')
+flac = audio_sp.dependency('FLAC')
+flac_cpp = audio_sp.dependency('FLAC++')
+
+alsoft_opts = cmake.subproject_options()
+alsoft_opts.add_cmake_defines({
+	'BUILD_TESTING': 'OFF',
+	'BUILD_SHARED_LIBS': 'OFF',
+	'LIBTYPE': 'STATIC',
+	'ALSOFT_DLOPEN': 'OFF',
+	'ALSOFT_EXAMPLES': 'OFF',
+	'ALSOFT_NO_CONFIG_UTIL': 'ON',
+	'ALSOFT_EAX': 'OFF',
+	'ALSOFT_UTILS': 'OFF',
+	'ALSOFT_RTKIT': 'OFF',
+	'ALSOFT_EMBED_HRTF_DATA': 'OFF',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
+})
+alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
 
 includes = [
 	'include',
@@ -71,7 +94,8 @@ includes = [
 	'../libs/dynalo/include',
 	'../libs/bsthreadpool',
 	'../libs/glm',
-	'../libs/uuid_v4'
+	'../libs/uuid_v4',
+	'../libs/dr_libs'
 ]
 
 cxx = meson.get_compiler('cpp')
@@ -91,7 +115,9 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	'src/Control/DynTickController.cpp',
 	'src/Rendering/RenderController.cpp',
 	'src/Utilities/AssetManager.cpp',
-	'src/Audio/AudioController.cpp'
+	'src/Audio/AudioController.cpp',
+	'src/Audio/Sound.cpp',
+	'src/Audio/AudioPlayer.cpp'
 ], include_directories: includes, dependencies: [
 	yaml_dep,
 	assimp_dep,
@@ -107,10 +133,25 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	spv_hlsl,
 	spv_msl,
 	skyshaders_dep,
-    audio_dep
+	alsoft_dep,
+	ogg,
+	vorbis,
+	vorbisfile,
+	opus,
+	opusfile,
+	flac,
+	flac_cpp
 ], pic: true)
 
+python = find_program('python')
+need_pipewire = run_command([ python, meson.global_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()
+exe_deps = []
+if need_pipewire == 0
+	find_program('pkg-config')
+	exe_deps += dependency('libpipewire-0.3', method: 'pkg-config')
+endif
+
 cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', build_by_default: true, win_subsystem: subsystem, include_directories: includes, 
-	build_rpath: '.', link_with: [ libcacao, libbackend ], export_dynamic: true)
+	build_rpath: '.', link_with: [ libcacao, libbackend ], export_dynamic: true, dependencies: exe_deps)
 
 subdir_done()

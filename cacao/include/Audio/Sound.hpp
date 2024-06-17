@@ -2,6 +2,9 @@
 
 #include "Utilities/Asset.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Events/EventSystem.hpp"
+
+#include "AL/al.h"
 
 #include <memory>
 #include <string>
@@ -14,28 +17,43 @@ namespace Cacao {
 		Sound(std::string filePath);
 		~Sound() final {
 			if(compiled) Release();
-			delete nativeData;
 		}
 
 		//Compile sound to be used later
+		//Will be automatically released at audio system shutdown
 		std::shared_future<void> Compile() override;
-		//Delete sound when no longer needed
+
+		//Delete compiled data when no longer needed
 		void Release() override;
 
 		std::string GetType() override {
 			return "SOUND";
 		}
 
-		//Access the native data
-		//This should ONLY be used by audio players
-		//Also you have to solemnly swear that you won't delete it (this is definitely a good safety tactic)
-		NativeData* GetNativeData(bool iSolemnlySwearThatIWillNotDeleteThisPointer) {
-			if(!iSolemnlySwearThatIWillNotDeleteThisPointer) return nullptr;
-			return nativeData;
-		}
-
 	  private:
-		std::string path;
-		NativeData* nativeData;
+		//Sound data
+		std::string filePath;
+		unsigned int sampleRate;
+		unsigned long long sampleCount;
+		std::vector<signed short> audioData;
+		unsigned int channelCount;
+
+		//OpenAL object
+		ALuint buf;
+
+		SignalEventConsumer* sec;
+
+		//Sound data initialization methods
+		void _InitFlac();
+		void _InitMP3();
+		void _InitWAV();
+		void _InitVorbis();
+		void _InitOpus();
+
+		//Need to let the FLAC decoder (which has to be a class per the API) access our methods
+		friend class FLACDecoder;
+
+		//Need the audio player to be able to see our stuff
+		friend class AudioPlayer;
 	};
 }
