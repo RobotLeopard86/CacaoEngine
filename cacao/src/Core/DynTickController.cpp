@@ -1,4 +1,4 @@
-#include "Control/DynTickController.hpp"
+#include "Core/DynTickController.hpp"
 
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
@@ -8,6 +8,7 @@
 #include "World/WorldManager.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 #include "Graphics/Rendering/MeshComponent.hpp"
+#include "Utilities/MultiFuture.hpp"
 
 #include <mutex>
 
@@ -64,10 +65,10 @@ namespace Cacao {
 			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
 			std::mutex slMutex {};
-			BS::multi_future<void> slFuture;
+			MultiFuture<void> slFuture;
 			for(int i = 0; i < activeWorld.topLevelEntities.size(); i++) {
 				std::shared_ptr<Entity> ent = activeWorld.topLevelEntities[i];
-				slFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, ent, &slMutex]() {
+				slFuture.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([this, ent, &slMutex]() {
 					//Create script locator function for an entity
 					auto scriptLocator = [this, &slMutex](std::shared_ptr<Entity> e) {
 						//Sneaky recursive lambda trick
@@ -98,7 +99,7 @@ namespace Cacao {
 				}));
 			}
 			//Wait for work to be completed
-			slFuture.wait();
+			slFuture.WaitAll();
 
 			//Execute scripts
 			for(std::shared_ptr<Component>& s : tickScriptList) {
@@ -109,10 +110,10 @@ namespace Cacao {
 			//Accumulate things to render
 			tickRenderList.clear();
 			std::mutex rlMutex {};
-			BS::multi_future<void> roFuture;
+			MultiFuture<void> roFuture;
 			for(int i = 0; i < activeWorld.topLevelEntities.size(); i++) {
 				std::shared_ptr<Entity> ent = activeWorld.topLevelEntities[i];
-				roFuture.push_back(Engine::GetInstance()->GetThreadPool().submit_task([this, ent, &rlMutex]() {
+				roFuture.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([this, ent, &rlMutex]() {
 					//Create mesh locator function for an entity
 					auto meshLocator = [this, &rlMutex](std::shared_ptr<Entity> e) {
 						//Sneaky recursive lambda trick
@@ -144,7 +145,7 @@ namespace Cacao {
 				}));
 			}
 			//Wait for work to be completed
-			roFuture.wait();
+			roFuture.WaitAll();
 
 			//Create frame object
 			std::shared_ptr<Frame> f = std::make_shared<Frame>();

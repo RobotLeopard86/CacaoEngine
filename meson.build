@@ -40,8 +40,8 @@ subdir('cacao')
 cacao_dep = declare_dependency(include_directories: [
 	'cacao/include',
 	'libs/spdlog/include',
+	'libs/thread-pool/include',
 	'libs/dynalo/include',
-	'libs/bsthreadpool',
 	'libs/glm',
 	'libs/uuid_v4',
 	include_directories('cacao')

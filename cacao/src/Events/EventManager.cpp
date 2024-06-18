@@ -100,9 +100,9 @@ namespace Cacao {
 		}
 	}
 
-	std::shared_ptr<EventSignal> EventManager::DispatchSignaled(Event& event) {
+	std::shared_ptr<MultiFuture<void>> EventManager::DispatchSignaled(Event& event) {
 		//Create signal
-		std::shared_ptr<EventSignal> signal = std::make_shared<EventSignal>();
+		std::shared_ptr<MultiFuture<void>> signal = std::make_shared<MultiFuture<void>>();
 
 		//Check if event type has registered consumers
 		if(consumers.contains(event.GetType())) {

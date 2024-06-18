@@ -3,7 +3,7 @@
 #include "Core/Exception.hpp"
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
-#include "Control/DynTickController.hpp"
+#include "Core/DynTickController.hpp"
 #include "Audio/AudioController.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 
@@ -72,10 +72,10 @@ namespace Cacao {
 
 		//Start the thread pool (subtract two threads for the dedicated dynamic tick and audio controllers)
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(std::thread::hardware_concurrency() - 2);
+		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 2));
 
 		//Set up common skybox resources
-		std::future<void> skySetup = threadPool.submit_task([]() {
+		std::future<void> skySetup = threadPool->enqueue([]() {
 			Skybox::CommonSetup();
 		});
 		skySetup.wait();
@@ -111,10 +111,9 @@ namespace Cacao {
 		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
 		exitFunc();
 
-		//"Stop" thread pool (really we just pause it so no new tasks can come in, actual thread pool destruction happens at program exit)
-		//This is necessary so that we can clean up any thread pool resources
+		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");
-		threadPool.pause();
+		threadPool.reset();
 	}
 
 	void Engine::Run() {

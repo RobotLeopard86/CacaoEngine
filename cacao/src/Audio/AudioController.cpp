@@ -97,7 +97,7 @@ namespace Cacao {
 
 		//Alert all audio objects that it is shutdown time
 		Event e("AudioShutdown");
-		EventManager::GetInstance()->DispatchSignaled(e)->wait();
+		EventManager::GetInstance()->DispatchSignaled(e)->WaitAll();
 
 		isInitialized = false;
 

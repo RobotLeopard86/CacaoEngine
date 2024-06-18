@@ -10,7 +10,6 @@
 #include "vorbis/codec.h"
 #include "vorbis/vorbisfile.h"
 #include "opusfile.h"
-#include "FLAC++/decoder.h"
 
 #include <filesystem>
 #include <fstream>
@@ -41,12 +40,6 @@ namespace Cacao {
 		file.read(header.data(), header.size());
 
 		bool goodFormat = false;
-
-		//Check for FLAC
-		if(header.compare("fLaC") == 0) {
-			goodFormat = true;
-			RETHROW_EXCEPTION(_InitFlac();)
-		}
 
 		//Check for MP3
 		//These can either just start with a frame or have ID3 data, so we check both
@@ -180,7 +173,7 @@ namespace Cacao {
 		int currentSection;
 
 		//Open the file
-		FILE* f = fopen(filePath.c_str(), "r");
+		FILE* f = fopen(filePath.c_str(), "rb");
 		CheckException(ov_open(f, &vf, NULL, 0) >= 0, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open Ogg Vorbis sound file!");
 
 		//Get file info
@@ -210,7 +203,6 @@ namespace Cacao {
 
 		//Clean up Ogg Vorbis
 		ov_clear(&vf);
-		fclose(f);
 	}
 
 	void Sound::_InitOpus() {
@@ -244,45 +236,5 @@ namespace Cacao {
 
 		//Clean up opusfile
 		op_free(opus);
-	}
-
-	class FLACDecoder : public FLAC::Decoder::File {
-	  public:
-		void setup(Sound* s) {
-			this->sound = s;
-			CheckException(init(sound->filePath) == FLAC__STREAM_DECODER_INIT_STATUS_OK, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open FLAC sound file!")
-			sound->sampleRate = get_sample_rate();
-			sound->channelCount = get_channels();
-			sound->sampleCount = get_total_samples();
-		}
-
-	  private:
-		Sound* sound;
-
-		FLAC__StreamDecoderWriteStatus write_callback(const FLAC__Frame* frame, const FLAC__int32* const buffer[]) override {
-			//Write the audio data chunk to the sound object
-			for(size_t i = 0; i < frame->header.blocksize; i++) {
-				for(size_t c = 0; c < sound->channelCount; c++) {
-					sound->audioData.push_back(static_cast<signed short>(buffer[c][i]));
-				}
-			}
-
-			//Tell libFLAC to keep going
-			return FLAC__StreamDecoderWriteStatus::FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
-		}
-
-		void error_callback(FLAC__StreamDecoderErrorStatus stat) override {}
-	};
-
-	void Sound::_InitFlac() {
-		//Open the file
-		FLACDecoder flac;
-		RETHROW_EXCEPTION(flac.setup(this);)
-
-		//Read the file
-		CheckException(flac.process_until_end_of_stream(), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read FLAC sound file!")
-
-		//Close the file
-		flac.finish();
 	}
 }

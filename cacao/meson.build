@@ -55,12 +55,6 @@ audio_opts.add_cmake_defines({
     'OPUS_BUILD_TESTING': 'OFF',
     'OPUS_CUSTOM_MODES': 'ON',
     'OPUS_BUILD_PROGRAMS': 'OFF',
-    'INSTALL_MANPAGES': 'OFF',
-    'BUILD_PROGRAMS': 'OFF',
-    'BUILD_DOCS': 'OFF',
-    'BUILD_CXXLIBS': 'ON',
-    'BUILD_TESTING': 'OFF',
-    'BUILD_EXAMPLES': 'OFF',
     'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
 })
 audio_sp = cmake.subproject('audiolibs', options: audio_opts, required: true)
@@ -69,8 +63,6 @@ vorbis = audio_sp.dependency('vorbis')
 vorbisfile = audio_sp.dependency('vorbisfile')
 opus = audio_sp.dependency('opus')
 opusfile = audio_sp.dependency('opusfile')
-flac = audio_sp.dependency('FLAC')
-flac_cpp = audio_sp.dependency('FLAC++')
 
 alsoft_opts = cmake.subproject_options()
 alsoft_opts.add_cmake_defines({
@@ -91,8 +83,8 @@ alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: tru
 includes = [
 	'include',
 	'../libs/spdlog/include',
+	'../libs/thread-pool/include',
 	'../libs/dynalo/include',
-	'../libs/bsthreadpool',
 	'../libs/glm',
 	'../libs/uuid_v4',
 	'../libs/dr_libs'
@@ -112,7 +104,7 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	'src/3D/Transform.cpp',
 	'src/Cameras/PerspectiveCamera.cpp',
 	'src/World/WorldManager.cpp',
-	'src/Control/DynTickController.cpp',
+	'src/Core/DynTickController.cpp',
 	'src/Rendering/RenderController.cpp',
 	'src/Utilities/AssetManager.cpp',
 	'src/Audio/AudioController.cpp',
@@ -138,16 +130,14 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	vorbis,
 	vorbisfile,
 	opus,
-	opusfile,
-	flac,
-	flac_cpp
+	opusfile
 ], pic: true)
 
 python = find_program('python')
 need_pipewire = run_command([ python, meson.global_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()
 exe_deps = []
 if need_pipewire == 0
-	find_program('pkg-config')
+	find_program('pkg-config', required: true)
 	exe_deps += dependency('libpipewire-0.3', method: 'pkg-config')
 endif
 

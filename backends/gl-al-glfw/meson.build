@@ -39,8 +39,8 @@ include_dirs = [
 	'../../cacao/include',
 	'include',
 	'../../libs/spdlog/include',
+	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
-	'../../libs/bsthreadpool',
 	'../../libs/glm',
 	'../../libs/uuid_v4',
 	include_directories('../../cacao')

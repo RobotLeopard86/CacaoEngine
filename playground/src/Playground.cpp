@@ -165,7 +165,7 @@ void PlaygroundApp::Launch() {
 	std::future<Cacao::AssetHandle<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> meshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj:Icosphere");
-	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.mp3");
+	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.opus");
 
 	shader = shaderFuture.get();
 	mesh = meshFuture.get();

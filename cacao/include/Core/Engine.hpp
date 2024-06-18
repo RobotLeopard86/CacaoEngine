@@ -4,13 +4,13 @@
 #include <string>
 #include <map>
 
-#define BS_THREAD_POOL_ENABLE_PAUSE
-#include "BS_thread_pool.hpp"
-
 #include "dynalo/dynalo.hpp"
+#include "thread_pool/thread_pool.h"
 
 #include "EngineConfig.hpp"
 #include "Utilities/MiscUtils.hpp"
+
+using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 
 namespace Cacao {
 	//Singleton representing the engine
@@ -26,7 +26,7 @@ namespace Cacao {
 		void Stop();
 
 		//Access the thread pool
-		BS::thread_pool& GetThreadPool() {
+		std::shared_ptr<thread_pool> GetThreadPool() {
 			return threadPool;
 		}
 
@@ -60,7 +60,7 @@ namespace Cacao {
 		std::atomic_bool shuttingDown;
 
 		//Thread pool
-		BS::thread_pool threadPool;
+		std::shared_ptr<thread_pool> threadPool;
 
 		//Engine thread ID
 		std::thread::id threadID;
