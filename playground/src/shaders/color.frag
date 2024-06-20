@@ -1,11 +1,11 @@
 #version 450 core
 
-layout(location=0) out vec4 color;
+layout(location = 0) out vec4 color;
 
-layout(location=0) in VS_Out {
+layout(location = 0) in Vertex2Fragment {
 	vec4 pos;
-} IN;
+} V2F;
 
 void main() {
-	color = IN.pos;
+	color = V2F.pos;
 }

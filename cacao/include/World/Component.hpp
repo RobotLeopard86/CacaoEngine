@@ -47,6 +47,6 @@ namespace Cacao {
 			this->owner = owner;
 		}
 
-		friend class Entity;
+		friend Entity;
 	};
 }

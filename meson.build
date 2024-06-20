@@ -8,7 +8,11 @@ if backend == '__DEFAULT__'
 endif
 
 if host_machine.system() == 'windows'
-	add_global_arguments(['-DNOMINMAX','-D_ITERATOR_DEBUG_LEVEL=0','-D_CRT_SECURE_NO_WARNINGS'], language: ['c', 'cpp'])
+	if meson.get_compiler('c').get_id() == 'msvc'
+		add_global_arguments(['/DNOMINMAX','/D _ITERATOR_DEBUG_LEVEL=0','/D_CRT_SECURE_NO_WARNINGS'], language: ['c', 'cpp'])
+	else
+		add_global_arguments(['-DNOMINMAX','-D_ITERATOR_DEBUG_LEVEL=0','-D_CRT_SECURE_NO_WARNINGS'], language: ['c', 'cpp'])
+	endif
 endif
 
 subsystem = 'console'
@@ -17,17 +21,30 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 	subsystem = 'windows'
 endif
 
-subdir('backends' / backend)
+glslc = find_program('glslc')
 
+glslc_text_cmd = [ glslc, '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@']
+skyvert = custom_target('sky_vertex', command: glslc_text_cmd, input: 'cacao/shaders/skybox.vert', output: '@PLAINNAME@.txt')
+skyfrag = custom_target('sky_frag', command: glslc_text_cmd, input: 'cacao/shaders/skybox.frag', output: '@PLAINNAME@.txt')
+
+skyshaders_dep = declare_dependency(sources: [
+	skyvert,
+	skyfrag
+])
+
+python = find_program('python')
+
+subdir('backends' / backend)
 subdir('cacao')
 
 cacao_dep = declare_dependency(include_directories: [
 	'cacao/include',
 	'libs/spdlog/include',
+	'libs/thread-pool/include',
 	'libs/dynalo/include',
-	'libs/bsthreadpool',
 	'libs/glm',
-	'libs/uuid_v4'
+	'libs/uuid_v4',
+	include_directories('cacao')
 ], dependencies: [
 	spv_core,
 	spv_c,
@@ -36,7 +53,9 @@ cacao_dep = declare_dependency(include_directories: [
 	spv_util,
 	spv_glsl,
 	spv_hlsl,
-	spv_msl
+	spv_msl,
+	skyshaders_dep,
+	alsoft_dep
 ], link_with: [
 	libbackend,
 	libcacao

@@ -12,7 +12,9 @@
 //Write first argument as a normal condition, it will be wrapped in parentheses
 #define CheckException(condition, exceptionCode, exceptionDescription) \
 	if(!(condition)) {                                                 \
-		throw Exception {exceptionDescription, exceptionCode};         \
+		Cacao::Exception ex {exceptionDescription, exceptionCode};     \
+		Cacao::Logging::EngineLog(ex.what(), LogLevel::Error);         \
+		throw ex;                                                      \
 	}
 
 namespace Cacao {

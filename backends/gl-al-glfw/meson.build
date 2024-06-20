@@ -22,9 +22,9 @@ spv_msl = spv_sp.dependency('spirv-cross-msl')
 
 glfw_opts = cmake.subproject_options()
 glfw_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'ON',
+	'BUILD_SHARED_LIBS': 'OFF',
 	'GLFW_BUILD_TESTS': 'OFF',
-	'GLFW_BUILD_DOCSS': 'OFF',
+	'GLFW_BUILD_DOCS': 'OFF',
 	'GLFW_BUILD_EXAMPLES': 'OFF'
 })
 if host_machine.system() == 'linux'
@@ -35,54 +35,18 @@ if host_machine.system() == 'linux'
 endif
 glfw_dep = cmake.subproject('glfw', options: glfw_opts, required: true).dependency('glfw')
 
-albundle_opts = cmake.subproject_options()
-albundle_opts.add_cmake_defines({
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'BUILD_TESTING': 'OFF',
-	'ALSOFT_DLOPEN': 'OFF',
-	'ALSOFT_EXAMPLES': 'OFF',
-	'ALSOFT_NO_CONFIG_UTIL': 'ON',
-	'ALSOFT_EAX': 'OFF',
-	'ALSOFT_UTILS': 'OFF',
-	'ALSOFT_RTKIT': 'OFF',
-	'ALURE_BUILD_SHARED': 'OFF',
-	'ALURE_BUILD_STATIC': 'ON',
-	'ALURE_ENABLE_OPUS': 'OFF',
-	'ALURE_ENABLE_SNDFILE': 'OFF',
-	'ALURE_ENABLE_VORBIS': 'ON',
-	'ALURE_INSTALL': 'OFF',
-	'ALURE_BUILD_EXAMPLES': 'OFF'
-})
-albundle = cmake.subproject('albundle', options: albundle_opts, required: true)
-vorbisfile_dep = albundle.dependency('vorbisfile')
-vorbis_dep = albundle.dependency('vorbis')
-ogg_dep = albundle.dependency('ogg')
-alsoft_dep = albundle.dependency('OpenAL')
-alure_dep = albundle.dependency('alure2_s')
-
 include_dirs = [
 	'../../cacao/include',
 	'include',
 	'../../libs/spdlog/include',
+	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
-	'../../libs/bsthreadpool',
 	'../../libs/glm',
-	'../../libs/uuid_v4'
+	'../../libs/uuid_v4',
+	include_directories('../../cacao')
 ]
 
-libbackend = shared_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/OpenGL.cpp',
-	'src/Window.cpp',
-	'src/Texture2D.cpp',
-	'src/Cubemap.cpp',
-	'src/Shader.cpp',
-	'src/Mesh.cpp',
-	'src/Skybox.cpp',
-	'src/Audio.cpp',
-	'src/Sound.cpp',
-	'src/AudioPlayer.cpp',
-	'src/Errors.cpp'
-], dependencies: [
+backend_deplist = [
 	spv_core,
 	spv_c,
 	spv_cpp,
@@ -92,16 +56,21 @@ libbackend = shared_library('cacaobackend', include_directories: include_dirs, s
 	spv_hlsl,
 	spv_msl,
 	glfw_dep,
-	vorbisfile_dep,
-	vorbis_dep,
-	ogg_dep,
-	alsoft_dep,
-	alure_dep,
 	glad_dep,
-	stb_dep
-], override_options: [ 'b_lundef=false' ])
+	stb_dep,
+	skyshaders_dep,
+	meson.get_compiler('cpp').find_library('atomic', required: true)
+]
 
-ninja = find_program('ninja')
-run_command([ ninja, '-C', meson.project_build_root()/'subprojects/albundle/__CMake_build', 'openal-soft/CMakeFiles/build_version'], check: true)
+libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
+	'src/OpenGL.cpp',
+	'src/Window.cpp',
+	'src/Texture2D.cpp',
+	'src/Cubemap.cpp',
+	'src/Shader.cpp',
+	'src/Mesh.cpp',
+	'src/Skybox.cpp',
+	'src/ExceptionCodes.cpp'
+], dependencies: backend_deplist)
 
 subdir_done()

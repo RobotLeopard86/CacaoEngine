@@ -52,83 +52,100 @@ class SussyScript final : public Cacao::Script {
   public:
 	void OnActivate() override {
 		Cacao::Logging::ClientLog("I'm awake!");
+		usedCtrl = false;
 	}
 	void OnDeactivate() override {
 		Cacao::Logging::ClientLog("I'm asleep!");
 	}
 	void OnTick(double timestep) override {
-		Cacao::World& world = Cacao::WorldManager::GetInstance()->GetActiveWorld();
-		Cacao::PerspectiveCamera* cam = static_cast<Cacao::PerspectiveCamera*>(world.cam);
-		glm::vec3 camRotChange = glm::vec3(0.0f);
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_J)) {
-			camRotChange.y -= 0.5f;
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_K)) {
-			camRotChange.y += 0.5f;
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Y)) {
-			camRotChange.x += 0.5f;
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_U)) {
-			camRotChange.x -= 0.5f;
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)) {
-			camRotChange.z += 0.5f;
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_C)) {
-			camRotChange.z -= 0.5f;
-		}
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_LEFT_CONTROL) && !usedCtrl) {
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_F)) {
+				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Fullscreen);
+				usedCtrl = true;
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_B)) {
+				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Borderless);
+				usedCtrl = true;
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)) {
+				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Window);
+				usedCtrl = true;
+			}
+		} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_LEFT_CONTROL) && usedCtrl) {
+		} else {
+			usedCtrl = false;
+			Cacao::World& world = Cacao::WorldManager::GetInstance()->GetActiveWorld();
+			Cacao::PerspectiveCamera* cam = static_cast<Cacao::PerspectiveCamera*>(world.cam);
+			glm::vec3 camRotChange = glm::vec3(0.0f);
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_J)) {
+				camRotChange.y -= 0.5f;
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_K)) {
+				camRotChange.y += 0.5f;
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Y)) {
+				camRotChange.x += 0.5f;
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_U)) {
+				camRotChange.x -= 0.5f;
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)) {
+				camRotChange.z += 0.5f;
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_C)) {
+				camRotChange.z -= 0.5f;
+			}
 
-		currentRot = cam->GetRotation();
-		currentRot += camRotChange;
+			currentRot = cam->GetRotation();
+			currentRot += camRotChange;
 
-		if(currentRot.x < -89.99) {
-			currentRot.x = -89.99f;
-		}
-		if(currentRot.x > 89.99) {
-			currentRot.x = 89.99f;
-		}
-		if(currentRot.y < 0) {
-			currentRot.y = 360.0f;
-		}
-		if(currentRot.y > 360) {
-			currentRot.y = 0.0f;
-		}
-		if(currentRot.z < 0) {
-			currentRot.z = 360.0f;
-		}
-		if(currentRot.z > 360) {
-			currentRot.z = 0.0f;
-		}
+			if(currentRot.x < -89.99) {
+				currentRot.x = -89.99f;
+			}
+			if(currentRot.x > 89.99) {
+				currentRot.x = 89.99f;
+			}
+			if(currentRot.y < 0) {
+				currentRot.y = 360.0f;
+			}
+			if(currentRot.y > 360) {
+				currentRot.y = 0.0f;
+			}
+			if(currentRot.z < 0) {
+				currentRot.z = 360.0f;
+			}
+			if(currentRot.z > 360) {
+				currentRot.z = 0.0f;
+			}
 
-		glm::vec3 posChange = glm::vec3(0.0f);
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)) {
-			posChange += cam->GetFrontVector() * 5.0f * float(timestep);
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_S)) {
-			posChange -= cam->GetFrontVector() * 5.0f * float(timestep);
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_D)) {
-			posChange += cam->GetRightVector() * 5.0f * float(timestep);
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_A)) {
-			posChange -= cam->GetRightVector() * 5.0f * float(timestep);
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_E)) {
-			posChange += cam->GetUpVector() * 5.0f * float(timestep);
-		}
-		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Q)) {
-			posChange -= cam->GetUpVector() * 5.0f * float(timestep);
-		}
+			glm::vec3 posChange = glm::vec3(0.0f);
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)) {
+				posChange += cam->GetFrontVector() * 5.0f * float(timestep);
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_S)) {
+				posChange -= cam->GetFrontVector() * 5.0f * float(timestep);
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_D)) {
+				posChange += cam->GetRightVector() * 5.0f * float(timestep);
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_A)) {
+				posChange -= cam->GetRightVector() * 5.0f * float(timestep);
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_E)) {
+				posChange += cam->GetUpVector() * 5.0f * float(timestep);
+			}
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_Q)) {
+				posChange -= cam->GetUpVector() * 5.0f * float(timestep);
+			}
 
-		currentPos = cam->GetPosition() + posChange;
+			currentPos = cam->GetPosition() + posChange;
 
-		cam->SetRotation(Orientation(currentRot));
-		cam->SetPosition(currentPos);
+			cam->SetRotation(Orientation(currentRot));
+			cam->SetPosition(currentPos);
+		}
 	}
 
   private:
 	glm::vec3 currentRot, currentPos;
+	bool usedCtrl;
 };
 
 PlaygroundApp* PlaygroundApp::instance = nullptr;
@@ -139,16 +156,10 @@ void PlaygroundApp::Launch() {
 	Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
 	Cacao::World& world = Cacao::WorldManager::GetInstance()->GetWorld("Playground");
 
-	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
-	cameraManager->active = true;
-	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
-	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
-	world.topLevelEntities.push_back(cameraManager);
-
 	std::future<Cacao::AssetHandle<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> meshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj:Icosphere");
-	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.mp3");
+	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.opus");
 
 	shader = shaderFuture.get();
 	mesh = meshFuture.get();
@@ -158,6 +169,11 @@ void PlaygroundApp::Launch() {
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
+	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
+	cameraManager->active = true;
+	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
+	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
+	world.topLevelEntities.push_back(cameraManager);
 	audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(audioPlayerUUID);
 	audioPlayer->Set3DSpatializationEnabled(false);
 	audioPlayer->SetLooping(true);

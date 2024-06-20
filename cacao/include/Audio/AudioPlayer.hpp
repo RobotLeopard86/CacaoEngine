@@ -8,61 +8,42 @@ namespace Cacao {
 	class AudioPlayer final : public Component {
 	  public:
 		AudioPlayer();
-		~AudioPlayer() {
-			delete nativeData;
-		}
+		~AudioPlayer();
 
 		//Play the sound
 		void Play();
+
+		//Toggle paused playback
+		void TogglePause();
 
 		//Stop playing
 		void Stop();
 
 		//Check if playing
-		bool IsPlaying() {
-			RefreshPlayState();
-			return isPlaying;
-		}
+		bool IsPlaying();
 
+		//Check if paused
+		bool IsPaused();
+
+		//Sound to play
 		AssetHandle<Sound> sound;
 
-		bool Is3DSpatializationEnabled() {
-			return is3D;
-		}
-		bool IsLooping() {
-			return isLooping;
-		}
-		float GetGain() {
-			return gain;
-		}
-
-		void Set3DSpatializationEnabled(bool val) {
-			is3D = val;
-			On3DChange();
-		}
-		void SetLooping(bool val) {
-			isLooping = val;
-			OnLoopChange();
-		}
-		void SetGain(float val) {
-			gain = val;
-			OnGainChange();
-		}
+		void Set3DSpatializationEnabled(bool val);
+		void SetLooping(bool val);
+		void SetGain(float val);
+		void SetPitchMultiplier(float val);
+		void SetPlaybackTime(float timeInSeconds);
+		bool Get3DSpatializationEnabled();
+		bool GetLooping();
+		float GetGain();
+		float GetPitchMultiplier();
+		float GetPlaybackTime();
 
 	  private:
-		NativeData* nativeData;
+		//OpenAL object
+		ALuint source;
 
-		//Player properties
-		bool is3D;
-		bool isLooping;
-		float gain;
-
-		//Backend-specific functions
-		void On3DChange();
-		void OnLoopChange();
-		void OnGainChange();
-		void RefreshPlayState();
-
-		bool isPlaying;
+		SignalEventConsumer* sec;
+		SignalEventConsumer* soundDelete;
 	};
 }

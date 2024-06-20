@@ -1,3 +1,3 @@
 option('build_playground', type: 'boolean', value: true, description: 'Whether or not to build the playground application.')
-option('use_backend', type: 'combo', value: '__DEFAULT__', description: 'The backend to use. Must be specified.', choices: ['__DEFAULT__', 'gl-al-glfw'])
+option('use_backend', type: 'combo', value: '__DEFAULT__', description: 'The backend to use. Must be specified.', choices: ['__DEFAULT__', 'gl-al-glfw', 'gles-al-glfw', 'gl-al-sdl', 'gles-al-sdl'])
 option('windows_noconsole', type: 'boolean', value: false, description: '(Windows only) Whether to hide the console window created by default.')

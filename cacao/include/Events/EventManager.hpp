@@ -6,8 +6,7 @@
 
 #include "Event.hpp"
 #include "EventConsumer.hpp"
-
-#include "BS_thread_pool.hpp"
+#include "Utilities/MultiFuture.hpp"
 
 namespace Cacao {
 	//Manager for the event system
@@ -25,7 +24,7 @@ namespace Cacao {
 		//Dispatches an event to all subscribed consumers for the appropriate event type
 		//Also returns a signal that can be waited on to know when all consumers have finished
 		//This requires that all registered consumers are signal-processing, if not this function will throw an exception
-		std::shared_ptr<EventSignal> DispatchSignaled(Event& event);
+		std::shared_ptr<MultiFuture<void>> DispatchSignaled(Event& event);
 
 		//Shutdown the event manager and unsubscribe all consumers
 		void Shutdown();

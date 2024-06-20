@@ -2,8 +2,7 @@
 
 #include "Event.hpp"
 #include "Core/Exception.hpp"
-
-#include "BS_thread_pool.hpp"
+#include "Utilities/MultiFuture.hpp"
 
 #include <functional>
 #include <vector>
@@ -34,15 +33,13 @@ namespace Cacao {
 		std::function<void(Event&)> consumer;
 	};
 
-	using EventSignal = BS::multi_future<void>;
-
 	//Extension to an event consumer that can work with signals
 	class SignalEventConsumer : public EventConsumer {
 	  public:
 		SignalEventConsumer(std::function<void(Event&, std::promise<void>&)> consumer)
 		  : EventConsumer(), consumer(consumer) {}
 
-		void ConsumeWithSignal(Event& event, EventSignal& signal) {
+		void ConsumeWithSignal(Event& event, MultiFuture<void>& signal) {
 			std::promise<void> signalPromise = std::promise<void>();
 			signal.push_back(signalPromise.get_future());
 			consumer(event, signalPromise);

@@ -14,6 +14,15 @@ namespace Cacao {
 	Window* Window::instance = nullptr;
 	bool Window::instanceExists = false;
 
+	//Simple friend struct to set window size without function that causes more size events
+	struct WindowResizer {
+		friend Window;
+
+		void Resize(glm::ivec2 size) {
+			ChangeSize(Window::GetInstance(), size);
+		}
+	};
+
 	//Singleton accessor
 	Window* Window::GetInstance() {
 		//Do we have an instance yet?
@@ -26,8 +35,17 @@ namespace Cacao {
 		return instance;
 	}
 
-	void Window::Open(std::string windowTitle, int initialSizeX, int initialSizeY, bool startVisible) {
+	//Utility for resizing the GL viewport
+	void ResizeGLViewport(GLFWwindow* win) {
+		int fbx, fby;
+		glfwGetFramebufferSize(win, &fbx, &fby);
+		glViewport(0, 0, fbx, fby);
+	}
+
+	void Window::Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode) {
 		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
+
+		size = initialSize;
 
 		//Initialize GLFW
 		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
@@ -50,14 +68,14 @@ namespace Cacao {
 		if(!startVisible) glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 		//Create window
-		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
+		nativeWindow = glfwCreateWindow(initialSize.x, initialSize.y, windowTitle.c_str(), NULL, NULL);
 		EngineAssert(nativeWindow != NULL, "Failed to open the window!");
+
+		//Set the window mode
+		SetMode(mode);
 
 		//Set window VSync state
 		SetVSyncEnabled(true);
-
-		//Set window object size parameters
-		size = {initialSizeX, initialSizeY};
 
 		//Register window callbacks
 		glfwSetCursorPosCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, double x, double y) {
@@ -69,7 +87,10 @@ namespace Cacao {
 			EventManager::GetInstance()->Dispatch(mse);
 		});
 		glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int x, int y) {
-			Window::GetInstance()->SetSize({x, y});
+			if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
+				WindowResizer().Resize({x, y});
+			}
+			ResizeGLViewport(win);
 			DataEvent<glm::ivec2> wre("WindowResize", {x, y});
 			EventManager::GetInstance()->Dispatch(wre);
 		});
@@ -143,9 +164,7 @@ namespace Cacao {
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
 
 		//Update OpenGL framebuffer size
-		int fbx, fby;
-		glfwGetFramebufferSize((GLFWwindow*)nativeWindow, &fbx, &fby);
-		glViewport(0, 0, fbx, fby);
+		ResizeGLViewport((GLFWwindow*)nativeWindow);
 	}
 
 	void Window::UpdateVisibilityState() {
@@ -153,6 +172,33 @@ namespace Cacao {
 			glfwShowWindow((GLFWwindow*)nativeWindow);
 		} else {
 			glfwHideWindow((GLFWwindow*)nativeWindow);
+		}
+	}
+
+	void Window::UpdateModeState(WindowMode lastMode) {
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* modeInfo = glfwGetVideoMode(monitor);
+		switch(mode) {
+			case WindowMode::Window:
+				if(lastMode == WindowMode::Borderless) {
+					//Exiting borderless is weird so we go to fullscreen for a sec to fix that
+					glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
+				}
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, windowedPosition.x, windowedPosition.y, size.x, size.y, GLFW_DONT_CARE);
+				break;
+			case WindowMode::Fullscreen:
+				if(lastMode == WindowMode::Window) {
+					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+				}
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
+				break;
+			case WindowMode::Borderless:
+				if(lastMode == WindowMode::Window) {
+					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+				}
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
+				glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
+				break;
 		}
 	}
 

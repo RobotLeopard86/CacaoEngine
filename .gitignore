@@ -6,11 +6,8 @@ cacao-engine.log
 .vscode
 
 # Don't send Wrap-downloaded things
-subprojects/albundle
-subprojects/assimp
-subprojects/glfw
-subprojects/spirv-cross
-subprojects/yaml
+subprojects/*
+!subprojects/*.wrap
 
 # Don't send Python crap from utility scripts
-playground/__pycache__
+scripts/__pycache__

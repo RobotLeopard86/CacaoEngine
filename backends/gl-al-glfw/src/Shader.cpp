@@ -176,7 +176,7 @@ namespace Cacao {
 			//Clean up resources
 			glDeleteShader(compiledVertexShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGL"), std::string("Vertex shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGLError"), std::string("Vertex shader compilation failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -201,7 +201,7 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGL"), std::string("Fragment shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGLError"), std::string("Fragment shader compilation failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -229,7 +229,7 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGL"), std::string("Shader linking failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("OpenGLError"), std::string("Shader linking failure: ") + infoLog.data());
 			return {};
 		}
 
