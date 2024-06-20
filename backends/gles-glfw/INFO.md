@@ -1,4 +1,4 @@
-# Backend `gl-al-glfw` Info
+# Backend `gles-glfw` Info
 
 ## Dependencies
 Windows and macOS: Platform-specific SDKs  

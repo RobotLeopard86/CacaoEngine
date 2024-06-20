@@ -35,27 +35,12 @@ if host_machine.system() == 'linux'
 endif
 glfw_dep = cmake.subproject('glfw', options: glfw_opts, required: true).dependency('glfw')
 
-alsoft_opts = cmake.subproject_options()
-alsoft_opts.add_cmake_defines({
-	'BUILD_TESTING': 'OFF',
-	'BUILD_SHARED_LIBS': 'OFF',
-	'LIBTYPE': 'STATIC',
-	'ALSOFT_DLOPEN': 'OFF',
-	'ALSOFT_EXAMPLES': 'OFF',
-	'ALSOFT_NO_CONFIG_UTIL': 'ON',
-	'ALSOFT_EAX': 'OFF',
-	'ALSOFT_UTILS': 'OFF',
-	'ALSOFT_RTKIT': 'OFF',
-	'ALSOFT_EMBED_HRTF_DATA': 'OFF',
-})
-alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
-
 include_dirs = [
 	'../../cacao/include',
 	'include',
 	'../../libs/spdlog/include',
+	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
-	'../../libs/bsthreadpool',
 	'../../libs/glm',
 	'../../libs/uuid_v4',
 	include_directories('../../cacao')
@@ -71,7 +56,6 @@ backend_deplist = [
 	spv_hlsl,
 	spv_msl,
 	glfw_dep,
-	alsoft_dep,
 	glad_dep,
 	stb_dep,
 	skyshaders_dep,
@@ -87,6 +71,6 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'src/Mesh.cpp',
 	'src/Skybox.cpp',
 	'src/ExceptionCodes.cpp'
-], dependencies: backend_deplist, cpp_args: '-DAL_LIBTYPE_STATIC')
+], dependencies: backend_deplist)
 
 subdir_done()

@@ -65,7 +65,7 @@ namespace Cacao {
 		if(!startVisible) glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 		//Create window
-		nativeWindow = glfwCreateWindow(initialSizeX, initialSizeY, windowTitle.c_str(), NULL, NULL);
+		nativeWindow = glfwCreateWindow(initialSize.x, initialSize.y, windowTitle.c_str(), NULL, NULL);
 		EngineAssert(nativeWindow != NULL, "Failed to open the window!");
 
 		//Set the window mode
@@ -161,7 +161,7 @@ namespace Cacao {
 		glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
 
 		//Update OpenGL ES framebuffer size
-		ResizeGLViewport();
+		ResizeGLViewport((GLFWwindow*)nativeWindow);
 	}
 
 	void Window::UpdateVisibilityState() {
