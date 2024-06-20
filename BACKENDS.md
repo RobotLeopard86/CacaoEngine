@@ -4,7 +4,7 @@ This table gives some basic information about backends and platform support. For
 
 | ID | What | Windows | Mac | Linux | Info |
 | -- | ---- | ------- | --- | ----- | ---- |
-| gl-al-glfw | OpenGL 4.1 Core Profile, GLFW, OpenAL | ✅ | ✅ | ✅ | [View](backends/gl-al-glfw/INFO.md) |
-| gles-al-glfw | OpenGL ES 3.0, GLFW, OpenAL | ✅ | ✅ | ✅ | [View](backends/gles-al-glfw/INFO.md) |
-| gl-al-sdl | OpenGL 4.1 Core Profile, SDL, OpenAL | ✅ | ✅ | ✅ | [View](backends/gl-al-sdl/INFO.md) |
-| gles-al-sdl | OpenGL ES 3.0, SDL, OpenAL | ✅ | ✅ | ✅ | [View](backends/gles-al-sdl/INFO.md) |
+| gl-glfw | OpenGL 4.1 Core Profile, GLFW | ✅ | ✅ | ✅ | [View](backends/gl-glfw/INFO.md) |
+| gles-glfw | OpenGL ES 3.0, GLFW | ✅ | ✅ | ✅ | [View](backends/gles-glfw/INFO.md) |
+| gl-sdl | OpenGL 4.1 Core Profile, SDL | ✅ | ✅ | ✅ | [View](backends/gl-al-sdl/INFO.md) |
+| gles-sdl | OpenGL ES 3.0, SDL | ✅ | ✅ | ✅ | [View](backends/gles-al-sdl/INFO.md) |
