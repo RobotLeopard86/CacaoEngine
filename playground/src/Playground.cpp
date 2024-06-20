@@ -156,12 +156,6 @@ void PlaygroundApp::Launch() {
 	Cacao::WorldManager::GetInstance()->SetActiveWorld("Playground");
 	Cacao::World& world = Cacao::WorldManager::GetInstance()->GetWorld("Playground");
 
-	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
-	cameraManager->active = true;
-	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
-	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
-	world.topLevelEntities.push_back(cameraManager);
-
 	std::future<Cacao::AssetHandle<Cacao::Shader>> shaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/color.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> meshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj:Icosphere");
@@ -175,6 +169,11 @@ void PlaygroundApp::Launch() {
 	mat = new Cacao::Material();
 	mat->shader = shader.GetManagedAsset().get();
 
+	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");
+	cameraManager->active = true;
+	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
+	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
+	world.topLevelEntities.push_back(cameraManager);
 	audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(audioPlayerUUID);
 	audioPlayer->Set3DSpatializationEnabled(false);
 	audioPlayer->SetLooping(true);

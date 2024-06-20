@@ -10,6 +10,7 @@ namespace Cacao {
 		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to create an audio player!")
 
 		//Create OpenAL source object
+		alcMakeContextCurrent(AudioController::GetInstance()->ctx);
 		alGenSources(1, &source);
 
 		//Configure source object
@@ -17,22 +18,51 @@ namespace Cacao {
 
 		//Register a release event
 		sec = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
+			//Stop playing and unlink buffer
+			if(IsPlaying()) Stop();
+			alSourcei(source, AL_BUFFER, AL_NONE);
+			
+			//Delete source object
 			alDeleteSources(1, &source);
+
+			//Remove audio shutdown consumer
 			EventManager::GetInstance()->UnsubscribeConsumer("AudioShutdown", sec);
 			delete sec;
+
+			//Notify that we're done
 			p.set_value();
 		});
 		EventManager::GetInstance()->SubscribeConsumer("AudioShutdown", sec);
+
+		//Register an event for sound releasing
+		soundDelete = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
+			DataEvent<ALuint>& de = static_cast<DataEvent<ALuint>&>(e);
+
+			//Check if this sound is ours, if it is we have to stop playback
+			if(!sound.IsNull() && de.GetData() == sound->buf) {
+				//Stop player and unlink buffer
+				if(IsPlaying()) Stop();
+				alSourcei(source, AL_BUFFER, AL_NONE);
+			}
+		});
+		EventManager::GetInstance()->SubscribeConsumer("SoundRelease", soundDelete);
 	}
 
 	AudioPlayer::~AudioPlayer() {
 		if(AudioController::GetInstance()->IsAudioSystemInitialized()) {
+			//Stop playing and unlink buffer
+			if(IsPlaying()) Stop();
+			alSourcei(source, AL_BUFFER, AL_NONE);
+
 			//Delete source object
 			alDeleteSources(1, &source);
-
-			EventManager::GetInstance()->UnsubscribeConsumer("AudioShutdown", sec);
-			delete sec;
 		}
+
+		//Remove consumers
+		EventManager::GetInstance()->UnsubscribeConsumer("AudioShutdown", sec);
+		EventManager::GetInstance()->UnsubscribeConsumer("SoundRelease", soundDelete);
+		delete sec;
+		delete soundDelete;
 	}
 
 	bool AudioPlayer::IsPlaying() {
@@ -78,6 +108,7 @@ namespace Cacao {
 		CheckException(IsPlaying(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop a sound when not playing one!")
 
 		alSourceStop(source);
+		alSourcei(source, AL_BUFFER, AL_NONE);
 	}
 
 	void AudioPlayer::Set3DSpatializationEnabled(bool val) {

@@ -44,5 +44,6 @@ namespace Cacao {
 		ALuint source;
 
 		SignalEventConsumer* sec;
+		SignalEventConsumer* soundDelete;
 	};
 }

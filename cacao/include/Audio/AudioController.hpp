@@ -47,6 +47,9 @@ namespace Cacao {
 			return isInitialized;
 		}
 
+		ALCdevice* dev;
+		ALCcontext* ctx;
+
 	  private:
 		//Singleton members
 		static AudioController* instance;
@@ -58,8 +61,7 @@ namespace Cacao {
 		std::jthread* thread;
 
 		//Audio context and device
-		ALCdevice* dev;
-		ALCcontext* ctx;
+		
 
 		//3D audio stuff
 		std::weak_ptr<Entity> target3DAudio;

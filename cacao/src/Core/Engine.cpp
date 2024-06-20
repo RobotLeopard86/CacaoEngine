@@ -5,6 +5,7 @@
 #include "Graphics/Window.hpp"
 #include "Core/DynTickController.hpp"
 #include "Audio/AudioController.hpp"
+#include "Audio/AudioPlayer.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 
 #include "yaml-cpp/yaml.h"
@@ -70,10 +71,6 @@ namespace Cacao {
 			return;
 		}));
 
-		//Start the thread pool (subtract two threads for the dedicated dynamic tick and audio controllers)
-		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 2));
-
 		//Set up common skybox resources
 		std::future<void> skySetup = threadPool->enqueue([]() {
 			Skybox::CommonSetup();
@@ -89,6 +86,11 @@ namespace Cacao {
 			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 		}
 
+		//Create a short-lived dummy audio player (somehow this is required to get normal players workimng)
+		{
+			AudioPlayer ap;
+		}
+
 		//Launch game module
 		Logging::EngineLog("Running game module startup hook...");
 		auto launchFunc = gameLib->get_function<void(void)>("_CacaoLaunch");
@@ -99,21 +101,6 @@ namespace Cacao {
 		DynTickController::GetInstance()->Start();
 
 		Logging::EngineLog("Engine startup complete!");
-	}
-
-	void Engine::CoreShutdown() {
-		//Stop the dynamic tick controller
-		Logging::EngineLog("Stopping controllers...");
-		DynTickController::GetInstance()->Stop();
-		AudioController::GetInstance()->Stop();
-
-		//Call game module exit hook
-		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
-		exitFunc();
-
-		//Stop thread pool
-		Logging::EngineLog("Stopping thread pool...");
-		threadPool.reset();
 	}
 
 	void Engine::Run() {
@@ -136,9 +123,13 @@ namespace Cacao {
 		Logging::EngineLog("Initializing rendering backend...");
 		RenderController::GetInstance()->Init();
 
+		//Start the thread pool (subtract two threads for the dedicated dynamic tick and audio controllers)
+		Logging::EngineLog("Starting thread pool...");
+		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 2));
+
 		//Asynchronously run core startup
-		//We never use this future as we don't intend to wait on it, but we have to do this because std::async has [[nodiscard]]
-		std::future<void> startup = std::async(std::launch::async, [this]() {
+		//We never use this future as we don't intend to wait on it, but we have to do this because [[nodiscard]]
+		std::future<void> startup = threadPool->enqueue([this]() {
 			this->CoreStartup();
 		});
 
@@ -164,8 +155,18 @@ namespace Cacao {
 		//Clear the render queue
 		RenderController::GetInstance()->ClearRenderQueue();
 
-		//Run engine shutdown
-		CoreShutdown();
+		//Stop the dynamic tick and audio controllers
+		Logging::EngineLog("Stopping controllers...");
+		DynTickController::GetInstance()->Stop();
+		AudioController::GetInstance()->Stop();
+
+		//Call game module exit hook
+		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
+		exitFunc();
+
+		//Stop thread pool
+		Logging::EngineLog("Stopping thread pool...");
+		threadPool.reset();
 
 		run.store(false);
 	}

@@ -35,7 +35,7 @@ namespace Cacao {
 		std::string filePath;
 		unsigned int sampleRate;
 		unsigned long long sampleCount;
-		std::vector<signed short> audioData;
+		std::vector<short> audioData;
 		unsigned int channelCount;
 
 		//OpenAL object

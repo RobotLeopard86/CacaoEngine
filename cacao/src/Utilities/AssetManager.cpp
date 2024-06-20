@@ -3,6 +3,7 @@
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "3D/Model.hpp"
+#include "Audio/AudioPlayer.hpp"
 
 #include "yaml-cpp/yaml.h"
 
@@ -248,6 +249,7 @@ namespace Cacao {
 			std::shared_ptr<Sound> snd = std::make_shared<Sound>(path);
 			snd->Compile().get();
 			this->assetCache.insert_or_assign(path, std::weak_ptr<Sound> {snd});
+
 			return AssetHandle<Sound>(path, snd);
 		});
 	}

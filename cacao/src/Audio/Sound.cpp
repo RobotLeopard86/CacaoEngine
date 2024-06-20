@@ -97,7 +97,7 @@ namespace Cacao {
 		alGenBuffers(1, &buf);
 
 		//Load buffer with audio data
-		alBufferData(buf, channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16, audioData.data(), audioData.size() * sizeof(signed short), sampleRate);
+		alBufferData(buf, channelCount == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, audioData.data(), audioData.size() * sizeof(short), sampleRate);
 
 		//Register a release event
 		sec = new SignalEventConsumer([this](Event& e, std::promise<void>& p) {
@@ -118,6 +118,10 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled sound!")
 		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
 
+		//Send out an event to let all players using this sound stop
+		DataEvent<ALuint> iAmBeingReleased("SoundRelease", buf);
+		EventManager::GetInstance()->DispatchSignaled(iAmBeingReleased)->WaitAll();
+
 		//Delete buffer object
 		alDeleteBuffers(1, &buf);
 
@@ -136,13 +140,13 @@ namespace Cacao {
 		//Get file info
 		sampleRate = mp3.sampleRate;
 		channelCount = mp3.channels;
+		drmp3_uint64 totalPCMFrameCount = drmp3_get_pcm_frame_count(&mp3);
+		sampleCount = totalPCMFrameCount * channelCount;
 
 		//Read PCM frames
-		std::vector<drmp3_int16> pcm;
-		drmp3_uint64 totalFrames = drmp3_get_pcm_frame_count(&mp3);
-		drmp3_uint64 framesRead = drmp3_read_pcm_frames_s16(&mp3, totalFrames, pcm.data());
-		sampleCount = framesRead * mp3.channels;
-		CheckException(framesRead == totalFrames, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read MP3 frames!");
+		audioData.resize(sampleCount);
+		drmp3_uint64 framesRead = drmp3_read_pcm_frames_s16(&mp3, totalPCMFrameCount, audioData.data());
+		CheckException(framesRead == totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read MP3 PCM frames!");
 
 		//Close the MP3
 		drmp3_uninit(&mp3);
@@ -155,13 +159,14 @@ namespace Cacao {
 
 		//Get file info
 		sampleRate = wave.sampleRate;
-		channelCount = wave.channels == 1;
+		channelCount = wave.channels;
+		drwav_uint64 totalPCMFrameCount = wave.totalPCMFrameCount;
+		sampleCount = totalPCMFrameCount * channelCount;
 
 		//Read PCM frames
-		std::vector<drmp3_int16> pcm;
-		drmp3_uint64 framesRead = drwav_read_pcm_frames_s16(&wave, wave.totalPCMFrameCount, pcm.data());
-		sampleCount = framesRead * wave.channels;
-		CheckException(framesRead == wave.totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read WAV frames!");
+		audioData.resize(sampleCount);
+		drwav_uint64 framesRead = drwav_read_pcm_frames_s16(&wave, totalPCMFrameCount, audioData.data());
+		CheckException(framesRead == totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read WAV frames!");
 
 		//Close the WAV
 		drwav_uninit(&wave);
@@ -184,21 +189,20 @@ namespace Cacao {
 
 		//Read the audio data
 		while(true) {
-			signed short pcm[4096];
-			long readResult = ov_read(&vf, (char*)pcm, sizeof(pcm), 0, 2, 1, &currentSection);
+			short pcm[4096];
+			long samplesRead = ov_read(&vf, reinterpret_cast<char*>(pcm), sizeof(pcm), 0, 2, 1, &currentSection);
 
-			//Should neither of these conditions be met, everything is fine
-			if(readResult == 0) {
+			if(samplesRead == 0) {
 				//End of file, so exit the loop
 				break;
-			} else if(readResult < 0) {
+			} else if(samplesRead < 0) {
 				//Oh no, an error!
 				ov_clear(&vf);
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), std::string("Ogg Vorbis file reading error, result ") + std::to_string(readResult))
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read Ogg Vorbis file!")
+			} else {
+				//Add the PCM data to the end
+				audioData.insert(audioData.end(), pcm, pcm + (samplesRead / channelCount));
 			}
-
-			//Add the PCM data to the end
-			audioData.insert(audioData.end(), std::begin(pcm), std::end(pcm));
 		}
 
 		//Clean up Ogg Vorbis
@@ -212,26 +216,27 @@ namespace Cacao {
 
 		//Get file info
 		sampleRate = OPUS_SAMPLE_RATE;
-		channelCount = op_channel_count(opus, -1);
+		const OpusHead* head = op_head(opus, 0);
+		channelCount = head->channel_count;
 		sampleCount = op_pcm_total(opus, -1);
 
 		//Read the audio data
+		audioData.reserve(sampleCount * channelCount);
 		while(true) {
-			signed short pcm[4096];
-			long readResult = op_read_stereo(opus, pcm, sizeof(pcm));
+			short pcm[4096];
+			long samplesRead = op_read_stereo(opus, pcm, sizeof(pcm));
 
-			//Should neither of these conditions be met, everything is fine
-			if(readResult == 0) {
+			if(samplesRead == 0) {
 				//End of file, so exit the loop
 				break;
-			} else if(readResult < 0) {
+			} else if(samplesRead < 0) {
 				//Oh no, an error!
 				op_free(opus);
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), std::string("Opus file reading error, result ") + std::to_string(readResult))
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read Opus file!")
+			} else {
+				//Add the PCM data to the end
+				audioData.insert(audioData.end(), pcm, pcm + (samplesRead * channelCount));
 			}
-
-			//Add the PCM data to the end
-			audioData.insert(audioData.end(), std::begin(pcm), std::end(pcm));
 		}
 
 		//Clean up opusfile
