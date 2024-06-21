@@ -6,6 +6,8 @@
 
 #include "glm/vec2.hpp"
 
+#include "Utilities/MiscUtils.hpp"
+
 namespace Cacao {
 	//Represents the three different window mode states
 	//Fullscreen and borderless modes apply to only the primary monitor
@@ -125,5 +127,7 @@ namespace Cacao {
 			win->size = size;
 		}
 		friend struct WindowResizer;
+
+		NativeData* nativeData;
 	};
 }
