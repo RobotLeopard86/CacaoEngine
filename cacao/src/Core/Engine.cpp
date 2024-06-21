@@ -100,6 +100,9 @@ namespace Cacao {
 		Logging::EngineLog("Starting dynamic tick controller...");
 		DynTickController::GetInstance()->Start();
 
+		//Make the window visible
+		Window::GetInstance()->SetWindowVisibility(true);
+
 		Logging::EngineLog("Engine startup complete!");
 	}
 
@@ -117,7 +120,7 @@ namespace Cacao {
 		cfg.maxFrameLag = 10;
 
 		//Open the window
-		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, true, WindowMode::Window);
+		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
 
 		//Initialize rendering backend
 		Logging::EngineLog("Initializing rendering backend...");
