@@ -9,7 +9,7 @@ namespace Cacao {
 	class Component {
 	  public:
 		const bool IsActive() {
-			return _GetActiveState() && owner.lock()->active;
+			return _GetActiveState() && owner.lock()->IsActive();
 		}
 		virtual void SetActive(bool value) {
 			_SetActiveInternal(value);

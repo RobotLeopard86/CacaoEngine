@@ -16,10 +16,20 @@
 #include <vector>
 
 #include "uuid_v4.h"
+#include "glm/mat4x4.hpp"
 
 namespace Cacao {
 	//Forward declaration of Component so its header can include this one
 	class Component;
+
+	//Forward declaration of Entity for the fake deleter
+	class Entity;
+
+	//Fake deleter that doesn't actually delete anything
+	//This is used on the self pointer so it doesn't try to delete us in the destructor
+	struct FakeDeleter {
+		void operator()(Entity* e) const {}
+	};
 
 	//An object in the world
 	class Entity {
@@ -27,16 +37,49 @@ namespace Cacao {
 		//UUID
 		const UUIDv4::UUID uuid;
 
-		Transform transform;
+		const bool IsActive() {
+			return active;
+		}
+		void SetActive(bool val) {
+			active = val;
+		}
+
+		//Local space transform (relative to parent)
+		Transform& GetLocalTransform() {
+			return transform;
+		}
+
+		//World space transformation matrix
+		//Changes made will not reflect on the entity
+		glm::mat4 GetWorldTransformMatrix() {
+			//Calculate the transformation matrix
+			std::shared_ptr<Entity> curParent = parent.lock();
+			glm::mat4 transMat = transform.GetTransformationMatrix();
+			while(true) {
+				//If the next parent's parent is itself (so orphaned or world root), we stop
+				if(curParent->parent.lock() == curParent) break;
+
+				//Apply this transformation
+				transMat = curParent->GetLocalTransform().GetTransformationMatrix() * transMat;
+
+				//Otherwise, move on to the next parent
+				curParent = curParent->parent.lock();
+			}
+
+			return transMat;
+		}
+
+		//Get a copy of the child entity list
+		std::vector<std::shared_ptr<Entity>> GetChildrenAsList() {
+			return children;
+		}
 
 		//Human-readable name
 		std::string name;
 
 		Entity(std::string name)
-		  : uuid(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID()), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), name(name), active(true), self(this) {}
+		  : uuid(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID()), name(name), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), self(this, FakeDeleter {}), parent(self), active(true) {}
 
-		//Is this entity active?
-		bool active;
 
 		//Add a component to this entity
 		//Functions like a constructor
@@ -92,6 +135,22 @@ namespace Cacao {
 			return out;
 		}
 
+		//Change parent to another entity
+		void SetParent(std::shared_ptr<Entity> newParent) {
+			//If we aren't orphaned, remove ourselves from the current parent
+			if(parent.lock() != self) {
+				std::shared_ptr<Entity> parentLk = parent.lock();
+				auto it = std::find(parentLk->children.begin(), parentLk->children.end(), self);
+				if(it != parentLk->children.end()) parentLk->children.erase(it);
+			}
+
+			//Add ourselves as a child to the new parent
+			newParent->children.push_back(self);
+
+			//Set parent pointer
+			parent = newParent;
+		}
+
 		~Entity() {
 			//Release ownership of all components
 			for(auto comp : components) {
@@ -103,14 +162,23 @@ namespace Cacao {
 			}
 		}
 
-		//Child entities
-		std::vector<std::shared_ptr<Entity>> children;
-
 	  private:
 		//Components on this entity
 		std::map<UUIDv4::UUID, std::shared_ptr<Component>> components;
 
+		//Child entities
+		std::vector<std::shared_ptr<Entity>> children;
+
+		//Transform
+		Transform transform;
+
 		//Shared pointer to self (used for component ownership)
 		std::shared_ptr<Entity> self;
+
+		//Weak pointer to parent
+		std::weak_ptr<Entity> parent;
+
+		//Is this entity active?
+		bool active;
 	};
 }

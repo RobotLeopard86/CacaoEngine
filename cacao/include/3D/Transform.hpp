@@ -3,13 +3,11 @@
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 
-#include "Orientation.hpp"
-
 namespace Cacao {
 	class Transform {
 	  public:
-		Transform(glm::vec3 position, Orientation rotation, glm::vec3 scale)
-		  : pos(position), scale(scale), rot(rotation), transMat(1.0) {
+		Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+		  : pos(position), rot(rotation), scale(scale), transMat(1.0) {
 			RecalculateTransformationMatrix();
 		}
 
@@ -42,8 +40,7 @@ namespace Cacao {
 		}
 
 	  private:
-		glm::vec3 pos, scale;
-		Orientation rot;
+		glm::vec3 pos, rot, scale;
 
 		glm::mat4 transMat;
 

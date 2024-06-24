@@ -1,8 +1,8 @@
 #pragma once
 
-#include "3D/Orientation.hpp"
-
 #include "glm/gtc/matrix_transform.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/rotate_vector.hpp"
 
 //Allows conversion of an instance member function into a form that can be called like a static function
 #define BIND_MEMBER_FUNC(func) std::bind(&func, this, std::placeholders::_1)
@@ -15,11 +15,11 @@ namespace Cacao {
 	struct Vectors {
 		glm::vec3 front, right, up;
 	};
-	//Caluclate the front, right, and up vectors from an orientation
-	inline Vectors Calculate3DVectors(Orientation rotation) {
+	//Caluclate the front, right, and up vectors from an rotation
+	inline Vectors Calculate3DVectors(glm::vec3 rotation) {
 		//Get our X and Y rotation in radians
-		float tilt = glm::radians(rotation.pitch);
-		float pan = glm::radians(rotation.yaw);
+		float tilt = glm::radians(rotation.x);
+		float pan = glm::radians(rotation.y);
 
 		glm::vec3 frontVec, rightVec, upVec;
 

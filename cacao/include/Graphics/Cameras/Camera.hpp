@@ -4,7 +4,6 @@
 
 #include "Events/EventSystem.hpp"
 #include "Utilities/MiscUtils.hpp"
-#include "3D/Orientation.hpp"
 
 namespace Cacao {
 	//Base camera type
@@ -26,8 +25,8 @@ namespace Cacao {
 		virtual void SetPosition(glm::vec3 pos) = 0;
 
 		//Get and set rotation
-		virtual Orientation GetRotation() = 0;
-		virtual void SetRotation(Orientation rot) = 0;
+		virtual glm::vec3 GetRotation() = 0;
+		virtual void SetRotation(glm::vec3 rot) = 0;
 
 		//Get projection matrix (transforms vertices according to how the camera sees them)
 		virtual glm::mat4 GetProjectionMatrix() = 0;

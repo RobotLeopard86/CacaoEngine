@@ -23,7 +23,7 @@ namespace Cacao {
 	Shader* Skybox::skyboxShader = nullptr;
 
 	Skybox::Skybox(Cubemap* tex)
-	  : Asset(false), orientation({0, 0, 0}), textureOwner(true), texture(tex) {
+	  : Asset(false), rotation({0, 0, 0}), textureOwner(true), texture(tex) {
 		//Create native data
 		nativeData = new GLSkyboxData();
 		nd->vaoReady = false;
@@ -112,9 +112,9 @@ namespace Cacao {
 		//Create skybox matrices
 		glm::mat4 skyView = glm::mat4(glm::mat3(viewMatrix));
 		glm::mat4 skyTransform(1.0);
-		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.pitch), {1.0, 0.0, 0.0});
-		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.yaw), {0.0, 1.0, 0.0});
-		skyTransform = glm::rotate(skyTransform, glm::radians(orientation.roll), {0.0, 0.0, 1.0});
+		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.x), {1.0, 0.0, 0.0});
+		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.y), {0.0, 1.0, 0.0});
+		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.z), {0.0, 0.0, 1.0});
 
 		//Bind skybox shader and texture
 		skyboxShader->Bind();

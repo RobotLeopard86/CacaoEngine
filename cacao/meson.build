@@ -107,7 +107,7 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	'src/Core/DynTickController.cpp',
 	'src/Rendering/RenderController.cpp',
 	'src/Utilities/AssetManager.cpp',
-	'src/Audio/AudioController.cpp',
+	'src/Audio/AudioSystem.cpp',
 	'src/Audio/Sound.cpp',
 	'src/Audio/AudioPlayer.cpp'
 ], include_directories: includes, dependencies: [

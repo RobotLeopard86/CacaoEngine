@@ -8,6 +8,8 @@
 #include "GLUtils.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
+#include "Graphics/Textures/Texture2D.hpp"
+#include "Graphics/Textures/Cubemap.hpp"
 
 namespace Cacao {
 	//Queue of OpenGL tasks to process
@@ -65,6 +67,22 @@ namespace Cacao {
 				//Draw the mesh
 				obj.mesh->Draw();
 
+				//Unbind any textures
+				const ShaderSpec& spec = obj.material.shader->GetSpec();
+				for(ShaderUploadItem& sui : obj.material.data) {
+					if(std::find_if(spec.begin(), spec.end(), [&sui](ShaderItemInfo sii) {
+						   return (sii.type == SpvType::SampledImage && sii.entryName == sui.target);
+					   }) != spec.end()) {
+						if(sui.data.type() == typeid(Texture2D*)) {
+							Texture2D* tex = std::any_cast<Texture2D*>(sui.data);
+							tex->Unbind();
+						} else if(sui.data.type() == typeid(Cubemap*)) {
+							Cubemap* tex = std::any_cast<Cubemap*>(sui.data);
+							tex->Unbind();
+						}
+					}
+				}
+
 				//Unbind shader
 				obj.material.shader->Unbind();
 			}
@@ -89,7 +107,7 @@ namespace Cacao {
 	}
 
 	void RenderController::Shutdown() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uinitialized render controller!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!")
 
 		//Take care of any remaining OpenGL tasks
 		while(!glQueue.empty()) {
