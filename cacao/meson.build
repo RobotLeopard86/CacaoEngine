@@ -80,21 +80,32 @@ alsoft_opts.add_cmake_defines({
 })
 alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
 
+guid_opts = cmake.subproject_options()
+guid_opts.add_cmake_defines({
+	'BUILD_SHARED_LIBS': 'OFF',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CROSSGUID_TESTS': 'OFF'
+})
+if meson.get_compiler('cpp').get_id() == 'msvc'
+	guid_opts.append_compile_args('cpp', '/FI', 'stdint.h')
+else
+	guid_opts.append_compile_args('cpp', '-include', 'stdint.h')
+endif
+guid_dep = cmake.subproject('guid', options: guid_opts, required: true).dependency('crossguid')
+
 includes = [
 	'include',
 	'../libs/spdlog/include',
 	'../libs/thread-pool/include',
 	'../libs/dynalo/include',
 	'../libs/glm',
-	'../libs/uuid_v4',
 	'../libs/dr_libs'
 ]
 
 cxx = meson.get_compiler('cpp')
-libm = cxx.find_library('m', required: false)
-libdl = cxx.find_library('dl', required: false)
+libdl = cxx.find_library('dl', required: false, static: true)
 
-libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
+sources = [
 	'src/Core/Log.cpp',
 	'src/Core/Assert.cpp',
 	'src/Core/Engine.cpp',
@@ -110,11 +121,25 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	'src/Audio/AudioSystem.cpp',
 	'src/Audio/Sound.cpp',
 	'src/Audio/AudioPlayer.cpp'
-], include_directories: includes, dependencies: [
+]
+
+if not cxx.links('''
+	#include <math.h>
+
+	int main() {
+		int x;
+		float y = __frexpf(1.1f, &x);
+		float z = __ldexpf(y, x);
+		return 0; 
+	}
+''', dependencies: cxx.find_library('m', required: false, static: false), name: 'EXPF check')
+	sources += 'src/expf.c'
+endif
+
+libcacao = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: [
 	yaml_dep,
 	assimp_dep,
 	zlib_dep,
-	libm,
 	libdl,
 	spv_core,
 	spv_c,
@@ -130,7 +155,8 @@ libcacao = static_library('cacaofrontend', build_by_default: true, sources: [
 	vorbis,
 	vorbisfile,
 	opus,
-	opusfile
+	opusfile,
+	guid_dep
 ], pic: true)
 
 python = find_program('python')
@@ -141,7 +167,7 @@ if need_pipewire == 0
 	exe_deps += dependency('libpipewire-0.3', method: 'pkg-config')
 endif
 
-cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', build_by_default: true, win_subsystem: subsystem, include_directories: includes, 
+cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: includes, 
 	build_rpath: '.', link_with: [ libcacao, libbackend ], export_dynamic: true, dependencies: exe_deps)
 
 subdir_done()

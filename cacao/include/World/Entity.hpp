@@ -15,7 +15,10 @@
 #include <map>
 #include <vector>
 
-#include "uuid_v4.h"
+//This is required for uint64_t used by crossguid (but that doesn't include it for some reason)
+#include <stdint.h>
+
+#include "crossguid/guid.hpp"
 #include "glm/mat4x4.hpp"
 
 namespace Cacao {
@@ -34,8 +37,8 @@ namespace Cacao {
 	//An object in the world
 	class Entity {
 	  public:
-		//UUID
-		const UUIDv4::UUID uuid;
+		//GUID
+		const xg::Guid guid;
 
 		const bool IsActive() {
 			return active;
@@ -78,16 +81,16 @@ namespace Cacao {
 		std::string name;
 
 		Entity(std::string name)
-		  : uuid(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID()), name(name), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), self(this, FakeDeleter {}), parent(self), active(true) {}
+		  : guid(xg::newGuid()), name(name), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), self(this, FakeDeleter {}), parent(self), active(true) {}
 
 
 		//Add a component to this entity
 		//Functions like a constructor
-		//Returns a UUID for accessing this component (DO NOT LOSE THIS)
+		//Returns a GUID for accessing this component (DO NOT LOSE THIS)
 		//All components will be removed and deleted when this object is deleted
 		//Component freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity
 		template<typename T, typename... Args>
-		const UUIDv4::UUID MountComponent(Args&&... args) {
+		const xg::Guid MountComponent(Args&&... args) {
 			static_assert(std::is_base_of<Component, T>(), "Can only mount subclasses of Component!");
 
 			//Create a component and set its owner
@@ -95,22 +98,22 @@ namespace Cacao {
 			cptr->SetOwner(self);
 
 			//Add this component to the list
-			auto mapValue = components.emplace(std::make_pair<UUIDv4::UUID, std::shared_ptr<Component>>(UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID(), std::static_pointer_cast<Component>(cptr)));
+			auto mapValue = components.emplace(std::make_pair<xg::Guid, std::shared_ptr<Component>>(xg::newGuid(), std::static_pointer_cast<Component>(cptr)));
 
-			//Return the UUID
+			//Return the GUID
 			return mapValue.first->first;
 		}
 
 		//Retrieve a component from the entity
-		//Requires the UUID returned from MountComponent
+		//Requires the GUID returned from MountComponent
 		template<typename T>
-		std::shared_ptr<T> GetComponent(UUIDv4::UUID uuid) {
+		std::shared_ptr<T> GetComponent(xg::Guid guid) {
 			static_assert(std::is_base_of<Component, T>(), "Can only get subclasses of Component!");
-			CheckException(components.contains(uuid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided UUID exists in this entity!");
+			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
 
 			//Try to cast the value
 			try {
-				return std::dynamic_pointer_cast<T>(components[uuid]);
+				return std::dynamic_pointer_cast<T>(components[guid]);
 			} catch(std::bad_cast) {
 				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "The requested compnent's type does not match the requested type!")
 			}
@@ -118,12 +121,12 @@ namespace Cacao {
 
 		//Remove a component from the entity and delete it
 		//The freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity
-		//Requires the UUID returned from MountComponent
-		void DeleteComponent(UUIDv4::UUID uuid) {
-			CheckException(components.contains(uuid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided UUID exists in this entity!");
+		//Requires the GUID returned from MountComponent
+		void DeleteComponent(xg::Guid guid) {
+			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
 
-			components[uuid].reset();
-			components.erase(uuid);
+			components[guid].reset();
+			components.erase(guid);
 		}
 
 		//Get the components in list form
@@ -164,7 +167,7 @@ namespace Cacao {
 
 	  private:
 		//Components on this entity
-		std::map<UUIDv4::UUID, std::shared_ptr<Component>> components;
+		std::map<xg::Guid, std::shared_ptr<Component>> components;
 
 		//Child entities
 		std::vector<std::shared_ptr<Entity>> children;

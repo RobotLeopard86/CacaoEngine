@@ -21,16 +21,16 @@ namespace Cacao {
 		//Root entity of this world
 		std::shared_ptr<Entity> rootEntity;
 
-		//Find an entity in this world by its UUID
+		//Find an entity in this world by its GUID
 		//Returns an optional because an entity may or may not be found
-		std::optional<std::shared_ptr<Entity>> FindEntityByUUID(UUIDv4::UUID uuid) {
-			//Create a function to check if the UUID matches
-			auto checkUUID = [uuid](std::shared_ptr<Entity> e) {
-				return uuid == e->uuid;
+		std::optional<std::shared_ptr<Entity>> FindEntityByGUID(xg::Guid guid) {
+			//Create a function to check if the GUID matches
+			auto checkGUID = [guid](std::shared_ptr<Entity> e) {
+				return guid == e->guid;
 			};
 
 			//Search for the object
-			return entitySearchRunner(rootEntity->GetChildrenAsList(), checkUUID);
+			return entitySearchRunner(rootEntity->GetChildrenAsList(), checkGUID);
 		}
 
 		World(Camera* camera) {

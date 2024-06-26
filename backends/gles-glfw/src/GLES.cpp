@@ -5,7 +5,7 @@
 
 #include "Graphics/Window.hpp"
 #include "Events/EventSystem.hpp"
-#include "GLUtils.hpp"
+#include "ESUtils.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "Graphics/Textures/Texture2D.hpp"

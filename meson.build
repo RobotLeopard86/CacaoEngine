@@ -1,4 +1,4 @@
-project('cacaoengine', 'cpp', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20' ])
+project('cacaoengine', 'cpp', 'c', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20' ])
 
 playground = get_option('build_playground')
 backend = get_option('use_backend')
@@ -43,19 +43,28 @@ cacao_dep = declare_dependency(include_directories: [
 	'libs/thread-pool/include',
 	'libs/dynalo/include',
 	'libs/glm',
-	'libs/uuid_v4',
 	include_directories('cacao')
 ], dependencies: [
+	yaml_dep,
+	assimp_dep,
+	zlib_dep,
+	libdl,
 	spv_core,
 	spv_c,
 	spv_cpp,
-	spv_rfl,
 	spv_util,
+	spv_rfl,
 	spv_glsl,
 	spv_hlsl,
 	spv_msl,
 	skyshaders_dep,
-	alsoft_dep
+	alsoft_dep,
+	ogg,
+	vorbis,
+	vorbisfile,
+	opus,
+	opusfile,
+	guid_dep
 ], link_with: [
 	libbackend,
 	libcacao

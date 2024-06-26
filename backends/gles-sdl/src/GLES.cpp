@@ -1,11 +1,10 @@
 #include "Graphics/Rendering/RenderController.hpp"
 
 #include "glad/gles2.h"
-#include "GLFW/glfw3.h"
 
 #include "Graphics/Window.hpp"
 #include "Events/EventSystem.hpp"
-#include "GLUtils.hpp"
+#include "ESUtils.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "Graphics/Textures/Texture2D.hpp"

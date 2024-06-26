@@ -61,12 +61,12 @@ namespace Cacao {
 	void Skybox::CommonCleanup() {
 		//Temporary shader pointer for capturing
 		Shader* shader = skyboxShader;
-		GLJob job([shader]() {
+		Task cleanupJob([shader]() {
 			shader->Release();
 			while(shader->IsCompiled()) {}
 			delete shader;
 		});
-		EnqueueGLJob(job);
+		EnqueueGLJob(cleanupJob);
 
 		isSetup = false;
 	}

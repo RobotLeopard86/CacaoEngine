@@ -43,9 +43,11 @@ class PlaygroundApp {
 		delete this;
 	}
 
-	Cacao::AssetHandle<Cacao::Skybox>& GetSky() {
+	Cacao::AssetHandle<Cacao::Skybox> GetSky() {
 		return sky;
 	}
+
+	void PlayStopTone();
 
   private:
 	static PlaygroundApp* instance;
@@ -53,6 +55,7 @@ class PlaygroundApp {
 
 	Cacao::AssetHandle<Cacao::Skybox> sky;
 	Cacao::AssetHandle<Cacao::Sound> bgm;
+	Cacao::AssetHandle<Cacao::Sound> stopTone;
 
 	Cacao::AssetHandle<Cacao::Shader> icoShader;
 	Cacao::AssetHandle<Cacao::Mesh> icoMesh;
@@ -60,6 +63,7 @@ class PlaygroundApp {
 	std::vector<std::shared_ptr<Cacao::Entity>> icospheres;
 
 	std::shared_ptr<Cacao::Entity> cameraManager;
+	xg::Guid apGuid;
 
 	Cacao::AssetHandle<Cacao::Shader> prisShader;
 	Cacao::AssetHandle<Cacao::Mesh> prisMesh;
@@ -77,7 +81,15 @@ class SussyScript final : public Cacao::Script {
 	void OnDeactivate() override {
 		Cacao::Logging::ClientLog("I'm asleep!");
 	}
+	void Exit() {
+		Cacao::Engine::GetInstance()->GetThreadPool()->enqueue_detach([]() {
+			PlaygroundApp::GetInstance()->PlayStopTone();
+			Cacao::Engine::GetInstance()->Stop();
+		});
+	}
 	void OnTick(double timestep) override {
+		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_ESCAPE)) Exit();
+
 		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_LEFT_CONTROL) && !usedCtrl) {
 			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_F)) {
 				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Fullscreen);
@@ -88,9 +100,10 @@ class SussyScript final : public Cacao::Script {
 			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_W)) {
 				Cacao::Window::GetInstance()->SetMode(Cacao::WindowMode::Window);
 				usedCtrl = true;
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)) {
+				Exit();
 			}
-		} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_LEFT_CONTROL) && usedCtrl) {
-		} else {
+		} else if(!Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_LEFT_CONTROL)) {
 			usedCtrl = false;
 			Cacao::World& world = Cacao::WorldManager::GetInstance()->GetActiveWorld();
 			Cacao::PerspectiveCamera* cam = static_cast<Cacao::PerspectiveCamera*>(world.cam);
@@ -106,12 +119,6 @@ class SussyScript final : public Cacao::Script {
 			}
 			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_U)) {
 				camRotChange.x -= 0.5f;
-			}
-			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_X)) {
-				camRotChange.z += 0.5f;
-			}
-			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_C)) {
-				camRotChange.z -= 0.5f;
 			}
 
 			currentRot = cam->GetRotation();
@@ -225,6 +232,18 @@ class Spinner : public Cacao::Script {
 PlaygroundApp* PlaygroundApp::instance = nullptr;
 bool PlaygroundApp::instanceExists = false;
 
+void PlaygroundApp::PlayStopTone() {
+	std::shared_ptr<Cacao::AudioPlayer> p = cameraManager->GetComponent<Cacao::AudioPlayer>(apGuid);
+	p->Stop();
+	p->sound = stopTone;
+	p->SetLooping(false);
+	p->SetGain(0.8f);
+	p->Play();
+	while(p->IsPlaying()) {
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
+}
+
 void PlaygroundApp::Launch() {
 	//Create a world
 	Cacao::WorldManager::GetInstance()->CreateWorld<Cacao::PerspectiveCamera>("Playground");
@@ -234,6 +253,7 @@ void PlaygroundApp::Launch() {
 	//Load assets
 	std::future<Cacao::AssetHandle<Cacao::Skybox>> skyFuture = Cacao::AssetManager::GetInstance()->LoadSkybox("assets/sky/sky.cubedef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Sound>> bgmFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/chords.opus");
+	std::future<Cacao::AssetHandle<Cacao::Sound>> stFuture = Cacao::AssetManager::GetInstance()->LoadSound("assets/audio/stoptone.mp3");
 	std::future<Cacao::AssetHandle<Cacao::Shader>> icoShaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/ico.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> icoMeshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/icosphere.obj:Icosphere");
 	std::future<Cacao::AssetHandle<Cacao::Shader>> prisShaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/prism.shaderdef.yml");
@@ -243,6 +263,7 @@ void PlaygroundApp::Launch() {
 	//Get loaded assets
 	sky = skyFuture.get();
 	bgm = bgmFuture.get();
+	stopTone = stFuture.get();
 	icoShader = icoShaderFuture.get();
 	icoMesh = icoMeshFuture.get();
 	prisShader = prisShaderFuture.get();
@@ -264,10 +285,10 @@ void PlaygroundApp::Launch() {
 	cameraManager->SetActive(true);
 	cameraManager->GetComponent<SussyScript>(cameraManager->MountComponent<SussyScript>())->SetActive(true);
 	cameraManager->SetParent(world.rootEntity);
-	UUIDv4::UUID audioPlayerUUID = cameraManager->MountComponent<Cacao::AudioPlayer>();
+	apGuid = cameraManager->MountComponent<Cacao::AudioPlayer>();
 
 	//Configure audio player
-	std::shared_ptr<Cacao::AudioPlayer> audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(audioPlayerUUID);
+	std::shared_ptr<Cacao::AudioPlayer> audioPlayer = cameraManager->GetComponent<Cacao::AudioPlayer>(apGuid);
 	audioPlayer->SetLooping(true);
 	audioPlayer->SetGain(1.0f);
 	audioPlayer->sound = bgm;

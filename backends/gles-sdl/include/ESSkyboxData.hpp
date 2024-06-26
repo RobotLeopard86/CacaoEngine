@@ -15,11 +15,11 @@ namespace Cacao {
 			if(vaoReady) {
 				//Copy VAO and VBO names so they can be deleted even if object is first
 				GLuint vertexArray = vao, vertexBuffer = vbo;
-				GLJob job([vertexArray, vertexBuffer]() {
+				Task delTask([vertexArray, vertexBuffer]() {
 					glDeleteBuffers(1, &vertexBuffer);
 					glDeleteVertexArrays(1, &vertexArray);
 				});
-				EnqueueGLJob(job);
+				EnqueueGLJob(delTask);
 			}
 		}
 	};

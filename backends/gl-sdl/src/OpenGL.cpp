@@ -1,7 +1,6 @@
 #include "Graphics/Rendering/RenderController.hpp"
 
 #include "glad/gl.h"
-#include "GLFW/glfw3.h"
 
 #include "Graphics/Window.hpp"
 #include "Events/EventSystem.hpp"

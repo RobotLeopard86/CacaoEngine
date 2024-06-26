@@ -147,6 +147,10 @@ namespace Cacao {
 	}
 
 	void Engine::Stop() {
+		run.store(false);
+	}
+
+	void Engine::CoreShutdown() {
 		Logging::EngineLog("Shutting down engine...");
 		shuttingDown.store(true);
 
