@@ -21,7 +21,7 @@ namespace Cacao {
 			delete nativeData;
 		}
 		Skybox(const Skybox& other)
-		  : Asset(other.compiled), orientation(other.orientation), textureOwner(false), texture(other.texture) {
+		  : Asset(other.compiled), rotation(other.rotation), textureOwner(false), texture(other.texture) {
 			_InitCopyND();
 		}
 
@@ -48,7 +48,7 @@ namespace Cacao {
 		//Clean up any common skybox resources
 		static void CommonCleanup();
 
-		Orientation orientation;
+		glm::vec3 rotation;
 
 	  private:
 		bool textureOwner;

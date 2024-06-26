@@ -55,7 +55,6 @@ include_dirs = [
 	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
 	'../../libs/glm',
-	'../../libs/uuid_v4',
 	include_directories('../../cacao')
 ]
 

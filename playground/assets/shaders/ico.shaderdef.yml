@@ -1,0 +1,2 @@
+vertex: assets/shaders/ico.vert.spv
+fragment: assets/shaders/ico.frag.spv

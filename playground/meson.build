@@ -1,11 +1,10 @@
-glslc_spv_cmd = [ glslc, '-mfmt=bin', '-o', '@OUTPUT@', '@INPUT@']
-colorvert = custom_target('color.vert', command: glslc_spv_cmd, input: 'src/shaders/color.vert', output: '@PLAINNAME@.spv', build_always_stale: true, build_by_default: true)
-colorfrag = custom_target('color.frag', command: glslc_spv_cmd, input: 'src/shaders/color.frag', output: '@PLAINNAME@.spv', build_always_stale: true, build_by_default: true)
+spv_gen = generator(glslc, output: '@PLAINNAME@.spv', arguments: ['-mfmt=bin', '@INPUT@', '-o', '@OUTPUT@'])
+
+shaders = spv_gen.process('src/shaders/ico.vert', 'src/shaders/ico.frag', 'src/shaders/prism.vert', 'src/shaders/prism.frag')
 
 launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep, sources: [
 	'src/Playground.cpp',
-	colorvert,
-	colorfrag
+	shaders
 ], build_by_default: true)
 
 run_target('bundle_playground', command: [python, meson.global_source_root()/'scripts'/'bundle_playground.py'], depends: [

@@ -72,6 +72,7 @@ namespace Cacao {
 
 		//Run the core startup and shutdown systems of the engine (render thread has to be on main and running early to process graphics stuff, so startup work gets forked off)
 		void CoreStartup();
+		void CoreShutdown();
 
 		//To be implemented by backend
 		//Register backend-specific exception codes

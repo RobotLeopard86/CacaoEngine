@@ -66,15 +66,15 @@ namespace Cacao {
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
 			std::mutex slMutex {};
 			MultiFuture<void> slFuture;
-			for(int i = 0; i < activeWorld.topLevelEntities.size(); i++) {
-				std::shared_ptr<Entity> ent = activeWorld.topLevelEntities[i];
+			for(int i = 0; i < activeWorld.rootEntity->GetChildrenAsList().size(); i++) {
+				std::shared_ptr<Entity> ent = activeWorld.rootEntity->GetChildrenAsList()[i];
 				slFuture.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([this, ent, &slMutex]() {
 					//Create script locator function for an entity
 					auto scriptLocator = [this, &slMutex](std::shared_ptr<Entity> e) {
 						//Sneaky recursive lambda trick
 						auto impl = [this, &slMutex](std::shared_ptr<Entity> e, auto& implRef) mutable {
 							//Stop if this component is inactive
-							if(!e->active) return;
+							if(!e->IsActive()) return;
 
 							//Check for scripts
 							for(std::shared_ptr<Component>& c : e->GetComponentsAsList()) {
@@ -87,7 +87,7 @@ namespace Cacao {
 							}
 
 							//Recurse through children
-							for(std::shared_ptr<Entity> child : e->children) {
+							for(std::shared_ptr<Entity> child : e->GetChildrenAsList()) {
 								implRef(child, implRef);
 							}
 						};
@@ -111,15 +111,15 @@ namespace Cacao {
 			tickRenderList.clear();
 			std::mutex rlMutex {};
 			MultiFuture<void> roFuture;
-			for(int i = 0; i < activeWorld.topLevelEntities.size(); i++) {
-				std::shared_ptr<Entity> ent = activeWorld.topLevelEntities[i];
+			for(int i = 0; i < activeWorld.rootEntity->GetChildrenAsList().size(); i++) {
+				std::shared_ptr<Entity> ent = activeWorld.rootEntity->GetChildrenAsList()[i];
 				roFuture.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([this, ent, &rlMutex]() {
 					//Create mesh locator function for an entity
 					auto meshLocator = [this, &rlMutex](std::shared_ptr<Entity> e) {
 						//Sneaky recursive lambda trick
 						auto impl = [this, &rlMutex](std::shared_ptr<Entity> e, auto& implRef) mutable {
 							//Stop if this component is inactive
-							if(!e->active) return;
+							if(!e->IsActive()) return;
 
 							//Check for mesh components
 							for(std::shared_ptr<Component>& c : e->GetComponentsAsList()) {
@@ -127,13 +127,13 @@ namespace Cacao {
 									//Add to list (once lock is available)
 									MeshComponent* mc = std::dynamic_pointer_cast<MeshComponent>(c).get();
 									rlMutex.lock();
-									this->tickRenderList.push_back(RenderObject(e->transform.GetTransformationMatrix(), mc->mesh, mc->mat));
+									this->tickRenderList.push_back(RenderObject(e->GetWorldTransformMatrix(), mc->mesh, mc->mat));
 									rlMutex.unlock();
 								}
 							}
 
 							//Recurse through children
-							for(std::shared_ptr<Entity> child : e->children) {
+							for(std::shared_ptr<Entity> child : e->GetChildrenAsList()) {
 								implRef(child, implRef);
 							}
 						};

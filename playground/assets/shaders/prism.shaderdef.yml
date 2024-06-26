@@ -1,0 +1,7 @@
+vertex: assets/shaders/prism.vert.spv
+fragment: assets/shaders/prism.frag.spv
+spec:
+  - name: texSample
+    sizex: 1
+    sizey: 1
+    type: texture

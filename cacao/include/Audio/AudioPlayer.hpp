@@ -28,12 +28,10 @@ namespace Cacao {
 		//Sound to play
 		AssetHandle<Sound> sound;
 
-		void Set3DSpatializationEnabled(bool val);
 		void SetLooping(bool val);
 		void SetGain(float val);
 		void SetPitchMultiplier(float val);
 		void SetPlaybackTime(float timeInSeconds);
-		bool Get3DSpatializationEnabled();
 		bool GetLooping();
 		float GetGain();
 		float GetPitchMultiplier();
@@ -45,5 +43,6 @@ namespace Cacao {
 
 		SignalEventConsumer* sec;
 		SignalEventConsumer* soundDelete;
+		bool consumersSubscribed;
 	};
 }

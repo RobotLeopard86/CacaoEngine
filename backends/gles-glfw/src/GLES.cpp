@@ -8,39 +8,36 @@
 #include "ESUtils.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
+#include "Graphics/Textures/Texture2D.hpp"
+#include "Graphics/Textures/Cubemap.hpp"
 
 namespace Cacao {
-	//Queue of OpenGL ES jobs to process
-	static std::queue<GLJob> glQueue;
+	//Queue of OpenGL ES tasks to process
+	static std::queue<Task> glQueue;
 
 	//Queue mutex
 	static std::mutex queueMutex;
 
 	void RenderController::UpdateGraphicsState() {
-		//Process OpenGL ES jobs
+		//Process OpenGL ES tasks
 		while(!glQueue.empty()) {
-			//Acquire next job
+			//Acquire next task
 			queueMutex.lock();
-			GLJob& job = glQueue.front();
+			Task& task = glQueue.front();
 			queueMutex.unlock();
 
-			//Run job
+			//Run task
 			//In case it throws an exception, send it back to the caller
 			try {
-				job.func();
+				task.func();
 
-				//Mark job as done
-				job.status->set_value();
+				//Mark task as done
+				task.status->set_value();
 			} catch(...) {
-				try {
-					std::rethrow_exception(std::current_exception());
-				} catch(const std::exception& e) {
-					Logging::EngineLog(e.what(), LogLevel::Error);
-				}
-				job.status->set_exception(std::current_exception());
+				task.status->set_exception(std::current_exception());
 			}
 
-			//Remove job from queue
+			//Remove task from queue
 			queueMutex.lock();
 			glQueue.pop();
 			queueMutex.unlock();
@@ -49,7 +46,7 @@ namespace Cacao {
 
 	void RenderController::ProcessFrame(Frame& frame) {
 		//Send the frame into the GL queue
-		std::shared_future<void> frameJob = InvokeGL([&frame]() {
+		std::shared_future<void> frameTask = InvokeGL([&frame]() {
 			//Clear the screen
 			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -70,6 +67,22 @@ namespace Cacao {
 				//Draw the mesh
 				obj.mesh->Draw();
 
+				//Unbind any textures
+				const ShaderSpec& spec = obj.material.shader->GetSpec();
+				for(ShaderUploadItem& sui : obj.material.data) {
+					if(std::find_if(spec.begin(), spec.end(), [&sui](ShaderItemInfo sii) {
+						   return (sii.type == SpvType::SampledImage && sii.entryName == sui.target);
+					   }) != spec.end()) {
+						if(sui.data.type() == typeid(Texture2D*)) {
+							Texture2D* tex = std::any_cast<Texture2D*>(sui.data);
+							tex->Unbind();
+						} else if(sui.data.type() == typeid(Cubemap*)) {
+							Cubemap* tex = std::any_cast<Cubemap*>(sui.data);
+							tex->Unbind();
+						}
+					}
+				}
+
 				//Unbind shader
 				obj.material.shader->Unbind();
 			}
@@ -78,13 +91,13 @@ namespace Cacao {
 			if(frame.skybox.has_value()) frame.skybox.value().Draw(frame.projection, frame.view);
 		});
 
-		//Update the graphics state (will guarantee that the job is processed, so it doesn't need to be waited on)
+		//Update the graphics state (will guarantee that the task is processed, so it doesn't need to be waited on)
 		UpdateGraphicsState();
 	}
 
-	void EnqueueGLJob(GLJob& job) {
+	void EnqueueGLJob(Task& task) {
 		queueMutex.lock();
-		glQueue.push(job);
+		glQueue.push(task);
 		queueMutex.unlock();
 	}
 
@@ -94,20 +107,20 @@ namespace Cacao {
 	}
 
 	void RenderController::Shutdown() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uinitialized render controller!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!")
 
-		//Take care of any remaining OpenGL ES jobs
+		//Take care of any remaining OpenGL ES tasks
 		while(!glQueue.empty()) {
-			//Acquire next job
-			GLJob& job = glQueue.front();
+			//Acquire next task
+			Task& task = glQueue.front();
 
-			//Run job
-			job.func();
+			//Run task
+			task.func();
 
-			//Mark job as done
-			job.status->set_value();
+			//Mark task as done
+			task.status->set_value();
 
-			//Remove job from queue
+			//Remove task from queue
 			glQueue.pop();
 		}
 

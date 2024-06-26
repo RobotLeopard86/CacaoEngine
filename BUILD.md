@@ -13,13 +13,17 @@
 * (reccommended but optional) LLD
 * GLSLC (for shaders)
 
-## 0. Audio Dependencies (*LINUX ONLY*)
+## 0. Linux Dependencies (*LINUX ONLY*)
 Cacao Engine uses OpenAL-Soft, a software implementation of the OpenAL API which sits atop platform-specific APIs. On Linux, depending on the audio providers you want available, you will need to install additional packages prior to configuring. Find these in the table below.  
 | Provider | Debian-based | Fedora-based | Arch-based |
 | -------- | ------------ | ------------ | ---------- |
 | Pipewire | `libpipewire-0.3-dev` | `pipewire-devel` | `libpipewire` |
 | PulseAudio | `libpulse-dev` | `pulseaudio-libs pulseaudio-libs-devel` | `libpulse` |
 | ALSA | `libasound2-dev` | `alsa-lib alsa-lib-devel` | `alsa-lib` |
+Cacao Engine also requires libuuid. The packages for that are listed below:
+* Debian-based: `uuid-dev`
+* Fedora-based: `libuuid-devel`
+* Arch-based: `util-linux-libs`
 
 ## 1. Tools
 To build Cacao Engine, the prerequisites listed above are required. You can install Meson as listed on their website [here](https://mesonbuild.com/SimpleStart.html#installing-meson). CMake is also simple. On Linux, it should be available in your package manager. For Windows and macOS users, you can get CMake on their website's [download page](https://cmake.org/download/#latest). Clang and LLD, though optional, are reccommended and are the compilers that Cacao Engine is designed to work on. Like CMake, they should be available in your Linux package manager, and can be downloaded on Windows and macOS from [the LLVM website](https://releases.llvm.org/). Finally, GLSLC is available as part of the Vulkan SDK (download that [here](https://vulkan.lunarg.com/sdk/home)), or can be downloaded standalone from the [project GitHub](https://github.com/google/shaderc/blob/main/downloads.md).

@@ -18,10 +18,10 @@ namespace Cacao {
 			position = pos;
 			RecalculateViewMatrix();
 		}
-		Orientation GetRotation() override {
+		glm::vec3 GetRotation() override {
 			return rotation;
 		}
-		void SetRotation(Orientation rot) override {
+		void SetRotation(glm::vec3 rot) override {
 			rotation = rot;
 			RecalculateViewMatrix();
 		}
@@ -59,10 +59,8 @@ namespace Cacao {
 	  private:
 		glm::mat4 projectionMatrix, viewMatrix, viewProjectionMatrix;
 
-		glm::vec3 position;
+		glm::vec3 position, rotation;
 		glm::vec3 frontVec, upVec, rightVec;
-
-		Orientation rotation;
 
 		glm::ivec2 displaySize;
 
@@ -72,7 +70,7 @@ namespace Cacao {
 		void RecalculateViewMatrix();
 		//Recalculate the projection matrix based on a new FOV and display size
 		void RecalculateProjectionMatrix();
-		//Recalculate camera orientation vectors
+		//Recalculate camera rotation vectors
 		void RecalculateCameraVectors();
 	};
 }

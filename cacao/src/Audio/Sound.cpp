@@ -1,7 +1,7 @@
 #include "Audio/Sound.hpp"
 
 #include "Core/Exception.hpp"
-#include "Audio/AudioController.hpp"
+#include "Audio/AudioSystem.hpp"
 
 #define DR_MP3_IMPLEMENTATION
 #define DR_WAV_IMPLEMENTATION
@@ -91,7 +91,7 @@ namespace Cacao {
 
 	std::shared_future<void> Sound::Compile() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!")
-		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
 
 		//Create buffer object
 		alGenBuffers(1, &buf);
@@ -116,7 +116,7 @@ namespace Cacao {
 
 	void Sound::Release() {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled sound!")
-		CheckException(AudioController::GetInstance()->IsAudioSystemInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
 
 		//Send out an event to let all players using this sound stop
 		DataEvent<ALuint> iAmBeingReleased("SoundRelease", buf);

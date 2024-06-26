@@ -4,7 +4,7 @@
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
 #include "Core/DynTickController.hpp"
-#include "Audio/AudioController.hpp"
+#include "Audio/AudioSystem.hpp"
 #include "Audio/AudioPlayer.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 
@@ -77,16 +77,11 @@ namespace Cacao {
 		});
 		skySetup.wait();
 
-		//Start audio controller
-		Logging::EngineLog("Starting audio controller...");
-		AudioController::GetInstance()->Start();
+		//Initialize audio system
+		Logging::EngineLog("Initializing audio system...");
+		AudioSystem::GetInstance()->Init();
 
-		//Since the audio controller is super important, we wait until it comes online
-		while(!AudioController::GetInstance()->IsAudioSystemInitialized()) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		}
-
-		//Create a short-lived dummy audio player (somehow this is required to get normal players workimng)
+		//Create a short-lived dummy audio player (for whatever reason this is required to get normal players workimng)
 		{
 			AudioPlayer ap;
 		}
@@ -99,6 +94,9 @@ namespace Cacao {
 		//Start dynamic tick controller
 		Logging::EngineLog("Starting dynamic tick controller...");
 		DynTickController::GetInstance()->Start();
+
+		//Make the window visible
+		Window::GetInstance()->SetWindowVisibility(true);
 
 		Logging::EngineLog("Engine startup complete!");
 	}
@@ -117,15 +115,15 @@ namespace Cacao {
 		cfg.maxFrameLag = 10;
 
 		//Open the window
-		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, true, WindowMode::Window);
+		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
 
 		//Initialize rendering backend
 		Logging::EngineLog("Initializing rendering backend...");
 		RenderController::GetInstance()->Init();
 
-		//Start the thread pool (subtract two threads for the dedicated dynamic tick and audio controllers)
+		//Start the thread pool (subtract one threads for the dedicated dynamic tick controller)
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 2));
+		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
 
 		//Asynchronously run core startup
 		//We never use this future as we don't intend to wait on it, but we have to do this because [[nodiscard]]
@@ -149,20 +147,28 @@ namespace Cacao {
 	}
 
 	void Engine::Stop() {
+		run.store(false);
+	}
+
+	void Engine::CoreShutdown() {
 		Logging::EngineLog("Shutting down engine...");
 		shuttingDown.store(true);
 
 		//Clear the render queue
 		RenderController::GetInstance()->ClearRenderQueue();
 
-		//Stop the dynamic tick and audio controllers
-		Logging::EngineLog("Stopping controllers...");
+		//Stop the dynamic tick controller
+		Logging::EngineLog("Stopping dynamic tick controller...");
 		DynTickController::GetInstance()->Stop();
-		AudioController::GetInstance()->Stop();
 
 		//Call game module exit hook
+		Logging::EngineLog("Running game module shutdown hook...");
 		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
 		exitFunc();
+
+		//Shut down the audio system
+		Logging::EngineLog("Shutting down audio system...");
+		AudioSystem::GetInstance()->Shutdown();
 
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");
