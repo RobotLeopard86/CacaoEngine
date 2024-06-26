@@ -133,7 +133,7 @@ if not cxx.links('''
 		return 0; 
 	}
 ''', dependencies: cxx.find_library('m', required: false, static: false), name: 'EXPF check')
-	sources += 'src/expf.c'
+	sources += 'expf.c'
 endif
 
 libcacao = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: [
