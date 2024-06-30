@@ -8,7 +8,10 @@ spv_opts.add_cmake_defines({
 	'SPIRV_CROSS_STATIC': 'ON',
 	'SPIRV_CROSS_SHARED': 'OFF',
 	'SPIRV_CROSS_CLI': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 spv_sp = cmake.subproject('spirv-cross', options: spv_opts, required: true)
 spv_core = spv_sp.dependency('spirv-cross-core')
@@ -25,7 +28,10 @@ glfw_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',
 	'GLFW_BUILD_TESTS': 'OFF',
 	'GLFW_BUILD_DOCS': 'OFF',
-	'GLFW_BUILD_EXAMPLES': 'OFF'
+	'GLFW_BUILD_EXAMPLES': 'OFF',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 if host_machine.system() == 'linux'
 	glfw_opts.add_cmake_defines({
@@ -58,7 +64,6 @@ backend_deplist = [
 	glad_dep,
 	stb_dep,
 	skyshaders_dep,
-	meson.get_compiler('cpp').find_library('atomic', required: true)
 ]
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [

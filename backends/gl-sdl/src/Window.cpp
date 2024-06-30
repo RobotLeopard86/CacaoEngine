@@ -122,28 +122,38 @@ namespace Cacao {
 	}
 
 	void Window::UpdateModeState(WindowMode lastMode) {
-		const SDL_DisplayMode* modeInfo = SDL_GetCurrentDisplayMode(SDL_GetPrimaryDisplay());
+		if(lastMode == WindowMode::Window) {
+			SDL_GetWindowPosition((SDL_Window*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+		}
 		switch(mode) {
 			case WindowMode::Window:
 				SDL_SetWindowSize((SDL_Window*)nativeWindow, size.x, size.y);
-				SDL_SetWindowFullscreen((SDL_Window*)nativeWindow, 0);
+				SDL_SetWindowFullscreen((SDL_Window*)nativeWindow, false);
 				SDL_SetWindowPosition((SDL_Window*)nativeWindow, windowedPosition.x, windowedPosition.y);
 				SDL_SetWindowBordered((SDL_Window*)nativeWindow, SDL_TRUE);
 				break;
-			case WindowMode::Fullscreen:
-				if(lastMode == WindowMode::Window) {
-					SDL_GetWindowPosition((SDL_Window*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+			case WindowMode::Fullscreen: {
+				//Get the fullscreen display modes
+				int fullscreenModesC;
+				const SDL_DisplayMode** fullscreenModesV = SDL_GetFullscreenDisplayModes(SDL_GetPrimaryDisplay(), &fullscreenModesC);
+
+				//Confirm that we have at least one
+				if(fullscreenModesC < 1) {
+					mode = lastMode;
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "There are no fullscreen modes available to use!")
 				}
-				SDL_SetWindowFullscreen((SDL_Window*)nativeWindow, SDL_WINDOW_FULLSCREEN);
+
+				//Set to fullscreen
+				SDL_SetWindowFullscreenMode((SDL_Window*)nativeWindow, fullscreenModesV[0]);
+				SDL_SetWindowFullscreen((SDL_Window*)nativeWindow, true);
+
+				//Free the mode pointer
+				SDL_free(fullscreenModesV);
 				break;
+			}
 			case WindowMode::Borderless:
-				if(lastMode == WindowMode::Window) {
-					SDL_GetWindowPosition((SDL_Window*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
-				}
-				SDL_SetWindowFullscreen((SDL_Window*)nativeWindow, 0);
-				SDL_SetWindowSize((SDL_Window*)nativeWindow, modeInfo->w, modeInfo->h);
-				SDL_SetWindowPosition((SDL_Window*)nativeWindow, 0, 0);
-				SDL_SetWindowBordered((SDL_Window*)nativeWindow, SDL_FALSE);
+				SDL_SetWindowFullscreenMode((SDL_Window*)nativeWindow, NULL);
+				SDL_SetWindowFullscreen((SDL_Window*)nativeWindow, true);
 				break;
 		}
 	}

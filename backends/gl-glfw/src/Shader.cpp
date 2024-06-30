@@ -284,7 +284,10 @@ namespace Cacao {
 	void Shader::Bind() {
 		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind shader in non-rendering thread!")
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
+		//CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
+		if(bound) {
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
+		}
 
 		glUseProgram(nd->gpuID);
 		bound = true;

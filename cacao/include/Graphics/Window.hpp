@@ -96,7 +96,7 @@ namespace Cacao {
 
 	  private:
 		Window()
-		  : isOpen(false) {}
+		  : isOpen(false), mode(WindowMode::Window) {}
 
 		//Singleton data
 		static Window* instance;

@@ -24,7 +24,7 @@ namespace Cacao {
 		bool bound;
 
 		//Constructor for initialization purposes
-		Texture(bool initiallyCompiled)
-		  : Asset(initiallyCompiled) {}
+		Texture(bool initialState)
+		  : Asset(initialState), bound(false) {}
 	};
 }
