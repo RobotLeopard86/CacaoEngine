@@ -134,16 +134,8 @@ namespace Cacao {
 		//Run the rendering controller on the main thread
 		RenderController::GetInstance()->Run();
 
-		//Shut down rendering backend
-		Logging::EngineLog("Shutting down rendering backend...");
-		RenderController::GetInstance()->Shutdown();
-
-		//Close window
-		Window::GetInstance()->Close();
-
-		//Shutdown event manager
-		Logging::EngineLog("Shutting down event manager...");
-		EventManager::GetInstance()->Shutdown();
+		//Run the shutdown functions
+		CoreShutdown();
 	}
 
 	void Engine::Stop() {
@@ -170,9 +162,20 @@ namespace Cacao {
 		Logging::EngineLog("Shutting down audio system...");
 		AudioSystem::GetInstance()->Shutdown();
 
+		//Shut down rendering backend
+		Logging::EngineLog("Shutting down rendering backend...");
+		RenderController::GetInstance()->Shutdown();
+
+		//Close window
+		Window::GetInstance()->Close();
+
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");
 		threadPool.reset();
+
+		//Shutdown event manager
+		Logging::EngineLog("Shutting down event manager...");
+		EventManager::GetInstance()->Shutdown();
 
 		run.store(false);
 	}

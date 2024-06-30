@@ -6,7 +6,7 @@
 
 #include <math.h>
 
-float frexpf(float x, int* exp) {
+/*float frexpf(float x, int* exp) {
 	int e = 0;
 	float mantissa = x;
 	if(x != 0.0f) {
@@ -21,15 +21,15 @@ float frexpf(float x, int* exp) {
 	}
 	*exp = e;
 	return mantissa;
-}
+}*/
 
 float __frexpf(float x, int* exp) {
 	return frexpf(x, exp);
 }
 
-float ldexpf(float x, int exp) {
+/*float ldexpf(float x, int exp) {
 	return x * powf(2.0f, (float)exp);
-}
+}*/
 
 float __ldexpf(float x, int exp) {
 	return ldexpf(x, exp);

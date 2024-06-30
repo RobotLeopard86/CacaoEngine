@@ -8,6 +8,12 @@
 #define ICOSPHERE_COUNT 9
 #define ICOSPHERE_RANGE 5
 
+#ifdef _WIN32
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
 class PlaygroundApp {
   public:
 	static PlaygroundApp* GetInstance() {
@@ -296,7 +302,7 @@ void PlaygroundApp::Launch() {
 	//Generate icospheres
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(-ICOSPHERE_RANGE, ICOSPHERE_RANGE);
+	std::uniform_int_distribution<std::mt19937::result_type> dist(0, ICOSPHERE_RANGE*2);
 	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
 		std::stringstream ss;
 		ss << "Icosphere" << i;
@@ -306,7 +312,7 @@ void PlaygroundApp::Launch() {
 		mc->mesh = icoMesh.GetManagedAsset().get();
 		mc->mat = icoMat;
 
-		int x = dist(rng), y = dist(rng), z = dist(rng);
+		int x = dist(rng) - ICOSPHERE_RANGE, y = dist(rng) - ICOSPHERE_RANGE, z = dist(rng) - ICOSPHERE_RANGE;
 		icospheres[i]->GetLocalTransform().SetPosition({x, y, z});
 		icospheres[i]->SetActive(true);
 
@@ -343,11 +349,11 @@ void PlaygroundApp::Launch() {
 }
 
 extern "C" {
-void _CacaoLaunch() {
+EXPORT void _CacaoLaunch() {
 	PlaygroundApp::GetInstance()->Launch();
 }
 
-void _CacaoExiting() {
+EXPORT void _CacaoExiting() {
 	PlaygroundApp::GetInstance()->Cleanup();
 }
 }

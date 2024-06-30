@@ -87,12 +87,14 @@ namespace Cacao {
 			EventManager::GetInstance()->Dispatch(mse);
 		});
 		glfwSetWindowSizeCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int x, int y) {
-			if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
-				WindowResizer().Resize({x, y});
+			if(!glfwGetWindowAttrib(win, GLFW_ICONIFIED)) {
+				if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
+					WindowResizer().Resize({x, y});
+				}
+				ResizeGLViewport(win);
+				DataEvent<glm::ivec2> wre("WindowResize", {x, y});
+				EventManager::GetInstance()->Dispatch(wre);
 			}
-			ResizeGLViewport(win);
-			DataEvent<glm::ivec2> wre("WindowResize", {x, y});
-			EventManager::GetInstance()->Dispatch(wre);
 		});
 		glfwSetWindowFocusCallback((GLFWwindow*)nativeWindow, [](GLFWwindow* win, int entered) {
 			Event e((entered ? "WindowFocus" : "WindowUnfocus"));
@@ -178,6 +180,13 @@ namespace Cacao {
 	void Window::UpdateModeState(WindowMode lastMode) {
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* modeInfo = glfwGetVideoMode(monitor);
+		if(lastMode == WindowMode::Window) {
+			if(glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+				glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+			} else {
+				windowedPosition = {0, 0};
+			}
+		}
 		switch(mode) {
 			case WindowMode::Window:
 				if(lastMode == WindowMode::Borderless) {
@@ -185,19 +194,18 @@ namespace Cacao {
 					glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
 				}
 				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, windowedPosition.x, windowedPosition.y, size.x, size.y, GLFW_DONT_CARE);
+				glfwSetWindowSize((GLFWwindow*)nativeWindow, size.x, size.y);
 				break;
 			case WindowMode::Fullscreen:
-				if(lastMode == WindowMode::Window) {
-					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
-				}
 				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
 				break;
-			case WindowMode::Borderless:
-				if(lastMode == WindowMode::Window) {
-					glfwGetWindowPos((GLFWwindow*)nativeWindow, &windowedPosition.x, &windowedPosition.y);
+			case WindowMode::Borderless: 
+				{
+					glm::ivec2 sizeBackup = size;
+					glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
+					glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
+					size = sizeBackup;
 				}
-				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, NULL, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
-				glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
 				break;
 		}
 	}

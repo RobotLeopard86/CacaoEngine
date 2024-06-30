@@ -58,7 +58,7 @@ namespace Cacao {
 			} else {
 				//Release lock and wait for a bit to avoid wasting CPU cycles
 				lock.unlock();
-				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
 		}
 	}

@@ -8,7 +8,10 @@ spv_opts.add_cmake_defines({
 	'SPIRV_CROSS_STATIC': 'ON',
 	'SPIRV_CROSS_SHARED': 'OFF',
 	'SPIRV_CROSS_CLI': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 spv_sp = cmake.subproject('spirv-cross', options: spv_opts, required: true)
 spv_core = spv_sp.dependency('spirv-cross-core')
@@ -22,28 +25,31 @@ spv_msl = spv_sp.dependency('spirv-cross-msl')
 
 sdl_opts = cmake.subproject_options()
 sdl_opts.add_cmake_defines({
-    'SDL_TESTS': 'OFF',
-    'SDL_SHARED': 'OFF',
-    'SDL_STATIC': 'ON',
-    'SDL_STATIC_PIC': 'ON',
-    'SDL_TEST_LIBRARY': 'OFF',
-    'SDL_AUDIO': 'OFF',
-    'SDL_VIDEO': 'ON',
-    'SDL_RENDER': 'OFF',
-    'SDL_CAMERA': 'OFF',
-    'SDL_JOYSTICK': 'OFF',
-    'SDL_HAPTIC': 'OFF',
-    'SDL_HIDAPI': 'OFF',
-    'SDL_POWER': 'OFF',
-    'SDL_SENSOR': 'OFF',
-    'SDL_DIALOG': 'OFF',
+	'SDL_TESTS': 'OFF',
+	'SDL_SHARED': 'OFF',
+	'SDL_STATIC': 'ON',
+	'SDL_STATIC_PIC': 'ON',
+	'SDL_TEST_LIBRARY': 'OFF',
+	'SDL_AUDIO': 'OFF',
+	'SDL_VIDEO': 'ON',
+	'SDL_RENDER': 'OFF',
+	'SDL_CAMERA': 'OFF',
+	'SDL_JOYSTICK': 'OFF',
+	'SDL_HAPTIC': 'OFF',
+	'SDL_HIDAPI': 'OFF',
+	'SDL_POWER': 'OFF',
+	'SDL_SENSOR': 'OFF',
+	'SDL_DIALOG': 'OFF',
 	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
 	'SDL_WAYLAND': 'ON',
 	'SDL_WAYLAND_SHARED': 'ON',
 	'SDL_WAYLAND_LIBDECOR': 'ON',
 	'SDL_WAYLAND_LIBDECOR_SHARED': 'ON',
 	'SDL_X11': 'ON',
-	'SDL_X11_SHARED': 'ON'
+	'SDL_X11_SHARED': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 sdl3_sp = cmake.subproject('sdl3', options: sdl_opts, required: true)
 sdl3 = sdl3_sp.dependency('SDL3-static')
@@ -71,8 +77,11 @@ backend_deplist = [
 	glad_dep,
 	stb_dep,
 	skyshaders_dep,
-	meson.get_compiler('cpp').find_library('atomic', required: true)
 ]
+
+if host_machine.system() == 'windows'
+	backend_deplist += meson.get_compiler('cpp').find_library('imm32', required: true)
+endif
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
 	'src/GLES.cpp',

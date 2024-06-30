@@ -9,7 +9,6 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(103, "GLESError");
 		Exception::RegisterExceptionCode(104, "UniformUploadFailure");
 		Exception::RegisterExceptionCode(105, "RenderThread");
-		Exception::RegisterExceptionCode(106, "AudioError");
-		Exception::RegisterExceptionCode(107, "UnsupportedType");
+		Exception::RegisterExceptionCode(106, "UnsupportedType");
 	}
 }
