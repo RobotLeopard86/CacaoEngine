@@ -245,9 +245,7 @@ void PlaygroundApp::PlayStopTone() {
 	p->SetLooping(false);
 	p->SetGain(0.8f);
 	p->Play();
-	while(p->IsPlaying()) {
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(4500));
 }
 
 void PlaygroundApp::Launch() {
@@ -302,7 +300,7 @@ void PlaygroundApp::Launch() {
 	//Generate icospheres
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(0, ICOSPHERE_RANGE*2);
+	std::uniform_int_distribution<std::mt19937::result_type> dist(0, ICOSPHERE_RANGE * 2);
 	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
 		std::stringstream ss;
 		ss << "Icosphere" << i;
