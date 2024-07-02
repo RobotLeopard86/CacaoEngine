@@ -9,6 +9,7 @@
 #include "3D/Transform.hpp"
 #include "Core/Log.hpp"
 #include "Core/Exception.hpp"
+#include "Utilities/MiscUtils.hpp"
 
 #include <memory>
 #include <string>
@@ -27,12 +28,6 @@ namespace Cacao {
 
 	//Forward declaration of Entity for the fake deleter
 	class Entity;
-
-	//Fake deleter that doesn't actually delete anything
-	//This is used on the self pointer so it doesn't try to delete us in the destructor
-	struct FakeDeleter {
-		void operator()(Entity* e) const {}
-	};
 
 	//An object in the world
 	class Entity {
@@ -81,7 +76,7 @@ namespace Cacao {
 		std::string name;
 
 		Entity(std::string name)
-		  : guid(xg::newGuid()), name(name), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), self(this, FakeDeleter {}), parent(self), active(true) {}
+		  : guid(xg::newGuid()), name(name), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), self(this, FakeDeleter<Entity> {}), parent(self), active(true) {}
 
 
 		//Add a component to this entity

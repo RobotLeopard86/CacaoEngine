@@ -37,9 +37,11 @@ namespace Cacao {
 
 	  protected:
 		unsigned char* dataBuffer;
-		glm::ivec2 imgSize;
+		glm::uvec2 imgSize;
 		int numImgChannels;
 
 		NativeData* nativeData;
+
+		friend class UIDisplay;
 	};
 }

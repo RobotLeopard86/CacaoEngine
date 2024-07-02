@@ -62,7 +62,7 @@ namespace Cacao {
 		glm::vec3 position, rotation;
 		glm::vec3 frontVec, upVec, rightVec;
 
-		glm::ivec2 displaySize;
+		glm::uvec2 displaySize;
 
 		float fov;
 

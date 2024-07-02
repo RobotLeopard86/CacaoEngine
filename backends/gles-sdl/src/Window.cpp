@@ -23,7 +23,7 @@ namespace Cacao {
 	struct WindowResizer {
 		friend Window;
 
-		void Resize(glm::ivec2 size) {
+		void Resize(glm::uvec2 size) {
 			ChangeSize(Window::GetInstance(), size);
 		}
 	};
@@ -47,7 +47,7 @@ namespace Cacao {
 		glViewport(0, 0, fbx, fby);
 	}
 
-	void Window::Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode) {
+	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
 		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
 
 		size = initialSize;
@@ -182,7 +182,7 @@ namespace Cacao {
 						WindowResizer().Resize({event.window.data1, event.window.data2});
 					}
 					ResizeGLViewport((SDL_Window*)nativeWindow);
-					DataEvent<glm::ivec2> wre("WindowResize", {event.window.data1, event.window.data2});
+					DataEvent<glm::uvec2> wre("WindowResize", {event.window.data1, event.window.data2});
 					EventManager::GetInstance()->Dispatch(wre);
 					break;
 				}

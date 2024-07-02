@@ -21,7 +21,7 @@ namespace Cacao {
 	class Window {
 	  public:
 		//Open the window
-		void Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode);
+		void Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode);
 		//Close the window
 		void Close();
 		//Is the window open?
@@ -34,12 +34,12 @@ namespace Cacao {
 		void Present();
 
 		//Get window size
-		glm::ivec2 GetSize() {
-			if(!isOpen) return glm::ivec2 {0};
+		glm::uvec2 GetSize() {
+			if(!isOpen) return glm::uvec2 {0};
 			return size;
 		}
 		//Resizes the window (in fullscreen or borderless mode, changes resolution)
-		void SetSize(glm::ivec2 newSize) {
+		void SetSize(glm::uvec2 newSize) {
 			if(!isOpen) return;
 			size = newSize;
 			UpdateWindowSize();
@@ -106,14 +106,14 @@ namespace Cacao {
 		bool isVisible;
 
 		bool useVSync;
-		glm::ivec2 size;
+		glm::uvec2 size;
 		std::string windowTitle;
 
 		WindowMode mode;
 
 		//The last known window position
 		//Used for switching between modes
-		glm::ivec2 windowedPosition;
+		glm::uvec2 windowedPosition;
 
 		void* nativeWindow;
 
@@ -123,7 +123,7 @@ namespace Cacao {
 		void UpdateModeState(WindowMode lastMode);
 
 		//For changing the window size from implementation without generating more resize events
-		friend void ChangeSize(Window* win, glm::ivec2 size) {
+		friend void ChangeSize(Window* win, glm::uvec2 size) {
 			win->size = size;
 		}
 		friend struct WindowResizer;

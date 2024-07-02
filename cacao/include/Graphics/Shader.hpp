@@ -27,7 +27,7 @@ namespace Cacao {
 
 		//Data size (x for number of vector components, y for number of vectors in a matrix)
 		//Example: a vec3 would be {3, 1}, a mat4 would be {4, 4}, and a scalar would be {1, 1}
-		glm::ivec2 size;
+		glm::uvec2 size;
 
 		//Name of entry
 		std::string entryName;

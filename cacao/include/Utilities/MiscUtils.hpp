@@ -37,4 +37,11 @@ namespace Cacao {
 
 		return {.front = frontVec, .right = rightVec, .up = upVec};
 	}
+
+	//Fake deleter that doesn't actually delete anything
+	//This is used on the self pointers so they don't try to delete themselves in the destructor
+	template<typename T>
+	struct FakeDeleter {
+		void operator()(T* e) const {}
+	};
 }

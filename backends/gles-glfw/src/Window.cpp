@@ -18,7 +18,7 @@ namespace Cacao {
 	struct WindowResizer {
 		friend Window;
 
-		void Resize(glm::ivec2 size) {
+		void Resize(glm::uvec2 size) {
 			ChangeSize(Window::GetInstance(), size);
 		}
 	};
@@ -42,7 +42,7 @@ namespace Cacao {
 		glViewport(0, 0, fbx, fby);
 	}
 
-	void Window::Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode) {
+	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
 		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
 
 		size = initialSize;
@@ -89,7 +89,7 @@ namespace Cacao {
 					WindowResizer().Resize({x, y});
 				}
 				ResizeGLViewport(win);
-				DataEvent<glm::ivec2> wre("WindowResize", {x, y});
+				DataEvent<glm::uvec2> wre("WindowResize", {x, y});
 				EventManager::GetInstance()->Dispatch(wre);
 			}
 		});
@@ -196,14 +196,12 @@ namespace Cacao {
 			case WindowMode::Fullscreen:
 				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
 				break;
-			case WindowMode::Borderless: 
-				{
-					glm::ivec2 sizeBackup = size;
-					glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
-					glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
-					size = sizeBackup;
-				}
-				break;
+			case WindowMode::Borderless: {
+				glm::uvec2 sizeBackup = size;
+				glfwSetWindowMonitor((GLFWwindow*)nativeWindow, monitor, 0, 0, modeInfo->width, modeInfo->height, GLFW_DONT_CARE);
+				glfwSetWindowSize((GLFWwindow*)nativeWindow, modeInfo->width, modeInfo->height);
+				size = sizeBackup;
+			} break;
 		}
 	}
 
