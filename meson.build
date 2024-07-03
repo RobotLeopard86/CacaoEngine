@@ -114,7 +114,12 @@ cacao_dep = declare_dependency(include_directories: [
 	vorbisfile,
 	opus,
 	opusfile,
-	guid_dep
+	guid_dep,
+	freetype,
+	icu,
+	harfbuzz,
+	harfbuzz_icu,
+	harfbuzz_sub
 ], link_with: cacao_exe)
 
 if playground

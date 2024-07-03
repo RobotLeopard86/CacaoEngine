@@ -1,0 +1,4 @@
+[wrap-git]
+url = https://gitlab.freedesktop.org/freetype/freetype.git
+depth = 1
+revision = VER-2-13-2

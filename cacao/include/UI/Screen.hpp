@@ -1,11 +1,7 @@
 #pragma once
 
 #include "UIElement.hpp"
-
-//This is required for uint64_t used by crossguid (but that doesn't include it for some reason)
-#include <stdint.h>
-
-#include "crossguid/guid.hpp"
+#include "Core/Exception.hpp"
 
 namespace Cacao {
 	//The top-level contents of a UI display
@@ -13,14 +9,21 @@ namespace Cacao {
 	class Screen {
 	  public:
 		//Add an element
-		//Returns a GUID for accessing this component (DO NOT LOSE THIS)
-		const xg::Guid AddElement(std::shared_ptr<UIElement> elem);
+		void AddElement(std::shared_ptr<UIElement> elem) {
+			CheckException(!HasElement(elem), Exception::GetCodeMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
+			elements.push_back(elem);
+		}
 
-		//Check if an element is contained by its GUID
-		bool HasElement(const xg::Guid& guid);
+		//Check if an element is contained
+		bool HasElement(std::shared_ptr<UIElement> elem) {
+			return (std::find(elements.begin(), elements.end(), elem) != elements.end());
+		}
 
-		//Remove an element by its GUID
-		void DeleteElement(const xg::Guid& guid);
+		//Remove an element
+		void DeleteElement(std::shared_ptr<UIElement> elem) {
+			CheckException(HasElement(elem), Exception::GetCodeMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
+			elements.erase(std::find(elements.begin(), elements.end(), elem));
+		}
 
 	  private:
 		//Contained elements
