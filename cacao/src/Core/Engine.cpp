@@ -7,6 +7,7 @@
 #include "Audio/AudioSystem.hpp"
 #include "Audio/AudioPlayer.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
+#include "UI/FreetypeOwner.hpp"
 
 #include "yaml-cpp/yaml.h"
 
@@ -63,6 +64,11 @@ namespace Cacao {
 			Window::GetInstance()->SetSize({std::stoi(launchRoot["dimensions"]["x"].Scalar()), std::stoi(launchRoot["dimensions"]["y"].Scalar())});
 		}
 		if(launchRoot["workingDir"].IsScalar() && std::filesystem::exists(launchRoot["workingDir"].Scalar())) std::filesystem::current_path(launchRoot["workingDir"].Scalar());
+
+		//Initialize FreeType by retrieving a never used owner instance
+		{
+			FreetypeOwner* fo = FreetypeOwner::GetInstance();
+		}
 
 		//Register the window close consumer
 		Logging::EngineLog("Setting up event manager...");
@@ -126,8 +132,7 @@ namespace Cacao {
 		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
 
 		//Asynchronously run core startup
-		//We never use this future as we don't intend to wait on it, but we have to do this because [[nodiscard]]
-		std::future<void> startup = threadPool->enqueue([this]() {
+		threadPool->enqueue_detach([this]() {
 			this->CoreStartup();
 		});
 
@@ -172,6 +177,9 @@ namespace Cacao {
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");
 		threadPool.reset();
+
+		//Shutdown the FreeType library
+		FT_Done_FreeType(FreetypeOwner::GetInstance()->GetLib());
 
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");

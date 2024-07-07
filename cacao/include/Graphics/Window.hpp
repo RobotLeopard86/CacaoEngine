@@ -113,7 +113,7 @@ namespace Cacao {
 
 		//The last known window position
 		//Used for switching between modes
-		glm::uvec2 windowedPosition;
+		glm::ivec2 windowedPosition;
 
 		void* nativeWindow;
 

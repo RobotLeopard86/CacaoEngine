@@ -117,7 +117,7 @@ namespace Cacao {
 
 		//Draw this element
 		//For backend implementation
-		virtual void Draw(glm::uvec2 area) = 0;
+		virtual void Draw(glm::uvec2 areaPixelSize) = 0;
 
 		//Are we dirty (have changed)?
 		bool dirty;

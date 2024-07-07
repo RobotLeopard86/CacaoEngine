@@ -37,7 +37,7 @@ namespace Cacao {
 
 	  protected:
 		unsigned char* dataBuffer;
-		glm::uvec2 imgSize;
+		glm::ivec2 imgSize;
 		int numImgChannels;
 
 		NativeData* nativeData;

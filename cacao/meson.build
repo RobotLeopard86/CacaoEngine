@@ -95,13 +95,13 @@ guid_dep = cmake.subproject('guid', options: guid_opts, required: true).dependen
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
 icu = icu_sp.get_variable('icuuc_dep')
 
+freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
+freetype = freetype_sp.get_variable('freetype_dep')
+
 harfbuzz_sp = subproject('harfbuzz', required: true, default_options: ['default_library=static', 'freetype=enabled', 'cairo=disabled', 'graphite2=disabled', 'glib=disabled', 'gobject=disabled', 'chafa=disabled', 'icu=enabled', 'gdi=disabled', 'directwrite=disabled', 'coretext=disabled', 'wasm=disabled', 'tests=disabled', 'introspection=disabled', 'docs=disabled', 'utilities=disabled'])
 harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
 harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
 harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
-
-freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=enabled'])
-freetype = freetype_sp.get_variable('freetype_dep')
 
 includes = [
 	'include',
@@ -131,6 +131,8 @@ sources = [
 	'src/Audio/AudioSystem.cpp',
 	'src/Audio/Sound.cpp',
 	'src/Audio/AudioPlayer.cpp',
+	'src/UI/FreetypeOwner.cpp',
+	'src/UI/Font.cpp',
 	'expf.c'
 ]
 
