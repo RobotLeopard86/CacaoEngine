@@ -22,7 +22,9 @@ namespace Cacao {
 		//Delete compiled data when no longer needed
 		void Release() override;
 
-		//Extract glyphs from the font
+		std::string GetType() override {
+			return "FONT";
+		}
 
 	  private:
 		//Path to font file
