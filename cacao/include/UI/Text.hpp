@@ -54,8 +54,6 @@ namespace Cacao {
 		}
 
 	  protected:
-		void Draw(glm::uvec2 areaPixelSize) override;
-
 		//Text to display
 		std::string text;
 

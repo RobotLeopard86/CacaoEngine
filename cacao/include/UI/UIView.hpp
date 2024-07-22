@@ -30,10 +30,24 @@ namespace Cacao {
 			screen = s;
 		}
 
+		//Set the size (in pixels) of the rendered area
+		void SetSize(glm::uvec2 sz) {
+			size = sz;
+		}
+
+		//Get the size (in pixels) of the rendered area
+		void GetSize() {
+			return sz;
+		}
+
 	  private:
 		glm::uvec2 size;
-		Texture2D frontBuffer;
-		Texture2D backBuffer;
+
+		//Backend-implemented buffer class
+		class Buffer;
+
+		Buffer front;
+		Buffer back;
 
 		std::weak_ptr<Screen> screen;
 	};

@@ -7,6 +7,7 @@
 #include "glm/vec2.hpp"
 
 #include "Utilities/MiscUtils.hpp"
+#include "Core/Engine.hpp"
 
 namespace Cacao {
 	//Represents the three different window mode states
@@ -42,6 +43,7 @@ namespace Cacao {
 		void SetSize(glm::uvec2 newSize) {
 			if(!isOpen) return;
 			size = newSize;
+			Engine::GetInstance()->GetGlobalUIView().SetSize(newSize);
 			UpdateWindowSize();
 		}
 
