@@ -14,7 +14,7 @@ namespace Cacao {
 			return "MESH";
 		}
 
-		Mesh* mesh;
-		Material* mat;
+		AssetHandle<Mesh> mesh;
+		std::shared_ptr<Material> mat;
 	};
 }

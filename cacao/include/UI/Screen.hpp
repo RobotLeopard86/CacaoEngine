@@ -10,7 +10,7 @@ namespace Cacao {
 	  public:
 		//Add an element
 		void AddElement(std::shared_ptr<UIElement> elem) {
-			CheckException(!HasElement(elem), Exception::GetCodeMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
+			CheckException(!HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
 			elements.push_back(elem);
 		}
 
@@ -21,7 +21,7 @@ namespace Cacao {
 
 		//Remove an element
 		void DeleteElement(std::shared_ptr<UIElement> elem) {
-			CheckException(HasElement(elem), Exception::GetCodeMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
+			CheckException(HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
 			elements.erase(std::find(elements.begin(), elements.end(), elem));
 		}
 
@@ -38,5 +38,5 @@ namespace Cacao {
 		}
 
 		friend class UIView;
-	}
+	};
 }

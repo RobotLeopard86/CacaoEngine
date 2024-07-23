@@ -20,7 +20,6 @@ namespace Cacao {
 		~Cubemap() final {
 			if(bound) Unbind();
 			if(compiled) Release();
-			delete nativeData;
 		}
 
 		//Attach this cubemap to the specified slot
@@ -37,8 +36,11 @@ namespace Cacao {
 		}
 
 	  protected:
+		//Backend-implemented data type
+		struct CubemapData;
+
 		std::vector<std::string> textures;
 
-		NativeData* nativeData;
+		std::shared_ptr<CubemapData> nativeData;
 	};
 }

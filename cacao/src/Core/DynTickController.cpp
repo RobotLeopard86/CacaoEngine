@@ -127,7 +127,7 @@ namespace Cacao {
 									//Add to list (once lock is available)
 									MeshComponent* mc = std::dynamic_pointer_cast<MeshComponent>(c).get();
 									rlMutex.lock();
-									this->tickRenderList.push_back(RenderObject(e->GetWorldTransformMatrix(), mc->mesh, mc->mat));
+									this->tickRenderList.push_back(RenderObject(e->GetWorldTransformMatrix(), mc->mesh, *(mc->mat)));
 									rlMutex.unlock();
 								}
 							}
@@ -151,7 +151,7 @@ namespace Cacao {
 			std::shared_ptr<Frame> f = std::make_shared<Frame>();
 			f->projection = activeWorld.cam->GetProjectionMatrix();
 			f->view = activeWorld.cam->GetViewMatrix();
-			f->skybox = (activeWorld.skybox.has_value() ? std::make_optional<Skybox>(Skybox(*(activeWorld.skybox.value()))) : std::nullopt);
+			f->skybox = activeWorld.skybox;
 			f->objects = tickRenderList;
 
 			//Send frame to render controller

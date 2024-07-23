@@ -261,11 +261,11 @@ namespace Cacao {
 			if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("FONT") == 0) return AssetHandle<Font>(path, std::dynamic_pointer_cast<Font>(this->assetCache[path].lock()));
 
 			//Construct an asset, add it to cache, and return a handle
-			std::shared_ptr<Font> snd = std::make_shared<Font>(path);
-			snd->Compile().get();
-			this->assetCache.insert_or_assign(path, std::weak_ptr<Font> {snd});
+			std::shared_ptr<Font> font = std::make_shared<Font>(path);
+			font->Compile().get();
+			this->assetCache.insert_or_assign(path, std::weak_ptr<Font> {font});
 
-			return AssetHandle<Font>(path, snd);
+			return AssetHandle<Font>(path, font);
 		});
 	}
 }

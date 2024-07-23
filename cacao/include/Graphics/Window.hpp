@@ -59,12 +59,6 @@ namespace Cacao {
 			return useVSync;
 		}
 
-		//Get native window type (returns void*, must be cast to target window type)
-		void* GetNativeWindow() {
-			if(!isOpen) return NULL;
-			return nativeWindow;
-		}
-
 		//Set new window title
 		void SetTitle(std::string title);
 
@@ -117,8 +111,6 @@ namespace Cacao {
 		//Used for switching between modes
 		glm::ivec2 windowedPosition;
 
-		void* nativeWindow;
-
 		void UpdateVSyncState();
 		void UpdateWindowSize();
 		void UpdateVisibilityState();
@@ -130,6 +122,9 @@ namespace Cacao {
 		}
 		friend struct WindowResizer;
 
-		NativeData* nativeData;
+		//Backend-implemented data type
+		struct WindowData;
+
+		std::shared_ptr<WindowData> nativeData;
 	};
 }

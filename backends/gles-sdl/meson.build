@@ -56,7 +56,9 @@ sdl3 = sdl3_sp.dependency('SDL3-static')
 
 include_dirs = [
 	'../../cacao/include',
-	'include',
+	'../common/gl/include',
+	'../common/sdl/include',
+	'../common',
 	'../../libs/spdlog/include',
 	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
@@ -84,14 +86,16 @@ if host_machine.system() == 'windows'
 endif
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/GLES.cpp',
-	'src/Window.cpp',
-	'src/Texture2D.cpp',
-	'src/Cubemap.cpp',
-	'src/Shader.cpp',
-	'src/Mesh.cpp',
-	'src/Skybox.cpp',
-	'src/ExceptionCodes.cpp'
-], dependencies: backend_deplist)
+	'src/GLHooks.cpp',
+	'src/SDLHooks.cpp',
+	'../common/sdl/src/Window.cpp',
+	'../common/gl/src/Texture2D.cpp',
+	'../common/gl/src/Cubemap.cpp',
+	'../common/gl/src/Shader.cpp',
+	'../common/gl/src/Mesh.cpp',
+	'../common/gl/src/Skybox.cpp',
+	'../common/gl/src/OpenGL.cpp',
+	'../common/ExceptionCodes.cpp'
+], dependencies: backend_deplist, cpp_args: ['-DES'])
 
 subdir_done()

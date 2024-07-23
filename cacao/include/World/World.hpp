@@ -11,8 +11,8 @@ namespace Cacao {
 	//Represents a world
 	class World {
 	  public:
-		//Optional skybox
-		std::optional<Skybox*> skybox;
+		//Optional skybox (set to null asset to have no skybox)
+		AssetHandle<Skybox> skybox;
 
 		//Main camera
 		//Will NOT be freed on object destruction

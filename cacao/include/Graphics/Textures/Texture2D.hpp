@@ -17,9 +17,7 @@ namespace Cacao {
 		~Texture2D() final {
 			if(bound) Unbind();
 			if(compiled) Release();
-
 			delete dataBuffer;
-			delete nativeData;
 		}
 
 		//Attach this texture to the specified slot
@@ -35,13 +33,14 @@ namespace Cacao {
 			return "2DTEX";
 		}
 
-	  protected:
+	  private:
+		//Backend-implemented data type
+		struct Tex2DData;
+
 		unsigned char* dataBuffer;
 		glm::ivec2 imgSize;
 		int numImgChannels;
 
-		NativeData* nativeData;
-
-		friend class UIDisplay;
+		std::shared_ptr<Tex2DData> nativeData;
 	};
 }

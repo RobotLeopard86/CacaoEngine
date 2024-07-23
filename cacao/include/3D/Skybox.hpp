@@ -18,7 +18,6 @@ namespace Cacao {
 		Skybox(Cubemap* tex);
 		~Skybox() {
 			if(textureOwner) delete texture;
-			delete nativeData;
 		}
 		Skybox(const Skybox& other)
 		  : Asset(other.compiled), rotation(other.rotation), textureOwner(false), texture(other.texture) {
@@ -110,6 +109,9 @@ namespace Cacao {
 
 		static bool isSetup;
 
-		NativeData* nativeData;
+		//Backend-implemented data type
+		struct SkyboxData;
+
+		std::shared_ptr<SkyboxData> nativeData;
 	};
 }

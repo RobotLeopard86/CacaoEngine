@@ -63,7 +63,6 @@ namespace Cacao {
 		~Shader() final {
 			if(compiled && bound) Unbind();
 			if(compiled) Release();
-			delete nativeData;
 		}
 
 		//Use this shader
@@ -78,11 +77,6 @@ namespace Cacao {
 		//Is shader bound?
 		bool IsBound() {
 			return bound;
-		}
-
-		//Read-only access to native data
-		const NativeData* GetNativeData() {
-			return nativeData;
 		}
 
 		//Read-only access to the shader spec
@@ -103,8 +97,11 @@ namespace Cacao {
 		}
 
 	  private:
+		//Backend-implemented data type
+		struct ShaderData;
+
 		bool bound;
-		NativeData* nativeData;
+		std::shared_ptr<ShaderData> nativeData;
 		const ShaderSpec specification;
 	};
 }

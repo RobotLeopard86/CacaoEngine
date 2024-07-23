@@ -57,7 +57,7 @@ namespace Cacao {
 
 		//Construct a "null" handle (used for failed asset load calls)
 		AssetHandle()
-		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME"), isNullHandle(false) {}
+		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME"), isNullHandle(true) {}
 
 		//Remove from asset cache if this is the last handle
 		~AssetHandle() {

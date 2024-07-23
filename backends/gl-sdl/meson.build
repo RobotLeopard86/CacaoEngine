@@ -56,7 +56,9 @@ sdl3 = sdl3_sp.dependency('SDL3-static')
 
 include_dirs = [
 	'../../cacao/include',
-	'include',
+	'../common/gl/include',
+	'../common/sdl/include',
+	'../common',
 	'../../libs/spdlog/include',
 	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
@@ -79,15 +81,21 @@ backend_deplist = [
 	skyshaders_dep,
 ]
 
+if host_machine.system() == 'windows'
+	backend_deplist += meson.get_compiler('cpp').find_library('imm32', required: true)
+endif
+
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/OpenGL.cpp',
-	'src/Window.cpp',
-	'src/Texture2D.cpp',
-	'src/Cubemap.cpp',
-	'src/Shader.cpp',
-	'src/Mesh.cpp',
-	'src/Skybox.cpp',
-	'src/ExceptionCodes.cpp'
+	'src/GLHooks.cpp',
+	'src/SDLHooks.cpp',
+	'../common/sdl/src/Window.cpp',
+	'../common/gl/src/Texture2D.cpp',
+	'../common/gl/src/Cubemap.cpp',
+	'../common/gl/src/Shader.cpp',
+	'../common/gl/src/Mesh.cpp',
+	'../common/gl/src/Skybox.cpp',
+	'../common/gl/src/OpenGL.cpp',
+	'../common/ExceptionCodes.cpp'
 ], dependencies: backend_deplist)
 
 subdir_done()

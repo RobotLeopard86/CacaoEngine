@@ -15,14 +15,10 @@ namespace Cacao {
 		void Render();
 
 		//Bind the front buffer to a texture slot
-		void Bind(int slot) {
-			frontBuffer.Bind(slot);
-		}
+		void Bind(int slot);
 
 		//Unbind the front buffer
-		void Unbind() {
-			frontBuffer.Unbind();
-		}
+		void Unbind();
 
 		//Set the currently displayed screen
 		//No change will be seen until Render() is called
@@ -36,18 +32,12 @@ namespace Cacao {
 		}
 
 		//Get the size (in pixels) of the rendered area
-		void GetSize() {
-			return sz;
+		glm::uvec2 GetSize() {
+			return size;
 		}
 
 	  private:
 		glm::uvec2 size;
-
-		//Backend-implemented buffer class
-		class Buffer;
-
-		Buffer front;
-		Buffer back;
 
 		std::weak_ptr<Screen> screen;
 	};

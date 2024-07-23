@@ -19,7 +19,7 @@ namespace Cacao {
 		BottomCenter,
 		LeftCenter,
 		RightCenter
-	}
+	};
 
 	//Base class for all UI elements
 	class UIElement {
@@ -124,5 +124,5 @@ namespace Cacao {
 		}
 
 		friend class UIView;
-	}
+	};
 }

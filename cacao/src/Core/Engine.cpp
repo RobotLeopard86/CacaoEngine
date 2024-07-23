@@ -65,10 +65,8 @@ namespace Cacao {
 		}
 		if(launchRoot["workingDir"].IsScalar() && std::filesystem::exists(launchRoot["workingDir"].Scalar())) std::filesystem::current_path(launchRoot["workingDir"].Scalar());
 
-		//Initialize FreeType by retrieving a never used owner instance
-		{
-			FreetypeOwner* fo = FreetypeOwner::GetInstance();
-		}
+		//Initialize FreeType
+		FreetypeOwner::GetInstance()->Init();
 
 		//Register the window close consumer
 		Logging::EngineLog("Setting up event manager...");
@@ -179,7 +177,7 @@ namespace Cacao {
 		threadPool.reset();
 
 		//Shutdown the FreeType library
-		FT_Done_FreeType(FreetypeOwner::GetInstance()->GetLib());
+		delete FreetypeOwner::GetInstance();
 
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");

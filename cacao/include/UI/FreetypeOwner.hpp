@@ -13,10 +13,15 @@ namespace Cacao {
 		//Get the instance or create one if it doesn't exist.
 		static FreetypeOwner* GetInstance();
 
+		//Initialize the FreeType library
+		void Init();
+
 		//Get the library instance
 		FT_Library& GetLib() {
 			return lib;
 		}
+
+		~FreetypeOwner();
 
 	  private:
 		//Singleton members
@@ -24,8 +29,9 @@ namespace Cacao {
 		static bool instanceExists;
 
 		//Library instance
-		//Created when this object is and destroyed when this object is
+		//Created when Init() is called and destroyed when this object is
 		FT_Library lib;
+		bool didInit;
 
 		FreetypeOwner();
 	};

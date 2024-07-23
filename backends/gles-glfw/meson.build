@@ -43,7 +43,9 @@ glfw_dep = cmake.subproject('glfw', options: glfw_opts, required: true).dependen
 
 include_dirs = [
 	'../../cacao/include',
-	'include',
+	'../common/gl/include',
+	'../common/glfw/include',
+	'../common',
 	'../../libs/spdlog/include',
 	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
@@ -66,15 +68,21 @@ backend_deplist = [
 	skyshaders_dep,
 ]
 
+if host_machine.system() == 'windows'
+	backend_deplist += meson.get_compiler('cpp').find_library('imm32', required: true)
+endif
+
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/GLES.cpp',
-	'src/Window.cpp',
-	'src/Texture2D.cpp',
-	'src/Cubemap.cpp',
-	'src/Shader.cpp',
-	'src/Mesh.cpp',
-	'src/Skybox.cpp',
-	'src/ExceptionCodes.cpp'
-], dependencies: backend_deplist)
+	'src/GLHooks.cpp',
+	'src/GLFWHooks.cpp',
+	'../common/glfw/src/Window.cpp',
+	'../common/gl/src/Texture2D.cpp',
+	'../common/gl/src/Cubemap.cpp',
+	'../common/gl/src/Shader.cpp',
+	'../common/gl/src/Mesh.cpp',
+	'../common/gl/src/Skybox.cpp',
+	'../common/gl/src/OpenGL.cpp',
+	'../common/ExceptionCodes.cpp'
+], dependencies: backend_deplist, cpp_args: ['-DES'])
 
 subdir_done()

@@ -30,10 +30,6 @@ class PlaygroundApp {
 	void Launch();
 
 	void Cleanup() {
-		//Delete materials
-		delete icoMat;
-		delete prisMat;
-
 		//Release assets
 		icoShader->Release();
 		icoMesh->Release();
@@ -65,7 +61,7 @@ class PlaygroundApp {
 
 	Cacao::AssetHandle<Cacao::Shader> icoShader;
 	Cacao::AssetHandle<Cacao::Mesh> icoMesh;
-	Cacao::Material* icoMat;
+	std::shared_ptr<Cacao::Material> icoMat;
 	std::vector<std::shared_ptr<Cacao::Entity>> icospheres;
 
 	std::shared_ptr<Cacao::Entity> cameraManager;
@@ -74,7 +70,7 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Shader> prisShader;
 	Cacao::AssetHandle<Cacao::Mesh> prisMesh;
 	Cacao::AssetHandle<Cacao::Texture2D> prisTex;
-	Cacao::Material* prisMat;
+	std::shared_ptr<Cacao::Material> prisMat;
 	std::shared_ptr<Cacao::Entity> p1, p2;
 };
 
@@ -275,10 +271,10 @@ void PlaygroundApp::Launch() {
 	prisTex = prisTexFuture.get();
 
 	//Create materials
-	icoMat = new Cacao::Material();
-	icoMat->shader = icoShader.GetManagedAsset().get();
-	prisMat = new Cacao::Material();
-	prisMat->shader = prisShader.GetManagedAsset().get();
+	icoMat = std::make_shared<Cacao::Material>();
+	icoMat->shader = icoShader;
+	prisMat = std::make_shared<Cacao::Material>();
+	prisMat->shader = prisShader;
 	Cacao::ShaderUploadItem prismData_Tex;
 	prismData_Tex.target = "texSample";
 	prismData_Tex.data = prisTex.GetManagedAsset().get();
@@ -307,7 +303,7 @@ void PlaygroundApp::Launch() {
 		icospheres.push_back(std::make_shared<Cacao::Entity>(ss.str()));
 		std::shared_ptr<Cacao::MeshComponent> mc = icospheres[i]->GetComponent<Cacao::MeshComponent>(icospheres[i]->MountComponent<Cacao::MeshComponent>());
 		mc->SetActive(true);
-		mc->mesh = icoMesh.GetManagedAsset().get();
+		mc->mesh = icoMesh;
 		mc->mat = icoMat;
 
 		int x = dist(rng) - ICOSPHERE_RANGE, y = dist(rng) - ICOSPHERE_RANGE, z = dist(rng) - ICOSPHERE_RANGE;
@@ -324,7 +320,7 @@ void PlaygroundApp::Launch() {
 	p1->GetComponent<PingPong>(p1->MountComponent<PingPong>(glm::vec3 {2, 0, -2}, glm::vec3 {2, 0, 2}))->SetActive(true);
 	p1->GetComponent<Spinner>(p1->MountComponent<Spinner>())->SetActive(true);
 	p1MC->SetActive(true);
-	p1MC->mesh = prisMesh.GetManagedAsset().get();
+	p1MC->mesh = prisMesh;
 	p1MC->mat = prisMat;
 	p1->GetLocalTransform().SetScale({0.5f, 0.5f, 0.5f});
 	p1->SetParent(world.rootEntity);
@@ -332,7 +328,7 @@ void PlaygroundApp::Launch() {
 	p2->SetActive(true);
 	std::shared_ptr<Cacao::MeshComponent> p2MC = p2->GetComponent<Cacao::MeshComponent>(p2->MountComponent<Cacao::MeshComponent>());
 	p2MC->SetActive(true);
-	p2MC->mesh = prisMesh.GetManagedAsset().get();
+	p2MC->mesh = prisMesh;
 	p2MC->mat = prisMat;
 	p2->GetLocalTransform().SetPosition({0, -3, 0});
 	p2->GetLocalTransform().SetScale({1.0f, 1.0f, 1.0f});
@@ -340,7 +336,7 @@ void PlaygroundApp::Launch() {
 	p2->SetParent(p1);
 
 	//Set skybox
-	world.skybox = sky.GetManagedAsset().get();
+	world.skybox = sky;
 
 	//Start audio playback
 	audioPlayer->Play();

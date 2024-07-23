@@ -8,9 +8,6 @@
 #define BIND_MEMBER_FUNC(func) std::bind(&func, this, std::placeholders::_1)
 
 namespace Cacao {
-	//Empty native data struct
-	struct NativeData {};
-
 	//Front, right, and up vector calculation result
 	struct Vectors {
 		glm::vec3 front, right, up;
