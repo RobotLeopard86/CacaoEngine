@@ -22,8 +22,16 @@ namespace Cacao {
 
 		//Set the currently displayed screen
 		//No change will be seen until Render() is called
-		void SetScreen(std::weak_ptr<Screen> s) {
+		void SetScreen(std::shared_ptr<Screen> s) {
 			screen = s;
+
+			//Mark as dirty so the renderer knows to re-render
+			s->dirty = true;
+		}
+
+		//Get the currently displayed screen
+		std::shared_ptr<Screen> GetScreen() {
+			return screen;
 		}
 
 		//Set the size (in pixels) of the rendered area
@@ -39,6 +47,15 @@ namespace Cacao {
 	  private:
 		glm::uvec2 size;
 
-		std::weak_ptr<Screen> screen;
+		std::shared_ptr<Screen> screen;
+
+		//Backend-implemented data type
+		struct UIViewData;
+
+		std::shared_ptr<UIViewData> nativeData;
+
+		//Draw the processed renderables to the front buffer
+		//Backend-implemented
+		void Draw(std::map<unsigned short, std::vector<UIRenderable>> renderables);
 	};
 }

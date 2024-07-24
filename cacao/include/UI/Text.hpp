@@ -3,6 +3,7 @@
 #include "UIElement.hpp"
 #include "Font.hpp"
 #include "Utilities/Asset.hpp"
+#include "UIRenderable.hpp"
 
 namespace Cacao {
 	//Horizontal alignment of a text within a text box
@@ -10,13 +11,6 @@ namespace Cacao {
 		Left,
 		Center,
 		Right
-	};
-
-	//Vertical alignment of a text within a text box
-	enum class VerticalTextAlign {
-		Top,
-		Center,
-		Bottom
 	};
 
 	//A text element
@@ -29,11 +23,8 @@ namespace Cacao {
 		AssetHandle<Font> GetFont() {
 			return font;
 		}
-		TextAlign GetHorizontalAlignment() {
-			return hAlign;
-		}
-		VerticalTextAlign GetVerticalAlignment() {
-			return vAlign;
+		TextAlign GetAlignment() {
+			return align;
 		}
 
 		void SetText(std::string t) {
@@ -44,14 +35,22 @@ namespace Cacao {
 			font = f;
 			dirty = true;
 		}
-		void SetHorizontalAlignment(TextAlign ha) {
-			hAlign = ha;
+		void SetAlignment(TextAlign a) {
+			align = a;
 			dirty = true;
 		}
-		void SetVerticalAlignment(VerticalTextAlign va) {
-			vAlign = va;
-			dirty = true;
-		}
+
+		struct Renderable : public UIRenderable {
+			struct Line {
+				hb_glyph_info_t* glyphInfo;
+				hb_glyph_position_t* glyphPositions;
+			};
+			std::vector<Line> lines;
+			FT_Face fontFace;
+			TextAlign alignment;
+		};
+
+		UIRenderable MakeRenderable(glm::uvec2 screenSize) override;
 
 	  protected:
 		//Text to display
@@ -61,7 +60,6 @@ namespace Cacao {
 		AssetHandle<Font> font;
 
 		//Alignment
-		TextAlign hAlign;
-		VerticalTextAlign vAlign;
+		TextAlign align;
 	};
 }

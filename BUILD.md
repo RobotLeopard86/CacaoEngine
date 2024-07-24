@@ -34,6 +34,7 @@ To build Cacao Engine, you need the prerequisites listed above. To install Git, 
 Building Cacao Engine requires a copy of the source code (obviously). Cacao Engine contains Git submodules, and the project **WILL NOT BUILD** if they are not found. When cloning the repository, just add the `--recursive` flag to the clone command line (e.g. `git clone https://github.com/RobotLeopard86/CacaoEngine --recursive`). If you have already cloned the source non-recursively, issue the following command in the source root to download the submodules: `git submodule update --init --recursive`.
 
 ## 2. Configuring the Build
+**IMPORTANT**: MSVC likely will only be detected properly if run in the Visual Studio Developer Command Prompt/PowerShell.
 Select a backend from [the backends list](BACKENDS.md). Enter the source tree root directory in your terminal, then run the following command `meson setup <build directory> --native-file default_native.ini -Dbuild_playground=true|false -Duse_backend=<chosen backend>`. Set the `build_playground` option to `true` if you want to optionally build the playground, or `false` otherwise. If on Windows, you may add `-Dwindows_noconsole=true` to the command to configure a build without a console. Meson runs debug builds by default. See [this page](https://mesonbuild.com/Builtin-options.html#core-options) on Meson's website for the list of types. This command may take some time to complete.
 
 ## 3. Build

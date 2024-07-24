@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utilities/MiscUtils.hpp"
+#include "UI/UIRenderable.hpp"
 
 #include "glm/glm.hpp"
 
@@ -89,6 +90,10 @@ namespace Cacao {
 			return dirty;
 		}
 
+		virtual UIRenderable MakeRenderable(glm::uvec2) {
+			return {.screenPos = {0, 0}, .size = {0, 0}, .depth = 0};
+		}
+
 	  protected:
 		//Pivot point within object bounds (0 to 1 per axis)
 		glm::vec2 pivot;
@@ -106,7 +111,7 @@ namespace Cacao {
 		glm::vec2 offsetFromAnchor;
 
 		//Object size (perecentage of screen)
-		glm::vec2 size;
+		glm::uvec2 size;
 
 		//How many "layers" deep this element should be
 		//Example: depth 3 object is behind depth 2 object

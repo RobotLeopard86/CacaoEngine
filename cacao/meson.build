@@ -133,6 +133,9 @@ sources = [
 	'src/Audio/AudioPlayer.cpp',
 	'src/UI/FreetypeOwner.cpp',
 	'src/UI/Font.cpp',
+	'src/UI/Screen.cpp',
+	'src/UI/Renderables.cpp',
+	'src/UI/UIView.cpp',
 	'expf.c'
 ]
 

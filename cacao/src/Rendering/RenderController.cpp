@@ -50,6 +50,11 @@ namespace Cacao {
 				//Release lock
 				lock.unlock();
 
+				//If the global UI is dirty, re-render
+				if(Engine::GetInstance()->GetGlobalUIView().GetScreen() && Engine::GetInstance()->GetGlobalUIView().GetScreen()->IsDirty()) {
+					Engine::GetInstance()->GetGlobalUIView().Render();
+				}
+
 				//Render the frame
 				ProcessFrame(*next);
 
