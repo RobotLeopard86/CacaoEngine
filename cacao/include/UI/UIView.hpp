@@ -49,10 +49,11 @@ namespace Cacao {
 
 		std::shared_ptr<Screen> screen;
 
-		//Backend-implemented data type
-		struct UIViewData;
+		//Backend-implemented view buffer
+		struct Buffer;
 
-		std::shared_ptr<UIViewData> nativeData;
+		std::shared_ptr<Buffer> frontBuffer;
+		std::shared_ptr<Buffer> backBuffer;
 
 		//Draw the processed renderables to the front buffer
 		//Backend-implemented

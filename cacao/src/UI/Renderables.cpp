@@ -67,6 +67,43 @@ namespace Cacao {
 			ret.lines.push_back(rline);
 		}
 
+		//Calculate pixel size and rotation
+		ret.size = {round(screenSize.x * size.x), round(screenSize.y * size.y)};
+		ret.rot = rotation;
+
+		//Calculate position
+		switch(anchor) {
+			case AnchorPoint::Center:
+				ret.screenPos = {round(screenSize.x / 2), round(screenSize.y / 2)};
+				break;
+			case AnchorPoint::TopLeft:
+				ret.screenPos = {round(ret.size.x / 2), round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::TopRight:
+				ret.screenPos = {screenSize.x - round(ret.size.x / 2), round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::BottomLeft:
+				ret.screenPos = {round(ret.size.x / 2), screenSize.y - round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::BottomRight:
+				ret.screenPos = {screenSize.x - round(ret.size.x / 2), screenSize.y - round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::TopCenter:
+				ret.screenPos = {round(screenSize.x / 2), round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::BottomCenter:
+				ret.screenPos = {round(screenSize.x / 2), screenSize.y - round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::LeftCenter:
+				ret.screenPos = {round(screenSize.x / 2), round(ret.size.y / 2)};
+				break;
+			case AnchorPoint::RightCenter:
+				ret.screenPos = {screenSize.x - round(screenSize.x / 2), round(ret.size.y / 2)};
+				break;
+		}
+		ret.screenPos.x += round(screenSize.x * size.x);
+		ret.screenPos.y += round(screenSize.y * size.y);
+
 		return ret;
 	}
 }

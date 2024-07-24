@@ -68,5 +68,10 @@ namespace Cacao {
 
 		//Draw renderables
 		Draw(depthSorted);
+
+		//Swap buffers
+		std::shared_ptr<Buffer> tmp = frontBuffer;
+		frontBuffer = backBuffer;
+		backBuffer = tmp;
 	}
 }

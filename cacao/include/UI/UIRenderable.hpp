@@ -9,8 +9,11 @@ namespace Cacao {
 		//This position is the center of the object's quad
 		glm::uvec2 screenPos;
 
-		//Size of the object  in pixels
+		//Size of the object in pixels
 		glm::uvec2 size;
+
+		//Rotation in degrees around center
+		float rot;
 
 		//How many "layers" deep this element should be
 		//Example: depth 3 object is behind depth 2 object

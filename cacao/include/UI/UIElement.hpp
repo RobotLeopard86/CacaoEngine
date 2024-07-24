@@ -26,19 +26,13 @@ namespace Cacao {
 	class UIElement {
 	  public:
 		UIElement()
-		  : pivot(0.0f, 0.0f), rotation(0.0f), anchor(AnchorPoint::Center), preserveAspect(true), offsetFromAnchor(0.0f, 0.0f), size(5, 5), depth(1), active(true), dirty(false) {}
+		  : rotation(0.0f), anchor(AnchorPoint::Center), offsetFromAnchor(0.0f, 0.0f), size(5, 5), depth(1), active(true), dirty(false) {}
 
-		glm::vec2 GetPivot() {
-			return pivot;
-		}
 		float GetRotation() {
 			return rotation;
 		}
 		AnchorPoint GetAnchor() {
 			return anchor;
-		}
-		bool IsAspectPreserved() {
-			return preserveAspect;
 		}
 		glm::vec2 GetOffsetFromAnchor() {
 			return offsetFromAnchor;
@@ -52,20 +46,12 @@ namespace Cacao {
 		bool IsActive() {
 			return active;
 		}
-		void SetPivot(glm::vec2 p) {
-			pivot = p;
-			dirty = true;
-		}
 		void SetRotation(float r) {
 			rotation = r;
 			dirty = true;
 		}
 		void SetAnchor(AnchorPoint a) {
 			anchor = a;
-			dirty = true;
-		}
-		void SetAspectPreservation(bool val) {
-			preserveAspect = val;
 			dirty = true;
 		}
 		void SetOffsetFromAnchor(glm::vec2 o) {
@@ -95,23 +81,17 @@ namespace Cacao {
 		}
 
 	  protected:
-		//Pivot point within object bounds (0 to 1 per axis)
-		glm::vec2 pivot;
-
-		//Rotation around pivot in degrees
+		//Rotation around center in degrees
 		float rotation;
 
 		//Designated anchor point
 		AnchorPoint anchor;
 
-		//Should the object's aspect ratio be preserved when scaling?
-		bool preserveAspect;
-
-		//Offset from anchor point (percentage of screen)
+		//Offset from anchor point (percentage of screen, 0...1)
 		glm::vec2 offsetFromAnchor;
 
-		//Object size (perecentage of screen)
-		glm::uvec2 size;
+		//Object size (perecentage of screen, 0...1)
+		glm::vec2 size;
 
 		//How many "layers" deep this element should be
 		//Example: depth 3 object is behind depth 2 object
