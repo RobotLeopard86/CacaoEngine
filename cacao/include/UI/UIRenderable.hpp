@@ -2,6 +2,8 @@
 
 #include "glm/vec2.hpp"
 
+#include <string>
+
 namespace Cacao {
 	//Base for all UI objects in their renderable state
 	struct UIRenderable {
@@ -18,5 +20,7 @@ namespace Cacao {
 		//How many "layers" deep this element should be
 		//Example: depth 3 object is behind depth 2 object
 		unsigned short depth;
+
+		virtual void Draw() {}
 	};
 }

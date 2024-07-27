@@ -78,7 +78,7 @@ backend_deplist = [
 	sdl3,
 	glad_dep,
 	stb_dep,
-	skyshaders_dep,
+	core_shaders,
 ]
 
 if host_machine.system() == 'windows'
@@ -95,6 +95,7 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/gl/src/Mesh.cpp',
 	'../common/gl/src/Skybox.cpp',
 	'../common/gl/src/OpenGL.cpp',
+	'../common/gl/src/UIDrawing.cpp',
 	'../common/ExceptionCodes.cpp'
 ], dependencies: backend_deplist)
 

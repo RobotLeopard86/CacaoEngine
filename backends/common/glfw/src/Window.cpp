@@ -8,6 +8,7 @@
 #include "Events/EventSystem.hpp"
 #include "GLFWWindowData.hpp"
 #include "GLFWHooks.hpp"
+#include "UI/Text.hpp"
 
 namespace Cacao {
 
@@ -210,4 +211,10 @@ namespace Cacao {
 	}
 
 	void RegisterWindowingExceptions() {}
+
+	glm::uvec2 Text::GetMonitorDPI() {
+		glm::uvec2 ret;
+		glfwGetMonitorContentScale(Window::GetInstance()->nativeData->win, &ret.x, &ret.y);
+		return (ret * 96);
+	}
 }

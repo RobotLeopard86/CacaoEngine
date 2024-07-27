@@ -55,7 +55,7 @@ namespace Cacao {
 		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!")
 
 		//Load game module and module config
-		gameLib = new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());
+		gameLib.reset(new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()));
 		cfg.fixedTickRate = (launchRoot["fixedTickRate"].IsScalar() ? std::stoi(launchRoot["fixedTickRate"].Scalar()) : cfg.fixedTickRate);
 		cfg.targetDynTPS = (launchRoot["dynamicTPS"].IsScalar() ? std::stoi(launchRoot["dynamicTPS"].Scalar()) : cfg.targetDynTPS);
 		cfg.maxFrameLag = (launchRoot["maxFrameLag"].IsScalar() ? std::stoi(launchRoot["maxFrameLag"].Scalar()) : cfg.maxFrameLag);
@@ -80,6 +80,9 @@ namespace Cacao {
 			Skybox::CommonSetup();
 		});
 		skySetup.wait();
+
+		//Create global UI view
+		uiView.reset(new UIView());
 
 		//Initialize audio system
 		Logging::EngineLog("Initializing audio system...");
@@ -165,6 +168,9 @@ namespace Cacao {
 		Logging::EngineLog("Shutting down audio system...");
 		AudioSystem::GetInstance()->Shutdown();
 
+		//Destroy global UI view
+		uiView.reset();
+
 		//Shut down rendering backend
 		Logging::EngineLog("Shutting down rendering backend...");
 		RenderController::GetInstance()->Shutdown();
@@ -182,8 +188,6 @@ namespace Cacao {
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");
 		EventManager::GetInstance()->Shutdown();
-
-		run.store(false);
 	}
 
 }

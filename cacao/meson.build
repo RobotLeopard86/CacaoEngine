@@ -144,7 +144,7 @@ libfrontend = static_library('cacaofrontend', sources: sources, include_director
 	assimp_dep,
 	zlib_dep,
 	libdl,
-	skyshaders_dep,
+	core_shaders,
 	alsoft_dep,
 	ogg,
 	vorbis,

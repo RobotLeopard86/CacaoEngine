@@ -32,7 +32,7 @@ namespace Cacao {
 		}
 
 		//Acess the global UI view
-		UIView& GetGlobalUIView() {
+		std::shared_ptr<UIView> GetGlobalUIView() {
 			return uiView;
 		}
 
@@ -72,10 +72,10 @@ namespace Cacao {
 		std::thread::id threadID;
 
 		//Game library
-		dynalo::library* gameLib;
+		std::unique_ptr<dynalo::library> gameLib;
 
 		//Top-level UI view
-		UIView uiView;
+		std::shared_ptr<UIView> uiView;
 
 		Engine() {}
 

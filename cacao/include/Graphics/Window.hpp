@@ -43,7 +43,7 @@ namespace Cacao {
 		void SetSize(glm::uvec2 newSize) {
 			if(!isOpen) return;
 			size = newSize;
-			Engine::GetInstance()->GetGlobalUIView().SetSize(newSize);
+			Engine::GetInstance()->GetGlobalUIView()->SetSize(newSize);
 			UpdateWindowSize();
 		}
 
@@ -126,5 +126,7 @@ namespace Cacao {
 		struct WindowData;
 
 		std::shared_ptr<WindowData> nativeData;
+
+		friend class Text;
 	};
 }

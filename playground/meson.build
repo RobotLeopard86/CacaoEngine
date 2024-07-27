@@ -1,6 +1,11 @@
 spv_gen = generator(glslc, output: '@PLAINNAME@.spv', arguments: ['-mfmt=bin', '@INPUT@', '-o', '@OUTPUT@'])
 
-shaders = spv_gen.process('src/shaders/ico.vert', 'src/shaders/ico.frag', 'src/shaders/prism.vert', 'src/shaders/prism.frag')
+shaders = spv_gen.process([
+	'src/shaders/ico.vert', 
+	'src/shaders/ico.frag', 
+	'src/shaders/prism.vert', 
+	'src/shaders/prism.frag'
+])
 
 launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep, sources: [
 	'src/Playground.cpp',

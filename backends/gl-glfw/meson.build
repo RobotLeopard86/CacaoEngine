@@ -65,7 +65,7 @@ backend_deplist = [
 	glfw_dep,
 	glad_dep,
 	stb_dep,
-	skyshaders_dep,
+	core_shaders,
 ]
 
 if host_machine.system() == 'windows'

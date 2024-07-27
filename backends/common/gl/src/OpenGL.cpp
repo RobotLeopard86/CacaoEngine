@@ -10,6 +10,7 @@
 #include "ExceptionCodes.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
+#include "GLUIView.hpp"
 
 namespace Cacao {
 	//Queue of OpenGL (ES) tasks to process
@@ -17,6 +18,10 @@ namespace Cacao {
 
 	//Queue mutex
 	static std::mutex queueMutex;
+
+	//UI quad assets
+	static GLuint uiVao, uiVbo;
+	static UIViewShaderManager uivsm;
 
 	void RenderController::UpdateGraphicsState() {
 		//Process OpenGL (ES) tasks
@@ -48,6 +53,7 @@ namespace Cacao {
 		//Send the frame into the queue
 		std::shared_future<void> frameTask = InvokeGL([&frame]() {
 			//Clear the screen
+			//We use an obnoxious neon alligator green because it indicates that something is messed up if you can see it
 			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -60,9 +66,11 @@ namespace Cacao {
 				//Bind shader
 				obj.material.shader->Bind();
 
-				//Configure OpenGL (ES) depth behavior
+				//Configure OpenGL (ES) depth and blending behavior
 				glEnable(GL_DEPTH_TEST);
+				glEnable(GL_BLEND);
 				glDepthFunc(GL_LESS);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 				//Draw the mesh
 				obj.mesh->Draw();
@@ -89,6 +97,19 @@ namespace Cacao {
 
 			//Draw skybox (if one exists)
 			if(!frame.skybox.IsNull()) frame.skybox->Draw(frame.projection, frame.view);
+
+			//Draw UI
+			Engine::GetInstance()->GetGlobalUIView()->Bind(7);//Why seven? Because I say so.
+			ShaderUploadData uiud;
+			uiud.emplace_back({.target = "uiTex", .data = std::make_any(7)});
+			uivsm->UploadData(uiud);
+			uivsm->Bind();
+			glDisable(GL_DEPTH_TEST);
+			glBindVertexArray(uiVao);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glBindVertexArray(0);
+			glEnable(GL_DEPTH_TEST);
+			Engine::GetInstance()->GetGlobalUIView()->Unbind();
 		});
 
 		//Update the graphics state (will guarantee that the task is processed, so it doesn't need to be waited on)
@@ -104,10 +125,37 @@ namespace Cacao {
 	void RenderController::Init() {
 		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
 		isInitialized = true;
+
+		uivsm = {};
+
+		//Compile UI view shader
+		uivsm.Compile();
+
+		//Set up UI view quad
+		glGenVertexArrays(1, &uiVao);
+		glGenBuffers(1, &uiVbo);
+		glBindVertexArray(uiVao);
+		glBindBuffer(GL_ARRAY_BUFFER, uiVbo);
+		constexpr float quadData[] = {
+			0.0f, 1.0f, 0.0f 1.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
+			1.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 0.0f};
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadData), quadData, GL_STATIC_DRAW);
+		glBindVertexArray(uiVao);
+		glBindVertexArray(0);
 	}
 
 	void RenderController::Shutdown() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!")
+
+		//Clean up UI view quad
+		glDeleteBuffers(1, &uiVbo);
+		glDeleteVertexArrays(1, &uiVao);
+
+		//Release UI view shader
+		uivsm.Release();
 
 		//Take care of any remaining OpenGL (ES) tasks
 		while(!glQueue.empty()) {

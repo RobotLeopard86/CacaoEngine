@@ -22,7 +22,7 @@ namespace Cacao {
 		unsigned int chunkSize = screen->elements.size() / numChunks;
 
 		//Process all elements to their renderable types
-		std::vector<UIRenderable> renderables;
+		std::vector<std::shared_ptr<UIRenderable>> renderables;
 
 		MultiFuture<void> elemProcessing;
 
@@ -47,7 +47,7 @@ namespace Cacao {
 
 		//Sort all items by depth
 		//Index in array indicates depth, higher indices = further back
-		std::map<unsigned short, std::vector<UIRenderable>> depthSorted;
+		std::map<unsigned short, std::vector<std::shared_ptr<UIRenderable>>> depthSorted;
 
 		MultiFuture<void> depthSort;
 
@@ -57,7 +57,7 @@ namespace Cacao {
 			depthSort.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, renderables, &depthSorted]() {
 				for(size_t i = start; i < end; i++) {
 					if(!depthSorted.contains(renderables[i].depth)) {
-						depthSorted.insert_or_assign(renderables[i].depth, std::vector<UIRenderable> {renderables[i]});
+						depthSorted.insert_or_assign(renderables[i].depth, std::vector<std::shared_ptr<UIRenderable>> {renderables[i]});
 					} else {
 						depthSorted[renderables[i].depth].push_back(renderables[i]);
 					}
@@ -70,8 +70,6 @@ namespace Cacao {
 		Draw(depthSorted);
 
 		//Swap buffers
-		std::shared_ptr<Buffer> tmp = frontBuffer;
-		frontBuffer = backBuffer;
-		backBuffer = tmp;
+		frontBuffer.swap(backBuffer);
 	}
 }

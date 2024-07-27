@@ -9,6 +9,7 @@
 #include "SDLWindowData.hpp"
 #include "KeyAndMouseLUT.hpp"
 #include "SDLHooks.hpp"
+#include "UI/Text.hpp"
 
 namespace Cacao {
 
@@ -208,4 +209,9 @@ namespace Cacao {
 	}
 
 	void RegisterWindowingExceptions() {}
+
+	glm::uvec2 Text::GetMonitorDPI() {
+		const SDL_DisplayMode* dm = SDL_GetDesktopDisplayMode(SDL_GetDisplayForWindow(Window::GetInstance()->nativeData->win));
+		return (glm::uvec2 {dm->w, dm->h} * 96);
+	}
 }

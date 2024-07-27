@@ -73,13 +73,16 @@ cmake_msvc_lib += 'DLL'
 
 glslc = find_program('glslc')
 
-glslc_text_cmd = [ glslc, '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@']
-skyvert = custom_target('sky_vertex', command: glslc_text_cmd, input: 'cacao/shaders/skybox.vert', output: '@PLAINNAME@.txt')
-skyfrag = custom_target('sky_frag', command: glslc_text_cmd, input: 'cacao/shaders/skybox.frag', output: '@PLAINNAME@.txt')
+glslc_text_gen = generator(glslc, arguments: ['-w', '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@'])
+core_shaders_s = glslc_text_gen.process([
+	'cacao/shaders/skybox.vert', 
+	'cacao/shaders/skybox.frag',
+	'cacao/shaders/uiquad.vert', 
+	'cacao/shaders/uiquad.frag'
+])
 
-skyshaders_dep = declare_dependency(sources: [
-	skyvert,
-	skyfrag
+core_shaders = declare_dependency(sources: [
+	core_shaders_s
 ])
 
 python = find_program('python')
@@ -107,7 +110,7 @@ cacao_dep = declare_dependency(include_directories: [
 	spv_glsl,
 	spv_hlsl,
 	spv_msl,
-	skyshaders_dep,
+	core_shaders,
 	alsoft_dep,
 	ogg,
 	vorbis,

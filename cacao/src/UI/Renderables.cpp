@@ -12,12 +12,12 @@
 #include "unicode/unistr.h"
 
 namespace Cacao {
-	UIRenderable Text::MakeRenderable(glm::uvec2 screenSize) {
+	std::shared_ptr<UIRenderable> Text::MakeRenderable(glm::uvec2 screenSize) {
 		//Initial renderable setup
-		Renderable ret;
-		ret.fontFace = font->face;
-		ret.alignment = align;
-		ret.depth = depth;
+		std::shared_ptr<Renderable> ret = std::make_shared<Renderable>();
+		ret->fontFace = font->face;
+		ret->alignment = align;
+		ret->depth = depth;
 
 		//Split text string by newlines and do tab characters
 		std::vector<std::string> baseLines;
@@ -64,46 +64,65 @@ namespace Cacao {
 			rline.glyphPositions = hb_buffer_get_glyph_positions(buf, &glyphCount);
 
 			//Add to list
-			ret.lines.push_back(rline);
+			ret->lines.push_back(rline);
 		}
 
 		//Calculate pixel size and rotation
-		ret.size = {round(screenSize.x * size.x), round(screenSize.y * size.y)};
-		ret.rot = rotation;
+		ret->size = {round(screenSize.x * size.x), round(screenSize.y * size.y)};
+		ret->rot = rotation;
 
 		//Calculate position
 		switch(anchor) {
 			case AnchorPoint::Center:
-				ret.screenPos = {round(screenSize.x / 2), round(screenSize.y / 2)};
+				ret->screenPos = {round(screenSize.x / 2), round(screenSize.y / 2)};
 				break;
 			case AnchorPoint::TopLeft:
-				ret.screenPos = {round(ret.size.x / 2), round(ret.size.y / 2)};
+				ret->screenPos = {round(ret->size.x / 2), round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::TopRight:
-				ret.screenPos = {screenSize.x - round(ret.size.x / 2), round(ret.size.y / 2)};
+				ret->screenPos = {screenSize.x - round(ret->size.x / 2), round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::BottomLeft:
-				ret.screenPos = {round(ret.size.x / 2), screenSize.y - round(ret.size.y / 2)};
+				ret->screenPos = {round(ret->size.x / 2), screenSize.y - round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::BottomRight:
-				ret.screenPos = {screenSize.x - round(ret.size.x / 2), screenSize.y - round(ret.size.y / 2)};
+				ret->screenPos = {screenSize.x - round(ret->size.x / 2), screenSize.y - round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::TopCenter:
-				ret.screenPos = {round(screenSize.x / 2), round(ret.size.y / 2)};
+				ret->screenPos = {round(screenSize.x / 2), round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::BottomCenter:
-				ret.screenPos = {round(screenSize.x / 2), screenSize.y - round(ret.size.y / 2)};
+				ret->screenPos = {round(screenSize.x / 2), screenSize.y - round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::LeftCenter:
-				ret.screenPos = {round(screenSize.x / 2), round(ret.size.y / 2)};
+				ret->screenPos = {round(screenSize.x / 2), round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::RightCenter:
-				ret.screenPos = {screenSize.x - round(screenSize.x / 2), round(ret.size.y / 2)};
+				ret->screenPos = {screenSize.x - round(screenSize.x / 2), round(ret->size.y / 2)};
 				break;
 		}
-		ret.screenPos.x += round(screenSize.x * size.x);
-		ret.screenPos.y += round(screenSize.y * size.y);
+		ret->screenPos.x += round(screenSize.x * size.x);
+		ret->screenPos.y += round(screenSize.y * size.y);
 
-		return ret;
+		//Calculate color, adjusted for shader
+		ret->color = {float(color.r) / 256.0f,
+			float(color.g) / 256.0f,
+			float(color.b) / 256.0f,
+			1.0f};
+
+		//Calculate line gap
+		double ascender = font->face->ascender / 64.0;
+		double descender = font->face->descender / 64.0;
+		double height = font->face->height / 64.0;
+		ret->linegap = (height - (ascender - descender)) / height;
+
+		//Calculate font size in points
+		int pixelSize = round((double(ret->size) / ret->lines.size()) * (1.0d - ret->linegap));
+		glm::uvec2 dpi = GetMonitorDPI();
+		double points = (static_cast<double>(pixelSize) * 72.0d) / static_cast<double>(dpi.y);
+		ret->charSize = static_cast<FT_F26Dot6>(points * 64.0d);
+		ret->monitorDPI = dpi;
+
+		return std::static_pointer_cast<UIRenderable>(ret);
 	}
 }

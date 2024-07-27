@@ -76,7 +76,7 @@ namespace Cacao {
 			return dirty;
 		}
 
-		virtual UIRenderable MakeRenderable(glm::uvec2) {
+		virtual std::shared_ptr<UIRenderable> MakeRenderable(glm::uvec2) {
 			return {.screenPos = {0, 0}, .size = {0, 0}, .depth = 0};
 		}
 
@@ -94,6 +94,7 @@ namespace Cacao {
 		glm::vec2 size;
 
 		//How many "layers" deep this element should be
+		//Depth 0 is first layer
 		//Example: depth 3 object is behind depth 2 object
 		unsigned short depth;
 

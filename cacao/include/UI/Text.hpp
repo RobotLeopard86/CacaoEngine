@@ -26,6 +26,9 @@ namespace Cacao {
 		TextAlign GetAlignment() {
 			return align;
 		}
+		glm::vec3 GetColor() {
+			return color;
+		}
 
 		void SetText(std::string t) {
 			text = t;
@@ -39,6 +42,10 @@ namespace Cacao {
 			align = a;
 			dirty = true;
 		}
+		void SetColor(glm::vec3 c) {
+			color = c;
+			dirty = true;
+		}
 
 		struct Renderable : public UIRenderable {
 			struct Line {
@@ -48,9 +55,15 @@ namespace Cacao {
 			std::vector<Line> lines;
 			FT_Face fontFace;
 			TextAlign alignment;
+			glm::vec4 color;
+			double linegap;
+			FT_F26Dot6 charSize;
+			glm::uvec2 monitorDPI;
+
+			void Draw() override;
 		};
 
-		UIRenderable MakeRenderable(glm::uvec2 screenSize) override;
+		std::shared_ptr<UIRenderable> MakeRenderable(glm::uvec2 screenSize) override;
 
 	  protected:
 		//Text to display
@@ -59,7 +72,15 @@ namespace Cacao {
 		//Font face
 		AssetHandle<Font> font;
 
+		//Text color
+		//0-255 for red, green, blue
+		glm::u8vec3 color;
+
 		//Alignment
 		TextAlign align;
+
+		//Get the DPI of the monitor
+		//Requires backend implementation
+		glm::uvec2 GetMonitorDPI();
 	};
 }
