@@ -69,10 +69,8 @@ namespace Cacao {
 
 				//Configure OpenGL (ES)
 				glEnable(GL_DEPTH_TEST);
-				glEnable(GL_BLEND);
+				glDisable(GL_BLEND);
 				glDepthFunc(GL_LESS);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glCullFace(GL_NONE);
 
 				//Draw the mesh
 				obj.mesh->Draw();
@@ -105,15 +103,28 @@ namespace Cacao {
 
 			//Draw UI
 			if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
+				//Upload uniforms
 				ShaderUploadData uiud;
 				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView())});
 				uivsm->UploadData(uiud);
 				uivsm->Bind();
+
+				//Configure OpenGL (ES)
 				glDisable(GL_DEPTH_TEST);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+				//Draw quad
 				glBindVertexArray(uiVao);
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 				glBindVertexArray(0);
+
+				//Reset OpenGL (ES) configurations to normal
 				glEnable(GL_DEPTH_TEST);
+				glDepthFunc(GL_LESS);
+				glDisable(GL_BLEND);
+
+				//Unbind UI view texture
 				Engine::GetInstance()->GetGlobalUIView()->Unbind();
 			}
 		});

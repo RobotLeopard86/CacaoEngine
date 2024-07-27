@@ -65,6 +65,11 @@ backend_deplist = [
 	glfw_dep,
 	glad_dep,
 	stb_dep,
+	freetype,
+	icu,
+	harfbuzz,
+	harfbuzz_icu,
+	harfbuzz_sub,
 	core_shaders,
 ]
 
@@ -82,6 +87,9 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/gl/src/Mesh.cpp',
 	'../common/gl/src/Skybox.cpp',
 	'../common/gl/src/OpenGL.cpp',
+	'../common/gl/src/UIDrawing.cpp',
+	'../common/gl/src/UIView.cpp',
+	'../common/gl/src/UIShaderGen.cpp',
 	'../common/ExceptionCodes.cpp'
 ], dependencies: backend_deplist, cpp_args: ['-DES'])
 
