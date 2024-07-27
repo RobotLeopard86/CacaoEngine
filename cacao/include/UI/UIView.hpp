@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Graphics/Textures/Texture2D.hpp"
 #include "Screen.hpp"
+#include "Graphics/Shader.hpp"
 
 #include "glm/glm.hpp"
 
@@ -44,7 +44,13 @@ namespace Cacao {
 			return size;
 		}
 
+		//Has this UI view been rendered?
+		bool HasBeenRendered() {
+			return hasRendered;
+		}
+
 		UIView();
+		~UIView();
 
 	  private:
 		glm::uvec2 size;

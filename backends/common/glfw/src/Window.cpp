@@ -213,8 +213,9 @@ namespace Cacao {
 	void RegisterWindowingExceptions() {}
 
 	glm::uvec2 Text::GetMonitorDPI() {
-		glm::uvec2 ret;
+		glm::vec2 ret;
 		glfwGetMonitorContentScale(Window::GetInstance()->nativeData->win, &ret.x, &ret.y);
-		return (ret * 96);
+		ret *= 96;
+		return glm::uvec2 {round(ret.x), round(ret.y)};
 	}
 }

@@ -77,7 +77,12 @@ namespace Cacao {
 		}
 
 		virtual std::shared_ptr<UIRenderable> MakeRenderable(glm::uvec2) {
-			return {.screenPos = {0, 0}, .size = {0, 0}, .depth = 0};
+			std::shared_ptr<UIRenderable> retval = std::make_shared<UIRenderable>();
+			retval->screenPos = {0, 0};
+			retval->size = {0, 0};
+			retval->depth = 0;
+			retval->rot = rotation;
+			return retval;
 		}
 
 	  protected:

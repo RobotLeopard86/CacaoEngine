@@ -58,10 +58,9 @@ namespace Cacao {
 			hb_shape(font->hbFont, buf, NULL, 0);
 
 			//Convert to glyphs
-			unsigned int glyphCount;
 			Renderable::Line rline;
-			rline.glyphInfo = hb_buffer_get_glyph_infos(buf, &glyphCount);
-			rline.glyphPositions = hb_buffer_get_glyph_positions(buf, &glyphCount);
+			rline.glyphInfo = hb_buffer_get_glyph_infos(buf, &(rline.glyphCount));
+			rline.glyphPositions = hb_buffer_get_glyph_positions(buf, &(rline.glyphCount));
 
 			//Add to list
 			ret->lines.push_back(rline);
@@ -107,8 +106,7 @@ namespace Cacao {
 		//Calculate color, adjusted for shader
 		ret->color = {float(color.r) / 256.0f,
 			float(color.g) / 256.0f,
-			float(color.b) / 256.0f,
-			1.0f};
+			float(color.b) / 256.0f};
 
 		//Calculate line gap
 		double ascender = font->face->ascender / 64.0;
@@ -117,10 +115,11 @@ namespace Cacao {
 		ret->linegap = (height - (ascender - descender)) / height;
 
 		//Calculate font size in points
-		int pixelSize = round((double(ret->size) / ret->lines.size()) * (1.0d - ret->linegap));
+		int pixelSize = round((double(ret->size.y) / ret->lines.size()) * (1.0 - ret->linegap));
+		ret->lineHeight = round(pixelSize * (ret->linegap + 1));
 		glm::uvec2 dpi = GetMonitorDPI();
-		double points = (static_cast<double>(pixelSize) * 72.0d) / static_cast<double>(dpi.y);
-		ret->charSize = static_cast<FT_F26Dot6>(points * 64.0d);
+		double points = (static_cast<double>(pixelSize) * 72.0) / static_cast<double>(dpi.y);
+		ret->charSize = static_cast<FT_F26Dot6>(points * 64.0);
 		ret->monitorDPI = dpi;
 
 		return std::static_pointer_cast<UIRenderable>(ret);

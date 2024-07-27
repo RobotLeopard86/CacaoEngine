@@ -51,16 +51,18 @@ namespace Cacao {
 			struct Line {
 				hb_glyph_info_t* glyphInfo;
 				hb_glyph_position_t* glyphPositions;
+				unsigned int glyphCount;
 			};
 			std::vector<Line> lines;
 			FT_Face fontFace;
 			TextAlign alignment;
-			glm::vec4 color;
+			glm::vec3 color;
 			double linegap;
+			unsigned int lineHeight;
 			FT_F26Dot6 charSize;
 			glm::uvec2 monitorDPI;
 
-			void Draw() override;
+			void Draw(const glm::mat4& projection) override;
 		};
 
 		std::shared_ptr<UIRenderable> MakeRenderable(glm::uvec2 screenSize) override;

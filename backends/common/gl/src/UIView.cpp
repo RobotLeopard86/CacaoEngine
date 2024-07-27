@@ -11,54 +11,57 @@ namespace Cacao {
 	Shader* UIView::shader = nullptr;
 
 	UIView::UIView()
-	  : hasRendered(false), bound(false), currentSlot(-1), size(0) {
+	  : size(0), bound(false), currentSlot(-1), hasRendered(false) {
 		//Create buffers
 		frontBuffer.reset(new Buffer());
 		backBuffer.reset(new Buffer());
 
 		//Create buffer objects
 		InvokeGL([this]() {
-			std::vector<Buffer> bufs = {this->frontBuffer, this->backBuffer};
+			std::vector<std::shared_ptr<Buffer>> bufs = {this->frontBuffer, this->backBuffer};
 			for(std::shared_ptr<Buffer> buf : bufs) {
 				//Create framebuffer object
-				glGenFramebuffers(1, &buf->fbo);
-				glBindFramebuffer(GL_FRAMEBUFFER, &buf->fbo);
+				glGenFramebuffers(1, &(buf->fbo));
+				glBindFramebuffer(GL_FRAMEBUFFER, buf->rbo);
 
-				//Create renderbuffer object
-				//A sink for depth and stencil data because it doesn't matter but we need to have an output for it
-				glGenRenderbuffers(1, &buf->rbo);
-				glBindRenderbuffer(GL_RENDERBUFFER, buf->rbo);
-				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 0, 0);
-
-				//Create texture object
-				//This is what matters: color output
-				glGenTextures(1, &buf->colorTex);
+				//Create color attachment
+				glGenTextures(1, &(buf->colorTex));
 				glBindTexture(GL_TEXTURE_2D, buf->colorTex);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-				//Attach texture and renderbuffer objects
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, buf->colorTex, 0);
-				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH24_STENCIL8, GL_RENDERBUFFER, buf->rbo);
+
+				//Create renderbuffer for depth and stencil attachments
+				//These are not sampled so we don't use a full texture
+				glGenRenderbuffers(1, &(buf->rbo));
+				glBindRenderbuffer(GL_RENDERBUFFER, buf->rbo);
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1, 1);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, buf->rbo);
 
 				//Confirm framebuffer "completeness"
-			CheckException(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, Exception::GetExceptionCodeFromMeaning("GLError"), "UI view framebuffer is not complete!")
-				glBindFramebuffer(0);
+				GLenum fbStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			CheckException(fbStatus == GL_FRAMEBUFFER_COMPLETE, Exception::GetExceptionCodeFromMeaning("GLError"), "UI view framebuffer is not complete!")
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+				//Unbind texture and renderbuffer
+				glBindRenderbuffer(GL_RENDERBUFFER, 0);
+				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 		}).get();
 	}
 
 	UIView::~UIView() {
 		//Delete buffer assets
-		InvokeGL([this]() {
-			glDeleteTextures(1, &this->frontBuffer->colorTex);
-			glDeleteTextures(1, &this->backBuffer->colorTex);
-			glDeleteRenderbuffers(1, &this->frontBuffer->rbo);
-			glDeleteRenderbuffers(1, &this->backBuffer->rbo);
-			glDeleteFramebuffers(1, &this->frontBuffer->fbo);
-			glDeleteFramebuffers(1, &this->backBuffer->fbo);
-		}).wait();
+		std::shared_ptr<Buffer> front(frontBuffer), back(backBuffer);
+		InvokeGL([front, back]() {
+			glDeleteTextures(1, &(front->colorTex));
+			glDeleteTextures(1, &(back->colorTex));
+			glDeleteRenderbuffers(1, &(front->rbo));
+			glDeleteRenderbuffers(1, &(back->rbo));
+			glDeleteFramebuffers(1, &(front->fbo));
+			glDeleteFramebuffers(1, &(back->fbo));
+		});
 	}
 
 	void UIView::Bind(int slot) {
@@ -90,13 +93,16 @@ namespace Cacao {
 		glBindTexture(GL_TEXTURE_2D, backBuffer->colorTex);
 		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
 		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
-		if(size.w != w || size.h != h) {
+		if(size.x != w || size.y != h) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 			glBindRenderbuffer(GL_RENDERBUFFER, backBuffer->rbo);
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
 			glBindRenderbuffer(GL_RENDERBUFFER, 0);
 		}
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//Create projection matrix
+		glm::mat4 project = glm::ortho(0.0f, float(size.x), 0.0f, float(size.y));
 
 		//Bind the framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, backBuffer->fbo);
@@ -112,12 +118,12 @@ namespace Cacao {
 		//Render each layer
 		int furthest = 0;
 		for(const auto& kv : renderables) {
-			if(kv > furthest) furthest = kv;
+			if(kv.first > furthest) furthest = kv.first;
 		}
 		for(int i = furthest; i >= 0; i--) {
 			const std::vector<std::shared_ptr<UIRenderable>>& layer = renderables[i];
 			for(auto renderable : layer) {
-				renderable->Draw();
+				renderable->Draw(project);
 			}
 		}
 

@@ -73,12 +73,14 @@ cmake_msvc_lib += 'DLL'
 
 glslc = find_program('glslc')
 
-glslc_text_gen = generator(glslc, arguments: ['-w', '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@'])
+glslc_text_gen = generator(glslc, arguments: ['-w', '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@'], output: '@PLAINNAME@.txt')
 core_shaders_s = glslc_text_gen.process([
 	'cacao/shaders/skybox.vert', 
 	'cacao/shaders/skybox.frag',
 	'cacao/shaders/uiquad.vert', 
-	'cacao/shaders/uiquad.frag'
+	'cacao/shaders/uiquad.frag',
+	'cacao/shaders/text.vert',
+	'cacao/shaders/text.frag'
 ])
 
 core_shaders = declare_dependency(sources: [
@@ -86,6 +88,17 @@ core_shaders = declare_dependency(sources: [
 ])
 
 python = find_program('python')
+
+icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
+icu = icu_sp.get_variable('icuuc_dep')
+
+freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
+freetype = freetype_sp.get_variable('freetype_dep')
+
+harfbuzz_sp = subproject('harfbuzz', required: true, default_options: ['default_library=static', 'freetype=enabled', 'cairo=disabled', 'graphite2=disabled', 'glib=disabled', 'gobject=disabled', 'chafa=disabled', 'icu=enabled', 'gdi=disabled', 'directwrite=disabled', 'coretext=disabled', 'wasm=disabled', 'tests=disabled', 'introspection=disabled', 'docs=disabled', 'utilities=disabled'])
+harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
+harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
+harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 
 subdir('backends' / backend)
 subdir('cacao')

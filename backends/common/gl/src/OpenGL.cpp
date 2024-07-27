@@ -9,6 +9,7 @@
 #include "Core/Exception.hpp"
 #include "ExceptionCodes.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
+#include "UI/Shaders.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "GLUIView.hpp"
 
@@ -66,11 +67,12 @@ namespace Cacao {
 				//Bind shader
 				obj.material.shader->Bind();
 
-				//Configure OpenGL (ES) depth and blending behavior
+				//Configure OpenGL (ES)
 				glEnable(GL_DEPTH_TEST);
 				glEnable(GL_BLEND);
 				glDepthFunc(GL_LESS);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glCullFace(GL_NONE);
 
 				//Draw the mesh
 				obj.mesh->Draw();
@@ -87,6 +89,9 @@ namespace Cacao {
 						} else if(sui.data.type() == typeid(Cubemap*)) {
 							Cubemap* tex = std::any_cast<Cubemap*>(sui.data);
 							tex->Unbind();
+						} else if(sui.data.type() == typeid(UIView*)) {
+							UIView* view = std::any_cast<UIView*>(sui.data);
+							view->Unbind();
 						}
 					}
 				}
@@ -99,17 +104,18 @@ namespace Cacao {
 			if(!frame.skybox.IsNull()) frame.skybox->Draw(frame.projection, frame.view);
 
 			//Draw UI
-			Engine::GetInstance()->GetGlobalUIView()->Bind(7);//Why seven? Because I say so.
-			ShaderUploadData uiud;
-			uiud.emplace_back({.target = "uiTex", .data = std::make_any(7)});
-			uivsm->UploadData(uiud);
-			uivsm->Bind();
-			glDisable(GL_DEPTH_TEST);
-			glBindVertexArray(uiVao);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-			glEnable(GL_DEPTH_TEST);
-			Engine::GetInstance()->GetGlobalUIView()->Unbind();
+			if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
+				ShaderUploadData uiud;
+				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView())});
+				uivsm->UploadData(uiud);
+				uivsm->Bind();
+				glDisable(GL_DEPTH_TEST);
+				glBindVertexArray(uiVao);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				glBindVertexArray(0);
+				glEnable(GL_DEPTH_TEST);
+				Engine::GetInstance()->GetGlobalUIView()->Unbind();
+			}
 		});
 
 		//Update the graphics state (will guarantee that the task is processed, so it doesn't need to be waited on)
@@ -136,8 +142,9 @@ namespace Cacao {
 		glGenBuffers(1, &uiVbo);
 		glBindVertexArray(uiVao);
 		glBindBuffer(GL_ARRAY_BUFFER, uiVbo);
-		constexpr float quadData[] = {
-			0.0f, 1.0f, 0.0f 1.0f, 1.0f, 0.0f,
+		constexpr float quadData[18] = {
+			0.0f, 1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
 			1.0f, 0.0f, 0.0f,
@@ -145,10 +152,16 @@ namespace Cacao {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(quadData), quadData, GL_STATIC_DRAW);
 		glBindVertexArray(uiVao);
 		glBindVertexArray(0);
+
+		//Compile UI element shaders
+		GenShaders();
 	}
 
 	void RenderController::Shutdown() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!")
+
+		//Release UI element shaders
+		DelShaders();
 
 		//Clean up UI view quad
 		glDeleteBuffers(1, &uiVbo);

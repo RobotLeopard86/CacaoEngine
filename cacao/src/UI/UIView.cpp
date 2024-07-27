@@ -33,7 +33,7 @@ namespace Cacao {
 				for(size_t i = start; i < end; i++) {
 					//Create renderable
 					std::shared_ptr<UIElement> e = this->screen->elements[i];
-					UIRenderable r = e->MakeRenderable(this->size);
+					std::shared_ptr<UIRenderable> r = e->MakeRenderable(this->size);
 
 					//Mark element as clean
 					e->NotifyClean();
@@ -56,10 +56,10 @@ namespace Cacao {
 			size_t end = std::min(start + chunkSize, screen->elements.size());
 			depthSort.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, renderables, &depthSorted]() {
 				for(size_t i = start; i < end; i++) {
-					if(!depthSorted.contains(renderables[i].depth)) {
-						depthSorted.insert_or_assign(renderables[i].depth, std::vector<std::shared_ptr<UIRenderable>> {renderables[i]});
+					if(!depthSorted.contains(renderables[i]->depth)) {
+						depthSorted.insert_or_assign(renderables[i]->depth, std::vector<std::shared_ptr<UIRenderable>> {renderables[i]});
 					} else {
-						depthSorted[renderables[i].depth].push_back(renderables[i]);
+						depthSorted[renderables[i]->depth].push_back(renderables[i]);
 					}
 				}
 			}));

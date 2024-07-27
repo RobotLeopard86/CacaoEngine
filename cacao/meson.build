@@ -92,17 +92,6 @@ else
 endif
 guid_dep = cmake.subproject('guid', options: guid_opts, required: true).dependency('crossguid')
 
-icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
-icu = icu_sp.get_variable('icuuc_dep')
-
-freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
-freetype = freetype_sp.get_variable('freetype_dep')
-
-harfbuzz_sp = subproject('harfbuzz', required: true, default_options: ['default_library=static', 'freetype=enabled', 'cairo=disabled', 'graphite2=disabled', 'glib=disabled', 'gobject=disabled', 'chafa=disabled', 'icu=enabled', 'gdi=disabled', 'directwrite=disabled', 'coretext=disabled', 'wasm=disabled', 'tests=disabled', 'introspection=disabled', 'docs=disabled', 'utilities=disabled'])
-harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
-harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
-harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
-
 includes = [
 	'include',
 	'../libs/spdlog/include',
@@ -139,7 +128,7 @@ sources = [
 	'expf.c'
 ]
 
-libfrontend = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: [
+frontend_deps = [
 	yaml_dep,
 	assimp_dep,
 	zlib_dep,
@@ -165,11 +154,13 @@ libfrontend = static_library('cacaofrontend', sources: sources, include_director
 	harfbuzz,
 	harfbuzz_icu,
 	harfbuzz_sub
-], pic: true)
+]
+libfrontend = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: frontend_deps, pic: true)
 
-exe_deps = []
-
-exe_deps += meson.get_compiler('cpp').find_library('atomic', required: host_machine.system() == 'linux')
+exe_deps = [
+	frontend_deps,
+	meson.get_compiler('cpp').find_library('atomic', required: host_machine.system() == 'linux')
+]
 
 python = find_program('python')
 need_pipewire = run_command([ python, meson.project_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()

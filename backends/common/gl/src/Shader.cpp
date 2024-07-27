@@ -404,6 +404,14 @@ namespace Cacao {
 						} else if(item.data.type() == typeid(Cubemap*)) {
 							Cubemap* tex = std::any_cast<Cubemap*>(item.data);
 							tex->Bind(imageSlotCounter);
+						} else if(item.data.type() == typeid(UIView*)) {
+							UIView* view = std::any_cast<UIView*>(item.data);
+							view->Bind(imageSlotCounter);
+						} else if(item.data.type() == typeid(RawGLTexture)) {
+							glActiveTexture(GL_TEXTURE0 + imageSlotCounter);
+							RawGLTexture tex = std::any_cast<RawGLTexture>(item.data);
+							glBindTexture(GL_TEXTURE_2D, tex.texObj);
+							(*tex.slot) = imageSlotCounter;
 						} else {
 							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!")
 						}

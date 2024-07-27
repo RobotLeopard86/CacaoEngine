@@ -11,6 +11,7 @@ namespace Cacao {
 	};
 
 	class UIViewShaderManager {
+	  public:
 		void Compile() {
 			//Define UI view shader specification
 			ShaderSpec spec;

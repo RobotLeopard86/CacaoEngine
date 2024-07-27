@@ -212,6 +212,6 @@ namespace Cacao {
 
 	glm::uvec2 Text::GetMonitorDPI() {
 		const SDL_DisplayMode* dm = SDL_GetDesktopDisplayMode(SDL_GetDisplayForWindow(Window::GetInstance()->nativeData->win));
-		return (glm::uvec2 {dm->w, dm->h} * 96);
+		return (glm::uvec2 {(unsigned int)(dm->w), (unsigned int)(dm->h)} * 96u);
 	}
 }

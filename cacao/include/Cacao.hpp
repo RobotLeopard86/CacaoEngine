@@ -30,3 +30,8 @@
 #include "Utilities/AssetManager.hpp"
 #include "Audio/Sound.hpp"
 #include "Audio/AudioPlayer.hpp"
+#include "UI/Font.hpp"
+#include "UI/Screen.hpp"
+#include "UI/Text.hpp"
+#include "UI/UIElement.hpp"
+#include "UI/UIView.hpp"

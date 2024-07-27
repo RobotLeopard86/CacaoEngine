@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm/vec2.hpp"
+#include "glm/mat4x4.hpp"
 
 #include <string>
 
@@ -21,6 +22,8 @@ namespace Cacao {
 		//Example: depth 3 object is behind depth 2 object
 		unsigned short depth;
 
-		virtual void Draw() {}
+		virtual void Draw(const glm::mat4& projection) {}
+
+		virtual ~UIRenderable() {}
 	};
 }
