@@ -5,8 +5,8 @@
 #include "UI/Shaders.hpp"
 #include "GLUtils.hpp"
 
-//Without this adjustment, items look slightly too high
-#define ANCHOR_Y_ALIGNMENT 0.01
+//Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
+#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2))
 
 namespace Cacao {
 	struct VBOEntry {
@@ -41,7 +41,7 @@ namespace Cacao {
 		for(Line ln : lines) {
 			//Calculate starting position
 			float startX = -((signed int)size.x / 2);
-			float startY = lineHeight * lineCounter;
+			float startY = (lines.size() > 1 ? (lineHeight * lineCounter) : SINGLE_LINE_ALIGNMENT);
 			if(alignment != TextAlign::Left) {
 				float textWidth = 0.0f;
 				for(unsigned int i = 0; i < ln.glyphCount; ++i) {
@@ -55,7 +55,7 @@ namespace Cacao {
 			}
 			startX += screenPos.x;
 			startY += screenPos.y;
-			startY = (screenSize.y - startY) - (float(screenSize.y) * ANCHOR_Y_ALIGNMENT);
+			startY = (screenSize.y - startY);
 
 			//Draw glyphs
 			float x = startX, y = startY;
