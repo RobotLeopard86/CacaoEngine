@@ -88,32 +88,29 @@ namespace Cacao {
 	}
 
 	void UIView::Draw(std::map<unsigned short, std::vector<std::shared_ptr<UIRenderable>>> renderables) {
-		//Regenerate textures and renderbuffers if size has changed
-		int w, h;
-		glBindTexture(GL_TEXTURE_2D, backBuffer->colorTex);
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
-		if(size.x != w || size.y != h) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-			glBindRenderbuffer(GL_RENDERBUFFER, backBuffer->rbo);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
-			glBindRenderbuffer(GL_RENDERBUFFER, 0);
-		}
-		glBindTexture(GL_TEXTURE_2D, 0);
-
 		//Create projection matrix
 		glm::mat4 project = glm::ortho(0.0f, float(size.x), 0.0f, float(size.y));
 
 		//Bind the framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, backBuffer->fbo);
 
+		//Regenerate textures and renderbuffers
+		glBindTexture(GL_TEXTURE_2D, backBuffer->colorTex);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glBindRenderbuffer(GL_RENDERBUFFER, backBuffer->rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, backBuffer->rbo);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, backBuffer->colorTex, 0);
+
 		//Clear the framebuffer
 		//We don't clear the depth buffer because it's irrelevant
 		//We use an obnoxious hot pink because it indicates that something is messed up if you can see it
 		//and it's different from the 3D clear color
 		glClearColor(1.0f, 0.1015625f, 1.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 		//Render each layer
 		int furthest = 0;
@@ -123,12 +120,14 @@ namespace Cacao {
 		for(int i = furthest; i >= 0; i--) {
 			const std::vector<std::shared_ptr<UIRenderable>>& layer = renderables[i];
 			for(auto renderable : layer) {
-				renderable->Draw(project);
+				renderable->Draw(size, project);
 			}
 		}
 
-		//Re-enable depth testing to avoid screwing up global state
+		//Re-enable depth testing and disable blending to avoid screwing up global state
+		glDisable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 
 		//Unbind framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

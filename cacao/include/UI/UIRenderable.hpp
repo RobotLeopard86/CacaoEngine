@@ -22,7 +22,7 @@ namespace Cacao {
 		//Example: depth 3 object is behind depth 2 object
 		unsigned short depth;
 
-		virtual void Draw(const glm::mat4& projection) {}
+		virtual void Draw(glm::uvec2 screenSize, const glm::mat4& projection) {}
 
 		virtual ~UIRenderable() {}
 	};

@@ -37,6 +37,7 @@ class PlaygroundApp {
 		prisMesh->Release();
 		prisTex->Release();
 		sky->Release();
+		font->Release();
 
 		//Delete world
 		Cacao::WorldManager::GetInstance()->RemoveWorld("Playground");
@@ -49,6 +50,13 @@ class PlaygroundApp {
 		return sky;
 	}
 
+	void SetTxtAnchor(Cacao::AnchorPoint anch) {
+		textElem->SetAnchor(anch);
+	}
+	void SetTxtAlign(Cacao::TextAlign al) {
+		textElem->SetAlignment(al);
+	}
+
 	void PlayStopTone();
 
   private:
@@ -58,6 +66,7 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Skybox> sky;
 	Cacao::AssetHandle<Cacao::Sound> bgm;
 	Cacao::AssetHandle<Cacao::Sound> stopTone;
+	Cacao::AssetHandle<Cacao::Font> font;
 
 	Cacao::AssetHandle<Cacao::Shader> icoShader;
 	Cacao::AssetHandle<Cacao::Mesh> icoMesh;
@@ -70,8 +79,12 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Shader> prisShader;
 	Cacao::AssetHandle<Cacao::Mesh> prisMesh;
 	Cacao::AssetHandle<Cacao::Texture2D> prisTex;
+
 	std::shared_ptr<Cacao::Material> prisMat;
 	std::shared_ptr<Cacao::Entity> p1, p2;
+
+	std::shared_ptr<Cacao::Screen> screen;
+	std::shared_ptr<Cacao::Text> textElem;
 };
 
 class SussyScript final : public Cacao::Script {
@@ -169,6 +182,35 @@ class SussyScript final : public Cacao::Script {
 
 			cam->SetRotation(currentRot);
 			cam->SetPosition(currentPos);
+
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_1)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::TopLeft);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Left);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_2)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::TopCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Center);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_3)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::TopRight);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Right);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_4)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::RightCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Right);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_5)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::BottomRight);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Right);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_6)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::BottomCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Center);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_7)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::BottomLeft);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Left);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_8)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::LeftCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Left);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_9)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::Center);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Center);
+			}
 		}
 	}
 
@@ -259,6 +301,7 @@ void PlaygroundApp::Launch() {
 	std::future<Cacao::AssetHandle<Cacao::Shader>> prisShaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/prism.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> prisMeshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/triprism.obj:Cone");
 	std::future<Cacao::AssetHandle<Cacao::Texture2D>> prisTexFuture = Cacao::AssetManager::GetInstance()->LoadTexture2D("assets/tex/prism.png");
+	std::future<Cacao::AssetHandle<Cacao::Font>> fontFuture = Cacao::AssetManager::GetInstance()->LoadFont("assets/fonts/Ubuntu-Light.ttf");
 
 	//Get loaded assets
 	sky = skyFuture.get();
@@ -269,6 +312,7 @@ void PlaygroundApp::Launch() {
 	prisShader = prisShaderFuture.get();
 	prisMesh = prisMeshFuture.get();
 	prisTex = prisTexFuture.get();
+	font = fontFuture.get();
 
 	//Create materials
 	icoMat = std::make_shared<Cacao::Material>();
@@ -334,6 +378,20 @@ void PlaygroundApp::Launch() {
 	p2->GetLocalTransform().SetScale({1.0f, 1.0f, 1.0f});
 	p2->GetLocalTransform().SetRotation({180, 0, 0});
 	p2->SetParent(p1);
+
+	//Create UI
+	screen = std::make_shared<Cacao::Screen>();
+	textElem = std::make_shared<Cacao::Text>();
+	textElem->SetActive(true);
+	textElem->SetAlignment(Cacao::TextAlign::Right);
+	textElem->SetAnchor(Cacao::AnchorPoint::BottomRight);
+	textElem->SetFont(font);
+	textElem->SetColor({92.0f, 214.0f, 92.0f});
+	textElem->SetOffsetFromAnchor({0, 0});
+	textElem->SetText("Cacao Engine Playground");
+	textElem->SetSize({0.05f, 0.05f});
+	screen->AddElement(textElem);
+	Cacao::Engine::GetInstance()->GetGlobalUIView()->SetScreen(screen);
 
 	//Set skybox
 	world.skybox = sky;

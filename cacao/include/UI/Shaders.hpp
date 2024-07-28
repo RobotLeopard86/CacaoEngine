@@ -13,12 +13,12 @@ namespace Cacao {
 	void DelShaders();
 
 	namespace TextShaders {
-		static constexpr uint32_t vertex[] =
+		constexpr uint32_t vertex[] =
 #include "text.vert.txt"
 			;
-		static constexpr uint32_t fragment[] =
+		constexpr uint32_t fragment[] =
 #include "text.frag.txt"
 			;
-		static Shader* shader;
+		inline Shader* shader;
 	}
 }

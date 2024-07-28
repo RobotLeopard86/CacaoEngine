@@ -83,6 +83,7 @@ namespace Cacao {
 
 		//Create global UI view
 		uiView.reset(new UIView());
+		uiView->SetSize(Window::GetInstance()->GetSize());
 
 		//Initialize audio system
 		Logging::EngineLog("Initializing audio system...");

@@ -41,26 +41,29 @@ namespace Cacao {
 					break;
 			}
 		}
+		baseLines.push_back(ss.str());
 
-		//Create Harfbuzz buffer
-		hb_buffer_t* buf = hb_buffer_create();
-
-		//Configure Harfbuzz Unicode
-		hb_unicode_funcs_t* icufunctions = hb_icu_get_unicode_funcs();
-		hb_buffer_set_unicode_funcs(buf, icufunctions);
+		//Create Harfbuzz font representation
+		ret->hbf = hb_ft_font_create(font->face, NULL);
 
 		//Convert to glyph info
 		for(std::string line : baseLines) {
+			Renderable::Line rline;
+
+			//Create Harfbuzz buffer
+			rline.buffer = hb_buffer_create();
+			hb_unicode_funcs_t* icufunctions = hb_icu_get_unicode_funcs();
+			hb_buffer_set_unicode_funcs(rline.buffer, icufunctions);
+
 			//Shape line text
-			hb_buffer_clear_contents(buf);
-			hb_buffer_add_utf8(buf, line.c_str(), line.length(), 0, line.length());
-			hb_buffer_guess_segment_properties(buf);
-			hb_shape(font->hbFont, buf, NULL, 0);
+			hb_buffer_clear_contents(rline.buffer);
+			hb_buffer_add_utf8(rline.buffer, line.c_str(), line.length(), 0, line.length());
+			hb_buffer_guess_segment_properties(rline.buffer);
+			hb_shape(ret->hbf, rline.buffer, NULL, 0);
 
 			//Convert to glyphs
-			Renderable::Line rline;
-			rline.glyphInfo = hb_buffer_get_glyph_infos(buf, &(rline.glyphCount));
-			rline.glyphPositions = hb_buffer_get_glyph_positions(buf, &(rline.glyphCount));
+			rline.glyphInfo = hb_buffer_get_glyph_infos(rline.buffer, &(rline.glyphCount));
+			rline.glyphPositions = hb_buffer_get_glyph_positions(rline.buffer, &(rline.glyphCount));
 
 			//Add to list
 			ret->lines.push_back(rline);
@@ -94,19 +97,19 @@ namespace Cacao {
 				ret->screenPos = {round(screenSize.x / 2), screenSize.y - round(ret->size.y / 2)};
 				break;
 			case AnchorPoint::LeftCenter:
-				ret->screenPos = {round(screenSize.x / 2), round(ret->size.y / 2)};
+				ret->screenPos = {round(ret->size.x / 2), round(screenSize.y / 2)};
 				break;
 			case AnchorPoint::RightCenter:
-				ret->screenPos = {screenSize.x - round(screenSize.x / 2), round(ret->size.y / 2)};
+				ret->screenPos = {screenSize.x - round(ret->size.x / 2), round(screenSize.y / 2)};
 				break;
 		}
-		ret->screenPos.x += round(screenSize.x * size.x);
-		ret->screenPos.y += round(screenSize.y * size.y);
+		ret->screenPos.x += round(offsetFromAnchor.x * screenSize.x);
+		ret->screenPos.y += round(offsetFromAnchor.y * screenSize.y);
 
 		//Calculate color, adjusted for shader
-		ret->color = {float(color.r) / 256.0f,
-			float(color.g) / 256.0f,
-			float(color.b) / 256.0f};
+		ret->color = {float(color.r > 0 ? color.r + 1 : 0) / 256.0f,
+			float(color.g > 0 ? color.g + 1 : 0) / 256.0f,
+			float(color.b > 0 ? color.b + 1 : 0) / 256.0f};
 
 		//Calculate line gap
 		double ascender = font->face->ascender / 64.0;
@@ -114,13 +117,9 @@ namespace Cacao {
 		double height = font->face->height / 64.0;
 		ret->linegap = (height - (ascender - descender)) / height;
 
-		//Calculate font size in points
-		int pixelSize = round((double(ret->size.y) / ret->lines.size()) * (1.0 - ret->linegap));
-		ret->lineHeight = round(pixelSize * (ret->linegap + 1));
-		glm::uvec2 dpi = GetMonitorDPI();
-		double points = (static_cast<double>(pixelSize) * 72.0) / static_cast<double>(dpi.y);
-		ret->charSize = static_cast<FT_F26Dot6>(points * 64.0);
-		ret->monitorDPI = dpi;
+		//Calculate font size and line height
+		ret->charSize = round((double(ret->size.y) / ret->lines.size()) * (1.0 - ret->linegap));
+		ret->lineHeight = round(ret->charSize * (ret->linegap + 1));
 
 		return std::static_pointer_cast<UIRenderable>(ret);
 	}

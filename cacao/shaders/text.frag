@@ -2,14 +2,16 @@
 
 layout(location=0) out vec4 color;
 
-layout(location=0) in CacaoUIQuad {
+layout(location=0) in CacaoTextElem {
     vec2 texCoords;
-	vec3 color;
 } V2F;
+
+layout(push_constant) uniform ShaderData {
+	vec3 color;
+} shader;
 
 layout(binding=0) uniform sampler2D glyph;
 
 void main() {
-    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(glyph, V2F.texCoords).r);
-    color = vec4(V2F.color, 1.0) * sampled;
+    color = vec4(shader.color, texture(glyph, V2F.texCoords).r);
 }

@@ -129,6 +129,9 @@ namespace Cacao {
 			Event e("WindowClose");
 			EventManager::GetInstance()->Dispatch(e);
 		});
+		glfwSetFramebufferSizeCallback(nativeData->win, [](GLFWwindow* win, int w, int h) {
+			Engine::GetInstance()->GetGlobalUIView()->SetSize({(unsigned int)w, (unsigned int)h});
+		});
 
 		//Initialize graphics api
 		SetupGraphicsAPI(nativeData->win);
@@ -152,7 +155,7 @@ namespace Cacao {
 	}
 
 	void Window::UpdateWindowSize() {
-		//Update GLFW window size
+		//Update window size
 		glfwSetWindowSize(nativeData->win, size.x, size.y);
 
 		//Update framebuffer size
@@ -198,6 +201,13 @@ namespace Cacao {
 		}
 	}
 
+	glm::uvec2 Window::GetContentAreaSize() {
+		if(!isOpen) return glm::uvec2 {0};
+		int x, y;
+		glfwGetFramebufferSize(nativeData->win, &x, &y);
+		return glm::uvec2 {(unsigned int)x, (unsigned int)y};
+	}
+
 	void Window::Update() {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
@@ -211,11 +221,4 @@ namespace Cacao {
 	}
 
 	void RegisterWindowingExceptions() {}
-
-	glm::uvec2 Text::GetMonitorDPI() {
-		glm::vec2 ret;
-		glfwGetMonitorContentScale(Window::GetInstance()->nativeData->win, &ret.x, &ret.y);
-		ret *= 96;
-		return glm::uvec2 {round(ret.x), round(ret.y)};
-	}
 }

@@ -43,9 +43,12 @@ namespace Cacao {
 		void SetSize(glm::uvec2 newSize) {
 			if(!isOpen) return;
 			size = newSize;
-			Engine::GetInstance()->GetGlobalUIView()->SetSize(newSize);
 			UpdateWindowSize();
 		}
+
+		//Get the size of the content area in pixels
+		//This is the space where the game is drawn
+		glm::uvec2 GetContentAreaSize();
 
 		//Enable/disable VSync
 		void SetVSyncEnabled(bool value) {

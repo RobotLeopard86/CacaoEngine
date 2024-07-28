@@ -18,6 +18,11 @@ namespace Cacao {
 		return retval;
 	}
 
-	//Does nothing because the above check means this will nevere get called, we just can't have those functions in the compilation unit
+	//Does nothing because the above check means this will never get called, we just can't have those functions in the compilation unit
 	void Handle64BitTypes(GLint, ShaderUploadItem& _, ShaderItemInfo& __, int) {}
+
+	void ConfigureSPIRV(spirv_cross::CompilerGLSL::Options* opts) {
+		opts->version = 300;
+		opts->es = true;
+	}
 }

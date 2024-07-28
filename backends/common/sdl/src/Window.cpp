@@ -85,11 +85,18 @@ namespace Cacao {
 		isOpen = false;
 	}
 
+	glm::uvec2 Window::GetContentAreaSize() {
+		if(!isOpen) return glm::uvec2 {0};
+		int x, y;
+		SDL_GetWindowSizeInPixels(nativeData->win, &x, &y);
+		return glm::uvec2 {(unsigned int)x, (unsigned int)y};
+	}
+
 	void Window::UpdateWindowSize() {
-		//Update GLFW window size
+		//Update window size
 		SDL_SetWindowSize(nativeData->win, size.x, size.y);
 
-		//Update OpenGL framebuffer size
+		//Update viewport size
 		ResizeViewport(nativeData->win);
 	}
 
@@ -164,6 +171,7 @@ namespace Cacao {
 					if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
 						WindowResizer().Resize({event.window.data1, event.window.data2});
 					}
+					Engine::GetInstance()->GetGlobalUIView()->SetSize(GetContentAreaSize());
 					ResizeViewport(nativeData->win);
 					DataEvent<glm::uvec2> wre("WindowResize", {event.window.data1, event.window.data2});
 					EventManager::GetInstance()->Dispatch(wre);
@@ -209,9 +217,4 @@ namespace Cacao {
 	}
 
 	void RegisterWindowingExceptions() {}
-
-	glm::uvec2 Text::GetMonitorDPI() {
-		const SDL_DisplayMode* dm = SDL_GetDesktopDisplayMode(SDL_GetDisplayForWindow(Window::GetInstance()->nativeData->win));
-		return (glm::uvec2 {(unsigned int)(dm->w), (unsigned int)(dm->h)} * 96u);
-	}
 }

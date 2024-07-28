@@ -5,14 +5,13 @@
 namespace Cacao {
 	void GenShaders() {
 		//Text element
-		{
-			ShaderSpec spec;
-			spec.emplace_back(ShaderItemInfo {.type = SpvType::SampledImage, .size = {1, 1}, .entryName = "glyph"});
-			std::vector<uint32_t> v(TextShaders::vertex, std::end(TextShaders::vertex));
-			std::vector<uint32_t> f(TextShaders::fragment, std::end(TextShaders::fragment));
-			TextShaders::shader = new Shader(v, f, spec);
-			TextShaders::shader->Compile();
-		}
+		ShaderSpec tspec;
+		tspec.emplace_back(ShaderItemInfo {.type = SpvType::SampledImage, .size = {1, 1}, .entryName = "glyph"});
+		tspec.emplace_back(ShaderItemInfo {.type = SpvType::Float, .size = {3, 1}, .entryName = "color"});
+		std::vector<uint32_t> v(TextShaders::vertex, std::end(TextShaders::vertex));
+		std::vector<uint32_t> f(TextShaders::fragment, std::end(TextShaders::fragment));
+		TextShaders::shader = new Shader(v, f, tspec);
+		TextShaders::shader->Compile();
 	}
 
 	void DelShaders() {

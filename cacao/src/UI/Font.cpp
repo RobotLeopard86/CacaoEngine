@@ -3,15 +3,13 @@
 #include "Core/Exception.hpp"
 #include "UI/FreetypeOwner.hpp"
 
-#include "hb-ft.h"
-
 #include <filesystem>
 
 namespace Cacao {
 
 	Font::Font(std::string path)
 	  : Asset(false) {
-		CheckException(std::filesystem::exists(filePath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load font from nonexistent file!")
+		CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load font from nonexistent file!")
 		filePath = path;
 	}
 
@@ -20,9 +18,6 @@ namespace Cacao {
 
 		//Load FreeType font face
 		CheckException(!FT_New_Face(ftLib, filePath.c_str(), 0, &face), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load font face!")
-
-		//Create Harfbuzz font
-		hbFont = hb_ft_font_create(face, NULL);
 
 		compiled = true;
 
@@ -34,9 +29,6 @@ namespace Cacao {
 
 	void Font::Release() {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled font!")
-
-		//Destroy Harfbuzz font
-		hb_font_destroy(hbFont);
 
 		//Destroy FreeType font face
 		FT_Done_Face(face);

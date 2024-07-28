@@ -51,6 +51,7 @@ namespace Cacao {
 			struct Line {
 				hb_glyph_info_t* glyphInfo;
 				hb_glyph_position_t* glyphPositions;
+				hb_buffer_t* buffer;
 				unsigned int glyphCount;
 			};
 			std::vector<Line> lines;
@@ -60,9 +61,9 @@ namespace Cacao {
 			double linegap;
 			unsigned int lineHeight;
 			FT_F26Dot6 charSize;
-			glm::uvec2 monitorDPI;
+			hb_font_t* hbf;
 
-			void Draw(const glm::mat4& projection) override;
+			void Draw(glm::uvec2 screenSize, const glm::mat4& projection) override;
 		};
 
 		std::shared_ptr<UIRenderable> MakeRenderable(glm::uvec2 screenSize) override;
@@ -80,9 +81,5 @@ namespace Cacao {
 
 		//Alignment
 		TextAlign align;
-
-		//Get the DPI of the monitor
-		//Requires backend implementation
-		glm::uvec2 GetMonitorDPI();
 	};
 }

@@ -2,6 +2,8 @@
 
 layout(std140,binding=0) uniform CacaoData {
     mat4 projection;
+
+	//These two are unused but required for Cacao Engine shaders
     mat4 view;
     mat4 transform;
 } cacao;
@@ -15,5 +17,5 @@ layout(location=0) out CacaoUIQuad {
 void main()
 {
 	V2F.texCoords = pos.xy;
-	gl_Position = vec4(pos, 1.0);
+	gl_Position = cacao.projection * vec4(pos.xy, 0.0, 1.0);
 }

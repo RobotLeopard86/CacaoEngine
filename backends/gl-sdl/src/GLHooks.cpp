@@ -87,4 +87,9 @@ namespace Cacao {
 				break;
 		}
 	}
+
+	void ConfigureSPIRV(spirv_cross::CompilerGLSL::Options* opts) {
+		opts->version = 410;
+		opts->es = false;
+	}
 }

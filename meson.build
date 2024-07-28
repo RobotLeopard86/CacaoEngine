@@ -73,7 +73,7 @@ cmake_msvc_lib += 'DLL'
 
 glslc = find_program('glslc')
 
-glslc_text_gen = generator(glslc, arguments: ['-w', '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@'], output: '@PLAINNAME@.txt')
+glslc_text_gen = generator(glslc, arguments: ['-w', '-O0', '-mfmt=c', '-o', '@OUTPUT@', '@INPUT@'], output: '@PLAINNAME@.txt')
 core_shaders_s = glslc_text_gen.process([
 	'cacao/shaders/skybox.vert', 
 	'cacao/shaders/skybox.frag',

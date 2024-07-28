@@ -115,8 +115,7 @@ namespace Cacao {
 
 		//Create common options
 		spirv_cross::CompilerGLSL::Options options;
-		options.es = true;
-		options.version = 300;
+		ConfigureSPIRV(&options);
 		options.enable_420pack_extension = false;
 
 		//Parse SPIR-V IR

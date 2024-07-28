@@ -27,8 +27,8 @@ namespace Cacao {
 		MultiFuture<void> elemProcessing;
 
 		//Run the element processing
-		for(size_t start = 0; start < renderables.size(); start += chunkSize) {
-			size_t end = std::min(start + chunkSize, renderables.size());
+		for(size_t start = 0; start < screen->elements.size(); start += chunkSize) {
+			size_t end = std::min(start + chunkSize, screen->elements.size());
 			elemProcessing.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, this, &renderables]() {
 				for(size_t i = start; i < end; i++) {
 					//Create renderable
@@ -71,5 +71,7 @@ namespace Cacao {
 
 		//Swap buffers
 		frontBuffer.swap(backBuffer);
+
+		hasRendered = true;
 	}
 }

@@ -103,11 +103,15 @@ namespace Cacao {
 
 			//Draw UI
 			if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
+				//Create projection matrix
+				glm::mat4 project = glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
+
 				//Upload uniforms
 				ShaderUploadData uiud;
-				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView())});
-				uivsm->UploadData(uiud);
+				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
 				uivsm->Bind();
+				uivsm->UploadData(uiud);
+				uivsm->UploadCacaoData(project, glm::identity<glm::mat4>(), glm::identity<glm::mat4>());
 
 				//Configure OpenGL (ES)
 				glDisable(GL_DEPTH_TEST);
@@ -124,7 +128,8 @@ namespace Cacao {
 				glDepthFunc(GL_LESS);
 				glDisable(GL_BLEND);
 
-				//Unbind UI view texture
+				//Unbind UI view texture and shader
+				uivsm->Unbind();
 				Engine::GetInstance()->GetGlobalUIView()->Unbind();
 			}
 		});
@@ -161,6 +166,8 @@ namespace Cacao {
 			1.0f, 0.0f, 0.0f,
 			1.0f, 1.0f, 0.0f};
 		glBufferData(GL_ARRAY_BUFFER, sizeof(quadData), quadData, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 		glBindVertexArray(uiVao);
 		glBindVertexArray(0);
 

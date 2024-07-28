@@ -5,8 +5,17 @@
 #include "UI/Shaders.hpp"
 #include "GLUtils.hpp"
 
+//Without this adjustment, items look slightly too high
+#define ANCHOR_Y_ALIGNMENT 0.01
+
 namespace Cacao {
-	void Text::Renderable::Draw(const glm::mat4& projection) {
+	struct VBOEntry {
+		glm::vec2 vert;
+		glm::vec2 tc;
+	};
+
+	void
+	Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
 		//Configure OpenGL (ES)
 		GLint originalUnpack;
 		glGetIntegerv(GL_UNPACK_ALIGNMENT, &originalUnpack);
@@ -21,9 +30,9 @@ namespace Cacao {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 7, NULL, GL_DYNAMIC_DRAW);
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)0);
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)offsetof(VBOEntry, tc));
 		glBindVertexArray(vao);
 		glBindVertexArray(0);
 
@@ -31,7 +40,7 @@ namespace Cacao {
 		int lineCounter = 0;
 		for(Line ln : lines) {
 			//Calculate starting position
-			float startX = 0;
+			float startX = -((signed int)size.x / 2);
 			float startY = lineHeight * lineCounter;
 			if(alignment != TextAlign::Left) {
 				float textWidth = 0.0f;
@@ -41,17 +50,20 @@ namespace Cacao {
 				if(alignment == TextAlign::Center) {
 					startX = (float(size.x) - textWidth) / 2.0;
 				} else {
-					startX = float(size.x) - textWidth;
+					startX = float(size.x) - textWidth - (size.x / 2u);
 				}
 			}
 			startX += screenPos.x;
 			startY += screenPos.y;
+			startY = (screenSize.y - startY) - (float(screenSize.y) * ANCHOR_Y_ALIGNMENT);
 
 			//Draw glyphs
 			float x = startX, y = startY;
 			glBindVertexArray(vao);
+			FT_Set_Pixel_Sizes(fontFace, 0, charSize);
 			for(unsigned int i = 0; i < ln.glyphCount; i++) {
-				CheckException(FT_Load_Glyph(fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER), Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!")
+				FT_Error err = FT_Load_Glyph(fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER);
+				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!")
 
 				//Get bitmap
 				FT_Bitmap& bitmap = fontFace->glyph->bitmap;
@@ -61,16 +73,18 @@ namespace Cacao {
 				float h = bitmap.rows;
 				float xpos = x + fontFace->glyph->bitmap_left;
 				float ypos = y - (h - fontFace->glyph->bitmap_top);
-				GLfloat vboData[6][7] = {
-					{xpos, ypos + h, 0.0f, 0.0f, color.r, color.g, color.b},
-					{xpos + w, ypos, 1.0f, 1.0f, color.r, color.g, color.b},
-					{xpos, ypos, 0.0f, 1.0f, color.r, color.g, color.b},
-					{xpos, ypos + h, 0.0f, 0.0f, color.r, color.g, color.b},
-					{xpos + w, ypos + h, 1.0f, 0.0f, color.r, color.g, color.b},
-					{xpos + w, ypos, 1.0f, 1.0f, color.r, color.g, color.b}};
+				VBOEntry vboData[6] = {
+					{{xpos, ypos + h}, {0.0f, 0.0f}},
+					{{xpos + w, ypos}, {1.0f, 1.0f}},
+					{{xpos, ypos}, {0.0f, 1.0f}},
+					{{xpos, ypos + h}, {0.0f, 0.0f}},
+					{{xpos + w, ypos + h}, {1.0f, 0.0f}},
+					{{xpos + w, ypos}, {1.0f, 1.0f}}};
 
 				//Update VBO
+				glBindBuffer(GL_ARRAY_BUFFER, vbo);
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vboData), vboData);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				//Upload glyph texture to GPU
 				glBindTexture(GL_TEXTURE_2D, tex);
@@ -84,8 +98,9 @@ namespace Cacao {
 				TextShaders::shader->Bind();
 				TextShaders::shader->UploadCacaoData(projection, glm::identity<glm::mat4>(), glm::identity<glm::mat4>());
 				ShaderUploadData up;
-				RawGLTexture upTex = {.texObj = tex, .slot = NULL};
+				RawGLTexture upTex = {.texObj = tex, .slot = new int(-1)};
 				up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
+				up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
 				TextShaders::shader->UploadData(up);
 
 				//Draw glyph
@@ -102,11 +117,17 @@ namespace Cacao {
 			}
 			glBindVertexArray(0);
 
+			//Destroy Harfbuzz buffer
+			hb_buffer_destroy(ln.buffer);
+
 			//Increment counter
 			lineCounter++;
 		}
 
 		//Reset OpenGL (ES)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, originalUnpack);
+
+		//Destroy Harfbuzz font representation
+		hb_font_destroy(hbf);
 	}
 }

@@ -32,7 +32,6 @@ namespace Cacao {
 
 		//FreeType font face
 		FT_Face face;
-		hb_font_t* hbFont;
 
 		friend class Text;
 	};
