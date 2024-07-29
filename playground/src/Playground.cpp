@@ -67,6 +67,7 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Sound> bgm;
 	Cacao::AssetHandle<Cacao::Sound> stopTone;
 	Cacao::AssetHandle<Cacao::Font> font;
+	Cacao::AssetHandle<Cacao::Texture2D> img;
 
 	Cacao::AssetHandle<Cacao::Shader> icoShader;
 	Cacao::AssetHandle<Cacao::Mesh> icoMesh;
@@ -85,6 +86,7 @@ class PlaygroundApp {
 
 	std::shared_ptr<Cacao::Screen> screen;
 	std::shared_ptr<Cacao::Text> textElem;
+	std::shared_ptr<Cacao::Image> imageElem;
 };
 
 class SussyScript final : public Cacao::Script {
@@ -301,6 +303,7 @@ void PlaygroundApp::Launch() {
 	std::future<Cacao::AssetHandle<Cacao::Shader>> prisShaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/prism.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> prisMeshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/triprism.obj:Cone");
 	std::future<Cacao::AssetHandle<Cacao::Texture2D>> prisTexFuture = Cacao::AssetManager::GetInstance()->LoadTexture2D("assets/tex/prism.png");
+	std::future<Cacao::AssetHandle<Cacao::Texture2D>> imgFuture = Cacao::AssetManager::GetInstance()->LoadTexture2D("assets/tex/cacaologo.png");
 	std::future<Cacao::AssetHandle<Cacao::Font>> fontFuture = Cacao::AssetManager::GetInstance()->LoadFont("assets/fonts/Ubuntu-Light.ttf");
 
 	//Get loaded assets
@@ -313,6 +316,7 @@ void PlaygroundApp::Launch() {
 	prisMesh = prisMeshFuture.get();
 	prisTex = prisTexFuture.get();
 	font = fontFuture.get();
+	img = imgFuture.get();
 
 	//Create materials
 	icoMat = std::make_shared<Cacao::Material>();
@@ -391,6 +395,13 @@ void PlaygroundApp::Launch() {
 	textElem->SetText("Cacao Engine Playground");
 	textElem->SetSize({0.05f, 0.05f});
 	screen->AddElement(textElem);
+	imageElem = std::make_shared<Cacao::Image>();
+	imageElem->SetActive(true);
+	imageElem->SetAnchor(Cacao::AnchorPoint::BottomLeft);
+	imageElem->SetOffsetFromAnchor({0, 0});
+	imageElem->SetImage(img);
+	imageElem->SetSize({0.095f, 0.2f});
+	screen->AddElement(imageElem);
 	Cacao::Engine::GetInstance()->GetGlobalUIView()->SetScreen(screen);
 
 	//Set skybox

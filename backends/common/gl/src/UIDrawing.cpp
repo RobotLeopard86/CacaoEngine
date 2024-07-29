@@ -1,6 +1,7 @@
 #include "GLHeaders.hpp"
 
 #include "UI/Text.hpp"
+#include "UI/Image.hpp"
 #include "Core/Exception.hpp"
 #include "UI/Shaders.hpp"
 #include "GLUtils.hpp"
@@ -14,8 +15,7 @@ namespace Cacao {
 		glm::vec2 tc;
 	};
 
-	void
-	Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
+	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
 		//Configure OpenGL (ES)
 		GLint originalUnpack;
 		glGetIntegerv(GL_UNPACK_ALIGNMENT, &originalUnpack);
@@ -28,7 +28,7 @@ namespace Cacao {
 		glGenTextures(1, &tex);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 7, NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(VBOEntry) * 6, NULL, GL_DYNAMIC_DRAW);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)0);
 		glEnableVertexAttribArray(1);
@@ -123,11 +123,64 @@ namespace Cacao {
 			//Increment counter
 			lineCounter++;
 		}
+		glBindVertexArray(0);
 
 		//Reset OpenGL (ES)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, originalUnpack);
 
 		//Destroy Harfbuzz font representation
 		hb_font_destroy(hbf);
+
+		//Clean up OpenGL (ES) objects
+		glDeleteTextures(1, &tex);
+		glDeleteBuffers(1, &vbo);
+		glDeleteVertexArrays(1, &vao);
+	}
+
+	void Image::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
+		//Get position of top left
+		glm::uvec2 topLeft = screenPos - (size / 2u);
+		topLeft.y = screenSize.y - topLeft.y;
+
+		//Create vertex buffer
+		VBOEntry vboData[6] = {
+			{{topLeft.x, topLeft.y - size.y}, {0.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}},
+			{{topLeft.x, topLeft.y}, {0.0f, 1.0f}},
+			{{topLeft.x, topLeft.y - size.y}, {0.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y - size.y}, {1.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}}};
+
+		//Create temporary OpenGL (ES) objects
+		GLuint vao, vbo;
+		glGenVertexArrays(1, &vao);
+		glGenBuffers(1, &vbo);
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(VBOEntry) * 6, vboData, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)offsetof(VBOEntry, tc));
+		glBindVertexArray(vao);
+
+		//Upload uniforms
+		ImageShaders::shader->Bind();
+		ImageShaders::shader->UploadCacaoData(projection, glm::identity<glm::mat4>(), glm::identity<glm::mat4>());
+		ShaderUploadData up;
+		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex.GetManagedAsset().get())});
+		ImageShaders::shader->UploadData(up);
+
+		//Draw image
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		//Unbind objects
+		tex->Unbind();
+		ImageShaders::shader->Unbind();
+		glBindVertexArray(0);
+
+		//Clean up OpenGL (ES) objects
+		glDeleteBuffers(1, &vbo);
+		glDeleteVertexArrays(1, &vao);
 	}
 }

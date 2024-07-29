@@ -1,5 +1,6 @@
 #include "UI/UIRenderable.hpp"
 #include "UI/Text.hpp"
+#include "UI/Image.hpp"
 
 #include <vector>
 #include <sstream>
@@ -12,12 +13,53 @@
 #include "unicode/unistr.h"
 
 namespace Cacao {
+	void UIElement::CommonRenderableSetup(std::shared_ptr<UIRenderable> out, glm::uvec2 screenSize) {
+		//Copy depth value
+		out->depth = depth;
+
+		//Calculate pixel size
+		out->size = {round(screenSize.x * size.x), round(screenSize.y * size.y)};
+
+		//Calculate pixel position
+		switch(anchor) {
+			case AnchorPoint::Center:
+				out->screenPos = {round(screenSize.x / 2), round(screenSize.y / 2)};
+				break;
+			case AnchorPoint::TopLeft:
+				out->screenPos = {round(out->size.x / 2), round(out->size.y / 2)};
+				break;
+			case AnchorPoint::TopRight:
+				out->screenPos = {screenSize.x - round(out->size.x / 2), round(out->size.y / 2)};
+				break;
+			case AnchorPoint::BottomLeft:
+				out->screenPos = {round(out->size.x / 2), screenSize.y - round(out->size.y / 2)};
+				break;
+			case AnchorPoint::BottomRight:
+				out->screenPos = {screenSize.x - round(out->size.x / 2), screenSize.y - round(out->size.y / 2)};
+				break;
+			case AnchorPoint::TopCenter:
+				out->screenPos = {round(screenSize.x / 2), round(out->size.y / 2)};
+				break;
+			case AnchorPoint::BottomCenter:
+				out->screenPos = {round(screenSize.x / 2), screenSize.y - round(out->size.y / 2)};
+				break;
+			case AnchorPoint::LeftCenter:
+				out->screenPos = {round(out->size.x / 2), round(screenSize.y / 2)};
+				break;
+			case AnchorPoint::RightCenter:
+				out->screenPos = {screenSize.x - round(out->size.x / 2), round(screenSize.y / 2)};
+				break;
+		}
+		out->screenPos.x += round(offsetFromAnchor.x * screenSize.x);
+		out->screenPos.y += round(offsetFromAnchor.y * screenSize.y);
+	}
+
 	std::shared_ptr<UIRenderable> Text::MakeRenderable(glm::uvec2 screenSize) {
 		//Initial renderable setup
 		std::shared_ptr<Renderable> ret = std::make_shared<Renderable>();
+		CommonRenderableSetup(std::static_pointer_cast<UIRenderable>(ret), screenSize);
 		ret->fontFace = font->face;
 		ret->alignment = align;
-		ret->depth = depth;
 
 		//Split text string by newlines and do tab characters
 		std::vector<std::string> baseLines;
@@ -69,43 +111,6 @@ namespace Cacao {
 			ret->lines.push_back(rline);
 		}
 
-		//Calculate pixel size and rotation
-		ret->size = {round(screenSize.x * size.x), round(screenSize.y * size.y)};
-		ret->rot = rotation;
-
-		//Calculate position
-		switch(anchor) {
-			case AnchorPoint::Center:
-				ret->screenPos = {round(screenSize.x / 2), round(screenSize.y / 2)};
-				break;
-			case AnchorPoint::TopLeft:
-				ret->screenPos = {round(ret->size.x / 2), round(ret->size.y / 2)};
-				break;
-			case AnchorPoint::TopRight:
-				ret->screenPos = {screenSize.x - round(ret->size.x / 2), round(ret->size.y / 2)};
-				break;
-			case AnchorPoint::BottomLeft:
-				ret->screenPos = {round(ret->size.x / 2), screenSize.y - round(ret->size.y / 2)};
-				break;
-			case AnchorPoint::BottomRight:
-				ret->screenPos = {screenSize.x - round(ret->size.x / 2), screenSize.y - round(ret->size.y / 2)};
-				break;
-			case AnchorPoint::TopCenter:
-				ret->screenPos = {round(screenSize.x / 2), round(ret->size.y / 2)};
-				break;
-			case AnchorPoint::BottomCenter:
-				ret->screenPos = {round(screenSize.x / 2), screenSize.y - round(ret->size.y / 2)};
-				break;
-			case AnchorPoint::LeftCenter:
-				ret->screenPos = {round(ret->size.x / 2), round(screenSize.y / 2)};
-				break;
-			case AnchorPoint::RightCenter:
-				ret->screenPos = {screenSize.x - round(ret->size.x / 2), round(screenSize.y / 2)};
-				break;
-		}
-		ret->screenPos.x += round(offsetFromAnchor.x * screenSize.x);
-		ret->screenPos.y += round(offsetFromAnchor.y * screenSize.y);
-
 		//Calculate color, adjusted for shader
 		ret->color = {float(color.r > 0 ? color.r + 1 : 0) / 256.0f,
 			float(color.g > 0 ? color.g + 1 : 0) / 256.0f,
@@ -120,6 +125,17 @@ namespace Cacao {
 		//Calculate font size and line height
 		ret->charSize = round((double(ret->size.y) / ret->lines.size()) * (1.0 - ret->linegap));
 		ret->lineHeight = round(ret->charSize * (ret->linegap + 1));
+
+		return std::static_pointer_cast<UIRenderable>(ret);
+	}
+
+	std::shared_ptr<UIRenderable> Image::MakeRenderable(glm::uvec2 screenSize) {
+		//Initial renderable setup
+		std::shared_ptr<Renderable> ret = std::make_shared<Renderable>();
+		CommonRenderableSetup(std::static_pointer_cast<UIRenderable>(ret), screenSize);
+
+		//Copy texture handle
+		ret->tex = img;
 
 		return std::static_pointer_cast<UIRenderable>(ret);
 	}

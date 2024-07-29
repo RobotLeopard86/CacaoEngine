@@ -104,9 +104,7 @@ namespace Cacao {
 
 		//Clear the framebuffer
 		//We don't clear the depth buffer because it's irrelevant
-		//We use an obnoxious hot pink because it indicates that something is messed up if you can see it
-		//and it's different from the 3D clear color
-		glClearColor(1.0f, 0.1015625f, 1.0f, 0.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);

@@ -21,4 +21,14 @@ namespace Cacao {
 			;
 		inline Shader* shader;
 	}
+
+	namespace ImageShaders {
+		constexpr uint32_t vertex[] =
+#include "image.vert.txt"
+			;
+		constexpr uint32_t fragment[] =
+#include "image.frag.txt"
+			;
+		inline Shader* shader;
+	}
 }

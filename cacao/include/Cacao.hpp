@@ -33,5 +33,6 @@
 #include "UI/Font.hpp"
 #include "UI/Screen.hpp"
 #include "UI/Text.hpp"
+#include "UI/Image.hpp"
 #include "UI/UIElement.hpp"
 #include "UI/UIView.hpp"

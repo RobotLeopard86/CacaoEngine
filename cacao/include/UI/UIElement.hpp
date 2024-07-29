@@ -81,9 +81,10 @@ namespace Cacao {
 			retval->screenPos = {0, 0};
 			retval->size = {0, 0};
 			retval->depth = 0;
-			retval->rot = rotation;
 			return retval;
 		}
+
+		void CommonRenderableSetup(std::shared_ptr<UIRenderable> out, glm::uvec2 screenSize);
 
 	  protected:
 		//Rotation around center in degrees
