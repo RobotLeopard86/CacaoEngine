@@ -30,10 +30,6 @@ class PlaygroundApp {
 	void Launch();
 
 	void Cleanup() {
-		//Delete materials
-		delete icoMat;
-		delete prisMat;
-
 		//Release assets
 		icoShader->Release();
 		icoMesh->Release();
@@ -41,6 +37,7 @@ class PlaygroundApp {
 		prisMesh->Release();
 		prisTex->Release();
 		sky->Release();
+		font->Release();
 
 		//Delete world
 		Cacao::WorldManager::GetInstance()->RemoveWorld("Playground");
@@ -53,6 +50,13 @@ class PlaygroundApp {
 		return sky;
 	}
 
+	void SetTxtAnchor(Cacao::AnchorPoint anch) {
+		textElem->SetAnchor(anch);
+	}
+	void SetTxtAlign(Cacao::TextAlign al) {
+		textElem->SetAlignment(al);
+	}
+
 	void PlayStopTone();
 
   private:
@@ -62,10 +66,12 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Skybox> sky;
 	Cacao::AssetHandle<Cacao::Sound> bgm;
 	Cacao::AssetHandle<Cacao::Sound> stopTone;
+	Cacao::AssetHandle<Cacao::Font> font;
+	Cacao::AssetHandle<Cacao::Texture2D> img;
 
 	Cacao::AssetHandle<Cacao::Shader> icoShader;
 	Cacao::AssetHandle<Cacao::Mesh> icoMesh;
-	Cacao::Material* icoMat;
+	std::shared_ptr<Cacao::Material> icoMat;
 	std::vector<std::shared_ptr<Cacao::Entity>> icospheres;
 
 	std::shared_ptr<Cacao::Entity> cameraManager;
@@ -74,8 +80,13 @@ class PlaygroundApp {
 	Cacao::AssetHandle<Cacao::Shader> prisShader;
 	Cacao::AssetHandle<Cacao::Mesh> prisMesh;
 	Cacao::AssetHandle<Cacao::Texture2D> prisTex;
-	Cacao::Material* prisMat;
+
+	std::shared_ptr<Cacao::Material> prisMat;
 	std::shared_ptr<Cacao::Entity> p1, p2;
+
+	std::shared_ptr<Cacao::Screen> screen;
+	std::shared_ptr<Cacao::Text> textElem;
+	std::shared_ptr<Cacao::Image> imageElem;
 };
 
 class SussyScript final : public Cacao::Script {
@@ -173,6 +184,35 @@ class SussyScript final : public Cacao::Script {
 
 			cam->SetRotation(currentRot);
 			cam->SetPosition(currentPos);
+
+			if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_1)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::TopLeft);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Left);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_2)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::TopCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Center);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_3)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::TopRight);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Right);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_4)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::RightCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Right);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_5)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::BottomRight);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Right);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_6)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::BottomCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Center);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_7)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::BottomLeft);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Left);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_8)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::LeftCenter);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Left);
+			} else if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_9)) {
+				PlaygroundApp::GetInstance()->SetTxtAnchor(Cacao::AnchorPoint::Center);
+				PlaygroundApp::GetInstance()->SetTxtAlign(Cacao::TextAlign::Center);
+			}
 		}
 	}
 
@@ -245,9 +285,7 @@ void PlaygroundApp::PlayStopTone() {
 	p->SetLooping(false);
 	p->SetGain(0.8f);
 	p->Play();
-	while(p->IsPlaying()) {
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(4500));
 }
 
 void PlaygroundApp::Launch() {
@@ -265,6 +303,8 @@ void PlaygroundApp::Launch() {
 	std::future<Cacao::AssetHandle<Cacao::Shader>> prisShaderFuture = Cacao::AssetManager::GetInstance()->LoadShader("assets/shaders/prism.shaderdef.yml");
 	std::future<Cacao::AssetHandle<Cacao::Mesh>> prisMeshFuture = Cacao::AssetManager::GetInstance()->LoadMesh("assets/models/triprism.obj:Cone");
 	std::future<Cacao::AssetHandle<Cacao::Texture2D>> prisTexFuture = Cacao::AssetManager::GetInstance()->LoadTexture2D("assets/tex/prism.png");
+	std::future<Cacao::AssetHandle<Cacao::Texture2D>> imgFuture = Cacao::AssetManager::GetInstance()->LoadTexture2D("assets/tex/cacaologo.png");
+	std::future<Cacao::AssetHandle<Cacao::Font>> fontFuture = Cacao::AssetManager::GetInstance()->LoadFont("assets/fonts/Ubuntu-Light.ttf");
 
 	//Get loaded assets
 	sky = skyFuture.get();
@@ -275,12 +315,14 @@ void PlaygroundApp::Launch() {
 	prisShader = prisShaderFuture.get();
 	prisMesh = prisMeshFuture.get();
 	prisTex = prisTexFuture.get();
+	font = fontFuture.get();
+	img = imgFuture.get();
 
 	//Create materials
-	icoMat = new Cacao::Material();
-	icoMat->shader = icoShader.GetManagedAsset().get();
-	prisMat = new Cacao::Material();
-	prisMat->shader = prisShader.GetManagedAsset().get();
+	icoMat = std::make_shared<Cacao::Material>();
+	icoMat->shader = icoShader;
+	prisMat = std::make_shared<Cacao::Material>();
+	prisMat->shader = prisShader;
 	Cacao::ShaderUploadItem prismData_Tex;
 	prismData_Tex.target = "texSample";
 	prismData_Tex.data = prisTex.GetManagedAsset().get();
@@ -302,14 +344,14 @@ void PlaygroundApp::Launch() {
 	//Generate icospheres
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(0, ICOSPHERE_RANGE*2);
+	std::uniform_int_distribution<std::mt19937::result_type> dist(0, ICOSPHERE_RANGE * 2);
 	for(int i = 0; i < ICOSPHERE_COUNT; i++) {
 		std::stringstream ss;
 		ss << "Icosphere" << i;
 		icospheres.push_back(std::make_shared<Cacao::Entity>(ss.str()));
 		std::shared_ptr<Cacao::MeshComponent> mc = icospheres[i]->GetComponent<Cacao::MeshComponent>(icospheres[i]->MountComponent<Cacao::MeshComponent>());
 		mc->SetActive(true);
-		mc->mesh = icoMesh.GetManagedAsset().get();
+		mc->mesh = icoMesh;
 		mc->mat = icoMat;
 
 		int x = dist(rng) - ICOSPHERE_RANGE, y = dist(rng) - ICOSPHERE_RANGE, z = dist(rng) - ICOSPHERE_RANGE;
@@ -326,7 +368,7 @@ void PlaygroundApp::Launch() {
 	p1->GetComponent<PingPong>(p1->MountComponent<PingPong>(glm::vec3 {2, 0, -2}, glm::vec3 {2, 0, 2}))->SetActive(true);
 	p1->GetComponent<Spinner>(p1->MountComponent<Spinner>())->SetActive(true);
 	p1MC->SetActive(true);
-	p1MC->mesh = prisMesh.GetManagedAsset().get();
+	p1MC->mesh = prisMesh;
 	p1MC->mat = prisMat;
 	p1->GetLocalTransform().SetScale({0.5f, 0.5f, 0.5f});
 	p1->SetParent(world.rootEntity);
@@ -334,15 +376,36 @@ void PlaygroundApp::Launch() {
 	p2->SetActive(true);
 	std::shared_ptr<Cacao::MeshComponent> p2MC = p2->GetComponent<Cacao::MeshComponent>(p2->MountComponent<Cacao::MeshComponent>());
 	p2MC->SetActive(true);
-	p2MC->mesh = prisMesh.GetManagedAsset().get();
+	p2MC->mesh = prisMesh;
 	p2MC->mat = prisMat;
 	p2->GetLocalTransform().SetPosition({0, -3, 0});
 	p2->GetLocalTransform().SetScale({1.0f, 1.0f, 1.0f});
 	p2->GetLocalTransform().SetRotation({180, 0, 0});
 	p2->SetParent(p1);
 
+	//Create UI
+	screen = std::make_shared<Cacao::Screen>();
+	textElem = std::make_shared<Cacao::Text>();
+	textElem->SetActive(true);
+	textElem->SetAlignment(Cacao::TextAlign::Right);
+	textElem->SetAnchor(Cacao::AnchorPoint::BottomRight);
+	textElem->SetFont(font);
+	textElem->SetColor({92.0f, 214.0f, 92.0f});
+	textElem->SetOffsetFromAnchor({0, 0});
+	textElem->SetText("Cacao Engine Playground");
+	textElem->SetSize({0.05f, 0.05f});
+	screen->AddElement(textElem);
+	imageElem = std::make_shared<Cacao::Image>();
+	imageElem->SetActive(true);
+	imageElem->SetAnchor(Cacao::AnchorPoint::BottomLeft);
+	imageElem->SetOffsetFromAnchor({0, 0});
+	imageElem->SetImage(img);
+	imageElem->SetSize({0.095f, 0.2f});
+	screen->AddElement(imageElem);
+	Cacao::Engine::GetInstance()->GetGlobalUIView()->SetScreen(screen);
+
 	//Set skybox
-	world.skybox = sky.GetManagedAsset().get();
+	world.skybox = sky;
 
 	//Start audio playback
 	audioPlayer->Play();

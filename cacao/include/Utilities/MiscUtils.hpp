@@ -4,13 +4,10 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
 
-//Allows conversion of an instance member function into a form that can be called like a static function
+//Allows conversion of an instance member function of the current class into a form that can be called like a static function
 #define BIND_MEMBER_FUNC(func) std::bind(&func, this, std::placeholders::_1)
 
 namespace Cacao {
-	//Empty native data struct
-	struct NativeData {};
-
 	//Front, right, and up vector calculation result
 	struct Vectors {
 		glm::vec3 front, right, up;
@@ -37,4 +34,11 @@ namespace Cacao {
 
 		return {.front = frontVec, .right = rightVec, .up = upVec};
 	}
+
+	//Fake deleter that doesn't actually delete anything
+	//This is used on the self pointers so they don't try to delete themselves in the destructor
+	template<typename T>
+	struct FakeDeleter {
+		void operator()(T* e) const {}
+	};
 }

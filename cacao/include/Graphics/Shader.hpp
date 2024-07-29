@@ -27,7 +27,7 @@ namespace Cacao {
 
 		//Data size (x for number of vector components, y for number of vectors in a matrix)
 		//Example: a vec3 would be {3, 1}, a mat4 would be {4, 4}, and a scalar would be {1, 1}
-		glm::ivec2 size;
+		glm::uvec2 size;
 
 		//Name of entry
 		std::string entryName;
@@ -63,7 +63,6 @@ namespace Cacao {
 		~Shader() final {
 			if(compiled && bound) Unbind();
 			if(compiled) Release();
-			delete nativeData;
 		}
 
 		//Use this shader
@@ -78,11 +77,6 @@ namespace Cacao {
 		//Is shader bound?
 		bool IsBound() {
 			return bound;
-		}
-
-		//Read-only access to native data
-		const NativeData* GetNativeData() {
-			return nativeData;
 		}
 
 		//Read-only access to the shader spec
@@ -103,8 +97,11 @@ namespace Cacao {
 		}
 
 	  private:
+		//Backend-implemented data type
+		struct ShaderData;
+
 		bool bound;
-		NativeData* nativeData;
+		std::shared_ptr<ShaderData> nativeData;
 		const ShaderSpec specification;
 	};
 }

@@ -9,6 +9,7 @@
 
 #include "EngineConfig.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "UI/UIView.hpp"
 
 using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 
@@ -28,6 +29,11 @@ namespace Cacao {
 		//Access the thread pool
 		std::shared_ptr<thread_pool> GetThreadPool() {
 			return threadPool;
+		}
+
+		//Acess the global UI view
+		std::shared_ptr<UIView> GetGlobalUIView() {
+			return uiView;
 		}
 
 		//Is the engine running?
@@ -66,7 +72,10 @@ namespace Cacao {
 		std::thread::id threadID;
 
 		//Game library
-		dynalo::library* gameLib;
+		std::unique_ptr<dynalo::library> gameLib;
+
+		//Top-level UI view
+		std::shared_ptr<UIView> uiView;
 
 		Engine() {}
 

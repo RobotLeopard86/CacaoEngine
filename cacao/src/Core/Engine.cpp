@@ -7,6 +7,7 @@
 #include "Audio/AudioSystem.hpp"
 #include "Audio/AudioPlayer.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
+#include "UI/FreetypeOwner.hpp"
 
 #include "yaml-cpp/yaml.h"
 
@@ -54,7 +55,7 @@ namespace Cacao {
 		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!")
 
 		//Load game module and module config
-		gameLib = new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension());
+		gameLib.reset(new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()));
 		cfg.fixedTickRate = (launchRoot["fixedTickRate"].IsScalar() ? std::stoi(launchRoot["fixedTickRate"].Scalar()) : cfg.fixedTickRate);
 		cfg.targetDynTPS = (launchRoot["dynamicTPS"].IsScalar() ? std::stoi(launchRoot["dynamicTPS"].Scalar()) : cfg.targetDynTPS);
 		cfg.maxFrameLag = (launchRoot["maxFrameLag"].IsScalar() ? std::stoi(launchRoot["maxFrameLag"].Scalar()) : cfg.maxFrameLag);
@@ -63,6 +64,9 @@ namespace Cacao {
 			Window::GetInstance()->SetSize({std::stoi(launchRoot["dimensions"]["x"].Scalar()), std::stoi(launchRoot["dimensions"]["y"].Scalar())});
 		}
 		if(launchRoot["workingDir"].IsScalar() && std::filesystem::exists(launchRoot["workingDir"].Scalar())) std::filesystem::current_path(launchRoot["workingDir"].Scalar());
+
+		//Initialize FreeType
+		FreetypeOwner::GetInstance()->Init();
 
 		//Register the window close consumer
 		Logging::EngineLog("Setting up event manager...");
@@ -76,6 +80,10 @@ namespace Cacao {
 			Skybox::CommonSetup();
 		});
 		skySetup.wait();
+
+		//Create global UI view
+		uiView.reset(new UIView());
+		uiView->SetSize(Window::GetInstance()->GetSize());
 
 		//Initialize audio system
 		Logging::EngineLog("Initializing audio system...");
@@ -126,8 +134,7 @@ namespace Cacao {
 		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
 
 		//Asynchronously run core startup
-		//We never use this future as we don't intend to wait on it, but we have to do this because [[nodiscard]]
-		std::future<void> startup = threadPool->enqueue([this]() {
+		threadPool->enqueue_detach([this]() {
 			this->CoreStartup();
 		});
 
@@ -162,6 +169,9 @@ namespace Cacao {
 		Logging::EngineLog("Shutting down audio system...");
 		AudioSystem::GetInstance()->Shutdown();
 
+		//Destroy global UI view
+		uiView.reset();
+
 		//Shut down rendering backend
 		Logging::EngineLog("Shutting down rendering backend...");
 		RenderController::GetInstance()->Shutdown();
@@ -173,11 +183,12 @@ namespace Cacao {
 		Logging::EngineLog("Stopping thread pool...");
 		threadPool.reset();
 
+		//Shutdown the FreeType library
+		delete FreetypeOwner::GetInstance();
+
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");
 		EventManager::GetInstance()->Shutdown();
-
-		run.store(false);
 	}
 
 }

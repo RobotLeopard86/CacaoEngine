@@ -56,7 +56,9 @@ sdl3 = sdl3_sp.dependency('SDL3-static')
 
 include_dirs = [
 	'../../cacao/include',
-	'include',
+	'../common/gl/include',
+	'../common/sdl/include',
+	'../common',
 	'../../libs/spdlog/include',
 	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
@@ -76,7 +78,12 @@ backend_deplist = [
 	sdl3,
 	glad_dep,
 	stb_dep,
-	skyshaders_dep,
+	freetype,
+	icu,
+	harfbuzz,
+	harfbuzz_icu,
+	harfbuzz_sub,
+	core_shaders,
 ]
 
 if host_machine.system() == 'windows'
@@ -84,14 +91,19 @@ if host_machine.system() == 'windows'
 endif
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/GLES.cpp',
-	'src/Window.cpp',
-	'src/Texture2D.cpp',
-	'src/Cubemap.cpp',
-	'src/Shader.cpp',
-	'src/Mesh.cpp',
-	'src/Skybox.cpp',
-	'src/ExceptionCodes.cpp'
-], dependencies: backend_deplist)
+	'src/GLHooks.cpp',
+	'src/SDLHooks.cpp',
+	'../common/sdl/src/Window.cpp',
+	'../common/gl/src/Texture2D.cpp',
+	'../common/gl/src/Cubemap.cpp',
+	'../common/gl/src/Shader.cpp',
+	'../common/gl/src/Mesh.cpp',
+	'../common/gl/src/Skybox.cpp',
+	'../common/gl/src/OpenGL.cpp',
+	'../common/gl/src/UIDrawing.cpp',
+	'../common/gl/src/UIView.cpp',
+	'../common/gl/src/UIShaderGen.cpp',
+	'../common/ExceptionCodes.cpp'
+], dependencies: backend_deplist, cpp_args: ['-DES'])
 
 subdir_done()

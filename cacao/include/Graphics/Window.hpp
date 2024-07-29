@@ -7,6 +7,7 @@
 #include "glm/vec2.hpp"
 
 #include "Utilities/MiscUtils.hpp"
+#include "Core/Engine.hpp"
 
 namespace Cacao {
 	//Represents the three different window mode states
@@ -21,7 +22,7 @@ namespace Cacao {
 	class Window {
 	  public:
 		//Open the window
-		void Open(std::string title, glm::ivec2 initialSize, bool startVisible, WindowMode mode);
+		void Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode);
 		//Close the window
 		void Close();
 		//Is the window open?
@@ -34,16 +35,20 @@ namespace Cacao {
 		void Present();
 
 		//Get window size
-		glm::ivec2 GetSize() {
-			if(!isOpen) return glm::ivec2 {0};
+		glm::uvec2 GetSize() {
+			if(!isOpen) return glm::uvec2 {0};
 			return size;
 		}
 		//Resizes the window (in fullscreen or borderless mode, changes resolution)
-		void SetSize(glm::ivec2 newSize) {
+		void SetSize(glm::uvec2 newSize) {
 			if(!isOpen) return;
 			size = newSize;
 			UpdateWindowSize();
 		}
+
+		//Get the size of the content area in pixels
+		//This is the space where the game is drawn
+		glm::uvec2 GetContentAreaSize();
 
 		//Enable/disable VSync
 		void SetVSyncEnabled(bool value) {
@@ -55,12 +60,6 @@ namespace Cacao {
 		bool IsVSyncEnabled() {
 			if(!isOpen) return false;
 			return useVSync;
-		}
-
-		//Get native window type (returns void*, must be cast to target window type)
-		void* GetNativeWindow() {
-			if(!isOpen) return NULL;
-			return nativeWindow;
 		}
 
 		//Set new window title
@@ -106,7 +105,7 @@ namespace Cacao {
 		bool isVisible;
 
 		bool useVSync;
-		glm::ivec2 size;
+		glm::uvec2 size;
 		std::string windowTitle;
 
 		WindowMode mode;
@@ -115,19 +114,22 @@ namespace Cacao {
 		//Used for switching between modes
 		glm::ivec2 windowedPosition;
 
-		void* nativeWindow;
-
 		void UpdateVSyncState();
 		void UpdateWindowSize();
 		void UpdateVisibilityState();
 		void UpdateModeState(WindowMode lastMode);
 
 		//For changing the window size from implementation without generating more resize events
-		friend void ChangeSize(Window* win, glm::ivec2 size) {
+		friend void ChangeSize(Window* win, glm::uvec2 size) {
 			win->size = size;
 		}
 		friend struct WindowResizer;
 
-		NativeData* nativeData;
+		//Backend-implemented data type
+		struct WindowData;
+
+		std::shared_ptr<WindowData> nativeData;
+
+		friend class Text;
 	};
 }

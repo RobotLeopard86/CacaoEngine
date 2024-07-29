@@ -6,6 +6,7 @@
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
 #include "Audio/Sound.hpp"
+#include "UI/Font.hpp"
 #include "Core/Exception.hpp"
 #include "Asset.hpp"
 
@@ -35,6 +36,9 @@ namespace Cacao {
 
 		//Load a sound from a file
 		std::future<AssetHandle<Sound>> LoadSound(std::string path);
+
+		//Load a font face from a file
+		std::future<AssetHandle<Font>> LoadFont(std::string path);
 
 		//Remove an asset from the cache by ID
 		//Generally should not be used (exists for assets to deregister themselves)

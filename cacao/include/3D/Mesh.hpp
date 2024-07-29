@@ -15,7 +15,6 @@ namespace Cacao {
 		Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
 		~Mesh() final {
 			if(compiled) Release();
-			delete nativeData;
 		}
 
 		//Draw this mesh
@@ -30,9 +29,12 @@ namespace Cacao {
 		}
 
 	  private:
+		//Backend-implemented data type
+		struct MeshData;
+
 		std::vector<Vertex> vertices;
 		std::vector<glm::uvec3> indices;
 
-		NativeData* nativeData;
+		std::shared_ptr<MeshData> nativeData;
 	};
 }

@@ -7,7 +7,7 @@ namespace Cacao {
 	class Material {
 	  public:
 		//Current shader
-		Shader* shader;
+		AssetHandle<Shader> shader;
 
 		//Data storage
 		ShaderUploadData data;

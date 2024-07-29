@@ -120,15 +120,20 @@ sources = [
 	'src/Audio/AudioSystem.cpp',
 	'src/Audio/Sound.cpp',
 	'src/Audio/AudioPlayer.cpp',
+	'src/UI/FreetypeOwner.cpp',
+	'src/UI/Font.cpp',
+	'src/UI/Screen.cpp',
+	'src/UI/Renderables.cpp',
+	'src/UI/UIView.cpp',
 	'expf.c'
 ]
 
-libfrontend = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: [
+frontend_deps = [
 	yaml_dep,
 	assimp_dep,
 	zlib_dep,
 	libdl,
-	skyshaders_dep,
+	core_shaders,
 	alsoft_dep,
 	ogg,
 	vorbis,
@@ -143,12 +148,19 @@ libfrontend = static_library('cacaofrontend', sources: sources, include_director
 	spv_rfl,
 	spv_glsl,
 	spv_hlsl,
-	spv_msl
-], pic: true)
+	spv_msl,
+	freetype,
+	icu,
+	harfbuzz,
+	harfbuzz_icu,
+	harfbuzz_sub
+]
+libfrontend = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: frontend_deps, pic: true)
 
-exe_deps = []
-
-exe_deps += meson.get_compiler('cpp').find_library('atomic', required: host_machine.system() == 'linux')
+exe_deps = [
+	frontend_deps,
+	meson.get_compiler('cpp').find_library('atomic', required: host_machine.system() == 'linux')
+]
 
 python = find_program('python')
 need_pipewire = run_command([ python, meson.project_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()

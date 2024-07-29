@@ -2,7 +2,6 @@
 
 ## Limitations
 * 64-bit shader types (`int64`, `uint64`, and `double`) are not allowed
-* GLFW's Wayland support doesn't allow moving windows programmatically, so going back to windowed mode from fullscreen or borderless will not position windows where they were prior to leaving windowed mode.
 
 ## Dependencies
 Windows and macOS: Platform-specific SDKs  
