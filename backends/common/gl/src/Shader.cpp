@@ -86,7 +86,21 @@ namespace Cacao {
 		fragParse.parse();
 
 		//Load vertex shader
-		spirv_cross::CompilerGLSL vertGLSL(std::move(vertParse.get_parsed_ir()));
+		spirv_cross::ParsedIR& ir = vertParse.get_parsed_ir();
+		bool hlsl = ir.source.hlsl;
+		spirv_cross::CompilerGLSL vertGLSL(std::move(ir));
+		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
+
+		//Convert CacaoData uniform block name
+		//HLSL has some funkiness with UBO names, so we need to fix those up
+		if(hlsl) {
+			for(auto& ubo : vertRes.uniform_buffers) {
+				if(ubo.name.compare("type_cacao") == 0 || ubo.name.compare("cacao") == 0) {
+					vertGLSL.set_name(ubo.id, "CacaoData");
+					break;
+				}
+			}
+		}
 
 		//Compile vertex shader to GLSL
 		vertGLSL.set_common_options(options);
