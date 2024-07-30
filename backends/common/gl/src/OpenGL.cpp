@@ -90,6 +90,15 @@ namespace Cacao {
 						} else if(sui.data.type() == typeid(UIView*)) {
 							UIView* view = std::any_cast<UIView*>(sui.data);
 							view->Unbind();
+						} else if(sui.data.type() == typeid(AssetHandle<Texture2D>)) {
+							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(sui.data);
+							tex->Unbind();
+						} else if(sui.data.type() == typeid(AssetHandle<Cubemap>)) {
+							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(sui.data);
+							tex->Unbind();
+						} else if(sui.data.type() == typeid(AssetHandle<UIView>)) {
+							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(sui.data);
+							view->Unbind();
 						}
 					}
 				}

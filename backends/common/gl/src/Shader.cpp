@@ -86,18 +86,24 @@ namespace Cacao {
 		fragParse.parse();
 
 		//Load vertex shader
-		spirv_cross::ParsedIR& ir = vertParse.get_parsed_ir();
-		bool hlsl = ir.source.hlsl;
-		spirv_cross::CompilerGLSL vertGLSL(std::move(ir));
+		spirv_cross::ParsedIR& vir = vertParse.get_parsed_ir();
+		bool vhlsl = vir.source.hlsl;
+		spirv_cross::CompilerGLSL vertGLSL(std::move(vir));
 		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
 
-		//Convert CacaoData uniform block name
-		//HLSL has some funkiness with UBO names, so we need to fix those up
-		if(hlsl) {
+		//Fix HLSL names because SPIRV-Cross likes to mess them up
+		if(vhlsl) {
 			for(auto& ubo : vertRes.uniform_buffers) {
-				if(ubo.name.compare("type_cacao") == 0 || ubo.name.compare("cacao") == 0) {
-					vertGLSL.set_name(ubo.id, "CacaoData");
+				if(ubo.name.compare("type.cacao") == 0 || ubo.name.compare("cacao") == 0) {
+					vertGLSL.set_name(ubo.base_type_id, "CacaoData");
 					break;
+				}
+			}
+			for(auto& out : vertRes.stage_outputs) {
+				if(out.name.starts_with("out.var.")) {
+					std::stringstream newName;
+					newName << "V2F." << out.name.substr(8, out.name.size());
+					vertGLSL.set_name(out.id, newName.str());
 				}
 			}
 		}
@@ -107,8 +113,21 @@ namespace Cacao {
 		nativeData->vertexCode = vertGLSL.compile();
 
 		//Load fragment shader
+		spirv_cross::ParsedIR& fir = fragParse.get_parsed_ir();
+		bool fhlsl = fir.source.hlsl;
 		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
 		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
+
+		//Fix HLSL names because SPIRV-Cross likes to mess them up
+		if(fhlsl) {
+			for(auto& in : fragRes.stage_inputs) {
+				if(in.name.starts_with("in.var.")) {
+					std::stringstream newName;
+					newName << "V2F." << in.name.substr(7, in.name.size());
+					fragGLSL.set_name(in.id, newName.str());
+				}
+			}
+		}
 
 		//Remove image decorations
 		for(auto& img : fragRes.sampled_images) {
@@ -129,7 +148,8 @@ namespace Cacao {
 
 		//Create common options
 		spirv_cross::CompilerGLSL::Options options;
-		ConfigureSPIRV(&options);
+		options.es = true;
+		options.version = 300;
 		options.enable_420pack_extension = false;
 
 		//Parse SPIR-V IR
@@ -139,15 +159,48 @@ namespace Cacao {
 		fragParse.parse();
 
 		//Load vertex shader
-		spirv_cross::CompilerGLSL vertGLSL(std::move(vertParse.get_parsed_ir()));
+		spirv_cross::ParsedIR& vir = vertParse.get_parsed_ir();
+		bool vhlsl = vir.source.hlsl;
+		spirv_cross::CompilerGLSL vertGLSL(std::move(vir));
+		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
+
+		//Fix HLSL names because SPIRV-Cross likes to mess them up
+		if(vhlsl) {
+			for(auto& ubo : vertRes.uniform_buffers) {
+				if(ubo.name.compare("type.cacao") == 0 || ubo.name.compare("cacao") == 0) {
+					vertGLSL.set_name(ubo.base_type_id, "CacaoData");
+					break;
+				}
+			}
+			for(auto& out : vertRes.stage_outputs) {
+				if(out.name.starts_with("out.var.")) {
+					std::stringstream newName;
+					newName << "V2F." << out.name.substr(8, out.name.size());
+					vertGLSL.set_name(out.id, newName.str());
+				}
+			}
+		}
 
 		//Compile vertex shader to GLSL
 		vertGLSL.set_common_options(options);
 		nativeData->vertexCode = vertGLSL.compile();
 
 		//Load fragment shader
+		spirv_cross::ParsedIR& fir = fragParse.get_parsed_ir();
+		bool fhlsl = fir.source.hlsl;
 		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
 		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
+
+		//Fix HLSL names because SPIRV-Cross likes to mess them up
+		if(fhlsl) {
+			for(auto& in : fragRes.stage_inputs) {
+				if(in.name.starts_with("in.var.")) {
+					std::stringstream newName;
+					newName << "V2F." << in.name.substr(7, in.name.size());
+					fragGLSL.set_name(in.id, newName.str());
+				}
+			}
+		}
 
 		//Remove image decorations
 		for(auto& img : fragRes.sampled_images) {
@@ -410,7 +463,6 @@ namespace Cacao {
 						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!")
 
 						//Bind texture to the next available slot
-						//Done in its own scope to avoid compiler error
 						if(item.data.type() == typeid(Texture2D*)) {
 							Texture2D* tex = std::any_cast<Texture2D*>(item.data);
 							tex->Bind(imageSlotCounter);
@@ -419,6 +471,15 @@ namespace Cacao {
 							tex->Bind(imageSlotCounter);
 						} else if(item.data.type() == typeid(UIView*)) {
 							UIView* view = std::any_cast<UIView*>(item.data);
+							view->Bind(imageSlotCounter);
+						} else if(item.data.type() == typeid(AssetHandle<Texture2D>)) {
+							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(item.data);
+							tex->Bind(imageSlotCounter);
+						} else if(item.data.type() == typeid(AssetHandle<Cubemap>)) {
+							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(item.data);
+							tex->Bind(imageSlotCounter);
+						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
+							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
 							view->Bind(imageSlotCounter);
 						} else if(item.data.type() == typeid(RawGLTexture)) {
 							glActiveTexture(GL_TEXTURE0 + imageSlotCounter);
