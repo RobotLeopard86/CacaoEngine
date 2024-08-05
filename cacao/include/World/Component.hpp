@@ -18,15 +18,15 @@ namespace Cacao {
 			return "_BASECOMPONENT";
 		}
 
+		//Access the owner
+		std::weak_ptr<Entity> GetOwner() {
+			return owner;
+		}
+
 		//Virtual destructor
 		virtual ~Component() {}
 
 	  protected:
-		//Access the owner
-		std::weak_ptr<Entity>& GetOwner() {
-			return owner;
-		}
-
 		//Internal direct active value setter
 		void _SetActiveInternal(bool v) {
 			active = v;

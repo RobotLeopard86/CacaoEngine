@@ -43,6 +43,7 @@ namespace Cacao {
 				}
 			}));
 		}
+		screen->NotifyClean();
 		elemProcessing.WaitAll();
 
 		//Sort all items by depth
