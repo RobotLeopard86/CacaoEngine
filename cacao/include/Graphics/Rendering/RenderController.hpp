@@ -50,7 +50,7 @@ namespace Cacao {
 		  : isInitialized(false) {}
 
 		//Process a frame for drawing
-		void ProcessFrame(Frame& frame);
+		void ProcessFrame(std::shared_ptr<Frame> frame);
 
 		//Update the graphics state
 		void UpdateGraphicsState();

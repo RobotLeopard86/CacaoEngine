@@ -27,10 +27,10 @@ namespace Cacao {
 		MultiFuture<void> elemProcessing;
 
 		//Run the element processing
-		for(size_t start = 0; start < screen->elements.size(); start += chunkSize) {
-			size_t end = std::min(start + chunkSize, screen->elements.size());
+		for(std::size_t start = 0; start < screen->elements.size(); start += chunkSize) {
+			std::size_t end = std::min(start + chunkSize, screen->elements.size());
 			elemProcessing.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, this, &renderables]() {
-				for(size_t i = start; i < end; i++) {
+				for(std::size_t i = start; i < end; i++) {
 					//Create renderable
 					std::shared_ptr<UIElement> e = this->screen->elements[i];
 					std::shared_ptr<UIRenderable> r = e->MakeRenderable(this->size);
@@ -43,8 +43,8 @@ namespace Cacao {
 				}
 			}));
 		}
-		screen->NotifyClean();
 		elemProcessing.WaitAll();
+		screen->NotifyClean();
 
 		//Sort all items by depth
 		//Index in array indicates depth, higher indices = further back
@@ -53,10 +53,10 @@ namespace Cacao {
 		MultiFuture<void> depthSort;
 
 		//Run the depth sort
-		for(size_t start = 0; start < screen->elements.size(); start += chunkSize) {
-			size_t end = std::min(start + chunkSize, screen->elements.size());
+		for(std::size_t start = 0; start < screen->elements.size(); start += chunkSize) {
+			std::size_t end = std::min(start + chunkSize, screen->elements.size());
 			depthSort.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, renderables, &depthSorted]() {
-				for(size_t i = start; i < end; i++) {
+				for(std::size_t i = start; i < end; i++) {
 					if(!depthSorted.contains(renderables[i]->depth)) {
 						depthSorted.insert_or_assign(renderables[i]->depth, std::vector<std::shared_ptr<UIRenderable>> {renderables[i]});
 					} else {

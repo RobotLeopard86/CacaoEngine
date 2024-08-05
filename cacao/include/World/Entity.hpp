@@ -125,12 +125,8 @@ namespace Cacao {
 		}
 
 		//Get the components in list form
-		std::vector<std::shared_ptr<Component>> GetComponentsAsList() {
-			std::vector<std::shared_ptr<Component>> out;
-			for(auto comp : components) {
-				out.push_back(comp.second);
-			}
-			return out;
+		std::map<xg::Guid, std::shared_ptr<Component>> GetComponents() {
+			return components;
 		}
 
 		//Change parent to another entity

@@ -23,8 +23,74 @@
 #include <iostream>
 
 namespace Cacao {
-	//A required static member initialization
-	GLuint Shader::ShaderData::uboIndexCounter = 0;
+	//Required static member initialization
+	GLuint Shader::ShaderData::uboIndexCounter = 1;
+
+	std::pair<std::string, std::string> RunSpvCross(std::vector<uint32_t>& vbuf, std::vector<uint32_t>& fbuf) {
+		//Convert SPIR-V to GLSL
+
+		//Create common options
+		spirv_cross::CompilerGLSL::Options options;
+		ConfigureSPIRV(&options);
+
+		//Parse SPIR-V IR
+		spirv_cross::Parser vertParse(std::move(vbuf));
+		vertParse.parse();
+		spirv_cross::Parser fragParse(std::move(fbuf));
+		fragParse.parse();
+
+		//Load vertex shader
+		spirv_cross::ParsedIR& vir = vertParse.get_parsed_ir();
+		bool vhlsl = vir.source.hlsl;
+		spirv_cross::CompilerGLSL vertGLSL(std::move(vir));
+		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
+		vertGLSL.set_common_options(options);
+
+		//Fix HLSL names because SPIRV-Cross likes to mess them up
+		if(vhlsl) {
+			for(auto& ubo : vertRes.uniform_buffers) {
+				if(ubo.name.compare("type.cacao_globals") == 0 || ubo.name.compare("cacao_globals") == 0) {
+					vertGLSL.set_name(ubo.base_type_id, "CacaoGlobals");
+				}
+				if(ubo.name.compare("type.cacao_locals") == 0 || ubo.name.compare("cacao_locals") == 0) {
+					vertGLSL.set_name(ubo.base_type_id, "CacaoLocals");
+				}
+			}
+			for(auto& out : vertRes.stage_outputs) {
+				if(out.name.starts_with("out.var.")) {
+					std::stringstream newName;
+					newName << "V2F." << out.name.substr(8, out.name.size());
+					vertGLSL.set_name(out.id, newName.str());
+				}
+			}
+		}
+
+		//Load fragment shader
+		spirv_cross::ParsedIR& fir = fragParse.get_parsed_ir();
+		bool fhlsl = fir.source.hlsl;
+		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
+		fragGLSL.set_common_options(options);
+		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
+
+		//Fix HLSL names because SPIRV-Cross likes to mess them up
+		if(fhlsl) {
+			for(auto& in : fragRes.stage_inputs) {
+				if(in.name.starts_with("in.var.")) {
+					std::stringstream newName;
+					newName << "V2F." << in.name.substr(7, in.name.size());
+					fragGLSL.set_name(in.id, newName.str());
+				}
+			}
+		}
+
+		//Remove image decorations
+		for(auto& img : fragRes.sampled_images) {
+			fragGLSL.unset_decoration(img.id, spv::DecorationDescriptorSet);
+		}
+
+		//Compile SPIR-V to GLSL
+		return std::make_pair<std::string, std::string>(vertGLSL.compile(), fragGLSL.compile());
+	}
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
 	  : Asset(false), bound(false), specification(spec) {
@@ -51,13 +117,13 @@ namespace Cacao {
 		//Load shader data into vectors
 		std::vector<uint32_t> vbuf(vlen);
 		std::vector<uint32_t> fbuf(flen);
-		if(fread(vbuf.data(), sizeof(uint32_t), vlen, vf) != size_t(vlen)) {
+		if(fread(vbuf.data(), sizeof(uint32_t), vlen, vf) != std::size_t(vlen)) {
 			//Clean up file streams before exception throw
 			fclose(vf);
 			fclose(ff);
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read vertex shader data from file!")
 		}
-		if(fread(fbuf.data(), sizeof(uint32_t), flen, ff) != size_t(flen)) {
+		if(fread(fbuf.data(), sizeof(uint32_t), flen, ff) != std::size_t(flen)) {
 			//Clean up file streams before exception throw
 			fclose(vf);
 			fclose(ff);
@@ -71,72 +137,10 @@ namespace Cacao {
 		//Create native data
 		nativeData.reset(new ShaderData());
 
-		//Convert SPIR-V to GLSL
-
-		//Create common options
-		spirv_cross::CompilerGLSL::Options options;
-		options.es = true;
-		options.version = 300;
-		options.enable_420pack_extension = false;
-
-		//Parse SPIR-V IR
-		spirv_cross::Parser vertParse(std::move(vbuf));
-		vertParse.parse();
-		spirv_cross::Parser fragParse(std::move(fbuf));
-		fragParse.parse();
-
-		//Load vertex shader
-		spirv_cross::ParsedIR& vir = vertParse.get_parsed_ir();
-		bool vhlsl = vir.source.hlsl;
-		spirv_cross::CompilerGLSL vertGLSL(std::move(vir));
-		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
-
-		//Fix HLSL names because SPIRV-Cross likes to mess them up
-		if(vhlsl) {
-			for(auto& ubo : vertRes.uniform_buffers) {
-				if(ubo.name.compare("type.cacao") == 0 || ubo.name.compare("cacao") == 0) {
-					vertGLSL.set_name(ubo.base_type_id, "CacaoData");
-					break;
-				}
-			}
-			for(auto& out : vertRes.stage_outputs) {
-				if(out.name.starts_with("out.var.")) {
-					std::stringstream newName;
-					newName << "V2F." << out.name.substr(8, out.name.size());
-					vertGLSL.set_name(out.id, newName.str());
-				}
-			}
-		}
-
-		//Compile vertex shader to GLSL
-		vertGLSL.set_common_options(options);
-		nativeData->vertexCode = vertGLSL.compile();
-
-		//Load fragment shader
-		spirv_cross::ParsedIR& fir = fragParse.get_parsed_ir();
-		bool fhlsl = fir.source.hlsl;
-		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
-		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
-
-		//Fix HLSL names because SPIRV-Cross likes to mess them up
-		if(fhlsl) {
-			for(auto& in : fragRes.stage_inputs) {
-				if(in.name.starts_with("in.var.")) {
-					std::stringstream newName;
-					newName << "V2F." << in.name.substr(7, in.name.size());
-					fragGLSL.set_name(in.id, newName.str());
-				}
-			}
-		}
-
-		//Remove image decorations
-		for(auto& img : fragRes.sampled_images) {
-			fragGLSL.unset_decoration(img.id, spv::DecorationDescriptorSet);
-		}
-
-		//Compile fragment shader to GLSL
-		fragGLSL.set_common_options(options);
-		nativeData->fragmentCode = fragGLSL.compile();
+		//Get shader code
+		auto glsl = RunSpvCross(vbuf, fbuf);
+		nativeData->vertexCode = glsl.first;
+		nativeData->fragmentCode = glsl.second;
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
@@ -144,72 +148,10 @@ namespace Cacao {
 		//Create native data
 		nativeData.reset(new ShaderData());
 
-		//Convert SPIR-V to GLSL
-
-		//Create common options
-		spirv_cross::CompilerGLSL::Options options;
-		options.es = true;
-		options.version = 300;
-		options.enable_420pack_extension = false;
-
-		//Parse SPIR-V IR
-		spirv_cross::Parser vertParse(std::move(vertex));
-		vertParse.parse();
-		spirv_cross::Parser fragParse(std::move(fragment));
-		fragParse.parse();
-
-		//Load vertex shader
-		spirv_cross::ParsedIR& vir = vertParse.get_parsed_ir();
-		bool vhlsl = vir.source.hlsl;
-		spirv_cross::CompilerGLSL vertGLSL(std::move(vir));
-		spirv_cross::ShaderResources vertRes = vertGLSL.get_shader_resources();
-
-		//Fix HLSL names because SPIRV-Cross likes to mess them up
-		if(vhlsl) {
-			for(auto& ubo : vertRes.uniform_buffers) {
-				if(ubo.name.compare("type.cacao") == 0 || ubo.name.compare("cacao") == 0) {
-					vertGLSL.set_name(ubo.base_type_id, "CacaoData");
-					break;
-				}
-			}
-			for(auto& out : vertRes.stage_outputs) {
-				if(out.name.starts_with("out.var.")) {
-					std::stringstream newName;
-					newName << "V2F." << out.name.substr(8, out.name.size());
-					vertGLSL.set_name(out.id, newName.str());
-				}
-			}
-		}
-
-		//Compile vertex shader to GLSL
-		vertGLSL.set_common_options(options);
-		nativeData->vertexCode = vertGLSL.compile();
-
-		//Load fragment shader
-		spirv_cross::ParsedIR& fir = fragParse.get_parsed_ir();
-		bool fhlsl = fir.source.hlsl;
-		spirv_cross::CompilerGLSL fragGLSL(std::move(fragParse.get_parsed_ir()));
-		spirv_cross::ShaderResources fragRes = fragGLSL.get_shader_resources();
-
-		//Fix HLSL names because SPIRV-Cross likes to mess them up
-		if(fhlsl) {
-			for(auto& in : fragRes.stage_inputs) {
-				if(in.name.starts_with("in.var.")) {
-					std::stringstream newName;
-					newName << "V2F." << in.name.substr(7, in.name.size());
-					fragGLSL.set_name(in.id, newName.str());
-				}
-			}
-		}
-
-		//Remove image decorations
-		for(auto& img : fragRes.sampled_images) {
-			fragGLSL.unset_decoration(img.id, spv::DecorationDescriptorSet);
-		}
-
-		//Compile fragment shader to GLSL
-		fragGLSL.set_common_options(options);
-		nativeData->fragmentCode = fragGLSL.compile();
+		//Get shader code
+		auto glsl = RunSpvCross(vertex, fragment);
+		nativeData->vertexCode = glsl.first;
+		nativeData->fragmentCode = glsl.second;
 	}
 
 	std::shared_future<void> Shader::Compile() {
@@ -304,17 +246,23 @@ namespace Cacao {
 		glDeleteShader(compiledVertexShader);
 		glDeleteShader(compiledFragmentShader);
 
-		//Setup Cacao data UBO
-		glGenBuffers(1, &(nativeData->cacaoDataUBO));
-		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->cacaoDataUBO);
-		glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+		//Setup local UBO
+		glGenBuffers(1, &(nativeData->localsUBO));
+		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->localsUBO);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		//Link Cacao data UBO
-		GLuint cacaoUBOIndex = glGetUniformBlockIndex(program, "CacaoData");
-		CheckException(cacaoUBOIndex != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the CacaoData uniform block!")
-		glUniformBlockBinding(program, cacaoUBOIndex, ShaderData::uboIndexCounter);
-		glBindBufferBase(GL_UNIFORM_BUFFER, ShaderData::uboIndexCounter, nativeData->cacaoDataUBO);
+		//Link global UBO
+		GLuint globalUBOIdx = glGetUniformBlockIndex(program, "CacaoGlobals");
+		CheckException(globalUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the Cacao Engine globals uniform block!")
+		glUniformBlockBinding(program, globalUBOIdx, 0);
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalsUBO);
+
+		//Link local UBO
+		GLuint localUBOIdx = glGetUniformBlockIndex(program, "CacaoLocals");
+		CheckException(localUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the Cacao Engine locals uniform block!")
+		glUniformBlockBinding(program, localUBOIdx, ShaderData::uboIndexCounter);
+		glBindBufferBase(GL_UNIFORM_BUFFER, ShaderData::uboIndexCounter, nativeData->localsUBO);
 
 		//Increment UBO index counter
 		ShaderData::uboIndexCounter++;
@@ -572,23 +520,41 @@ namespace Cacao {
 		}
 	}
 
-	void Shader::UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform) {
+	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
 			//Invoke OpenGL (ES) on the main thread
-			InvokeGL([this, projection, view, transform]() {
-				this->UploadCacaoData(projection, view, transform);
+			InvokeGL([projection, view]() {
+				UploadCacaoGlobals(projection, view);
 			});
 			return;
 		}
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload Cacao Engine data to uncompiled shader!")
 
 		//Bind UBO
-		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->cacaoDataUBO);
+		glBindBuffer(GL_UNIFORM_BUFFER, globalsUBO);
 
 		//Upload data
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
-		glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(transform));
+
+		//Unbind UBO
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void Shader::UploadCacaoLocals(glm::mat4 transform) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+			//Invoke OpenGL (ES) on the main thread
+			InvokeGL([this, transform]() {
+				this->UploadCacaoLocals(transform);
+			});
+			return;
+		}
+		CheckException(this->compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload locals data to uncompiled shader!")
+
+		//Bind UBO
+		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->localsUBO);
+
+		//Upload data
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(transform));
 
 		//Unbind UBO
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);

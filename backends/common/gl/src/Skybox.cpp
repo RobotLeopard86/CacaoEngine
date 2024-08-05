@@ -106,8 +106,7 @@ namespace Cacao {
 			nativeData->vaoReady = true;
 		}
 
-		//Create skybox matrices
-		glm::mat4 skyView = glm::mat4(glm::mat3(viewMatrix));
+		//Create skybox transform matrix
 		glm::mat4 skyTransform(1.0);
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.x), {1.0, 0.0, 0.0});
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.y), {0.0, 1.0, 0.0});
@@ -117,7 +116,7 @@ namespace Cacao {
 		skyboxShader->Bind();
 
 		//Upload data to shader
-		skyboxShader->UploadCacaoData(projectionMatrix, skyView, skyTransform);
+		skyboxShader->UploadCacaoLocals(skyTransform);
 		ShaderUploadData sud;
 		ShaderUploadItem skySampler;
 		skySampler.data = std::any(texture);

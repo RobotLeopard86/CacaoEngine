@@ -88,9 +88,11 @@ namespace Cacao {
 		//WARNING: Will temporarily bind shader
 		void UploadData(ShaderUploadData& data);
 
-		//Upload Cacao Engine built-in data to the shader
-		//Only call from rendering thread
-		void UploadCacaoData(glm::mat4 projection, glm::mat4 view, glm::mat4 transform);
+		//Upload Cacao Engine global shader data
+		static void UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view);
+
+		//Upload Cacao Engine local shader data
+		void UploadCacaoLocals(glm::mat4 transform);
 
 		std::string GetType() override {
 			return "SHADER";

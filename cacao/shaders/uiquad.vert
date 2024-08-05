@@ -1,12 +1,16 @@
 #version 450 core
 
-layout(std140,binding=0) uniform CacaoData {
+layout(std140,binding=0) uniform CacaoGlobals {
     mat4 projection;
-
-	//These two are unused but required for Cacao Engine shaders
+	
+	//Unusued but required
     mat4 view;
+} globals;
+
+//This is unused as positions come in pixels, but it's required
+layout(std140,binding=1) uniform CacaoLocals {
     mat4 transform;
-} cacao;
+} locals;
 
 layout(location=0) in vec3 pos;
 
@@ -17,5 +21,5 @@ layout(location=0) out CacaoUIQuad {
 void main()
 {
 	V2F.texCoords = pos.xy;
-	gl_Position = cacao.projection * vec4(pos.xy, 0.0, 1.0);
+	gl_Position = globals.projection * vec4(pos.xy, 0.0, 1.0);
 }

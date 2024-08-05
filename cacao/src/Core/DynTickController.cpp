@@ -53,8 +53,8 @@ namespace Cacao {
 		if(!e->IsActive()) return;
 
 		//Check for components
-		for(std::shared_ptr<Component> c : e->GetComponentsAsList()) {
-			if(c->IsActive()) maybeMatch(c);
+		for(auto& c : e->GetComponents()) {
+			if(c.second->IsActive()) maybeMatch(c.second);
 		}
 
 		//Recurse through children
@@ -117,6 +117,10 @@ namespace Cacao {
 			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();
 			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count()) / 1000);
+
+			std::stringstream loggo;
+			loggo << "Tick took " << std::chrono::duration_cast<std::chrono::microseconds>(tickEnd - tickStart);
+			Logging::EngineLog(loggo.str(), LogLevel::Trace);
 
 			//If we stopped before the ideal max time, wait until that point
 			//Otherwise, run the next tick immediately
