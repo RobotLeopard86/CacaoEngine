@@ -110,6 +110,10 @@ namespace Cacao {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
+		//Upload the projection matrix
+		//Kinda scary but it'll get overwritten for the next frame
+		Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());
+
 		//Render each layer
 		int furthest = 0;
 		for(const auto& kv : renderables) {

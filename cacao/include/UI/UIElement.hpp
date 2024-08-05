@@ -26,11 +26,8 @@ namespace Cacao {
 	class UIElement {
 	  public:
 		UIElement()
-		  : rotation(0.0f), anchor(AnchorPoint::Center), offsetFromAnchor(0.0f, 0.0f), size(5, 5), depth(1), active(true), dirty(false) {}
+		  : anchor(AnchorPoint::Center), offsetFromAnchor(0.0f, 0.0f), size(5, 5), depth(1), active(true), dirty(false) {}
 
-		float GetRotation() {
-			return rotation;
-		}
 		AnchorPoint GetAnchor() {
 			return anchor;
 		}
@@ -45,10 +42,6 @@ namespace Cacao {
 		}
 		bool IsActive() {
 			return active;
-		}
-		void SetRotation(float r) {
-			rotation = r;
-			dirty = true;
 		}
 		void SetAnchor(AnchorPoint a) {
 			anchor = a;
@@ -87,9 +80,6 @@ namespace Cacao {
 		void CommonRenderableSetup(std::shared_ptr<UIRenderable> out, glm::uvec2 screenSize);
 
 	  protected:
-		//Rotation around center in degrees
-		float rotation;
-
 		//Designated anchor point
 		AnchorPoint anchor;
 

@@ -33,6 +33,11 @@ namespace Cacao {
 			return dirty;
 		}
 
+		//Make this screen dirty to force a re-render
+		void ForceDirty() {
+			dirty = true;
+		}
+
 	  private:
 		//Contained elements
 		std::vector<std::shared_ptr<UIElement>> elements;

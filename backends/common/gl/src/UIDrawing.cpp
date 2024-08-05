@@ -96,7 +96,6 @@ namespace Cacao {
 
 				//Upload uniforms
 				TextShaders::shader->Bind();
-				TextShaders::shader->UploadCacaoData(projection, glm::identity<glm::mat4>(), glm::identity<glm::mat4>());
 				ShaderUploadData up;
 				RawGLTexture upTex = {.texObj = tex, .slot = new int(-1)};
 				up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
@@ -166,7 +165,6 @@ namespace Cacao {
 
 		//Upload uniforms
 		ImageShaders::shader->Bind();
-		ImageShaders::shader->UploadCacaoData(projection, glm::identity<glm::mat4>(), glm::identity<glm::mat4>());
 		ShaderUploadData up;
 		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex.GetManagedAsset().get())});
 		ImageShaders::shader->UploadData(up);

@@ -34,10 +34,11 @@ namespace Cacao {
 		std::jthread* thread;
 
 		std::vector<std::shared_ptr<Component>> tickScriptList;
-		std::vector<RenderObject> tickRenderList;
 		double timestep;
 
 		DynTickController()
 		  : isRunning(false), thread(nullptr) {}
+
+		void LocateComponents(std::shared_ptr<Entity> e, std::function<void(std::shared_ptr<Component>)> maybeMatch);
 	};
 }

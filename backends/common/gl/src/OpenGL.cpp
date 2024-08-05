@@ -50,19 +50,22 @@ namespace Cacao {
 		}
 	}
 
-	void RenderController::ProcessFrame(Frame& frame) {
+	void RenderController::ProcessFrame(std::shared_ptr<Frame> frame) {
 		//Send the frame into the queue
-		std::shared_future<void> frameTask = InvokeGL([&frame]() {
+		std::shared_future<void> frameTask = InvokeGL([frame]() {
 			//Clear the screen
 			//We use an obnoxious neon alligator green because it indicates that something is messed up if you can see it
 			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			//Upload globals
+			Shader::UploadCacaoGlobals(frame->projection, frame->view);
+
 			//Render main scene
-			for(RenderObject& obj : frame.objects) {
+			for(RenderObject& obj : frame->objects) {
 				//Upload material data to shader
 				obj.material.shader->UploadData(obj.material.data);
-				obj.material.shader->UploadCacaoData(frame.projection, frame.view, obj.transformMatrix);
+				obj.material.shader->UploadCacaoLocals(obj.transformMatrix);
 
 				//Bind shader
 				obj.material.shader->Bind();
@@ -90,6 +93,15 @@ namespace Cacao {
 						} else if(sui.data.type() == typeid(UIView*)) {
 							UIView* view = std::any_cast<UIView*>(sui.data);
 							view->Unbind();
+						} else if(sui.data.type() == typeid(AssetHandle<Texture2D>)) {
+							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(sui.data);
+							tex->Unbind();
+						} else if(sui.data.type() == typeid(AssetHandle<Cubemap>)) {
+							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(sui.data);
+							tex->Unbind();
+						} else if(sui.data.type() == typeid(AssetHandle<UIView>)) {
+							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(sui.data);
+							view->Unbind();
 						}
 					}
 				}
@@ -99,7 +111,7 @@ namespace Cacao {
 			}
 
 			//Draw skybox (if one exists)
-			if(!frame.skybox.IsNull()) frame.skybox->Draw(frame.projection, frame.view);
+			if(!frame->skybox.IsNull()) frame->skybox->Draw(frame->projection, frame->view);
 
 			//Draw UI
 			if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
@@ -111,7 +123,7 @@ namespace Cacao {
 				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
 				uivsm->Bind();
 				uivsm->UploadData(uiud);
-				uivsm->UploadCacaoData(project, glm::identity<glm::mat4>(), glm::identity<glm::mat4>());
+				Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
 
 				//Configure OpenGL (ES)
 				glDisable(GL_DEPTH_TEST);
@@ -149,6 +161,12 @@ namespace Cacao {
 		isInitialized = true;
 
 		uivsm = {};
+
+		//Create globals UBO
+		glGenBuffers(1, &globalsUBO);
+		glBindBuffer(GL_UNIFORM_BUFFER, globalsUBO);
+		glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		//Compile UI view shader
 		uivsm.Compile();
@@ -202,6 +220,9 @@ namespace Cacao {
 			//Remove task from queue
 			glQueue.pop();
 		}
+
+		//Delete global shader UBO
+		glDeleteBuffers(1, &globalsUBO);
 
 		isInitialized = false;
 	}

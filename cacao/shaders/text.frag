@@ -14,4 +14,5 @@ layout(binding=0) uniform sampler2D glyph;
 
 void main() {
     color = vec4(shader.color, texture(glyph, V2F.texCoords).r);
+	if(color.a == 0) discard;
 }

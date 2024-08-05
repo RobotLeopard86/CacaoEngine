@@ -1,10 +1,13 @@
 #version 450 core
 
-layout(std140,binding=0) uniform CacaoData {
+layout(std140,binding=0) uniform CacaoGlobals {
     mat4 projection;
     mat4 view;
+} globals;
+
+layout(std140,binding=1) uniform CacaoLocals {
     mat4 transform;
-} cacao;
+} locals;
 
 layout(location=0) in vec3 pos;
 
@@ -15,6 +18,7 @@ layout(location=0) out CacaoSky {
 void main()
 {
 	V2F.texCoords = pos;
-	vec4 skypos = cacao.projection * cacao.view * cacao.transform * vec4(pos, 1.0);
+	mat4 view = mat4(mat3(globals.view));
+	vec4 skypos = globals.projection * view * locals.transform * vec4(pos, 1.0);
 	gl_Position = skypos.xyww;
 }

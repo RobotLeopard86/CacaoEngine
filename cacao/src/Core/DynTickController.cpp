@@ -10,8 +10,6 @@
 #include "Graphics/Rendering/MeshComponent.hpp"
 #include "Utilities/MultiFuture.hpp"
 
-#include <mutex>
-
 namespace Cacao {
 	//Required static variable initialization
 	DynTickController* DynTickController::instance = nullptr;
@@ -50,6 +48,21 @@ namespace Cacao {
 		isRunning = false;
 	}
 
+	void DynTickController::LocateComponents(std::shared_ptr<Entity> e, std::function<void(std::shared_ptr<Component>)> maybeMatch) {
+		//Stop if this component is inactive
+		if(!e->IsActive()) return;
+
+		//Check for components
+		for(auto& c : e->GetComponents()) {
+			if(c.second->IsActive()) maybeMatch(c.second);
+		}
+
+		//Recurse through children
+		for(std::shared_ptr<Entity> child : e->GetChildrenAsList()) {
+			LocateComponents(child, maybeMatch);
+		}
+	}
+
 	void DynTickController::Run(std::stop_token stopTkn) {
 		//Run while we haven't been asked to stop
 		timestep = 0.0;
@@ -64,42 +77,15 @@ namespace Cacao {
 			//Find all scripts that need to be run
 			tickScriptList.clear();
 			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
-			std::mutex slMutex {};
-			MultiFuture<void> slFuture;
-			for(int i = 0; i < activeWorld.rootEntity->GetChildrenAsList().size(); i++) {
-				std::shared_ptr<Entity> ent = activeWorld.rootEntity->GetChildrenAsList()[i];
-				slFuture.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([this, ent, &slMutex]() {
-					//Create script locator function for an entity
-					auto scriptLocator = [this, &slMutex](std::shared_ptr<Entity> e) {
-						//Sneaky recursive lambda trick
-						auto impl = [this, &slMutex](std::shared_ptr<Entity> e, auto& implRef) mutable {
-							//Stop if this component is inactive
-							if(!e->IsActive()) return;
-
-							//Check for scripts
-							for(std::shared_ptr<Component>& c : e->GetComponentsAsList()) {
-								if(c->GetKind() == "SCRIPT" && c->IsActive()) {
-									//Add to list (once lock is available)
-									slMutex.lock();
-									this->tickScriptList.push_back(c);
-									slMutex.unlock();
-								}
-							}
-
-							//Recurse through children
-							for(std::shared_ptr<Entity> child : e->GetChildrenAsList()) {
-								implRef(child, implRef);
-							}
-						};
-						return impl(e, impl);
-					};
-
-					//Execute the script locator
-					scriptLocator(ent);
-				}));
+			for(std::shared_ptr<Entity> ent : activeWorld.rootEntity->GetChildrenAsList()) {
+				//Execute the script locator
+				LocateComponents(ent, [this](std::shared_ptr<Component> c) {
+					if(c->GetKind() == "SCRIPT") {
+						//Add to list
+						this->tickScriptList.push_back(c);
+					}
+				});
 			}
-			//Wait for work to be completed
-			slFuture.WaitAll();
 
 			//Execute scripts
 			for(std::shared_ptr<Component>& s : tickScriptList) {
@@ -107,52 +93,23 @@ namespace Cacao {
 				script->OnTick(timestep);
 			}
 
-			//Accumulate things to render
-			tickRenderList.clear();
-			std::mutex rlMutex {};
-			MultiFuture<void> roFuture;
-			for(int i = 0; i < activeWorld.rootEntity->GetChildrenAsList().size(); i++) {
-				std::shared_ptr<Entity> ent = activeWorld.rootEntity->GetChildrenAsList()[i];
-				roFuture.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([this, ent, &rlMutex]() {
-					//Create mesh locator function for an entity
-					auto meshLocator = [this, &rlMutex](std::shared_ptr<Entity> e) {
-						//Sneaky recursive lambda trick
-						auto impl = [this, &rlMutex](std::shared_ptr<Entity> e, auto& implRef) mutable {
-							//Stop if this component is inactive
-							if(!e->IsActive()) return;
-
-							//Check for mesh components
-							for(std::shared_ptr<Component>& c : e->GetComponentsAsList()) {
-								if(c->GetKind() == "MESH" && c->IsActive()) {
-									//Add to list (once lock is available)
-									MeshComponent* mc = std::dynamic_pointer_cast<MeshComponent>(c).get();
-									rlMutex.lock();
-									this->tickRenderList.push_back(RenderObject(e->GetWorldTransformMatrix(), mc->mesh, *(mc->mat)));
-									rlMutex.unlock();
-								}
-							}
-
-							//Recurse through children
-							for(std::shared_ptr<Entity> child : e->GetChildrenAsList()) {
-								implRef(child, implRef);
-							}
-						};
-						return impl(e, impl);
-					};
-
-					//Execute the mesh locator
-					meshLocator(ent);
-				}));
-			}
-			//Wait for work to be completed
-			roFuture.WaitAll();
-
 			//Create frame object
 			std::shared_ptr<Frame> f = std::make_shared<Frame>();
 			f->projection = activeWorld.cam->GetProjectionMatrix();
 			f->view = activeWorld.cam->GetViewMatrix();
 			f->skybox = activeWorld.skybox;
-			f->objects = tickRenderList;
+
+			//Accumulate things to render
+			for(std::shared_ptr<Entity> ent : activeWorld.rootEntity->GetChildrenAsList()) {
+				//Execute the mesh locator
+				LocateComponents(ent, [&f](std::shared_ptr<Component> c) {
+					if(c->GetKind() == "MESH") {
+						//Add to list
+						MeshComponent* mc = std::dynamic_pointer_cast<MeshComponent>(c).get();
+						f->objects.emplace_back(c->GetOwner().lock()->GetWorldTransformMatrix(), mc->mesh, *(mc->mat));
+					}
+				});
+			}
 
 			//Send frame to render controller
 			RenderController::GetInstance()->EnqueueFrame(f);
@@ -160,6 +117,10 @@ namespace Cacao {
 			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();
 			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count()) / 1000);
+
+			std::stringstream loggo;
+			loggo << "Tick took " << std::chrono::duration_cast<std::chrono::microseconds>(tickEnd - tickStart);
+			Logging::EngineLog(loggo.str(), LogLevel::Trace);
 
 			//If we stopped before the ideal max time, wait until that point
 			//Otherwise, run the next tick immediately

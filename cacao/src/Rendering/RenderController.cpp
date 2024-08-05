@@ -47,6 +47,8 @@ namespace Cacao {
 				std::shared_ptr<Frame> next = frameQueue.front();
 				frameQueue.pop();
 
+				std::chrono::steady_clock::time_point fb = std::chrono::steady_clock::now();
+
 				//Release lock
 				lock.unlock();
 
@@ -56,10 +58,14 @@ namespace Cacao {
 				}
 
 				//Render the frame
-				ProcessFrame(*next);
+				ProcessFrame(next);
 
 				//Present rendered frame to window
 				Window::GetInstance()->Present();
+
+				std::stringstream loggo;
+				loggo << "Render took " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - fb);
+				Logging::EngineLog(loggo.str(), LogLevel::Trace);
 			} else {
 				//Release lock and wait for a bit to avoid wasting CPU cycles
 				lock.unlock();

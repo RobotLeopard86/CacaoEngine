@@ -21,4 +21,5 @@ namespace Cacao {
 		int* slot;
 	};
 
+	inline GLuint globalsUBO = 37;
 }
