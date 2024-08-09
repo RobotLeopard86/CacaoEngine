@@ -15,6 +15,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <mutex>
 
 //This is required for uint64_t used by crossguid (but that doesn't include it for some reason)
 #include <stdint.h>
@@ -92,11 +93,15 @@ namespace Cacao {
 			std::shared_ptr<T> cptr = std::make_shared<T>(std::forward<Args>(args)...);
 			cptr->SetOwner(self);
 
-			//Add this component to the list
-			auto mapValue = components.emplace(std::make_pair<xg::Guid, std::shared_ptr<Component>>(xg::newGuid(), std::static_pointer_cast<Component>(cptr)));
+			{
+				std::lock_guard lk(componentsMtx);
 
-			//Return the GUID
-			return mapValue.first->first;
+				//Add this component to the list
+				auto mapValue = components.emplace(std::make_pair<xg::Guid, std::shared_ptr<Component>>(xg::newGuid(), std::static_pointer_cast<Component>(cptr)));
+
+				//Return the GUID
+				return mapValue.first->first;
+			}
 		}
 
 		//Retrieve a component from the entity
@@ -104,6 +109,7 @@ namespace Cacao {
 		template<typename T>
 		std::shared_ptr<T> GetComponent(xg::Guid guid) {
 			static_assert(std::is_base_of<Component, T>(), "Can only get subclasses of Component!");
+			std::lock_guard lk(componentsMtx);
 			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
 
 			//Try to cast the value
@@ -118,15 +124,11 @@ namespace Cacao {
 		//The freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity
 		//Requires the GUID returned from MountComponent
 		void DeleteComponent(xg::Guid guid) {
+			std::lock_guard lk(componentsMtx);
 			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
 
 			components[guid].reset();
 			components.erase(guid);
-		}
-
-		//Get the components in list form
-		std::map<xg::Guid, std::shared_ptr<Component>> GetComponents() {
-			return components;
 		}
 
 		//Change parent to another entity
@@ -147,9 +149,13 @@ namespace Cacao {
 
 		~Entity() {
 			//Release ownership of all components
-			for(auto comp : components) {
-				comp.second.reset();
+			{
+				std::lock_guard lk(componentsMtx);
+				for(auto comp : components) {
+					comp.second.reset();
+				}
 			}
+
 			//Release ownership of all children
 			for(auto child : children) {
 				child.reset();
@@ -159,6 +165,7 @@ namespace Cacao {
 	  private:
 		//Components on this entity
 		std::map<xg::Guid, std::shared_ptr<Component>> components;
+		std::mutex componentsMtx;
 
 		//Child entities
 		std::vector<std::shared_ptr<Entity>> children;
@@ -174,5 +181,7 @@ namespace Cacao {
 
 		//Is this entity active?
 		bool active;
+
+		friend class DynTickController;
 	};
 }
