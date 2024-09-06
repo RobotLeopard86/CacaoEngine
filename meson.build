@@ -39,11 +39,13 @@ else
 	run_command([ python, 'scripts/delay.py' ], check: false)
 endif
 
-if host_machine.system() == 'windows'
+bt = get_option('buildtype')
+
+if bt == 'debug'
 	if meson.get_compiler('c').get_id() == 'msvc'
-		add_global_arguments(['/DNOMINMAX', '/D_CRT_SECURE_NO_WARNINGS', '/D_ITERATOR_DEBUG_LEVEL=0'], language: ['c', 'cpp'])
+		add_project_arguments(['/D_ITERATOR_DEBUG_LEVEL=2'], language: ['c', 'cpp'])
 	else
-		add_global_arguments(['-DNOMINMAX', '-D_CRT_SECURE_NO_WARNINGS', '-D_ITERATOR_DEBUG_LEVEL=0'], language: ['c', 'cpp'])
+		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2'], language: ['c', 'cpp'])
 	endif
 endif
 
@@ -52,7 +54,6 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 	subsystem = 'windows'
 endif
 
-bt = get_option('buildtype')
 cmake_build_type = ''
 cmake_msvc_lib = 'MultiThreaded'
 if bt.contains('debug')
