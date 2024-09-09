@@ -104,6 +104,11 @@ namespace Cacao {
 			}
 		}
 
+		//Get all components in this entity
+		std::map<xg::Guid, std::shared_ptr<Component>> GetAllComponents() {
+			return components;
+		}
+
 		//Retrieve a component from the entity
 		//Requires the GUID returned from MountComponent
 		template<typename T>

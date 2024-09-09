@@ -49,10 +49,10 @@ namespace Cacao {
 		//Fix HLSL names because SPIRV-Cross likes to mess them up
 		if(vhlsl) {
 			for(auto& ubo : vertRes.uniform_buffers) {
-				if(ubo.name.compare("type.cacao_globals") == 0 || ubo.name.compare("cacao_globals") == 0) {
+				if(ubo.name.compare("type.cacao_globals") == 0 || ubo.name.compare("cacao_globals") == 0 || ubo.name.compare("type.ConstantBuffer.CacaoGlobals") == 0 || ubo.name.compare("globals") == 0) {
 					vertGLSL.set_name(ubo.base_type_id, "CacaoGlobals");
 				}
-				if(ubo.name.compare("type.cacao_locals") == 0 || ubo.name.compare("cacao_locals") == 0) {
+				if(ubo.name.compare("type.cacao_locals") == 0 || ubo.name.compare("cacao_locals") == 0 || ubo.name.compare("type.ConstantBuffer.CacaoLocals") == 0 || ubo.name.compare("locals") == 0) {
 					vertGLSL.set_name(ubo.base_type_id, "CacaoLocals");
 				}
 			}
@@ -61,6 +61,11 @@ namespace Cacao {
 					std::stringstream newName;
 					newName << "V2F." << out.name.substr(8, out.name.size());
 					vertGLSL.set_name(out.id, newName.str());
+				}
+			}
+			for(auto& pcb : vertRes.push_constant_buffers) {
+				if(pcb.name.compare("type.PushConstant.ShaderData") == 0 || pcb.name.compare("shader") == 0) {
+					vertGLSL.set_name(pcb.base_type_id, "ShaderData");
 				}
 			}
 		}

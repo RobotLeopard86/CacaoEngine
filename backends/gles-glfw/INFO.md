@@ -1,7 +1,8 @@
 # Backend `gles-glfw` Info
 
 ## Limitations
-* 64-bit shader types (`int64`, `uint64`, and `double`) are not allowed
+* 64-bit shader uniform types (`int64`, `uint64`, and `double`) are not allowed
+* Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
 
 ## Dependencies
 Windows and macOS: Platform-specific SDKs  
