@@ -33,6 +33,7 @@ namespace Cacao {
 				for(std::size_t i = start; i < end; i++) {
 					//Create renderable
 					std::shared_ptr<UIElement> e = this->screen->elements[i];
+					if(!e->IsActive()) continue;
 					std::shared_ptr<UIRenderable> r = e->MakeRenderable(this->size);
 
 					//Mark element as clean
