@@ -7,7 +7,7 @@ For the time being, you will have to build the engine yourself. Instructions to 
 
 Before you get continue, make sure you have installed all the dependencies listed there.
 
-## Create a project
+## Bundle layout
 Cacao Engine itself ships as an executable. Your code lives in a special file called the launch module. This launch module is a file that must be named `launch.(dll,so,dylib)`. You can build your launch module through whatever means you like, though [Meson](https://mesonbuild.com) is the only officially supported option. In addition to your launch module, you will need another file: `launchconfig.cacao.yml`. This is a YAML file that must be placed in the same dirctory as the built Cacao Engine executable, which has the following items:
 * `launch`: The path to the launch module relative to the engine executable
 * `dynamicTPS`: The number of dynamic ticks that should happen in a second (**not a hard constraint**)

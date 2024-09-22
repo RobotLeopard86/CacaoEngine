@@ -2,6 +2,8 @@
 
 The remainder of this tutorial will assume that you are using Meson to build your game.
 
+**IMPORTANT:** If you want to use Visual Studio, read the [Visual Studio compatibility guide](../vs) before continuing.
+
 ## Creating a base project
 The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at `https://github.com/RobotLeopard86/CacaoEngine-Game-Template`. This repository contains an ideal setup for creating a Cacao Engine game. Run the following command in your terminal to set up your build directory: `meson setup build`. **IMPORTANT**: If on Linux or macOS, append `--native-file posix_native.ini` to your command line. Next, run ` ninja -C build run` to build and run the template. If all goes well, you should see something like this:  
 ![Template](../../assets/quickstart-template.png)

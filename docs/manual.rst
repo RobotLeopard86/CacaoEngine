@@ -9,7 +9,9 @@ Table of Contents:
 
 .. toctree::
 	:maxdepth: 2
+	:titlesonly:
 
 	manual/quickstart
 	manual/building
 	manual/backends
+	manual/vs
