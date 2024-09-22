@@ -40,6 +40,6 @@
 //Cacao namespace docs
 
 /**
- * @brief The namespace where all \Cacao \Engine components live
+ * @brief The namespace where all @a Cacao @a Engine components live
  */
 namespace Cacao {}

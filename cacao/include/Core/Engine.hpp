@@ -76,7 +76,7 @@ namespace Cacao {
 			return threadID;
 		}
 
-		///@brief \Engine configuration values
+		///@brief @a Engine configuration values
 		EngineConfig cfg;
 
 	  private:

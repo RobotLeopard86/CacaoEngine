@@ -15,7 +15,7 @@
  *
  * @param condition The condition to check. No parenthetical wrapping necessary.
  * @param exceptionCode The exception code to use. Must have been registered prior to use.
- * See the page "Exception Codes" in the manual for a list of codes.
+ * @note See the page "Exception Codes" in the manual for a list of codes.
  * @param exceptionDescription The human-readable message to print if the condition is false
  *
  * @throws Cacao::Exception Thrown if the condition is false
@@ -39,7 +39,7 @@ namespace Cacao {
 		 * @brief Create a new exception
 		 *
 		 * @param exceptionCode The exception code to use. Must have been registered prior to use. See the page "Exception Codes" in the manual for more details.
-		 * @param exceptionDescription The human-readable message to print if the condition is false
+		 * @param description The human-readable message to print if the condition is false
 		 */
 		Exception(std::string description, unsigned int exceptionCode)
 		  : error(description), code(exceptionCode) {
@@ -124,7 +124,7 @@ namespace Cacao {
 		/**
 		 * @brief Get an exception code from its meaning
 		 *
-		 * @param code The meaning of a code
+		 * @param meaning The meaning of a code
 		 *
 		 * @return The exception code associated with meaning or UINT_MAX if no matching code was found
 		 */
