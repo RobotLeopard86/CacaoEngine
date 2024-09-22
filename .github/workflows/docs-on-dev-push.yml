@@ -27,11 +27,12 @@ jobs:
       - name: Build documentation
         uses: sphinx-notes/pages@v2
         with:
-          python_version: "3.12"
           sphinx_options: "-j auto -a"
           target_path: latest
           target_branch: gh-pages
           sphinx_version: "7.3.7"
+          requirements_path: "docs/requirements.txt"
+          documentation_path: "docs"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
