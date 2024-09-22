@@ -195,11 +195,15 @@
 <dt class="sig sig-object cpp" id="c.CheckException">
 <span class="target" id="Exception_8hpp_1adf308ade970f15b84d3b7f7566325925"></span><span class="sig-name descname"><span class="n"><span class="pre">CheckException</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">condition</span></span>, <span class="n"><span class="pre">exceptionCode</span></span>, <span class="n"><span class="pre">exceptionDescription</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.CheckException" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.CheckException'"><span></span></a><br/></dt>
 <dd><p>Check if the condition is true, and throw an exception if not. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See the page “Exception Codes” in the manual for a list of codes. </p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>condition</strong> – The condition to check. No parenthetical wrapping necessary. </p></li>
-<li><p><strong>exceptionCode</strong> – The exception code to use. Must have been registered prior to use. See the page “Exception Codes” in the manual for a list of codes. </p></li>
+<li><p><strong>exceptionCode</strong> – The exception code to use. Must have been registered prior to use. </p></li>
 <li><p><strong>exceptionDescription</strong> – The human-readable message to print if the condition is false</p></li>
 </ul>
 </dd>
