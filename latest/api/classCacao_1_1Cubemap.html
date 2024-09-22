@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" data-content_root="../" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Class Cubemap | Cacao Engine Docs</title>
+<meta content="Class Cubemap | Cacao Engine Docs" property="og:title"/>
+<meta content="Class Cubemap | Cacao Engine Docs" name="twitter:title"/>
+<link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
+<link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="classCacao_1_1DataEvent.html" rel="next" title="Template Class DataEvent"/>
+<link href="classCacao_1_1Component.html" rel="prev" title="Class Component"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html"><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">Cacao Engine Docs</span>
+</a></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center space-x-1">
+<a href="https://github.com/RobotLeopard86/CacaoEngine" rel="noopener nofollow" title="Visit GitHub Repository">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg>
+</div>
+</a>
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" aria-label="Color theme switcher" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html"><span class="font-bold text-clip whitespace-nowrap">Cacao Engine Docs</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual.html">Cacao Engine Manual<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual/quickstart.html">Quickstart<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../manual/quickstart/setup.html">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manual/quickstart/first-project.html">Making Your First Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/building.html">Cacao Engine Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/backends.html">Cacao Engine Backends</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1UIRenderable.html">Struct UIRenderable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Vectors.html">Struct Vectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1AssetHandle.html">Template Class AssetHandle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1AssetManager.html">Class AssetManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1AudioSystem.html">Class AudioSystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Class Cubemap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1DynTickController.html">Class DynTickController</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Entity.html">Class Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1EventConsumer.html">Class EventConsumer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Exception.html">Class Exception</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Flushable.html">Template Class Flushable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Font.html">Class Font</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1FreetypeOwner.html">Class FreetypeOwner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1RenderController.html">Class RenderController</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Screen.html">Class Screen</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1SignalEventConsumer.html">Class SignalEventConsumer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Skybox.html">Class Skybox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Text.html">Class Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Texture.html">Class Texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Texture2D.html">Class Texture2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1UIElement.html">Class UIElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1UIView.html">Class UIView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">Cacao Engine Docs</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="library_root.html">Cacao Engine API Reference</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Class Cubemap</span>
+</nav>
+<div id="content" role="main">
+<section id="class-cubemap">
+<span id="exhale-class-classcacao-1-1cubemap"></span><h1>Class Cubemap<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#class-cubemap"><span></span></a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_cacao_include_Graphics_Textures_Cubemap.hpp.html#file-cacao-include-graphics-textures-cubemap-hpp"><span class="std std-ref">File Cubemap.hpp</span></a></p></li>
+</ul>
+<section id="inheritance-relationships">
+<h2>Inheritance Relationships<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#inheritance-relationships" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#inheritance-relationships'"><span></span></a></h2>
+<section id="base-type">
+<h3>Base Type<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#base-type" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#base-type'"><span></span></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Texture</span></code> (<a class="reference internal" href="classCacao_1_1Texture.html#exhale-class-classcacao-1-1texture"><span class="std std-ref">Class Texture</span></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="class-documentation">
+<h2>Class Documentation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#class-documentation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#class-documentation'"><span></span></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7CubemapE">
+<span id="_CPPv3N5Cacao7CubemapE"></span><span id="_CPPv2N5Cacao7CubemapE"></span><span id="Cacao::Cubemap"></span><span class="target" id="classCacao_1_1Cubemap"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Texture.html#_CPPv4N5Cacao7TextureE" title="Cacao::Texture"><span class="n"><span class="pre">Texture</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7CubemapE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7CubemapE'"><span></span></a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE">
+<span id="_CPPv3N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"></span><span id="_CPPv2N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"></span><span id="Cacao::Cubemap::Cubemap__std::vector:ss:"></span><span class="target" id="classCacao_1_1Cubemap_1abade47339e27381fc8f41a310518dbcb"></span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">filePaths</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7CubemapD0Ev">
+<span id="_CPPv3N5Cacao7CubemapD0Ev"></span><span id="_CPPv2N5Cacao7CubemapD0Ev"></span><span id="Cacao::Cubemap::~Cubemap"></span><span class="target" id="classCacao_1_1Cubemap_1a17d62555483c4fc2442c03c8918031da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Cubemap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7CubemapD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7CubemapD0Ev'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap4BindEi">
+<span id="_CPPv3N5Cacao7Cubemap4BindEi"></span><span id="_CPPv2N5Cacao7Cubemap4BindEi"></span><span id="Cacao::Cubemap::Bind__i"></span><span class="target" id="classCacao_1_1Cubemap_1a92d4a2a02332089fb0bd00e83799b9f9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bind</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">slot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap4BindEi" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap4BindEi'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap6UnbindEv">
+<span id="_CPPv3N5Cacao7Cubemap6UnbindEv"></span><span id="_CPPv2N5Cacao7Cubemap6UnbindEv"></span><span id="Cacao::Cubemap::Unbind"></span><span class="target" id="classCacao_1_1Cubemap_1ab19872656a3bf87dd8dfdc9356dab49c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unbind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap6UnbindEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap6UnbindEv'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7CompileEv">
+<span id="_CPPv3N5Cacao7Cubemap7CompileEv"></span><span id="_CPPv2N5Cacao7Cubemap7CompileEv"></span><span id="Cacao::Cubemap::Compile"></span><span class="target" id="classCacao_1_1Cubemap_1a615989250efee0742a1fb9acb924b71c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7CompileEv'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7ReleaseEv">
+<span id="_CPPv3N5Cacao7Cubemap7ReleaseEv"></span><span id="_CPPv2N5Cacao7Cubemap7ReleaseEv"></span><span id="Cacao::Cubemap::Release"></span><span class="target" id="classCacao_1_1Cubemap_1af5536d9a8baedaf7ff0fc2eff38ba9af"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7ReleaseEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7ReleaseEv'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7GetTypeEv">
+<span id="_CPPv3N5Cacao7Cubemap7GetTypeEv"></span><span id="_CPPv2N5Cacao7Cubemap7GetTypeEv"></span><span id="Cacao::Cubemap::GetType"></span><span class="target" id="classCacao_1_1Cubemap_1a7b95c1897fac85d49d5d5ce7dd98a5ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7GetTypeEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7GetTypeEv'"><span></span></a><br/></dt>
+<dd></dd></dl>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap8texturesE">
+<span id="_CPPv3N5Cacao7Cubemap8texturesE"></span><span id="_CPPv2N5Cacao7Cubemap8texturesE"></span><span id="Cacao::Cubemap::textures__std::vector:ss:"></span><span class="target" id="classCacao_1_1Cubemap_1a593101bbcbaca8e12a4d0113557bec82"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">textures</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap8texturesE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap8texturesE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap10nativeDataE">
+<span id="_CPPv3N5Cacao7Cubemap10nativeDataE"></span><span id="_CPPv2N5Cacao7Cubemap10nativeDataE"></span><span id="Cacao::Cubemap::nativeData__std::shared_ptr:CubemapData:"></span><span class="target" id="classCacao_1_1Cubemap_1a3f7fdf8b2d097eee11d3d5b01b5235bf"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">CubemapData</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nativeData</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap10nativeDataE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap10nativeDataE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+</div>
+</dd></dl>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="classCacao_1_1Component.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Class Component
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="classCacao_1_1DataEvent.html">
+        Template Class DataEvent
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#inheritance-relationships'" class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a :data-current="activeSection === '#base-type'" class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#class-documentation'" class="reference internal" href="#class-documentation">Class Documentation</a><ul>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7CubemapE'" class="reference internal" href="#_CPPv4N5Cacao7CubemapE"><code class="docutils literal notranslate"><span class="pre">Cubemap</span></code></a><ul>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Cubemap::Cubemap()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7CubemapD0Ev'" class="reference internal" href="#_CPPv4N5Cacao7CubemapD0Ev"><code class="docutils literal notranslate"><span class="pre">Cubemap::~Cubemap()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap4BindEi'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap4BindEi"><code class="docutils literal notranslate"><span class="pre">Cubemap::Bind()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap6UnbindEv'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap6UnbindEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Unbind()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap7CompileEv'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap7CompileEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Compile()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap7ReleaseEv'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Release()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap7GetTypeEv'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::GetType()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap8texturesE'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap8texturesE"><code class="docutils literal notranslate"><span class="pre">Cubemap::textures</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao7Cubemap10nativeDataE'" class="reference internal" href="#_CPPv4N5Cacao7Cubemap10nativeDataE"><code class="docutils literal notranslate"><span class="pre">Cubemap::nativeData</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2024, RobotLeopard86 Built with <a class="font-medium underline underline-offset-4" href="https://www.sphinx-doc.org" rel="noreferrer">Sphinx 7.3.7</a></p>
+</div>
+</div>
+</footer>
+</div>
+<script src="../_static/documentation_options.js?v=2caa9db7"></script>
+<script src="../_static/doctools.js?v=9a2dae69"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script defer="defer" src="../_static/theme.js?v=e82a16a3"></script>
+<script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+<script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+</body>
+</html>
