@@ -81,7 +81,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../building.html">Cacao Engine Build Instructions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../backends.html">Cacao Engine Backends</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../backends/gles-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-glfw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../backends/gles-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-sdl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vs.html">Visual Studio Compatibility</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -181,6 +188,7 @@
 <section id="making-your-first-project">
 <h1>Making Your First Project<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#making-your-first-project"><span></span></a></h1>
 <p>The remainder of this tutorial will assume that you are using Meson to build your game.</p>
+<p><strong>IMPORTANT:</strong> If you want to use Visual Studio, read the <a class="reference internal" href="../vs.html"><span class="doc std std-doc">Visual Studio compatibility guide</span></a> before continuing.</p>
 <section id="creating-a-base-project">
 <h2>Creating a base project<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#creating-a-base-project" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-a-base-project'"><span></span></a></h2>
 <p>The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at <code class="docutils literal notranslate"><span class="pre">https://github.com/RobotLeopard86/CacaoEngine-Game-Template</span></code>. This repository contains an ideal setup for creating a Cacao Engine game. Run the following command in your terminal to set up your build directory: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span></code>. <strong>IMPORTANT</strong>: If on Linux or macOS, append <code class="docutils literal notranslate"><span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> to your command line. Next, run <code class="docutils literal notranslate"> <span class="pre">ninja</span> <span class="pre">-C</span> <span class="pre">build</span> <span class="pre">run</span></code> to build and run the template. If all goes well, you should see something like this:<br/>

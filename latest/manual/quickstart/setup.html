@@ -81,7 +81,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../building.html">Cacao Engine Build Instructions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../backends.html">Cacao Engine Backends</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../backends/gles-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-glfw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../backends/gles-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-sdl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vs.html">Visual Studio Compatibility</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -186,8 +193,8 @@
 <p>For the time being, you will have to build the engine yourself. Instructions to do that are in the <code class="docutils literal notranslate"><span class="pre">BUILD.md</span></code> document in the GitHub repository and <a class="reference internal" href="../building.html"><span class="doc std std-doc">here</span></a>.</p>
 <p>Before you get continue, make sure you have installed all the dependencies listed there.</p>
 </section>
-<section id="create-a-project">
-<h2>Create a project<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#create-a-project" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#create-a-project'"><span></span></a></h2>
+<section id="bundle-layout">
+<h2>Bundle layout<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#bundle-layout" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#bundle-layout'"><span></span></a></h2>
 <p>Cacao Engine itself ships as an executable. Your code lives in a special file called the launch module. This launch module is a file that must be named <code class="docutils literal notranslate"><span class="pre">launch.(dll,so,dylib)</span></code>. You can build your launch module through whatever means you like, though <a class="reference external" href="https://mesonbuild.com" rel="nofollow noopener">Meson<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> is the only officially supported option. In addition to your launch module, you will need another file: <code class="docutils literal notranslate"><span class="pre">launchconfig.cacao.yml</span></code>. This is a YAML file that must be placed in the same dirctory as the built Cacao Engine executable, which has the following items:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">launch</span></code>: The path to the launch module relative to the engine executable</p></li>
@@ -225,7 +232,7 @@
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#acquire-the-engine'" class="reference internal" href="#acquire-the-engine">Acquire the engine</a></li>
-<li><a :data-current="activeSection === '#create-a-project'" class="reference internal" href="#create-a-project">Create a project</a></li>
+<li><a :data-current="activeSection === '#bundle-layout'" class="reference internal" href="#bundle-layout">Bundle layout</a></li>
 </ul>
 </div>
 </aside>
