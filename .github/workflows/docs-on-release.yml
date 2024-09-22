@@ -1,0 +1,49 @@
+name: Update docs on push
+
+permissions: write-all
+
+on:
+  release:
+        types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update;
+          sudo apt install doxygen -y
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get release version
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Build documentation
+        uses: sphinx-notes/pages@v2
+        with:
+          sphinx_options: "-j auto -a"
+          target_path: latest
+          target_branch: gh-pages
+          sphinx_version: "7.3.7"
+          requirements_path: "docs/requirements.txt"
+          documentation_path: "docs"
+      - name: Redirect stable to new release
+        run: |
+            echo "Redirecting stable to newly released version " $RELEASE_VERSION
+            rm -rf stable
+            ln -s $RELEASE_VERSION stable
+            git add stable
+            git commit -m "Redirect stable to new version $RELEASE_VERSION"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
