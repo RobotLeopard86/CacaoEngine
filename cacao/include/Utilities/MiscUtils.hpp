@@ -12,6 +12,7 @@ namespace Cacao {
 	struct Vectors {
 		glm::vec3 front, right, up;
 	};
+
 	//Caluclate the front, right, and up vectors from an rotation
 	inline Vectors Calculate3DVectors(glm::vec3 rotation) {
 		//Get our X and Y rotation in radians
