@@ -11,47 +11,72 @@
 #include "Utilities/MiscUtils.hpp"
 #include "UI/UIView.hpp"
 
+/**
+ * @brief Shorthand engine thread pool type.
+ * @see dp::thread_pool for its API.
+ */
 using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 
 namespace Cacao {
-	//Singleton representing the engine
+	///@brief Singleton representing the engine
 	class Engine {
 	  public:
-		//Get an instance of the engine, or create one if it doesn't exist
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static Engine* GetInstance();
 
-		//Run the engine
+		/**
+		 * @brief Start the engine
+		 * @details This function is called automatically to start everything, and blocks until engine shutdown
+		 */
 		void Run();
 
-		//Stop the engine
+		/**
+		 * @brief Stop the engine
+		 * @details This function will shut down all engine systems and exit cleanly
+		 */
 		void Stop();
 
-		//Access the thread pool
+		///@brief Access the thread pool
 		std::shared_ptr<thread_pool> GetThreadPool() {
 			return threadPool;
 		}
 
-		//Acess the global UI view
+		///@brief Access the global UI view
 		std::shared_ptr<UIView> GetGlobalUIView() {
 			return uiView;
 		}
 
-		//Is the engine running?
+		/**
+		 * @brief Check if the engine is running
+		 *
+		 * @return If the engine is running
+		 */
 		bool IsRunning() {
 			return run;
 		}
 
-		//Is the engine shutting down?
+		/**
+		 * @brief Check if the engine is shutting down
+		 *
+		 * @return If the engine is shutting down
+		 */
 		bool IsShuttingDown() {
 			return shuttingDown;
 		}
 
-		//Get the thread ID of the engine
+		/**
+		 * @brief Get the thread ID that @ref Run was called on
+		 * @details Useful for identifying the main thread
+		 */
 		std::thread::id GetThreadID() {
 			return threadID;
 		}
 
-		//Engine config properties
+		///@brief \Engine configuration values
 		EngineConfig cfg;
 
 	  private:

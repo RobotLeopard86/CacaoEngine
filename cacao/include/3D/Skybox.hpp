@@ -11,43 +11,97 @@
 #include <future>
 
 namespace Cacao {
-	//Must be implemented per-rendering API
+	/**
+	 * @brief A skybox. Implementation is backend-dependent
+	 */
 	class Skybox : public Asset {
 	  public:
-		//Warning: deletes cubemap provided when deleted if not copy-constructed
+		/**
+		 * @brief Create a skybox from a cubemap
+		 * @note Prefer to use AssetManager::LoadSkybox over direct construction
+		 *
+		 * @warning Deletes texture as part of destructor
+		 *
+		 * @param tex A cubemap to use as the skybox texture
+		 */
 		Skybox(Cubemap* tex);
+
+		/**
+		 * @brief Destroy the skybox
+		 * @warning If created from Cubemap pointer, the associated memory will be freed
+		 */
 		~Skybox() {
 			if(textureOwner) delete texture;
 		}
+
+		/**
+		 * @brief Copy-construct a skybox
+		 *
+		 * @param other The skybox to copy from
+		 */
 		Skybox(const Skybox& other)
 		  : Asset(other.compiled), rotation(other.rotation), textureOwner(false), texture(other.texture) {
 			_InitCopyND();
 		}
 
-		//Utility compile and release functions which are forwarded to the texture
+		/**
+		 * @brief Compile the cubemap.
+		 * @see Cubemap::Compile
+		 */
 		std::shared_future<void> Compile() override {
 			return texture->Compile();
 		}
+
+		/**
+		 * @brief Release the cubemap data.
+		 * @see Cubemap::Release
+		 */
 		void Release() override {
 			texture->Release();
 		}
+
+		/**
+		 * @brief Check if the cubemap is \compiled.
+		 * @see Cubemap::IsCompiled
+		 */
 		bool IsCompiled() override {
 			return texture->IsCompiled();
 		}
 
+		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "SKYBOX";
 		}
 
-		//Draw this skybox
+		/**
+		 * @brief Draw this skybox
+		 *
+		 * @param projectionMatrix The camera's projection matrix
+		 * @param viewMatrix The camera's view matrix
+		 *
+		 * @note For use by the engine only
+		 */
 		void Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 
-		//Set up any common skybox resources
+		/**
+		 * @brief Set up common skybox resources
+		 *
+		 * @note Called automatically by the engine during startup
+		 *
+		 * @throws Exception If common resources were already set up
+		 */
 		static void CommonSetup();
-		//Clean up any common skybox resources
+
+		/**
+		 * @brief Clean up common skybox resources
+		 *
+		 * @note Called automatically by the engine during shutdown
+		 *
+		 * @throws Exception If common resources were already cleaned up
+		 */
 		static void CommonCleanup();
 
-		glm::vec3 rotation;
+		glm::vec3 rotation;///<The rotation of the skybox
 
 	  private:
 		bool textureOwner;

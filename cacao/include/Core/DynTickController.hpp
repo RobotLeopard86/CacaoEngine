@@ -9,16 +9,36 @@
 #include "Graphics/Rendering/RenderObjects.hpp"
 
 namespace Cacao {
-	//Controller for running dynamic ticks
+	/**
+	 * @brief Controls dynamic ticks
+	 */
 	class DynTickController {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static DynTickController* GetInstance();
 
-		//Start the controller
+		/**
+		 * @brief Start the controller
+		 * @details Spawns a thread to run the controller on
+		 *
+		 * @note This function is called by the engine during startup
+		 *
+		 * @throws Exception If the controller was already started
+		 */
 		void Start();
 
-		//Stop the controller
+		/**
+		 * @brief Stop the controller
+		 * @details Stops the controller and joins its thread
+		 *
+		 * @note This function is called by the engine during shutdown
+		 *
+		 * @throws Exception If the controller was not started
+		 */
 		void Stop();
 
 	  private:

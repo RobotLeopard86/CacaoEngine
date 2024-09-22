@@ -94,6 +94,7 @@ namespace Cacao {
 		//Upload Cacao Engine local shader data
 		void UploadCacaoLocals(glm::mat4 transform);
 
+		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "SHADER";
 		}

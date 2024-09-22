@@ -37,10 +37,10 @@ exhale_args = {
     "createTreeView":        True,
     "exhaleExecutesDoxygen": True,
     "exhaleDoxygenStdin":    dedent('''
-									INPUT = ../cacao/include
+									INPUT = ../cacao/include,../libs/thread-pool/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,ftLib,Cacao::_AH*,Cacao::*::Renderable*,Cacao::FakeDeleter,std*
+									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,ftLib,Cacao::_AH*,Cacao::*::Renderable*,Cacao::FakeDeleter,std*,dp::details*,dp::thread_safe_queue
 									EXCLUDE = ../cacao/include/UI/Shaders.hpp
 									''')
 }

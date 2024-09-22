@@ -10,7 +10,11 @@ namespace Cacao {
 	//Owns the FreeType library instance
 	class FreetypeOwner {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static FreetypeOwner* GetInstance();
 
 		//Initialize the FreeType library

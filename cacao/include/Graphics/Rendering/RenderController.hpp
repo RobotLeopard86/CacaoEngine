@@ -13,7 +13,11 @@ namespace Cacao {
 	//Controller for rendering frames
 	class RenderController {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static RenderController* GetInstance();
 
 		//Run the tick controller on the calling thread

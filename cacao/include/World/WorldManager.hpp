@@ -9,7 +9,11 @@ namespace Cacao {
 	//Singleton for managing global world state
 	class WorldManager {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static WorldManager* GetInstance();
 
 		//Create an empty world with a camera

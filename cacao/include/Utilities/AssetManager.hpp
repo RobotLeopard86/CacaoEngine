@@ -16,7 +16,11 @@ namespace Cacao {
 	//Game asset manager
 	class AssetManager {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static AssetManager* GetInstance();
 
 		//Load a shader with a path to a shader definition file

@@ -5,36 +5,139 @@
 #include "Utilities/MiscUtils.hpp"
 
 namespace Cacao {
+	/**
+	 * @brief A component that plays audio
+	 */
 	class AudioPlayer final : public Component {
 	  public:
+		/**
+		 * @brief Create a new audio player.
+		 * @note Generally, you shouldn't call this constructor directly. Prefer creating this through Entity::MountComponent
+		 *
+		 * @throws Exception If the audio system is unitialized
+		 */
 		AudioPlayer();
+
+		///@brief Delete the audio player
 		~AudioPlayer();
 
-		//Play the sound
+		/**
+		 * @brief Play the \sound contained in sound
+		 *
+		 * @throws Exception If the audio system is uninitialized, a \sound is already playing, or sound is a null handle
+		 */
 		void Play();
 
-		//Toggle paused playback
+		/**
+		 * @brief Pause or unpase \sound playback
+		 *
+		 * @throws Exception If the audio system is uninitialized or no sound is playing
+		 */
 		void TogglePause();
 
-		//Stop playing
+		/**
+		 * @brief Stop \sound playback
+		 *
+		 * @throws Exception If the audio system is uninitialized or no sound is playing
+		 */
 		void Stop();
 
-		//Check if playing
+		/**
+		 * @brief Check if a \sound is playing
+		 *
+		 * @return Whether a \sound is playing or not
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		bool IsPlaying();
 
-		//Check if paused
+		/**
+		 * @brief Check if playback is paused
+		 *
+		 * @return Whether playback is paused or not
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		bool IsPaused();
 
-		//Sound to play
+		/**
+		 * @brief The sound that should be played.
+		 */
 		AssetHandle<Sound> sound;
 
+		/**
+		 * @brief Set if the \sound should loop
+		 *
+		 * @param val If the \sound should loop
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		void SetLooping(bool val);
+
+		/**
+		 * @brief Set the gain value
+		 *
+		 * @param val The new gain value
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		void SetGain(float val);
+
+		/**
+		 * @brief Set the pitch multiplier
+		 *
+		 * @param val The new pitch multiplier
+		 * 	- 0-1: Deeper
+		 * 	- 1: Normal
+		 * 	- > 1: Higher
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		void SetPitchMultiplier(float val);
+
+		/**
+		 * @brief Set how far through playback the player is
+		 *
+		 * @param timeInSeconds The new time in seconds
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		void SetPlaybackTime(float timeInSeconds);
+
+		/**
+		 * @brief Check if the \sound is looping
+		 *
+		 * @return Whether the \sound is looping or not
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		bool GetLooping();
+
+		/**
+		 * @brief Get the current gain value
+		 *
+		 * @return The current gain value
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		float GetGain();
+
+		/**
+		 * @brief Get the current pitch multiplier
+		 *
+		 * @return The current pitch multiplier
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		float GetPitchMultiplier();
+
+		/**
+		 * @brief Get the current playback time
+		 *
+		 * @return The current playback time in seconds
+		 *
+		 * @throws Exception If the audio system is uninitialized
+		 */
 		float GetPlaybackTime();
 
 	  private:
