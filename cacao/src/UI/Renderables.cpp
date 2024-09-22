@@ -85,7 +85,18 @@ namespace Cacao {
 		}
 		baseLines.push_back(ss.str());
 
+		//Calculate line gap
+		double ascender = font->face->ascender / 64.0;
+		double descender = font->face->descender / 64.0;
+		double height = font->face->height / 64.0;
+		ret->linegap = (height - (ascender - descender)) / height;
+
+		//Calculate font size and line height
+		ret->charSize = round((double(ret->size.y) / baseLines.size()) * (1.0 - ret->linegap));
+		ret->lineHeight = round(ret->charSize * (ret->linegap + 1));
+
 		//Create Harfbuzz font representation
+		FT_Set_Pixel_Sizes(font->face, 0, ret->charSize);
 		ret->hbf = hb_ft_font_create(font->face, NULL);
 
 		//Convert to glyph info
@@ -105,7 +116,10 @@ namespace Cacao {
 
 			//Convert to glyphs
 			rline.glyphInfo = hb_buffer_get_glyph_infos(rline.buffer, &(rline.glyphCount));
-			rline.glyphPositions = hb_buffer_get_glyph_positions(rline.buffer, &(rline.glyphCount));
+			auto gp = hb_buffer_get_glyph_positions(rline.buffer, &(rline.glyphCount));
+			for(unsigned int i = 0; i < rline.glyphCount; i++) {
+				rline.advances.emplace_back(gp[i].x_advance, gp[i].y_advance, gp[i].x_offset, gp[i].y_offset);
+			}
 
 			//Add to list
 			ret->lines.push_back(rline);
@@ -115,16 +129,6 @@ namespace Cacao {
 		ret->color = {float(color.r > 0 ? color.r + 1 : 0) / 256.0f,
 			float(color.g > 0 ? color.g + 1 : 0) / 256.0f,
 			float(color.b > 0 ? color.b + 1 : 0) / 256.0f};
-
-		//Calculate line gap
-		double ascender = font->face->ascender / 64.0;
-		double descender = font->face->descender / 64.0;
-		double height = font->face->height / 64.0;
-		ret->linegap = (height - (ascender - descender)) / height;
-
-		//Calculate font size and line height
-		ret->charSize = round((double(ret->size.y) / ret->lines.size()) * (1.0 - ret->linegap));
-		ret->lineHeight = round(ret->charSize * (ret->linegap + 1));
 
 		return std::static_pointer_cast<UIRenderable>(ret);
 	}

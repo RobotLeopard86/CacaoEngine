@@ -48,9 +48,14 @@ namespace Cacao {
 		}
 
 		struct Renderable : public UIRenderable {
+			struct Advance {
+				glm::i32vec2 adv, offset;
+				Advance(int32_t xa, int32_t ya, int32_t xo, int32_t yo)
+				  : adv(xa, ya), offset(xo, yo) {}
+			};
 			struct Line {
 				hb_glyph_info_t* glyphInfo;
-				hb_glyph_position_t* glyphPositions;
+				std::vector<Advance> advances;
 				hb_buffer_t* buffer;
 				unsigned int glyphCount;
 			};

@@ -3,7 +3,8 @@
 ## Limitations
 * For some reason, the SDL header does not contain the grave/tilde key (`` ` ``/`~`), so it won't be detected as key input
 * SDL does not support the F25 key (if you have that for some reason), so it won't be detected as key input
-* 64-bit shader types (`int64`, `uint64`, and `double`) are not allowed
+* 64-bit shader uniform types (`int64`, `uint64`, and `double`) are not allowed
+* Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
 
 ## Notes
 * On Linux, presumably due to a bug with the pre-release SDL version, "corrupted double-linked list" is printed after total engine shutdown. This is to be expected.

@@ -45,7 +45,7 @@ namespace Cacao {
 			if(alignment != TextAlign::Left) {
 				float textWidth = 0.0f;
 				for(unsigned int i = 0; i < ln.glyphCount; ++i) {
-					textWidth += (ln.glyphPositions[i].x_advance / 64.0f);
+					textWidth += (ln.advances[i].adv.x / 64.0f);
 				}
 				if(alignment == TextAlign::Center) {
 					startX = (float(size.x) - textWidth) / 2.0;
@@ -111,8 +111,8 @@ namespace Cacao {
 				TextShaders::shader->Unbind();
 
 				//Advance cursor for next glyph
-				x += (ln.glyphPositions[i].x_advance / 64.0f);
-				y += (ln.glyphPositions[i].y_advance / 64.0f);
+				x += (ln.advances[i].adv.x / 64.0f);
+				y += (ln.advances[i].adv.y / 64.0f);
 			}
 			glBindVertexArray(0);
 

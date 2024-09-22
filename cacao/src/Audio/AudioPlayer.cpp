@@ -99,7 +99,7 @@ namespace Cacao {
 
 	void AudioPlayer::TogglePause() {
 		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to pause sound playback!")
-		CheckException(IsPlaying(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot pause a sound when not playing one!")
+		CheckException(IsPlaying() || IsPaused(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot pause a sound when not playing one!")
 
 		if(IsPaused()) {
 			//This will continue playback if paused (which it is)
@@ -111,7 +111,7 @@ namespace Cacao {
 
 	void AudioPlayer::Stop() {
 		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to stop sound playback!")
-		CheckException(IsPlaying(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop a sound when not playing one!")
+		CheckException(IsPlaying() || IsPaused(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop a sound when not playing one!")
 
 		alSourceStop(source);
 		alSourcei(source, AL_BUFFER, AL_NONE);

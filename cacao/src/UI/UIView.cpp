@@ -33,6 +33,7 @@ namespace Cacao {
 				for(std::size_t i = start; i < end; i++) {
 					//Create renderable
 					std::shared_ptr<UIElement> e = this->screen->elements[i];
+					if(!e->IsActive()) continue;
 					std::shared_ptr<UIRenderable> r = e->MakeRenderable(this->size);
 
 					//Mark element as clean
@@ -53,8 +54,8 @@ namespace Cacao {
 		MultiFuture<void> depthSort;
 
 		//Run the depth sort
-		for(std::size_t start = 0; start < screen->elements.size(); start += chunkSize) {
-			std::size_t end = std::min(start + chunkSize, screen->elements.size());
+		for(std::size_t start = 0; start < renderables.size(); start += chunkSize) {
+			std::size_t end = std::min(start + chunkSize, renderables.size());
 			depthSort.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, renderables, &depthSorted]() {
 				for(std::size_t i = start; i < end; i++) {
 					if(!depthSorted.contains(renderables[i]->depth)) {

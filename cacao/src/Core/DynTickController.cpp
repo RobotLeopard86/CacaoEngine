@@ -53,8 +53,9 @@ namespace Cacao {
 		if(!e->IsActive()) return;
 
 		//Check for components
-		for(auto& c : e->GetComponents()) {
-			if(c.second->IsActive()) maybeMatch(c.second);
+		for(auto& it : e->components) {
+			std::shared_ptr<Component> c = e->GetComponent<Component>(it.first);
+			if(c && c->IsActive()) maybeMatch(c);
 		}
 
 		//Recurse through children
