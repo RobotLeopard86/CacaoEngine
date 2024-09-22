@@ -19,6 +19,9 @@ More features may come in the future, so stay tuned!
 ## Building
 See the [build instructions page](BUILD.md) for information.
 
+## Documentation
+The full engine documentation is located in the `docs` folder.  See the [docs build instructions page](docs/README.md) for more information.
+
 ## Branching Scheme
 Cacao Engine uses two branches, `main` and `dev`. `main` should be considered stable and should **NEVER** be pushed to on its own. `dev` is where main work can happen and is allowed to be unstable and break. Only once `dev` is in a stable state can it be merged into `main` via a pull request.
 

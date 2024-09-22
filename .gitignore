@@ -14,3 +14,12 @@ scripts/__pycache__
 
 # Don't send Meson subproject download hash
 .meson-subproject-wrap-hash.txt
+
+# Don't send built docs
+docs/*
+!docs/conf.py
+!docs/*.rst
+!docs/manual
+!docs/assets
+!docs/README.md
+!docs/requirements.txt
