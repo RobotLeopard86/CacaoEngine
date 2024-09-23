@@ -208,13 +208,23 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12UIRenderableE">
 <span id="_CPPv3N5Cacao12UIRenderableE"></span><span id="_CPPv2N5Cacao12UIRenderableE"></span><span id="Cacao::UIRenderable"></span><span class="target" id="structCacao_1_1UIRenderable"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UIRenderable</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12UIRenderableE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12UIRenderableE'"><span></span></a><br/></dt>
-<dd><p>Subclassed by Cacao::Image::Renderable, Cacao::Text::Renderable</p>
+<dd><p>Base renderable form of a UI element. </p>
+<p>Subclassed by Cacao::Image::Renderable, Cacao::Text::Renderable</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12UIRenderable4DrawEN3glm5uvec2ERKN3glm4mat4E">
 <span id="_CPPv3N5Cacao12UIRenderable4DrawEN3glm5uvec2ERKN3glm4mat4E"></span><span id="_CPPv2N5Cacao12UIRenderable4DrawEN3glm5uvec2ERKN3glm4mat4E"></span><span id="Cacao::UIRenderable::Draw__glm::uvec2.glm::mat4CR"></span><span class="target" id="structCacao_1_1UIRenderable_1a3684afa1b52c8d6a94bd083e9ba18ef5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Draw</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">screenSize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">projection</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12UIRenderable4DrawEN3glm5uvec2ERKN3glm4mat4E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12UIRenderable4DrawEN3glm5uvec2ERKN3glm4mat4E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Draw this renderable. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>screenSize</strong> – The size of the screen to render to in pixels </p></li>
+<li><p><strong>projection</strong> – The projection matrix to draw with </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12UIRenderableD0Ev">
 <span id="_CPPv3N5Cacao12UIRenderableD0Ev"></span><span id="_CPPv2N5Cacao12UIRenderableD0Ev"></span><span id="Cacao::UIRenderable::~UIRenderable"></span><span class="target" id="structCacao_1_1UIRenderable_1a81d6ff20a4a65f94d5bd38a5b821c3a8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~UIRenderable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12UIRenderableD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12UIRenderableD0Ev'"><span></span></a><br/></dt>
@@ -225,15 +235,18 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12UIRenderable9screenPosE">
 <span id="_CPPv3N5Cacao12UIRenderable9screenPosE"></span><span id="_CPPv2N5Cacao12UIRenderable9screenPosE"></span><span id="Cacao::UIRenderable::screenPos__glm::uvec2"></span><span class="target" id="structCacao_1_1UIRenderable_1a084a8d09821c945b6132fc73449e95d4"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">screenPos</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12UIRenderable9screenPosE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12UIRenderable9screenPosE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Position on the screen in pixels at the object center, (0, 0) is top left. </p>
+</dd></dl>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12UIRenderable4sizeE">
 <span id="_CPPv3N5Cacao12UIRenderable4sizeE"></span><span id="_CPPv2N5Cacao12UIRenderable4sizeE"></span><span id="Cacao::UIRenderable::size__glm::uvec2"></span><span class="target" id="structCacao_1_1UIRenderable_1a82a134450dc631b96f7c93cfcaddaa13"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12UIRenderable4sizeE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12UIRenderable4sizeE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Size in pixels. </p>
+</dd></dl>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12UIRenderable5depthE">
 <span id="_CPPv3N5Cacao12UIRenderable5depthE"></span><span id="_CPPv2N5Cacao12UIRenderable5depthE"></span><span id="Cacao::UIRenderable::depth__unsigned-short"></span><span class="target" id="structCacao_1_1UIRenderable_1a90dbcb3af5b255f218ca54ecb80fa0e0"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">depth</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12UIRenderable5depthE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12UIRenderable5depthE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Depth. </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

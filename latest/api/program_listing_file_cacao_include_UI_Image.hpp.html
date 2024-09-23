@@ -202,24 +202,25 @@
 </span><span id="line-12"><span class="w">        </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetImage</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="line-13"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">img</span><span class="p">;</span>
 </span><span id="line-14"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-15"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetImage</span><span class="p">(</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-16"><span class="w">            </span><span class="n">img</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
-</span><span id="line-17"><span class="w">            </span><span class="n">dirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-</span><span id="line-18"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-19">
-</span><span id="line-20"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Renderable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIRenderable</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-21"><span class="w">            </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tex</span><span class="p">;</span>
-</span><span id="line-22">
-</span><span id="line-23"><span class="w">            </span><span class="kt">void</span><span class="w"> </span><span class="nf">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">projection</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-</span><span id="line-24"><span class="w">        </span><span class="p">};</span>
-</span><span id="line-25">
-</span><span id="line-26"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIRenderable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MakeRenderable</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-</span><span id="line-27">
-</span><span id="line-28"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-29"><span class="w">        </span><span class="c1">//The image to draw</span>
-</span><span id="line-30"><span class="w">        </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">img</span><span class="p">;</span>
-</span><span id="line-31"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-32"><span class="p">}</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetImage</span><span class="p">(</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-17"><span class="w">            </span><span class="n">img</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="line-18"><span class="w">            </span><span class="n">dirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span><span id="line-19"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Renderable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIRenderable</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-22"><span class="w">            </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tex</span><span class="p">;</span>
+</span><span id="line-23">
+</span><span id="line-24"><span class="w">            </span><span class="kt">void</span><span class="w"> </span><span class="nf">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">projection</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+</span><span id="line-25"><span class="w">        </span><span class="p">};</span>
+</span><span id="line-26">
+</span><span id="line-27"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIRenderable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MakeRenderable</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+</span><span id="line-28">
+</span><span id="line-29"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-30"><span class="w">        </span><span class="c1">//The image to draw</span>
+</span><span id="line-31"><span class="w">        </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">img</span><span class="p">;</span>
+</span><span id="line-32"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-33"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>

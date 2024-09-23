@@ -207,23 +207,35 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4FontE">
 <span id="_CPPv3N5Cacao4FontE"></span><span id="_CPPv2N5Cacao4FontE"></span><span id="Cacao::Font"></span><span class="target" id="classCacao_1_1Font"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Font</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Asset.html#_CPPv4N5Cacao5AssetE" title="Cacao::Asset"><span class="n"><span class="pre">Asset</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4FontE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4FontE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>A font face for text rendering. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Font4FontENSt6stringE">
 <span id="_CPPv3N5Cacao4Font4FontENSt6stringE"></span><span id="_CPPv2N5Cacao4Font4FontENSt6stringE"></span><span id="Cacao::Font::Font__ss"></span><span class="target" id="classCacao_1_1Font_1a3c5c9a10c190cd4592460fef1484ca3f"></span><span class="sig-name descname"><span class="n"><span class="pre">Font</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Font4FontENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Font4FontENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a font from a file path. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1ad8b1d69db98d32e10a341dce1266775a"><span class="std std-ref">AssetManager::LoadFont</span></a> over direct construction </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path to a font file to load</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4FontD0Ev">
 <span id="_CPPv3N5Cacao4FontD0Ev"></span><span id="_CPPv2N5Cacao4FontD0Ev"></span><span id="Cacao::Font::~Font"></span><span class="target" id="classCacao_1_1Font_1adf658e6d183be20d613b2266ca50ac06"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Font</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4FontD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4FontD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy the font face and its compiled data if applicable. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Font7CompileEv">
 <span id="_CPPv3N5Cacao4Font7CompileEv"></span><span id="_CPPv2N5Cacao4Font7CompileEv"></span><span id="Cacao::Font::Compile"></span><span class="target" id="classCacao_1_1Font_1a7f48c29b432cf3a645b06f6097ac5c4f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Font7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Font7CompileEv'"><span></span></a><br/></dt>
-<dd><p>Compile the raw asset data into a format that can be used. </p>
+<dd><p>Compile the raw font data into a usable font face. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was already compiled </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the font face was already compiled </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A future that will resolve when compilation is done</p>
@@ -233,10 +245,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Font7ReleaseEv">
 <span id="_CPPv3N5Cacao4Font7ReleaseEv"></span><span id="_CPPv2N5Cacao4Font7ReleaseEv"></span><span id="Cacao::Font::Release"></span><span class="target" id="classCacao_1_1Font_1ac7e05b4bc4776913b3d770fe8b08dee7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Font7ReleaseEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Font7ReleaseEv'"><span></span></a><br/></dt>
-<dd><p>Delete the compiled asset data. </p>
+<dd><p>Delete the compiled data. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was not compiled </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the font face was not compiled </p>
 </dd>
 </dl>
 </dd></dl>

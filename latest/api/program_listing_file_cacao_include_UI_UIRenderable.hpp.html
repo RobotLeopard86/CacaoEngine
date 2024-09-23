@@ -196,24 +196,16 @@
 </span><span id="line-6"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 </span><span id="line-7">
 </span><span id="line-8"><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-9"><span class="w">    </span><span class="c1">//Base for all UI objects in their renderable state</span>
-</span><span id="line-10"><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">UIRenderable</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-11"><span class="w">        </span><span class="c1">//Position on the screen in pixels, (0, 0) is top left</span>
-</span><span id="line-12"><span class="w">        </span><span class="c1">//This position is the center of the object's quad</span>
-</span><span id="line-13"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenPos</span><span class="p">;</span>
-</span><span id="line-14">
-</span><span id="line-15"><span class="w">        </span><span class="c1">//Size of the object in pixels</span>
-</span><span id="line-16"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-</span><span id="line-17">
-</span><span id="line-18"><span class="w">        </span><span class="c1">//How many "layers" deep this element should be</span>
-</span><span id="line-19"><span class="w">        </span><span class="c1">//Example: depth 3 object is behind depth 2 object</span>
-</span><span id="line-20"><span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span>
-</span><span id="line-21">
-</span><span id="line-22"><span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">projection</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-23">
-</span><span id="line-24"><span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">UIRenderable</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-25"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-26"><span class="p">}</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">UIRenderable</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-10"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenPos</span><span class="p">;</span>
+</span><span id="line-11"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+</span><span id="line-12"><span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">projection</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">UIRenderable</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="line-17"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-18"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>

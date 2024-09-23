@@ -198,48 +198,119 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIViewE">
 <span id="_CPPv3N5Cacao6UIViewE"></span><span id="_CPPv2N5Cacao6UIViewE"></span><span id="Cacao::UIView"></span><span class="target" id="classCacao_1_1UIView"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UIView</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIViewE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIViewE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Renderer for a <a class="reference internal" href="classCacao_1_1Screen.html#classCacao_1_1Screen"><span class="std std-ref">Screen</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView6RenderEv">
 <span id="_CPPv3N5Cacao6UIView6RenderEv"></span><span id="_CPPv2N5Cacao6UIView6RenderEv"></span><span id="Cacao::UIView::Render"></span><span class="target" id="classCacao_1_1UIView_1a43b723137ca45278940f8dcca72dbc12"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Render</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView6RenderEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView6RenderEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Render the selected screen and swap buffers. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If there is no screen to render </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView4BindEi">
 <span id="_CPPv3N5Cacao6UIView4BindEi"></span><span id="_CPPv2N5Cacao6UIView4BindEi"></span><span id="Cacao::UIView::Bind__i"></span><span class="target" id="classCacao_1_1UIView_1aacbade6b33a4269efbc2b91750d038f2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bind</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">slot</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView4BindEi" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView4BindEi'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Attach the front buffer to a texture slot. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>slot</strong> – The texture slot to attach to</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the view hasn’t been rendered, already bound, or if not called on the main thread </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView6UnbindEv">
 <span id="_CPPv3N5Cacao6UIView6UnbindEv"></span><span id="_CPPv2N5Cacao6UIView6UnbindEv"></span><span id="Cacao::UIView::Unbind"></span><span class="target" id="classCacao_1_1UIView_1a6a006f023cbe639c70ac21f177d6f5ad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unbind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView6UnbindEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView6UnbindEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Detach from the current slot. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the view isn’t bound, or if not called on the main thread </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView9SetScreenENSt10shared_ptrI6ScreenEE">
 <span id="_CPPv3N5Cacao6UIView9SetScreenENSt10shared_ptrI6ScreenEE"></span><span id="_CPPv2N5Cacao6UIView9SetScreenENSt10shared_ptrI6ScreenEE"></span><span id="Cacao::UIView::SetScreen__std::shared_ptr:Screen:"></span><span class="target" id="classCacao_1_1UIView_1a539f95cd35ae4055d4c50b348fcc8f3c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetScreen</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Screen.html#_CPPv4N5Cacao6ScreenE" title="Cacao::Screen"><span class="n"><span class="pre">Screen</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView9SetScreenENSt10shared_ptrI6ScreenEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView9SetScreenENSt10shared_ptrI6ScreenEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the current screen. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> – The new screen to render </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView9GetScreenEv">
 <span id="_CPPv3N5Cacao6UIView9GetScreenEv"></span><span id="_CPPv2N5Cacao6UIView9GetScreenEv"></span><span id="Cacao::UIView::GetScreen"></span><span class="target" id="classCacao_1_1UIView_1a9af02f6e608a9c55d13a4086aa3b64bd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Screen.html#_CPPv4N5Cacao6ScreenE" title="Cacao::Screen"><span class="n"><span class="pre">Screen</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetScreen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView9GetScreenEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView9GetScreenEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the current screen. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current screen </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView7SetSizeEN3glm5uvec2E">
 <span id="_CPPv3N5Cacao6UIView7SetSizeEN3glm5uvec2E"></span><span id="_CPPv2N5Cacao6UIView7SetSizeEN3glm5uvec2E"></span><span id="Cacao::UIView::SetSize__glm::uvec2"></span><span class="target" id="classCacao_1_1UIView_1aca0085e282284093c7e9adf584d58aac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sz</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView7SetSizeEN3glm5uvec2E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView7SetSizeEN3glm5uvec2E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the size of the rendered area. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sz</strong> – The new size in pixels </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView7GetSizeEv">
 <span id="_CPPv3N5Cacao6UIView7GetSizeEv"></span><span id="_CPPv2N5Cacao6UIView7GetSizeEv"></span><span id="Cacao::UIView::GetSize"></span><span class="target" id="classCacao_1_1UIView_1af2189fe6fe457df4758fd8a96d3b885d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView7GetSizeEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView7GetSizeEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the size of the rendered area. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current size in pixels </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView15HasBeenRenderedEv">
 <span id="_CPPv3N5Cacao6UIView15HasBeenRenderedEv"></span><span id="_CPPv2N5Cacao6UIView15HasBeenRenderedEv"></span><span id="Cacao::UIView::HasBeenRendered"></span><span class="target" id="classCacao_1_1UIView_1ae76c081b4eb1b65c4e6e9e5f42e48398"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasBeenRendered</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView15HasBeenRenderedEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView15HasBeenRenderedEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if this view has been rendered. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the view has been rendered or not </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIView6UIViewEv">
 <span id="_CPPv3N5Cacao6UIView6UIViewEv"></span><span id="_CPPv2N5Cacao6UIView6UIViewEv"></span><span id="Cacao::UIView::UIView"></span><span class="target" id="classCacao_1_1UIView_1a7e9a35dfc802725dc2cc98209d2cb972"></span><span class="sig-name descname"><span class="n"><span class="pre">UIView</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIView6UIViewEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIView6UIViewEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new UI view. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the rendering backend has not been initialized yet, this function will block until it is </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the framebuffers could not be created</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6UIViewD0Ev">
 <span id="_CPPv3N5Cacao6UIViewD0Ev"></span><span id="_CPPv2N5Cacao6UIViewD0Ev"></span><span id="Cacao::UIView::~UIView"></span><span class="target" id="classCacao_1_1UIView_1ad794466602a26a39df5380e309227244"></span><span class="sig-name descname"><span class="n"><span class="pre">~UIView</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6UIViewD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6UIViewD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy the UI view. </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

@@ -198,28 +198,64 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ScreenE">
 <span id="_CPPv3N5Cacao6ScreenE"></span><span id="_CPPv2N5Cacao6ScreenE"></span><span id="Cacao::Screen"></span><span class="target" id="classCacao_1_1Screen"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Screen</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6ScreenE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6ScreenE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>A layout of UI elements that can be displayed by a <a class="reference internal" href="classCacao_1_1UIView.html#classCacao_1_1UIView"><span class="std std-ref">UIView</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Screen10AddElementENSt10shared_ptrI9UIElementEE">
 <span id="_CPPv3N5Cacao6Screen10AddElementENSt10shared_ptrI9UIElementEE"></span><span id="_CPPv2N5Cacao6Screen10AddElementENSt10shared_ptrI9UIElementEE"></span><span id="Cacao::Screen::AddElement__std::shared_ptr:UIElement:"></span><span class="target" id="classCacao_1_1Screen_1ad5324aec4b95d66a764aab5d80353b14"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddElement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1UIElement.html#_CPPv4N5Cacao9UIElementE" title="Cacao::UIElement"><span class="n"><span class="pre">UIElement</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">elem</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Screen10AddElementENSt10shared_ptrI9UIElementEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Screen10AddElementENSt10shared_ptrI9UIElementEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Add an element to the screen. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>elem</strong> – The element to add</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If this element already exists in the screen </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Screen10HasElementENSt10shared_ptrI9UIElementEE">
 <span id="_CPPv3N5Cacao6Screen10HasElementENSt10shared_ptrI9UIElementEE"></span><span id="_CPPv2N5Cacao6Screen10HasElementENSt10shared_ptrI9UIElementEE"></span><span id="Cacao::Screen::HasElement__std::shared_ptr:UIElement:"></span><span class="target" id="classCacao_1_1Screen_1aa399f2865984cf5f73543970fca52657"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasElement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1UIElement.html#_CPPv4N5Cacao9UIElementE" title="Cacao::UIElement"><span class="n"><span class="pre">UIElement</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">elem</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Screen10HasElementENSt10shared_ptrI9UIElementEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Screen10HasElementENSt10shared_ptrI9UIElementEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if an element is in the screen. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>elem</strong> – The element to search for</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether the element is in the screen or not </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Screen13DeleteElementENSt10shared_ptrI9UIElementEE">
 <span id="_CPPv3N5Cacao6Screen13DeleteElementENSt10shared_ptrI9UIElementEE"></span><span id="_CPPv2N5Cacao6Screen13DeleteElementENSt10shared_ptrI9UIElementEE"></span><span id="Cacao::Screen::DeleteElement__std::shared_ptr:UIElement:"></span><span class="target" id="classCacao_1_1Screen_1acb696c6ff9126b83b78d2ea9832d2077"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteElement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1UIElement.html#_CPPv4N5Cacao9UIElementE" title="Cacao::UIElement"><span class="n"><span class="pre">UIElement</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">elem</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Screen13DeleteElementENSt10shared_ptrI9UIElementEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Screen13DeleteElementENSt10shared_ptrI9UIElementEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Remove an element from the screen. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>elem</strong> – The element to remove</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If this element doesn’t exists in the screen </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Screen7IsDirtyEv">
 <span id="_CPPv3N5Cacao6Screen7IsDirtyEv"></span><span id="_CPPv2N5Cacao6Screen7IsDirtyEv"></span><span id="Cacao::Screen::IsDirty"></span><span class="target" id="classCacao_1_1Screen_1a3d391c461a7dc1a99e3183a2d07bc1f6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsDirty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Screen7IsDirtyEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Screen7IsDirtyEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if the screen is dirty and needs to be re-rendered. </p>
+<p>Will refresh the dirty state when called</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the screen is dirty </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Screen10ForceDirtyEv">
 <span id="_CPPv3N5Cacao6Screen10ForceDirtyEv"></span><span id="_CPPv2N5Cacao6Screen10ForceDirtyEv"></span><span id="Cacao::Screen::ForceDirty"></span><span class="target" id="classCacao_1_1Screen_1ae56716aaf932111a1ebed797ec512831"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ForceDirty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Screen10ForceDirtyEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Screen10ForceDirtyEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Force the screen to be dirty. </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>
