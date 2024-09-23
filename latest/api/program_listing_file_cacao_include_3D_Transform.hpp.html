@@ -87,6 +87,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -197,42 +200,45 @@
 </span><span id="line-11"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
 </span><span id="line-12"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-13">
-</span><span id="line-14"><span class="w">        </span><span class="c1">//Self-explanatory getters and setters</span>
-</span><span id="line-15"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetPosition</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-16"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span>
-</span><span id="line-17"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-14"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetPosition</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-15"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span>
+</span><span id="line-16"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-17">
 </span><span id="line-18"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetRotation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="line-19"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">rot</span><span class="p">;</span>
 </span><span id="line-20"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-21"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetScale</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-22"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
-</span><span id="line-23"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-24">
-</span><span id="line-25"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetPosition</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newPos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-26"><span class="w">            </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newPos</span><span class="p">;</span>
-</span><span id="line-27"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
-</span><span id="line-28"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-29"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetRotation</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newRot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-30"><span class="w">            </span><span class="n">rot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newRot</span><span class="p">;</span>
-</span><span id="line-31"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
-</span><span id="line-32"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-33"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetScale</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newScale</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-34"><span class="w">            </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newScale</span><span class="p">;</span>
-</span><span id="line-35"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
-</span><span id="line-36"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-37">
-</span><span id="line-38"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">GetTransformationMatrix</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-39"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
-</span><span id="line-40"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-41">
-</span><span id="line-42"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-43"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">rot</span><span class="p">,</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+</span><span id="line-21">
+</span><span id="line-22"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetScale</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-23"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+</span><span id="line-24"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-25">
+</span><span id="line-26"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetPosition</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newPos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-27"><span class="w">            </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newPos</span><span class="p">;</span>
+</span><span id="line-28"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
+</span><span id="line-29"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-30">
+</span><span id="line-31"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetRotation</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newRot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-32"><span class="w">            </span><span class="n">rot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newRot</span><span class="p">;</span>
+</span><span id="line-33"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
+</span><span id="line-34"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-35">
+</span><span id="line-36"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetScale</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newScale</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-37"><span class="w">            </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newScale</span><span class="p">;</span>
+</span><span id="line-38"><span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
+</span><span id="line-39"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-40">
+</span><span id="line-41"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">GetTransformationMatrix</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-42"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
+</span><span id="line-43"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-44">
-</span><span id="line-45"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
-</span><span id="line-46">
-</span><span id="line-47"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RecalculateTransformationMatrix</span><span class="p">();</span>
-</span><span id="line-48"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-49"><span class="p">}</span>
+</span><span id="line-45"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-46"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">rot</span><span class="p">,</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+</span><span id="line-47">
+</span><span id="line-48"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
+</span><span id="line-49">
+</span><span id="line-50"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RecalculateTransformationMatrix</span><span class="p">();</span>
+</span><span id="line-51"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-52"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>

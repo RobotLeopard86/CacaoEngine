@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -212,7 +215,7 @@
 <dd><p>Create a skybox from a cubemap. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Prefer to use AssetManager::LoadSkybox over direct construction</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1a18301d289fed08439d2714e975ae2c44"><span class="std std-ref">AssetManager::LoadSkybox</span></a> over direct construction</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -249,7 +252,7 @@
 <dd><p>Compile the cubemap. </p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>Cubemap::Compile </p>
+<p><a class="reference internal" href="classCacao_1_1Cubemap.html#classCacao_1_1Cubemap_1a615989250efee0742a1fb9acb924b71c"><span class="std std-ref">Cubemap::Compile</span></a></p>
 </div>
 </p>
 </dd></dl>
@@ -259,7 +262,7 @@
 <dd><p>Release the cubemap data. </p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>Cubemap::Release </p>
+<p><a class="reference internal" href="classCacao_1_1Cubemap.html#classCacao_1_1Cubemap_1af5536d9a8baedaf7ff0fc2eff38ba9af"><span class="std std-ref">Cubemap::Release</span></a></p>
 </div>
 </p>
 </dd></dl>
@@ -269,7 +272,7 @@
 <dd><p>Check if the cubemap is <em>compiled</em>. </p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>Cubemap::IsCompiled </p>
+<p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset_1a91af0a376decafd26c047557bca83641"><span class="std std-ref">Cubemap::IsCompiled</span></a></p>
 </div>
 </p>
 </dd></dl>

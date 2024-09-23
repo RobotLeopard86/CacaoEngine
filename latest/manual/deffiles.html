@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Cacao Engine Backends | Cacao Engine Docs</title>
-<meta content="Cacao Engine Backends | Cacao Engine Docs" property="og:title"/>
-<meta content="Cacao Engine Backends | Cacao Engine Docs" name="twitter:title"/>
+<title>Definition Files | Cacao Engine Docs</title>
+<meta content="Definition Files | Cacao Engine Docs" property="og:title"/>
+<meta content="Definition Files | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="backends/gl-glfw.html" rel="next" title="Backend gl-glfw"/>
-<link href="building.html" rel="prev" title="Cacao Engine Build Instructions"/>
+<link href="../api/library_root.html" rel="next" title="Cacao Engine API Reference"/>
+<link href="inputmappings.html" rel="prev" title="Input Mappings"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -81,7 +81,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="building.html">Cacao Engine Build Instructions</a></li>
-<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="current reference internal expandable" href="#">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="backends/gles-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-glfw</span></code></a></li>
@@ -91,7 +91,7 @@
 <li class="toctree-l2"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l2"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -184,40 +184,68 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../manual.html">Cacao Engine Manual</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Cacao Engine Backends</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Definition Files</span>
 </nav>
 <div id="content" role="main">
-<section id="cacao-engine-backends">
-<h1>Cacao Engine Backends<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cacao-engine-backends"><span></span></a></h1>
-<p>Cacao Engine supports multiple backends to run on top of.</p>
-<p>See the table of contents below for each.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/gles-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-glfw</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/gles-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-sdl</span></code></a></li>
+<section id="definition-files">
+<h1>Definition Files<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#definition-files"><span></span></a></h1>
+<p>In Cacao Engine, shaders and cubemaps are defined by definition files. These are special YAML files giving all necessary info about these assets.</p>
+<section id="shader-definition-file-attributes">
+<h2>Shader Definition File Attributes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shader-definition-file-attributes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shader-definition-file-attributes'"><span></span></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vertex</span></code>: Path from the working directory (set in <code class="docutils literal notranslate"><span class="pre">launchconfig.cacao.yml</span></code>) to the SPIR-V vertex shader</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fragment</span></code>: Path from the working directory (set in <code class="docutils literal notranslate"><span class="pre">launchconfig.cacao.yml</span></code>) to the SPIR-V fragment shader</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>: The shader specification, a list of shader entries.</p></li>
 </ul>
-</div>
+</section>
+<section id="shader-entry-attributes">
+<h2>Shader Entry Attributes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shader-entry-attributes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shader-entry-attributes'"><span></span></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: The name of the entry in the shader code</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: The data type, one of <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">uint</span></code>, <code class="docutils literal notranslate"><span class="pre">int64</span></code>, <code class="docutils literal notranslate"><span class="pre">uint64</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, or <code class="docutils literal notranslate"><span class="pre">texture</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sizex</span></code>: The horizontal size of the entry. For example: a GLSL <code class="docutils literal notranslate"><span class="pre">vec3</span></code> has a <code class="docutils literal notranslate"><span class="pre">sizex</span></code> value of 3, because it has three columns.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sizey</span></code>: The vertical size of the entry. For example: a GLSL <code class="docutils literal notranslate"><span class="pre">mat4</span></code> has a <code class="docutils literal notranslate"><span class="pre">sizey</span></code> value of 4, because it has four rows.</p></li>
+</ul>
+</section>
+<section id="cubemap-definition-file-attributes">
+<h2>Cubemap Definition File Attributes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubemap-definition-file-attributes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cubemap-definition-file-attributes'"><span></span></a></h2>
+<p>All items are paths from the working directory (set in <code class="docutils literal notranslate"><span class="pre">launchconfig.cacao.yml</span></code>) to the desired image.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x+</span></code>: The image in the positive X direction (typically right)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x-</span></code>: The image in the negative X direction (typically left)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y+</span></code>: The image in the positive Y direction (typically up)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y-</span></code>: The image in the negative Y direction (typically down)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z+</span></code>: The image in the positive Z direction (typically forward)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z-</span></code>: The image in the negative Z direction (typically backward)</p></li>
+</ul>
+</section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="building.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="inputmappings.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Cacao Engine Build Instructions
+        Input Mappings
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="backends/gl-glfw.html">
-        Backend gl-glfw
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="../api/library_root.html">
+        Cacao Engine API Reference
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
 </a>
 </div>
-</div></div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#shader-definition-file-attributes'" class="reference internal" href="#shader-definition-file-attributes">Shader Definition File Attributes</a></li>
+<li><a :data-current="activeSection === '#shader-entry-attributes'" class="reference internal" href="#shader-entry-attributes">Shader Entry Attributes</a></li>
+<li><a :data-current="activeSection === '#cubemap-definition-file-attributes'" class="reference internal" href="#cubemap-definition-file-attributes">Cubemap Definition File Attributes</a></li>
+</ul>
+</div>
+</aside>
 </main>
 </div>
 </div><footer class="py-6 border-t border-border md:py-0">

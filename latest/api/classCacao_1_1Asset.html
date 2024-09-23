@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -208,25 +211,48 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5AssetE">
 <span id="_CPPv3N5Cacao5AssetE"></span><span id="_CPPv2N5Cacao5AssetE"></span><span id="Cacao::Asset"></span><span class="target" id="classCacao_1_1Asset"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Asset</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5AssetE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5AssetE'"><span></span></a><br/></dt>
-<dd><p>Subclassed by <a class="reference internal" href="classCacao_1_1Font.html#classCacao_1_1Font"><span class="std std-ref">Cacao::Font</span></a>, <a class="reference internal" href="classCacao_1_1Mesh.html#classCacao_1_1Mesh"><span class="std std-ref">Cacao::Mesh</span></a>, <a class="reference internal" href="classCacao_1_1Shader.html#classCacao_1_1Shader"><span class="std std-ref">Cacao::Shader</span></a>, <a class="reference internal" href="classCacao_1_1Skybox.html#classCacao_1_1Skybox"><span class="std std-ref">Cacao::Skybox</span></a>, <a class="reference internal" href="classCacao_1_1Sound.html#classCacao_1_1Sound"><span class="std std-ref">Cacao::Sound</span></a>, <a class="reference internal" href="classCacao_1_1Texture.html#classCacao_1_1Texture"><span class="std std-ref">Cacao::Texture</span></a></p>
+<dd><p>Base asset type. </p>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1Font.html#classCacao_1_1Font"><span class="std std-ref">Cacao::Font</span></a>, <a class="reference internal" href="classCacao_1_1Mesh.html#classCacao_1_1Mesh"><span class="std std-ref">Cacao::Mesh</span></a>, <a class="reference internal" href="classCacao_1_1Shader.html#classCacao_1_1Shader"><span class="std std-ref">Cacao::Shader</span></a>, <a class="reference internal" href="classCacao_1_1Skybox.html#classCacao_1_1Skybox"><span class="std std-ref">Cacao::Skybox</span></a>, <a class="reference internal" href="classCacao_1_1Sound.html#classCacao_1_1Sound"><span class="std std-ref">Cacao::Sound</span></a>, <a class="reference internal" href="classCacao_1_1Texture.html#classCacao_1_1Texture"><span class="std std-ref">Cacao::Texture</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset7CompileEv">
 <span id="_CPPv3N5Cacao5Asset7CompileEv"></span><span id="_CPPv2N5Cacao5Asset7CompileEv"></span><span id="Cacao::Asset::Compile"></span><span class="target" id="classCacao_1_1Asset_1a11adb745a134d7b78d0e5b5b320e28f5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Asset7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Asset7CompileEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Compile the raw asset data into a format that can be used. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was already compiled </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A future that will resolve when compilation is done</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset7ReleaseEv">
 <span id="_CPPv3N5Cacao5Asset7ReleaseEv"></span><span id="_CPPv2N5Cacao5Asset7ReleaseEv"></span><span id="Cacao::Asset::Release"></span><span class="target" id="classCacao_1_1Asset_1a051c7f71efa93964ef0858a8d07e78c6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Asset7ReleaseEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Asset7ReleaseEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Delete the compiled asset data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was not compiled </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset10IsCompiledEv">
 <span id="_CPPv3N5Cacao5Asset10IsCompiledEv"></span><span id="_CPPv2N5Cacao5Asset10IsCompiledEv"></span><span id="Cacao::Asset::IsCompiled"></span><span class="target" id="classCacao_1_1Asset_1a91af0a376decafd26c047557bca83641"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsCompiled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Asset10IsCompiledEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Asset10IsCompiledEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if the asset is compiled. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the asset is compiled or not </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset7GetTypeEv">
 <span id="_CPPv3N5Cacao5Asset7GetTypeEv"></span><span id="_CPPv2N5Cacao5Asset7GetTypeEv"></span><span id="Cacao::Asset::GetType"></span><span class="target" id="classCacao_1_1Asset_1af5a436f59d46ecde4bd67dc5dc610f7a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Asset7GetTypeEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Asset7GetTypeEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the asset type (not useful here because this is the base asset) </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5AssetD0Ev">
 <span id="_CPPv3N5Cacao5AssetD0Ev"></span><span id="_CPPv2N5Cacao5AssetD0Ev"></span><span id="Cacao::Asset::~Asset"></span><span class="target" id="classCacao_1_1Asset_1ad901463a38eed8f711da58f565a8d8c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Asset</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5AssetD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5AssetD0Ev'"><span></span></a><br/></dt>

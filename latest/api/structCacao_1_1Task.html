@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,35 +197,48 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4TaskE">
 <span id="_CPPv3N5Cacao4TaskE"></span><span id="_CPPv2N5Cacao4TaskE"></span><span id="Cacao::Task"></span><span class="target" id="structCacao_1_1Task"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4TaskE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4TaskE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Internal encapsulation of a std::promise and an associated promise. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Task4TaskERK4Task">
 <span id="_CPPv3N5Cacao4Task4TaskERK4Task"></span><span id="_CPPv2N5Cacao4Task4TaskERK4Task"></span><span id="Cacao::Task::Task__TaskCR"></span><span class="target" id="structCacao_1_1Task_1a06f69014aa49c351d7f2c26338dd9dca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao4Task4TaskERK4Task" title="Cacao::Task::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Task4TaskERK4Task" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Task4TaskERK4Task'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Copy-construct a task. </p>
+<p>The new task shares the function and status of the copied-from task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – The task to copy from </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Task4TaskERR4Task">
 <span id="_CPPv3N5Cacao4Task4TaskERR4Task"></span><span id="_CPPv2N5Cacao4Task4TaskERR4Task"></span><span id="Cacao::Task::Task__TaskRR"></span><span class="target" id="structCacao_1_1Task_1adf5e221d901dea000c7c7e21c5874729"></span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao4Task4TaskERR4Task" title="Cacao::Task::Task"><span class="n"><span class="pre">Task</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Task4TaskERR4Task" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Task4TaskERR4Task'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Move-assignment is banned. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4TaskD0Ev">
 <span id="_CPPv3N5Cacao4TaskD0Ev"></span><span id="_CPPv2N5Cacao4TaskD0Ev"></span><span id="Cacao::Task::~Task"></span><span class="target" id="structCacao_1_1Task_1ae13bca9491baa377ab281bced4865afe"></span><span class="sig-name descname"><span class="n"><span class="pre">~Task</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4TaskD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4TaskD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Default destructor. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Task4TaskENSt8functionIFvvEEE">
 <span id="_CPPv3N5Cacao4Task4TaskENSt8functionIFvvEEE"></span><span id="_CPPv2N5Cacao4Task4TaskENSt8functionIFvvEEE"></span><span class="target" id="structCacao_1_1Task_1a8dafef8f0f0596a3d5b3ea63ac124702"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Task</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">job</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Task4TaskENSt8functionIFvvEEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Task4TaskENSt8functionIFvvEEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a task and a new status promise. </p>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Task4funcE">
 <span id="_CPPv3N5Cacao4Task4funcE"></span><span id="_CPPv2N5Cacao4Task4funcE"></span><span class="target" id="structCacao_1_1Task_1af9d263bf8501df5d7c37b02cce1c0161"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">func</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Task4funcE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Task4funcE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>The function to run. </p>
+</dd></dl>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Task6statusE">
 <span id="_CPPv3N5Cacao4Task6statusE"></span><span id="_CPPv2N5Cacao4Task6statusE"></span><span id="Cacao::Task::status__std::shared_ptr:std::promise:void::"></span><span class="target" id="structCacao_1_1Task_1a2534f2800844944818e29b9eebe5b016"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">promise</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">status</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao4Task6statusE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao4Task6statusE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>The status promise. </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

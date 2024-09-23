@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,24 +197,34 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao9FlushableE">
 <span id="_CPPv3I0EN5Cacao9FlushableE"></span><span id="_CPPv2I0EN5Cacao9FlushableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br/><span class="target" id="classCacao_1_1Flushable"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4I0EN5Cacao9FlushableE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4I0EN5Cacao9FlushableE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Utility that caches changes to an object and applies them on command. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable9FlushableER1T">
 <span id="_CPPv3N5Cacao9Flushable9FlushableER1T"></span><span id="_CPPv2N5Cacao9Flushable9FlushableER1T"></span><span id="Cacao::Flushable::Flushable__TR"></span><span class="target" id="classCacao_1_1Flushable_1af25c2b87ede2fa05f9f91d96674bcd82"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Flushable9FlushableER1T" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Flushable9FlushableER1T'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new flushable. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – The original object </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableptEv">
 <span id="_CPPv3N5Cacao9FlushableptEv"></span><span id="_CPPv2N5Cacao9FlushableptEv"></span><span id="Cacao::Flushable::pointer-operator"></span><span class="target" id="classCacao_1_1Flushable_1a7206c1e8f4d605c071dcd6e49c3f78f5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9FlushableptEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9FlushableptEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Access the object copy where changes can be made. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableaSE1T">
 <span id="_CPPv3N5Cacao9FlushableaSE1T"></span><span id="_CPPv2N5Cacao9FlushableaSE1T"></span><span id="Cacao::Flushable::assign-operator__T"></span><span class="target" id="classCacao_1_1Flushable_1aa954a014c290b214baed25539e1692c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newDat</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9FlushableaSE1T" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9FlushableaSE1T'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Overwrite the object copy with new data. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable5FlushEv">
 <span id="_CPPv3N5Cacao9Flushable5FlushEv"></span><span id="_CPPv2N5Cacao9Flushable5FlushEv"></span><span id="Cacao::Flushable::Flush"></span><span class="target" id="classCacao_1_1Flushable_1aa576d2339edc75767f5c9fb22e0cc204"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flush</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Flushable5FlushEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Flushable5FlushEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Write the changes back to the original object. </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

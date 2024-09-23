@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,35 +197,82 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManagerE">
 <span id="_CPPv3N5Cacao12EventManagerE"></span><span id="_CPPv2N5Cacao12EventManagerE"></span><span id="Cacao::EventManager"></span><span class="target" id="classCacao_1_1EventManager"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EventManager</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManagerE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManagerE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Manages event consumers and event dispatching. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManager17SubscribeConsumerENSt6stringEP13EventConsumer">
 <span id="_CPPv3N5Cacao12EventManager17SubscribeConsumerENSt6stringEP13EventConsumer"></span><span id="_CPPv2N5Cacao12EventManager17SubscribeConsumerENSt6stringEP13EventConsumer"></span><span id="Cacao::EventManager::SubscribeConsumer__ss.EventConsumerP"></span><span class="target" id="classCacao_1_1EventManager_1a638a4495d461d2d0c591cec1bfa6bcc9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SubscribeConsumer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <a class="reference internal" href="classCacao_1_1EventConsumer.html#_CPPv4N5Cacao13EventConsumerE" title="Cacao::EventConsumer"><span class="n"><span class="pre">EventConsumer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">consumer</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManager17SubscribeConsumerENSt6stringEP13EventConsumer" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManager17SubscribeConsumerENSt6stringEP13EventConsumer'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Subscribe a consumer to the given event type. </p>
+<p>Registers this consumer to be called when an event of the given type is dispatched</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – The type of event to subscribe to </p></li>
+<li><p><strong>consumer</strong> – The consumer to subscribe </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManager19UnsubscribeConsumerENSt6stringEP13EventConsumer">
 <span id="_CPPv3N5Cacao12EventManager19UnsubscribeConsumerENSt6stringEP13EventConsumer"></span><span id="_CPPv2N5Cacao12EventManager19UnsubscribeConsumerENSt6stringEP13EventConsumer"></span><span id="Cacao::EventManager::UnsubscribeConsumer__ss.EventConsumerP"></span><span class="target" id="classCacao_1_1EventManager_1a473f214f6fca509d21c8b2af10f633b4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnsubscribeConsumer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <a class="reference internal" href="classCacao_1_1EventConsumer.html#_CPPv4N5Cacao13EventConsumerE" title="Cacao::EventConsumer"><span class="n"><span class="pre">EventConsumer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">consumer</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManager19UnsubscribeConsumerENSt6stringEP13EventConsumer" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManager19UnsubscribeConsumerENSt6stringEP13EventConsumer'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Unsubscribe a consumer from the given event type. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – The type of event to unsubscribe from </p></li>
+<li><p><strong>consumer</strong> – The consumer to unsubscribe </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManager8DispatchER5Event">
 <span id="_CPPv3N5Cacao12EventManager8DispatchER5Event"></span><span id="_CPPv2N5Cacao12EventManager8DispatchER5Event"></span><span id="Cacao::EventManager::Dispatch__EventR"></span><span class="target" id="classCacao_1_1EventManager_1a82613863ae34ab14688a0349e4abbc65"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dispatch</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManager8DispatchER5Event" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManager8DispatchER5Event'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Dispatch an event to all subscribed consumers of its type. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, this blocks until all consumers are done. This behavior will be changed in the future.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> – The event to dispatch </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManager16DispatchSignaledER5Event">
 <span id="_CPPv3N5Cacao12EventManager16DispatchSignaledER5Event"></span><span id="_CPPv2N5Cacao12EventManager16DispatchSignaledER5Event"></span><span id="Cacao::EventManager::DispatchSignaled__EventR"></span><span class="target" id="classCacao_1_1EventManager_1a623692cdf2f52722ac1ca58b0bec30e8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1MultiFuture.html#_CPPv4I0EN5Cacao11MultiFutureE" title="Cacao::MultiFuture"><span class="n"><span class="pre">MultiFuture</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DispatchSignaled</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManager16DispatchSignaledER5Event" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManager16DispatchSignaledER5Event'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Dispatch an event to all subscribed consumers of its type with a signal. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, this blocks until all consumers are done. This behavior will be changed in the future.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> – The event to dispatch </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManager8ShutdownEv">
 <span id="_CPPv3N5Cacao12EventManager8ShutdownEv"></span><span id="_CPPv2N5Cacao12EventManager8ShutdownEv"></span><span id="Cacao::EventManager::Shutdown"></span><span class="target" id="classCacao_1_1EventManager_1abd54ec26692ccd0bfa5fcbe2453a2e86"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Shutdown</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManager8ShutdownEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManager8ShutdownEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Shut down the event manager and unsubscribe all consumers. </p>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EventManager11GetInstanceEv">
 <span id="_CPPv3N5Cacao12EventManager11GetInstanceEv"></span><span id="_CPPv2N5Cacao12EventManager11GetInstanceEv"></span><span id="Cacao::EventManager::GetInstance"></span><span class="target" id="classCacao_1_1EventManager_1a52b31d40898dbd413058f2f06f3c6ac4"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao12EventManagerE" title="Cacao::EventManager"><span class="n"><span class="pre">EventManager</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetInstance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EventManager11GetInstanceEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EventManager11GetInstanceEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

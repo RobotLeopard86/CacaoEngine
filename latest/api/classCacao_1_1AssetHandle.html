@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,36 +197,72 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao11AssetHandleE">
 <span id="_CPPv3I0EN5Cacao11AssetHandleE"></span><span id="_CPPv2I0EN5Cacao11AssetHandleE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br/><span class="target" id="classCacao_1_1AssetHandle"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AssetHandle</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4I0EN5Cacao11AssetHandleE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4I0EN5Cacao11AssetHandleE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Reference-counted handle to an asset. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandle11AssetHandleERKNSt6stringENSt10shared_ptrI1TEE">
 <span id="_CPPv3N5Cacao11AssetHandle11AssetHandleERKNSt6stringENSt10shared_ptrI1TEE"></span><span id="_CPPv2N5Cacao11AssetHandle11AssetHandleERKNSt6stringENSt10shared_ptrI1TEE"></span><span id="Cacao::AssetHandle::AssetHandle__ssCR.std::shared_ptr:T:"></span><span class="target" id="classCacao_1_1AssetHandle_1a284ea36de0707012a7c618034c0ff08b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AssetHandle</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">asset</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandle11AssetHandleERKNSt6stringENSt10shared_ptrI1TEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandle11AssetHandleERKNSt6stringENSt10shared_ptrI1TEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Construct an asset handle with an ID and asset. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefer to use AssetManager::Load* methods to get AssetHandles.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The asset ID </p></li>
+<li><p><strong>asset</strong> – The asset, which must have a type that is a subclass of <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandle11AssetHandleEv">
 <span id="_CPPv3N5Cacao11AssetHandle11AssetHandleEv"></span><span id="_CPPv2N5Cacao11AssetHandle11AssetHandleEv"></span><span id="Cacao::AssetHandle::AssetHandle"></span><span class="target" id="classCacao_1_1AssetHandle_1a8211a9112fa2d95475ccef6f68e04597"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AssetHandle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandle11AssetHandleEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandle11AssetHandleEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Construct a “null” <a class="reference internal" href="#classCacao_1_1AssetHandle"><span class="std std-ref">AssetHandle</span></a>. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only </p>
+</div>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandleD0Ev">
 <span id="_CPPv3N5Cacao11AssetHandleD0Ev"></span><span id="_CPPv2N5Cacao11AssetHandleD0Ev"></span><span id="Cacao::AssetHandle::~AssetHandle"></span><span class="target" id="classCacao_1_1AssetHandle_1a0614ae8bb99258f3a68271ba5a2097d2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~AssetHandle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandleD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandleD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy the asset handle. </p>
+<p>If this was the last reference to the asset, uncache it </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandleptEv">
 <span id="_CPPv3N5Cacao11AssetHandleptEv"></span><span id="_CPPv2N5Cacao11AssetHandleptEv"></span><span id="Cacao::AssetHandle::pointer-operator"></span><span class="target" id="classCacao_1_1AssetHandle_1aca567b9c1cf1c32da12e23da5e02c0f0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandleptEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandleptEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Access the managed asset. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandle15GetManagedAssetEv">
 <span id="_CPPv3N5Cacao11AssetHandle15GetManagedAssetEv"></span><span id="_CPPv2N5Cacao11AssetHandle15GetManagedAssetEv"></span><span id="Cacao::AssetHandle::GetManagedAsset"></span><span class="target" id="classCacao_1_1AssetHandle_1a53a1f627da4ee802accdae6a558aa0d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetManagedAsset</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandle15GetManagedAssetEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandle15GetManagedAssetEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the managed asset. </p>
+<p>This can be used when you need the shared_ptr value and can’t use the operator shared_ptr&lt;T&gt; or the arrow operator </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandle5GetIDEv">
 <span id="_CPPv3N5Cacao11AssetHandle5GetIDEv"></span><span id="_CPPv2N5Cacao11AssetHandle5GetIDEv"></span><span id="Cacao::AssetHandle::GetID"></span><span class="target" id="classCacao_1_1AssetHandle_1a5a97fae3aadeca6c8807ff2c0479355a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandle5GetIDEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandle5GetIDEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the asset ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The asset ID </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AssetHandle6IsNullEv">
 <span id="_CPPv3N5Cacao11AssetHandle6IsNullEv"></span><span id="_CPPv2N5Cacao11AssetHandle6IsNullEv"></span><span id="Cacao::AssetHandle::IsNull"></span><span class="target" id="classCacao_1_1AssetHandle_1a3fa012bf08c2b6f25262b6534f9e8388"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsNull</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AssetHandle6IsNullEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AssetHandle6IsNullEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if this is a “null” asset handle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether this is a “null” handle or not </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

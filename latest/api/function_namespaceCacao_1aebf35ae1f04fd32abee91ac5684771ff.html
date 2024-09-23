@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,7 +197,9 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E">
 <span id="_CPPv3N5Cacao18Calculate3DVectorsEN3glm4vec3E"></span><span id="_CPPv2N5Cacao18Calculate3DVectorsEN3glm4vec3E"></span><span id="Cacao::Calculate3DVectors__glm::vec3"></span><span class="target" id="namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1Vectors.html#_CPPv4N5Cacao7VectorsE" title="Cacao::Vectors"><span class="n"><span class="pre">Vectors</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Calculate3DVectors</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Calculate a front vector pointing away from the origin at the given rotation and its accompanying right and up vectors. </p>
+<p>The rotation values must be in degrees </p>
+</dd></dl>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">

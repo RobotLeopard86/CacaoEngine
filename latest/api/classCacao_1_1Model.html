@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,28 +197,68 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5ModelE">
 <span id="_CPPv3N5Cacao5ModelE"></span><span id="_CPPv2N5Cacao5ModelE"></span><span id="Cacao::Model"></span><span class="target" id="classCacao_1_1Model"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Model</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5ModelE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5ModelE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>The representation of a model file. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model5ModelENSt6stringE">
 <span id="_CPPv3N5Cacao5Model5ModelENSt6stringE"></span><span id="_CPPv2N5Cacao5Model5ModelENSt6stringE"></span><span id="Cacao::Model::Model__ss"></span><span class="target" id="classCacao_1_1Model_1aa9f8fc3d9d81d517fa67c7894c5e8876"></span><span class="sig-name descname"><span class="n"><span class="pre">Model</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">filePath</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Model5ModelENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Model5ModelENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a model from a file path. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1acb13f42865c6f4f1e46af04edd1e9f1a"><span class="std std-ref">AssetManager::LoadMesh</span></a> if loading a mesh from a model file</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filePath</strong> – The path to load from</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the file does not exist, could not be parsed, or has no meshes </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5ModelD0Ev">
 <span id="_CPPv3N5Cacao5ModelD0Ev"></span><span id="_CPPv2N5Cacao5ModelD0Ev"></span><span id="Cacao::Model::~Model"></span><span class="target" id="classCacao_1_1Model_1a16ef68c1f4294e8fe95bbfdb9708b565"></span><span class="sig-name descname"><span class="n"><span class="pre">~Model</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5ModelD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5ModelD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy the model (does not destroy meshes) </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model10ListMeshesEv">
 <span id="_CPPv3N5Cacao5Model10ListMeshesEv"></span><span id="_CPPv2N5Cacao5Model10ListMeshesEv"></span><span id="Cacao::Model::ListMeshes"></span><span class="target" id="classCacao_1_1Model_1a029a4ec2129ce44ddb9c2775d5a27d57"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ListMeshes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Model10ListMeshesEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Model10ListMeshesEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>List the meshes in this model. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The mesh list </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model11ExtractMeshENSt6stringE">
 <span id="_CPPv3N5Cacao5Model11ExtractMeshENSt6stringE"></span><span id="_CPPv2N5Cacao5Model11ExtractMeshENSt6stringE"></span><span id="Cacao::Model::ExtractMesh__ss"></span><span class="target" id="classCacao_1_1Model_1a8848aa40ac89d140505621a9f65f0b3e"></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">ExtractMesh</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Model11ExtractMeshENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Model11ExtractMeshENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Extract a mesh from this model. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The extracted mesh, if modified, will have those modifications reflected in the model’s stored in-memory mesh. The mesh will not be deleted with the model.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – The name of the mesh to extract</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the model does not contain a mesh with the given name </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model7HasMeshENSt6stringE">
 <span id="_CPPv3N5Cacao5Model7HasMeshENSt6stringE"></span><span id="_CPPv2N5Cacao5Model7HasMeshENSt6stringE"></span><span id="Cacao::Model::HasMesh__ss"></span><span class="target" id="classCacao_1_1Model_1ae4f5b7e0efd3cb82f51f4fbb2db5d567"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasMesh</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Model7HasMeshENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Model7HasMeshENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if this model contains a given mesh. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – The name of the mesh to search for </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

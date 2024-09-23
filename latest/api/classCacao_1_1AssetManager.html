@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,40 +197,149 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManagerE">
 <span id="_CPPv3N5Cacao12AssetManagerE"></span><span id="_CPPv2N5Cacao12AssetManagerE"></span><span id="Cacao::AssetManager"></span><span class="target" id="classCacao_1_1AssetManager"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AssetManager</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManagerE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManagerE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Manages the loading of assets and the asset cache. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager10LoadShaderENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager10LoadShaderENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager10LoadShaderENSt6stringE"></span><span id="Cacao::AssetManager::LoadShader__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a27d3236a2faeee1085a9a6d6ce2afda0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Shader.html#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadShader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">definitionPath</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager10LoadShaderENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager10LoadShaderENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a shader from a shader definition file See the page “Definition Files” in the manual for their format. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Shader.html#classCacao_1_1Shader_1ae2372978dff65722c4cb72b4948748e7"><span class="std std-ref">Shader::Compile</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>definitionPath</strong> – The path to a definition file</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the definition file does not exist, has the wrong format, or fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager13LoadTexture2DENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager13LoadTexture2DENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager13LoadTexture2DENSt6stringE"></span><span id="Cacao::AssetManager::LoadTexture2D__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a7522aaa1e5956b9cc3aea82320dcb6d8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Texture2D.html#_CPPv4N5Cacao9Texture2DE" title="Cacao::Texture2D"><span class="n"><span class="pre">Texture2D</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadTexture2D</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager13LoadTexture2DENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager13LoadTexture2DENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a 2D texture from an image file. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Texture2D.html#classCacao_1_1Texture2D_1a0be63718f6062bd63aec7209d6f99fb6"><span class="std std-ref">Texture2D::Compile</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path to an image</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the image file does not exist or fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager11LoadCubemapENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager11LoadCubemapENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager11LoadCubemapENSt6stringE"></span><span id="Cacao::AssetManager::LoadCubemap__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a58a318976ac07b0ddbc921728d6e6147"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Cubemap.html#_CPPv4N5Cacao7CubemapE" title="Cacao::Cubemap"><span class="n"><span class="pre">Cubemap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadCubemap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">definitionPath</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager11LoadCubemapENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager11LoadCubemapENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a cubemap from a cubemap definition file See the page “Definition Files” in the manual for their format. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Cubemap.html#classCacao_1_1Cubemap_1a615989250efee0742a1fb9acb924b71c"><span class="std std-ref">Cubemap::Compile</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>definitionPath</strong> – The path to a definition file</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the definition file does not exist, has the wrong format, or fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager10LoadSkyboxENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager10LoadSkyboxENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager10LoadSkyboxENSt6stringE"></span><span id="Cacao::AssetManager::LoadSkybox__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a18301d289fed08439d2714e975ae2c44"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Skybox.html#_CPPv4N5Cacao6SkyboxE" title="Cacao::Skybox"><span class="n"><span class="pre">Skybox</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadSkybox</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">definitionPath</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager10LoadSkyboxENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager10LoadSkyboxENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a skybox from a cubemap definition file See the page “Definition Files” in the manual for their format. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Cubemap.html#classCacao_1_1Cubemap_1a615989250efee0742a1fb9acb924b71c"><span class="std std-ref">Cubemap::Compile</span></a>,<a class="reference internal" href="#classCacao_1_1AssetManager_1a58a318976ac07b0ddbc921728d6e6147"><span class="std std-ref">LoadCubemap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>definitionPath</strong> – The path to a definition file</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the definition file does not exist, has the wrong format, or fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager8LoadMeshENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager8LoadMeshENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager8LoadMeshENSt6stringE"></span><span id="Cacao::AssetManager::LoadMesh__ss"></span><span class="target" id="classCacao_1_1AssetManager_1acb13f42865c6f4f1e46af04edd1e9f1a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadMesh</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">location</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager8LoadMeshENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager8LoadMeshENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a mesh from a given model file. </p>
+<p>The input format is as follows: (model file path):(mesh name)</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Model.html#classCacao_1_1Model_1aa9f8fc3d9d81d517fa67c7894c5e8876"><span class="std std-ref">Model::Model</span></a>,<a class="reference internal" href="classCacao_1_1Mesh.html#classCacao_1_1Mesh_1a18ee9f5ae9ff23fe976f5b299d6cd7ce"><span class="std std-ref">Mesh::Compile</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>location</strong> – The location to retrieve the mesh from</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the location parameter has the wrong format, the model file does not exist, the model fails to load, the model does not contain the requested mesh, or the mesh fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager9LoadSoundENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager9LoadSoundENSt6stringE"></span><span id="Cacao::AssetManager::LoadSound__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a56c90511c5e45caf96e283fb88c613a0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Sound.html#_CPPv4N5Cacao5SoundE" title="Cacao::Sound"><span class="n"><span class="pre">Sound</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadSound</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a sound from a file. </p>
+<p>Supports MP3, WAV, Ogg Vorbis, and Ogg Opus files</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Sound.html#classCacao_1_1Sound_1a42147d817d720a314d1f2e6c60ff3592"><span class="std std-ref">Sound::Compile</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path to a sound file</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the sound file does not exist, fails to be read, or fails to compile (which may happen if the audio system is uninitialized) </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager8LoadFontENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager8LoadFontENSt6stringE"></span><span id="Cacao::AssetManager::LoadFont__ss"></span><span class="target" id="classCacao_1_1AssetManager_1ad8b1d69db98d32e10a341dce1266775a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Font.html#_CPPv4N5Cacao4FontE" title="Cacao::Font"><span class="n"><span class="pre">Font</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadFont</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Load a font face from a file. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path to a font file</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the font file does not exist or the font face cannot be loaded from it </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE">
 <span id="_CPPv3N5Cacao12AssetManager12UncacheAssetENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager12UncacheAssetENSt6stringE"></span><span id="Cacao::AssetManager::UncacheAsset__ss"></span><span class="target" id="classCacao_1_1AssetManager_1ac1ebc73e06c0903b12cec9adbd04016e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UncacheAsset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Remove an asset from the cache. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the asset to remove from the cache</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the specified asset ID does not exist in the cache </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>

@@ -87,6 +87,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -197,15 +200,17 @@
 </span><span id="line-11">
 </span><span id="line-12"><span class="w">        </span><span class="n">Task</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
 </span><span id="line-13"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">func</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">func</span><span class="p">),</span><span class="w"> </span><span class="n">status</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-14"><span class="w">        </span><span class="n">Task</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
-</span><span id="line-15"><span class="w">        </span><span class="o">~</span><span class="n">Task</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+</span><span id="line-14">
+</span><span id="line-15"><span class="w">        </span><span class="n">Task</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
 </span><span id="line-16">
-</span><span id="line-17"><span class="w">        </span><span class="k">explicit</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">job</span><span class="p">)</span>
-</span><span id="line-18"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">func</span><span class="p">(</span><span class="n">job</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-19"><span class="w">            </span><span class="n">status</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">());</span>
-</span><span id="line-20"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-21"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-22"><span class="p">}</span>
+</span><span id="line-17"><span class="w">        </span><span class="o">~</span><span class="n">Task</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+</span><span id="line-18">
+</span><span id="line-19"><span class="w">        </span><span class="k">explicit</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">job</span><span class="p">)</span>
+</span><span id="line-20"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">func</span><span class="p">(</span><span class="n">job</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-21"><span class="w">            </span><span class="n">status</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">());</span>
+</span><span id="line-22"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-23"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-24"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>

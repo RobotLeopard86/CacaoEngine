@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,31 +197,54 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5WorldE">
 <span id="_CPPv3N5Cacao5WorldE"></span><span id="_CPPv2N5Cacao5WorldE"></span><span id="Cacao::World"></span><span class="target" id="classCacao_1_1World"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">World</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5WorldE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5WorldE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>A gameplay space. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World16FindEntityByGUIDEN2xg4GuidE">
 <span id="_CPPv3N5Cacao5World16FindEntityByGUIDEN2xg4GuidE"></span><span id="_CPPv2N5Cacao5World16FindEntityByGUIDEN2xg4GuidE"></span><span id="Cacao::World::FindEntityByGUID__xg::Guid"></span><span class="target" id="classCacao_1_1World_1a7bc8e2c9a2bad18dc9a9901a866ea5d0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Entity.html#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindEntityByGUID</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">guid</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5World16FindEntityByGUIDEN2xg4GuidE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5World16FindEntityByGUIDEN2xg4GuidE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Find an <a class="reference internal" href="classCacao_1_1Entity.html#classCacao_1_1Entity"><span class="std std-ref">Entity</span></a> by its GUID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>guid</strong> – The GUID to search for</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An optional that contains the entity if it was found </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World5WorldEP6Camera">
 <span id="_CPPv3N5Cacao5World5WorldEP6Camera"></span><span id="_CPPv2N5Cacao5World5WorldEP6Camera"></span><span id="Cacao::World::World__CameraP"></span><span class="target" id="classCacao_1_1World_1a4db7b2c115ed230b6a5c1228909e9844"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">World</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Camera.html#_CPPv4N5Cacao6CameraE" title="Cacao::Camera"><span class="n"><span class="pre">Camera</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">camera</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5World5WorldEP6Camera" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5World5WorldEP6Camera'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a world. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1WorldManager.html#classCacao_1_1WorldManager_1abd06fd3dca8d0057cccb3dedc6754126"><span class="std std-ref">WorldManager::CreateWorld</span></a> to be able to use the created world </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>camera</strong> – The main camera</p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World6skyboxE">
 <span id="_CPPv3N5Cacao5World6skyboxE"></span><span id="_CPPv2N5Cacao5World6skyboxE"></span><span id="Cacao::World::skybox__AssetHandle:Skybox:"></span><span class="target" id="classCacao_1_1World_1a76443513606999c6ccebd5b9afae6d09"></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Skybox.html#_CPPv4N5Cacao6SkyboxE" title="Cacao::Skybox"><span class="n"><span class="pre">Skybox</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">skybox</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5World6skyboxE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5World6skyboxE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p><a class="reference internal" href="classCacao_1_1Skybox.html#classCacao_1_1Skybox"><span class="std std-ref">Skybox</span></a> (set to a null asset handle to have no skybox) </p>
+</dd></dl>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World3camE">
 <span id="_CPPv3N5Cacao5World3camE"></span><span id="_CPPv2N5Cacao5World3camE"></span><span id="Cacao::World::cam__CameraP"></span><span class="target" id="classCacao_1_1World_1adade008c8e7d056160c5fb77ae93730a"></span><a class="reference internal" href="classCacao_1_1Camera.html#_CPPv4N5Cacao6CameraE" title="Cacao::Camera"><span class="n"><span class="pre">Camera</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">cam</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5World3camE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5World3camE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Main camera (will not be freed on world destruction) </p>
+</dd></dl>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World10rootEntityE">
 <span id="_CPPv3N5Cacao5World10rootEntityE"></span><span id="_CPPv2N5Cacao5World10rootEntityE"></span><span id="Cacao::World::rootEntity__std::shared_ptr:Entity:"></span><span class="target" id="classCacao_1_1World_1a4a7da678dfbb63d5f9c67dafe2f3cc89"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Entity.html#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rootEntity</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5World10rootEntityE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5World10rootEntityE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Root entity (set this as an <a class="reference internal" href="classCacao_1_1Entity.html#classCacao_1_1Entity"><span class="std std-ref">Entity</span></a>’s parent to add it to the world) </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

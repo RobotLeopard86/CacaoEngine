@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -203,17 +206,30 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5EventE">
 <span id="_CPPv3N5Cacao5EventE"></span><span id="_CPPv2N5Cacao5EventE"></span><span id="Cacao::Event"></span><span class="target" id="classCacao_1_1Event"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Event</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5EventE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5EventE'"><span></span></a><br/></dt>
-<dd><p>Subclassed by <a class="reference internal" href="classCacao_1_1DataEvent.html#classCacao_1_1DataEvent"><span class="std std-ref">Cacao::DataEvent&lt; T &gt;</span></a></p>
+<dd><p>An event. </p>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1DataEvent.html#classCacao_1_1DataEvent"><span class="std std-ref">Cacao::DataEvent&lt; T &gt;</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Event5EventENSt6stringE">
 <span id="_CPPv3N5Cacao5Event5EventENSt6stringE"></span><span id="_CPPv2N5Cacao5Event5EventENSt6stringE"></span><span id="Cacao::Event::Event__ss"></span><span class="target" id="classCacao_1_1Event_1a95a5ace00787515e6ddc42bceb120105"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Event</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eventType</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Event5EventENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Event5EventENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new event. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>eventType</strong> – The type of event See the page “Events” in the manual for a list of engine events </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Event7GetTypeEv">
 <span id="_CPPv3N5Cacao5Event7GetTypeEv"></span><span id="_CPPv2N5Cacao5Event7GetTypeEv"></span><span id="Cacao::Event::GetType"></span><span class="target" id="classCacao_1_1Event_1a874f18ab05363ef3ea3776c2c13bae6b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Event7GetTypeEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Event7GetTypeEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the event type. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The event type </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>

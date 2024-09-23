@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,40 +197,93 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9TransformE">
 <span id="_CPPv3N5Cacao9TransformE"></span><span id="_CPPv2N5Cacao9TransformE"></span><span id="Cacao::Transform"></span><span class="target" id="classCacao_1_1Transform"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Transform</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9TransformE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9TransformE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>A transform defining position, rotation, and scale. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform9TransformEN3glm4vec3EN3glm4vec3EN3glm4vec3E">
 <span id="_CPPv3N5Cacao9Transform9TransformEN3glm4vec3EN3glm4vec3EN3glm4vec3E"></span><span id="_CPPv2N5Cacao9Transform9TransformEN3glm4vec3EN3glm4vec3EN3glm4vec3E"></span><span id="Cacao::Transform::Transform__glm::vec3.glm::vec3.glm::vec3"></span><span class="target" id="classCacao_1_1Transform_1add7af281c80186135b48f14825950b49"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Transform</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform9TransformEN3glm4vec3EN3glm4vec3EN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform9TransformEN3glm4vec3EN3glm4vec3EN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new transform. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – Position relative to the parent </p></li>
+<li><p><strong>rotation</strong> – Rotation about the center </p></li>
+<li><p><strong>scale</strong> – Scale from the center </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform11GetPositionEv">
 <span id="_CPPv3N5Cacao9Transform11GetPositionEv"></span><span id="_CPPv2N5Cacao9Transform11GetPositionEv"></span><span id="Cacao::Transform::GetPosition"></span><span class="target" id="classCacao_1_1Transform_1affbfccc60e27c8a1a7e34d6b0cd6c161"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform11GetPositionEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform11GetPositionEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the position. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform11GetRotationEv">
 <span id="_CPPv3N5Cacao9Transform11GetRotationEv"></span><span id="_CPPv2N5Cacao9Transform11GetRotationEv"></span><span id="Cacao::Transform::GetRotation"></span><span class="target" id="classCacao_1_1Transform_1a7e3a3ab2dfac06d19cf2a0b10a1aa604"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform11GetRotationEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform11GetRotationEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the rotation. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform8GetScaleEv">
 <span id="_CPPv3N5Cacao9Transform8GetScaleEv"></span><span id="_CPPv2N5Cacao9Transform8GetScaleEv"></span><span id="Cacao::Transform::GetScale"></span><span class="target" id="classCacao_1_1Transform_1a8eab8f96db98fe9570b7bfebf6d0c9e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetScale</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform8GetScaleEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform8GetScaleEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the scale. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The scale </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform11SetPositionEN3glm4vec3E">
 <span id="_CPPv3N5Cacao9Transform11SetPositionEN3glm4vec3E"></span><span id="_CPPv2N5Cacao9Transform11SetPositionEN3glm4vec3E"></span><span id="Cacao::Transform::SetPosition__glm::vec3"></span><span class="target" id="classCacao_1_1Transform_1aa676bee4c81ba17854152cf971ac93ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newPos</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform11SetPositionEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform11SetPositionEN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the position. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newPos</strong> – The new position </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform11SetRotationEN3glm4vec3E">
 <span id="_CPPv3N5Cacao9Transform11SetRotationEN3glm4vec3E"></span><span id="_CPPv2N5Cacao9Transform11SetRotationEN3glm4vec3E"></span><span id="Cacao::Transform::SetRotation__glm::vec3"></span><span class="target" id="classCacao_1_1Transform_1a6ca2a78cc38d5be8f48635109dfbb253"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newRot</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform11SetRotationEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform11SetRotationEN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the rotation. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newRot</strong> – The new rotation </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform8SetScaleEN3glm4vec3E">
 <span id="_CPPv3N5Cacao9Transform8SetScaleEN3glm4vec3E"></span><span id="_CPPv2N5Cacao9Transform8SetScaleEN3glm4vec3E"></span><span id="Cacao::Transform::SetScale__glm::vec3"></span><span class="target" id="classCacao_1_1Transform_1a8fe54473cdb7d28672a259ce609d7dce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetScale</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newScale</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform8SetScaleEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform8SetScaleEN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the scale. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newScale</strong> – The new scale </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform23GetTransformationMatrixEv">
 <span id="_CPPv3N5Cacao9Transform23GetTransformationMatrixEv"></span><span id="_CPPv2N5Cacao9Transform23GetTransformationMatrixEv"></span><span id="Cacao::Transform::GetTransformationMatrix"></span><span class="target" id="classCacao_1_1Transform_1ab90d3b53b3ba2525189d24d8e9c571dd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetTransformationMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9Transform23GetTransformationMatrixEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9Transform23GetTransformationMatrixEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the matrix representing the applied transformations. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The transformation matrix </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

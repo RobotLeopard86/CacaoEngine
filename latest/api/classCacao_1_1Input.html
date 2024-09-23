@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,31 +197,75 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5InputE">
 <span id="_CPPv3N5Cacao5InputE"></span><span id="_CPPv2N5Cacao5InputE"></span><span id="Cacao::Input"></span><span class="target" id="classCacao_1_1Input"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Input</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5InputE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5InputE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p><a class="reference internal" href="#classCacao_1_1Input"><span class="std std-ref">Input</span></a> handler and store. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input12GetCursorPosEv">
 <span id="_CPPv3N5Cacao5Input12GetCursorPosEv"></span><span id="_CPPv2N5Cacao5Input12GetCursorPosEv"></span><span id="Cacao::Input::GetCursorPos"></span><span class="target" id="classCacao_1_1Input_1adf0c7981b1d2b4894a0dfcc1601795c1"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetCursorPos</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Input12GetCursorPosEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Input12GetCursorPosEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the current cursor position. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current cursor position </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input12IsKeyPressedEi">
 <span id="_CPPv3N5Cacao5Input12IsKeyPressedEi"></span><span id="_CPPv2N5Cacao5Input12IsKeyPressedEi"></span><span id="Cacao::Input::IsKeyPressed__i"></span><span class="target" id="classCacao_1_1Input_1a59f0d298ad902e855d0c6cdc3821320e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsKeyPressed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Input12IsKeyPressedEi" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Input12IsKeyPressedEi'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check whether a given key is pressed. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>View the page “Input Mappings” in the manual for the list of valid keys</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> – The key to check. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the key is pressed </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input20IsMouseButtonPressedEi">
 <span id="_CPPv3N5Cacao5Input20IsMouseButtonPressedEi"></span><span id="_CPPv2N5Cacao5Input20IsMouseButtonPressedEi"></span><span id="Cacao::Input::IsMouseButtonPressed__i"></span><span class="target" id="classCacao_1_1Input_1a42185b0062791c045315af2185daab7d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsMouseButtonPressed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">button</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Input20IsMouseButtonPressedEi" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Input20IsMouseButtonPressedEi'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check whether a given mouse button is pressed. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>View the page “Input Mappings” in the manual for the list of valid buttons</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>button</strong> – The mouse button to check. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the mouse button is pressed </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input21FreezeFrameInputStateEv">
 <span id="_CPPv3N5Cacao5Input21FreezeFrameInputStateEv"></span><span id="_CPPv2N5Cacao5Input21FreezeFrameInputStateEv"></span><span id="Cacao::Input::FreezeFrameInputState"></span><span class="target" id="classCacao_1_1Input_1ab233c74e9fbb2f26734e9541a12b1da4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FreezeFrameInputState</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Input21FreezeFrameInputStateEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Input21FreezeFrameInputStateEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Freeze the current input state for this tick. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only </p>
+</div>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input11GetInstanceEv">
 <span id="_CPPv3N5Cacao5Input11GetInstanceEv"></span><span id="_CPPv2N5Cacao5Input11GetInstanceEv"></span><span id="Cacao::Input::GetInstance"></span><span class="target" id="classCacao_1_1Input_1abe630cd30bb009724b40484b9e88cb02"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao5InputE" title="Cacao::Input"><span class="n"><span class="pre">Input</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetInstance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Input11GetInstanceEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Input11GetInstanceEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

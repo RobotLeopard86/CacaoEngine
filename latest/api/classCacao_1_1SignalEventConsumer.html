@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -203,20 +206,39 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao19SignalEventConsumerE">
 <span id="_CPPv3N5Cacao19SignalEventConsumerE"></span><span id="_CPPv2N5Cacao19SignalEventConsumerE"></span><span id="Cacao::SignalEventConsumer"></span><span class="target" id="classCacao_1_1SignalEventConsumer"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SignalEventConsumer</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1EventConsumer.html#_CPPv4N5Cacao13EventConsumerE" title="Cacao::EventConsumer"><span class="n"><span class="pre">EventConsumer</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao19SignalEventConsumerE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao19SignalEventConsumerE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>An extended event consumer that can signal when it’s done via a promise. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao19SignalEventConsumer19SignalEventConsumerENSt8functionIFvR5EventRNSt7promiseIvEEEEE">
 <span id="_CPPv3N5Cacao19SignalEventConsumer19SignalEventConsumerENSt8functionIFvR5EventRNSt7promiseIvEEEEE"></span><span id="_CPPv2N5Cacao19SignalEventConsumer19SignalEventConsumerENSt8functionIFvR5EventRNSt7promiseIvEEEEE"></span><span class="target" id="classCacao_1_1SignalEventConsumer_1a255c4579c752b5c5ded05fe0bd03679d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SignalEventConsumer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">promise</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">consumer</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao19SignalEventConsumer19SignalEventConsumerENSt8functionIFvR5EventRNSt7promiseIvEEEEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao19SignalEventConsumer19SignalEventConsumerENSt8functionIFvR5EventRNSt7promiseIvEEEEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new signal event consumer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>consumer</strong> – The consuming function </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao19SignalEventConsumer17ConsumeWithSignalER5EventR11MultiFutureIvE">
 <span id="_CPPv3N5Cacao19SignalEventConsumer17ConsumeWithSignalER5EventR11MultiFutureIvE"></span><span id="_CPPv2N5Cacao19SignalEventConsumer17ConsumeWithSignalER5EventR11MultiFutureIvE"></span><span id="Cacao::SignalEventConsumer::ConsumeWithSignal__EventR.MultiFuture:void:R"></span><span class="target" id="classCacao_1_1SignalEventConsumer_1a6250118bce7700e1a35b5b54d826984c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConsumeWithSignal</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">event</span></span>, <a class="reference internal" href="classCacao_1_1MultiFuture.html#_CPPv4I0EN5Cacao11MultiFutureE" title="Cacao::MultiFuture"><span class="n"><span class="pre">MultiFuture</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">signal</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao19SignalEventConsumer17ConsumeWithSignalER5EventR11MultiFutureIvE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao19SignalEventConsumer17ConsumeWithSignalER5EventR11MultiFutureIvE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Consume an event with a signal. </p>
+<p>Forwards the event and a promise to the consuming function, which should set the promise value to indicate that it’s done </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao19SignalEventConsumer7ConsumeER5Event">
 <span id="_CPPv3N5Cacao19SignalEventConsumer7ConsumeER5Event"></span><span id="_CPPv2N5Cacao19SignalEventConsumer7ConsumeER5Event"></span><span id="Cacao::SignalEventConsumer::Consume__EventR"></span><span class="target" id="classCacao_1_1SignalEventConsumer_1aa7dc64bdcff618af24c6f5135873130e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Consume</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao19SignalEventConsumer7ConsumeER5Event" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao19SignalEventConsumer7ConsumeER5Event'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>(DISALLOWED) Consume an unsignaled event </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function does nothing, because signal event consumers require a signal </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – When called </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

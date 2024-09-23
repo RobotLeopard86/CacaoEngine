@@ -87,6 +87,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -199,50 +202,40 @@
 </span><span id="line-13"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
 </span><span id="line-14">
 </span><span id="line-15"><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-16"><span class="w">    </span><span class="c1">//Game asset manager</span>
-</span><span id="line-17"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">AssetManager</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-18"><span class="w">      </span><span class="k">public</span><span class="o">:</span>
-</span><span id="line-19"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">AssetManager</span><span class="o">*</span><span class="w"> </span><span class="n">GetInstance</span><span class="p">();</span>
-</span><span id="line-20">
-</span><span id="line-21"><span class="w">        </span><span class="c1">//Load a shader with a path to a shader definition file</span>
-</span><span id="line-22"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Shader</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadShader</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">definitionPath</span><span class="p">);</span>
+</span><span id="line-16"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">AssetManager</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-17"><span class="w">      </span><span class="k">public</span><span class="o">:</span>
+</span><span id="line-18"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">AssetManager</span><span class="o">*</span><span class="w"> </span><span class="n">GetInstance</span><span class="p">();</span>
+</span><span id="line-19">
+</span><span id="line-20"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Shader</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadShader</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">definitionPath</span><span class="p">);</span>
+</span><span id="line-21">
+</span><span id="line-22"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadTexture2D</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
 </span><span id="line-23">
-</span><span id="line-24"><span class="w">        </span><span class="c1">//Load a 2D texture from a file</span>
-</span><span id="line-25"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadTexture2D</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
-</span><span id="line-26"><span class="w">        </span><span class="c1">//Load a cubemap from a cubemap definition file</span>
-</span><span id="line-27"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Cubemap</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadCubemap</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">definitionPath</span><span class="p">);</span>
-</span><span id="line-28">
-</span><span id="line-29"><span class="w">        </span><span class="c1">//Load a skybox with a cubemap created from a cubemap definition file</span>
-</span><span id="line-30"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Skybox</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadSkybox</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">definitionPath</span><span class="p">);</span>
+</span><span id="line-24"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Cubemap</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadCubemap</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">definitionPath</span><span class="p">);</span>
+</span><span id="line-25">
+</span><span id="line-26"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Skybox</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadSkybox</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">definitionPath</span><span class="p">);</span>
+</span><span id="line-27">
+</span><span id="line-28"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Mesh</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadMesh</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">location</span><span class="p">);</span>
+</span><span id="line-29">
+</span><span id="line-30"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Sound</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadSound</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
 </span><span id="line-31">
-</span><span id="line-32"><span class="w">        </span><span class="c1">//Load a mesh from a model file</span>
-</span><span id="line-33"><span class="w">        </span><span class="c1">//Location format: &lt;model path&gt;:&lt;mesh ID&gt;</span>
-</span><span id="line-34"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Mesh</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadMesh</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">location</span><span class="p">);</span>
-</span><span id="line-35">
-</span><span id="line-36"><span class="w">        </span><span class="c1">//Load a sound from a file</span>
-</span><span id="line-37"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Sound</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadSound</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
+</span><span id="line-32"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Font</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadFont</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
+</span><span id="line-33">
+</span><span id="line-34"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UncacheAsset</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">assetID</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-35"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">assetCache</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">assetID</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"Unable to remove uncached asset from cache!"</span><span class="p">)</span>
+</span><span id="line-36"><span class="w">            </span><span class="n">assetCache</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">assetID</span><span class="p">);</span>
+</span><span id="line-37"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-38">
-</span><span id="line-39"><span class="w">        </span><span class="c1">//Load a font face from a file</span>
-</span><span id="line-40"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Font</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadFont</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
-</span><span id="line-41">
-</span><span id="line-42"><span class="w">        </span><span class="c1">//Remove an asset from the cache by ID</span>
-</span><span id="line-43"><span class="w">        </span><span class="c1">//Generally should not be used (exists for assets to deregister themselves)</span>
-</span><span id="line-44"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UncacheAsset</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">assetID</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-45"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">assetCache</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">assetID</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"Unable to remove uncached asset from cache!"</span><span class="p">)</span>
-</span><span id="line-46"><span class="w">            </span><span class="n">assetCache</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">assetID</span><span class="p">);</span>
-</span><span id="line-47"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-48">
-</span><span id="line-49"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-50"><span class="w">        </span><span class="c1">//Singleton members</span>
-</span><span id="line-51"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">AssetManager</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
-</span><span id="line-52"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
-</span><span id="line-53">
-</span><span id="line-54"><span class="w">        </span><span class="c1">//Asset cache</span>
-</span><span id="line-55"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Asset</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">assetCache</span><span class="p">;</span>
-</span><span id="line-56">
-</span><span id="line-57"><span class="w">        </span><span class="n">AssetManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-58"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-59"><span class="p">}</span>
+</span><span id="line-39"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-40"><span class="w">        </span><span class="c1">//Singleton members</span>
+</span><span id="line-41"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">AssetManager</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+</span><span id="line-42"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
+</span><span id="line-43">
+</span><span id="line-44"><span class="w">        </span><span class="c1">//Asset cache</span>
+</span><span id="line-45"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Asset</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">assetCache</span><span class="p">;</span>
+</span><span id="line-46">
+</span><span id="line-47"><span class="w">        </span><span class="n">AssetManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="line-48"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-49"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>

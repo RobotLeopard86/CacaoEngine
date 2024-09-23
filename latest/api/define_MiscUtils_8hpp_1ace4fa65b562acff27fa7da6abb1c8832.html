@@ -89,6 +89,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
@@ -194,7 +197,12 @@
 <dl class="cpp macro">
 <dt class="sig sig-object cpp" id="c.BIND_MEMBER_FUNC">
 <span class="target" id="MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832"></span><span class="sig-name descname"><span class="n"><span class="pre">BIND_MEMBER_FUNC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">func</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.BIND_MEMBER_FUNC" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.BIND_MEMBER_FUNC'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Convert a member function of this object into a form that can be called statically. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The function must take no arguments, otherwise you will receive weird template instantiation errors that don’t help </p>
+</div>
+</dd></dl>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
