@@ -6,19 +6,20 @@
 #include <string>
 
 namespace Cacao {
-	//Base for all UI objects in their renderable state
+	/**
+	 * @brief Base renderable form of a UI element
+	 */
 	struct UIRenderable {
-		//Position on the screen in pixels, (0, 0) is top left
-		//This position is the center of the object's quad
-		glm::uvec2 screenPos;
+		glm::uvec2 screenPos;///<Position on the screen in pixels at the object center, (0, 0) is top left
+		glm::uvec2 size;	 ///<Size in pixels
+		unsigned short depth;///<Depth
 
-		//Size of the object in pixels
-		glm::uvec2 size;
-
-		//How many "layers" deep this element should be
-		//Example: depth 3 object is behind depth 2 object
-		unsigned short depth;
-
+		/**
+		 * @brief Draw this renderable
+		 *
+		 * @param screenSize The size of the screen to render to in pixels
+		 * @param projection The projection matrix to draw with
+		 */
 		virtual void Draw(glm::uvec2 screenSize, const glm::mat4& projection) {}
 
 		virtual ~UIRenderable() {}

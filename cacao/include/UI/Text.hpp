@@ -6,42 +6,89 @@
 #include "UIRenderable.hpp"
 
 namespace Cacao {
-	//Horizontal alignment of a text within a text box
+	///@brief The alignment of text within a text box
 	enum class TextAlign {
 		Left,
 		Center,
 		Right
 	};
 
-	//A text element
-	//Font size is automatically calculated based on element size
+	/**
+	 * @brief A text UI element
+	 */
 	class Text final : public UIElement {
 	  public:
+		/**
+		 * @brief Get the current text
+		 *
+		 * @return The text
+		 */
 		std::string GetText() {
 			return text;
 		}
+
+		/**
+		 * @brief Get the current font face
+		 *
+		 * @return The font face
+		 */
 		AssetHandle<Font> GetFont() {
 			return font;
 		}
+
+		/**
+		 * @brief Get the current horizontal alignment
+		 *
+		 * @return The alignment
+		 */
 		TextAlign GetAlignment() {
 			return align;
 		}
+
+		/**
+		 * @brief Get the current text color
+		 *
+		 * @return The text color
+		 */
 		glm::vec3 GetColor() {
 			return color;
 		}
 
+		/**
+		 * @brief Set the text and make this element dirty
+		 *
+		 * @param t The new text
+		 */
 		void SetText(std::string t) {
 			text = t;
 			dirty = true;
 		}
+
+		/**
+		 * @brief Set the font face and make this element dirty
+		 *
+		 * @param f The new font face
+		 */
 		void SetFont(AssetHandle<Font> f) {
 			font = f;
 			dirty = true;
 		}
+
+		/**
+		 * @brief Set the horizontal alignment and make this element dirty
+		 *
+		 * @param a The new alignment
+		 */
 		void SetAlignment(TextAlign a) {
 			align = a;
 			dirty = true;
 		}
+
+		/**
+		 * @brief Set the text color and make this element dirty
+		 *
+		 * @param c The new color
+		 */
 		void SetColor(glm::vec3 c) {
 			color = c;
 			dirty = true;

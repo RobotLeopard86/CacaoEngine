@@ -7,7 +7,9 @@
 #define ftLib FreetypeOwner::GetInstance()->GetLib()
 
 namespace Cacao {
-	//Owns the FreeType library instance
+	/**
+	 * @brief Manages the FreeType instance
+	 */
 	class FreetypeOwner {
 	  public:
 		/**
@@ -17,14 +19,25 @@ namespace Cacao {
 		 */
 		static FreetypeOwner* GetInstance();
 
-		//Initialize the FreeType library
+		/**
+		 * @brief Initialize FreeType
+		 *
+		 * @throws Exception If FreeType was already initialized or fails to initialize
+		 */
 		void Init();
 
-		//Get the library instance
+		/**
+		 * @brief Get the FreeType library instance
+		 *
+		 * @return The FreeType instance
+		 */
 		FT_Library& GetLib() {
 			return lib;
 		}
 
+		/**
+		 * @brief Destroys the object and the FreeType instance if it exists
+		 */
 		~FreetypeOwner();
 
 	  private:

@@ -4,28 +4,52 @@
 #include "Core/Exception.hpp"
 
 namespace Cacao {
-	//The top-level contents of a UI display
-	//Can be nested in other screens with a NestedScreen element
+	/**
+	 * @brief A layout of UI elements that can be displayed by a UIView
+	 */
 	class Screen {
 	  public:
-		//Add an element
+		/**
+		 * @brief Add an element to the screen
+		 *
+		 * @param elem The element to add
+		 *
+		 * @throws Exception If this element already exists in the screen
+		 */
 		void AddElement(std::shared_ptr<UIElement> elem) {
 			CheckException(!HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
 			elements.push_back(elem);
 		}
 
-		//Check if an element is contained
+		/**
+		 * @brief Check if an element is in the screen
+		 *
+		 * @param elem The element to search for
+		 *
+		 * @return Whether the element is in the screen or not
+		 */
 		bool HasElement(std::shared_ptr<UIElement> elem) {
 			return (std::find(elements.begin(), elements.end(), elem) != elements.end());
 		}
 
-		//Remove an element
+		/**
+		 * @brief Remove an element from the screen
+		 *
+		 * @param elem The element to remove
+		 *
+		 * @throws Exception If this element doesn't exists in the screen
+		 */
 		void DeleteElement(std::shared_ptr<UIElement> elem) {
 			CheckException(HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
 			elements.erase(std::find(elements.begin(), elements.end(), elem));
 		}
 
-		//Check if screen is dirty
+		/**
+		 * @brief Check if the screen is dirty and needs to be re-rendered
+		 * @details Will refresh the dirty state when called
+		 *
+		 * @return If the screen is dirty
+		 */
 		bool IsDirty() {
 			//If we aren't dirty, check to make sure we haven't become dirty
 			RefreshDirtyState();
@@ -33,7 +57,9 @@ namespace Cacao {
 			return dirty;
 		}
 
-		//Make this screen dirty to force a re-render
+		/**
+		 * @brief Force the screen to be dirty
+		 */
 		void ForceDirty() {
 			dirty = true;
 		}
