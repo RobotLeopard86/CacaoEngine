@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -206,35 +207,88 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ShaderE">
 <span id="_CPPv3N5Cacao6ShaderE"></span><span id="_CPPv2N5Cacao6ShaderE"></span><span id="Cacao::Shader"></span><span class="target" id="classCacao_1_1Shader"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Asset.html#_CPPv4N5Cacao5AssetE" title="Cacao::Asset"><span class="n"><span class="pre">Asset</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6ShaderE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6ShaderE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>A shader program. Implementation is backend-dependent. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec">
-<span id="_CPPv3N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="Cacao::Shader::Shader__std::vector:uint32_t:R.std::vector:uint32_t:R.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1afb3b3f58133dd846e105905dcc8be964"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<span id="_CPPv3N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="Cacao::Shader::Shader__std::vector:uint32_t:R.std::vector:uint32_t:R.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1afb3b3f58133dd846e105905dcc8be964"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec'"><span></span></a><br/></dt>
+<dd><p>Create a shader from SPIR-V code. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not recommended for use by games, but if it’s necessary to put SPIR-V in code, go ahead… </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertex</strong> – SPIR-V code for the vertex shader </p></li>
+<li><p><strong>fragment</strong> – SPIR-V code for the vertex shader </p></li>
+<li><p><strong>spec</strong> – The shader specification</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec">
-<span id="_CPPv3N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="Cacao::Shader::Shader__ss.ss.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1aeccce1eef2b41dfc5637c4d2370f340e"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<span id="_CPPv3N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="Cacao::Shader::Shader__ss.ss.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1aeccce1eef2b41dfc5637c4d2370f340e"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec'"><span></span></a><br/></dt>
+<dd><p>Create a shader from files. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1a27d3236a2faeee1085a9a6d6ce2afda0"><span class="std std-ref">AssetManager::LoadShader</span></a> over direct construction</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertex</strong> – Path to SPIR-V code for the vertex shader </p></li>
+<li><p><strong>fragment</strong> – Path to SPIR-V code for the fragment shader </p></li>
+<li><p><strong>spec</strong> – The shader specification</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the files don’t exist or could not be opened </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ShaderD0Ev">
 <span id="_CPPv3N5Cacao6ShaderD0Ev"></span><span id="_CPPv2N5Cacao6ShaderD0Ev"></span><span id="Cacao::Shader::~Shader"></span><span class="target" id="classCacao_1_1Shader_1a6c6895b14a3230b42ec7c09bec5eb9b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Shader</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6ShaderD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6ShaderD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Delete the shader and its compiled data. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader4BindEv">
 <span id="_CPPv3N5Cacao6Shader4BindEv"></span><span id="_CPPv2N5Cacao6Shader4BindEv"></span><span id="Cacao::Shader::Bind"></span><span class="target" id="classCacao_1_1Shader_1a6f8ab4a018e284a2cbe3a8cde5957121"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader4BindEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader4BindEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Activate this shader for drawing. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader is already bound, not compiled, or if not called on the engine thread </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6UnbindEv">
 <span id="_CPPv3N5Cacao6Shader6UnbindEv"></span><span id="_CPPv2N5Cacao6Shader6UnbindEv"></span><span id="Cacao::Shader::Unbind"></span><span class="target" id="classCacao_1_1Shader_1a591304e3bb057cab116536e074fd6596"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unbind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader6UnbindEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader6UnbindEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Deactivate this shader for drawing. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader is not bound, not compiled, or if not called on the engine thread </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7CompileEv">
 <span id="_CPPv3N5Cacao6Shader7CompileEv"></span><span id="_CPPv2N5Cacao6Shader7CompileEv"></span><span id="Cacao::Shader::Compile"></span><span class="target" id="classCacao_1_1Shader_1ae2372978dff65722c4cb72b4948748e7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader7CompileEv'"><span></span></a><br/></dt>
-<dd><p>Compile the raw asset data into a format that can be used. </p>
+<dd><p>Compile the raw SPIR-V code into a format that can be run by the GPU. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was already compiled </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was already compiled or the SPIR-V is invalid </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A future that will resolve when compilation is done</p>
@@ -244,29 +298,65 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7ReleaseEv">
 <span id="_CPPv3N5Cacao6Shader7ReleaseEv"></span><span id="_CPPv2N5Cacao6Shader7ReleaseEv"></span><span id="Cacao::Shader::Release"></span><span class="target" id="classCacao_1_1Shader_1aee8a912518f69692ede8d945ee81ec28"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader7ReleaseEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader7ReleaseEv'"><span></span></a><br/></dt>
-<dd><p>Delete the compiled asset data. </p>
+<dd><p>Delete the compiled data. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was not compiled </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was not compiled or is bound </p>
 </dd>
 </dl>
 </dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7IsBoundEv">
 <span id="_CPPv3N5Cacao6Shader7IsBoundEv"></span><span id="_CPPv2N5Cacao6Shader7IsBoundEv"></span><span id="Cacao::Shader::IsBound"></span><span class="target" id="classCacao_1_1Shader_1a7a9b90f78a868103f9b508dd135b8186"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsBound</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader7IsBoundEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader7IsBoundEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if the shader is bound. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the shader is bound </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Shader7GetSpecEv">
-<span id="_CPPv3NK5Cacao6Shader7GetSpecEv"></span><span id="_CPPv2NK5Cacao6Shader7GetSpecEv"></span><span id="Cacao::Shader::GetSpecC"></span><span class="target" id="classCacao_1_1Shader_1a02099abf60bf13b3785ca656b2c069ca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetSpec</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4NK5Cacao6Shader7GetSpecEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4NK5Cacao6Shader7GetSpecEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<span id="_CPPv3NK5Cacao6Shader7GetSpecEv"></span><span id="_CPPv2NK5Cacao6Shader7GetSpecEv"></span><span id="Cacao::Shader::GetSpecC"></span><span class="target" id="classCacao_1_1Shader_1a02099abf60bf13b3785ca656b2c069ca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetSpec</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4NK5Cacao6Shader7GetSpecEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4NK5Cacao6Shader7GetSpecEv'"><span></span></a><br/></dt>
+<dd><p>Get the shader spec. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An immutable reference to the shader specification </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadData">
-<span id="_CPPv3N5Cacao6Shader10UploadDataER16ShaderUploadData"></span><span id="_CPPv2N5Cacao6Shader10UploadDataER16ShaderUploadData"></span><span id="Cacao::Shader::UploadData__ShaderUploadDataR"></span><span class="target" id="classCacao_1_1Shader_1a26fd376051d0ffc992d577720aa5e3ce"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UploadData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html#_CPPv4N5Cacao16ShaderUploadDataE" title="Cacao::ShaderUploadData"><span class="n"><span class="pre">ShaderUploadData</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadData" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadData'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<span id="_CPPv3N5Cacao6Shader10UploadDataER16ShaderUploadData"></span><span id="_CPPv2N5Cacao6Shader10UploadDataER16ShaderUploadData"></span><span id="Cacao::Shader::UploadData__ShaderUploadDataR"></span><span class="target" id="classCacao_1_1Shader_1a26fd376051d0ffc992d577720aa5e3ce"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UploadData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html#_CPPv4N5Cacao16ShaderUploadDataE" title="Cacao::ShaderUploadData"><span class="n"><span class="pre">ShaderUploadData</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadData" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadData'"><span></span></a><br/></dt>
+<dd><p>Upload data to the shader. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Temporarily binds the shader, but previous shader is restored after</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the data uploaded does not match the shader specification or the shader was not compiled </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader17UploadCacaoLocalsEN3glm4mat4E">
 <span id="_CPPv3N5Cacao6Shader17UploadCacaoLocalsEN3glm4mat4E"></span><span id="_CPPv2N5Cacao6Shader17UploadCacaoLocalsEN3glm4mat4E"></span><span id="Cacao::Shader::UploadCacaoLocals__glm::mat4"></span><span class="target" id="classCacao_1_1Shader_1aeed15432319f532c82bf1107645d04fb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UploadCacaoLocals</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">transform</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader17UploadCacaoLocalsEN3glm4mat4E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader17UploadCacaoLocalsEN3glm4mat4E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Upload object local data. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>transform</strong> – The transformation matrix</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7GetTypeEv">
 <span id="_CPPv3N5Cacao6Shader7GetTypeEv"></span><span id="_CPPv2N5Cacao6Shader7GetTypeEv"></span><span id="Cacao::Shader::GetType"></span><span class="target" id="classCacao_1_1Shader_1af66bf499b52279a8b0704fa0ebf45cb4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader7GetTypeEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader7GetTypeEv'"><span></span></a><br/></dt>
@@ -278,7 +368,20 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E">
 <span id="_CPPv3N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"></span><span id="_CPPv2N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"></span><span id="Cacao::Shader::UploadCacaoGlobals__glm::mat4.glm::mat4"></span><span class="target" id="classCacao_1_1Shader_1a4f787fe85e838bcfc917ba31c0cf7d06"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UploadCacaoGlobals</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">projection</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">view</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Upload engine global data. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>projection</strong> – The projection matrix </p></li>
+<li><p><strong>view</strong> – The view matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

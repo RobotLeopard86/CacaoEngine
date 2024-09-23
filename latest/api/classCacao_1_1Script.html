@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -206,36 +207,63 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ScriptE">
 <span id="_CPPv3N5Cacao6ScriptE"></span><span id="_CPPv2N5Cacao6ScriptE"></span><span id="Cacao::Script"></span><span class="target" id="classCacao_1_1Script"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Script</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6ScriptE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6ScriptE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Base class for a script. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script6OnTickEd">
 <span id="_CPPv3N5Cacao6Script6OnTickEd"></span><span id="_CPPv2N5Cacao6Script6OnTickEd"></span><span id="Cacao::Script::OnTick__double"></span><span class="target" id="classCacao_1_1Script_1a7d54d8acc52d991a40ecd2274766d9bc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnTick</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timestep</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Script6OnTickEd" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Script6OnTickEd'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Runs every dynamic tick. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timestep</strong> – The time in seconds since the last dynamic tick </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script11OnFixedTickEv">
 <span id="_CPPv3N5Cacao6Script11OnFixedTickEv"></span><span id="_CPPv2N5Cacao6Script11OnFixedTickEv"></span><span id="Cacao::Script::OnFixedTick"></span><span class="target" id="classCacao_1_1Script_1a2d4b139b3c79988b64cedb12dfdf719a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnFixedTick</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Script11OnFixedTickEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Script11OnFixedTickEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Runs every fixed tick. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Fixed ticks are not yet implemented in the engine </p>
+</div>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script10OnActivateEv">
 <span id="_CPPv3N5Cacao6Script10OnActivateEv"></span><span id="_CPPv2N5Cacao6Script10OnActivateEv"></span><span id="Cacao::Script::OnActivate"></span><span class="target" id="classCacao_1_1Script_1a6df06fe9dd061f53e5861a2b31c67093"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnActivate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Script10OnActivateEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Script10OnActivateEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Runs on activation. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script12OnDeactivateEv">
 <span id="_CPPv3N5Cacao6Script12OnDeactivateEv"></span><span id="_CPPv2N5Cacao6Script12OnDeactivateEv"></span><span id="Cacao::Script::OnDeactivate"></span><span class="target" id="classCacao_1_1Script_1aee68fc48ba14d6faf607319d0abe4153"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnDeactivate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Script12OnDeactivateEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Script12OnDeactivateEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Runs on deactivation. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script9SetActiveEb">
 <span id="_CPPv3N5Cacao6Script9SetActiveEb"></span><span id="_CPPv2N5Cacao6Script9SetActiveEb"></span><span id="Cacao::Script::SetActive__b"></span><span class="target" id="classCacao_1_1Script_1ab5849c1119ae8ff8e716825f81bb380e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetActive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Script9SetActiveEb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Script9SetActiveEb'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the activation state. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runs OnActive or OnDeactivate if the state changes </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – The new activation state</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script7GetKindEv">
 <span id="_CPPv3N5Cacao6Script7GetKindEv"></span><span id="_CPPv2N5Cacao6Script7GetKindEv"></span><span id="Cacao::Script::GetKind"></span><span class="target" id="classCacao_1_1Script_1a61dba2132bcbab93f2faa32a9ff5984c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetKind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Script7GetKindEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Script7GetKindEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Gets the type of this componet. Needed for safe downcasting from <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a>. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ScripteqE6Script">
 <span id="_CPPv3N5Cacao6ScripteqE6Script"></span><span id="_CPPv2N5Cacao6ScripteqE6Script"></span><span id="Cacao::Script::eq-operator__Script"></span><span class="target" id="classCacao_1_1Script_1ab72f460ae74af27e1dc5304ae107279f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6ScriptE" title="Cacao::Script"><span class="n"><span class="pre">Script</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6ScripteqE6Script" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6ScripteqE6Script'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if two EventConsumers are equal. </p>
+<p>Compares memory addresses to perform check </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ScriptD0Ev">
 <span id="_CPPv3N5Cacao6ScriptD0Ev"></span><span id="_CPPv2N5Cacao6ScriptD0Ev"></span><span id="Cacao::Script::~Script"></span><span class="target" id="classCacao_1_1Script_1ac83b490ccb415ddfcb542496de792b39"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Script</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6ScriptD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6ScriptD0Ev'"><span></span></a><br/></dt>

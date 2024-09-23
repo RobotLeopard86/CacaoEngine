@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Typedef Cacao::ShaderSpec | Cacao Engine Docs</title>
-<meta content="Typedef Cacao::ShaderSpec | Cacao Engine Docs" property="og:title"/>
-<meta content="Typedef Cacao::ShaderSpec | Cacao Engine Docs" name="twitter:title"/>
+<title>Function Cacao::Calculate3DVectors | Cacao Engine Docs</title>
+<meta content="Function Cacao::Calculate3DVectors | Cacao Engine Docs" property="og:title"/>
+<meta content="Function Cacao::Calculate3DVectors | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html" rel="next" title="Typedef Cacao::ShaderUploadData"/>
-<link href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html" rel="prev" title="Define CheckException"/>
+<link href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html" rel="next" title="Function Cacao::ClientAssert"/>
+<link href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html" rel="prev" title="Enum WindowMode"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -184,34 +185,36 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="library_root.html">Cacao Engine API Reference</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Typedef Cacao::ShaderSpec</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Function Cacao::Calculate3DVectors</span>
 </nav>
 <div id="content" role="main">
-<section id="typedef-cacao-shaderspec">
-<span id="exhale-typedef-namespacecacao-1a07dbc3646ae4c7e07bf5fdd6b73f8133"></span><h1>Typedef Cacao::ShaderSpec<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#typedef-cacao-shaderspec"><span></span></a></h1>
+<section id="function-cacao-calculate3dvectors">
+<span id="exhale-function-miscutils-8hpp-1aebf35ae1f04fd32abee91ac5684771ff"></span><h1>Function Cacao::Calculate3DVectors<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#function-cacao-calculate3dvectors"><span></span></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_cacao_include_Graphics_Shader.hpp.html#file-cacao-include-graphics-shader-hpp"><span class="std std-ref">File Shader.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_cacao_include_Utilities_MiscUtils.hpp.html#file-cacao-include-utilities-miscutils-hpp"><span class="std std-ref">File MiscUtils.hpp</span></a></p></li>
 </ul>
-<section id="typedef-documentation">
-<h2>Typedef Documentation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#typedef-documentation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#typedef-documentation'"><span></span></a></h2>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ShaderSpecE">
-<span id="_CPPv3N5Cacao10ShaderSpecE"></span><span id="_CPPv2N5Cacao10ShaderSpecE"></span><span class="target" id="namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ShaderSpec</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html#_CPPv4N5Cacao14ShaderItemInfoE" title="Cacao::ShaderItemInfo"><span class="n"><span class="pre">ShaderItemInfo</span></span></a><span class="p"><span class="pre">&gt;</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao10ShaderSpecE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao10ShaderSpecE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<section id="function-documentation">
+<h2>Function Documentation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#function-documentation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#function-documentation'"><span></span></a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E">
+<span id="_CPPv3N5Cacao18Calculate3DVectorsEN3glm4vec3E"></span><span id="_CPPv2N5Cacao18Calculate3DVectorsEN3glm4vec3E"></span><span id="Cacao::Calculate3DVectors__glm::vec3"></span><span class="target" id="MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1Vectors.html#_CPPv4N5Cacao7VectorsE" title="Cacao::Vectors"><span class="n"><span class="pre">Vectors</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Calculate3DVectors</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E'"><span></span></a><br/></dt>
+<dd><p>Calculate a front vector pointing away from the origin at the given rotation and its accompanying right and up vectors. </p>
+<p>The rotation values must be in degrees </p>
+</dd></dl>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Define CheckException
+        Enum WindowMode
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">
-        Typedef Cacao::ShaderUploadData
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">
+        Function Cacao::ClientAssert
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
@@ -220,8 +223,8 @@
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
-<li><a :data-current="activeSection === '#typedef-documentation'" class="reference internal" href="#typedef-documentation">Typedef Documentation</a><ul>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao10ShaderSpecE'" class="reference internal" href="#_CPPv4N5Cacao10ShaderSpecE"><code class="docutils literal notranslate"><span class="pre">ShaderSpec</span></code></a></li>
+<li><a :data-current="activeSection === '#function-documentation'" class="reference internal" href="#function-documentation">Function Documentation</a><ul>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E'" class="reference internal" href="#_CPPv4N5Cacao18Calculate3DVectorsEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">Calculate3DVectors()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -215,7 +216,7 @@
 <dd><p>Create a new audio player. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Generally, you shouldn’t call this constructor directly. Prefer creating this through Entity::MountComponent</p>
+<p>Generally, you shouldn’t call this constructor directly. Prefer creating this through <a class="reference internal" href="classCacao_1_1Entity.html#classCacao_1_1Entity_1abf56a3f718652a41923f14bfbe1a0d11"><span class="std std-ref">Entity::MountComponent</span></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
@@ -231,43 +232,43 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer4PlayEv">
 <span id="_CPPv3N5Cacao11AudioPlayer4PlayEv"></span><span id="_CPPv2N5Cacao11AudioPlayer4PlayEv"></span><span id="Cacao::AudioPlayer::Play"></span><span class="target" id="classCacao_1_1AudioPlayer_1a08e2f3d0a8fe30edbb356a44898ab287"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Play</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AudioPlayer4PlayEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AudioPlayer4PlayEv'"><span></span></a><br/></dt>
-<dd><p>Play the <em>sound</em> contained in sound. </p>
+<dd><p>Play the audio contained in sound. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized, a <em>sound</em> is already playing, or sound is a null handle </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized, a audio is already playing, or sound is a null handle </p>
 </dd>
 </dl>
 </dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer11TogglePauseEv">
 <span id="_CPPv3N5Cacao11AudioPlayer11TogglePauseEv"></span><span id="_CPPv2N5Cacao11AudioPlayer11TogglePauseEv"></span><span id="Cacao::AudioPlayer::TogglePause"></span><span class="target" id="classCacao_1_1AudioPlayer_1acdedc67cfe049583a8092cb8b0bfcf21"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TogglePause</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AudioPlayer11TogglePauseEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AudioPlayer11TogglePauseEv'"><span></span></a><br/></dt>
-<dd><p>Pause or unpase <em>sound</em> playback. </p>
+<dd><p>Pause or unpase audio playback. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized or no <em>sound</em> is playing </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized or no audio is playing </p>
 </dd>
 </dl>
 </dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer4StopEv">
 <span id="_CPPv3N5Cacao11AudioPlayer4StopEv"></span><span id="_CPPv2N5Cacao11AudioPlayer4StopEv"></span><span id="Cacao::AudioPlayer::Stop"></span><span class="target" id="classCacao_1_1AudioPlayer_1aae172b88b02955732262f62091eecf30"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Stop</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AudioPlayer4StopEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AudioPlayer4StopEv'"><span></span></a><br/></dt>
-<dd><p>Stop <em>sound</em> playback. </p>
+<dd><p>Stop audio playback. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized or no <em>sound</em> is playing </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized or no audio is playing </p>
 </dd>
 </dl>
 </dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer9IsPlayingEv">
 <span id="_CPPv3N5Cacao11AudioPlayer9IsPlayingEv"></span><span id="_CPPv2N5Cacao11AudioPlayer9IsPlayingEv"></span><span id="Cacao::AudioPlayer::IsPlaying"></span><span class="target" id="classCacao_1_1AudioPlayer_1a8b2bdba1a82cbf75c11b3dac0588bc7e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsPlaying</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AudioPlayer9IsPlayingEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AudioPlayer9IsPlayingEv'"><span></span></a><br/></dt>
-<dd><p>Check if a <em>sound</em> is playing. </p>
+<dd><p>Check if a audio is playing. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Whether a <em>sound</em> is playing or not</p>
+<dd class="field-even"><p>Whether a audio is playing or not</p>
 </dd>
 </dl>
 </dd></dl>
@@ -287,10 +288,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer10SetLoopingEb">
 <span id="_CPPv3N5Cacao11AudioPlayer10SetLoopingEb"></span><span id="_CPPv2N5Cacao11AudioPlayer10SetLoopingEb"></span><span id="Cacao::AudioPlayer::SetLooping__b"></span><span class="target" id="classCacao_1_1AudioPlayer_1af539537b23bf5d09aa4c100fcbf1f768"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetLooping</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AudioPlayer10SetLoopingEb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AudioPlayer10SetLoopingEb'"><span></span></a><br/></dt>
-<dd><p>Set if the <em>sound</em> should loop. </p>
+<dd><p>Set if the audio should loop. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>val</strong> – If the <em>sound</em> should loop</p>
+<dd class="field-odd"><p><strong>val</strong> – If the audio should loop</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized </p>
@@ -344,13 +345,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer10GetLoopingEv">
 <span id="_CPPv3N5Cacao11AudioPlayer10GetLoopingEv"></span><span id="_CPPv2N5Cacao11AudioPlayer10GetLoopingEv"></span><span id="Cacao::AudioPlayer::GetLooping"></span><span class="target" id="classCacao_1_1AudioPlayer_1a8433ae6a3e3d985b1a4270e30c622338"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetLooping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AudioPlayer10GetLoopingEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AudioPlayer10GetLoopingEv'"><span></span></a><br/></dt>
-<dd><p>Check if the <em>sound</em> is looping. </p>
+<dd><p>Check if the audio is looping. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the audio system is uninitialized </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Whether the <em>sound</em> is looping or not</p>
+<dd class="field-even"><p>Whether the audio is looping or not</p>
 </dd>
 </dl>
 </dd></dl>

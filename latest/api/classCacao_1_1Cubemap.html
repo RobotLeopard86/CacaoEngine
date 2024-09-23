@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -206,31 +207,69 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7CubemapE">
 <span id="_CPPv3N5Cacao7CubemapE"></span><span id="_CPPv2N5Cacao7CubemapE"></span><span id="Cacao::Cubemap"></span><span class="target" id="classCacao_1_1Cubemap"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Texture.html#_CPPv4N5Cacao7TextureE" title="Cacao::Texture"><span class="n"><span class="pre">Texture</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7CubemapE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7CubemapE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Cube texture. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE">
 <span id="_CPPv3N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"></span><span id="_CPPv2N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"></span><span id="Cacao::Cubemap::Cubemap__std::vector:ss:"></span><span class="target" id="classCacao_1_1Cubemap_1abade47339e27381fc8f41a310518dbcb"></span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">filePaths</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new cubemap from a file list. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1a58a318976ac07b0ddbc921728d6e6147"><span class="std std-ref">AssetManager::LoadCubemap</span></a> over direct construction</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filePaths</strong> – The paths to image files for each face. Must be in the order +X, -X, +Y, -Y, +Z, -Z</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If any of the specified files does not exist </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7CubemapD0Ev">
 <span id="_CPPv3N5Cacao7CubemapD0Ev"></span><span id="_CPPv2N5Cacao7CubemapD0Ev"></span><span id="Cacao::Cubemap::~Cubemap"></span><span class="target" id="classCacao_1_1Cubemap_1a17d62555483c4fc2442c03c8918031da"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Cubemap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7CubemapD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7CubemapD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy the cubemap and its compiled data if applicable. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap4BindEi">
 <span id="_CPPv3N5Cacao7Cubemap4BindEi"></span><span id="_CPPv2N5Cacao7Cubemap4BindEi"></span><span id="Cacao::Cubemap::Bind__i"></span><span class="target" id="classCacao_1_1Cubemap_1a92d4a2a02332089fb0bd00e83799b9f9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bind</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">slot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap4BindEi" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap4BindEi'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Attach to the specified slot. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>slot</strong> – The texture slot to attach to</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If cubemap is already bound, not compiled, or if not called on the main thread </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap6UnbindEv">
 <span id="_CPPv3N5Cacao7Cubemap6UnbindEv"></span><span id="_CPPv2N5Cacao7Cubemap6UnbindEv"></span><span id="Cacao::Cubemap::Unbind"></span><span class="target" id="classCacao_1_1Cubemap_1ab19872656a3bf87dd8dfdc9356dab49c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unbind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap6UnbindEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap6UnbindEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Detach from the current slot. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If cubemap is already bound, not compiled, or if not called on the main thread </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7CompileEv">
 <span id="_CPPv3N5Cacao7Cubemap7CompileEv"></span><span id="_CPPv2N5Cacao7Cubemap7CompileEv"></span><span id="Cacao::Cubemap::Compile"></span><span class="target" id="classCacao_1_1Cubemap_1a615989250efee0742a1fb9acb924b71c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7CompileEv'"><span></span></a><br/></dt>
-<dd><p>Compile the raw asset data into a format that can be used. </p>
+<dd><p>Compile the raw image data into a format that can be sampled by the GPU. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was already compiled </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the cubemap was already compiled </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A future that will resolve when compilation is done</p>
@@ -240,10 +279,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7ReleaseEv">
 <span id="_CPPv3N5Cacao7Cubemap7ReleaseEv"></span><span id="_CPPv2N5Cacao7Cubemap7ReleaseEv"></span><span id="Cacao::Cubemap::Release"></span><span class="target" id="classCacao_1_1Cubemap_1af5536d9a8baedaf7ff0fc2eff38ba9af"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao7Cubemap7ReleaseEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao7Cubemap7ReleaseEv'"><span></span></a><br/></dt>
-<dd><p>Delete the compiled asset data. </p>
+<dd><p>Delete the compiled data. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset was not compiled </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the cubemap was not compiled or is bound </p>
 </dd>
 </dl>
 </dd></dl>

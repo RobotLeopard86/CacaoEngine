@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Enum TextAlign | Cacao Engine Docs</title>
-<meta content="Enum TextAlign | Cacao Engine Docs" property="og:title"/>
-<meta content="Enum TextAlign | Cacao Engine Docs" name="twitter:title"/>
+<title>Function Cacao::EngineAssert | Cacao Engine Docs</title>
+<meta content="Function Cacao::EngineAssert | Cacao Engine Docs" property="og:title"/>
+<meta content="Function Cacao::EngineAssert | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html" rel="next" title="Enum WindowMode"/>
-<link href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html" rel="prev" title="Enum LogLevel"/>
+<link href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html" rel="next" title="Define BIND_MEMBER_FUNC"/>
+<link href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html" rel="prev" title="Function Cacao::ClientAssert"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -184,47 +185,51 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="library_root.html">Cacao Engine API Reference</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Enum TextAlign</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Function Cacao::EngineAssert</span>
 </nav>
 <div id="content" role="main">
-<section id="enum-textalign">
-<span id="exhale-enum-namespacecacao-1af970ec1fd000c6348d399ead3d51a182"></span><h1>Enum TextAlign<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#enum-textalign"><span></span></a></h1>
+<section id="function-cacao-engineassert">
+<span id="exhale-function-assert-8hpp-1aa3b81b1988010641719f6034606dde2d"></span><h1>Function Cacao::EngineAssert<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#function-cacao-engineassert"><span></span></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_cacao_include_UI_Text.hpp.html#file-cacao-include-ui-text-hpp"><span class="std std-ref">File Text.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_cacao_include_Core_Assert.hpp.html#file-cacao-include-core-assert-hpp"><span class="std std-ref">File Assert.hpp</span></a></p></li>
 </ul>
-<section id="enum-documentation">
-<h2>Enum Documentation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#enum-documentation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#enum-documentation'"><span></span></a></h2>
-<dl class="cpp enum-class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9TextAlignE">
-<span id="_CPPv3N5Cacao9TextAlignE"></span><span id="_CPPv2N5Cacao9TextAlignE"></span><span class="target" id="namespaceCacao_1af970ec1fd000c6348d399ead3d51a182"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TextAlign</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9TextAlignE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9TextAlignE'"><span></span></a><br/></dt>
-<dd><p><em>Values:</em></p>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9TextAlign4LeftE">
-<span id="_CPPv3N5Cacao9TextAlign4LeftE"></span><span id="_CPPv2N5Cacao9TextAlign4LeftE"></span><span class="target" id="namespaceCacao_1af970ec1fd000c6348d399ead3d51a182a945d5e233cf7d6240f6b783b36a374ff"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Left</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9TextAlign4LeftE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9TextAlign4LeftE'"><span></span></a><br/></dt>
-<dd></dd></dl>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9TextAlign6CenterE">
-<span id="_CPPv3N5Cacao9TextAlign6CenterE"></span><span id="_CPPv2N5Cacao9TextAlign6CenterE"></span><span class="target" id="namespaceCacao_1af970ec1fd000c6348d399ead3d51a182a4f1f6016fc9f3f2353c0cc7c67b292bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Center</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9TextAlign6CenterE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9TextAlign6CenterE'"><span></span></a><br/></dt>
-<dd></dd></dl>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9TextAlign5RightE">
-<span id="_CPPv3N5Cacao9TextAlign5RightE"></span><span id="_CPPv2N5Cacao9TextAlign5RightE"></span><span class="target" id="namespaceCacao_1af970ec1fd000c6348d399ead3d51a182a92b09c7c48c520c3c55e497875da437c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Right</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao9TextAlign5RightE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao9TextAlign5RightE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<section id="function-documentation">
+<h2>Function Documentation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#function-documentation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#function-documentation'"><span></span></a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EngineAssertEbNSt6stringE">
+<span id="_CPPv3N5Cacao12EngineAssertEbNSt6stringE"></span><span id="_CPPv2N5Cacao12EngineAssertEbNSt6stringE"></span><span id="Cacao::EngineAssert__b.ss"></span><span class="target" id="Assert_8hpp_1aa3b81b1988010641719f6034606dde2d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">EngineAssert</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">condition</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">errorMsg</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao12EngineAssertEbNSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao12EngineAssertEbNSt6stringE'"><span></span></a><br/></dt>
+<dd><p>Check if the condition is true, and if not exit. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use only by the engine internally. </p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the condition is false, the engine will immediately shut down without calling anything else. Prefer CheckException when possible.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>condition</strong> – The condition to check </p></li>
+<li><p><strong>errorMsg</strong> – The message to log if the assertion fails</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Enum LogLevel
+        Function Cacao::ClientAssert
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">
-        Enum WindowMode
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">
+        Define BIND_MEMBER_FUNC
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
@@ -233,13 +238,8 @@
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
-<li><a :data-current="activeSection === '#enum-documentation'" class="reference internal" href="#enum-documentation">Enum Documentation</a><ul>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao9TextAlignE'" class="reference internal" href="#_CPPv4N5Cacao9TextAlignE"><code class="docutils literal notranslate"><span class="pre">TextAlign</span></code></a><ul>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao9TextAlign4LeftE'" class="reference internal" href="#_CPPv4N5Cacao9TextAlign4LeftE"><code class="docutils literal notranslate"><span class="pre">TextAlign::Left</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao9TextAlign6CenterE'" class="reference internal" href="#_CPPv4N5Cacao9TextAlign6CenterE"><code class="docutils literal notranslate"><span class="pre">TextAlign::Center</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao9TextAlign5RightE'" class="reference internal" href="#_CPPv4N5Cacao9TextAlign5RightE"><code class="docutils literal notranslate"><span class="pre">TextAlign::Right</span></code></a></li>
-</ul>
-</li>
+<li><a :data-current="activeSection === '#function-documentation'" class="reference internal" href="#function-documentation">Function Documentation</a><ul>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao12EngineAssertEbNSt6stringE'" class="reference internal" href="#_CPPv4N5Cacao12EngineAssertEbNSt6stringE"><code class="docutils literal notranslate"><span class="pre">EngineAssert()</span></code></a></li>
 </ul>
 </li>
 </ul>

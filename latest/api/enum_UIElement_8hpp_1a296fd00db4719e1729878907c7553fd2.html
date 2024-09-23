@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Enum LogLevel | Cacao Engine Docs</title>
-<meta content="Enum LogLevel | Cacao Engine Docs" property="og:title"/>
-<meta content="Enum LogLevel | Cacao Engine Docs" name="twitter:title"/>
+<title>Enum AnchorPoint | Cacao Engine Docs</title>
+<meta content="Enum AnchorPoint | Cacao Engine Docs" property="og:title"/>
+<meta content="Enum AnchorPoint | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html" rel="next" title="Enum TextAlign"/>
-<link href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html" rel="prev" title="Enum AnchorPoint"/>
+<link href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html" rel="next" title="Enum LogLevel"/>
+<link href="classCacao_1_1WorldManager.html" rel="prev" title="Class WorldManager"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -184,61 +185,71 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="library_root.html">Cacao Engine API Reference</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Enum LogLevel</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Enum AnchorPoint</span>
 </nav>
 <div id="content" role="main">
-<section id="enum-loglevel">
-<span id="exhale-enum-namespacecacao-1a4109bf5e930b4737aeee9931d7f7f63c"></span><h1>Enum LogLevel<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#enum-loglevel"><span></span></a></h1>
+<section id="enum-anchorpoint">
+<span id="exhale-enum-uielement-8hpp-1a296fd00db4719e1729878907c7553fd2"></span><h1>Enum AnchorPoint<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#enum-anchorpoint"><span></span></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_cacao_include_Core_Log.hpp.html#file-cacao-include-core-log-hpp"><span class="std std-ref">File Log.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_cacao_include_UI_UIElement.hpp.html#file-cacao-include-ui-uielement-hpp"><span class="std std-ref">File UIElement.hpp</span></a></p></li>
 </ul>
 <section id="enum-documentation">
 <h2>Enum Documentation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#enum-documentation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#enum-documentation'"><span></span></a></h2>
-<dl class="cpp enum">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8LogLevelE">
-<span id="_CPPv3N5Cacao8LogLevelE"></span><span id="_CPPv2N5Cacao8LogLevelE"></span><span class="target" id="namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">LogLevel</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao8LogLevelE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao8LogLevelE'"><span></span></a><br/></dt>
-<dd><p>Level of severity for log messages. </p>
-<p><em>Values:</em></p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPointE">
+<span id="_CPPv3N5Cacao11AnchorPointE"></span><span id="_CPPv2N5Cacao11AnchorPointE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">AnchorPoint</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPointE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPointE'"><span></span></a><br/></dt>
+<dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8LogLevel5TraceE">
-<span id="_CPPv3N5Cacao8LogLevel5TraceE"></span><span id="_CPPv2N5Cacao8LogLevel5TraceE"></span><span class="target" id="namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63ca8405752bb8db779dca1302833ee8ca8a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Trace</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao8LogLevel5TraceE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao8LogLevel5TraceE'"><span></span></a><br/></dt>
-<dd><p>Debug information, usually unneeded. </p>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint6CenterE">
+<span id="_CPPv3N5Cacao11AnchorPoint6CenterE"></span><span id="_CPPv2N5Cacao11AnchorPoint6CenterE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2a4f1f6016fc9f3f2353c0cc7c67b292bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Center</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint6CenterE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint6CenterE'"><span></span></a><br/></dt>
+<dd></dd></dl>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8LogLevel4InfoE">
-<span id="_CPPv3N5Cacao8LogLevel4InfoE"></span><span id="_CPPv2N5Cacao8LogLevel4InfoE"></span><span class="target" id="namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63cabb8a1a12f1ff829fabf53789affd1472"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Info</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao8LogLevel4InfoE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao8LogLevel4InfoE'"><span></span></a><br/></dt>
-<dd><p>Information. </p>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint7TopLeftE">
+<span id="_CPPv3N5Cacao11AnchorPoint7TopLeftE"></span><span id="_CPPv2N5Cacao11AnchorPoint7TopLeftE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2ab32beb056fbfe36afbabc6c88c81ab36"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TopLeft</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint7TopLeftE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint7TopLeftE'"><span></span></a><br/></dt>
+<dd></dd></dl>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8LogLevel4WarnE">
-<span id="_CPPv3N5Cacao8LogLevel4WarnE"></span><span id="_CPPv2N5Cacao8LogLevel4WarnE"></span><span class="target" id="namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63ca3f0092a2b11330ce8672244b80bb6bb0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Warn</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao8LogLevel4WarnE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao8LogLevel4WarnE'"><span></span></a><br/></dt>
-<dd><p>Warnings. </p>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint8TopRightE">
+<span id="_CPPv3N5Cacao11AnchorPoint8TopRightE"></span><span id="_CPPv2N5Cacao11AnchorPoint8TopRightE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2a1d85a557894c340c318493f33bfa8efb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TopRight</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint8TopRightE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint8TopRightE'"><span></span></a><br/></dt>
+<dd></dd></dl>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8LogLevel5ErrorE">
-<span id="_CPPv3N5Cacao8LogLevel5ErrorE"></span><span id="_CPPv2N5Cacao8LogLevel5ErrorE"></span><span class="target" id="namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63ca59cef4346ce0e25c60b1fe270438eb25"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Error</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao8LogLevel5ErrorE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao8LogLevel5ErrorE'"><span></span></a><br/></dt>
-<dd><p>Errors. </p>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint10BottomLeftE">
+<span id="_CPPv3N5Cacao11AnchorPoint10BottomLeftE"></span><span id="_CPPv2N5Cacao11AnchorPoint10BottomLeftE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2a98e5a1c44509157ebcaf46c515c78875"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BottomLeft</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint10BottomLeftE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint10BottomLeftE'"><span></span></a><br/></dt>
+<dd></dd></dl>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8LogLevel5FatalE">
-<span id="_CPPv3N5Cacao8LogLevel5FatalE"></span><span id="_CPPv2N5Cacao8LogLevel5FatalE"></span><span class="target" id="namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63cab4a568d1f1327da3eeccac1ff9ab3132"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Fatal</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao8LogLevel5FatalE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao8LogLevel5FatalE'"><span></span></a><br/></dt>
-<dd><p>Fatal Errors. </p>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint11BottomRightE">
+<span id="_CPPv3N5Cacao11AnchorPoint11BottomRightE"></span><span id="_CPPv2N5Cacao11AnchorPoint11BottomRightE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2a9146bfc669fddc88db2c4d89297d0e9a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BottomRight</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint11BottomRightE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint11BottomRightE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint9TopCenterE">
+<span id="_CPPv3N5Cacao11AnchorPoint9TopCenterE"></span><span id="_CPPv2N5Cacao11AnchorPoint9TopCenterE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2a91b8ede24b7f93a98ae4dcaade15d468"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TopCenter</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint9TopCenterE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint9TopCenterE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint12BottomCenterE">
+<span id="_CPPv3N5Cacao11AnchorPoint12BottomCenterE"></span><span id="_CPPv2N5Cacao11AnchorPoint12BottomCenterE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2abf7d9c8ad2f89a37cf5378b5fec0b420"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BottomCenter</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint12BottomCenterE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint12BottomCenterE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint10LeftCenterE">
+<span id="_CPPv3N5Cacao11AnchorPoint10LeftCenterE"></span><span id="_CPPv2N5Cacao11AnchorPoint10LeftCenterE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2ac7304bf037c39d7f1dcc0f8b81398247"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LeftCenter</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint10LeftCenterE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint10LeftCenterE'"><span></span></a><br/></dt>
+<dd></dd></dl>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AnchorPoint11RightCenterE">
+<span id="_CPPv3N5Cacao11AnchorPoint11RightCenterE"></span><span id="_CPPv2N5Cacao11AnchorPoint11RightCenterE"></span><span class="target" id="UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2a5595404fe7046ad0f3796b176c4f257e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RightCenter</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao11AnchorPoint11RightCenterE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao11AnchorPoint11RightCenterE'"><span></span></a><br/></dt>
+<dd></dd></dl>
 </dd></dl>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="classCacao_1_1WorldManager.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Enum AnchorPoint
+        Class WorldManager
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">
-        Enum TextAlign
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">
+        Enum LogLevel
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
@@ -248,12 +259,16 @@
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#enum-documentation'" class="reference internal" href="#enum-documentation">Enum Documentation</a><ul>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao8LogLevelE'" class="reference internal" href="#_CPPv4N5Cacao8LogLevelE"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a><ul>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao8LogLevel5TraceE'" class="reference internal" href="#_CPPv4N5Cacao8LogLevel5TraceE"><code class="docutils literal notranslate"><span class="pre">LogLevel::Trace</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao8LogLevel4InfoE'" class="reference internal" href="#_CPPv4N5Cacao8LogLevel4InfoE"><code class="docutils literal notranslate"><span class="pre">LogLevel::Info</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao8LogLevel4WarnE'" class="reference internal" href="#_CPPv4N5Cacao8LogLevel4WarnE"><code class="docutils literal notranslate"><span class="pre">LogLevel::Warn</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao8LogLevel5ErrorE'" class="reference internal" href="#_CPPv4N5Cacao8LogLevel5ErrorE"><code class="docutils literal notranslate"><span class="pre">LogLevel::Error</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao8LogLevel5FatalE'" class="reference internal" href="#_CPPv4N5Cacao8LogLevel5FatalE"><code class="docutils literal notranslate"><span class="pre">LogLevel::Fatal</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPointE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPointE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint</span></code></a><ul>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint6CenterE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint6CenterE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::Center</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint7TopLeftE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint7TopLeftE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::TopLeft</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint8TopRightE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint8TopRightE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::TopRight</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint10BottomLeftE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint10BottomLeftE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::BottomLeft</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint11BottomRightE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint11BottomRightE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::BottomRight</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint9TopCenterE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint9TopCenterE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::TopCenter</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint12BottomCenterE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint12BottomCenterE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::BottomCenter</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint10LeftCenterE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint10LeftCenterE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::LeftCenter</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao11AnchorPoint11RightCenterE'" class="reference internal" href="#_CPPv4N5Cacao11AnchorPoint11RightCenterE"><code class="docutils literal notranslate"><span class="pre">AnchorPoint::RightCenter</span></code></a></li>
 </ul>
 </li>
 </ul>

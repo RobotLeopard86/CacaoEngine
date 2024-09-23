@@ -90,12 +90,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -125,7 +127,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -147,18 +148,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -219,166 +220,148 @@
 </span><span id="line-30"><span class="w">    </span><span class="c1">//Forward declaration of Entity for the fake deleter</span>
 </span><span id="line-31"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Entity</span><span class="p">;</span>
 </span><span id="line-32">
-</span><span id="line-33"><span class="w">    </span><span class="c1">//An object in the world</span>
-</span><span id="line-34"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Entity</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-35"><span class="w">      </span><span class="k">public</span><span class="o">:</span>
-</span><span id="line-36"><span class="w">        </span><span class="c1">//GUID</span>
-</span><span id="line-37"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">;</span>
-</span><span id="line-38">
-</span><span id="line-39"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsActive</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-40"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
-</span><span id="line-41"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-42"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-43"><span class="w">            </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span>
-</span><span id="line-44"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-45">
-</span><span id="line-46"><span class="w">        </span><span class="c1">//Local space transform (relative to parent)</span>
-</span><span id="line-47"><span class="w">        </span><span class="n">Transform</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetLocalTransform</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-48"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
-</span><span id="line-49"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-50">
-</span><span id="line-51"><span class="w">        </span><span class="c1">//World space transformation matrix</span>
-</span><span id="line-52"><span class="w">        </span><span class="c1">//Changes made will not reflect on the entity</span>
-</span><span id="line-53"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="nf">GetWorldTransformMatrix</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-54"><span class="w">            </span><span class="c1">//Calculate the transformation matrix</span>
-</span><span id="line-55"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">curParent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
-</span><span id="line-56"><span class="w">            </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">transMat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">GetTransformationMatrix</span><span class="p">();</span>
-</span><span id="line-57"><span class="w">            </span><span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-58"><span class="w">                </span><span class="c1">//If the next parent's parent is itself (so orphaned or world root), we stop</span>
-</span><span id="line-59"><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">curParent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">curParent</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
-</span><span id="line-60">
-</span><span id="line-61"><span class="w">                </span><span class="c1">//Apply this transformation</span>
-</span><span id="line-62"><span class="w">                </span><span class="n">transMat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curParent</span><span class="o">-&gt;</span><span class="n">GetLocalTransform</span><span class="p">().</span><span class="n">GetTransformationMatrix</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
+</span><span id="line-33"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Entity</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-34"><span class="w">      </span><span class="k">public</span><span class="o">:</span>
+</span><span id="line-35"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">;</span>
+</span><span id="line-36">
+</span><span id="line-37"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsActive</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-38"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
+</span><span id="line-39"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-40">
+</span><span id="line-41"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-42"><span class="w">            </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span>
+</span><span id="line-43"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-44">
+</span><span id="line-45"><span class="w">        </span><span class="n">Transform</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetLocalTransform</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-46"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+</span><span id="line-47"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-48">
+</span><span id="line-49"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="nf">GetWorldTransformMatrix</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-50"><span class="w">            </span><span class="c1">//Calculate the transformation matrix</span>
+</span><span id="line-51"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">curParent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span><span id="line-52"><span class="w">            </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">transMat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">GetTransformationMatrix</span><span class="p">();</span>
+</span><span id="line-53"><span class="w">            </span><span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-54"><span class="w">                </span><span class="c1">//If the next parent's parent is itself (so orphaned or world root), we stop</span>
+</span><span id="line-55"><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">curParent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">curParent</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+</span><span id="line-56">
+</span><span id="line-57"><span class="w">                </span><span class="c1">//Apply this transformation</span>
+</span><span id="line-58"><span class="w">                </span><span class="n">transMat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curParent</span><span class="o">-&gt;</span><span class="n">GetLocalTransform</span><span class="p">().</span><span class="n">GetTransformationMatrix</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
+</span><span id="line-59">
+</span><span id="line-60"><span class="w">                </span><span class="c1">//Otherwise, move on to the next parent</span>
+</span><span id="line-61"><span class="w">                </span><span class="n">curParent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curParent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span><span id="line-62"><span class="w">            </span><span class="p">}</span>
 </span><span id="line-63">
-</span><span id="line-64"><span class="w">                </span><span class="c1">//Otherwise, move on to the next parent</span>
-</span><span id="line-65"><span class="w">                </span><span class="n">curParent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curParent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
-</span><span id="line-66"><span class="w">            </span><span class="p">}</span>
-</span><span id="line-67">
-</span><span id="line-68"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
+</span><span id="line-64"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
+</span><span id="line-65"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-66">
+</span><span id="line-67"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">GetChildrenAsList</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-68"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
 </span><span id="line-69"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-70">
-</span><span id="line-71"><span class="w">        </span><span class="c1">//Get a copy of the child entity list</span>
-</span><span id="line-72"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">GetChildrenAsList</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-73"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
-</span><span id="line-74"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-71"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+</span><span id="line-72">
+</span><span id="line-73"><span class="w">        </span><span class="n">Entity</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="line-74"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">guid</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">newGuid</span><span class="p">()),</span><span class="w"> </span><span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w"> </span><span class="n">transform</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">}),</span><span class="w"> </span><span class="n">self</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">FakeDeleter</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}),</span><span class="w"> </span><span class="n">parent</span><span class="p">(</span><span class="n">self</span><span class="p">),</span><span class="w"> </span><span class="n">active</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </span><span id="line-75">
-</span><span id="line-76"><span class="w">        </span><span class="c1">//Human-readable name</span>
-</span><span id="line-77"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-</span><span id="line-78">
-</span><span id="line-79"><span class="w">        </span><span class="n">Entity</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
-</span><span id="line-80"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">guid</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">newGuid</span><span class="p">()),</span><span class="w"> </span><span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w"> </span><span class="n">transform</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">}),</span><span class="w"> </span><span class="n">self</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">FakeDeleter</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}),</span><span class="w"> </span><span class="n">parent</span><span class="p">(</span><span class="n">self</span><span class="p">),</span><span class="w"> </span><span class="n">active</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-81">
-</span><span id="line-82">
-</span><span id="line-83"><span class="w">        </span><span class="c1">//Add a component to this entity</span>
-</span><span id="line-84"><span class="w">        </span><span class="c1">//Functions like a constructor</span>
-</span><span id="line-85"><span class="w">        </span><span class="c1">//Returns a GUID for accessing this component (DO NOT LOSE THIS)</span>
-</span><span id="line-86"><span class="w">        </span><span class="c1">//All components will be removed and deleted when this object is deleted</span>
-</span><span id="line-87"><span class="w">        </span><span class="c1">//Component freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity</span>
-</span><span id="line-88"><span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
-</span><span id="line-89"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-90"><span class="w">            </span><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"Can only mount subclasses of Component!"</span><span class="p">);</span>
-</span><span id="line-91">
-</span><span id="line-92"><span class="w">            </span><span class="c1">//Create a component and set its owner</span>
-</span><span id="line-93"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
-</span><span id="line-94"><span class="w">            </span><span class="n">cptr</span><span class="o">-&gt;</span><span class="n">SetOwner</span><span class="p">(</span><span class="n">self</span><span class="p">);</span>
+</span><span id="line-76">
+</span><span id="line-77"><span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
+</span><span id="line-78"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-79"><span class="w">            </span><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"Can only mount subclasses of Component!"</span><span class="p">);</span>
+</span><span id="line-80">
+</span><span id="line-81"><span class="w">            </span><span class="c1">//Create a component and set its owner</span>
+</span><span id="line-82"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+</span><span id="line-83"><span class="w">            </span><span class="n">cptr</span><span class="o">-&gt;</span><span class="n">SetOwner</span><span class="p">(</span><span class="n">self</span><span class="p">);</span>
+</span><span id="line-84">
+</span><span id="line-85"><span class="w">            </span><span class="p">{</span>
+</span><span id="line-86"><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
+</span><span id="line-87">
+</span><span id="line-88"><span class="w">                </span><span class="c1">//Add this component to the list</span>
+</span><span id="line-89"><span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">mapValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">components</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">newGuid</span><span class="p">(),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">static_pointer_cast</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cptr</span><span class="p">)));</span>
+</span><span id="line-90">
+</span><span id="line-91"><span class="w">                </span><span class="c1">//Return the GUID</span>
+</span><span id="line-92"><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">mapValue</span><span class="p">.</span><span class="n">first</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">;</span>
+</span><span id="line-93"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-94"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-95">
-</span><span id="line-96"><span class="w">            </span><span class="p">{</span>
-</span><span id="line-97"><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
-</span><span id="line-98">
-</span><span id="line-99"><span class="w">                </span><span class="c1">//Add this component to the list</span>
-</span><span id="line-100"><span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">mapValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">components</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">newGuid</span><span class="p">(),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">static_pointer_cast</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cptr</span><span class="p">)));</span>
-</span><span id="line-101">
-</span><span id="line-102"><span class="w">                </span><span class="c1">//Return the GUID</span>
-</span><span id="line-103"><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">mapValue</span><span class="p">.</span><span class="n">first</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">;</span>
-</span><span id="line-104"><span class="w">            </span><span class="p">}</span>
-</span><span id="line-105"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-106">
-</span><span id="line-107"><span class="w">        </span><span class="c1">//Get all components in this entity</span>
-</span><span id="line-108"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">GetAllComponents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-109"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">components</span><span class="p">;</span>
-</span><span id="line-110"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-111">
-</span><span id="line-112"><span class="w">        </span><span class="c1">//Retrieve a component from the entity</span>
-</span><span id="line-113"><span class="w">        </span><span class="c1">//Requires the GUID returned from MountComponent</span>
-</span><span id="line-114"><span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-</span><span id="line-115"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetComponent</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-116"><span class="w">            </span><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"Can only get subclasses of Component!"</span><span class="p">);</span>
-</span><span id="line-117"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
-</span><span id="line-118"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">guid</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"No component with the provided GUID exists in this entity!"</span><span class="p">);</span>
-</span><span id="line-119">
-</span><span id="line-120"><span class="w">            </span><span class="c1">//Try to cast the value</span>
-</span><span id="line-121"><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-122"><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">dynamic_pointer_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">components</span><span class="p">[</span><span class="n">guid</span><span class="p">]);</span>
-</span><span id="line-123"><span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">bad_cast</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-124"><span class="w">                </span><span class="n">CheckException</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"WrongType"</span><span class="p">),</span><span class="w"> </span><span class="s">"The requested compnent's type does not match the requested type!"</span><span class="p">)</span>
-</span><span id="line-125"><span class="w">            </span><span class="p">}</span>
-</span><span id="line-126"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-127">
-</span><span id="line-128"><span class="w">        </span><span class="c1">//Remove a component from the entity and delete it</span>
-</span><span id="line-129"><span class="w">        </span><span class="c1">//The freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity</span>
-</span><span id="line-130"><span class="w">        </span><span class="c1">//Requires the GUID returned from MountComponent</span>
-</span><span id="line-131"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DeleteComponent</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-132"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
-</span><span id="line-133"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">guid</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"No component with the provided GUID exists in this entity!"</span><span class="p">);</span>
-</span><span id="line-134">
-</span><span id="line-135"><span class="w">            </span><span class="n">components</span><span class="p">[</span><span class="n">guid</span><span class="p">].</span><span class="n">reset</span><span class="p">();</span>
-</span><span id="line-136"><span class="w">            </span><span class="n">components</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
-</span><span id="line-137"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-138">
-</span><span id="line-139"><span class="w">        </span><span class="c1">//Change parent to another entity</span>
-</span><span id="line-140"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetParent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newParent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-141"><span class="w">            </span><span class="c1">//If we aren't orphaned, remove ourselves from the current parent</span>
-</span><span id="line-142"><span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-143"><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parentLk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
-</span><span id="line-144"><span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">self</span><span class="p">);</span>
-</span><span id="line-145"><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
-</span><span id="line-146"><span class="w">            </span><span class="p">}</span>
-</span><span id="line-147">
-</span><span id="line-148"><span class="w">            </span><span class="c1">//Add ourselves as a child to the new parent</span>
-</span><span id="line-149"><span class="w">            </span><span class="n">newParent</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">self</span><span class="p">);</span>
-</span><span id="line-150">
-</span><span id="line-151"><span class="w">            </span><span class="c1">//Set parent pointer</span>
-</span><span id="line-152"><span class="w">            </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newParent</span><span class="p">;</span>
-</span><span id="line-153"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-154">
-</span><span id="line-155"><span class="w">        </span><span class="o">~</span><span class="n">Entity</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-156"><span class="w">            </span><span class="c1">//Release ownership of all components</span>
-</span><span id="line-157"><span class="w">            </span><span class="p">{</span>
-</span><span id="line-158"><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
-</span><span id="line-159"><span class="w">                </span><span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">components</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-160"><span class="w">                    </span><span class="n">comp</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
-</span><span id="line-161"><span class="w">                </span><span class="p">}</span>
-</span><span id="line-162"><span class="w">            </span><span class="p">}</span>
-</span><span id="line-163">
-</span><span id="line-164"><span class="w">            </span><span class="c1">//Release ownership of all children</span>
-</span><span id="line-165"><span class="w">            </span><span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">children</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-166"><span class="w">                </span><span class="n">child</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
-</span><span id="line-167"><span class="w">            </span><span class="p">}</span>
-</span><span id="line-168"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-169">
-</span><span id="line-170"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-171"><span class="w">        </span><span class="c1">//Components on this entity</span>
-</span><span id="line-172"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">components</span><span class="p">;</span>
-</span><span id="line-173"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">componentsMtx</span><span class="p">;</span>
-</span><span id="line-174">
-</span><span id="line-175"><span class="w">        </span><span class="c1">//Child entities</span>
-</span><span id="line-176"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
-</span><span id="line-177">
-</span><span id="line-178"><span class="w">        </span><span class="c1">//Transform</span>
-</span><span id="line-179"><span class="w">        </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
-</span><span id="line-180">
-</span><span id="line-181"><span class="w">        </span><span class="c1">//Shared pointer to self (used for component ownership)</span>
-</span><span id="line-182"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">self</span><span class="p">;</span>
-</span><span id="line-183">
-</span><span id="line-184"><span class="w">        </span><span class="c1">//Weak pointer to parent</span>
-</span><span id="line-185"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
-</span><span id="line-186">
-</span><span id="line-187"><span class="w">        </span><span class="c1">//Is this entity active?</span>
-</span><span id="line-188"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
-</span><span id="line-189">
-</span><span id="line-190"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DynTickController</span><span class="p">;</span>
-</span><span id="line-191"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-192"><span class="p">}</span>
+</span><span id="line-96"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">GetAllComponents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-97"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">components</span><span class="p">;</span>
+</span><span id="line-98"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-99">
+</span><span id="line-100"><span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+</span><span id="line-101"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetComponent</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-102"><span class="w">            </span><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"Can only get subclasses of Component!"</span><span class="p">);</span>
+</span><span id="line-103"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
+</span><span id="line-104"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">guid</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"No component with the provided GUID exists in this entity!"</span><span class="p">);</span>
+</span><span id="line-105">
+</span><span id="line-106"><span class="w">            </span><span class="c1">//Try to cast the value</span>
+</span><span id="line-107"><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-108"><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">dynamic_pointer_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">components</span><span class="p">[</span><span class="n">guid</span><span class="p">]);</span>
+</span><span id="line-109"><span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">bad_cast</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-110"><span class="w">                </span><span class="n">CheckException</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"WrongType"</span><span class="p">),</span><span class="w"> </span><span class="s">"The requested compnent's type does not match the requested type!"</span><span class="p">)</span>
+</span><span id="line-111"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-112"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-113">
+</span><span id="line-114"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">DeleteComponent</span><span class="p">(</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-115"><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
+</span><span id="line-116"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">guid</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"No component with the provided GUID exists in this entity!"</span><span class="p">);</span>
+</span><span id="line-117">
+</span><span id="line-118"><span class="w">            </span><span class="n">components</span><span class="p">[</span><span class="n">guid</span><span class="p">].</span><span class="n">reset</span><span class="p">();</span>
+</span><span id="line-119"><span class="w">            </span><span class="n">components</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
+</span><span id="line-120"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-121">
+</span><span id="line-122"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetParent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newParent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-123"><span class="w">            </span><span class="c1">//If we aren't orphaned, remove ourselves from the current parent</span>
+</span><span id="line-124"><span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-125"><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parentLk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span><span id="line-126"><span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">self</span><span class="p">);</span>
+</span><span id="line-127"><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="n">parentLk</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+</span><span id="line-128"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-129">
+</span><span id="line-130"><span class="w">            </span><span class="c1">//Add ourselves as a child to the new parent</span>
+</span><span id="line-131"><span class="w">            </span><span class="n">newParent</span><span class="o">-&gt;</span><span class="n">children</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">self</span><span class="p">);</span>
+</span><span id="line-132">
+</span><span id="line-133"><span class="w">            </span><span class="c1">//Set parent pointer</span>
+</span><span id="line-134"><span class="w">            </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newParent</span><span class="p">;</span>
+</span><span id="line-135"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-136">
+</span><span id="line-137"><span class="w">        </span><span class="o">~</span><span class="n">Entity</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-138"><span class="w">            </span><span class="c1">//Release ownership of all components</span>
+</span><span id="line-139"><span class="w">            </span><span class="p">{</span>
+</span><span id="line-140"><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">componentsMtx</span><span class="p">);</span>
+</span><span id="line-141"><span class="w">                </span><span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">components</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-142"><span class="w">                    </span><span class="n">comp</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+</span><span id="line-143"><span class="w">                </span><span class="p">}</span>
+</span><span id="line-144"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-145">
+</span><span id="line-146"><span class="w">            </span><span class="c1">//Release ownership of all children</span>
+</span><span id="line-147"><span class="w">            </span><span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">children</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-148"><span class="w">                </span><span class="n">child</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+</span><span id="line-149"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-150"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-151">
+</span><span id="line-152"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-153"><span class="w">        </span><span class="c1">//Components on this entity</span>
+</span><span id="line-154"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">components</span><span class="p">;</span>
+</span><span id="line-155"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">componentsMtx</span><span class="p">;</span>
+</span><span id="line-156">
+</span><span id="line-157"><span class="w">        </span><span class="c1">//Child entities</span>
+</span><span id="line-158"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
+</span><span id="line-159">
+</span><span id="line-160"><span class="w">        </span><span class="c1">//Transform</span>
+</span><span id="line-161"><span class="w">        </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+</span><span id="line-162">
+</span><span id="line-163"><span class="w">        </span><span class="c1">//Shared pointer to self (used for component ownership)</span>
+</span><span id="line-164"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">self</span><span class="p">;</span>
+</span><span id="line-165">
+</span><span id="line-166"><span class="w">        </span><span class="c1">//Weak pointer to parent</span>
+</span><span id="line-167"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
+</span><span id="line-168">
+</span><span id="line-169"><span class="w">        </span><span class="c1">//Is this entity active?</span>
+</span><span id="line-170"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
+</span><span id="line-171">
+</span><span id="line-172"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DynTickController</span><span class="p">;</span>
+</span><span id="line-173"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-174"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>

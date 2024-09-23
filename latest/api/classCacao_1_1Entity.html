@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -197,67 +198,164 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6EntityE">
 <span id="_CPPv3N5Cacao6EntityE"></span><span id="_CPPv2N5Cacao6EntityE"></span><span id="Cacao::Entity"></span><span class="target" id="classCacao_1_1Entity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Entity</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6EntityE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6EntityE'"><span></span></a><br/></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>An object in the world. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You <strong>MUST</strong> keep a reference to an entity as long as it is in a world, or you will cause a segmentation fault </p>
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity8IsActiveEv">
 <span id="_CPPv3N5Cacao6Entity8IsActiveEv"></span><span id="_CPPv2N5Cacao6Entity8IsActiveEv"></span><span id="Cacao::Entity::IsActive"></span><span class="target" id="classCacao_1_1Entity_1aa0efdb6f2f73390e74e24a4f6227e68f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsActive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity8IsActiveEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity8IsActiveEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Check if this entity is active. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the entity is active </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity9SetActiveEb">
 <span id="_CPPv3N5Cacao6Entity9SetActiveEb"></span><span id="_CPPv2N5Cacao6Entity9SetActiveEb"></span><span id="Cacao::Entity::SetActive__b"></span><span class="target" id="classCacao_1_1Entity_1ae2a8cfc04a396324c5046ff41a8742a9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetActive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity9SetActiveEb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity9SetActiveEb'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Activate or deactivate this entity. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – The new activation state </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity17GetLocalTransformEv">
 <span id="_CPPv3N5Cacao6Entity17GetLocalTransformEv"></span><span id="_CPPv2N5Cacao6Entity17GetLocalTransformEv"></span><span id="Cacao::Entity::GetLocalTransform"></span><span class="target" id="classCacao_1_1Entity_1ac3cbb3791ae0219d2572e3a36d286fbf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetLocalTransform</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity17GetLocalTransformEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity17GetLocalTransformEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the local-space transform. </p>
+<p>This transform is relative to the entity’s parent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A mutable reference to the local-space transform </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity23GetWorldTransformMatrixEv">
 <span id="_CPPv3N5Cacao6Entity23GetWorldTransformMatrixEv"></span><span id="_CPPv2N5Cacao6Entity23GetWorldTransformMatrixEv"></span><span id="Cacao::Entity::GetWorldTransformMatrix"></span><span class="target" id="classCacao_1_1Entity_1a035407c646831b3a1ad7a8de95ff7c78"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransformMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity23GetWorldTransformMatrixEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity23GetWorldTransformMatrixEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the world-space transformation matrix. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A matrix representing all transformations on this entity </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity17GetChildrenAsListEv">
 <span id="_CPPv3N5Cacao6Entity17GetChildrenAsListEv"></span><span id="_CPPv2N5Cacao6Entity17GetChildrenAsListEv"></span><span id="Cacao::Entity::GetChildrenAsList"></span><span class="target" id="classCacao_1_1Entity_1af4e26e9318a01494a4e74b54d559084b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetChildrenAsList</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity17GetChildrenAsListEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity17GetChildrenAsListEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the list of child entities. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A copy of the child entity list </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity6EntityENSt6stringE">
 <span id="_CPPv3N5Cacao6Entity6EntityENSt6stringE"></span><span id="_CPPv2N5Cacao6Entity6EntityENSt6stringE"></span><span id="Cacao::Entity::Entity__ss"></span><span class="target" id="classCacao_1_1Entity_1a0580da19f08d4e6b973b9ad74741ff44"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Entity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity6EntityENSt6stringE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity6EntityENSt6stringE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a new entity. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of this entity </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0DpEN5Cacao6Entity14MountComponentEKN2xg4GuidEDpRR4Args">
 <span id="_CPPv3I0DpEN5Cacao6Entity14MountComponentEDpRR4Args"></span><span id="_CPPv2I0DpEN5Cacao6Entity14MountComponentEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br/><span class="target" id="classCacao_1_1Entity_1abf56a3f718652a41923f14bfbe1a0d11"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao6Entity14MountComponentEKN2xg4GuidEDpRR4Args" title="Cacao::Entity::MountComponent::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4I0DpEN5Cacao6Entity14MountComponentEKN2xg4GuidEDpRR4Args" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4I0DpEN5Cacao6Entity14MountComponentEKN2xg4GuidEDpRR4Args'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Add a component to this entity. </p>
+<p>All arguments are forwarded to the constructor of the component type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Components created here will continue to exist after the entity is destroyed if another object still holds a reference to it, but will not be accessible </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The component’s GUID (Needed to access the component)</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity16GetAllComponentsEv">
 <span id="_CPPv3N5Cacao6Entity16GetAllComponentsEv"></span><span id="_CPPv2N5Cacao6Entity16GetAllComponentsEv"></span><span id="Cacao::Entity::GetAllComponents"></span><span class="target" id="classCacao_1_1Entity_1a51451282dc60d042631919b1299b0faa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetAllComponents</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity16GetAllComponentsEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity16GetAllComponentsEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get all components on the entity. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A copy of the components on this entity </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao6Entity12GetComponentENSt10shared_ptrI1TEEN2xg4GuidE">
 <span id="_CPPv3I0EN5Cacao6Entity12GetComponentEN2xg4GuidE"></span><span id="_CPPv2I0EN5Cacao6Entity12GetComponentEN2xg4GuidE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br/><span class="target" id="classCacao_1_1Entity_1a28270906285b9ce3597a2f35e9c204e9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao6Entity12GetComponentENSt10shared_ptrI1TEEN2xg4GuidE" title="Cacao::Entity::GetComponent::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetComponent</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">guid</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4I0EN5Cacao6Entity12GetComponentENSt10shared_ptrI1TEEN2xg4GuidE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4I0EN5Cacao6Entity12GetComponentENSt10shared_ptrI1TEEN2xg4GuidE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Access a component on this entity. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>guid</strong> – The GUID of the component (returned from MountComponent)</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If no component with the provided GUID exists or it could not be cast to the specified type </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The component</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity15DeleteComponentEN2xg4GuidE">
 <span id="_CPPv3N5Cacao6Entity15DeleteComponentEN2xg4GuidE"></span><span id="_CPPv2N5Cacao6Entity15DeleteComponentEN2xg4GuidE"></span><span id="Cacao::Entity::DeleteComponent__xg::Guid"></span><span class="target" id="classCacao_1_1Entity_1a21e487e0b38ecefd9224df3846faf398"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteComponent</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">guid</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity15DeleteComponentEN2xg4GuidE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity15DeleteComponentEN2xg4GuidE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Remove a component from this entity. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there are other references to the component, it will not be freed by this call</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>guid</strong> – The GUID of the component (returned from MountComponent)</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If no component with the provided GUID exists </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity9SetParentENSt10shared_ptrI6EntityEE">
 <span id="_CPPv3N5Cacao6Entity9SetParentENSt10shared_ptrI6EntityEE"></span><span id="_CPPv2N5Cacao6Entity9SetParentENSt10shared_ptrI6EntityEE"></span><span id="Cacao::Entity::SetParent__std::shared_ptr:Entity:"></span><span class="target" id="classCacao_1_1Entity_1a45a364a8a9b9bbab6504da2df3c77d24"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetParent</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newParent</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity9SetParentENSt10shared_ptrI6EntityEE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity9SetParentENSt10shared_ptrI6EntityEE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the parent of this entity. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To add an entity to a <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a>, set its parent to the world’s root entity</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newParent</strong> – The new parent of the entity </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6EntityD0Ev">
 <span id="_CPPv3N5Cacao6EntityD0Ev"></span><span id="_CPPv2N5Cacao6EntityD0Ev"></span><span id="Cacao::Entity::~Entity"></span><span class="target" id="classCacao_1_1Entity_1ab7401d0e3f1b4258331a4e38549dc9bc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Entity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6EntityD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6EntityD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy the entity and release references to components and child entities. </p>
+</dd></dl>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity4guidE">
 <span id="_CPPv3N5Cacao6Entity4guidE"></span><span id="_CPPv2N5Cacao6Entity4guidE"></span><span id="Cacao::Entity::guid__xg::GuidC"></span><span class="target" id="classCacao_1_1Entity_1a935e3b2d62202cf699a7611ec0dce8ac"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">guid</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity4guidE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity4guidE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>GUID (Globally Unique Identifier) </p>
+</dd></dl>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Entity4nameE">
 <span id="_CPPv3N5Cacao6Entity4nameE"></span><span id="_CPPv2N5Cacao6Entity4nameE"></span><span id="Cacao::Entity::name__ss"></span><span class="target" id="classCacao_1_1Entity_1a2bdd9695b552d376334537559203a365"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Entity4nameE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Entity4nameE'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Human-readable name. </p>
+</dd></dl>
 </div>
 </dd></dl>
 </section>

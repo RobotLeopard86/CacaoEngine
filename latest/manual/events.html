@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Cacao Engine Build Instructions | Cacao Engine Docs</title>
-<meta content="Cacao Engine Build Instructions | Cacao Engine Docs" property="og:title"/>
-<meta content="Cacao Engine Build Instructions | Cacao Engine Docs" name="twitter:title"/>
+<title>Built-In Event List | Cacao Engine Docs</title>
+<meta content="Built-In Event List | Cacao Engine Docs" property="og:title"/>
+<meta content="Built-In Event List | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="backends.html" rel="next" title="Cacao Engine Backends"/>
-<link href="quickstart/first-project.html" rel="prev" title="Making Your First Project"/>
+<link href="../api/library_root.html" rel="next" title="Cacao Engine API Reference"/>
+<link href="deffiles.html" rel="prev" title="Definition Files"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -80,7 +80,7 @@
 <li class="toctree-l3"><a class="reference internal" href="quickstart/first-project.html">Making Your First Project</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Cacao Engine Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html">Cacao Engine Build Instructions</a></li>
 <li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
@@ -92,7 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="events.html">Built-In Event List</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -185,128 +185,43 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../manual.html">Cacao Engine Manual</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Cacao Engine Build Instructions</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Built-In Event List</span>
 </nav>
 <div id="content" role="main">
-<section id="cacao-engine-build-instructions">
-<h1>Cacao Engine Build Instructions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cacao-engine-build-instructions"><span></span></a></h1>
-<section id="prerequisites">
-<h2>Prerequisites<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#prerequisites" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#prerequisites'"><span></span></a></h2>
+<section id="built-in-event-list">
+<h1>Built-In Event List<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#built-in-event-list"><span></span></a></h1>
+<p>This is a list of all built-in events:</p>
 <ul class="simple">
-<li><p>Git</p></li>
-<li><p>Meson</p></li>
-<li><p>Ninja</p></li>
-<li><p>Python 3</p></li>
-<li><p>CMake</p></li>
-<li><p>GLSLC</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WindowClose</span></code>: The window is closing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WindowFocus</span></code>: The window has gained focus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WindowUnfocus</span></code>: The window has lost focus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WindowResize</span></code>: The size of the window has changed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MouseMove</span></code>: The cursor has moved</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MouseScroll</span></code>: The mouse wheel has been scrolled</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MousePress</span></code>: A mouse button has been pressed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MouseRelease</span></code>: A mouse button has been released</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KeyDown</span></code>: A key has been pressed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KeyUp</span></code>: A key has been released</p></li>
 </ul>
-</section>
-<section id="linux-package-dependencies">
-<h2>Linux Package Dependencies<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#linux-package-dependencies" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#linux-package-dependencies'"><span></span></a></h2>
-<p>Cacao Engine uses OpenAL-Soft, a software implementation of the OpenAL API which sits atop platform-specific APIs. On Linux, depending on the audio providers you want available, you will need to install additional packages prior to configuring. Find these in the table below.</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Provider</p></th>
-<th class="head"><p>Debian-based</p></th>
-<th class="head"><p>Fedora-based</p></th>
-<th class="head"><p>Arch-based</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Pipewire</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libpipewire-0.3-dev</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">pipewire-devel</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libpipewire</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>PulseAudio</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libpulse-dev</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">pulseaudio-libs</span> <span class="pre">pulseaudio-libs-devel</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libpulse</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>ALSA</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libasound2-dev</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">alsa-lib</span> <span class="pre">alsa-lib-devel</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">alsa-lib</span></code></p></td>
-</tr>
-</tbody>
-</table>
-<p>Cacao Engine also requires libuuid. The packages for that are listed below:</p>
-<ul class="simple">
-<li><p>Debian-based: <code class="docutils literal notranslate"><span class="pre">uuid-dev</span></code></p></li>
-<li><p>Fedora-based: <code class="docutils literal notranslate"><span class="pre">libuuid-devel</span></code></p></li>
-<li><p>Arch-based: <code class="docutils literal notranslate"><span class="pre">util-linux-libs</span></code></p></li>
-</ul>
-</section>
-<section id="compilers">
-<h2>Compilers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#compilers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#compilers'"><span></span></a></h2>
-<p>Cacao Engine is designed to build using Clang with LLD on Linux and macOS. On Windows, MSVC is the target. If problems are encountered when using alternative compilers (e.g. GCC or Clang with Gold linker), they are officially unsupported. Clang (including Apple’s modified Clang) with LLD and MSVC are the ONLY supported compilers. Regarding installation of these compilers, MSVC is available through Visual Studio, which can be downloaded <a class="reference external" href="https://visualstudio.microsoft.com" rel="nofollow noopener">here<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>. In the Visual Studio Installer, select the <code class="docutils literal notranslate"><span class="pre">Desktop</span> <span class="pre">development</span> <span class="pre">with</span> <span class="pre">C++</span></code> workload before installing, or in the <code class="docutils literal notranslate"><span class="pre">Modify</span></code> UI after. As for Linux, they should be available in your package manager. On macOS, you’ll need the Xcode command line tools (install with <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code>), and then install the <code class="docutils literal notranslate"><span class="pre">llvm</span></code> <a class="reference external" href="https://brew.sh" rel="nofollow noopener">Homebrew<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> package. That will install Clang and LLD to your system. While other compilers may work, they are officially not supported.</p>
-</section>
-<section id="known-building-platforms">
-<h2>Known Building Platforms<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#known-building-platforms" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#known-building-platforms'"><span></span></a></h2>
-<ul class="simple">
-<li><p>x86_64 GNU/Linux with Clang and LLD</p></li>
-<li><p>aarch64 GNU/Linux with Clang and LLD</p></li>
-<li><p>x86_64 Windows with MSVC</p></li>
-</ul>
-</section>
-<section id="prerequisite-installation">
-<h2>0. Prerequisite Installation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#prerequisite-installation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#prerequisite-installation'"><span></span></a></h2>
-<p>To build Cacao Engine, you need the prerequisites listed above.<br/>
-To install Git, either find it in your package manager if on Linux, with <a class="reference external" href="https://brew.sh" rel="nofollow noopener">Homebrew<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> on macOS, or from the <a class="reference external" href="https://gitforwindows.org" rel="nofollow noopener">Git for Windows project<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> on Windows.<br/>
-You can install Meson as listed on their website <a class="reference external" href="https://mesonbuild.com/SimpleStart.html#installing-meson" rel="nofollow noopener">here<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>. Instructions for installing Python 3 and ninja can also be found there.<br/>
-CMake is also simple. On Linux, it should be available in your package manager. For Windows and macOS users, you can get CMake on their website’s <a class="reference external" href="https://cmake.org/download/#latest" rel="nofollow noopener">download page<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>.<br/>
-Finally, GLSLC is available as part of the Vulkan SDK (download that <a class="reference external" href="https://vulkan.lunarg.com/sdk/home" rel="nofollow noopener">here<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>), or can be downloaded standalone from the <a class="reference external" href="https://github.com/google/shaderc/blob/main/downloads.md" rel="nofollow noopener">project GitHub<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>.</p>
-</section>
-<section id="getting-the-source">
-<h2>1. Getting The Source<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#getting-the-source" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#getting-the-source'"><span></span></a></h2>
-<p>Building Cacao Engine requires a copy of the source code (obviously). Cacao Engine contains Git submodules, and the project <strong>WILL NOT BUILD</strong> if they are not found. When cloning the repository, just add the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag to the clone command line (e.g. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/RobotLeopard86/CacaoEngine</span> <span class="pre">--recursive</span></code>). If you have already cloned the source non-recursively, issue the following command in the source root to download the submodules: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code>.</p>
-</section>
-<section id="configuring-the-build">
-<h2>2. Configuring the Build<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#configuring-the-build" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#configuring-the-build'"><span></span></a></h2>
-<p><strong>IMPORTANT</strong>: MSVC likely will only be detected properly if run in the Visual Studio Developer Command Prompt/PowerShell.
-Select a backend from <a class="reference internal" href="backends.html"><span class="doc std std-doc">the backends list</span></a>. Enter the source tree root directory in your terminal, then run the following command <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">-Dbuild_playground=true|false</span> <span class="pre">-Duse_backend=&lt;chosen</span> <span class="pre">backend&gt;</span></code>. <strong>IMPORTANT</strong>: Add <code class="docutils literal notranslate"><span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> to your command line if on Linux or macOS. Set the <code class="docutils literal notranslate"><span class="pre">build_playground</span></code> option to <code class="docutils literal notranslate"><span class="pre">true</span></code> if you want to optionally build the playground, or <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. If on Windows, you may add <code class="docutils literal notranslate"><span class="pre">-Dwindows_noconsole=true</span></code> to the command to configure a build without a console. Meson runs debug builds by default. See <a class="reference external" href="https://mesonbuild.com/Builtin-options.html#core-options" rel="nofollow noopener">this page<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> on Meson’s website for the list of types. This command may take some time to complete.</p>
-</section>
-<section id="build">
-<h2>3. Build<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#build" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#build'"><span></span></a></h2>
-<p>Congratulations, you’re ready to build. Simply enter the build directory in your terminal and run <code class="docutils literal notranslate"><span class="pre">ninja</span></code>. Wait for it to complete, and then you’re basically good to go. The <code class="docutils literal notranslate"><span class="pre">cacaoengine</span></code> executable on its own won’t display anything if the proper files for starting a game aren’t found, so see the the following section in which the playground is set up as an example.</p>
-</section>
-<section id="playground-setup">
-<h2>4. Playground Setup<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#playground-setup" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#playground-setup'"><span></span></a></h2>
-<p>If you chose to build the playground, you will find an additional <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory in your build folder. This directory contains the built files produced by the playground. This won’t run on its own though, so to set that up, run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">bundle_playground</span></code> in your terminal. This will merge the playground, its assets, and the engine binaries into one directory for your convenience. If you would like to do something similar with your own game build, make a new directory, and copy your <code class="docutils literal notranslate"><span class="pre">launch.so|.dll|.dylib</span></code> (whichever you have) to it, as well as the <code class="docutils literal notranslate"><span class="pre">cacaoengine[.exe]</span></code> in the <code class="docutils literal notranslate"><span class="pre">cacao</span></code> directory and the <code class="docutils literal notranslate"><span class="pre">libcacaobackend.so|.dll|.dylib</span></code> (whichever you have) in the <code class="docutils literal notranslate"><span class="pre">backends/&lt;chosen</span> <span class="pre">backend&gt;</span></code> directory. Additionally copy your other project directories, and you’re done.</p>
-</section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="quickstart/first-project.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="deffiles.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Making Your First Project
+        Definition Files
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="backends.html">
-        Cacao Engine Backends
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="../api/library_root.html">
+        Cacao Engine API Reference
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
 </a>
 </div>
-</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
-<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
-<ul>
-<li><a :data-current="activeSection === '#prerequisites'" class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a :data-current="activeSection === '#linux-package-dependencies'" class="reference internal" href="#linux-package-dependencies">Linux Package Dependencies</a></li>
-<li><a :data-current="activeSection === '#compilers'" class="reference internal" href="#compilers">Compilers</a></li>
-<li><a :data-current="activeSection === '#known-building-platforms'" class="reference internal" href="#known-building-platforms">Known Building Platforms</a></li>
-<li><a :data-current="activeSection === '#prerequisite-installation'" class="reference internal" href="#prerequisite-installation">0. Prerequisite Installation</a></li>
-<li><a :data-current="activeSection === '#getting-the-source'" class="reference internal" href="#getting-the-source">1. Getting The Source</a></li>
-<li><a :data-current="activeSection === '#configuring-the-build'" class="reference internal" href="#configuring-the-build">2. Configuring the Build</a></li>
-<li><a :data-current="activeSection === '#build'" class="reference internal" href="#build">3. Build</a></li>
-<li><a :data-current="activeSection === '#playground-setup'" class="reference internal" href="#playground-setup">4. Playground Setup</a></li>
-</ul>
-</div>
-</aside>
+</div></div>
 </main>
 </div>
 </div><footer class="py-6 border-t border-border md:py-0">

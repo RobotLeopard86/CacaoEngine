@@ -92,12 +92,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../manual/excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manual/deffiles.html">Definition Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
@@ -127,7 +129,6 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -149,18 +150,18 @@
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
-<li class="toctree-l2"><a class="reference internal" href="enum_namespaceCacao_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_namespaceCacao_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_Exception_8hpp_1adf308ade970f15b84d3b7f7566325925.html">Define CheckException</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="typedef_namespaceCacao_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
 </ul>
 </li>
@@ -206,45 +207,98 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6CameraE">
 <span id="_CPPv3N5Cacao6CameraE"></span><span id="_CPPv2N5Cacao6CameraE"></span><span id="Cacao::Camera"></span><span class="target" id="classCacao_1_1Camera"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6CameraE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6CameraE'"><span></span></a><br/></dt>
-<dd><p>Subclassed by <a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#classCacao_1_1PerspectiveCamera"><span class="std std-ref">Cacao::PerspectiveCamera</span></a></p>
+<dd><p>Base camera type. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Abstract, so cannot be passed by value </p>
+</div>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#classCacao_1_1PerspectiveCamera"><span class="std std-ref">Cacao::PerspectiveCamera</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera6CameraEv">
 <span id="_CPPv3N5Cacao6Camera6CameraEv"></span><span id="_CPPv2N5Cacao6Camera6CameraEv"></span><span id="Cacao::Camera::Camera"></span><span class="target" id="classCacao_1_1Camera_1a3183ee821e4140afeb75a32ed8c9b73f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera6CameraEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera6CameraEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Create a camera. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6CameraD0Ev">
 <span id="_CPPv3N5Cacao6CameraD0Ev"></span><span id="_CPPv2N5Cacao6CameraD0Ev"></span><span id="Cacao::Camera::~Camera"></span><span class="target" id="classCacao_1_1Camera_1a7e58776eef281041529bafe595e60fd9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6CameraD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6CameraD0Ev'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Destroy a camera. </p>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11GetPositionEv">
 <span id="_CPPv3N5Cacao6Camera11GetPositionEv"></span><span id="_CPPv2N5Cacao6Camera11GetPositionEv"></span><span id="Cacao::Camera::GetPosition"></span><span class="target" id="classCacao_1_1Camera_1a188459e2c579ec356f8192b0f51375c5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera11GetPositionEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera11GetPositionEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the position of the camera. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The camera position in world space </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E">
 <span id="_CPPv3N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="Cacao::Camera::SetPosition__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a56f060ffb7b1598fd777c5b2b8dcd6b4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the position of the camera. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pos</strong> – The new position </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11GetRotationEv">
 <span id="_CPPv3N5Cacao6Camera11GetRotationEv"></span><span id="_CPPv2N5Cacao6Camera11GetRotationEv"></span><span id="Cacao::Camera::GetRotation"></span><span class="target" id="classCacao_1_1Camera_1a781f49f463fdd592f952a1be6cb35336"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera11GetRotationEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera11GetRotationEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the rotation of the camera. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The camera rotation </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetRotationEN3glm4vec3E">
 <span id="_CPPv3N5Cacao6Camera11SetRotationEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetRotationEN3glm4vec3E"></span><span id="Cacao::Camera::SetRotation__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1aa998fdcfe5c57a897b843192e48bb4c5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4vec3E" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera11SetRotationEN3glm4vec3E'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Set the rotation of the camera. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rot</strong> – The new rotation </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera19GetProjectionMatrixEv">
 <span id="_CPPv3N5Cacao6Camera19GetProjectionMatrixEv"></span><span id="_CPPv2N5Cacao6Camera19GetProjectionMatrixEv"></span><span id="Cacao::Camera::GetProjectionMatrix"></span><span class="target" id="classCacao_1_1Camera_1a5657fc1e3dbe7ca321d7514708ff3d31"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera19GetProjectionMatrixEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera19GetProjectionMatrixEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the projection matrix. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The projection matrix </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera13GetViewMatrixEv">
 <span id="_CPPv3N5Cacao6Camera13GetViewMatrixEv"></span><span id="_CPPv2N5Cacao6Camera13GetViewMatrixEv"></span><span id="Cacao::Camera::GetViewMatrix"></span><span class="target" id="classCacao_1_1Camera_1ab83b0ab4c7c95b87d967853d2540f190"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera13GetViewMatrixEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera13GetViewMatrixEv'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p>Get the view matrix. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The view matrix </p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event">
 <span id="_CPPv3N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="_CPPv2N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="Cacao::Camera::ResizeProjectionMatrix__EventR"></span><span class="target" id="classCacao_1_1Camera_1a1edc10487c065c503b5c350067f388e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResizeProjectionMatrix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event'"><span></span></a><br/></dt>
-<dd></dd></dl>
+<dd><p><a class="reference internal" href="classCacao_1_1Event.html#classCacao_1_1Event"><span class="std std-ref">Event</span></a> handler for resizing the projection matrix when the window size changes. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>e</strong> – The event object (which should be a DataEvent&lt;glm::uvec2&gt;) </p>
+</dd>
+</dl>
+</dd></dl>
 </div>
 </dd></dl>
 </section>
