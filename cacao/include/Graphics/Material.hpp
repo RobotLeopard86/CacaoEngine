@@ -3,13 +3,10 @@
 #include "Shader.hpp"
 
 namespace Cacao {
-	//Material which holds a shader and data for the shader
-	class Material {
+	///@brief A shader and data to input into it
+	struct Material {
 	  public:
-		//Current shader
-		AssetHandle<Shader> shader;
-
-		//Data storage
-		ShaderUploadData data;
+		AssetHandle<Shader> shader;///<The shader to use
+		ShaderUploadData data;	   ///<The data to upload
 	};
 }

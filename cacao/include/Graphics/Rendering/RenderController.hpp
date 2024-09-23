@@ -10,7 +10,11 @@
 #include <vector>
 
 namespace Cacao {
-	//Controller for rendering frames
+	/**
+	 * @brief Frame renderer
+	 *
+	 * @note For use by the engine only
+	 */
 	class RenderController {
 	  public:
 		/**
@@ -20,10 +24,18 @@ namespace Cacao {
 		 */
 		static RenderController* GetInstance();
 
-		//Run the tick controller on the calling thread
+		/**
+		 * @brief Run the controller on the calling thread
+		 *
+		 * @note Called automatically after engine startup
+		 */
 		void Run();
 
-		//Enqueue a frame for rendering
+		/**
+		 * @brief Enqueue a frame for rendering
+		 *
+		 * @param frame The frame to enqueue
+		 */
 		void EnqueueFrame(std::shared_ptr<Frame>& frame) {
 			if(!Engine::GetInstance()->IsShuttingDown()) {
 				//Add a frame to the queue
@@ -32,17 +44,27 @@ namespace Cacao {
 			}
 		}
 
-		//Clear the render queue
+		/**
+		 * @brief Clear the frame queue
+		 */
 		void ClearRenderQueue() {
 			std::unique_lock<std::mutex> lock(fqMutex);
 			while(!frameQueue.empty()) frameQueue.pop();
 			lock.unlock();
 		}
 
-		//Initialize the backend
+		/**
+		 * @brief Initialize the rendering backend
+		 *
+		 * @throws Exception If the backend is already initialized
+		 */
 		void Init();
 
-		//Shutdown the backend
+		/**
+		 * @brief Shut down the rendering backend
+		 *
+		 * @throws Exception If the backend is not initialized
+		 */
 		void Shutdown();
 
 	  private:

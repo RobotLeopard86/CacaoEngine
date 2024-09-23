@@ -64,6 +64,8 @@ namespace Cacao {
 			} else {
 				//Free whatever junk we have
 				stbi_image_free(data);
+
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open cubemap face image file!")
 			}
 		}
 

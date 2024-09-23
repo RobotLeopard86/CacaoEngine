@@ -48,7 +48,6 @@ namespace Cacao {
 		void Release() override;
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
-		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "SOUND";
 		}

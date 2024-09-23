@@ -168,7 +168,7 @@ namespace Cacao {
 					break;
 				}
 				case SDL_EVENT_WINDOW_RESIZED: {
-					if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
+					if(Window::GetInstance()->GetMode() == WindowMode::Window) {
 						WindowResizer().Resize({event.window.data1, event.window.data2});
 					}
 					Engine::GetInstance()->GetGlobalUIView()->SetSize(GetContentAreaSize());

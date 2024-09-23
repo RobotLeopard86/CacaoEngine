@@ -22,30 +22,30 @@ namespace Cacao {
 		~AudioPlayer();
 
 		/**
-		 * @brief Play the @a sound contained in sound
+		 * @brief Play the audio contained in sound
 		 *
-		 * @throws Exception If the audio system is uninitialized, a @a sound is already playing, or sound is a null handle
+		 * @throws Exception If the audio system is uninitialized, a audio is already playing, or sound is a null handle
 		 */
 		void Play();
 
 		/**
-		 * @brief Pause or unpase @a sound playback
+		 * @brief Pause or unpase audio playback
 		 *
-		 * @throws Exception If the audio system is uninitialized or no @a sound is playing
+		 * @throws Exception If the audio system is uninitialized or no audio is playing
 		 */
 		void TogglePause();
 
 		/**
-		 * @brief Stop @a sound playback
+		 * @brief Stop audio playback
 		 *
-		 * @throws Exception If the audio system is uninitialized or no @a sound is playing
+		 * @throws Exception If the audio system is uninitialized or no audio is playing
 		 */
 		void Stop();
 
 		/**
-		 * @brief Check if a @a sound is playing
+		 * @brief Check if a audio is playing
 		 *
-		 * @return Whether a @a sound is playing or not
+		 * @return Whether a audio is playing or not
 		 *
 		 * @throws Exception If the audio system is uninitialized
 		 */
@@ -63,9 +63,9 @@ namespace Cacao {
 		AssetHandle<Sound> sound;///<The sound that should be played
 
 		/**
-		 * @brief Set if the @a sound should loop
+		 * @brief Set if the audio should loop
 		 *
-		 * @param val If the @a sound should loop
+		 * @param val If the audio should loop
 		 *
 		 * @throws Exception If the audio system is uninitialized
 		 */
@@ -102,9 +102,9 @@ namespace Cacao {
 		void SetPlaybackTime(float timeInSeconds);
 
 		/**
-		 * @brief Check if the @a sound is looping
+		 * @brief Check if the audio is looping
 		 *
-		 * @return Whether the @a sound is looping or not
+		 * @return Whether the audio is looping or not
 		 *
 		 * @throws Exception If the audio system is uninitialized
 		 */

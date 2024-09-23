@@ -19,7 +19,7 @@ namespace Cacao {
 	void PerspectiveCamera::RecalculateViewMatrix() {
 		//Figure out where we are looking
 		RecalculateCameraVectors();
-		//Look at our target from our position, with a straight up vector (where "up" is)
+		//Look at our target from our position
 		viewMatrix = glm::lookAt(position, position + frontVec, upVec);
 	}
 

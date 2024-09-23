@@ -36,10 +36,3 @@
 #include "UI/Image.hpp"
 #include "UI/UIElement.hpp"
 #include "UI/UIView.hpp"
-
-//Cacao namespace docs
-
-/**
- * @brief The namespace where all @a Cacao @a Engine components live
- */
-namespace Cacao {}

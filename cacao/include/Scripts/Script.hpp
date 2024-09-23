@@ -3,22 +3,37 @@
 #include "World/Component.hpp"
 
 namespace Cacao {
-	//Base class representing a game script
+	/**
+	 * @brief Base class for a script
+	 */
 	class Script : public Component {
 	  public:
-		//Runs every tick
+		/**
+		 * @brief Runs every dynamic tick
+		 *
+		 * @param timestep The time in seconds since the last dynamic tick
+		 */
 		virtual void OnTick(double timestep) {}
 
-		//Runs every fixed tick
+		/**
+		 * @brief Runs every fixed tick
+		 * @warning Fixed ticks are not yet implemented in the engine
+		 */
 		virtual void OnFixedTick() {}
 
-		//Runs whenever the script is activated
+		///@brief Runs on activation
 		virtual void OnActivate() {}
 
-		//Runs whenever the script is deactivated
+		///@brief Runs on deactivation
 		virtual void OnDeactivate() {}
 
-		//Get and set the active state
+		/**
+		 * @brief Set the activation state
+		 *
+		 * @param val The new activation state
+		 *
+		 * @note Runs OnActive or OnDeactivate if the state changes
+		 */
 		void SetActive(bool val) override final {
 			bool prevActive = this->IsActive();
 			_SetActiveInternal(val);
@@ -32,10 +47,15 @@ namespace Cacao {
 			}
 		}
 
+		///@brief Gets the type of this componet. Needed for safe downcasting from Component
 		std::string GetKind() override final {
 			return "SCRIPT";
 		}
 
+		/**
+		 * @brief Check if two EventConsumers are equal
+		 * @details Compares memory addresses to perform check
+		 */
 		const bool operator==(Script rhs) {
 			return (this == &rhs);
 		}

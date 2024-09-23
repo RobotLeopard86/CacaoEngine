@@ -81,7 +81,7 @@ namespace Cacao {
 		});
 		glfwSetWindowSizeCallback(nativeData->win, [](GLFWwindow* win, int x, int y) {
 			if(!glfwGetWindowAttrib(win, GLFW_ICONIFIED)) {
-				if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
+				if(Window::GetInstance()->GetMode() == WindowMode::Window) {
 					WindowResizer().Resize({x, y});
 				}
 				ResizeViewport(win);

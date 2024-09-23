@@ -61,7 +61,7 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Check if the cubemap is @a compiled.
+		 * @brief Check if the cubemap is compiled.
 		 * @see Cubemap::IsCompiled
 		 */
 		bool IsCompiled() override {

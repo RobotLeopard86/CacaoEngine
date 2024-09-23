@@ -31,7 +31,7 @@ namespace Cacao {
 
 		/**
 		 * @brief Check if two EventConsumers are equal
-		 * @details Compares memory addresses to check
+		 * @details Compares memory addresses to perform check
 		 */
 		bool operator==(EventConsumer rhs) {
 			return (this == &rhs);
