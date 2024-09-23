@@ -9,19 +9,50 @@
 #include <future>
 
 namespace Cacao {
-	//Must be implemented per-rendering API
+	/**
+	 * @brief A mesh. Implementation is backend-dependent
+	 */
 	class Mesh final : public Asset {
 	  public:
+		/**
+		 * @brief Create a mesh from a list of vertices and indices
+		 * @note Prefer to use AssetManager::LoadMesh over direct construction
+		 *
+		 * @param vertices The list of vertices
+		 * @param indices The list of indices (each "index" is a triangle comprised of three positions in the vertex list)
+		 */
 		Mesh(std::vector<Vertex> vertices, std::vector<glm::uvec3> indices);
+
+		/**
+		 * @brief Delete the mesh and release compiled data if present
+		 */
 		~Mesh() final {
 			if(compiled) Release();
 		}
 
-		//Draw this mesh
+		/**
+		 * @brief Draw the mesh
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throws Exception If not compiled or if not called on the engine thread
+		 */
 		void Draw();
-		//Compile the mesh into a usable form for drawing
+
+		/**
+		 * @brief Compile the raw mesh data into a format that can be drawn
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the mesh was already compiled
+		 */
 		std::shared_future<void> Compile() override;
-		//Release compiled assets from memory
+
+		/**
+		 * @brief Delete the compiled data
+		 *
+		 * @throws Exception If the mesh was not compiled
+		 */
 		void Release() override;
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset

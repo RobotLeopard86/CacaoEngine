@@ -214,7 +214,7 @@ namespace Cacao {
 			if(this->assetCache.contains(location) && this->assetCache[location].lock()->GetType().compare("MESH") == 0) return AssetHandle<Mesh>(location, std::dynamic_pointer_cast<Mesh>(this->assetCache[location].lock()));
 
 			//Split location parameter
-			size_t pos = location.find(':');
+			std::size_t pos = location.find(':');
 			std::string model = location.substr(0, pos);
 			std::string mesh = location.substr(pos + 1, location.size());
 

@@ -15,3 +15,6 @@ Table of Contents:
 	manual/building
 	manual/backends
 	manual/vs
+	manual/excodes
+	manual/inputmappings
+	manual/deffiles

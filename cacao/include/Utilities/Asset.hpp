@@ -7,24 +7,42 @@
 #include <future>
 
 namespace Cacao {
-	//Base asset type
+	/**
+	 * @brief Base asset type
+	 */
 	class Asset {
 	  public:
-		//Compile asset to be used later
+		/**
+		 * @brief Compile the raw asset data into a format that can be used
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the asset was already compiled
+		 */
 		virtual std::shared_future<void> Compile() {
-			Logging::EngineLog("Cannot compile base asset type!");
+			Logging::EngineLog("Cannot compile base asset type!", LogLevel::Error);
 			return {};
 		}
-		//Delete asset when no longer needed
+
+		/**
+		 * @brief Delete the compiled asset data
+		 *
+		 * @throws Exception If the asset was not compiled
+		 */
 		virtual void Release() {
-			Logging::EngineLog("Cannot release base asset type!");
+			Logging::EngineLog("Cannot release base asset type!", LogLevel::Error);
 		}
-		//Check if compiled
+
+		/**
+		 * @brief Check if the asset is compiled
+		 *
+		 * @return Whether the asset is compiled or not
+		 */
 		virtual bool IsCompiled() {
 			return compiled;
 		}
 
-		//Get asset type
+		///@brief Get the asset type (not useful here because this is the base asset)
 		virtual std::string GetType() {
 			return "N/A";
 		}
@@ -45,48 +63,79 @@ namespace Cacao {
 		void _AM_Uncache_AHID(std::string id);
 	}
 
-	//Handle to an asset
+	/**
+	 * @brief Reference-counted handle to an asset
+	 */
 	template<typename T>
 	class AssetHandle {
 	  public:
-		//Construct an asset handle with an ID and asset
+		/**
+		 * @brief Construct an asset handle with an ID and asset
+		 * @note Prefer to use AssetManager::Load* methods to get AssetHandles.
+		 *
+		 * @param id The asset ID
+		 * @param asset The asset, which must have a type that is a subclass of Asset
+		 */
 		AssetHandle(const std::string& id, std::shared_ptr<T> asset)
 		  : asset(asset), id(id), isNullHandle(false) {
 			static_assert(std::is_base_of<Asset, T>(), "Cannot construct asset handle with non-subclass of Asset!");
 		}
 
-		//Construct a "null" handle (used for failed asset load calls)
+		/**
+		 * @brief Construct a "null" AssetHandle
+		 *
+		 * @note For use by the engine only
+		 */
 		AssetHandle()
 		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME"), isNullHandle(true) {}
 
-		//Remove from asset cache if this is the last handle
+		/**
+		 * @brief Destroy the asset handle
+		 * @details If this was the last reference to the asset, uncache it
+		 */
 		~AssetHandle() {
 			if(asset.use_count() == 1) {
 				_AH::_AM_Uncache_AHID(id);
 			}
 		}
 
-		//Allows this handle to be used directly in place of the asset type
+		/**
+		 * @brief Access the underlying shared_ptr
+		 * @details This is done so the AssetHandle can act in place of the shared_ptr
+		 */
 		operator std::shared_ptr<T>() {
 			return asset;
 		}
 
-		//Do stuff with the asset
+		/**
+		 * @brief Access the managed asset
+		 */
 		std::shared_ptr<T>& operator->() {
 			return asset;
 		}
 
-		//Get the asset manually
+		/**
+		 * @brief Get the managed asset
+		 * @details This can be used when you need the shared_ptr value and can't use the operator shared_ptr<T> or the arrow operator
+		 */
 		std::shared_ptr<T>& GetManagedAsset() {
 			return asset;
 		}
 
-		//Get the ID of the asset
+		/**
+		 * @brief Get the asset ID
+		 *
+		 * @return The asset ID
+		 */
 		std::string GetID() {
 			return id;
 		}
 
-		//Is this handle a null handle?
+		/**
+		 * @brief Check if this is a "null" asset handle
+		 *
+		 * @return Whether this is a "null" handle or not
+		 */
 		bool IsNull() {
 			return isNullHandle;
 		}

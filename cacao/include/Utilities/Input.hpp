@@ -8,20 +8,50 @@
 #include <map>
 
 namespace Cacao {
-	//Input utility singleton
+	/**
+	 * @brief Input handler and store
+	 */
 	class Input {
 	  public:
-		//Returns a two-component vector of doubles representing the current cursor position
+		/**
+		 * @brief Get the current cursor position
+		 *
+		 * @return The current cursor position
+		 */
 		glm::dvec2 GetCursorPos();
-		//Returns a boolean representing whether the given key is pressed
+
+		/**
+		 * @brief Check whether a given key is pressed
+		 *
+		 * @param key The key to check.
+		 * @note View the page "Input Mappings" in the manual for the list of valid keys
+		 *
+		 * @return If the key is pressed
+		 */
 		bool IsKeyPressed(int key);
-		//Returns a boolean representing whether the given mouse button is pressed
+
+		/**
+		 * @brief Check whether a given mouse button is pressed
+		 *
+		 * @param button The mouse button to check.
+		 * @note View the page "Input Mappings" in the manual for the list of valid buttons
+		 *
+		 * @return If the mouse button is pressed
+		 */
 		bool IsMouseButtonPressed(int button);
 
-		//Flush the input state
+		/**
+		 * @brief Freeze the current input state for this tick
+		 *
+		 * @note For use by the engine only
+		 */
 		void FreezeFrameInputState();
 
-		//Get the current instance or create one if it doesn't exist
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static Input* GetInstance();
 
 	  private:

@@ -9,27 +9,56 @@
 #include "Utilities/MultiFuture.hpp"
 
 namespace Cacao {
-	//Manager for the event system
+	/**
+	 * @brief Manages event consumers and event dispatching
+	 */
 	class EventManager {
 	  public:
-		//Subscribes a consumer for events of the given type to be dispatched to
+		/**
+		 * @brief Subscribe a consumer to the given event type
+		 * @details Registers this consumer to be called when an event of the given type is dispatched
+		 *
+		 * @param type The type of event to subscribe to
+		 * @param consumer The consumer to subscribe
+		 */
 		void SubscribeConsumer(std::string type, EventConsumer* consumer);
 
-		//Unsubscribes a consumer from events of the given type
+		/**
+		 * @brief Unsubscribe a consumer from the given event type
+		 *
+		 * @param type The type of event to unsubscribe from
+		 * @param consumer The consumer to unsubscribe
+		 */
 		void UnsubscribeConsumer(std::string type, EventConsumer* consumer);
 
-		//Dispatches an event to all subscribed consumers for the appropriate event type
+		/**
+		 * @brief Dispatch an event to all subscribed consumers of its type
+		 *
+		 * @warning Currently, this blocks until all consumers are done. This behavior will be changed in the future.
+		 *
+		 * @param event The event to dispatch
+		 */
 		void Dispatch(Event& event);
 
-		//Dispatches an event to all subscribed consumers for the appropriate event type
-		//Also returns a signal that can be waited on to know when all consumers have finished
-		//This requires that all registered consumers are signal-processing, if not this function will throw an exception
+		/**
+		 * @brief Dispatch an event to all subscribed consumers of its type with a signal
+		 *
+		 * @warning Currently, this blocks until all consumers are done. This behavior will be changed in the future.
+		 *
+		 * @param event The event to dispatch
+		 */
 		std::shared_ptr<MultiFuture<void>> DispatchSignaled(Event& event);
 
-		//Shutdown the event manager and unsubscribe all consumers
+		/**
+		 * @brief Shut down the event manager and unsubscribe all consumers
+		 */
 		void Shutdown();
 
-		//Get the current instance or create one if it doesn't exist
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static EventManager* GetInstance();
 
 	  private:

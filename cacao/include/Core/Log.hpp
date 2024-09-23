@@ -17,6 +17,9 @@ namespace Cacao {
 		Fatal = 4 ///<Fatal Errors
 	};
 
+	/**
+	 * @brief Logging manager
+	 */
 	class Logging {
 	  public:
 		/**

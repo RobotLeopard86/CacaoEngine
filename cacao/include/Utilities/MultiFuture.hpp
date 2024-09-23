@@ -4,30 +4,42 @@
 #include <vector>
 
 namespace Cacao {
-
-	//An aggregator of futures that can be waited on all at once
+	/**
+	 * @brief Aggregates a list of futures into one future that can be waited on all at once
+	 */
 	template<typename T>
 	class MultiFuture : public std::vector<std::future<T>> {
 	  public:
-		//All of vector's constructors
+		//All of std::vector's constructors
 		using std::vector<std::future<T>>::vector;
 
-		//Delete copy constructor and copy-assignment
+		///@brief Copy-construction is banned
 		MultiFuture(const MultiFuture&) = delete;
+
+		///@brief Copy-assignment is banned
 		MultiFuture& operator=(const MultiFuture&) = delete;
 
-		//Explict default move constructor and move assignment
+		///@cond
 		MultiFuture(MultiFuture&&) = default;
 		MultiFuture& operator=(MultiFuture&&) = default;
+		///@endcond
 
-		//Wait on all futures
+		/**
+		 * @brief Wait on all futures
+		 *
+		 * @note Blocks until all futures are completed
+		 */
 		void WaitAll() {
 			for(const std::future<T>& fut : *this) {
 				fut.wait();
 			}
 		}
 
-		//How many futures are ready?
+		/**
+		 * @brief Get the number of futures that are ready
+		 *
+		 * @return The number of ready futures
+		 */
 		int NumReadyFutures() {
 			int retval;
 			for(const std::future<T>& fut : *this) {

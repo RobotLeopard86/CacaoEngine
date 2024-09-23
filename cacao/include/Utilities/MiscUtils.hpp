@@ -4,16 +4,24 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
 
-//Allows conversion of an instance member function of the current class into a form that can be called like a static function
+/**
+ * @brief Convert a member function of this object into a form that can be called statically
+ * @warning The function must take no arguments, otherwise you will receive weird template instantiation errors that don't help
+ */
 #define BIND_MEMBER_FUNC(func) std::bind(&func, this, std::placeholders::_1)
 
 namespace Cacao {
-	//Front, right, and up vector calculation result
+	/**
+	 * @brief Result from Calculate3DVectors
+	 */
 	struct Vectors {
 		glm::vec3 front, right, up;
 	};
 
-	//Caluclate the front, right, and up vectors from an rotation
+	/**
+	 * @brief Calculate a front vector pointing away from the origin at the given rotation and its accompanying right and up vectors
+	 * @details The rotation values must be in degrees
+	 */
 	inline Vectors Calculate3DVectors(glm::vec3 rotation) {
 		//Get our X and Y rotation in radians
 		float tilt = glm::radians(rotation.x);
@@ -36,8 +44,12 @@ namespace Cacao {
 		return {.front = frontVec, .right = rightVec, .up = upVec};
 	}
 
-	//Fake deleter that doesn't actually delete anything
-	//This is used on the self pointers so they don't try to delete themselves in the destructor
+	/**
+	 * @brief Fake deleter for shared pointers that doesn't delete anything
+	 * @details This was made to use on Entity self-pointers, so that the shared_ptr doesn't recursively call the destructor
+	 *
+	 * @note This was made for internal purposes, but if it helps, feel free to use it.
+	 */
 	template<typename T>
 	struct FakeDeleter {
 		void operator()(T* e) const {}
