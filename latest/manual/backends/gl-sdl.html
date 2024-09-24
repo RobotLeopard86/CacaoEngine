@@ -83,6 +83,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../deffiles.html">Definition Files</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../shaders.html">Shader Guide<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../shaders/glsl.html">GLSL Shaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../shaders/hlsl.html">HLSL Shaders</a></li>
+</ul>
+</li>
 <li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l3"><a class="reference internal" href="gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
