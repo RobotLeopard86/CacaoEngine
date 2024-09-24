@@ -8,14 +8,15 @@ If you're just looking to get started with making a game, see the :doc:`quicksta
 Table of Contents:
 
 .. toctree::
-	:maxdepth: 2
+	:maxdepth: 1
 	:titlesonly:
 
 	manual/quickstart
 	manual/building
-	manual/backends
 	manual/vs
+	manual/bundles
+	manual/events
 	manual/excodes
 	manual/inputmappings
 	manual/deffiles
-	manual/events
+	manual/backends

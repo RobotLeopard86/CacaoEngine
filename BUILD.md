@@ -14,7 +14,8 @@ Cacao Engine uses OpenAL-Soft, a software implementation of the OpenAL API which
 | -------- | ------------ | ------------ | ---------- |
 | Pipewire | `libpipewire-0.3-dev` | `pipewire-devel` | `libpipewire` |
 | PulseAudio | `libpulse-dev` | `pulseaudio-libs pulseaudio-libs-devel` | `libpulse` |
-| ALSA | `libasound2-dev` | `alsa-lib alsa-lib-devel` | `alsa-lib` |
+| ALSA | `libasound2-dev` | `alsa-lib alsa-lib-devel` | `alsa-lib` |  
+
 Cacao Engine also requires libuuid. The packages for that are listed below:
 * Debian-based: `uuid-dev`
 * Fedora-based: `libuuid-devel`
@@ -41,10 +42,10 @@ Building Cacao Engine requires a copy of the source code (obviously). Cacao Engi
 
 ## 2. Configuring the Build
 **IMPORTANT**: MSVC likely will only be detected properly if run in the Visual Studio Developer Command Prompt/PowerShell.
-Select a backend from [the backends list](BACKENDS.md). Enter the source tree root directory in your terminal, then run the following command `meson setup <build directory> -Dbuild_playground=true|false -Duse_backend=<chosen backend>`. **IMPORTANT**: Add `--native-file posix_native.ini` to your command line if on Linux or macOS. Set the `build_playground` option to `true` if you want to optionally build the playground, or `false` otherwise. If on Windows, you may add `-Dwindows_noconsole=true` to the command to configure a build without a console. Meson runs debug builds by default. See [this page](https://mesonbuild.com/Builtin-options.html#core-options) on Meson's website for the list of types. This command may take some time to complete.
+Select a backend from [the backends list](backends). Enter the source tree root directory in your terminal, then run the following command `meson setup <build directory> -Dbuild_playground=true|false -Duse_backend=<chosen backend>`. **IMPORTANT**: Add `--native-file posix_native.ini` to your command line if on Linux or macOS. Set the `build_playground` option to `true` if you want to optionally build the playground, or `false` otherwise. If on Windows, you may add `-Dwindows_noconsole=true` to the command to configure a build without a console. Meson runs debug builds by default. See [this page](https://mesonbuild.com/Builtin-options.html#core-options) on Meson's website for the list of types. This command may take some time to complete.
 
 ## 3. Build
 Congratulations, you're ready to build. Simply enter the build directory in your terminal and run `ninja`. Wait for it to complete, and then you're basically good to go. The `cacaoengine` executable on its own won't display anything if the proper files for starting a game aren't found, so see the the following section in which the playground is set up as an example.
 
 ## 4. Playground Setup
-If you chose to build the playground, you will find an additional `playground` directory in your build folder. This directory contains the built files produced by the playground. This won't run on its own though, so to set that up, run `ninja bundle_playground` in your terminal. This will merge the playground, its assets, and the engine binaries into one directory for your convenience. If you would like to do something similar with your own game build, make a new directory, and copy your `launch.so|.dll|.dylib` (whichever you have) to it, as well as the `cacaoengine[.exe]` in the `cacao` directory and the `libcacaobackend.so|.dll|.dylib` (whichever you have) in the `backends/<chosen backend>` directory. Additionally copy your other project directories, and you're done.
+If you chose to build the playground, you will find an additional `playground` directory in your build folder. This directory contains the built files produced by the playground. This won't run on its own though, so to set that up, run `ninja bundle` in your terminal. This will merge the playground, its assets, and the engine binaries into one directory so that the engine will run properly.
