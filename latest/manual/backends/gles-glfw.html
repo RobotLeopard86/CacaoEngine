@@ -75,12 +75,14 @@
 <div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
 <ul class="current">
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../manual.html">Cacao Engine Manual<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
-<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../quickstart.html">Quickstart<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
-<li class="toctree-l3"><a class="reference internal" href="../quickstart/setup.html">Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart/first-project.html">Making Your First Project</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../building.html">Cacao Engine Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../building.html">Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bundles.html">Bundles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../events.html">Built-In Event List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deffiles.html">Definition Files</a></li>
 <li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l3"><a class="reference internal" href="gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
@@ -88,11 +90,6 @@
 <li class="toctree-l3"><a class="reference internal" href="gles-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-sdl</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../vs.html">Visual Studio Compatibility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../excodes.html">Exception Codes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../deffiles.html">Definition Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">

@@ -14,7 +14,7 @@
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="quickstart/setup.html" rel="next" title="Setup"/>
+<link href="building.html" rel="next" title="Build Instructions"/>
 <link href="../manual.html" rel="prev" title="Cacao Engine Manual"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
@@ -75,12 +75,14 @@
 <div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
 <ul class="current">
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual.html">Cacao Engine Manual<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
-<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="current reference internal expandable" href="#">Quickstart<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
-<li class="toctree-l3"><a class="reference internal" href="quickstart/setup.html">Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart/first-project.html">Making Your First Project</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="building.html">Cacao Engine Build Instructions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html">Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundles.html">Bundles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Built-In Event List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
 <li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
@@ -88,11 +90,6 @@
 <li class="toctree-l3"><a class="reference internal" href="backends/gles-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-sdl</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -190,13 +187,56 @@
 <div id="content" role="main">
 <section id="quickstart">
 <h1>Quickstart<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#quickstart"><span></span></a></h1>
-<p>Welcome to the Cacao Engine quickstart guide! This will teach you how to get started with your first Cacao Engine game.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/setup.html">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/first-project.html">Making Your First Project</a></li>
-</ul>
+<section id="creating-a-base-project">
+<h2>Creating a base project<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#creating-a-base-project" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-a-base-project'"><span></span></a></h2>
+<p>The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at <code class="docutils literal notranslate"><span class="pre">https://github.com/RobotLeopard86/CacaoEngine-Game-Template</span></code>. This repository contains an ideal setup for creating a Cacao Engine game.</p>
+</section>
+<section id="building">
+<h2>Building<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#building" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#building'"><span></span></a></h2>
+<p>Install the dependencies as listed in the <a class="reference internal" href="building.html"><span class="doc std std-doc">build instructions</span></a>.<br/>
+If you’d like to use Visual Studio, see the <a class="reference internal" href="vs.html"><span class="doc std std-doc">Visual Studio compatibility guide</span></a> for info on how to set up a Visual Studio Solution.<br/>
+Otherwise, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span></code> if on Windows or <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> if on Linux or macOS to create a build directory, then run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">-C</span> <span class="pre">build</span> <span class="pre">run</span></code> to build and run the template.
+If all goes well, you should see something like this:<br/>
+<img alt="Template" src="../_images/quickstart-template.png"/></p>
+</section>
+<section id="breaking-down-the-template">
+<h2>Breaking down the template<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#breaking-down-the-template" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#breaking-down-the-template'"><span></span></a></h2>
+<p>The main part of this template is the <code class="docutils literal notranslate"><span class="pre">src/Game.cpp</span></code> file. It is the entrypoint for your game. Let’s walk through it step-by-step.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">#ifdef _WIN32</span>
+</span><span id="line-2"><span class="cp">#define EXPORT __declspec(dllexport)</span>
+</span><span id="line-3"><span class="cp">#else</span>
+</span><span id="line-4"><span class="cp">#define EXPORT</span>
+</span><span id="line-5"><span class="cp">#endif</span>
+</span></code></pre></div>
 </div>
+<p>This is some C++ preprocessor stuff to make sure that our hook functions are always accessible. On most POSIX systems, all symbols in a shared library are automatically exported, meaning they are visible to other files. On Windows, however, everything in a shared library (DLL) is invisible by default, and must be exported.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao.hpp"</span>
+</span></code></pre></div>
+</div>
+<p>Here we include the Cacao Engine header file, giving us access to all of the Cacao Engine functions we need.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{...}</span>
+</span></code></pre></div>
+</div>
+<p>This is telling the C++ compiler, “Hey! Keep these function names exactly like they are!”. By default, C++ compilers “mangle” names, so as to avoid conflicts. Here though, we need these names preserved so the engine can find them. Now we move inside this block.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">_CacaoLaunch</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-2"><span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">"Hi!"</span><span class="p">);</span>
+</span><span id="line-3"><span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">CreateWorld</span><span class="o">&lt;</span><span class="n">Cacao</span><span class="o">::</span><span class="n">PerspectiveCamera</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
+</span><span id="line-4"><span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetActiveWorld</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
+</span><span id="line-5"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>Here we define the startup hook function. Notice that it’s marked with the <code class="docutils literal notranslate"><span class="pre">EXPORT</span></code> macro from earlier. This function is called by the engine to set up your game before the run loop.<br/>
+Inside this function, we log <code class="docutils literal notranslate"><span class="pre">Hi!</span></code> to the console, create a world with a perspective camera named <code class="docutils literal notranslate"><span class="pre">World</span></code>, and set it as active.<br/>
+Note that the log function specifically says <code class="docutils literal notranslate"><span class="pre">ClientLog</span></code>. This is to distinguish messages coming from your game (the client) and the engine.<br/>
+You may also notice that everything is prefixed with <code class="docutils literal notranslate"><span class="pre">Cacao::</span></code>. All Cacao Engine things live in the <code class="docutils literal notranslate"><span class="pre">Cacao</span></code> namespace. If you want to omit this, add <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">namespace</span> <span class="pre">Cacao;</span></code> right after including the <code class="docutils literal notranslate"><span class="pre">Cacao.hpp</span></code> header file.<br/>
+Lastly, many components of Cacao Engine follow the singleton pattern, meaning there is only ever one instance of them. In this function, we get the instance of the <code class="docutils literal notranslate"><span class="pre">WorldManager</span></code> to use it.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">_CacaoExiting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-2"><span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+</span><span id="line-3"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>Lastly, we define the shutdown hook function. Again, note that it’s marked with the <code class="docutils literal notranslate"><span class="pre">EXPORT</span></code> macro. This function is called during engine shutdown, to clean up everything.</p>
+</section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
@@ -208,14 +248,22 @@
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="quickstart/setup.html">
-        Setup
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="building.html">
+        Build Instructions
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
 </a>
 </div>
-</div></div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#creating-a-base-project'" class="reference internal" href="#creating-a-base-project">Creating a base project</a></li>
+<li><a :data-current="activeSection === '#building'" class="reference internal" href="#building">Building</a></li>
+<li><a :data-current="activeSection === '#breaking-down-the-template'" class="reference internal" href="#breaking-down-the-template">Breaking down the template</a></li>
+</ul>
+</div>
+</aside>
 </main>
 </div>
 </div><footer class="py-6 border-t border-border md:py-0">

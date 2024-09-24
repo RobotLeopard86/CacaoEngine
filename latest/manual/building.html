@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Cacao Engine Build Instructions | Cacao Engine Docs</title>
-<meta content="Cacao Engine Build Instructions | Cacao Engine Docs" property="og:title"/>
-<meta content="Cacao Engine Build Instructions | Cacao Engine Docs" name="twitter:title"/>
+<title>Build Instructions | Cacao Engine Docs</title>
+<meta content="Build Instructions | Cacao Engine Docs" property="og:title"/>
+<meta content="Build Instructions | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../search.html" rel="search" title="Search"/>
-<link href="backends.html" rel="next" title="Cacao Engine Backends"/>
-<link href="quickstart/first-project.html" rel="prev" title="Making Your First Project"/>
+<link href="vs.html" rel="next" title="Visual Studio Compatibility"/>
+<link href="quickstart.html" rel="prev" title="Quickstart"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -75,12 +75,14 @@
 <div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
 <ul class="current">
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual.html">Cacao Engine Manual<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
-<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="quickstart.html">Quickstart<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
-<li class="toctree-l3"><a class="reference internal" href="quickstart/setup.html">Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart/first-project.html">Making Your First Project</a></li>
-</ul>
-</li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Cacao Engine Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Build Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundles.html">Bundles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Built-In Event List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
 <li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
@@ -88,11 +90,6 @@
 <li class="toctree-l3"><a class="reference internal" href="backends/gles-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gles-sdl</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="events.html">Built-In Event List</a></li>
 </ul>
 </li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/library_root.html">Cacao Engine API Reference<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
@@ -185,11 +182,11 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../manual.html">Cacao Engine Manual</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Cacao Engine Build Instructions</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Build Instructions</span>
 </nav>
 <div id="content" role="main">
-<section id="cacao-engine-build-instructions">
-<h1>Cacao Engine Build Instructions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cacao-engine-build-instructions"><span></span></a></h1>
+<section id="build-instructions">
+<h1>Build Instructions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#build-instructions"><span></span></a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#prerequisites" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#prerequisites'"><span></span></a></h2>
 <ul class="simple">
@@ -272,21 +269,21 @@ Select a backend from <a class="reference internal" href="backends.html"><span c
 </section>
 <section id="playground-setup">
 <h2>4. Playground Setup<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#playground-setup" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#playground-setup'"><span></span></a></h2>
-<p>If you chose to build the playground, you will find an additional <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory in your build folder. This directory contains the built files produced by the playground. This won’t run on its own though, so to set that up, run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">bundle_playground</span></code> in your terminal. This will merge the playground, its assets, and the engine binaries into one directory for your convenience. If you would like to do something similar with your own game build, make a new directory, and copy your <code class="docutils literal notranslate"><span class="pre">launch.so|.dll|.dylib</span></code> (whichever you have) to it, as well as the <code class="docutils literal notranslate"><span class="pre">cacaoengine[.exe]</span></code> in the <code class="docutils literal notranslate"><span class="pre">cacao</span></code> directory and the <code class="docutils literal notranslate"><span class="pre">libcacaobackend.so|.dll|.dylib</span></code> (whichever you have) in the <code class="docutils literal notranslate"><span class="pre">backends/&lt;chosen</span> <span class="pre">backend&gt;</span></code> directory. Additionally copy your other project directories, and you’re done.</p>
+<p>If you chose to build the playground, you will find an additional <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory in your build folder. This directory contains the built files produced by the playground. This won’t run on its own though, so to set that up, run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">bundle</span></code> in your terminal. This will merge the playground, its assets, and the engine binaries into one directory so that the engine will run properly.</p>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="quickstart/first-project.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="quickstart.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Making Your First Project
+        Quickstart
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="backends.html">
-        Cacao Engine Backends
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="vs.html">
+        Visual Studio Compatibility
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
