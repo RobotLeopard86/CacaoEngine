@@ -19,4 +19,5 @@ Table of Contents:
 	manual/excodes
 	manual/inputmappings
 	manual/deffiles
+	manual/shaders
 	manual/backends
