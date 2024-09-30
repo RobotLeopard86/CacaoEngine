@@ -26,6 +26,9 @@ layout(std140,binding=1) uniform CacaoLocals {
 } locals;
 ```  
 
+## Texture Bindings
+In Vulkan GLSL, every uniform must have a declared `binding` value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can't have a `binding=0` in your fragment shader, as that's already assigned to the `CacaoGlobals` uniform block.
+
 ## Applying the Matrices
 To get the final `gl_Position` value, you should write that assignment as follows:
 ```{code-block} glsl

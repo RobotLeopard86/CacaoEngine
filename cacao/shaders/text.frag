@@ -10,7 +10,7 @@ layout(push_constant) uniform ShaderData {
 	vec3 color;
 } shader;
 
-layout(binding=0) uniform sampler2D glyph;
+layout(binding=2) uniform sampler2D glyph;
 
 void main() {
     color = vec4(shader.color, texture(glyph, V2F.texCoords).r);

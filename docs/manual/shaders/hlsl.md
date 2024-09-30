@@ -66,8 +66,15 @@ struct ShaderData {
 ```  
 
 ## Textures and Samplers
-In HLSL, samplers and textures are separate objects. This model is not compatible with all APIs. A `SamplerState` associated with a texture must have the same register number as that texture (e.g. `register(t0)` on the texture is connected to the sampler with `regsiter(s0)`). `SamplerState`s and textures must also all be marked with the `[[vk::combinedImageSampler]]` annotation. Here's an example:  
+In HLSL, samplers and textures are separate objects. This model is not compatible with all APIs. A `SamplerState` associated with a texture must have the same register number as that texture (e.g. `register(t0)` on the texture is connected to the sampler with `register(s0)`). `SamplerState`s and textures must also all be marked with the `[[vk::combinedImageSampler]]` annotation. In addition, you all textures must be given a binding number. This is different than HLSL registers, and they are shared between the vertex and fragment stages. Since bindings `0` and `1` are, as seen above, taken by the constant buffers, it's best to start with binding number `2`. Apply bindings with the `[[vk::binding(NUMBER)]]` annotation. Here's an example:  
 ```{code-block} hlsl
-[[vk::combinedImageSampler]] Texture2D tex : register(t0);
-[[vk::combinedImageSampler]] SamplerState texSampler : register(s0);
-```
+[[vk::binding(2)]] [[vk::combinedImageSampler]] Texture2D tex : register(t0);
+[[vk::binding(2)]] [[vk::combinedImageSampler]] SamplerState texSampler : register(s0);
+```  
+If dealing with all of that is a lot, just write a macro for all of that put together. Here's one you can just copy-paste in:
+```{code-block} hlsl
+#define CacaoTexture(name, reg) [[vk::binding(reg + 2)]] [[vk::combinedImageSampler]] Texture2D name : register(t##reg);\
+								[[vk::binding(reg + 2)]] [[vk::combinedImageSampler]] SamplerState name##Sampler : register(s##reg)
+```  
+Then you can just do this instead: `CacaoTexture(tex, 0);`  
+For simplicity, maybe place this macro in a `texmacro.hlsl` file and `#include` it for ease-of-use.
