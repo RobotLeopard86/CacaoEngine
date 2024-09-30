@@ -220,6 +220,10 @@ Below is an example of how those should be declared. <strong>The order of member
 </span></code></pre></div>
 </div>
 </section>
+<section id="texture-bindings">
+<h2>Texture Bindings<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#texture-bindings" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#texture-bindings'"><span></span></a></h2>
+<p>In Vulkan GLSL, every uniform must have a declared <code class="docutils literal notranslate"><span class="pre">binding</span></code> value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can’t have a <code class="docutils literal notranslate"><span class="pre">binding=0</span></code> in your fragment shader, as that’s already assigned to the <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> uniform block.</p>
+</section>
 <section id="applying-the-matrices">
 <h2>Applying the Matrices<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#applying-the-matrices" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#applying-the-matrices'"><span></span></a></h2>
 <p>To get the final <code class="docutils literal notranslate"><span class="pre">gl_Position</span></code> value, you should write that assignment as follows:</p>
@@ -268,6 +272,7 @@ Below is an example of how those should be declared. <strong>The order of member
 <ul>
 <li><a :data-current="activeSection === '#inputs'" class="reference internal" href="#inputs">Inputs</a></li>
 <li><a :data-current="activeSection === '#uniform-blocks'" class="reference internal" href="#uniform-blocks">Uniform Blocks</a></li>
+<li><a :data-current="activeSection === '#texture-bindings'" class="reference internal" href="#texture-bindings">Texture Bindings</a></li>
 <li><a :data-current="activeSection === '#applying-the-matrices'" class="reference internal" href="#applying-the-matrices">Applying the Matrices</a></li>
 <li><a :data-current="activeSection === '#custom-shader-data'" class="reference internal" href="#custom-shader-data">Custom Shader Data</a></li>
 <li><a :data-current="activeSection === '#passing-data-between-shader-stages'" class="reference internal" href="#passing-data-between-shader-stages">Passing Data Between Shader Stages</a></li>
