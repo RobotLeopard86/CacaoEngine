@@ -58,16 +58,17 @@ namespace Cacao {
 		nativeData->win = SDL_CreateWindow(windowTitle.c_str(), initialSize.x, initialSize.y, flags);
 		EngineAssert(nativeData->win != NULL, "Failed to open the window!");
 
+		//Initialize graphics API
+		SetupGraphicsAPI(nativeData->win);
+
+		//Mark window open
+		isOpen = true;
+
 		//Set the window mode
 		SetMode(mode);
 
 		//Set window VSync state
 		SetVSyncEnabled(true);
-
-		//Initialize graphics API
-		SetupGraphicsAPI(nativeData->win);
-
-		isOpen = true;
 	}
 
 	void Window::Close() {

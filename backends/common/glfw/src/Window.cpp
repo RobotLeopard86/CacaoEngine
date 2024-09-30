@@ -64,12 +64,6 @@ namespace Cacao {
 		nativeData->win = glfwCreateWindow(initialSize.x, initialSize.y, windowTitle.c_str(), NULL, NULL);
 		EngineAssert(nativeData->win != NULL, "Failed to open the window!");
 
-		//Set the window mode
-		SetMode(mode);
-
-		//Set window VSync state
-		SetVSyncEnabled(true);
-
 		//Register window callbacks
 		glfwSetCursorPosCallback(nativeData->win, [](GLFWwindow* win, double x, double y) {
 			DataEvent<glm::vec2> mme("MouseMove", {x, y});
@@ -136,7 +130,14 @@ namespace Cacao {
 		//Initialize graphics api
 		SetupGraphicsAPI(nativeData->win);
 
+		//Mark window open
 		isOpen = true;
+
+		//Set the window mode
+		SetMode(mode);
+
+		//Set window VSync state
+		SetVSyncEnabled(true);
 	}
 
 	void Window::Close() {
