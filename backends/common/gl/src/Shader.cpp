@@ -271,6 +271,7 @@ namespace Cacao {
 
 		//Increment UBO index counter
 		ShaderData::uboIndexCounter++;
+		if(ShaderData::uboIndexCounter == globalsUBO) ShaderData::uboIndexCounter++;
 
 		//Set GPU ID and compiled values
 		nativeData->gpuID = program;

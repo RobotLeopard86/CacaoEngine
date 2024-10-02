@@ -37,6 +37,6 @@ namespace Cacao {
 	}
 
 	void PerspectiveCamera::RecalculateProjectionMatrix() {
-		projectionMatrix = glm::perspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.0000000001f, 100000.0f);
+		projectionMatrix = glm::infinitePerspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.1f);
 	}
 }
