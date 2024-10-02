@@ -11,7 +11,7 @@ namespace Cacao {
 	//Singleton accessor
 	WorldManager* WorldManager::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new WorldManager();
 			instanceExists = true;

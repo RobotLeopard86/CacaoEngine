@@ -21,7 +21,7 @@ namespace Cacao {
 	//Singleton accessor
 	Engine* Engine::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new Engine();
 			instanceExists = true;

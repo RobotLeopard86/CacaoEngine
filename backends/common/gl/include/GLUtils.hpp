@@ -23,8 +23,9 @@ namespace Cacao {
 
 	inline GLuint globalsUBO = 37;
 
-	inline GLuint SrgbFormat2Linear(GLuint in) {
+	inline GLuint LinearFormat2Srgb(GLuint in) {
 		switch(in) {
+			case GL_RED: return GL_RED;
 			case GL_RGB: return GL_SRGB;
 			case GL_RGBA: return GL_SRGB_ALPHA;
 			case GL_RGB8: return GL_SRGB8;
@@ -33,8 +34,9 @@ namespace Cacao {
 		}
 	}
 
-	inline GLuint LinearFormat2Srgb(GLuint in) {
+	inline GLuint SrgbFormat2Linear(GLuint in) {
 		switch(in) {
+			case GL_RED: return GL_RED;
 			case GL_SRGB: return GL_RGB;
 			case GL_SRGB_ALPHA: return GL_RGBA;
 			case GL_SRGB8: return GL_RGB8;

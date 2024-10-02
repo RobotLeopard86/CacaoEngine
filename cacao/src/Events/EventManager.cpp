@@ -133,7 +133,7 @@ namespace Cacao {
 
 	EventManager* EventManager::GetInstance() {
 		//Do we have a event manager instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create event manager instance
 			instance = new EventManager();
 			instanceExists = true;

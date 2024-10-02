@@ -18,7 +18,7 @@ class PlaygroundApp {
   public:
 	static PlaygroundApp* GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new PlaygroundApp();
 			instanceExists = true;
@@ -390,7 +390,7 @@ void PlaygroundApp::Launch() {
 	textElem->SetAlignment(Cacao::TextAlign::Right);
 	textElem->SetAnchor(Cacao::AnchorPoint::BottomRight);
 	textElem->SetFont(font);
-	textElem->SetColor({92.0f, 214.0f, 92.0f});
+	textElem->SetColor({0x13, 0xC3, 0x13});
 	textElem->SetOffsetFromAnchor({0, 0});
 	textElem->SetText("Cacao Engine Playground");
 	textElem->SetSize({0.05f, 0.05f});

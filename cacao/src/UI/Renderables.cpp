@@ -97,7 +97,7 @@ namespace Cacao {
 
 		//Create Harfbuzz font representation
 		FT_Set_Pixel_Sizes(font->face, 0, ret->charSize);
-		ret->hbf = hb_ft_font_create(font->face, NULL);
+		ret->hbf = hb_ft_font_create(font->face, nullptr);
 
 		//Convert to glyph info
 		for(std::string line : baseLines) {
@@ -112,7 +112,7 @@ namespace Cacao {
 			hb_buffer_clear_contents(rline.buffer);
 			hb_buffer_add_utf8(rline.buffer, line.c_str(), line.length(), 0, line.length());
 			hb_buffer_guess_segment_properties(rline.buffer);
-			hb_shape(ret->hbf, rline.buffer, NULL, 0);
+			hb_shape(ret->hbf, rline.buffer, nullptr, 0);
 
 			//Convert to glyphs
 			rline.glyphInfo = hb_buffer_get_glyph_infos(rline.buffer, &(rline.glyphCount));

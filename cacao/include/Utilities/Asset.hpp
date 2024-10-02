@@ -87,7 +87,7 @@ namespace Cacao {
 		 * @note For use by the engine only
 		 */
 		AssetHandle()
-		  : asset(nullptr), id("NULL_HANDLE_DONT_USE_ME"), isNullHandle(true) {}
+		  : asset(nullptr), id("nullptr_HANDLE_DONT_USE_ME"), isNullHandle(true) {}
 
 		/**
 		 * @brief Destroy the asset handle

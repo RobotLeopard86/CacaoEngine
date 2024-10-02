@@ -29,7 +29,7 @@ namespace Cacao {
 	//Singleton accessor
 	Window* Window::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new Window();
 			instanceExists = true;
@@ -46,6 +46,10 @@ namespace Cacao {
 		//Create native data
 		nativeData.reset(new WindowData());
 
+#ifdef __linux__
+		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_VIDEO_DRIVER_HINT, "x11");
+#endif
+
 		//Initialize GLFW
 		EngineAssert(SDL_Init(SDL_INIT_VIDEO) == 0, "Could not initialize SDL library, no window can be created.");
 
@@ -56,7 +60,7 @@ namespace Cacao {
 		SDL_WindowFlags flags = GetSDLFlags() | SDL_WINDOW_RESIZABLE;
 		if(!startVisible) flags |= SDL_WINDOW_HIDDEN;
 		nativeData->win = SDL_CreateWindow(windowTitle.c_str(), initialSize.x, initialSize.y, flags);
-		EngineAssert(nativeData->win != NULL, "Failed to open the window!");
+		EngineAssert(nativeData->win != nullptr, "Failed to open the window!");
 
 		//Initialize graphics API
 		SetupGraphicsAPI(nativeData->win);
@@ -140,7 +144,7 @@ namespace Cacao {
 				break;
 			}
 			case WindowMode::Borderless:
-				SDL_SetWindowFullscreenMode(nativeData->win, NULL);
+				SDL_SetWindowFullscreenMode(nativeData->win, nullptr);
 				SDL_SetWindowFullscreen(nativeData->win, true);
 				break;
 		}

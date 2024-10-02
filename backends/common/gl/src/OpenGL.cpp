@@ -162,10 +162,13 @@ namespace Cacao {
 
 		uivsm = {};
 
+		//Enable SRGB
+		glEnable(GL_FRAMEBUFFER_SRGB);
+
 		//Create globals UBO
 		glGenBuffers(1, &globalsUBO);
 		glBindBuffer(GL_UNIFORM_BUFFER, globalsUBO);
-		glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		//Compile UI view shader

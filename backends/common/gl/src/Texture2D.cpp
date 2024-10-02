@@ -34,9 +34,9 @@ namespace Cacao {
 		if(numImgChannels == 1) {
 			nativeData->format = GL_RED;
 		} else if(numImgChannels == 3) {
-			nativeData->format = GL_RGB;
+			nativeData->format = GL_SRGB;
 		} else if(numImgChannels == 4) {
-			nativeData->format = GL_RGBA;
+			nativeData->format = GL_SRGB_ALPHA;
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace Cacao {
 		glBindTexture(GL_TEXTURE_2D, nativeData->gpuID);
 
 		//Load image data into texture object
-		glTexImage2D(GL_TEXTURE_2D, 0, nativeData->format, imgSize.x, imgSize.y, 0, nativeData->format, GL_UNSIGNED_BYTE, dataBuffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, nativeData->format, imgSize.x, imgSize.y, 0, SrgbFormat2Linear(nativeData->format), GL_UNSIGNED_BYTE, dataBuffer);
 
 		//Apply texture filtering
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

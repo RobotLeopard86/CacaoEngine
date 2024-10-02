@@ -15,7 +15,7 @@ namespace Cacao {
 	//Singleton accessor
 	AssetManager* AssetManager::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new AssetManager();
 			instanceExists = true;

@@ -254,7 +254,7 @@ namespace Cacao {
 		//Setup local UBO
 		glGenBuffers(1, &(nativeData->localsUBO));
 		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->localsUBO);
-		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		//Link global UBO

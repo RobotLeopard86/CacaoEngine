@@ -18,7 +18,7 @@ namespace Cacao {
 	//Singleton accessor
 	DynTickController* DynTickController::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new DynTickController();
 			instanceExists = true;
