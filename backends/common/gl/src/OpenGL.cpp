@@ -13,6 +13,10 @@
 #include "Graphics/Textures/Cubemap.hpp"
 #include "GLUIView.hpp"
 
+#ifdef ES
+#define GL_FRAMEBUFFER_SRGB GL_FRAMEBUFFER_SRGB_EXT
+#endif
+
 namespace Cacao {
 	//Queue of OpenGL (ES) tasks to process
 	static std::queue<Task> glQueue;

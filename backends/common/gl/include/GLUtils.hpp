@@ -7,6 +7,10 @@
 #include <future>
 #include <memory>
 
+#ifdef ES
+#define GL_SRGB_ALPHA GL_SRGB_ALPHA_EXT
+#endif
+
 namespace Cacao {
 	void EnqueueGLJob(Task& task);
 
