@@ -1,6 +1,6 @@
-x+: assets/sky/right.jpg
-x-: assets/sky/left.jpg
-y+: assets/sky/top.jpg
-y-: assets/sky/bottom.jpg
-z+: assets/sky/front.jpg
-z-: assets/sky/back.jpg
+x+: assets/sky/r.png
+x-: assets/sky/l.png
+y+: assets/sky/u.png
+y-: assets/sky/d.png
+z+: assets/sky/f.png
+z-: assets/sky/b.png

@@ -1,5 +1,7 @@
 # HLSL Shaders
 
+**WARNING**: The `dxc` version that ships with Visual Studio 2022 **does not** support SPIR-V codegen!! You will need to either use the `dxc` from the [Vulkan SDK](https://vulkan.lunarg.org) or build it from source.  
+
 Cacao Engine shaders should target Shader Model 6.0.  
 
 ## Matrix Packing

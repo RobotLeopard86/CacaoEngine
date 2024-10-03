@@ -13,6 +13,8 @@
 #include "Graphics/Textures/Cubemap.hpp"
 #include "GLUIView.hpp"
 
+constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
+
 namespace Cacao {
 	//Queue of OpenGL (ES) tasks to process
 	static std::queue<Task> glQueue;
@@ -55,7 +57,8 @@ namespace Cacao {
 		std::shared_future<void> frameTask = InvokeGL([frame]() {
 			//Clear the screen
 			//We use an obnoxious neon alligator green because it indicates that something is messed up if you can see it
-			glClearColor(0.765625f, 1.0f, 0.1015625f, 1.0f);
+			glm::vec3 clearColorLinear = glm::pow(clearColorSRGB, glm::vec3 {2.2f});
+			glClearColor(clearColorLinear.r, clearColorLinear.g, clearColorLinear.b, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			//Upload globals
