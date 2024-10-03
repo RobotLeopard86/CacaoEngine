@@ -13,7 +13,7 @@ namespace Cacao {
 	//Singleton accessor
 	AudioSystem* AudioSystem::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new AudioSystem();
 			instanceExists = true;
@@ -26,9 +26,9 @@ namespace Cacao {
 		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized audio system!")
 
 		//Initialize OpenAL-Soft
-		dev = alcOpenDevice(NULL);
+		dev = alcOpenDevice(nullptr);
 		CheckException(dev, Exception::GetExceptionCodeFromMeaning("External"), "Failed to open the OpenAL device!")
-		ctx = alcCreateContext(dev, NULL);
+		ctx = alcCreateContext(dev, nullptr);
 
 		//Make audio context current
 		alcMakeContextCurrent(ctx);
@@ -49,7 +49,7 @@ namespace Cacao {
 		isInitialized = false;
 
 		//Shutdown OpenAL-Soft
-		alcMakeContextCurrent(NULL);
+		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(ctx);
 		alcCloseDevice(dev);
 	}

@@ -5,23 +5,48 @@
 #include <string>
 
 namespace Cacao {
+
+	/**
+	 * @brief Level of severity for log messages
+	 */
 	enum LogLevel {
-		Trace = 0,//Debug information, usually unneeded (e.g. renderer backend info)
-		Info = 1, //Information (e.g. engine starting)
-		Warn = 2, //Warnings (e.g. slow loading)
-		Error = 3,//Errors (e.g. shader compilation failure)
-		Fatal = 4 //Fatal Errors (e.g. backend initialization failure)
+		Trace = 0,///<Debug information, usually unneeded
+		Info = 1, ///<Information
+		Warn = 2, ///<Warnings
+		Error = 3,///<Errors
+		Fatal = 4 ///<Fatal Errors
 	};
 
+	/**
+	 * @brief Logging manager
+	 */
 	class Logging {
 	  public:
-		//Initialize the logging system
+		/**
+		 * @brief Initialize the logging system
+		 *
+		 * @note This function is called by at engine startup automatically.
+		 */
 		static void Init();
 
-		//Engine logs
+		/**
+		 * @brief Log a message from the engine
+		 *
+		 * @param message The message to log
+		 * @param level The @ref LogLevel to use. (optional, defaults to Info)
+		 *
+		 * @note For use only by the engine internally.
+		 */
 		static void EngineLog(std::string message, LogLevel level = LogLevel::Info);
 
-		//Client logs
+		/**
+		 * @brief Log a message from the game
+		 *
+		 * @param message The message to log
+		 * @param level The @ref LogLevel to use. (optional, defaults to Info)
+		 *
+		 * @note For use by games using the engine.
+		 */
 		static void ClientLog(std::string message, LogLevel level = LogLevel::Info);
 
 	  private:

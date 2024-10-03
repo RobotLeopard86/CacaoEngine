@@ -10,22 +10,44 @@
 #include <string>
 
 namespace Cacao {
-	//A sound or music to play
+	/**
+	 * @brief A sound that can be played
+	 */
 	class Sound final : public Asset {
 	  public:
-		//Create a sound from an audio file path
+		/**
+		 * @brief Load a sound from a path
+		 * @details Supports MP3, WAV, Ogg Vorbis, and Ogg Opus
+		 * @note Prefer to use AssetManager::LoadSound over direct construction
+		 *
+		 * @param filePath The path to load from
+		 *
+		 * @throws Exception If the file does not exist, could not be opened, is of an unsupported format, or its data could not be read
+		 */
 		Sound(std::string filePath);
 		~Sound() final {
 			if(compiled) Release();
 		}
 
-		//Compile sound to be used later
-		//Will be automatically released at audio system shutdown
+		/**
+		 * @brief Compile the raw sound data into a format that can be played
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @note The compiled data will be automatically released when at AudioSystem shuts down
+		 *
+		 * @throws Exception If the sound was already compiled or the audio system is uninitialized
+		 */
 		std::shared_future<void> Compile() override;
 
-		//Delete compiled data when no longer needed
+		/**
+		 * @brief Delete the compiled data
+		 *
+		 * @throws Exception If the sound was not compiled or the audio system is uninitialized
+		 */
 		void Release() override;
 
+		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "SOUND";
 		}

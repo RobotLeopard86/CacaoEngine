@@ -8,21 +8,24 @@
 #include <algorithm>
 
 namespace Cacao {
-	//Represents a world
+	/**
+	 * @brief A gameplay space
+	 */
 	class World {
 	  public:
-		//Optional skybox (set to null asset to have no skybox)
-		AssetHandle<Skybox> skybox;
+		AssetHandle<Skybox> skybox;///<Skybox (set to a null asset handle to have no skybox)
 
-		//Main camera
-		//Will NOT be freed on object destruction
-		Camera* cam;
+		Camera* cam;///<Main camera (will not be freed on world destruction)
 
-		//Root entity of this world
-		std::shared_ptr<Entity> rootEntity;
+		std::shared_ptr<Entity> rootEntity;///<Root entity (set this as an Entity's parent to add it to the world)
 
-		//Find an entity in this world by its GUID
-		//Returns an optional because an entity may or may not be found
+		/**
+		 * @brief Find an Entity by its GUID
+		 *
+		 * @param guid The GUID to search for
+		 *
+		 * @return An optional that contains the entity if it was found
+		 */
 		std::optional<std::shared_ptr<Entity>> FindEntityByGUID(xg::Guid guid) {
 			//Create a function to check if the GUID matches
 			auto checkGUID = [guid](std::shared_ptr<Entity> e) {
@@ -33,6 +36,13 @@ namespace Cacao {
 			return entitySearchRunner(rootEntity->GetChildrenAsList(), checkGUID);
 		}
 
+		/**
+		 * @brief Create a world
+		 *
+		 * @param camera The main camera
+		 *
+		 * @note Prefer to use WorldManager::CreateWorld to be able to use the created world
+		 */
 		World(Camera* camera) {
 			cam = camera;
 			rootEntity = std::make_shared<Entity>("__WORLDROOT__");

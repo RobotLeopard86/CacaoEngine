@@ -15,85 +15,148 @@
 #include "glm/glm.hpp"
 
 namespace Cacao {
-	//Shader data system
-
-	//For convienience
+	///@brief Shorthand type for shader data types
 	using SpvType = spirv_cross::SPIRType::BaseType;
 
-	//Shader data item information
+	///@brief Item in a ShaderSpec
 	struct ShaderItemInfo {
-		//Base type (e.g. int, float)
-		spirv_cross::TypeID type;
-
-		//Data size (x for number of vector components, y for number of vectors in a matrix)
-		//Example: a vec3 would be {3, 1}, a mat4 would be {4, 4}, and a scalar would be {1, 1}
-		glm::uvec2 size;
-
-		//Name of entry
-		std::string entryName;
+		spirv_cross::TypeID type;///<Base data type
+		glm::uvec2 size;		 ///<Size (x is columns, y is rows). Example: scalars are {1, 1}, vectors are {size, 1}, matrices are {x, y}
+		std::string entryName;	 ///<Name of the entry and how it is referenced
 	};
 
-	//Represents the layout of shader data
+	///@brief Collection of shader input items
 	using ShaderSpec = std::vector<ShaderItemInfo>;
 
-	//Item to upload to a shader
+	///@brief Item of data to upload to a shader
 	struct ShaderUploadItem {
-		//Name of target entry in shader spec
-		std::string target;
-
-		//Actual data
-		//During upload, this will be attempted to cast to the type specified in the shader item
-		//If this cast fails, an error will be thrown and the upload will be aborted
-		//If you are targeting an image, use that texture pointer here (a texture slot will be auto-selected and this texture will be bound)
-		std::any data;
+		std::string target;///<The name of the ShaderItemInfo to target
+		std::any data;	   ///<The data to upload
 	};
 
-	//Data to upload to a shader
+	///@brief Collection of items to upload to a shader
 	using ShaderUploadData = std::vector<ShaderUploadItem>;
 
-	//Must be implemented per-rendering API
-	//Shader class
+	/**
+	 * @brief A shader program. Implementation is backend-dependent
+	 */
 	class Shader final : public Asset {
 	  public:
-		//Create a shader from raw SPIR-V code loaded separately
+		/**
+		 * @brief Create a shader from SPIR-V code
+		 *
+		 * @param vertex SPIR-V code for the vertex shader
+		 * @param fragment SPIR-V code for the vertex shader
+		 * @param spec The shader specification
+		 *
+		 * @note Not recommended for use by games, but if it's necessary to put SPIR-V in code, go ahead...
+		 */
 		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
-		//Create a shader from file paths
+
+		/**
+		 * @brief Create a shader from files
+		 *
+		 * @param vertex Path to SPIR-V code for the vertex shader
+		 * @param fragment Path to SPIR-V code for the fragment shader
+		 * @param spec The shader specification
+		 *
+		 * @note Prefer to use AssetManager::LoadShader over direct construction
+		 *
+		 * @throws Exception If the files don't exist or could not be opened
+		 */
 		Shader(std::string vertex, std::string fragment, ShaderSpec spec);
 
+		/**
+		 * @brief Delete the shader and its compiled data
+		 */
 		~Shader() final {
 			if(compiled && bound) Unbind();
 			if(compiled) Release();
 		}
 
-		//Use this shader
+		/**
+		 * @brief Activate this shader for drawing
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throws Exception If the shader is already bound, not compiled, or if not called on the engine thread
+		 */
 		void Bind();
-		//Don't use this shader
+
+		/**
+		 * @brief Deactivate this shader for drawing
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throws Exception If the shader is not bound, not compiled, or if not called on the engine thread
+		 */
 		void Unbind();
-		//Compile shader to be used later
+
+		/**
+		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the shader was already compiled or the SPIR-V is invalid
+		 */
 		std::shared_future<void> Compile() override;
-		//Delete shader when no longer needed
+
+		/**
+		 * @brief Delete the compiled data
+		 *
+		 * @throws Exception If the shader was not compiled or is bound
+		 */
 		void Release() override;
 
-		//Is shader bound?
+		/**
+		 * @brief Check if the shader is bound
+		 *
+		 * @return If the shader is bound
+		 */
 		bool IsBound() {
 			return bound;
 		}
 
-		//Read-only access to the shader spec
+		/**
+		 * @brief Get the shader spec
+		 *
+		 * @return An immutable reference to the shader specification
+		 */
 		const ShaderSpec& GetSpec() const {
 			return specification;
 		}
 
-		//Upload data to the shader
-		//WARNING: Will temporarily bind shader
+		/**
+		 * @brief Upload data to the shader
+		 *
+		 * @warning Temporarily binds the shader, but previous shader is restored after
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throws Exception If the data uploaded does not match the shader specification or the shader was not compiled
+		 */
 		void UploadData(ShaderUploadData& data);
 
-		//Upload Cacao Engine global shader data
+		/**
+		 * @brief Upload engine global data
+		 *
+		 * @param projection The projection matrix
+		 * @param view The view matrix
+		 *
+		 * @note For use by the engine only
+		 */
 		static void UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view);
 
-		//Upload Cacao Engine local shader data
+		/**
+		 * @brief Upload object local data
+		 *
+		 * @param transform The transformation matrix
+		 *
+		 * @note For use by the engine only
+		 */
 		void UploadCacaoLocals(glm::mat4 transform);
 
+		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "SHADER";
 		}

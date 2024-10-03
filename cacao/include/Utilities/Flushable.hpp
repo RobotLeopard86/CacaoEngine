@@ -1,24 +1,37 @@
 #pragma once
 
 namespace Cacao {
-	//Utility class for storing temporary data and writing it back to an original object later
+	/**
+	 * @brief Utility that caches changes to an object and applies them on command
+	 */
 	template<typename T>
 	class Flushable {
 	  public:
+		/**
+		 * @brief Create a new flushable
+		 *
+		 * @param obj The original object
+		 */
 		explicit Flushable(T& obj)
 		  : originalObject(obj), mod(obj) {}
 
-		//Access the local copy
+		/**
+		 * @brief Access the object copy where changes can be made
+		 */
 		T* operator->() {
 			return &mod;
 		}
 
-		//Overwrite the local copy with new data
+		/**
+		 * @brief Overwrite the object copy with new data
+		 */
 		void operator=(T newDat) {
 			mod = newDat;
 		}
 
-		//Flush changes to the original object
+		/**
+		 * @brief Write the changes back to the original object
+		 */
 		void Flush() {
 			originalObject = mod;
 		}

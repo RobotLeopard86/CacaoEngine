@@ -10,25 +10,31 @@
 #include <optional>
 
 namespace Cacao {
-	//An object to render
+	/**
+	 * @brief Internal representation of an object to render
+	 */
 	struct RenderObject {
-		//Transform (must be in world space!)
-		glm::mat4 transformMatrix;
+		glm::mat4 transformMatrix;///<The transformation matrix to apply
+		AssetHandle<Mesh> mesh;	  ///<The mesh to draw
+		Material material;		  ///<The material to draw the mesh with
 
-		//Mesh to render
-		AssetHandle<Mesh> mesh;
-
-		//Material to render with
-		Material material;
-
+		/**
+		 * @brief Create a render object
+		 *
+		 * @param transform The transformation matrix
+		 * @param mesh The mesh to draw
+		 * @param mat The material to use
+		 */
 		RenderObject(glm::mat4 transform, AssetHandle<Mesh> mesh, Material mat)
 		  : transformMatrix(transform), mesh(mesh), material(mat) {}
 	};
 
-	//An entire frame
+	/**
+	 * @brief Frame rendering parameters
+	 */
 	struct Frame {
-		std::vector<RenderObject> objects;
-		glm::mat4 projection, view;
-		AssetHandle<Skybox> skybox;
+		std::vector<RenderObject> objects;///<The list of objects to render
+		glm::mat4 projection, view;		  ///<The projection and view matrices from the main camera
+		AssetHandle<Skybox> skybox;		  ///<The skybox to draw (null handle means no skybox)
 	};
 }

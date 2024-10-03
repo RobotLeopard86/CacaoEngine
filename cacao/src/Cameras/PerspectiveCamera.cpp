@@ -19,7 +19,7 @@ namespace Cacao {
 	void PerspectiveCamera::RecalculateViewMatrix() {
 		//Figure out where we are looking
 		RecalculateCameraVectors();
-		//Look at our target from our position, with a straight up vector (where "up" is)
+		//Look at our target from our position
 		viewMatrix = glm::lookAt(position, position + frontVec, upVec);
 	}
 
@@ -37,6 +37,6 @@ namespace Cacao {
 	}
 
 	void PerspectiveCamera::RecalculateProjectionMatrix() {
-		projectionMatrix = glm::perspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.001f, 100000.0f);
+		projectionMatrix = glm::infinitePerspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.1f);
 	}
 }

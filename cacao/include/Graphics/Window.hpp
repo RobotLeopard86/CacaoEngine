@@ -10,79 +10,167 @@
 #include "Core/Engine.hpp"
 
 namespace Cacao {
-	//Represents the three different window mode states
-	//Fullscreen and borderless modes apply to only the primary monitor
+	/**
+	 * @brief The different window display modes
+	 */
 	enum class WindowMode {
-		Window,	   //Runs in a standard window
-		Fullscreen,//Runs in exclusive fullscreen mode, controlling monitor
-		Borderless //Runs in a borderless fullscreen window (appears fullscreen)
+		Window,	   ///<Normal window
+		Fullscreen,///<Exclusive fullscreen (only on primary monitor)
+		Borderless ///<Borderless fullscreen window (only on primary monitor)
 	};
 
-	//Platform-agnostic window singleton
+	/**
+	 * @brief Window singleton
+	 */
 	class Window {
 	  public:
-		//Open the window
+		/**
+		 * @brief Open the window
+		 *
+		 * @param title The window title
+		 * @param initialSize The initial size of the window
+		 * @param startVisible If the window should open visible
+		 * @param mode The intial mode the window should be in
+		 *
+		 * @note For use by the engine only and automatically called by it at startup
+		 *
+		 * @throws Exception If the window is open already
+		 */
 		void Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode);
-		//Close the window
+
+		/**
+		 * @brief Close the window
+		 *
+		 * @note For use by the engine only and automatically called by it at shutdown
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void Close();
-		//Is the window open?
+
+		/**
+		 * @brief Check if the window is open or not
+		 *
+		 * @return Whether the window is open or not
+		 */
 		bool IsOpen() {
 			return isOpen;
 		}
-		//Check for updated state and events from the OS
+
+		/**
+		 * @brief Query the OS for events and process them
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void Update();
-		//Present the currently drawn image to the window
+
+		/**
+		 * @brief Present the last drawn frame to the window
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void Present();
 
-		//Get window size
+		/**
+		 * @brief Get the window size
+		 *
+		 * @return The window size, or {0, 0} if the window isn't open
+		 */
 		glm::uvec2 GetSize() {
 			if(!isOpen) return glm::uvec2 {0};
 			return size;
 		}
-		//Resizes the window (in fullscreen or borderless mode, changes resolution)
+
+		/**
+		 * @brief Set the window size
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void SetSize(glm::uvec2 newSize) {
-			if(!isOpen) return;
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
 			size = newSize;
 			UpdateWindowSize();
 		}
 
-		//Get the size of the content area in pixels
-		//This is the space where the game is drawn
+		/**
+		 * @brief Get the size of the content area
+		 * @details The content area is the area where the game is drawn, excluding window decorations
+		 *
+		 * @return The content area size in pixels
+		 */
 		glm::uvec2 GetContentAreaSize();
 
-		//Enable/disable VSync
+		/**
+		 * @brief Enable or disable VSync
+		 *
+		 * @param value The new VSync state
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void SetVSyncEnabled(bool value) {
-			if(!isOpen) return;
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
 			useVSync = value;
 			UpdateVSyncState();
 		}
-		//Returns if VSync is enabled or not
+
+		/**
+		 * @brief Check if VSync is enabled
+		 *
+		 * @return If VSync is enabled or simply false if the window isn't open
+		 */
 		bool IsVSyncEnabled() {
 			if(!isOpen) return false;
 			return useVSync;
 		}
 
-		//Set new window title
+		/**
+		 * @brief Set the window title
+		 *
+		 * @param value The new title
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void SetTitle(std::string title);
 
-		//Show/hide the window
+		/**
+		 * @brief Get the window title
+		 *
+		 * @return The window title or an empty string if the window isn't open
+		 */
+		std::string GetWindowTitle() {
+			if(!isOpen) return "";
+			return windowTitle;
+		}
+
+		/**
+		 * @brief Show/hide the window
+		 *
+		 * @param value The new visibility state
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void SetWindowVisibility(bool value) {
-			if(!isOpen) return;
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
 			isVisible = value;
 			UpdateVisibilityState();
 		}
-		//Returns if the window is visible
+
+		/**
+		 * @brief Check if the window is visible
+		 *
+		 * @return If the window is visible or simply false if the window isn't open
+		 */
 		bool IsWindowVisible() {
 			if(!isOpen) return false;
 			return isVisible;
 		}
 
-		//Get the current window mode (returns windowed if not open)
-		WindowMode GetCurrentMode() {
-			if(!isOpen) return WindowMode::Window;
-			return mode;
-		}
-		//Set the current window mode
+		/**
+		 * @brief Set the window mode
+		 *
+		 * @param value The new mode
+		 *
+		 * @throws Exception If the window isn't open
+		 */
 		void SetMode(WindowMode newMode) {
 			if(!isOpen) return;
 			WindowMode last = mode;
@@ -90,7 +178,21 @@ namespace Cacao {
 			UpdateModeState(last);
 		}
 
-		//Get window instance
+		/**
+		 * @brief Get the current window mode
+		 *
+		 * @return The current window mode or WindowMode::Window if the window isn't open
+		 */
+		WindowMode GetMode() {
+			if(!isOpen) return WindowMode::Window;
+			return mode;
+		}
+
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static Window* GetInstance();
 
 	  private:

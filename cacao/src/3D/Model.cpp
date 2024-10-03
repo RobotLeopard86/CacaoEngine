@@ -35,7 +35,7 @@ namespace Cacao {
 		const aiScene* scene = importer.ReadFile(filePath, aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_SortByPType);
 
 		//Perform checks
-		CheckException(scene != NULL, Exception::GetExceptionCodeFromMeaning("NullValue"), (std::string("Model loading failed, Assimp error: ") + importer.GetErrorString()))
+		CheckException(scene != nullptr, Exception::GetExceptionCodeFromMeaning("NullValue"), (std::string("Model loading failed, Assimp error: ") + importer.GetErrorString()))
 		CheckException(scene->HasMeshes(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Model file does not contain any meshes!")
 
 		//Load meshes data

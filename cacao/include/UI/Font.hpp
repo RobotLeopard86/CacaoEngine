@@ -7,21 +7,44 @@
 #include FT_FREETYPE_H
 
 namespace Cacao {
-	//A font face
+	/**
+	 * @brief A font face for text rendering
+	 */
 	class Font final : public Asset {
 	  public:
+		/**
+		 * @brief Create a font from a file path
+		 *
+		 * @param path The path to a font file to load
+		 *
+		 * @note Prefer to use AssetManager::LoadFont over direct construction
+		 */
 		Font(std::string path);
 
+		/**
+		 * @brief Destroy the font face and its compiled data if applicable
+		 */
 		~Font() final {
 			if(compiled) Release();
 		}
 
-		//Compile font to be used later
+		/**
+		 * @brief Compile the raw font data into a usable font face
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the font face was already compiled
+		 */
 		std::shared_future<void> Compile() override;
 
-		//Delete compiled data when no longer needed
+		/**
+		 * @brief Delete the compiled data
+		 *
+		 * @throws Exception If the font face was not compiled
+		 */
 		void Release() override;
 
+		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "FONT";
 		}

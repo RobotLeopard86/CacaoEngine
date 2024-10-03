@@ -30,26 +30,49 @@ namespace Cacao {
 	//Forward declaration of Entity for the fake deleter
 	class Entity;
 
-	//An object in the world
+	/**
+	 * @brief An object in the world
+	 *
+	 * @warning You @b MUST keep a reference to an entity as long as it is in a world, or you will cause a segmentation fault
+	 */
 	class Entity {
 	  public:
-		//GUID
+		///@brief GUID (Globally Unique Identifier)
 		const xg::Guid guid;
 
+		/**
+		 * @brief Check if this entity is active
+		 *
+		 * @return If the entity is active
+		 */
 		const bool IsActive() {
 			return active;
 		}
+
+		/**
+		 * @brief Activate or deactivate this entity
+		 *
+		 * @param val The new activation state
+		 */
 		void SetActive(bool val) {
 			active = val;
 		}
 
-		//Local space transform (relative to parent)
+		/**
+		 * @brief Get the local-space transform
+		 * @details This transform is relative to the entity's parent
+		 *
+		 * @return A mutable reference to the local-space transform
+		 */
 		Transform& GetLocalTransform() {
 			return transform;
 		}
 
-		//World space transformation matrix
-		//Changes made will not reflect on the entity
+		/**
+		 * @brief Get the world-space transformation matrix
+		 *
+		 * @return A matrix representing all transformations on this entity
+		 */
 		glm::mat4 GetWorldTransformMatrix() {
 			//Calculate the transformation matrix
 			std::shared_ptr<Entity> curParent = parent.lock();
@@ -68,23 +91,36 @@ namespace Cacao {
 			return transMat;
 		}
 
-		//Get a copy of the child entity list
+		/**
+		 * @brief Get the list of child entities
+		 *
+		 * @return A copy of the child entity list
+		 */
 		std::vector<std::shared_ptr<Entity>> GetChildrenAsList() {
 			return children;
 		}
 
-		//Human-readable name
+		///@brief Human-readable name
 		std::string name;
 
+		/**
+		 * @brief Create a new entity
+		 *
+		 * @param name The name of this entity
+		 */
 		Entity(std::string name)
 		  : guid(xg::newGuid()), name(name), transform(glm::vec3 {0}, glm::vec3 {0}, glm::vec3 {1}), self(this, FakeDeleter<Entity> {}), parent(self), active(true) {}
 
 
-		//Add a component to this entity
-		//Functions like a constructor
-		//Returns a GUID for accessing this component (DO NOT LOSE THIS)
-		//All components will be removed and deleted when this object is deleted
-		//Component freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity
+		/**
+		 * @brief Add a component to this entity
+		 *
+		 * @details All arguments are forwarded to the constructor of the component type.
+		 *
+		 * @return The component's GUID (Needed to access the component)
+		 *
+		 * @note Components created here will continue to exist after the entity is destroyed if another object still holds a reference to it, but will not be accessible
+		 */
 		template<typename T, typename... Args>
 		const xg::Guid MountComponent(Args&&... args) {
 			static_assert(std::is_base_of<Component, T>(), "Can only mount subclasses of Component!");
@@ -104,13 +140,24 @@ namespace Cacao {
 			}
 		}
 
-		//Get all components in this entity
+		/**
+		 * @brief Get all components on the entity
+		 *
+		 * @return A copy of the components on this entity
+		 */
 		std::map<xg::Guid, std::shared_ptr<Component>> GetAllComponents() {
 			return components;
 		}
 
-		//Retrieve a component from the entity
-		//Requires the GUID returned from MountComponent
+		/**
+		 * @brief Access a component on this entity
+		 *
+		 * @param guid The GUID of the component (returned from MountComponent)
+		 *
+		 * @return The component
+		 *
+		 * @throws Exception If no component with the provided GUID exists or it could not be cast to the specified type
+		 */
 		template<typename T>
 		std::shared_ptr<T> GetComponent(xg::Guid guid) {
 			static_assert(std::is_base_of<Component, T>(), "Can only get subclasses of Component!");
@@ -125,9 +172,15 @@ namespace Cacao {
 			}
 		}
 
-		//Remove a component from the entity and delete it
-		//The freeing will only occur once all holders release ownership, but it will no longer be accessible through the entity
-		//Requires the GUID returned from MountComponent
+		/**
+		 * @brief Remove a component from this entity
+		 *
+		 * @note If there are other references to the component, it will not be freed by this call
+		 *
+		 * @param guid The GUID of the component (returned from MountComponent)
+		 *
+		 * @throws Exception If no component with the provided GUID exists
+		 */
 		void DeleteComponent(xg::Guid guid) {
 			std::lock_guard lk(componentsMtx);
 			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
@@ -136,7 +189,13 @@ namespace Cacao {
 			components.erase(guid);
 		}
 
-		//Change parent to another entity
+		/**
+		 * @brief Set the parent of this entity
+		 *
+		 * @note To add an entity to a World, set its parent to the world's root entity
+		 *
+		 * @param newParent The new parent of the entity
+		 */
 		void SetParent(std::shared_ptr<Entity> newParent) {
 			//If we aren't orphaned, remove ourselves from the current parent
 			if(parent.lock() != self) {
@@ -152,6 +211,9 @@ namespace Cacao {
 			parent = newParent;
 		}
 
+		/**
+		 * @brief Destroy the entity and release references to components and child entities
+		 */
 		~Entity() {
 			//Release ownership of all components
 			{

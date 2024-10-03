@@ -12,7 +12,7 @@ namespace Cacao {
 	//Singleton accessor
 	RenderController* RenderController::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new RenderController();
 			instanceExists = true;

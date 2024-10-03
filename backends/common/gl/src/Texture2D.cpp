@@ -25,6 +25,8 @@ namespace Cacao {
 		//Load image
 		dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 0);
 
+		CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!")
+
 		bound = false;
 		currentSlot = -1;
 
@@ -32,9 +34,9 @@ namespace Cacao {
 		if(numImgChannels == 1) {
 			nativeData->format = GL_RED;
 		} else if(numImgChannels == 3) {
-			nativeData->format = GL_RGB;
+			nativeData->format = GL_SRGB8;
 		} else if(numImgChannels == 4) {
-			nativeData->format = GL_RGBA;
+			nativeData->format = GL_SRGB8_ALPHA8;
 		}
 	}
 
@@ -54,21 +56,22 @@ namespace Cacao {
 		glBindTexture(GL_TEXTURE_2D, nativeData->gpuID);
 
 		//Load image data into texture object
-		glTexImage2D(GL_TEXTURE_2D, 0, nativeData->format, imgSize.x, imgSize.y, 0, nativeData->format, GL_UNSIGNED_BYTE, dataBuffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, nativeData->format, imgSize.x, imgSize.y, 0, GetTextureMemoryFormat(nativeData->format), GL_UNSIGNED_BYTE, dataBuffer);
 
-		//Apply texture filtering
+		//Apply texture mipmap filtering
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		//Allow minimum detail mipmaps
+		//Configure mipmap levels
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 10);
+
+		//Generate mipmaps for texture
+		glGenerateMipmap(GL_TEXTURE_2D);
 
 		//Configure texture wrapping mode
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		//Generate mipmaps for texture
-		glGenerateMipmap(GL_TEXTURE_2D);
 
 		//Unbind texture object since we're done with it for now
 		glBindTexture(GL_TEXTURE_2D, 0);

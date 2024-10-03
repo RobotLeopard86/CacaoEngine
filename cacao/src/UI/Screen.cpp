@@ -18,10 +18,10 @@ namespace Cacao {
 		unsigned int chunkSize = elements.size() / numChunks;
 
 		//Run the dirty check
-		for(size_t start = 0; start < elements.size(); start += chunkSize) {
-			size_t end = std::min(start + chunkSize, elements.size());
+		for(std::size_t start = 0; start < elements.size(); start += chunkSize) {
+			std::size_t end = std::min(start + chunkSize, elements.size());
 			dirtyCheck.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, this]() {
-				for(size_t i = start; i < end; i++) {
+				for(std::size_t i = start; i < end; i++) {
 					//If the screen has already been found dirty, we can stop early
 					if(this->dirty) break;
 

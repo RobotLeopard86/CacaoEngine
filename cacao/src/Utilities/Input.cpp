@@ -10,7 +10,7 @@ namespace Cacao {
 
 	Input* Input::GetInstance() {
 		//Do we have a input instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create input instance
 			instance = new Input();
 			instanceExists = true;

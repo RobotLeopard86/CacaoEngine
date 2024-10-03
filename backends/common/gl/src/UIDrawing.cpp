@@ -28,7 +28,7 @@ namespace Cacao {
 		glGenTextures(1, &tex);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(VBOEntry) * 6, NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(VBOEntry) * 6, nullptr, GL_DYNAMIC_DRAW);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)0);
 		glEnableVertexAttribArray(1);

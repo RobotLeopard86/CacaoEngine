@@ -28,7 +28,7 @@ namespace Cacao {
 	//Singleton accessor
 	Window* Window::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new Window();
 			instanceExists = true;
@@ -44,6 +44,10 @@ namespace Cacao {
 
 		//Create native data
 		nativeData.reset(new WindowData());
+
+#ifdef __linux__
+		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
 
 		//Initialize GLFW
 		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
@@ -61,14 +65,8 @@ namespace Cacao {
 		if(!startVisible) glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 		//Create window
-		nativeData->win = glfwCreateWindow(initialSize.x, initialSize.y, windowTitle.c_str(), NULL, NULL);
-		EngineAssert(nativeData->win != NULL, "Failed to open the window!");
-
-		//Set the window mode
-		SetMode(mode);
-
-		//Set window VSync state
-		SetVSyncEnabled(true);
+		nativeData->win = glfwCreateWindow(initialSize.x, initialSize.y, windowTitle.c_str(), nullptr, nullptr);
+		EngineAssert(nativeData->win != nullptr, "Failed to open the window!");
 
 		//Register window callbacks
 		glfwSetCursorPosCallback(nativeData->win, [](GLFWwindow* win, double x, double y) {
@@ -81,7 +79,7 @@ namespace Cacao {
 		});
 		glfwSetWindowSizeCallback(nativeData->win, [](GLFWwindow* win, int x, int y) {
 			if(!glfwGetWindowAttrib(win, GLFW_ICONIFIED)) {
-				if(Window::GetInstance()->GetCurrentMode() == WindowMode::Window) {
+				if(Window::GetInstance()->GetMode() == WindowMode::Window) {
 					WindowResizer().Resize({x, y});
 				}
 				ResizeViewport(win);
@@ -136,7 +134,14 @@ namespace Cacao {
 		//Initialize graphics api
 		SetupGraphicsAPI(nativeData->win);
 
+		//Mark window open
 		isOpen = true;
+
+		//Set the window mode
+		SetMode(mode);
+
+		//Set window VSync state
+		SetVSyncEnabled(true);
 	}
 
 	void Window::Close() {
@@ -186,7 +191,7 @@ namespace Cacao {
 					//Exiting borderless is weird so we go to fullscreen for a sec to fix that
 					glfwSetWindowMonitor(nativeData->win, monitor, 0, 0, modeInfo->width, modeInfo->height, modeInfo->refreshRate);
 				}
-				glfwSetWindowMonitor(nativeData->win, NULL, windowedPosition.x, windowedPosition.y, size.x, size.y, GLFW_DONT_CARE);
+				glfwSetWindowMonitor(nativeData->win, nullptr, windowedPosition.x, windowedPosition.y, size.x, size.y, GLFW_DONT_CARE);
 				glfwSetWindowSize(nativeData->win, size.x, size.y);
 				break;
 			case WindowMode::Fullscreen:

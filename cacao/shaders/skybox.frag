@@ -6,7 +6,7 @@ layout(location=0) in CacaoSky {
     vec3 texCoords;
 } V2F;
 
-layout(binding=0) uniform samplerCube skybox;
+layout(binding=2) uniform samplerCube skybox;
 
 void main()
 {

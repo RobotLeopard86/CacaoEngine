@@ -9,9 +9,20 @@ namespace Cacao {
 	//An image element
 	class Image final : public UIElement {
 	  public:
+		/**
+		 * @brief Get current image to display
+		 *
+		 * @return The current image
+		 */
 		AssetHandle<Texture2D> GetImage() {
 			return img;
 		}
+
+		/**
+		 * @brief Set the image to display and make this element dirty
+		 *
+		 * @param i The new image
+		 */
 		void SetImage(AssetHandle<Texture2D> i) {
 			img = i;
 			dirty = true;

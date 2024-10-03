@@ -10,7 +10,7 @@ namespace Cacao {
 	//Singleton accessor
 	FreetypeOwner* FreetypeOwner::GetInstance() {
 		//Do we have an instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create instance
 			instance = new FreetypeOwner();
 			instanceExists = true;

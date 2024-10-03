@@ -89,9 +89,7 @@ namespace Cacao {
 			//Locate consumers for event type in consumer map
 			try {
 				eventTypeConsumers = consumers.at(event.GetType());
-			} catch(std::out_of_range) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "No consumers exist for the specified event type!");
-			}
+			} catch(std::out_of_range) {}
 
 			//Send event to each registered consumer
 			for(EventConsumer* consumer : eventTypeConsumers) {
@@ -111,9 +109,7 @@ namespace Cacao {
 			//Locate consumers for event type in consumer map
 			try {
 				eventTypeConsumers = consumers.at(event.GetType());
-			} catch(std::out_of_range) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "No consumers exist for the specified event type!");
-			}
+			} catch(std::out_of_range) {}
 
 			std::vector<SignalEventConsumer*> sec;//No, not the Securities & Exchange Commision.
 
@@ -137,7 +133,7 @@ namespace Cacao {
 
 	EventManager* EventManager::GetInstance() {
 		//Do we have a event manager instance yet?
-		if(!instanceExists || instance == NULL) {
+		if(!instanceExists || instance == nullptr) {
 			//Create event manager instance
 			instance = new EventManager();
 			instanceExists = true;

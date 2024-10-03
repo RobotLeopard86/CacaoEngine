@@ -5,15 +5,36 @@
 #include <future>
 
 namespace Cacao {
-	//Base texture type
+	/**
+	 * @brief Base texture asset
+	 */
 	class Texture : public Asset {
 	  public:
-		//Attach this texture to the specified slot
+		/**
+		 * @brief Attach to the specified slot
+		 *
+		 * @param slot The texture slot to attach to
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 */
 		virtual void Bind(int slot) {}
-		//Detach this texture
+
+		/**
+		 * @brief Detach from the current slot
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 */
 		virtual void Unbind() {}
 
-		//Is texture bound?
+		/**
+		 * @brief Check if the texture is bound
+		 *
+		 * @return Whether the texture is bound or not
+		 */
 		bool IsBound() const {
 			return bound;
 		}

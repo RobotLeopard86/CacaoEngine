@@ -22,4 +22,15 @@ namespace Cacao {
 	};
 
 	inline GLuint globalsUBO = 37;
+
+	inline GLenum GetTextureMemoryFormat(GLenum internalFormat) {
+		switch(internalFormat) {
+			case GL_RED: return GL_RED;
+			case GL_RGB8: return GL_RGB;
+			case GL_RGBA8: return GL_RGBA;
+			case GL_SRGB8: return GL_RGB;
+			case GL_SRGB8_ALPHA8: return GL_RGBA;
+			default: return 0;
+		}
+	}
 }

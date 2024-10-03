@@ -4,41 +4,79 @@
 
 #include "World.hpp"
 #include "Utilities/Flushable.hpp"
+#include "Core/Exception.hpp"
 
 namespace Cacao {
-	//Singleton for managing global world state
+	/**
+	 * @brief Interface for interacting with various worlds
+	 */
 	class WorldManager {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static WorldManager* GetInstance();
 
-		//Create an empty world with a camera
-		//Defined in the header file to allow usage by the client
+		/**
+		 * @brief Create a new world
+		 *
+		 * @note The camera type template argument must subclass Camera
+		 *
+		 * @param name The name of the new world
+		 *
+		 * @throws Exception If there is already a world with the given name
+		 */
 		template<typename T>
 		void CreateWorld(std::string name) {
-			static_assert(std::is_base_of<Camera, T>(), "You must create a world with a type extending Camera!");
-			if(worlds.contains(name)) {
-				Logging::EngineLog("Not adding world because one with the specified name already exists!", LogLevel::Warn);
-				return;
-			}
+			static_assert(std::is_base_of<Camera, T>(), "You must create a world with a camera type extending Camera!");
+			CheckException(!worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "A world with the provided name already exists!")
 
 			worlds.insert_or_assign(name, World {new T()});
 		}
 
-		//Remove a world from the manager
-		//This will also delete the world instance itself
+		/**
+		 * @brief Delete a world
+		 *
+		 * @param name The name of the world to delete
+		 *
+		 * @throws Exception If there is no world with the given name
+		 */
 		void RemoveWorld(std::string name);
 
-		//Set the active world
+		/**
+		 * @brief Set the active world
+		 *
+		 * @param name The name of the world to set as the active world
+		 *
+		 * @throws Exception If there is no world with the given name
+		 */
 		void SetActiveWorld(std::string name);
 
-		//Get the ID of the active world
+		/**
+		 * @brief Get the name of the active world
+		 *
+		 * @return The active world name or an empty string if there is no active world
+		 */
 		std::string GetActiveWorldID();
 
-		//Get a reference to the active world
+		/**
+		 * @brief Get the active world
+		 *
+		 * @return A mutable reference to the active world
+		 *
+		 * @throws Exception If there is no active world
+		 */
 		World& GetActiveWorld();
 
-		//Get a reference to a world
+		/**
+		 * @brief Get the world with the given name
+		 *
+		 * @return The world with the given name
+		 *
+		 * @throws Exception If there is no world with the given name
+		 */
 		World& GetWorld(std::string name);
 
 	  private:

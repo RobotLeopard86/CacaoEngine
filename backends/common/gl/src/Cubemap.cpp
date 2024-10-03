@@ -52,18 +52,20 @@ namespace Cacao {
 			stbi_set_flip_vertically_on_load(true);
 
 			//Load texture data from file
-			unsigned char* data = stbi_load(textures[i].c_str(), &width, &height, &numChannels, 0);
+			unsigned char* data = stbi_load(textures[i].c_str(), &width, &height, &numChannels, 3);
 
 			//Make sure we have data
 			if(data) {
 				//Add image data to cubemap
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_SRGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
 				//Free data (we won't be needing it anymore)
 				stbi_image_free(data);
 			} else {
 				//Free whatever junk we have
 				stbi_image_free(data);
+
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open cubemap face image file!")
 			}
 		}
 

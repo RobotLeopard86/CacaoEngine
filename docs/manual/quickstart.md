@@ -1,10 +1,14 @@
-# Making Your First Project
-
-The remainder of this tutorial will assume that you are using Meson to build your game.
+# Quickstart
 
 ## Creating a base project
-The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at `https://github.com/RobotLeopard86/CacaoEngine-Game-Template`. This repository contains an ideal setup for creating a Cacao Engine game. Run the following command in your terminal to set up your build directory: `meson setup build`. **IMPORTANT**: If on Linux or macOS, append `--native-file posix_native.ini` to your command line. Next, run ` ninja -C build run` to build and run the template. If all goes well, you should see something like this:  
-![Template](../../assets/quickstart-template.png)
+The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at `https://github.com/RobotLeopard86/CacaoEngine-Game-Template`. This repository contains an ideal setup for creating a Cacao Engine game.
+
+## Building
+Install the dependencies as listed in the [build instructions](./building).  
+If you'd like to use Visual Studio, see the [Visual Studio compatibility guide](./vs) for info on how to set up a Visual Studio Solution.  
+Otherwise, run `meson setup build` if on Windows or `meson setup build --native-file posix_native.ini` if on Linux or macOS to create a build directory, then run `ninja -C build run` to build and run the template.
+If all goes well, you should see something like this:  
+![Template](../assets/quickstart-template.png)
 
 ## Breaking down the template
 The main part of this template is the `src/Game.cpp` file. It is the entrypoint for your game. Let's walk through it step-by-step.  

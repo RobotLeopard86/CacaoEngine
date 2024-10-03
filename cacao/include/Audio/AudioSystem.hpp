@@ -11,24 +11,57 @@
 #include <mutex>
 
 namespace Cacao {
-	//Controls the playback of audio
+	/**
+	 * @brief Global audio system
+	 */
 	class AudioSystem {
 	  public:
-		//Get the instance or create one if it doesn't exist.
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
 		static AudioSystem* GetInstance();
 
-		//Initialize the audio system
+		/**
+		 * @brief Initialize the audio system
+		 *
+		 * @note This function is called by the engine during startup
+		 *
+		 * @throws Exception If the system was already initialized
+		 */
 		void Init();
 
-		//Shut down the audio system
+		/**
+		 * @brief Shut down the audio system
+		 *
+		 * @note This function is called by the engine during shutdown
+		 *
+		 * @throws Exception If the system was not initialized
+		 */
 		void Shutdown();
 
-		//Set the global gain (must be positive)
+		/**
+		 * @brief Set the global gain value
+		 *
+		 * @param value The new global gain value, which must be positive
+		 *
+		 * @throws Exception If the provided value was not positive
+		 */
 		void SetGlobalGain(float value);
 
-		//Get the global gain value
+		/**
+		 * @brief Get the global gain value
+		 *
+		 * @return The current global gain value,
+		 */
 		float GetGlobalGain();
 
+		/**
+		 * @brief Check if the audio system is initialized
+		 *
+		 * @return If the system is initialized
+		 */
 		bool IsInitialized() {
 			return isInitialized;
 		}

@@ -8,27 +8,68 @@
 #include <string>
 
 namespace Cacao {
-
-	//2D texture
-	//Must be implemented per-rendering API
+	/**
+	 * @brief 2D image texture
+	 */
 	class Texture2D final : public Texture {
 	  public:
+		/**
+		 * @brief Create a new texture from a file
+		 *
+		 * @param filePath The path to an image file
+		 *
+		 * @note Prefer to use AssetManager::LoadTexture2D over direct construction
+		 *
+		 * @throws Exception If the file does not exist or could not be opened
+		 */
 		Texture2D(std::string filePath);
+
+		/**
+		 * @brief Destroy the texture and its compiled data if applicable
+		 */
 		~Texture2D() final {
 			if(bound) Unbind();
 			if(compiled) Release();
 			delete dataBuffer;
 		}
 
-		//Attach this texture to the specified slot
+		/**
+		 * @brief Attach to the specified slot
+		 *
+		 * @param slot The texture slot to attach to
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 */
 		void Bind(int slot) override;
-		//Detach this texture
+
+		/**
+		 * @brief Detach from the current slot
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 */
 		void Unbind() override;
-		//Compile texture to be used later
+
+		/**
+		 * @brief Compile the raw image data into a format that can be sampled by the GPU
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the texture was already compiled
+		 */
 		std::shared_future<void> Compile() override;
-		//Delete texture when no longer needed
+
+		/**
+		 * @brief Delete the compiled data
+		 *
+		 * @throws Exception If the texture was not compiled or is bound
+		 */
 		void Release() override;
 
+		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {
 			return "2DTEX";
 		}

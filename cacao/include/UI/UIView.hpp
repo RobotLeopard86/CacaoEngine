@@ -8,20 +8,43 @@
 #include <memory>
 
 namespace Cacao {
-	//A view for UI
+	/**
+	 * @brief Renderer for a Screen
+	 */
 	class UIView {
 	  public:
-		//Render a snapshot of the current screen and swap buffers
+		/**
+		 * @brief Render the selected screen and swap buffers
+		 *
+		 * @throws Exception If there is no screen to render
+		 */
 		void Render();
 
-		//Bind the front buffer to a texture slot
+		/**
+		 * @brief Attach the front buffer to a texture slot
+		 *
+		 * @param slot The texture slot to attach to
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throws Exception If the view hasn't been rendered, already bound, or if not called on the main thread
+		 */
 		void Bind(int slot);
 
-		//Unbind the front buffer
+		/**
+		 * @brief Detach from the current slot
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @throws Exception If the view isn't bound, or if not called on the main thread
+		 */
 		void Unbind();
 
-		//Set the currently displayed screen
-		//No change will be seen until Render() is called
+		/**
+		 * @brief Set the current screen
+		 *
+		 * @param s The new screen to render
+		 */
 		void SetScreen(std::shared_ptr<Screen> s) {
 			screen = s;
 
@@ -29,27 +52,54 @@ namespace Cacao {
 			s->dirty = true;
 		}
 
-		//Get the currently displayed screen
+		/**
+		 * @brief Get the current screen
+		 *
+		 * @return The current screen
+		 */
 		std::shared_ptr<Screen> GetScreen() {
 			return screen;
 		}
 
-		//Set the size (in pixels) of the rendered area
+		/**
+		 * @brief Set the size of the rendered area
+		 *
+		 * @param sz The new size in pixels
+		 */
 		void SetSize(glm::uvec2 sz) {
 			size = sz;
 		}
 
-		//Get the size (in pixels) of the rendered area
+		/**
+		 * @brief Get the size of the rendered area
+		 *
+		 * @return The current size in pixels
+		 */
 		glm::uvec2 GetSize() {
 			return size;
 		}
 
-		//Has this UI view been rendered?
+		/**
+		 * @brief Check if this view has been rendered
+		 *
+		 * @return Whether the view has been rendered or not
+		 */
 		bool HasBeenRendered() {
 			return hasRendered;
 		}
 
+		/**
+		 * @brief Create a new UI view
+		 *
+		 * @throws Exception If the framebuffers could not be created
+		 *
+		 * @warning If the rendering backend has not been initialized yet, this function will block until it is
+		 */
 		UIView();
+
+		/**
+		 * @brief Destroy the UI view
+		 */
 		~UIView();
 
 	  private:
