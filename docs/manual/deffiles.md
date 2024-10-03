@@ -20,4 +20,6 @@ All items are paths from the working directory (set in `launchconfig.cacao.yml`)
 * `y+`: The image in the positive Y direction (typically up)
 * `y-`: The image in the negative Y direction (typically down)
 * `z+`: The image in the positive Z direction (typically forward)
-* `z-`: The image in the negative Z direction (typically backward)
+* `z-`: The image in the negative Z direction (typically backward)  
+
+**WARNING**: Cubemap textures should be flipped so that what you want to see at the top is at the bottom of the image. Otherwise, things will look disjointed.
