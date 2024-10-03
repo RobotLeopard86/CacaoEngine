@@ -109,7 +109,10 @@ namespace Cacao {
 		 * @throws Exception If the specified asset ID does not exist in the cache
 		 */
 		void UncacheAsset(std::string assetID) {
-			CheckException(assetCache.contains(assetID), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Unable to remove uncached asset from cache!")
+			if(!assetCache.contains(assetID)) {
+				Logging::EngineLog("Uncaching of asset not in asset cache requested, ignoring...");
+				return;
+			}
 			assetCache.erase(assetID);
 		}
 
