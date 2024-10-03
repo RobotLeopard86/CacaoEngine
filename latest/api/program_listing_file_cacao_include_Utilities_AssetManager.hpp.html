@@ -224,21 +224,24 @@
 </span><span id="line-32"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Font</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">LoadFont</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
 </span><span id="line-33">
 </span><span id="line-34"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UncacheAsset</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">assetID</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-35"><span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="n">assetCache</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">assetID</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">"ContainerValue"</span><span class="p">),</span><span class="w"> </span><span class="s">"Unable to remove uncached asset from cache!"</span><span class="p">)</span>
-</span><span id="line-36"><span class="w">            </span><span class="n">assetCache</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">assetID</span><span class="p">);</span>
-</span><span id="line-37"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-38">
-</span><span id="line-39"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-40"><span class="w">        </span><span class="c1">//Singleton members</span>
-</span><span id="line-41"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">AssetManager</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
-</span><span id="line-42"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
-</span><span id="line-43">
-</span><span id="line-44"><span class="w">        </span><span class="c1">//Asset cache</span>
-</span><span id="line-45"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Asset</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">assetCache</span><span class="p">;</span>
+</span><span id="line-35"><span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">assetCache</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">assetID</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-36"><span class="w">                </span><span class="n">Logging</span><span class="o">::</span><span class="n">EngineLog</span><span class="p">(</span><span class="s">"Uncaching of asset not in asset cache requested, ignoring..."</span><span class="p">);</span>
+</span><span id="line-37"><span class="w">                </span><span class="k">return</span><span class="p">;</span>
+</span><span id="line-38"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-39"><span class="w">            </span><span class="n">assetCache</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">assetID</span><span class="p">);</span>
+</span><span id="line-40"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-41">
+</span><span id="line-42"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-43"><span class="w">        </span><span class="c1">//Singleton members</span>
+</span><span id="line-44"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">AssetManager</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+</span><span id="line-45"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
 </span><span id="line-46">
-</span><span id="line-47"><span class="w">        </span><span class="n">AssetManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-48"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-49"><span class="p">}</span>
+</span><span id="line-47"><span class="w">        </span><span class="c1">//Asset cache</span>
+</span><span id="line-48"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Asset</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">assetCache</span><span class="p">;</span>
+</span><span id="line-49">
+</span><span id="line-50"><span class="w">        </span><span class="n">AssetManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="line-51"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-52"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
