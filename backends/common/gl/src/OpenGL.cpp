@@ -165,10 +165,8 @@ namespace Cacao {
 
 		uivsm = {};
 
-#ifndef ES
-		//Enable SRGB (on by default for OpenGL ES)
-		glEnable(GL_FRAMEBUFFER_SRGB);
-#endif
+		//Enable SRGB
+		glEnable(GL_FRAMEBUFFER_SRGB_EXT);
 
 		//Create globals UBO
 		glGenBuffers(1, &globalsUBO);

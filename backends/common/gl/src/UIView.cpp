@@ -96,7 +96,7 @@ namespace Cacao {
 
 		//Regenerate textures and renderbuffers
 		glBindTexture(GL_TEXTURE_2D, backBuffer->colorTex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, size.x, size.y, 0, GL_RGBA8, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glBindRenderbuffer(GL_RENDERBUFFER, backBuffer->rbo);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, backBuffer->rbo);

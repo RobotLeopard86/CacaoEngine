@@ -7,7 +7,7 @@
 * Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
 
 ## Notes
-* On Linux, presumably due to a bug with the pre-release SDL version, "corrupted double-linked list" is printed after total engine shutdown. This is to be expected.
+* On Linux when running this backend through XWayland, the window will fail to open.
 
 ## Dependencies
 Windows and macOS: Platform-specific SDKs  

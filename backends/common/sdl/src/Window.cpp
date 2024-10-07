@@ -47,7 +47,7 @@ namespace Cacao {
 		nativeData.reset(new WindowData());
 
 #ifdef __linux__
-		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_VIDEO_DRIVER_HINT, "x11");
+		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
 #endif
 
 		//Initialize GLFW
