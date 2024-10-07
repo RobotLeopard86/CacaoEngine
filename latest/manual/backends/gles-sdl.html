@@ -203,6 +203,12 @@
 <li><p>SDL does not support the F25 key (if you have that for some reason), so it won’t be detected as key input</p></li>
 </ul>
 </section>
+<section id="notes">
+<h2>Notes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#notes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#notes'"><span></span></a></h2>
+<ul class="simple">
+<li><p>On Linux when running this backend through XWayland, the window will fail to open.</p></li>
+</ul>
+</section>
 <section id="dependencies">
 <h2>Dependencies<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dependencies" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dependencies'"><span></span></a></h2>
 <ul class="simple">
@@ -233,6 +239,7 @@
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#limitations'" class="reference internal" href="#limitations">Limitations</a></li>
+<li><a :data-current="activeSection === '#notes'" class="reference internal" href="#notes">Notes</a></li>
 <li><a :data-current="activeSection === '#dependencies'" class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </div>
