@@ -5,6 +5,7 @@ This backend uses OpenGL ES 3.0 and GLFW.
 ## Limitations
 * 64-bit shader uniform types (`int64`, `uint64`, and `double`) are not allowed
 * Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
+* X11 has issues with gamma correction, so a dialog box will show to warn the user about this
 
 ## Linux Dependencies
 * Fedora-based (e.g. RHEL) Linux: wayland-devel wayland-protocols-devel libxkbcommon-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel extra-cmake-modules

@@ -3,6 +3,7 @@
 ## Limitations
 * 64-bit shader uniform types (`int64`, `uint64`, and `double`) are not allowed
 * Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
+* X11 has issues with gamma correction, so a dialog box will show to warn the user about this
 
 ## Dependencies
 Windows and macOS: Platform-specific SDKs  

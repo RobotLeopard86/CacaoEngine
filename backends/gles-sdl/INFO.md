@@ -5,6 +5,7 @@
 * SDL does not support the F25 key (if you have that for some reason), so it won't be detected as key input
 * 64-bit shader uniform types (`int64`, `uint64`, and `double`) are not allowed
 * Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
+* X11 has issues with gamma correction, so a dialog box will show to warn the user about this
 
 ## Notes
 * On Linux when running this backend through XWayland, the window will fail to open.

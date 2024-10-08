@@ -63,6 +63,7 @@ include_dirs = [
 	'../../libs/thread-pool/include',
 	'../../libs/dynalo/include',
 	'../../libs/glm',
+	'../../libs/tinyfiledialogs',
 	include_directories('../../cacao')
 ]
 
@@ -103,7 +104,8 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/gl/src/UIDrawing.cpp',
 	'../common/gl/src/UIView.cpp',
 	'../common/gl/src/UIShaderGen.cpp',
-	'../common/ExceptionCodes.cpp'
+	'../common/ExceptionCodes.cpp',
+	'../../libs/tinyfiledialogs/tinyfiledialogs.c'
 ], dependencies: backend_deplist, cpp_args: ['-DES'])
 
 subdir_done()

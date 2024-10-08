@@ -8,12 +8,19 @@
 #include "Core/Exception.hpp"
 #include "SDLWindowData.hpp"
 
+#include "tinyfiledialogs.h"
+
 namespace Cacao {
 	void ConfigureSDL() {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, SDL_TRUE);
+
+		if(std::string(SDL_GetCurrentVideoDriver()).compare("x11") == 0) {
+			int result = tinyfd_messageBox("Cacao Engine Warning", "On X11 with OpenGL ES, gamma correction does not apply correctly. Visuals may appear at the incorrect brightness level.\nThis issue does not occur in a Wayland session or with other backends.\n\nDo you want to proceed with visual errors?", "yesno", "warning", 0);
+			if(result == 0) exit(0);
+		}
 	}
 
 	SDL_WindowFlags GetSDLFlags() {

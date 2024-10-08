@@ -7,6 +7,7 @@ This backend uses OpenGL ES 3.0 and SDL.
 * Boolean shader uniform types break and will not apply properly, use `int` or `uint` instead
 * For some reason, the SDL header does not contain the grave/tilde key (`` ` ``/`~`), so it won't be detected as key input
 * SDL does not support the F25 key (if you have that for some reason), so it won't be detected as key input
+* X11 has issues with gamma correction, so a dialog box will show to warn the user about this
 
 ## Notes
 * On Linux when running this backend through XWayland, the window will fail to open.

@@ -8,12 +8,20 @@
 #include "Core/Exception.hpp"
 #include "GLFWWindowData.hpp"
 
+#include "tinyfiledialogs.h"
+
 namespace Cacao {
 	void SetGLFWHints() {
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 		glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_TRUE);
+
+		if(glfwGetPlatform() == GLFW_PLATFORM_X11) {
+			int result = tinyfd_messageBox("Cacao Engine Warning", "On X11 with OpenGL ES, gamma correction does not apply correctly. Visuals may appear at the incorrect brightness level.\nThis issue does not occur in a Wayland session or with other backends.\n\nDo you want to proceed with visual errors?", "yesno", "warning", 0);
+			if(result == 0) exit(0);
+		}
 	}
 
 	void SetupGraphicsAPI(GLFWwindow* win) {
