@@ -63,7 +63,6 @@ backend_deplist = [
 	spv_hlsl,
 	spv_msl,
 	glfw_dep,
-	glad_dep,
 	stb_dep,
 	freetype,
 	icu,
