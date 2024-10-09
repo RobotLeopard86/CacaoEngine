@@ -7,9 +7,9 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Build Instructions | Cacao Engine Docs</title>
-<meta content="Build Instructions | Cacao Engine Docs" property="og:title"/>
-<meta content="Build Instructions | Cacao Engine Docs" name="twitter:title"/>
+<title>Cacao Engine Build Instructions | Cacao Engine Docs</title>
+<meta content="Cacao Engine Build Instructions | Cacao Engine Docs" property="og:title"/>
+<meta content="Cacao Engine Build Instructions | Cacao Engine Docs" name="twitter:title"/>
 <link href="../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
@@ -76,7 +76,7 @@
 <ul class="current">
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual.html">Cacao Engine Manual<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Build Instructions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Cacao Engine Build Instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bundles.html">Bundles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html">Built-In Event List</a></li>
@@ -185,11 +185,11 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../manual.html">Cacao Engine Manual</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Build Instructions</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Cacao Engine Build Instructions</span>
 </nav>
 <div id="content" role="main">
-<section id="build-instructions">
-<h1>Build Instructions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#build-instructions"><span></span></a></h1>
+<section id="cacao-engine-build-instructions">
+<h1>Cacao Engine Build Instructions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cacao-engine-build-instructions"><span></span></a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#prerequisites" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#prerequisites'"><span></span></a></h2>
 <ul class="simple">
@@ -250,16 +250,12 @@
 </ul>
 </section>
 <section id="prerequisite-installation">
-<h2>0. Prerequisite Installation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#prerequisite-installation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#prerequisite-installation'"><span></span></a></h2>
+<h2>1. Prerequisite Installation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#prerequisite-installation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#prerequisite-installation'"><span></span></a></h2>
 <p>To build Cacao Engine, you need the prerequisites listed above.<br/>
 To install Git, either find it in your package manager if on Linux, with <a class="reference external" href="https://brew.sh" rel="nofollow noopener">Homebrew<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> on macOS, or from the <a class="reference external" href="https://gitforwindows.org" rel="nofollow noopener">Git for Windows project<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> on Windows.<br/>
 You can install Meson as listed on their website <a class="reference external" href="https://mesonbuild.com/SimpleStart.html#installing-meson" rel="nofollow noopener">here<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>. Instructions for installing Python 3 and ninja can also be found there.<br/>
 CMake is also simple. On Linux, it should be available in your package manager. For Windows and macOS users, you can get CMake on their website’s <a class="reference external" href="https://cmake.org/download/#latest" rel="nofollow noopener">download page<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>.<br/>
 Finally, GLSLC is available as part of the Vulkan SDK (download that <a class="reference external" href="https://vulkan.lunarg.com/sdk/home" rel="nofollow noopener">here<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>), or can be downloaded standalone from the <a class="reference external" href="https://github.com/google/shaderc/blob/main/downloads.md" rel="nofollow noopener">project GitHub<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>.</p>
-</section>
-<section id="getting-the-source">
-<h2>1. Getting The Source<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#getting-the-source" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#getting-the-source'"><span></span></a></h2>
-<p>Building Cacao Engine requires a copy of the source code (obviously). Cacao Engine contains Git submodules, and the project <strong>WILL NOT BUILD</strong> if they are not found. When cloning the repository, just add the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag to the clone command line (e.g. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/RobotLeopard86/CacaoEngine</span> <span class="pre">--recursive</span></code>). If you have already cloned the source non-recursively, issue the following command in the source root to download the submodules: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code>.</p>
 </section>
 <section id="configuring-the-build">
 <h2>2. Configuring the Build<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#configuring-the-build" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#configuring-the-build'"><span></span></a></h2>
@@ -299,8 +295,7 @@ Select a backend from <a class="reference internal" href="backends.html"><span c
 <li><a :data-current="activeSection === '#linux-package-dependencies'" class="reference internal" href="#linux-package-dependencies">Linux Package Dependencies</a></li>
 <li><a :data-current="activeSection === '#compilers'" class="reference internal" href="#compilers">Compilers</a></li>
 <li><a :data-current="activeSection === '#known-building-platforms'" class="reference internal" href="#known-building-platforms">Known Building Platforms</a></li>
-<li><a :data-current="activeSection === '#prerequisite-installation'" class="reference internal" href="#prerequisite-installation">0. Prerequisite Installation</a></li>
-<li><a :data-current="activeSection === '#getting-the-source'" class="reference internal" href="#getting-the-source">1. Getting The Source</a></li>
+<li><a :data-current="activeSection === '#prerequisite-installation'" class="reference internal" href="#prerequisite-installation">1. Prerequisite Installation</a></li>
 <li><a :data-current="activeSection === '#configuring-the-build'" class="reference internal" href="#configuring-the-build">2. Configuring the Build</a></li>
 <li><a :data-current="activeSection === '#build'" class="reference internal" href="#build">3. Build</a></li>
 <li><a :data-current="activeSection === '#playground-setup'" class="reference internal" href="#playground-setup">4. Playground Setup</a></li>
