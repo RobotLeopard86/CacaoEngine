@@ -1,4 +1,4 @@
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "UI/Text.hpp"
 #include "UI/Image.hpp"

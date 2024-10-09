@@ -1,6 +1,6 @@
 cmake = import('cmake')
 
-glad_dep = subproject('glad', required: true, default_options: [ 'what=gl' ]).get_variable('glad_dep')
+glad_dep = subproject('glad', required: true).get_variable('glad_dep')
 stb_dep = subproject('stb', required: true).get_variable('stb_dep')
 
 spv_opts = cmake.subproject_options()
@@ -91,7 +91,6 @@ if host_machine.system() == 'windows'
 endif
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/GLHooks.cpp',
 	'src/SDLHooks.cpp',
 	'../common/sdl/src/Window.cpp',
 	'../common/gl/src/Texture2D.cpp',

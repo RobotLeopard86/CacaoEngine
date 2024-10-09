@@ -1,4 +1,4 @@
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "GLFWHooks.hpp"
 

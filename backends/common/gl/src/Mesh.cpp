@@ -7,7 +7,7 @@
 
 #include <future>
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace Cacao {

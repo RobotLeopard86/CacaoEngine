@@ -3,7 +3,7 @@
 #include "Utilities/MiscUtils.hpp"
 #include "GLUtils.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 namespace Cacao {
 	//Struct for data required for an OpenGL (ES) skybox

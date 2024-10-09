@@ -2,7 +2,7 @@
 
 #include "Events/EventSystem.hpp"
 #include "Utilities/Task.hpp"
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include <future>
 #include <memory>

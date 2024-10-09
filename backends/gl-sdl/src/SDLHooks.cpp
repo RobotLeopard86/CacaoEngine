@@ -1,7 +1,7 @@
 #include "SDLHooks.hpp"
 
 #include "SDL3/SDL.h"
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "Core/Assert.hpp"
 #include "Graphics/Window.hpp"

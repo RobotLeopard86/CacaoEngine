@@ -1,6 +1,6 @@
 #include "UI/Shaders.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 namespace Cacao {
 	void GenShaders() {

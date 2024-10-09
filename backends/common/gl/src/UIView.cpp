@@ -1,6 +1,6 @@
 #include "UI/UIView.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "GLUIView.hpp"
 #include "GLUtils.hpp"

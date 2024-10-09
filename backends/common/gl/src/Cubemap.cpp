@@ -9,7 +9,7 @@
 
 #include "stb_image.h"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include <future>
 #include <filesystem>

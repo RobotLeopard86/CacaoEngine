@@ -7,9 +7,8 @@
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "GLUtils.hpp"
-#include "GLHooks.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 #include "spirv_glsl.hpp"
 #include "spirv_cross.hpp"
 #include "spirv_parser.hpp"
@@ -31,7 +30,8 @@ namespace Cacao {
 
 		//Create common options
 		spirv_cross::CompilerGLSL::Options options;
-		ConfigureSPIRV(&options);
+		options.es = false;
+		options.version = 410;
 
 		//Parse SPIR-V IR
 		spirv_cross::Parser vertParse(std::move(vbuf));
@@ -355,10 +355,6 @@ namespace Cacao {
 			GLint uniformLocation = glGetUniformLocation(nativeData->gpuID, ulocPath.str().c_str());
 			CheckException(uniformLocation != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the requested uniform!")
 
-			//Confirm that spec does not contain types that aren't supported
-			UniformTypeCheckResponse res = CheckUniformType(info.type);
-			CheckException(res.ok, Exception::GetExceptionCodeFromMeaning("UnsupportedType"), res.err)
-
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
 			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!")
@@ -510,9 +506,80 @@ namespace Cacao {
 						}
 						break;
 					case SpvType::Double:
+						switch(dims) {
+							case 1:
+								glUniform1d(uniformLocation, std::any_cast<double>(item.data));
+								break;
+							case 2:
+								glUniform2dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec2>(item.data)));
+								break;
+							case 3:
+								glUniform3dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec3>(item.data)));
+								break;
+							case 4:
+								glUniform4dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec4>(item.data)));
+								break;
+							case 6:
+								glUniformMatrix2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2>(item.data)));
+								break;
+							case 7:
+								glUniformMatrix2x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data)));
+								break;
+							case 8:
+								glUniformMatrix2x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data)));
+								break;
+							case 10:
+								glUniformMatrix3x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data)));
+								break;
+							case 11:
+								glUniformMatrix3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3>(item.data)));
+								break;
+							case 12:
+								glUniformMatrix3x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data)));
+								break;
+							case 14:
+								glUniformMatrix4x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data)));
+								break;
+							case 15:
+								glUniformMatrix4x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data)));
+								break;
+							case 16:
+								glUniformMatrix4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4>(item.data)));
+								break;
+						}
+						break;
 					case SpvType::Int64:
+						switch(dims) {
+							case 1:
+								glUniform1i64ARB(uniformLocation, std::any_cast<int64_t>(item.data));
+								break;
+							case 2:
+								glUniform2i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec2>(item.data)));
+								break;
+							case 3:
+								glUniform3i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec3>(item.data)));
+								break;
+							case 4:
+								glUniform4i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec4>(item.data)));
+								break;
+						}
+						break;
 					case SpvType::UInt64:
-						Handle64BitTypes(uniformLocation, item, info, dims);
+						switch(dims) {
+							case 1:
+								glUniform1ui64ARB(uniformLocation, std::any_cast<uint64_t>(item.data));
+								break;
+							case 2:
+								glUniform2ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec2>(item.data)));
+								break;
+							case 3:
+								glUniform3ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec3>(item.data)));
+								break;
+							case 4:
+								glUniform4ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec4>(item.data)));
+								break;
+						}
+						break;
 				}
 			} catch(const std::bad_cast&) {
 				CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Failed cast of shader upload value to type specified in target!")
