@@ -46,10 +46,6 @@ include_dirs = [
 	'../common/gl/include',
 	'../common/glfw/include',
 	'../common',
-	'../../libs/spdlog/include',
-	'../../libs/thread-pool/include',
-	'../../libs/dynalo/include',
-	'../../libs/glm',
 	include_directories('../../cacao')
 ]
 
@@ -70,7 +66,12 @@ backend_deplist = [
 	harfbuzz,
 	harfbuzz_icu,
 	harfbuzz_sub,
-	core_shaders
+	core_shaders,
+	glm_dep,
+	dr_libs_dep,
+	dynalo_dep,
+	spdlog_dep,
+	thread_pool_dep
 ]
 
 if host_machine.system() == 'windows'

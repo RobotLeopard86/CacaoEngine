@@ -92,15 +92,6 @@ else
 endif
 guid_dep = cmake.subproject('guid', options: guid_opts, required: true).dependency('crossguid')
 
-includes = [
-	'include',
-	'../libs/spdlog/include',
-	'../libs/thread-pool/include',
-	'../libs/dynalo/include',
-	'../libs/glm',
-	'../libs/dr_libs'
-]
-
 cxx = meson.get_compiler('cpp')
 libdl = cxx.find_library('dl', required: false, static: true)
 
@@ -153,9 +144,14 @@ frontend_deps = [
 	icu,
 	harfbuzz,
 	harfbuzz_icu,
-	harfbuzz_sub
+	harfbuzz_sub,
+	glm_dep,
+	dr_libs_dep,
+	thread_pool_dep,
+	dynalo_dep,
+	spdlog_dep
 ]
-libfrontend = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: frontend_deps, pic: true)
+libfrontend = static_library('cacaofrontend', sources: sources, include_directories: 'include', dependencies: frontend_deps, pic: true)
 
 exe_deps = [
 	frontend_deps,
@@ -183,10 +179,10 @@ if host_machine.system() == 'windows'
 	exe_deps += meson.get_compiler('cpp').find_library('winmm', required: true)
 	exe_deps += meson.get_compiler('cpp').find_library('version', required: true)
 	exe_deps += meson.get_compiler('cpp').find_library('setupapi', required: true)
-	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: includes, 
+	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: 'include', 
 		build_rpath: '.', link_whole: [ libcacaoengine ], export_dynamic: true, implib: true, dependencies: exe_deps, vs_module_defs: vs_def, link_args: lnk_args)
 else
-	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', include_directories: includes, 
+	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', include_directories: 'include', 
 		build_rpath: '.', link_whole: [ libfrontend, libbackend ], export_dynamic: true, dependencies: exe_deps)
 endif
 

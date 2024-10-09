@@ -103,16 +103,17 @@ harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
 harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
 harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 
+glm_dep = subproject('glm', required: true).get_variable('glm_dep')
+spdlog_dep = subproject('spdlog', required: true).get_variable('spdlog_dep')
+dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
+thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
+dr_libs_dep = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
+
 subdir('backends' / backend)
 subdir('cacao')
 
 cacao_dep = declare_dependency(include_directories: [
 	'cacao/include',
-	'libs/spdlog/include',
-	'libs/thread-pool/include',
-	'libs/dynalo/include',
-	'libs/glm',
-	include_directories('cacao')
 ], dependencies: [
 	yaml_dep,
 	assimp_dep,
@@ -138,7 +139,12 @@ cacao_dep = declare_dependency(include_directories: [
 	icu,
 	harfbuzz,
 	harfbuzz_icu,
-	harfbuzz_sub
+	harfbuzz_sub,
+	glm_dep,
+	dr_libs_dep,
+	dynalo_dep,
+	spdlog_dep,
+	thread_pool_dep
 ], link_with: cacao_exe)
 
 if playground
