@@ -47,7 +47,7 @@ vmahpp = subproject('vma-hpp', required: true).get_variable('vma_hpp_dep')
 
 include_dirs = [
 	'../../cacao/include',
-	'../common/gl/include',
+	'../common/vk/include',
 	'../common/glfw/include',
 	'../common',
 	include_directories('../../cacao')
@@ -87,8 +87,11 @@ endif
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
 	'src/GLFWHooks.cpp',
+	'src/VkHooks.cpp',
 	'../common/glfw/src/Window.cpp',
-	'../common/ExceptionCodes.cpp'
-], dependencies: backend_deplist)
+	'../common/ExceptionCodes.cpp',
+	'../common/vk/src/Vulkan.cpp',
+	'../common/vk/src/VkUtils.cpp'
+], dependencies: backend_deplist, cpp_args: ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', '-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1002000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', '-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1'])
 
 subdir_done()

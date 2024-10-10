@@ -54,6 +54,11 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 	subsystem = 'windows'
 endif
 
+if host_machine.system() == 'darwin'
+	add_project_arguments('-fexperimental-library', language: 'cpp')
+	add_project_link_arguments('-fexperimental-library', language: 'cpp')
+endif
+
 cmake_build_type = ''
 cmake_msvc_lib = 'MultiThreaded'
 if bt.contains('debug')
@@ -108,6 +113,10 @@ spdlog_dep = subproject('spdlog', required: true).get_variable('spdlog_dep')
 dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
 thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
 dr_libs_dep = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
+
+if bt.contains('debug')
+	add_project_arguments(['-DDEBUG'], language: 'cpp')
+endif
 
 subdir('backends' / backend)
 subdir('cacao')
