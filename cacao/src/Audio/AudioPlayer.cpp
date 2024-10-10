@@ -25,11 +25,13 @@ namespace Cacao {
 			alDeleteSources(1, &source);
 
 			//Remove consumers
-			EventManager::GetInstance()->UnsubscribeConsumer("AudioShutdown", sec);
-			EventManager::GetInstance()->UnsubscribeConsumer("SoundRelease", soundDelete);
-			delete sec;
-			delete soundDelete;
-			consumersSubscribed = false;
+			if(consumersSubscribed) {
+				EventManager::GetInstance()->UnsubscribeConsumer("AudioShutdown", sec);
+				EventManager::GetInstance()->UnsubscribeConsumer("SoundRelease", soundDelete);
+				delete sec;
+				delete soundDelete;
+				consumersSubscribed = false;
+			}
 
 			//Notify that we're done
 			p.set_value();
@@ -46,6 +48,9 @@ namespace Cacao {
 				if(IsPlaying()) Stop();
 				alSourcei(source, AL_BUFFER, AL_NONE);
 			}
+
+			//Notify that we're done
+			p.set_value();
 		});
 		EventManager::GetInstance()->SubscribeConsumer("SoundRelease", soundDelete);
 
