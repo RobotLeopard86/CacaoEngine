@@ -56,7 +56,7 @@ KeepEmptyLinesAtTheStartOfBlocks: true
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
 Macros:
-- CheckException(x,y,z)=if(!(x)) {throw Exception{z, y};}
+- CheckException(x,y,z)=if(!(x)) throw Exception{z, y};
 MaxEmptyLinesToKeep: 3
 NamespaceIndentation: All
 ObjCBlockIndentWidth: 2

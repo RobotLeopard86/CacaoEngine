@@ -16,12 +16,12 @@ namespace Cacao {
 	};
 
 	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
-		//Configure OpenGL (ES)
+		//Configure OpenGL
 		GLint originalUnpack;
 		glGetIntegerv(GL_UNPACK_ALIGNMENT, &originalUnpack);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		//Create temporary OpenGL (ES) objects
+		//Create temporary OpenGL objects
 		GLuint vao, vbo, tex;
 		glGenVertexArrays(1, &vao);
 		glGenBuffers(1, &vbo);
@@ -124,13 +124,13 @@ namespace Cacao {
 		}
 		glBindVertexArray(0);
 
-		//Reset OpenGL (ES)
+		//Reset OpenGL
 		glPixelStorei(GL_UNPACK_ALIGNMENT, originalUnpack);
 
 		//Destroy Harfbuzz font representation
 		hb_font_destroy(hbf);
 
-		//Clean up OpenGL (ES) objects
+		//Clean up OpenGL objects
 		glDeleteTextures(1, &tex);
 		glDeleteBuffers(1, &vbo);
 		glDeleteVertexArrays(1, &vao);
@@ -150,7 +150,7 @@ namespace Cacao {
 			{{topLeft.x + size.x, topLeft.y - size.y}, {1.0f, 0.0f}},
 			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}}};
 
-		//Create temporary OpenGL (ES) objects
+		//Create temporary OpenGL objects
 		GLuint vao, vbo;
 		glGenVertexArrays(1, &vao);
 		glGenBuffers(1, &vbo);
@@ -177,7 +177,7 @@ namespace Cacao {
 		ImageShaders::shader->Unbind();
 		glBindVertexArray(0);
 
-		//Clean up OpenGL (ES) objects
+		//Clean up OpenGL objects
 		glDeleteBuffers(1, &vbo);
 		glDeleteVertexArrays(1, &vao);
 	}

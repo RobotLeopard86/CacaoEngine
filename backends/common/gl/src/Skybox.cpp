@@ -70,7 +70,7 @@ namespace Cacao {
 
 	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Try to invoke OpenGL (ES) and throw any exceptions back to the initial caller
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this, projectionMatrix, viewMatrix]() {
 					this->Draw(projectionMatrix, viewMatrix);
@@ -84,7 +84,7 @@ namespace Cacao {
 		//Confirm that texture is compiled
 		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!")
 
-		//Set up OpenGL (ES) VAO if not already
+		//Set up OpenGL VAO if not already
 		if(!nativeData->vaoReady) {
 			//Generate vertex array and buffer
 			glGenVertexArrays(1, &(nativeData->vao));

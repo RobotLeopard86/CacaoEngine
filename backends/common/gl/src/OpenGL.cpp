@@ -16,7 +16,7 @@
 constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
 
 namespace Cacao {
-	//Queue of OpenGL (ES) tasks to process
+	//Queue of OpenGL tasks to process
 	static std::queue<Task> glQueue;
 
 	//Queue mutex
@@ -27,7 +27,7 @@ namespace Cacao {
 	static UIViewShaderManager uivsm;
 
 	void RenderController::UpdateGraphicsState() {
-		//Process OpenGL (ES) tasks
+		//Process OpenGL tasks
 		while(!glQueue.empty()) {
 			//Acquire next task
 			queueMutex.lock();
@@ -73,7 +73,7 @@ namespace Cacao {
 				//Bind shader
 				obj.material.shader->Bind();
 
-				//Configure OpenGL (ES)
+				//Configure OpenGL
 				glEnable(GL_DEPTH_TEST);
 				glDisable(GL_BLEND);
 				glDepthFunc(GL_LESS);
@@ -128,7 +128,7 @@ namespace Cacao {
 				uivsm->UploadData(uiud);
 				Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
 
-				//Configure OpenGL (ES)
+				//Configure OpenGL
 				glDisable(GL_DEPTH_TEST);
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -138,7 +138,7 @@ namespace Cacao {
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 				glBindVertexArray(0);
 
-				//Reset OpenGL (ES) configurations to normal
+				//Reset OpenGL configurations to normal
 				glEnable(GL_DEPTH_TEST);
 				glDepthFunc(GL_LESS);
 				glDisable(GL_BLEND);
@@ -212,7 +212,7 @@ namespace Cacao {
 		//Release UI view shader
 		uivsm.Release();
 
-		//Take care of any remaining OpenGL (ES) tasks
+		//Take care of any remaining OpenGL tasks
 		while(!glQueue.empty()) {
 			//Acquire next task
 			Task& task = glQueue.front();

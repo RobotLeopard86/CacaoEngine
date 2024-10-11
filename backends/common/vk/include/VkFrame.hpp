@@ -13,4 +13,6 @@ namespace Cacao {
 		vk::Semaphore sem;
 		uint32_t image;
 	} submission;
+
+	inline VkFrame* activeFrame;
 }

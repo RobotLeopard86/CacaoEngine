@@ -6,7 +6,7 @@
 #include "glad/gl.h"
 
 namespace Cacao {
-	//Struct for data required for an OpenGL (ES) skybox
+	//Struct for data required for an OpenGL skybox
 	struct Skybox::SkyboxData {
 		GLuint vao, vbo;
 		bool vaoReady;

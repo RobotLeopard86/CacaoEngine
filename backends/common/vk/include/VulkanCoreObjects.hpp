@@ -10,6 +10,10 @@
 #include <map>
 
 namespace Cacao {
+	struct Immediate {
+		vk::CommandBuffer cmd;
+		vk::Fence fence;
+	};
 	inline vk::Instance vk_instance;
 	inline vk::PhysicalDevice physDev;
 	inline vk::Device dev;
@@ -21,6 +25,6 @@ namespace Cacao {
 	inline std::vector<vk::ImageView> imageViews;
 	inline std::vector<VkFrame> frames;
 	inline vk::CommandPool renderPool, immediatePool;
-	inline std::map<std::thread::id, vk::CommandBuffer> immediateCommandBuffers;
+	inline std::map<std::thread::id, Immediate> immediates;
 	inline vma::Allocator allocator;
 }

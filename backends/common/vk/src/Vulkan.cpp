@@ -171,6 +171,7 @@ namespace Cacao {
 
 	void RegisterGraphicsExceptions() {
 		Exception::RegisterExceptionCode(100, "Vulkan");
+		Exception::RegisterExceptionCode(101, "WaitExpired");
 	}
 
 	void RenderController::UpdateGraphicsState() {}

@@ -91,7 +91,12 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/glfw/src/Window.cpp',
 	'../common/ExceptionCodes.cpp',
 	'../common/vk/src/Vulkan.cpp',
-	'../common/vk/src/VkUtils.cpp'
+	'../common/vk/src/VkUtils.cpp',
+	'../common/vk/src/Cubemap.cpp',
+	'../common/vk/src/Texture2D.cpp',
+	'../common/vk/src/Mesh.cpp',
+	'../common/vk/src/Shader.cpp',
+	'../common/vk/src/Skybox.cpp'
 ], dependencies: backend_deplist, cpp_args: ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', '-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1002000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', '-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1'])
 
 subdir_done()

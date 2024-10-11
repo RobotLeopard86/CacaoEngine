@@ -5,7 +5,7 @@
 #include "glad/gl.h"
 
 namespace Cacao {
-	//Struct for data required for an OpenGL (ES) cubemap
+	//Struct for data required for an OpenGL cubemap
 	struct Cubemap::CubemapData {
 		GLuint gpuID;
 	};

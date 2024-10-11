@@ -42,7 +42,7 @@ namespace Cacao {
 
 	std::shared_future<void> Texture2D::Compile() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
+			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
 				this->Compile();
 			});
@@ -84,7 +84,7 @@ namespace Cacao {
 
 	void Texture2D::Release() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Try to invoke OpenGL (ES) and throw any exceptions back to the initial caller
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
 					this->Release();
