@@ -89,7 +89,7 @@ namespace Cacao {
 
 		//Check for FIFO present mode
 		auto pmodes = physDev.getSurfacePresentModesKHR(surface);
-		CheckException(std::find(pmodes.cbegin(), pmodes.cend(), vk::PresentModeKHR::eFifo) != pmodes.cend(), Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "The FIFO present mode is not available!")
+		CheckException(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "The requested present mode is not available!")
 
 		//Make new swapchain
 		vk::SwapchainCreateInfoKHR swapchainCI(

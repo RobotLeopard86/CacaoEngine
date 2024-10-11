@@ -8,4 +8,9 @@ namespace Cacao {
 		vk::Semaphore acquireSemaphore, renderSemaphore;
 		vk::CommandBuffer cmd;
 	};
+
+	inline struct FrameSubmission {
+		vk::Semaphore sem;
+		uint32_t image;
+	} submission;
 }

@@ -23,16 +23,50 @@ namespace Cacao {
 		surface = vk::SurfaceKHR(cSurface);
 
 		//Create swapchain and image views
-		GenSwapchain();
+		try {
+			GenSwapchain();
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Swapchain recreation failed: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+		}
 	}
 
-	void CleanupGraphicsAPI() {}
+	void CleanupGraphicsAPI() {
+		dev.destroySwapchainKHR(swapchain);
+		vk_instance.destroySurfaceKHR(surface);
+	}
 
-	void ResizeViewport(GLFWwindow* win) {}
+	void ResizeViewport(GLFWwindow* win) {
+		try {
+			GenSwapchain();
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Swapchain recreation failed: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+		}
+	}
 
-	void Window::UpdateVSyncState() {}
+	void Window::UpdateVSyncState() {
+		presentMode = (useVSync ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eImmediate);
+		try {
+			GenSwapchain();
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Swapchain recreation failed: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+		}
+	}
 
 	void Window::Present() {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!")
+		vk::PresentInfoKHR pi(submission.sem, swapchain, submission.image);
+		try {
+			graphicsQueue.presentKHR(pi);
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Present failed: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+		}
 	}
 }

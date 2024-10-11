@@ -6,6 +6,8 @@
 #include "VkFrame.hpp"
 
 #include <vector>
+#include <thread>
+#include <map>
 
 namespace Cacao {
 	inline vk::Instance vk_instance;
@@ -19,5 +21,6 @@ namespace Cacao {
 	inline std::vector<vk::ImageView> imageViews;
 	inline std::vector<VkFrame> frames;
 	inline vk::CommandPool renderPool, immediatePool;
+	inline std::map<std::thread::id, vk::CommandBuffer> immediateCommandBuffers;
 	inline vma::Allocator allocator;
 }

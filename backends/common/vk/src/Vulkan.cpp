@@ -4,6 +4,8 @@
 #include "VkHooks.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 #include "Core/Assert.hpp"
+#include "Utilities/MultiFuture.hpp"
+#include "ExceptionCodes.hpp"
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
@@ -137,5 +139,39 @@ namespace Cacao {
 			vk_instance.destroy();
 			EngineAssert(false, "Could not create immediate command pool!");
 		}
+
+		//Allocate immediate command buffers
+		MultiFuture<std::thread::id> poolThreadsFut;
+		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
+			poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
+				return std::this_thread::get_id();
+			}));
+		}
+		poolThreadsFut.WaitAll();
+		std::vector<std::thread::id> poolThreads;
+		for(int i = 0; i < poolThreadsFut.size(); i++) {
+			poolThreads.push_back(poolThreadsFut[i].get());
+		}
+		vk::CommandBufferAllocateInfo allocCI(immediatePool, vk::CommandBufferLevel::ePrimary, poolThreads.size());
+		std::vector<vk::CommandBuffer> immBufs;
+		try {
+			immBufs = dev.allocateCommandBuffers(allocCI);
+		} catch(vk::SystemError& err) {
+			dev.destroyCommandPool(immediatePool);
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			EngineAssert(false, "Could not allocate immediate command buffers!");
+		}
+		for(int i = 0; i < immBufs.size(); i++) {
+			immediateCommandBuffers.insert_or_assign(poolThreads[i], immBufs[i]);
+		}
 	}
+
+	void RegisterGraphicsExceptions() {
+		Exception::RegisterExceptionCode(100, "Vulkan");
+	}
+
+	void RenderController::UpdateGraphicsState() {}
 }
