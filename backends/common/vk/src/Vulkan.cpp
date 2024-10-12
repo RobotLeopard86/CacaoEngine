@@ -48,6 +48,7 @@ namespace Cacao {
 			VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME,
 			VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
 			VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
+			VK_EXT_ROBUSTNESS_2_EXTENSION_NAME,
 			VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME};
 #ifdef __linux__
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
@@ -82,21 +83,14 @@ namespace Cacao {
 		//Create logical device
 		float queuePriorities[2] = {1.0f, 2.0f};
 		vk::DeviceQueueCreateInfo queueCI({}, 0, 2, queuePriorities);
-		vk::PhysicalDeviceFeatures2 deviceFeatures2 = {};
-		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures = {};
-		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures = {};
-		vk::PhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features = {};
-		vk::PhysicalDeviceSynchronization2Features sync2Features = {};
-		dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
-		extendedDynamicStateFeatures.extendedDynamicState = VK_TRUE;
-		extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
-		sync2Features.synchronization2 = VK_TRUE;
-		deviceFeatures2.pNext = &dynamicRenderingFeatures;
-		dynamicRenderingFeatures.pNext = &extendedDynamicStateFeatures;
-		extendedDynamicStateFeatures.pNext = &extendedDynamicState2Features;
-		extendedDynamicState2Features.pNext = &sync2Features;
-		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts);
-		deviceCI.pNext = &deviceFeatures2;
+		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
+		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
+		vk::PhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features(VK_TRUE, VK_TRUE, VK_TRUE, &extendedDynamicStateFeatures);
+		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicState2Features);
+		vk::PhysicalDeviceRobustness2FeaturesEXT robustnessFeatures(VK_TRUE, VK_TRUE, VK_TRUE, &sync2Features);
+		vk::PhysicalDeviceFeatures2 deviceFeatures2 {};
+		deviceFeatures2.pNext = &robustnessFeatures;
+		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts, nullptr, &deviceFeatures2);
 		try {
 			dev = physDev.createDevice(deviceCI);
 		} catch(vk::SystemError& err) {
@@ -165,7 +159,24 @@ namespace Cacao {
 			EngineAssert(false, "Could not allocate immediate command buffers!");
 		}
 		for(int i = 0; i < immBufs.size(); i++) {
-			immediateCommandBuffers.insert_or_assign(poolThreads[i], immBufs[i]);
+			Immediate imm;
+			imm.cmd = immBufs[i];
+			try {
+				imm.fence = dev.createFence({vk::FenceCreateFlagBits::eSignaled});
+			} catch(vk::SystemError& err) {
+				for(; i >= 0; i--) {
+					dev.destroyFence(immediates[poolThreads[i]].fence);
+					immediates.erase(poolThreads[i]);
+				}
+				dev.freeCommandBuffers(immediatePool, immBufs);
+				dev.destroyCommandPool(immediatePool);
+				dev.destroyCommandPool(renderPool);
+				allocator.destroy();
+				dev.destroy();
+				vk_instance.destroy();
+				EngineAssert(false, "Could not create immediate fences!");
+			}
+			immediates.insert_or_assign(poolThreads[i], imm);
 		}
 	}
 
@@ -175,4 +186,27 @@ namespace Cacao {
 	}
 
 	void RenderController::UpdateGraphicsState() {}
+
+	void RenderController::Shutdown() {
+		//Destroy Vulkan objects
+		std::vector<vk::CommandBuffer> cbufs;
+		for(auto i : immediates) {
+			dev.destroyFence(i.second.fence);
+			cbufs.push_back(i.second.cmd);
+		}
+		dev.freeCommandBuffers(immediatePool, cbufs);
+		cbufs.clear();
+		for(auto f : frames) {
+			dev.destroySemaphore(f.acquireSemaphore);
+			dev.destroySemaphore(f.renderSemaphore);
+			dev.destroyFence(f.fence);
+			cbufs.push_back(f.cmd);
+		}
+		dev.freeCommandBuffers(renderPool, cbufs);
+		dev.destroyCommandPool(immediatePool);
+		dev.destroyCommandPool(renderPool);
+		allocator.destroy();
+		dev.destroy();
+		vk_instance.destroy();
+	}
 }

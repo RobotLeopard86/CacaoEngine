@@ -6,10 +6,11 @@
 #include <string>
 
 #include "VkUtils.hpp"
+#include "Graphics/Shader.hpp"
 
 namespace Cacao {
 	//Struct for data required for a Vulkan shader
-	struct Shader::ShaderData {
+	struct VkShaderData {
 		vk::Pipeline pipeline;					//Graphics pipeline
 		vk::DescriptorPool dpool;				//Descriptor pool
 		vk::DescriptorSet dset;					//Descriptor set
@@ -18,5 +19,10 @@ namespace Cacao {
 		Allocated<vk::Buffer> localsUBO;		//Locals uniform buffer
 		void* locals;							//Memory mapped to the locals uniform buffer
 		void* shaderData;						//Shader data buffer
+		std::vector<int> imageSlots;			//List of valid image slots
+	};
+
+	struct Shader::ShaderData {
+		VkShaderData impl;
 	};
 }

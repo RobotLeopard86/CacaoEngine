@@ -45,6 +45,7 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(10, "WrongType");
 		Exception::RegisterExceptionCode(11, "IO");
 		Exception::RegisterExceptionCode(12, "BadCompileState");
+		Exception::RegisterExceptionCode(13, "BadValue");
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");

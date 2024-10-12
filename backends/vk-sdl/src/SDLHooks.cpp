@@ -9,6 +9,7 @@
 #include "SDLWindowData.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "VkUtils.hpp"
+#include "ActiveItems.hpp"
 
 constexpr std::array<vk::Format, 2> acceptableFormats {{vk::Format::eB8G8R8A8Srgb, vk::Format::eR8G8B8A8Srgb}};
 
@@ -45,6 +46,9 @@ namespace Cacao {
 	}
 
 	void CleanupGraphicsAPI() {
+		for(vk::ImageView& iview : imageViews) {
+			dev.destroyImageView(iview);
+		}
 		dev.destroySwapchainKHR(swapchain);
 		vk_instance.destroySurfaceKHR(surface);
 	}

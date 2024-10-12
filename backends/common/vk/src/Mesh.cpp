@@ -4,6 +4,7 @@
 #include "Core/Exception.hpp"
 #include "Core/Engine.hpp"
 #include "VulkanCoreObjects.hpp"
+#include "ActiveItems.hpp"
 
 #include <future>
 
@@ -15,12 +16,10 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Mesh::Compile() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!")
 		const auto doCompile = [this]() {
-			CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!")
-
-			std::vector<unsigned int> ibd(indices.size() * 3);
-
 			//Unpack index buffer data from vec3 to floats
+			std::vector<unsigned int> ibd(indices.size() * 3);
 			for(int i = 0; i < indices.size(); i++) {
 				glm::vec3 idx = indices[i];
 				ibd[i * 3] = idx.x;

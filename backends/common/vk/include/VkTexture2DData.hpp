@@ -1,15 +1,16 @@
 #pragma once
 
 #include "vulkan/vulkan.hpp"
-#include "vk_mem_alloc.hpp"
+
+#include "VkUtils.hpp"
 
 namespace Cacao {
 	//Struct for data required for a Vulkan 2D texture
 	struct Texture2D::Tex2DData {
-		vma::Allocation alloc;
-		vk::Image image;
+		Allocated<vk::Image> texture;
 		vk::ImageView iview;
 		vk::Sampler sampler;
 		vk::Format format;
+		vk::DescriptorSet* boundDS;
 	};
 }
