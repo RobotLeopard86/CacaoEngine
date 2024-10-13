@@ -198,6 +198,10 @@
 <p>Shaders <em>MUST</em> use row-major matrix packing because the DirectX Shader Compiler changes that to column-major in SPIR-V, which is what Cacao Engine uses. See <a class="reference external" href="https://github.com/microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#appendix-a-matrix-representation" rel="nofollow noopener">this section<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> of the SPIR-V compatibility document for more info on why. Take a look at the whole of that document too; it will give better context as to writing HLSL for SPIR-V.<br/>
 You can either mark each matrix with the <code class="docutils literal notranslate"><span class="pre">row_major</span></code> qualifier, or add <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">pack_matrix(row_major)</span></code> to the top of your file.</p>
 </section>
+<section id="compile-arguments">
+<h2>Compile Arguments<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#compile-arguments" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#compile-arguments'"><span></span></a></h2>
+<p>When using <code class="docutils literal notranslate"><span class="pre">dxc</span></code> for shader compilation, you <strong>MUST</strong> ensure that <code class="docutils literal notranslate"><span class="pre">-fspv-reflect</span></code> and <code class="docutils literal notranslate"><span class="pre">-fvk-use-gl-layout</span></code> are added to the command line, or else the engine will fail to understand your shader.</p>
+</section>
 <section id="main-functions">
 <h2>Main Functions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#main-functions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#main-functions'"><span></span></a></h2>
 <p>The main functions of all shader stages must have the name <code class="docutils literal notranslate"><span class="pre">main</span></code>, otherwise Cacao Engine will fail to use them properly.</p>
@@ -318,6 +322,7 @@ For simplicity, maybe place this macro in a <code class="docutils literal notran
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#matrix-packing'" class="reference internal" href="#matrix-packing">Matrix Packing</a></li>
+<li><a :data-current="activeSection === '#compile-arguments'" class="reference internal" href="#compile-arguments">Compile Arguments</a></li>
 <li><a :data-current="activeSection === '#main-functions'" class="reference internal" href="#main-functions">Main Functions</a></li>
 <li><a :data-current="activeSection === '#inputs'" class="reference internal" href="#inputs">Inputs</a></li>
 <li><a :data-current="activeSection === '#constant-buffers'" class="reference internal" href="#constant-buffers">Constant Buffers</a><ul>
