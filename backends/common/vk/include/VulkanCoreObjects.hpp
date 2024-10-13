@@ -4,6 +4,7 @@
 #include "vk_mem_alloc.hpp"
 
 #include "VkFrame.hpp"
+#include "VkUtils.hpp"
 
 #include <vector>
 #include <thread>
@@ -27,4 +28,6 @@ namespace Cacao {
 	inline vk::CommandPool renderPool, immediatePool;
 	inline std::map<std::thread::id, Immediate> immediates;
 	inline vma::Allocator allocator;
+	inline Allocated<vk::Buffer> globalsUBO;
+	inline void* globalsMem;
 }

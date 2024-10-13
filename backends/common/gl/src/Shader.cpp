@@ -166,7 +166,8 @@ namespace Cacao {
 				this->Compile();
 			});
 		}
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!")
+		;
 
 		//Create vertex shader base
 		GLuint compiledVertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -188,7 +189,8 @@ namespace Cacao {
 			//Clean up resources
 			glDeleteShader(compiledVertexShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Vertex shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Vertex shader compilation failure: ") + infoLog.data())
+			;
 			return {};
 		}
 
@@ -213,7 +215,8 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Fragment shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Fragment shader compilation failure: ") + infoLog.data())
+			;
 			return {};
 		}
 
@@ -241,7 +244,8 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Shader linking failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Shader linking failure: ") + infoLog.data())
+			;
 			return {};
 		}
 
@@ -293,8 +297,10 @@ namespace Cacao {
 				std::rethrow_exception(std::current_exception());
 			}
 		}
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!");
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound shader!");
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!")
+		;
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound shader!")
+		;
 
 		glDeleteProgram(nativeData->gpuID);
 		compiled = false;
@@ -302,8 +308,10 @@ namespace Cacao {
 
 	void Shader::Bind() {
 		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind shader in non-rendering thread!")
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!")
+		;
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!")
+		;
 
 		glUseProgram(nativeData->gpuID);
 		bound = true;
@@ -311,8 +319,10 @@ namespace Cacao {
 
 	void Shader::Unbind() {
 		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind shader in non-rendering thread!")
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!");
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!");
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!")
+		;
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!")
+		;
 
 		//Clear current program
 		glUseProgram(0);
@@ -344,7 +354,7 @@ namespace Cacao {
 					}
 				}
 			}
-			CheckException(found, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Can't locate targeted item in shader specification!")
+			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!")
 
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];

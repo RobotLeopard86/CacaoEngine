@@ -30,7 +30,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Cubemap::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!")
 		const auto doCompile = [this]() {
 			//Load images
 			glm::uvec2 imgSize = {0, 0};
@@ -148,7 +148,8 @@ namespace Cacao {
 	}
 
 	void Cubemap::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled texture!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled cubemap!")
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound cubemap!")
 
 		//Destroy objects
 		dev.destroySampler(nativeData->sampler);
@@ -159,11 +160,10 @@ namespace Cacao {
 	}
 
 	void Cubemap::Bind(int slot) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled texture!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no bound shader!")
-		CheckException(std::find(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), slot) != activeShader->imageSlots.end(),
-			Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled cubemap!")
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound cubemap!")
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no bound shader!")
+		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
 
 		//Create update info
 		vk::DescriptorImageInfo dii(nativeData->sampler, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -178,8 +178,8 @@ namespace Cacao {
 	}
 
 	void Cubemap::Unbind() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled texture!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound texture!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled cubemap!")
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound cubemap!")
 
 		//Check if bound descriptor set still exists
 		if(!nativeData->boundDS || (nativeData->boundDS && *(nativeData->boundDS))) {

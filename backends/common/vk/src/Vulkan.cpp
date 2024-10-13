@@ -85,8 +85,7 @@ namespace Cacao {
 		vk::DeviceQueueCreateInfo queueCI({}, 0, 2, queuePriorities);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
-		vk::PhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features(VK_TRUE, VK_TRUE, VK_TRUE, &extendedDynamicStateFeatures);
-		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicState2Features);
+		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
 		vk::PhysicalDeviceRobustness2FeaturesEXT robustnessFeatures(VK_TRUE, VK_TRUE, VK_TRUE, &sync2Features);
 		vk::PhysicalDeviceFeatures2 deviceFeatures2 {};
 		deviceFeatures2.pNext = &robustnessFeatures;
@@ -178,6 +177,44 @@ namespace Cacao {
 			}
 			immediates.insert_or_assign(poolThreads[i], imm);
 		}
+
+		//Create globals UBO
+		vk::BufferCreateInfo globalsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo globalsAllocCI({}, vma::MemoryUsage::eCpuToGpu);
+		try {
+			auto [globals, alloc] = allocator.createBuffer(globalsCI, globalsAllocCI);
+			globalsUBO = {.alloc = alloc, .obj = globals};
+		} catch(vk::SystemError& err) {
+			for(int i = 0; i < poolThreads.size(); i++) {
+				dev.destroyFence(immediates[poolThreads[i]].fence);
+				immediates.erase(poolThreads[i]);
+			}
+			dev.freeCommandBuffers(immediatePool, immBufs);
+			dev.destroyCommandPool(immediatePool);
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create globals uniform buffer: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
+		//Map globals UBO
+		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			for(int i = 0; i < poolThreads.size(); i++) {
+				dev.destroyFence(immediates[poolThreads[i]].fence);
+				immediates.erase(poolThreads[i]);
+			}
+			dev.freeCommandBuffers(immediatePool, immBufs);
+			dev.destroyCommandPool(immediatePool);
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			EngineAssert(false, "Could not map globals uniform buffer memory!");
+		}
 	}
 
 	void RegisterGraphicsExceptions() {
@@ -189,6 +226,8 @@ namespace Cacao {
 
 	void RenderController::Shutdown() {
 		//Destroy Vulkan objects
+		allocator.unmapMemory(globalsUBO.alloc);
+		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 		std::vector<vk::CommandBuffer> cbufs;
 		for(auto i : immediates) {
 			dev.destroyFence(i.second.fence);

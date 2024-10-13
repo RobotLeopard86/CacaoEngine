@@ -1,5 +1,3 @@
-cmake = import('cmake')
-
 glad_dep = subproject('glad', required: true).get_variable('glad_dep')
 stb_dep = subproject('stb', required: true).get_variable('stb_dep')
 

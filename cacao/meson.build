@@ -1,19 +1,3 @@
-cmake = import('cmake')
-
-yaml_opts = cmake.subproject_options()
-yaml_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
-	'YAML_CPP_BUILD_TOOLS': 'OFF',
-	'YAML_CPP_BUILD_TESTS': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-yaml_opts.set_install(true)
-yaml_dep = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
-
 assimp_opts = cmake.subproject_options()
 assimp_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',

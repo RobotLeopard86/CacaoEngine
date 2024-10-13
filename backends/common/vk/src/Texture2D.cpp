@@ -132,8 +132,7 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled texture!")
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!")
 		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no bound shader!")
-		CheckException(std::find(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), slot) != activeShader->imageSlots.end(),
-			Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
 
 		//Create update info
 		vk::DescriptorImageInfo dii(nativeData->sampler, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);

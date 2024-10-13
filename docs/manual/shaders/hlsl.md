@@ -6,7 +6,10 @@ Cacao Engine shaders should target Shader Model 6.0.
 
 ## Matrix Packing
 Shaders *MUST* use row-major matrix packing because the DirectX Shader Compiler changes that to column-major in SPIR-V, which is what Cacao Engine uses. See [this section](https://github.com/microsoft/DirectXShaderCompiler/blob/main/docs/SPIR-V.rst#appendix-a-matrix-representation) of the SPIR-V compatibility document for more info on why. Take a look at the whole of that document too; it will give better context as to writing HLSL for SPIR-V.  
-You can either mark each matrix with the `row_major` qualifier, or add `#pragma pack_matrix(row_major)` to the top of your file.  
+You can either mark each matrix with the `row_major` qualifier, or add `#pragma pack_matrix(row_major)` to the top of your file.
+
+## Compile Arguments
+When using `dxc` for shader compilation, you **MUST** ensure that `-fspv-reflect` and `-fvk-use-gl-layout` are added to the command line, or else the engine will fail to understand your shader.
 
 ## Main Functions
 The main functions of all shader stages must have the name `main`, otherwise Cacao Engine will fail to use them properly.  

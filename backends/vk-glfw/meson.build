@@ -1,5 +1,3 @@
-cmake = import('cmake')
-
 stb_dep = subproject('stb', required: true).get_variable('stb_dep')
 
 spv_opts = cmake.subproject_options()
@@ -78,7 +76,8 @@ backend_deplist = [
 	vkheaders,
 	vkhpp,
 	vma,
-	vmahpp
+	vmahpp,
+	yaml_dep
 ]
 
 if host_machine.system() == 'windows'
