@@ -11,10 +11,13 @@
 #include "Graphics/Textures/Cubemap.hpp"
 #include "ExceptionCodes.hpp"
 #include "UIViewShaderManager.hpp"
+#include "UI/Shaders.hpp"
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 namespace Cacao {
+	Allocated<vk::Buffer> uiQuadBuffer;
+
 	void RenderController::Init() {
 		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
 		isInitialized = true;
@@ -155,6 +158,7 @@ namespace Cacao {
 		for(int i = 0; i < poolThreadsFut.size(); i++) {
 			poolThreads.push_back(poolThreadsFut[i].get());
 		}
+		poolThreads.push_back(std::this_thread::get_id());
 		vk::CommandBufferAllocateInfo allocCI(immediatePool, vk::CommandBufferLevel::ePrimary, poolThreads.size());
 		std::vector<vk::CommandBuffer> immBufs;
 		try {
@@ -254,8 +258,59 @@ namespace Cacao {
 			EngineAssert(false, "Could not find any valid depth formats!");
 		}
 
+		//Create UI quad buffer
+		constexpr float quadData[18] = {
+			0.0f, 1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
+			1.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 0.0f};
+		auto vbsz = sizeof(float) * 18;
+		vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer);
+		vk::BufferCreateInfo vertexUpCI({}, vbsz, vk::BufferUsageFlagBits::eTransferSrc);
+		vma::AllocationCreateInfo uploadAllocCI({}, vma::MemoryUsage::eCpuToGpu);
+		vma::AllocationCreateInfo bufferAllocCI({}, vma::MemoryUsage::eGpuOnly);
+		Allocated<vk::Buffer> vertexUp = {};
+		{
+			auto [buffer, alloc] = allocator.createBuffer(vertexCI, bufferAllocCI);
+			uiQuadBuffer.alloc = alloc;
+			uiQuadBuffer.obj = buffer;
+		}
+		{
+			auto [buffer, alloc] = allocator.createBuffer(vertexUpCI, uploadAllocCI);
+			vertexUp.alloc = alloc;
+			vertexUp.obj = buffer;
+		}
+		void* gpuMem;
+		allocator.mapMemory(vertexUp.alloc, &gpuMem);
+		std::memcpy(gpuMem, quadData, vbsz);
+		allocator.unmapMemory(vertexUp.alloc);
+		Immediate imm = immediates[std::this_thread::get_id()];
+		vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+		imm.cmd.begin(copyBegin);
+		{
+			vk::BufferCopy2 copy(0UL, 0UL, vbsz);
+			vk::CopyBufferInfo2 copyInfo(vertexUp.obj, uiQuadBuffer.obj, copy);
+			imm.cmd.copyBuffer2(copyInfo);
+		}
+		imm.cmd.end();
+		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+			dev.resetFences(imm.fence);
+		}
+		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+		vk::SubmitInfo2 si({}, {}, cbsi);
+		immediateQueue.submit2(si, imm.fence);
+		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
+
 		//Compile UI view shader
 		uivsm.Compile();
+
+		//Generate other UI shaders
+		GenShaders();
 
 		frameCycle = 0;
 	}
@@ -268,6 +323,10 @@ namespace Cacao {
 	void RenderController::UpdateGraphicsState() {}
 
 	void RenderController::Shutdown() {
+		//Cleanup UI shaders
+		DelShaders();
+		uivsm.Release();
+
 		//Destroy Vulkan objects
 		allocator.unmapMemory(globalsUBO.alloc);
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
@@ -298,11 +357,6 @@ namespace Cacao {
 		activeFrame = &f;
 
 		//Pre-process projection matrix to make it work with Vulkan
-		constexpr glm::mat4 projectionCorrection(
-			{1.0f, 0.0f, 0.0f, 0.0f}, //No X change
-			{0.0f, -1.0f, 0.0f, 0.0f},//Flip Y
-			{0.0f, 0.0f, 0.5f, 0.5f}, //Adjust depth range (OpenGL [-1, 1] -> Vulkan [0, 1])
-			{0.0f, 0.0f, 0.0f, 1.0f});//No W change
 		glm::mat4 projMatrix = projectionCorrection * frame->projection;
 
 		//Update globals UBO
@@ -331,7 +385,7 @@ namespace Cacao {
 					goto acquire;
 				} catch(std::exception& e) {
 					std::stringstream emsg;
-					emsg << "Failed to regenrate swapchain: " << e.what();
+					emsg << "Failed to regenerate swapchain: " << e.what();
 					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
 				}
 			}
@@ -363,12 +417,13 @@ namespace Cacao {
 		vk::Extent2D extent;
 		{
 			glm::ivec2 winSize = Window::GetInstance()->GetContentAreaSize();
+			extent = {.width = (unsigned int)winSize.x, .height = (unsigned int)winSize.y};
 			auto surfc = physDev.getSurfaceCapabilitiesKHR(surface);
 			extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
 		}
 
-		//Set viewport and scissor
+		//Set dynamic state
 		vk::Viewport viewport(0.0f, 0.0f, float(extent.width), float(extent.height), 0.0f, 1.0f);
 		vk::Rect2D scissor({0, 0}, extent);
 		f.cmd.setViewport(0, viewport);
@@ -430,5 +485,88 @@ namespace Cacao {
 
 		//Draw skybox (if one exists)
 		if(!frame->skybox.IsNull()) frame->skybox->Draw(frame->projection, frame->view);
+
+		//Draw UI if it's been rendered
+		if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
+			//Create projection matrix
+			glm::mat4 project = projectionCorrection * glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
+
+			//Upload uniforms
+			ShaderUploadData uiud;
+			uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
+			uivsm->Bind();
+			uivsm->UploadData(uiud);
+			Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
+
+			//Modify dynamic state
+			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);
+			vk::ColorBlendEquationEXT equ(vk::BlendFactor::eSrcColor, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha);
+			f.cmd.setColorBlendEquationEXT(0, equ);
+			f.cmd.setDepthTestEnable(VK_FALSE);
+
+			//Bind UI shader
+			uivsm->Bind();
+
+			//Draw quad
+			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
+			f.cmd.bindVertexBuffers(0, uiQuadBuffer.obj, offsets);
+			f.cmd.draw(18, 1, 0, 0);
+
+			//Unbind UI shader and view
+			uivsm->Unbind();
+			Engine::GetInstance()->GetGlobalUIView()->Unbind();
+		}
+
+		//End rendering
+		f.cmd.endRendering();
+
+		//Transition image to sampleable state
+		{
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
+				vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, images[imgIdx],
+				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
+			vk::DependencyInfo transition({}, {}, {}, barrier);
+			f.cmd.pipelineBarrier2(transition);
+		}
+
+		//End recording
+		f.cmd.end();
+
+		//Submit the command buffer to the queue
+		vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+		vk::SubmitInfo submitInfo(f.acquireSemaphore, waitStage, f.cmd, f.renderSemaphore);
+		if(graphicsQueue.submit(1, &submitInfo, f.fence) != vk::Result::eSuccess) {
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!")
+		}
+
+		//Present the frame
+		vk::PresentInfoKHR presentInfo(f.renderSemaphore, swapchain, imgIdx);
+		try {
+			graphicsQueue.presentKHR(presentInfo);
+		} catch(vk::SystemError& err) {
+			if(err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eSuboptimalKHR) {
+				try {
+					//Regen swapchain
+					GenSwapchain();
+
+					//Get new frame object (they get re-created)
+					VkFrame f = frames[frameCycle];
+					activeFrame = &f;
+
+					goto acquire;
+				} catch(std::exception& e) {
+					std::stringstream emsg;
+					emsg << "Failed to regenerate swapchain: " << e.what();
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+				}
+			}
+			std::stringstream emsg;
+			emsg << "Failed to present frame: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+		}
+
+		//Cycle the frame
+		frameCycle = (frameCycle + 1) % frames.size();
 	}
 }

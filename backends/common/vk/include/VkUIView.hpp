@@ -7,6 +7,9 @@
 
 namespace Cacao {
 	struct UIView::Buffer {
-		Allocated<vk::Image> uiTex;
+		Allocated<vk::Image> tex;
+		vk::ImageView view;
+		vk::Sampler sampler;
+		static vk::DescriptorSet* boundDS;
 	};
 }

@@ -89,7 +89,7 @@ namespace Cacao {
 		extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 		extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
 
-		//Check for FIFO present mode
+		//Check for present mode
 		auto pmodes = physDev.getSurfacePresentModesKHR(surface);
 		CheckException(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "The requested present mode is not available!")
 

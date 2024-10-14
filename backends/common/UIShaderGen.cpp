@@ -1,7 +1,5 @@
 #include "UI/Shaders.hpp"
 
-#include "glad/gl.h"
-
 namespace Cacao {
 	void GenShaders() {
 		//Text element

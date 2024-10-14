@@ -2,6 +2,7 @@
 
 #include "vulkan/vulkan.hpp"
 #include "vk_mem_alloc.hpp"
+#include "glm/vec4.hpp"
 
 #include "VkFrame.hpp"
 #include "VkUtils.hpp"
@@ -33,4 +34,9 @@ namespace Cacao {
 	inline Allocated<vk::Image> depthImage;
 	inline vk::ImageView depthView;
 	inline vk::Format selectedDF;
+	constexpr inline glm::mat4 projectionCorrection(
+		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change
+		{0.0f, -1.0f, 0.0f, 0.0f},//Flip Y
+		{0.0f, 0.0f, 0.5f, 0.5f}, //Adjust depth range (OpenGL [-1, 1] -> Vulkan [0, 1])
+		{0.0f, 0.0f, 0.0f, 1.0f});//No W change
 }

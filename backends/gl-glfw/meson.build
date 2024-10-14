@@ -87,7 +87,7 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/gl/src/OpenGL.cpp',
 	'../common/gl/src/UIDrawing.cpp',
 	'../common/gl/src/UIView.cpp',
-	'../common/gl/src/UIShaderGen.cpp',
+	'../common/UIShaderGen.cpp',
 	'../common/ExceptionCodes.cpp'
 ], dependencies: backend_deplist)
 
