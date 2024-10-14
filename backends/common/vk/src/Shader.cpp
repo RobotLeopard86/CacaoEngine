@@ -42,9 +42,10 @@ namespace Cacao {
 		spirv_cross::CompilerReflection vertReflector(vertParse.get_parsed_ir());
 		spirv_cross::ShaderResources vr = vertReflector.get_shader_resources();
 		spirv_cross::CompilerReflection fragReflector(fragParse.get_parsed_ir());
-		spirv_cross::ShaderResources fr = vertReflector.get_shader_resources();
+		spirv_cross::ShaderResources fr = fragReflector.get_shader_resources();
 
 		//Get shader data block size and offsets
+		bool foundSD = false;
 		for(auto pcb : vr.push_constant_buffers) {
 			if(pcb.name.compare("type.PushConstant.ShaderData") == 0 || pcb.name.compare("shader") == 0) {
 				spirv_cross::SPIRType type = vertReflector.get_type(pcb.base_type_id);
@@ -52,7 +53,23 @@ namespace Cacao {
 				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
 					mod->offsets.insert_or_assign(vertReflector.get_member_name(pcb.base_type_id, i), vertReflector.type_struct_member_offset(type, i));
 				}
+				foundSD = true;
+				mod->pushConstantFromFragment = false;
 				break;
+			}
+		}
+		if(!foundSD) {
+			for(auto pcb : fr.push_constant_buffers) {
+				if(pcb.name.compare("type.PushConstant.ShaderData") == 0 || pcb.name.compare("shader") == 0) {
+					spirv_cross::SPIRType type = fragReflector.get_type(pcb.base_type_id);
+					mod->shaderDataSize = fragReflector.get_declared_struct_size(type);
+					for(unsigned int i = 0; i < type.member_types.size(); ++i) {
+						mod->offsets.insert_or_assign(fragReflector.get_member_name(pcb.base_type_id, i), fragReflector.type_struct_member_offset(type, i));
+					}
+					foundSD = true;
+					mod->pushConstantFromFragment = true;
+					break;
+				}
 			}
 		}
 
@@ -176,7 +193,7 @@ namespace Cacao {
 				vk::DynamicState::eViewport,
 				vk::DynamicState::eScissor,
 				vk::DynamicState::eColorBlendEquationEXT,
-				vk::DynamicState::eColorWriteEnableEXT,
+				vk::DynamicState::eColorBlendEnableEXT,
 				vk::DynamicState::eDepthTestEnable};
 			vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
@@ -202,8 +219,11 @@ namespace Cacao {
 			vk::DescriptorSetLayout dsLayout = dev.createDescriptorSetLayout({{}, dsBindings});
 
 			//Create pipeline layout
-			vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize);
-			vk::PipelineLayoutCreateInfo layoutCI({}, dsLayout, pcr);
+			vk::PipelineLayoutCreateInfo layoutCI({}, dsLayout);
+			if(nd->shaderDataSize > 0) {
+				vk::PushConstantRange pcr((nd->pushConstantFromFragment ? vk::ShaderStageFlagBits::eFragment : vk::ShaderStageFlagBits::eVertex), 0, nd->shaderDataSize);
+				layoutCI.setPushConstantRanges(pcr);
+			}
 			vk::PipelineLayout layout = dev.createPipelineLayout(layoutCI);
 
 			//Create pipeline
@@ -213,8 +233,10 @@ namespace Cacao {
 			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!")
 			nd->pipeline = pipelineResult.value;
 
-			//Allocate shader data memory (scary)
-			nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize);
+			if(nd->shaderDataSize > 0) {
+				//Allocate shader data memory (scary)
+				nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize);
+			}
 
 			//Create and map locals UBO
 			vk::BufferCreateInfo localsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
@@ -230,8 +252,9 @@ namespace Cacao {
 			CheckException(allocator.mapMemory(nd->localsUBO.alloc, &nd->locals) == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to map locals uniform buffer memory!")
 
 			//Create descriptor pool
-			std::array<vk::DescriptorPoolSize, 2> poolSizes {{{vk::DescriptorType::eUniformBuffer, 2},
-				{vk::DescriptorType::eCombinedImageSampler, (unsigned int)nd->imageSlots.size()}}};
+			std::vector<vk::DescriptorPoolSize> poolSizes;
+			poolSizes.emplace_back(vk::DescriptorType::eUniformBuffer, 2);
+			if(nd->imageSlots.size() > 0) poolSizes.emplace_back(vk::DescriptorType::eCombinedImageSampler, (unsigned int)nd->imageSlots.size());
 			vk::DescriptorPoolCreateInfo poolCI({}, 1, poolSizes);
 			try {
 				nd->dpool = dev.createDescriptorPool(poolCI);
@@ -317,9 +340,10 @@ namespace Cacao {
 	}
 
 	void Shader::UploadData(ShaderUploadData& data) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind shader when there is no active frame object!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!")
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!")
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!")
+		CheckException(nd->shaderData, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!")
 
 		//Do data upload
 		std::map<std::string, ShaderItemInfo> foundItems;
@@ -416,6 +440,12 @@ namespace Cacao {
 						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
 							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
 							view->Bind(nd->imageSlots[item.target]);
+						} else if(item.data.type() == typeid(RawVkTexture*)) {
+							RawVkTexture* raw = std::any_cast<RawVkTexture*>(item.data);
+							vk::DescriptorImageInfo dii(raw->sampler, raw->view, vk::ImageLayout::eShaderReadOnlyOptimal);
+							vk::WriteDescriptorSet wds(activeShader->dset, nd->imageSlots[item.target], 0, vk::DescriptorType::eCombinedImageSampler, dii);
+							dev.updateDescriptorSets(wds, {});
+							*(raw->slot) = nd->imageSlots[item.target];
 						} else {
 							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!")
 						}

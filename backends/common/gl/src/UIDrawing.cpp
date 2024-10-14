@@ -11,7 +11,7 @@
 
 namespace Cacao {
 	struct VBOEntry {
-		glm::vec2 vert;
+		glm::vec3 vert;
 		glm::vec2 tc;
 	};
 
@@ -74,12 +74,12 @@ namespace Cacao {
 				float xpos = x + fontFace->glyph->bitmap_left;
 				float ypos = y - (h - fontFace->glyph->bitmap_top);
 				VBOEntry vboData[6] = {
-					{{xpos, ypos + h}, {0.0f, 0.0f}},
-					{{xpos + w, ypos}, {1.0f, 1.0f}},
-					{{xpos, ypos}, {0.0f, 1.0f}},
-					{{xpos, ypos + h}, {0.0f, 0.0f}},
-					{{xpos + w, ypos + h}, {1.0f, 0.0f}},
-					{{xpos + w, ypos}, {1.0f, 1.0f}}};
+					{{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}},
+					{{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}},
+					{{xpos, ypos, 0.0f}, {0.0f, 1.0f}},
+					{{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}},
+					{{xpos + w, ypos + h, 0.0f}, {1.0f, 0.0f}},
+					{{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}}};
 
 				//Update VBO
 				glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -109,6 +109,7 @@ namespace Cacao {
 				glActiveTexture(GL_TEXTURE0 + (*upTex.slot));
 				glBindTexture(GL_TEXTURE_2D, 0);
 				TextShaders::shader->Unbind();
+				delete upTex.slot;
 
 				//Advance cursor for next glyph
 				x += (ln.advances[i].adv.x / 64.0f);
@@ -143,12 +144,12 @@ namespace Cacao {
 
 		//Create vertex buffer
 		VBOEntry vboData[6] = {
-			{{topLeft.x, topLeft.y - size.y}, {0.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}},
-			{{topLeft.x, topLeft.y}, {0.0f, 1.0f}},
-			{{topLeft.x, topLeft.y - size.y}, {0.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y - size.y}, {1.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}}};
+			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
+			{{topLeft.x, topLeft.y, 0.0f}, {0.0f, 1.0f}},
+			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y - size.y, 0.0f}, {1.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}}};
 
 		//Create temporary OpenGL objects
 		GLuint vao, vbo;
@@ -166,7 +167,7 @@ namespace Cacao {
 		//Upload uniforms
 		ImageShaders::shader->Bind();
 		ShaderUploadData up;
-		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex.GetManagedAsset().get())});
+		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
 		ImageShaders::shader->UploadData(up);
 
 		//Draw image

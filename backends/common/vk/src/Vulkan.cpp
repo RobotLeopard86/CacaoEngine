@@ -15,6 +15,8 @@
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
+bool backendInitBeforeWindow = true;
+
 namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
 
@@ -58,6 +60,7 @@ namespace Cacao {
 			VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
 			VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
 			VK_EXT_ROBUSTNESS_2_EXTENSION_NAME,
+			VK_KHR_COPY_COMMANDS_2_EXTENSION_NAME,
 			VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME};
 #ifdef __linux__
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
@@ -90,7 +93,7 @@ namespace Cacao {
 		}
 
 		//Create logical device
-		float queuePriorities[2] = {1.0f, 2.0f};
+		float queuePriorities[2] = {0.8f, 1.0f};
 		vk::DeviceQueueCreateInfo queueCI({}, 0, 2, queuePriorities);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
@@ -99,7 +102,7 @@ namespace Cacao {
 		extendedDynamicState3Features.extendedDynamicState3ColorBlendEquation = VK_TRUE;
 		extendedDynamicState3Features.pNext = &extendedDynamicStateFeatures;
 		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicState3Features);
-		vk::PhysicalDeviceRobustness2FeaturesEXT robustnessFeatures(VK_TRUE, VK_TRUE, VK_TRUE, &sync2Features);
+		vk::PhysicalDeviceRobustness2FeaturesEXT robustnessFeatures(VK_FALSE, VK_FALSE, VK_TRUE, &sync2Features);
 		vk::PhysicalDeviceFeatures2 deviceFeatures2 {};
 		deviceFeatures2.pNext = &robustnessFeatures;
 		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts, nullptr, &deviceFeatures2);
@@ -109,6 +112,9 @@ namespace Cacao {
 			vk_instance.destroy();
 			EngineAssert(false, "The logical device could not be created!");
 		}
+
+		//Initialize device Vulkan functions
+		VULKAN_HPP_DEFAULT_DISPATCHER.init(vk_instance, dev);
 
 		//Get queues
 		graphicsQueue = dev.getQueue(0, 0);
@@ -234,7 +240,6 @@ namespace Cacao {
 		constexpr std::array<vk::Format, 3> allowedDepthFormats {{vk::Format::eD32Sfloat,
 			vk::Format::eD32SfloatS8Uint,
 			vk::Format::eD24UnormS8Uint}};
-		vk::Format selectedDF = vk::Format::eUndefined;
 		for(vk::Format df : allowedDepthFormats) {
 			vk::FormatProperties props = physDev.getFormatProperties(df);
 			if((props.optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment) == vk::FormatFeatureFlagBits::eDepthStencilAttachment) {

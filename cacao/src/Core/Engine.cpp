@@ -123,16 +123,28 @@ namespace Cacao {
 		cfg.targetDynTPS = 60;
 		cfg.maxFrameLag = 10;
 
-		//Open the window
-		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
-
-		//Initialize rendering backend
-		Logging::EngineLog("Initializing rendering backend...");
-		RenderController::GetInstance()->Init();
-
 		//Start the thread pool (subtract one threads for the dedicated dynamic tick controller)
 		Logging::EngineLog("Starting thread pool...");
 		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
+
+		//Initialize windowing system (NOT THE WINDOW)
+		EarlyWindowingInit();
+
+		if(backendInitBeforeWindow) {
+			//Initialize rendering backend
+			Logging::EngineLog("Initializing rendering backend...");
+			RenderController::GetInstance()->Init();
+
+			//Open the window
+			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+		} else {
+			//Open the window
+			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+
+			//Initialize rendering backend
+			Logging::EngineLog("Initializing rendering backend...");
+			RenderController::GetInstance()->Init();
+		}
 
 		//Asynchronously run core startup
 		threadPool->enqueue_detach([this]() {

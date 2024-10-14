@@ -17,6 +17,10 @@
  */
 using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 
+///@cond
+extern bool backendInitBeforeWindow;
+///@endcond
+
 namespace Cacao {
 	///@brief Singleton representing the engine
 	class Engine {
@@ -115,5 +119,9 @@ namespace Cacao {
 		//To be implemented by backend
 		//Register backend-specific exception codes
 		void RegisterBackendExceptions();
+
+		//To be implemented by backend
+		//Initialize windowing backend early if necessary
+		void EarlyWindowingInit();
 	};
 }

@@ -38,20 +38,22 @@ namespace Cacao {
 		return instance;
 	}
 
-	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
-		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
-
-		size = initialSize;
-
-		//Create native data
-		nativeData.reset(new WindowData());
-
+	void EarlyWindowingInit() {
 #ifdef __linux__
 		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
 #endif
 
 		//Initialize GLFW
 		EngineAssert(SDL_Init(SDL_INIT_VIDEO) == 0, "Could not initialize SDL library, no window can be created.");
+	}
+
+	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
+		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!")
+
+		size = initialSize;
+
+		//Create native data
+		nativeData.reset(new WindowData());
 
 		//Configure SDL prior to window creation
 		ConfigureSDL();
@@ -76,7 +78,7 @@ namespace Cacao {
 	}
 
 	void Window::Close() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!")
 
 		//Clean up the graphics API
 		CleanupGraphicsAPI();
@@ -151,7 +153,7 @@ namespace Cacao {
 	}
 
 	void Window::Update() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!")
 
 		//Continuously fetch and process SDL events
 		SDL_Event event;
@@ -217,7 +219,7 @@ namespace Cacao {
 	}
 
 	void Window::SetTitle(std::string title) {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!")
 		SDL_SetWindowTitle(nativeData->win, title.c_str());
 	}
 

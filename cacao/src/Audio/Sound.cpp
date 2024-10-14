@@ -35,7 +35,8 @@ namespace Cacao {
 		std::string header(4, '\0');
 		std::ifstream file(filePath, std::ios::binary);
 		if(!file.is_open()) {
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open the sound file!");
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open the sound file!")
+			;
 		}
 		file.read(header.data(), header.size());
 
@@ -135,7 +136,7 @@ namespace Cacao {
 	void Sound::_InitMP3() {
 		//Open the MP3
 		drmp3 mp3;
-		CheckException(drmp3_init_file(&mp3, filePath.c_str(), nullptr), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load MP3 sound file!");
+		CheckException(drmp3_init_file(&mp3, filePath.c_str(), nullptr), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load MP3 sound file!")
 
 		//Get file info
 		sampleRate = mp3.sampleRate;
@@ -146,7 +147,7 @@ namespace Cacao {
 		//Read PCM frames
 		audioData.resize(sampleCount);
 		drmp3_uint64 framesRead = drmp3_read_pcm_frames_s16(&mp3, totalPCMFrameCount, audioData.data());
-		CheckException(framesRead == totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read MP3 PCM frames!");
+		CheckException(framesRead == totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read MP3 PCM frames!")
 
 		//Close the MP3
 		drmp3_uninit(&mp3);
@@ -155,7 +156,7 @@ namespace Cacao {
 	void Sound::_InitWAV() {
 		//Open the WAV
 		drwav wave;
-		CheckException(drwav_init_file(&wave, filePath.c_str(), nullptr), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load WAV sound file!");
+		CheckException(drwav_init_file(&wave, filePath.c_str(), nullptr), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load WAV sound file!")
 
 		//Get file info
 		sampleRate = wave.sampleRate;
@@ -166,7 +167,7 @@ namespace Cacao {
 		//Read PCM frames
 		audioData.resize(sampleCount);
 		drwav_uint64 framesRead = drwav_read_pcm_frames_s16(&wave, totalPCMFrameCount, audioData.data());
-		CheckException(framesRead == totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read WAV frames!");
+		CheckException(framesRead == totalPCMFrameCount, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read WAV frames!")
 
 		//Close the WAV
 		drwav_uninit(&wave);
@@ -179,7 +180,7 @@ namespace Cacao {
 
 		//Open the file
 		FILE* f = fopen(filePath.c_str(), "rb");
-		CheckException(ov_open(f, &vf, nullptr, 0) >= 0, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open Ogg Vorbis sound file!");
+		CheckException(ov_open(f, &vf, nullptr, 0) >= 0, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open Ogg Vorbis sound file!")
 
 		//Get file info
 		vorbis_info* info = ov_info(&vf, -1);

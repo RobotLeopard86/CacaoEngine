@@ -118,7 +118,8 @@ namespace Cacao {
 				try {
 					sec.push_back(dynamic_cast<SignalEventConsumer*>(consumer));
 				} catch(std::bad_cast) {
-					CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot dispatch signaled event to non-signal-processing consumer!");
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot dispatch signaled event to non-signal-processing consumer!")
+					;
 				}
 			}
 

@@ -16,6 +16,8 @@
 
 constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
 
+bool backendInitBeforeWindow = false;
+
 namespace Cacao {
 	//Queue of OpenGL tasks to process
 	static std::queue<Task> glQueue;

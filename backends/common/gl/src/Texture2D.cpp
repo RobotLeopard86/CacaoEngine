@@ -95,9 +95,7 @@ namespace Cacao {
 			}
 		}
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled texture!")
-		;
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound texture!")
-		;
 
 		glDeleteTextures(1, &(nativeData->gpuID));
 		compiled = false;
@@ -106,9 +104,7 @@ namespace Cacao {
 	void Texture2D::Bind(int slot) {
 		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind texture in non-rendering thread!")
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled texture!")
-		;
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!")
-		;
 
 		//Bind the texture to the requested slot
 		currentSlot = slot;
@@ -120,9 +116,7 @@ namespace Cacao {
 	void Texture2D::Unbind() {
 		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind texture in non-rendering thread!")
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled texture!")
-		;
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound texture!")
-		;
 
 		//Unbind the texture from its current slot
 		glActiveTexture(GL_TEXTURE0 + currentSlot);

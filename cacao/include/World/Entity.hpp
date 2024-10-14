@@ -162,7 +162,8 @@ namespace Cacao {
 		std::shared_ptr<T> GetComponent(xg::Guid guid) {
 			static_assert(std::is_base_of<Component, T>(), "Can only get subclasses of Component!");
 			std::lock_guard lk(componentsMtx);
-			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
+			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!")
+			;
 
 			//Try to cast the value
 			try {
@@ -183,7 +184,8 @@ namespace Cacao {
 		 */
 		void DeleteComponent(xg::Guid guid) {
 			std::lock_guard lk(componentsMtx);
-			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
+			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!")
+			;
 
 			components[guid].reset();
 			components.erase(guid);
