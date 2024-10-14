@@ -9,7 +9,7 @@ namespace Cacao {
 		uint32_t image;
 	} submission;
 
+	inline unsigned short frameCycle;
 	inline VkFrame* activeFrame;
-
 	inline VkShaderData* activeShader;
 }

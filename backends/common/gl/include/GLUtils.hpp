@@ -21,7 +21,7 @@ namespace Cacao {
 		int* slot;
 	};
 
-	inline GLuint globalsUBO = 37;
+	inline GLuint globalsUBO = 0;
 
 	inline GLenum GetTextureMemoryFormat(GLenum internalFormat) {
 		switch(internalFormat) {

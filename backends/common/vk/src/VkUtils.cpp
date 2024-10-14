@@ -76,6 +76,8 @@ namespace Cacao {
 			for(auto iv : imageViews) {
 				dev.destroyImageView(iv);
 			}
+			dev.destroyImageView(depthView);
+			allocator.destroyImage(depthImage.obj, depthImage.alloc);
 		}
 
 		//Get surface capabilities
@@ -113,6 +115,23 @@ namespace Cacao {
 			swapchainImageViews[i] = dev.createImageView(imageViewCI);
 		}
 		imageViews = swapchainImageViews;
+
+		//Create new depth image and view
+		vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, selectedDF, {extent.width, extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo depthAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
+		{
+			auto [img, alloc] = allocator.createImage(depthCI, depthAllocCI);
+			depthImage = {.alloc = alloc, .obj = img};
+		}
+		vk::ImageViewCreateInfo depthViewCI(
+			{}, depthImage.obj, vk::ImageViewType::e2D, selectedDF, {},
+			vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, 1));
+		try {
+			depthView = dev.createImageView(depthViewCI);
+		} catch(vk::SystemError& err) {
+			std::rethrow_exception(std::current_exception());
+		}
 
 		//Regenerate frame objects
 		GenFrameObjects();

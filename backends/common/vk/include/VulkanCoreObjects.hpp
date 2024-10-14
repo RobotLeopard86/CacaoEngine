@@ -30,4 +30,7 @@ namespace Cacao {
 	inline vma::Allocator allocator;
 	inline Allocated<vk::Buffer> globalsUBO;
 	inline void* globalsMem;
+	inline Allocated<vk::Image> depthImage;
+	inline vk::ImageView depthView;
+	inline vk::Format selectedDF;
 }

@@ -164,17 +164,20 @@ namespace Cacao {
 
 			//Create color and depth-stencil attachments
 			vk::PipelineDepthStencilStateCreateInfo depthStencilCI(
-				{}, VK_FALSE, VK_FALSE, vk::CompareOp::eLess,
+				{}, VK_TRUE, VK_TRUE, vk::CompareOp::eLess,
 				VK_FALSE, VK_FALSE, {}, {}, 1.0f, 1.0f);
 			vk::PipelineColorBlendAttachmentState colorBlendAttach(
-				{}, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
+				VK_FALSE, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
 				vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
 			vk::PipelineColorBlendStateCreateInfo colorBlendCI({}, VK_FALSE, vk::LogicOp::eCopy, colorBlendAttach, {0.0f, 0.0f, 0.0f, 0.0f});
 
 			//Create dynamic state info
 			std::vector<vk::DynamicState> dynamicStates = {
 				vk::DynamicState::eViewport,
-				vk::DynamicState::eScissor};
+				vk::DynamicState::eScissor,
+				vk::DynamicState::eColorBlendEquationEXT,
+				vk::DynamicState::eColorWriteEnableEXT,
+				vk::DynamicState::eDepthTestEnable};
 			vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
 			//Create pipeline rendering info

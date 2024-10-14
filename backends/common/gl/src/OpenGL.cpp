@@ -12,6 +12,7 @@
 #include "UI/Shaders.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "GLUIView.hpp"
+#include "UIViewShaderManager.hpp"
 
 constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
 
@@ -24,7 +25,6 @@ namespace Cacao {
 
 	//UI quad assets
 	static GLuint uiVao, uiVbo;
-	static UIViewShaderManager uivsm;
 
 	void RenderController::UpdateGraphicsState() {
 		//Process OpenGL tasks
@@ -163,10 +163,8 @@ namespace Cacao {
 		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
 		isInitialized = true;
 
-		uivsm = {};
-
 		//Enable SRGB
-		glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+		glEnable(GL_FRAMEBUFFER_SRGB);
 
 		//Create globals UBO
 		glGenBuffers(1, &globalsUBO);

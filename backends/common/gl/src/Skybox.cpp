@@ -56,6 +56,8 @@ namespace Cacao {
 	}
 
 	void Skybox::CommonCleanup() {
+		CheckException(isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot clean up skybox resources that are not set up!")
+
 		//Temporary shader pointer for capturing
 		Shader* shader = skyboxShader;
 		Task cleanupJob([shader]() {
