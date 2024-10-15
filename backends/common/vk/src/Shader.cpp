@@ -315,12 +315,18 @@ namespace Cacao {
 		//Bind pipeline object
 		activeFrame->cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, nd->pipeline);
 
+		//Mark us as the active shader
+		activeShader = nd;
+
 		bound = true;
 	}
 
 	void Shader::Unbind() {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!")
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!")
+
+		//Make us not the active shader
+		if(activeShader == nd) activeShader = nullptr;
 
 		//Vulkan has no concept of unbinding a pipeline, also since command buffers shift around state is wiped clean every time
 		bound = false;
@@ -364,9 +370,15 @@ namespace Cacao {
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];
 
-			//Find offset
-			CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
-			auto offset = nd->offsets[item.target];
+			//Find offset or image binding
+			unsigned int offset, binding;
+			if(info.type == SpvType::SampledImage) {
+				CheckException(nd->imageSlots.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
+				binding = nd->imageSlots[item.target];
+			} else {
+				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
+				offset = nd->offsets[item.target];
+			}
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
@@ -424,29 +436,30 @@ namespace Cacao {
 						//Bind texture to the slot specified
 						if(item.data.type() == typeid(Texture2D*)) {
 							Texture2D* tex = std::any_cast<Texture2D*>(item.data);
-							tex->Bind(nd->imageSlots[item.target]);
+							tex->Bind(binding);
 						} else if(item.data.type() == typeid(Cubemap*)) {
 							Cubemap* tex = std::any_cast<Cubemap*>(item.data);
-							tex->Bind(nd->imageSlots[item.target]);
+							tex->Bind(binding);
 						} else if(item.data.type() == typeid(UIView*)) {
 							UIView* view = std::any_cast<UIView*>(item.data);
-							view->Bind(nd->imageSlots[item.target]);
+							view->Bind(binding);
 						} else if(item.data.type() == typeid(AssetHandle<Texture2D>)) {
 							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(item.data);
-							tex->Bind(nd->imageSlots[item.target]);
+							tex->Bind(binding);
 						} else if(item.data.type() == typeid(AssetHandle<Cubemap>)) {
 							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(item.data);
-							tex->Bind(nd->imageSlots[item.target]);
+							tex->Bind(binding);
 						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
 							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
-							view->Bind(nd->imageSlots[item.target]);
-						} else if(item.data.type() == typeid(RawVkTexture*)) {
-							RawVkTexture* raw = std::any_cast<RawVkTexture*>(item.data);
-							vk::DescriptorImageInfo dii(raw->sampler, raw->view, vk::ImageLayout::eShaderReadOnlyOptimal);
-							vk::WriteDescriptorSet wds(activeShader->dset, nd->imageSlots[item.target], 0, vk::DescriptorType::eCombinedImageSampler, dii);
+							view->Bind(binding);
+						} else if(item.data.type() == typeid(RawVkTexture)) {
+							RawVkTexture raw = std::any_cast<RawVkTexture>(item.data);
+							vk::DescriptorImageInfo dii(raw.sampler, raw.view, vk::ImageLayout::eShaderReadOnlyOptimal);
+							vk::WriteDescriptorSet wds(nd->dset, binding, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 							dev.updateDescriptorSets(wds, {});
-							*(raw->slot) = nd->imageSlots[item.target];
+							*(raw.slot) = binding;
 						} else {
+							Logging::EngineLog(item.data.type().name());
 							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!")
 						}
 

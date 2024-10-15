@@ -13,20 +13,22 @@
 
 namespace Cacao {
 	struct Immediate {
+		vk::CommandPool pool;
 		vk::CommandBuffer cmd;
 		vk::Fence fence;
+		vk::Queue queue;
 	};
 	inline vk::Instance vk_instance;
 	inline vk::PhysicalDevice physDev;
 	inline vk::Device dev;
-	inline vk::Queue graphicsQueue, immediateQueue;
+	inline vk::Queue graphicsQueue;
 	inline vk::SurfaceKHR surface;
 	inline vk::SurfaceFormatKHR surfaceFormat;
 	inline vk::SwapchainKHR swapchain;
 	inline std::vector<vk::Image> images;
 	inline std::vector<vk::ImageView> imageViews;
 	inline std::vector<VkFrame> frames;
-	inline vk::CommandPool renderPool, immediatePool;
+	inline vk::CommandPool renderPool;
 	inline std::map<std::thread::id, Immediate> immediates;
 	inline vma::Allocator allocator;
 	inline Allocated<vk::Buffer> globalsUBO;

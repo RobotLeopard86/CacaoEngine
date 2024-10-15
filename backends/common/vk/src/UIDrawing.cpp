@@ -78,6 +78,14 @@ namespace Cacao {
 				//Get bitmap
 				FT_Bitmap& bitmap = fontFace->glyph->bitmap;
 
+				//Check for empty glyph
+				if(!bitmap.buffer || bitmap.width == 0 || bitmap.rows == 0) {
+					//Advance cursor for next glyph and skip
+					x += (ln.advances[i].adv.x / 64.0f);
+					y += (ln.advances[i].adv.y / 64.0f);
+					continue;
+				}
+
 				//Calculate vertex data for glyph
 				float w = bitmap.width;
 				float h = bitmap.rows;
@@ -95,12 +103,18 @@ namespace Cacao {
 					vk::ImageTiling::eLinear, vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive, 0);
 				vma::AllocationCreateInfo texAllocCI {};
 				texAllocCI.requiredFlags = vk::MemoryPropertyFlagBits::eHostVisible;
-				auto [image, alloc] = allocator.createImage(texCI, texAllocCI);
-				info.glyph.image = {.alloc = alloc, .obj = image};
-				vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,
-					{vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eR},
-					{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
-				info.glyph.view = dev.createImageView(viewCI);
+				vma::Allocation alloc;
+				try {
+					auto [image, _alloc] = allocator.createImage(texCI, texAllocCI);
+					alloc = _alloc;
+					info.glyph.image = {.alloc = alloc, .obj = image};
+					vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,
+						{vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eR},
+						{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+					info.glyph.view = dev.createImageView(viewCI);
+				} catch(vk::SystemError& verr) {
+					Logging::EngineLog(verr.what(), LogLevel::Error);
+				}
 
 				//Copy image data to GPU
 				void* gpuMem;

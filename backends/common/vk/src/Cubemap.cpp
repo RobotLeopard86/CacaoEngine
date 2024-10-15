@@ -121,7 +121,7 @@ namespace Cacao {
 			//Submit and wait
 			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 			vk::SubmitInfo2 si({}, {}, cbsi);
-			immediateQueue.submit2(si, imm.fence);
+			imm.queue.submit2(si, imm.fence);
 			dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 
 			//Assign to native data

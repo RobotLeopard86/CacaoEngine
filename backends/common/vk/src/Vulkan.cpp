@@ -92,9 +92,26 @@ namespace Cacao {
 			EngineAssert(false, "No devices support the required Vulkan extensions!");
 		}
 
+		//Get pool threads
+		MultiFuture<std::thread::id> poolThreadsFut;
+		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
+			poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
+				return std::this_thread::get_id();
+			}));
+		}
+		poolThreadsFut.WaitAll();
+		std::vector<std::thread::id> poolThreads;
+		for(int i = 0; i < poolThreadsFut.size(); i++) {
+			poolThreads.push_back(poolThreadsFut[i].get());
+		}
+		poolThreads.push_back(std::this_thread::get_id());
+
 		//Create logical device
-		float queuePriorities[2] = {0.8f, 1.0f};
-		vk::DeviceQueueCreateInfo queueCI({}, 0, 2, queuePriorities);
+		std::vector<float> queuePriorities = {0.5f};
+		for(int i = 0; i < poolThreads.size(); i++) {
+			queuePriorities.push_back(1.0f);
+		}
+		vk::DeviceQueueCreateInfo queueCI({}, 0, queuePriorities);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
 		vk::PhysicalDeviceExtendedDynamicState3FeaturesEXT extendedDynamicState3Features {};
@@ -116,9 +133,8 @@ namespace Cacao {
 		//Initialize device Vulkan functions
 		VULKAN_HPP_DEFAULT_DISPATCHER.init(vk_instance, dev);
 
-		//Get queues
+		//Get graphics queue
 		graphicsQueue = dev.getQueue(0, 0);
-		immediateQueue = dev.getQueue(0, 1);
 
 		//Create memory allocator
 		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);
@@ -131,9 +147,8 @@ namespace Cacao {
 			EngineAssert(false, "Could not create memory allocator!");
 		}
 
-		//Create command pools
+		//Create command pool
 		vk::CommandPoolCreateInfo rpoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, 0);
-		vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
 		try {
 			renderPool = dev.createCommandPool(rpoolCI);
 		} catch(vk::SystemError& err) {
@@ -142,53 +157,48 @@ namespace Cacao {
 			vk_instance.destroy();
 			EngineAssert(false, "Could not create rendering command pool!");
 		}
-		try {
-			immediatePool = dev.createCommandPool(ipoolCI);
-		} catch(vk::SystemError& err) {
-			dev.destroyCommandPool(renderPool);
-			allocator.destroy();
-			dev.destroy();
-			vk_instance.destroy();
-			EngineAssert(false, "Could not create immediate command pool!");
-		}
 
-		//Allocate immediate command buffers
-		MultiFuture<std::thread::id> poolThreadsFut;
-		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
-			poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
-				return std::this_thread::get_id();
-			}));
-		}
-		poolThreadsFut.WaitAll();
-		std::vector<std::thread::id> poolThreads;
-		for(int i = 0; i < poolThreadsFut.size(); i++) {
-			poolThreads.push_back(poolThreadsFut[i].get());
-		}
-		poolThreads.push_back(std::this_thread::get_id());
-		vk::CommandBufferAllocateInfo allocCI(immediatePool, vk::CommandBufferLevel::ePrimary, poolThreads.size());
-		std::vector<vk::CommandBuffer> immBufs;
-		try {
-			immBufs = dev.allocateCommandBuffers(allocCI);
-		} catch(vk::SystemError& err) {
-			dev.destroyCommandPool(immediatePool);
-			dev.destroyCommandPool(renderPool);
-			allocator.destroy();
-			dev.destroy();
-			vk_instance.destroy();
-			EngineAssert(false, "Could not allocate immediate command buffers!");
-		}
-		for(int i = 0; i < immBufs.size(); i++) {
+		vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
+		for(int i = 0; i < poolThreads.size(); i++) {
 			Immediate imm;
-			imm.cmd = immBufs[i];
+			imm.queue = dev.getQueue(0, i + 1);
+			try {
+				imm.pool = dev.createCommandPool(ipoolCI);
+			} catch(vk::SystemError& err) {
+				for(; i >= 0; i--) {
+					dev.destroyCommandPool(immediates[poolThreads[i]].pool);
+					immediates.erase(poolThreads[i]);
+				}
+				dev.destroyCommandPool(renderPool);
+				allocator.destroy();
+				dev.destroy();
+				vk_instance.destroy();
+				EngineAssert(false, "Could not create immediate pools!");
+			}
+			try {
+				vk::CommandBufferAllocateInfo allocCI(imm.pool, vk::CommandBufferLevel::ePrimary, 1);
+				imm.cmd = dev.allocateCommandBuffers(allocCI)[0];
+			} catch(vk::SystemError& err) {
+				for(; i >= 0; i--) {
+					dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+					dev.destroyCommandPool(immediates[poolThreads[i]].pool);
+					immediates.erase(poolThreads[i]);
+				}
+				dev.destroyCommandPool(renderPool);
+				allocator.destroy();
+				dev.destroy();
+				vk_instance.destroy();
+				EngineAssert(false, "Could not create immediate pools!");
+			}
 			try {
 				imm.fence = dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 			} catch(vk::SystemError& err) {
 				for(; i >= 0; i--) {
+					dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+					dev.destroyCommandPool(immediates[poolThreads[i]].pool);
 					dev.destroyFence(immediates[poolThreads[i]].fence);
 					immediates.erase(poolThreads[i]);
 				}
-				dev.freeCommandBuffers(immediatePool, immBufs);
-				dev.destroyCommandPool(immediatePool);
 				dev.destroyCommandPool(renderPool);
 				allocator.destroy();
 				dev.destroy();
@@ -205,12 +215,12 @@ namespace Cacao {
 			auto [globals, alloc] = allocator.createBuffer(globalsCI, globalsAllocCI);
 			globalsUBO = {.alloc = alloc, .obj = globals};
 		} catch(vk::SystemError& err) {
-			for(int i = 0; i < poolThreads.size(); i++) {
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
 				dev.destroyFence(immediates[poolThreads[i]].fence);
 				immediates.erase(poolThreads[i]);
 			}
-			dev.freeCommandBuffers(immediatePool, immBufs);
-			dev.destroyCommandPool(immediatePool);
 			dev.destroyCommandPool(renderPool);
 			allocator.destroy();
 			dev.destroy();
@@ -223,12 +233,12 @@ namespace Cacao {
 		//Map globals UBO
 		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-			for(int i = 0; i < poolThreads.size(); i++) {
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
 				dev.destroyFence(immediates[poolThreads[i]].fence);
 				immediates.erase(poolThreads[i]);
 			}
-			dev.freeCommandBuffers(immediatePool, immBufs);
-			dev.destroyCommandPool(immediatePool);
 			dev.destroyCommandPool(renderPool);
 			allocator.destroy();
 			dev.destroy();
@@ -250,12 +260,12 @@ namespace Cacao {
 		if(selectedDF == vk::Format::eUndefined) {
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-			for(int i = 0; i < poolThreads.size(); i++) {
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
 				dev.destroyFence(immediates[poolThreads[i]].fence);
 				immediates.erase(poolThreads[i]);
 			}
-			dev.freeCommandBuffers(immediatePool, immBufs);
-			dev.destroyCommandPool(immediatePool);
 			dev.destroyCommandPool(renderPool);
 			allocator.destroy();
 			dev.destroy();
@@ -307,7 +317,7 @@ namespace Cacao {
 		}
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
-		immediateQueue.submit2(si, imm.fence);
+		imm.queue.submit2(si, imm.fence);
 		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
@@ -336,12 +346,12 @@ namespace Cacao {
 		allocator.unmapMemory(globalsUBO.alloc);
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 		std::vector<vk::CommandBuffer> cbufs;
-		for(auto i : immediates) {
-			dev.destroyFence(i.second.fence);
-			cbufs.push_back(i.second.cmd);
+		for(auto imm : immediates) {
+			dev.freeCommandBuffers(imm.second.pool, imm.second.cmd);
+			dev.destroyCommandPool(imm.second.pool);
+			dev.destroyFence(imm.second.fence);
 		}
-		dev.freeCommandBuffers(immediatePool, cbufs);
-		cbufs.clear();
+		immediates.clear();
 		for(auto f : frames) {
 			dev.destroySemaphore(f.acquireSemaphore);
 			dev.destroySemaphore(f.renderSemaphore);
@@ -349,7 +359,6 @@ namespace Cacao {
 			cbufs.push_back(f.cmd);
 		}
 		dev.freeCommandBuffers(renderPool, cbufs);
-		dev.destroyCommandPool(immediatePool);
 		dev.destroyCommandPool(renderPool);
 		allocator.destroy();
 		dev.destroy();
