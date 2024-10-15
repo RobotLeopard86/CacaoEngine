@@ -128,6 +128,7 @@ namespace Cacao {
 		vk::Extent2D extent;
 		{
 			glm::ivec2 winSize = Window::GetInstance()->GetContentAreaSize();
+			extent = {.width = (unsigned int)winSize.x, .height = (unsigned int)winSize.y};
 			auto surfc = physDev.getSurfaceCapabilitiesKHR(surface);
 			extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
@@ -159,6 +160,10 @@ namespace Cacao {
 		vk::RenderingInfo renderingInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment);
 		imm.cmd.beginRendering(renderingInfo);
 
+		//Set allocated object list and command buffer
+		uiCmd = &(imm.cmd);
+		allocatedObjects.clear();
+
 		//Render each layer
 		int furthest = 0;
 		for(const auto& kv : renderables) {
@@ -186,6 +191,35 @@ namespace Cacao {
 
 		//End recording
 		imm.cmd.end();
+
+		//Submit command buffer and wait
+		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+		vk::SubmitInfo2 si({}, {}, cbsi);
+		immediateQueue.submit2(si, imm.fence);
+		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+
+		//Clean up allocated objects
+		for(auto obj : allocatedObjects) {
+			switch(obj.index()) {
+				case 0: {
+					auto image = std::get<Allocated<vk::Image>>(obj);
+					allocator.destroyImage(image.obj, image.alloc);
+				}
+				case 1: {
+					auto buffer = std::get<Allocated<vk::Buffer>>(obj);
+					allocator.destroyBuffer(buffer.obj, buffer.alloc);
+				}
+				case 2: {
+					auto sampler = std::get<vk::Sampler>(obj);
+					dev.destroySampler(sampler);
+				}
+				case 3: {
+					auto iview = std::get<vk::ImageView>(obj);
+					dev.destroyImageView(iview);
+				}
+			}
+		}
+		allocatedObjects.clear();
 
 		//Restore the real frame object
 		VkFrame* fake = activeFrame;

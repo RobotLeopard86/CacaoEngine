@@ -92,8 +92,8 @@ namespace Cacao {
 
 				//Create glyph image and image view
 				vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, vk::Format::eR8Unorm, {bitmap.width, bitmap.rows, 1}, 1, 1, vk::SampleCountFlagBits::e1,
-					vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive, 0);
-				vma::AllocationCreateInfo texAllocCI(vma::AllocationCreateFlagBits::eHostAccessRandom, vma::MemoryUsage::eAuto, vk::MemoryPropertyFlagBits::eDeviceLocal);
+					vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
+				vma::AllocationCreateInfo texAllocCI({}, vma::MemoryUsage::eAuto, vk::MemoryPropertyFlagBits::eHostVisible);
 				auto [image, alloc] = allocator.createImage(texCI, texAllocCI);
 				info.glyph.image = {.alloc = alloc, .obj = image};
 				vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,
@@ -128,9 +128,6 @@ namespace Cacao {
 		void* vertexBuffer;
 		allocator.mapMemory(vertex.alloc, &vertexBuffer);
 
-		//Get command buffer
-		vk::CommandBuffer& cmd = activeFrame->cmd;
-
 		//Bind text shader
 		TextShaders::shader->Bind();
 
@@ -148,8 +145,8 @@ namespace Cacao {
 
 			//Draw glyph
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
-			cmd.bindVertexBuffers(0, vertex.obj, offsets);
-			cmd.draw(6, 1, 0, 0);
+			uiCmd->bindVertexBuffers(0, vertex.obj, offsets);
+			uiCmd->draw(6, 1, 0, 0);
 
 			//Unbind texture
 			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
@@ -161,13 +158,15 @@ namespace Cacao {
 		//Unbind text shader
 		TextShaders::shader->Unbind();
 
-		//Destroy temporary objects
+		//Unmap vertex buffer
 		allocator.unmapMemory(vertex.alloc);
-		allocator.destroyBuffer(vertex.obj, vertex.alloc);
-		dev.destroySampler(sampler);
+
+		//Add objects to allocated list
+		allocatedObjects.emplace_back(vertex);
+		allocatedObjects.emplace_back(sampler);
 		for(const CharacterInfo& character : infos) {
-			dev.destroyImageView(character.glyph.view);
-			allocator.destroyImage(character.glyph.image.obj, character.glyph.image.alloc);
+			allocatedObjects.emplace_back(character.glyph.view);
+			allocatedObjects.emplace_back(character.glyph.image);
 		}
 	}
 
@@ -196,9 +195,6 @@ namespace Cacao {
 		std::memcpy(vertexBuffer, vertexData, sizeof(UIVertex) * 6);
 		allocator.unmapMemory(vertex.alloc);
 
-		//Get command buffer
-		vk::CommandBuffer& cmd = activeFrame->cmd;
-
 		//Upload uniforms
 		ImageShaders::shader->Bind();
 		ShaderUploadData up;
@@ -207,15 +203,15 @@ namespace Cacao {
 
 		//Draw image
 		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
-		cmd.bindVertexBuffers(0, vertex.obj, offsets);
-		cmd.draw(6, 1, 0, 0);
+		uiCmd->bindVertexBuffers(0, vertex.obj, offsets);
+		uiCmd->draw(6, 1, 0, 0);
 
 		//Unbind objects
 		tex->Unbind();
 		ImageShaders::shader->Unbind();
 
-		//Destroy vertex buffer
-		allocator.destroyBuffer(vertex.obj, vertex.alloc);
+		//Add vertex buffer to allocated list
+		allocatedObjects.emplace_back(vertex);
 	}
 
 }
