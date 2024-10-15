@@ -92,8 +92,9 @@ namespace Cacao {
 
 				//Create glyph image and image view
 				vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, vk::Format::eR8Unorm, {bitmap.width, bitmap.rows, 1}, 1, 1, vk::SampleCountFlagBits::e1,
-					vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
-				vma::AllocationCreateInfo texAllocCI({}, vma::MemoryUsage::eAuto, vk::MemoryPropertyFlagBits::eHostVisible);
+					vk::ImageTiling::eLinear, vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive, 0);
+				vma::AllocationCreateInfo texAllocCI {};
+				texAllocCI.requiredFlags = vk::MemoryPropertyFlagBits::eHostVisible;
 				auto [image, alloc] = allocator.createImage(texCI, texAllocCI);
 				info.glyph.image = {.alloc = alloc, .obj = image};
 				vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,

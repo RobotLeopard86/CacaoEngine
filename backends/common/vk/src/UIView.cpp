@@ -92,8 +92,13 @@ namespace Cacao {
 	}
 
 	void UIView::Draw(std::map<unsigned short, std::vector<std::shared_ptr<UIRenderable>>> renderables) {
+		//Delete old back buffer
+		dev.destroySampler(backBuffer->sampler);
+		dev.destroyImageView(backBuffer->view);
+		allocator.destroyImage(backBuffer->tex.obj, backBuffer->tex.alloc);
+
 		//Regenerate back buffer
-		vk::ImageCreateInfo bufImageCI({}, vk::ImageType::e2D, surfaceFormat.format, {1, 1, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+		vk::ImageCreateInfo bufImageCI({}, vk::ImageType::e2D, surfaceFormat.format, {size.x, size.y, 1}, 1, 1, vk::SampleCountFlagBits::e1,
 			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo bufAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
 		auto [img, alloc] = allocator.createImage(bufImageCI, bufAllocCI);
@@ -125,10 +130,8 @@ namespace Cacao {
 		imm.cmd.begin(begin);
 
 		//Calculate extent
-		vk::Extent2D extent;
+		vk::Extent2D extent((unsigned int)size.x, (unsigned int)size.y);
 		{
-			glm::ivec2 winSize = Window::GetInstance()->GetContentAreaSize();
-			extent = {.width = (unsigned int)winSize.x, .height = (unsigned int)winSize.y};
 			auto surfc = physDev.getSurfaceCapabilitiesKHR(surface);
 			extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 			extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
