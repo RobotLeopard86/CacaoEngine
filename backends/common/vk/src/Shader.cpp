@@ -225,6 +225,7 @@ namespace Cacao {
 				layoutCI.setPushConstantRanges(pcr);
 			}
 			vk::PipelineLayout layout = dev.createPipelineLayout(layoutCI);
+			nd->pipelineLayout = layout;
 
 			//Create pipeline
 			vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
@@ -314,6 +315,9 @@ namespace Cacao {
 
 		//Bind pipeline object
 		activeFrame->cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, nd->pipeline);
+
+		//Bind descriptor set
+		activeFrame->cmd.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, nd->dset, {});
 
 		//Mark us as the active shader
 		activeShader = nd;
@@ -645,5 +649,8 @@ namespace Cacao {
 			//Copy data into buffer
 			std::memcpy(nd->shaderData + offset, data, dataSize);
 		}
+
+		//Push constants
+		activeFrame->cmd.pushConstants(nd->pipelineLayout, (nd->pushConstantFromFragment ? vk::ShaderStageFlagBits::eFragment : vk::ShaderStageFlagBits::eVertex), 0, nd->shaderDataSize, nd->shaderData);
 	}
 }

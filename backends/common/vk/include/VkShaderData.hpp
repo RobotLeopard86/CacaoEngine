@@ -22,7 +22,8 @@ namespace Cacao {
 		uint32_t shaderDataSize;					   //Total size of shader data
 		std::map<std::string, uint32_t> offsets;	   //Named offsets into the shader data (how to arrange the shader data)
 		std::map<std::string, int> imageSlots;		   //List of valid image slots
-		bool pushConstantFromFragment;
+		bool pushConstantFromFragment;				   //If the push constant block was in the fragment shader
+		vk::PipelineLayout pipelineLayout;			   //Pipeline layout
 	};
 
 	//Actual implementation of the shader native data, containing the above struct
