@@ -9,8 +9,6 @@ namespace Cacao {
 	struct Texture2D::Tex2DData {
 		Allocated<vk::Image> texture;
 		vk::ImageView iview;
-		vk::Sampler sampler;
 		vk::Format format;
-		vk::DescriptorSet* boundDS;
 	};
 }

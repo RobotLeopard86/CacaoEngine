@@ -21,7 +21,6 @@ namespace Cacao {
 
 		//Create temporary Vulkan objects
 		Allocated<vk::Buffer> vertex;
-		vk::Sampler sampler;
 
 		//Create buffer
 		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
@@ -30,12 +29,6 @@ namespace Cacao {
 			auto [buf, alloc] = allocator.createBuffer(bufferCI, allocCI);
 			vertex = {.alloc = alloc, .obj = buf};
 		}
-
-		//Create sampler
-		vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge,
-			vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever,
-			0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-		sampler = dev.createSampler(samplerCI);
 
 		//Create text character infos
 		struct CharacterInfo {
@@ -153,7 +146,7 @@ namespace Cacao {
 
 			//Upload uniform data
 			ShaderUploadData up;
-			RawVkTexture upTex = {.view = character.glyph.view, .sampler = sampler, .slot = new int(-1)};
+			RawVkTexture upTex = {.view = character.glyph.view, .slot = new int(-1)};
 			up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
 			up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
 			TextShaders::shader->UploadData(up);
@@ -165,8 +158,8 @@ namespace Cacao {
 
 			//Unbind texture
 			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
-			vk::WriteDescriptorSet wds(activeShader->dset, *(upTex.slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
-			dev.updateDescriptorSets(wds, {});
+			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(upTex.slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
+			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 			delete upTex.slot;
 		}
 
@@ -178,7 +171,6 @@ namespace Cacao {
 
 		//Add objects to allocated list
 		allocatedObjects.emplace_back(vertex);
-		allocatedObjects.emplace_back(sampler);
 		for(const CharacterInfo& character : infos) {
 			allocatedObjects.emplace_back(character.glyph.view);
 			allocatedObjects.emplace_back(character.glyph.image);

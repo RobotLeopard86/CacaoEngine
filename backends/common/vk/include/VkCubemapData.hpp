@@ -9,7 +9,5 @@ namespace Cacao {
 	struct Cubemap::CubemapData {
 		Allocated<vk::Image> texture;
 		vk::ImageView iview;
-		vk::Sampler sampler;
-		vk::DescriptorSet* boundDS;
 	};
 }

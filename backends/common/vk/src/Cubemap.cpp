@@ -35,7 +35,7 @@ namespace Cacao {
 			//Load images
 			glm::uvec2 imgSize = {0, 0};
 			std::array<unsigned char*, 6> faces;
-			for(unsigned int i = 0; i < i < textures.size(); i++) {
+			for(unsigned int i = 0; i < textures.size(); i++) {
 				int w, h, _;
 
 				//Load texture data from file
@@ -137,11 +137,6 @@ namespace Cacao {
 				{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			nativeData->iview = dev.createImageView(viewCI);
 
-			//Create sampler
-			vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
-				vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-			nativeData->sampler = dev.createSampler(samplerCI);
-
 			compiled = true;
 		};
 		return Engine::GetInstance()->GetThreadPool()->enqueue(doCompile).share();
@@ -152,7 +147,6 @@ namespace Cacao {
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound cubemap!")
 
 		//Destroy objects
-		dev.destroySampler(nativeData->sampler);
 		dev.destroyImageView(nativeData->iview);
 		allocator.destroyImage(nativeData->texture.obj, nativeData->texture.alloc);
 
@@ -163,39 +157,33 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled cubemap!")
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound cubemap!")
 		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no bound shader!")
-		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no active frame!")
+		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
 
 		//Create update info
-		vk::DescriptorImageInfo dii(nativeData->sampler, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
-		vk::WriteDescriptorSet wds(activeShader->dset, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
-		dev.updateDescriptorSets(wds, {});
+		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 
 		currentSlot = slot;
-		nativeData->boundDS = &activeShader->dset;
 		bound = true;
 	}
 
 	void Cubemap::Unbind() {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled cubemap!")
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound cubemap!")
-
-		//Check if bound descriptor set still exists
-		if(!nativeData->boundDS || (nativeData->boundDS && *(nativeData->boundDS))) {
-			bound = false;
-			return;
-		}
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind cubemap when there is no active frame!")
 
 		//Create update info
 		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
-		vk::WriteDescriptorSet wds(*(nativeData->boundDS), currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
-		dev.updateDescriptorSets(wds, {});
+		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 
 		currentSlot = -1;
 		bound = false;
-		nativeData->boundDS = nullptr;
 	}
 }

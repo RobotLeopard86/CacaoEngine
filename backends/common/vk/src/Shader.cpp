@@ -24,8 +24,8 @@
 #define nd (&(this->nativeData->impl))
 
 namespace Cacao {
-	//Calculates shader data offsets and image slots
-	void GetShaderUniformInfo(const ShaderSpec& spec, VkShaderData* mod) {
+	//Sets up shader data according to the shader spec
+	void PrepShaderData(const ShaderSpec& spec, VkShaderData* mod) {
 		CheckException(mod, Exception::GetExceptionCodeFromMeaning("NullValue"), "Passed-in shader data pointer is invalid!")
 
 		//Copy the SPIR-V because SPIRV-Cross requires a move
@@ -75,7 +75,10 @@ namespace Cacao {
 
 		//Get valid image slots
 		for(auto tex : fr.sampled_images) {
-			mod->imageSlots.insert_or_assign(fragReflector.get_name(tex.id), fragReflector.get_decoration(tex.id, spv::DecorationBinding));
+			VkShaderData::ImageSlot slotVal = {};
+			slotVal.binding = fragReflector.get_decoration(tex.id, spv::DecorationBinding);
+			slotVal.dimensionality = fragReflector.get_type(tex.base_type_id).image.dim;
+			mod->imageSlots.insert_or_assign(fragReflector.get_name(tex.id), slotVal);
 		}
 
 		//Make sure that shader data matches spec
@@ -137,8 +140,8 @@ namespace Cacao {
 		nd->vertexCode = vbuf;
 		nd->fragmentCode = fbuf;
 
-		//Get shader uniform info
-		GetShaderUniformInfo(spec, nd);
+		//Prepare native data
+		PrepShaderData(spec, nd);
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
@@ -151,8 +154,8 @@ namespace Cacao {
 		nd->vertexCode = vertex;
 		nd->fragmentCode = fragment;
 
-		//Get shader uniform info
-		GetShaderUniformInfo(spec, nd);
+		//Prepare native data
+		PrepShaderData(spec, nd);
 	}
 
 	std::shared_future<void> Shader::Compile() {
@@ -209,14 +212,27 @@ namespace Cacao {
 				{4, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)}}};
 			vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
 
+			//Create image slot samplers
+			for(auto& slot : nd->imageSlots) {
+				if(slot.second.dimensionality == spv::Dim::DimCube) {
+					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
+						vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+					slot.second.sampler = dev.createSampler(samplerCI);
+				} else {
+					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
+						vk::SamplerAddressMode::eRepeat, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+					slot.second.sampler = dev.createSampler(samplerCI);
+				}
+			}
+
 			//Create descriptor set layout
 			std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
 			dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
 			dsBindings.emplace_back(1, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
 			for(auto slot : nd->imageSlots) {
-				dsBindings.emplace_back(slot.second, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
+				dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
 			}
-			vk::DescriptorSetLayout dsLayout = dev.createDescriptorSetLayout({{}, dsBindings});
+			vk::DescriptorSetLayout dsLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
 			//Create pipeline layout
 			vk::PipelineLayoutCreateInfo layoutCI({}, dsLayout);
@@ -252,36 +268,6 @@ namespace Cacao {
 			}
 			CheckException(allocator.mapMemory(nd->localsUBO.alloc, &nd->locals) == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to map locals uniform buffer memory!")
 
-			//Create descriptor pool
-			std::vector<vk::DescriptorPoolSize> poolSizes;
-			poolSizes.emplace_back(vk::DescriptorType::eUniformBuffer, 2);
-			if(nd->imageSlots.size() > 0) poolSizes.emplace_back(vk::DescriptorType::eCombinedImageSampler, (unsigned int)nd->imageSlots.size());
-			vk::DescriptorPoolCreateInfo poolCI({}, 1, poolSizes);
-			try {
-				nd->dpool = dev.createDescriptorPool(poolCI);
-			} catch(vk::SystemError& err) {
-				std::stringstream emsg;
-				emsg << "Failed to create shader descriptor pool: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
-			}
-
-			//Allocate descriptor set
-			vk::DescriptorSetAllocateInfo setAllocInfo(nd->dpool, dsLayout);
-			try {
-				nd->dset = dev.allocateDescriptorSets(setAllocInfo)[0];
-			} catch(vk::SystemError& err) {
-				std::stringstream emsg;
-				emsg << "Failed to allocate shader descriptor set: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
-			}
-
-			//Bind globals and locals UBOs
-			vk::DescriptorBufferInfo globalsDBI(globalsUBO.obj, 0, vk::WholeSize);
-			vk::DescriptorBufferInfo localsDBI(nd->localsUBO.obj, 0, vk::WholeSize);
-			std::array<vk::WriteDescriptorSet, 2> dsWrites {{{nd->dset, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI},
-				{nd->dset, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &localsDBI}}};
-			dev.updateDescriptorSets(dsWrites, {});
-
 			compiled = true;
 		};
 		return Engine::GetInstance()->GetThreadPool()->enqueue(doCompile).share();
@@ -291,9 +277,10 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!")
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound shader!")
 
-		//Destroy descriptor pool and set
-		dev.resetDescriptorPool(nd->dpool);
-		dev.destroyDescriptorPool(nd->dpool);
+		//Destroy image slot samplers
+		for(auto slotPair : nd->imageSlots) {
+			dev.destroySampler(slotPair.second.sampler);
+		}
 
 		//Unmap and destroy locals UBO
 		allocator.unmapMemory(nd->localsUBO.alloc);
@@ -316,8 +303,12 @@ namespace Cacao {
 		//Bind pipeline object
 		activeFrame->cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, nd->pipeline);
 
-		//Bind descriptor set
-		activeFrame->cmd.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, nd->dset, {});
+		//Bind descriptors
+		vk::DescriptorBufferInfo globalsDBI(globalsUBO.obj, 0, vk::WholeSize);
+		vk::DescriptorBufferInfo localsDBI(nd->localsUBO.obj, 0, vk::WholeSize);
+		std::array<vk::WriteDescriptorSet, 2> dsWrites {{{VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI},
+			{VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &localsDBI}}};
+		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, dsWrites);
 
 		//Mark us as the active shader
 		activeShader = nd;
@@ -353,7 +344,7 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!")
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!")
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!")
-		CheckException(nd->shaderData, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!")
+		CheckException(!(nd->shaderDataSize == 0 && nd->imageSlots.size() == 0 && data.size() > 0), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!")
 
 		//Do data upload
 		std::map<std::string, ShaderItemInfo> foundItems;
@@ -375,10 +366,11 @@ namespace Cacao {
 			ShaderItemInfo info = foundItems[item.target];
 
 			//Find offset or image binding
-			unsigned int offset, binding;
+			unsigned int offset;
+			VkShaderData::ImageSlot slot;
 			if(info.type == SpvType::SampledImage) {
 				CheckException(nd->imageSlots.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
-				binding = nd->imageSlots[item.target];
+				slot = nd->imageSlots[item.target];
 			} else {
 				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
 				offset = nd->offsets[item.target];
@@ -440,28 +432,28 @@ namespace Cacao {
 						//Bind texture to the slot specified
 						if(item.data.type() == typeid(Texture2D*)) {
 							Texture2D* tex = std::any_cast<Texture2D*>(item.data);
-							tex->Bind(binding);
+							tex->Bind(slot.binding);
 						} else if(item.data.type() == typeid(Cubemap*)) {
 							Cubemap* tex = std::any_cast<Cubemap*>(item.data);
-							tex->Bind(binding);
+							tex->Bind(slot.binding);
 						} else if(item.data.type() == typeid(UIView*)) {
 							UIView* view = std::any_cast<UIView*>(item.data);
-							view->Bind(binding);
+							view->Bind(slot.binding);
 						} else if(item.data.type() == typeid(AssetHandle<Texture2D>)) {
 							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(item.data);
-							tex->Bind(binding);
+							tex->Bind(slot.binding);
 						} else if(item.data.type() == typeid(AssetHandle<Cubemap>)) {
 							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(item.data);
-							tex->Bind(binding);
+							tex->Bind(slot.binding);
 						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
 							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
-							view->Bind(binding);
+							view->Bind(slot.binding);
 						} else if(item.data.type() == typeid(RawVkTexture)) {
 							RawVkTexture raw = std::any_cast<RawVkTexture>(item.data);
-							vk::DescriptorImageInfo dii(raw.sampler, raw.view, vk::ImageLayout::eShaderReadOnlyOptimal);
-							vk::WriteDescriptorSet wds(nd->dset, binding, 0, vk::DescriptorType::eCombinedImageSampler, dii);
-							dev.updateDescriptorSets(wds, {});
-							*(raw.slot) = binding;
+							vk::DescriptorImageInfo dii(slot.sampler, raw.view, vk::ImageLayout::eShaderReadOnlyOptimal);
+							vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot.binding, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+							activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, wds);
+							*(raw.slot) = slot.binding;
 						} else {
 							Logging::EngineLog(item.data.type().name());
 							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!")
@@ -646,11 +638,11 @@ namespace Cacao {
 			}
 
 
-			//Copy data into buffer
-			std::memcpy(nd->shaderData + offset, data, dataSize);
+			//Copy data into buffer if we need to
+			if(nd->shaderDataSize > 0) std::memcpy(nd->shaderData + offset, data, dataSize);
 		}
 
-		//Push constants
-		activeFrame->cmd.pushConstants(nd->pipelineLayout, (nd->pushConstantFromFragment ? vk::ShaderStageFlagBits::eFragment : vk::ShaderStageFlagBits::eVertex), 0, nd->shaderDataSize, nd->shaderData);
+		//Push constants if there are any
+		if(nd->shaderDataSize > 0) activeFrame->cmd.pushConstants(nd->pipelineLayout, (nd->pushConstantFromFragment ? vk::ShaderStageFlagBits::eFragment : vk::ShaderStageFlagBits::eVertex), 0, nd->shaderDataSize, nd->shaderData);
 	}
 }

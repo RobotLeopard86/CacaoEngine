@@ -10,7 +10,6 @@
 namespace Cacao {
 	//Required initialization of static members
 	Shader* UIView::shader = nullptr;
-	vk::DescriptorSet* UIView::Buffer::boundDS = nullptr;
 
 	UIView::UIView()
 	  : size(0), bound(false), currentSlot(-1), hasRendered(false) {
@@ -33,21 +32,13 @@ namespace Cacao {
 				{}, buf->tex.obj, vk::ImageViewType::e2D, surfaceFormat.format, {},
 				vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
 			buf->view = dev.createImageView(imageViewCI);
-
-			//Create sampler
-			vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge,
-				vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f,
-				VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-			buf->sampler = dev.createSampler(samplerCI);
 		}
 	}
 
 	UIView::~UIView() {
 		//Destroy buffer objects
-		dev.destroySampler(frontBuffer->sampler);
 		dev.destroyImageView(frontBuffer->view);
 		allocator.destroyImage(frontBuffer->tex.obj, frontBuffer->tex.alloc);
-		dev.destroySampler(backBuffer->sampler);
 		dev.destroyImageView(backBuffer->view);
 		allocator.destroyImage(backBuffer->tex.obj, backBuffer->tex.alloc);
 	}
@@ -56,44 +47,35 @@ namespace Cacao {
 		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!")
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!")
 		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind UI view when there is no bound shader!")
-		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
 
 		//Create update info
-		vk::DescriptorImageInfo dii(frontBuffer->sampler, frontBuffer->view, vk::ImageLayout::eShaderReadOnlyOptimal);
-		vk::WriteDescriptorSet wds(activeShader->dset, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, frontBuffer->view, vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
-		dev.updateDescriptorSets(wds, {});
+		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 
 		currentSlot = slot;
-		Buffer::boundDS = &activeShader->dset;
 		bound = true;
 	}
 
 	void UIView::Unbind() {
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!")
 
-		//Check if bound descriptor set still exists
-		if(!Buffer::boundDS || (Buffer::boundDS && *(Buffer::boundDS))) {
-			bound = false;
-			return;
-		}
-
 		//Create update info
 		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
-		vk::WriteDescriptorSet wds(*(Buffer::boundDS), currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
-		dev.updateDescriptorSets(wds, {});
+		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 
 		currentSlot = -1;
 		bound = false;
-		Buffer::boundDS = nullptr;
 	}
 
 	void UIView::Draw(std::map<unsigned short, std::vector<std::shared_ptr<UIRenderable>>> renderables) {
 		//Delete old back buffer
-		dev.destroySampler(backBuffer->sampler);
 		dev.destroyImageView(backBuffer->view);
 		allocator.destroyImage(backBuffer->tex.obj, backBuffer->tex.alloc);
 
@@ -107,10 +89,6 @@ namespace Cacao {
 			{}, backBuffer->tex.obj, vk::ImageViewType::e2D, surfaceFormat.format, {},
 			vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
 		backBuffer->view = dev.createImageView(imageViewCI);
-		vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge,
-			vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f,
-			VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-		backBuffer->sampler = dev.createSampler(samplerCI);
 
 		//Fetch immediate
 		Immediate imm = immediates[std::this_thread::get_id()];
@@ -149,12 +127,11 @@ namespace Cacao {
 
 		//Transition image to drawable state
 		{
-			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryWrite,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
-				vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, 0, 0, backBuffer->tex.obj,
-				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
-			vk::DependencyInfo transition({}, {}, {}, barrier);
-			imm.cmd.pipelineBarrier2(transition);
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, 0, 0, backBuffer->tex.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+			vk::DependencyInfo cdDI({}, {}, {}, barrier);
+			imm.cmd.pipelineBarrier2(cdDI);
 		}
 
 		//Start rendering
@@ -184,16 +161,22 @@ namespace Cacao {
 
 		//Transition image to sampleable state
 		{
-			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryWrite,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
-				vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, backBuffer->tex.obj,
-				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
-			vk::DependencyInfo transition({}, {}, {}, barrier);
-			imm.cmd.pipelineBarrier2(transition);
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, backBuffer->tex.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+			vk::DependencyInfo cdDI({}, {}, {}, barrier);
+			imm.cmd.pipelineBarrier2(cdDI);
 		}
 
 		//End recording
 		imm.cmd.end();
+
+		//Wait for and reset fence just in case
+		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+			dev.resetFences(imm.fence);
+		}
 
 		//Submit command buffer and wait
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
@@ -207,18 +190,17 @@ namespace Cacao {
 				case 0: {
 					auto image = std::get<Allocated<vk::Image>>(obj);
 					allocator.destroyImage(image.obj, image.alloc);
+					break;
 				}
 				case 1: {
 					auto buffer = std::get<Allocated<vk::Buffer>>(obj);
 					allocator.destroyBuffer(buffer.obj, buffer.alloc);
+					break;
 				}
 				case 2: {
-					auto sampler = std::get<vk::Sampler>(obj);
-					dev.destroySampler(sampler);
-				}
-				case 3: {
 					auto iview = std::get<vk::ImageView>(obj);
 					dev.destroyImageView(iview);
+					break;
 				}
 			}
 		}
