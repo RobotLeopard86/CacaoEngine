@@ -8,68 +8,42 @@
 #include "VulkanCoreObjects.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
-#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2))
+#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (tr->linegap / 2))
 
 namespace Cacao {
-	struct UIVertex {
-		glm::vec3 vert;
-		glm::vec2 tc;
-	};
-
-	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw text renderable when there is no active frame!")
-
-		//Create temporary Vulkan objects
-		Allocated<vk::Buffer> vertex;
-
-		//Create buffer
-		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
-		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
-		{
-			auto [buf, alloc] = allocator.createBuffer(bufferCI, allocCI);
-			vertex = {.alloc = alloc, .obj = buf};
-		}
-
-		//Create text character infos
-		struct CharacterInfo {
-			std::array<UIVertex, 6> vertices;
-			struct Glyph {
-				Allocated<vk::Image> image;
-				vk::ImageView view;
-			} glyph;
-		};
+	void PreprocessTextRenderable(Text::Renderable* tr, glm::uvec2 screenSize) {
 		std::vector<CharacterInfo> infos;
 		int lineCounter = 0;
-		for(auto ln : lines) {
+		for(auto ln : tr->lines) {
 			//Calculate starting position
-			float startX = -((signed int)size.x / 2);
-			float startY = (lines.size() > 1 ? (lineHeight * lineCounter) : SINGLE_LINE_ALIGNMENT);
-			if(alignment != TextAlign::Left) {
+			float startX = -((signed int)tr->size.x / 2);
+			float startY = (tr->lines.size() > 1 ? (tr->lineHeight * lineCounter) : SINGLE_LINE_ALIGNMENT);
+			if(tr->alignment != TextAlign::Left) {
 				float textWidth = 0.0f;
 				for(unsigned int i = 0; i < ln.glyphCount; ++i) {
 					textWidth += (ln.advances[i].adv.x / 64.0f);
 				}
-				if(alignment == TextAlign::Center) {
-					startX = (float(size.x) - textWidth) / 2.0;
+				if(tr->alignment == TextAlign::Center) {
+					startX = (float(tr->size.x) - textWidth) / 2.0;
 				} else {
-					startX = float(size.x) - textWidth - (size.x / 2u);
+					startX = float(tr->size.x) - textWidth - (tr->size.x / 2u);
 				}
 			}
-			startX += screenPos.x;
-			startY += screenPos.y;
+			startX += tr->screenPos.x;
+			startY += tr->screenPos.y;
 			startY = (screenSize.y - startY);
 
 			//Make glyphs
 			float x = startX, y = startY;
-			FT_Set_Pixel_Sizes(fontFace, 0, charSize);
+			FT_Set_Pixel_Sizes(tr->fontFace, 0, tr->charSize);
 			for(unsigned int i = 0; i < ln.glyphCount; i++) {
-				FT_Error err = FT_Load_Glyph(fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER);
+				FT_Error err = FT_Load_Glyph(tr->fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER);
 				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!")
 
 				CharacterInfo info = {};
 
 				//Get bitmap
-				FT_Bitmap& bitmap = fontFace->glyph->bitmap;
+				FT_Bitmap& bitmap = tr->fontFace->glyph->bitmap;
 
 				//Check for empty glyph
 				if(!bitmap.buffer || bitmap.width == 0 || bitmap.rows == 0) {
@@ -82,8 +56,8 @@ namespace Cacao {
 				//Calculate vertex data for glyph
 				float w = bitmap.width;
 				float h = bitmap.rows;
-				float xpos = x + fontFace->glyph->bitmap_left;
-				float ypos = y - (h - fontFace->glyph->bitmap_top);
+				float xpos = x + tr->fontFace->glyph->bitmap_left;
+				float ypos = y - (h - tr->fontFace->glyph->bitmap_top);
 				info.vertices[0] = {{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}};
 				info.vertices[1] = {{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}};
 				info.vertices[2] = {{xpos, ypos, 0.0f}, {0.0f, 1.0f}};
@@ -115,6 +89,15 @@ namespace Cacao {
 				std::memcpy(gpuMem, bitmap.buffer, bitmap.width * bitmap.rows);
 				allocator.unmapMemory(alloc);
 
+				//Transition image to shader resource state
+				{
+					vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+						vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, info.glyph.image.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+					vk::DependencyInfo cdDI({}, {}, {}, barrier);
+					uiCmd->pipelineBarrier2(cdDI);
+				}
+
 				infos.push_back(std::move(info));
 
 				//Advance cursor for next glyph
@@ -130,7 +113,28 @@ namespace Cacao {
 		}
 
 		//Destroy Harfbuzz font representation
-		hb_font_destroy(hbf);
+		hb_font_destroy(tr->hbf);
+
+		//Push character infos
+		trCharInfos.insert_or_assign(tr, infos);
+	}
+
+	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
+		CheckException(trCharInfos.contains(this), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot draw text renderable that hasn't been preprocessed!")
+
+		//Create temporary Vulkan objects
+		Allocated<vk::Buffer> vertex;
+
+		//Create buffer
+		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
+		{
+			auto [buf, alloc] = allocator.createBuffer(bufferCI, allocCI);
+			vertex = {.alloc = alloc, .obj = buf};
+		}
+
+		//Fetch text character infos
+		std::vector<CharacterInfo> infos = trCharInfos.at(this);
 
 		//Map vertex buffer memory
 		void* vertexBuffer;
@@ -159,7 +163,7 @@ namespace Cacao {
 			//Unbind texture
 			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
 			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(upTex.slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
-			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 			delete upTex.slot;
 		}
 

@@ -134,15 +134,27 @@ namespace Cacao {
 			imm.cmd.pipelineBarrier2(cdDI);
 		}
 
+		//Set allocated object list and command buffer
+		uiCmd = &(imm.cmd);
+		allocatedObjects.clear();
+
+		//Preprocess text renderables
+		trCharInfos.clear();
+		for(auto layer : renderables) {
+			for(auto renderable : layer.second) {
+				//If the cast fails, this wasn't a text renderable so we don't care
+				try {
+					Text::Renderable* tr = std::dynamic_pointer_cast<Text::Renderable>(renderable).get();
+					if(tr) PreprocessTextRenderable(tr, size);
+				} catch(...) {}
+			}
+		}
+
 		//Start rendering
 		vk::RenderingAttachmentInfo colorAttachment(backBuffer->view, vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eStore, vk::ClearColorValue(0.0f, 0.0f, 0.0f, 0.0f));
 		vk::RenderingInfo renderingInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment);
 		imm.cmd.beginRendering(renderingInfo);
-
-		//Set allocated object list and command buffer
-		uiCmd = &(imm.cmd);
-		allocatedObjects.clear();
 
 		//Render each layer
 		int furthest = 0;

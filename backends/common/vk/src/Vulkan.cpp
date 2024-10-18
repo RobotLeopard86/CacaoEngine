@@ -428,6 +428,16 @@ namespace Cacao {
 			f.cmd.pipelineBarrier2(transition);
 		}
 
+		//Make sure depth image is drawable
+		{
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
+				vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthAttachmentOptimal, 0, 0, depthImage.obj,
+				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
+			vk::DependencyInfo transition({}, {}, {}, barrier);
+			f.cmd.pipelineBarrier2(transition);
+		}
+
 		//Calculate extent
 		vk::Extent2D extent;
 		{
@@ -444,12 +454,13 @@ namespace Cacao {
 		f.cmd.setViewport(0, viewport);
 		f.cmd.setScissor(0, scissor);
 		f.cmd.setColorBlendEnableEXT(0, VK_FALSE);
+		f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd, vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd));
 		f.cmd.setDepthTestEnable(VK_TRUE);
 
 		//Start rendering
 		vk::RenderingAttachmentInfo colorAttachment(imageViews[imgIdx], vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {float(0xCF) / 255, 1.0f, float(0x4D) / 255, 1.0f}));
-		vk::RenderingAttachmentInfo depthAttachment(depthView, vk::ImageLayout::eUndefined, {}, {}, {}, vk::AttachmentLoadOp::eClear,
+		vk::RenderingAttachmentInfo depthAttachment(depthView, vk::ImageLayout::eDepthAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eDontCare, vk::ClearDepthStencilValue(1.0f, 0.0f));
 		vk::RenderingInfo renderingInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment, &depthAttachment);
 		f.cmd.beginRendering(renderingInfo);
@@ -515,8 +526,7 @@ namespace Cacao {
 
 			//Modify dynamic state
 			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);
-			vk::ColorBlendEquationEXT equ(vk::BlendFactor::eSrcColor, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha);
-			f.cmd.setColorBlendEquationEXT(0, equ);
+			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcColor, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
 			f.cmd.setDepthTestEnable(VK_FALSE);
 
 			//Bind UI shader

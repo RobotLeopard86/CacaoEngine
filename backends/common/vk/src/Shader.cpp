@@ -201,7 +201,7 @@ namespace Cacao {
 			vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
 			//Create pipeline rendering info
-			vk::PipelineRenderingCreateInfo pipelineRenderingInfo(0, surfaceFormat.format, vk::Format::eD32Sfloat);
+			vk::PipelineRenderingCreateInfo pipelineRenderingInfo(0, surfaceFormat.format, selectedDF);
 
 			//Create input attributes and bindings
 			vk::VertexInputBindingDescription inputBinding(0, sizeof(Vertex), vk::VertexInputRate::eVertex);
