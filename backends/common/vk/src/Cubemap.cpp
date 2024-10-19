@@ -39,7 +39,7 @@ namespace Cacao {
 				int w, h, _;
 
 				//Load texture data from file
-				unsigned char* data = stbi_load(textures[i].c_str(), &w, &h, &_, 3);
+				unsigned char* data = stbi_load(textures[i].c_str(), &w, &h, &_, 4);
 				if(data) {
 					if(imgSize.x == 0 || imgSize.y == 0) imgSize = {w, h};
 			CheckException(w == imgSize.x && h == imgSize.y, Exception::GetExceptionCodeFromMeaning("BadValue"), "All cubemap faces must be the same size!")
@@ -53,11 +53,11 @@ namespace Cacao {
 				}
 			}
 
-			vk::DeviceSize faceSize = imgSize.x * imgSize.y * 3;
+			vk::DeviceSize faceSize = imgSize.x * imgSize.y * 4;
 			vk::DeviceSize totalSize = faceSize * 6;
 
 			//Allocate texture and upload buffer
-			vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8Srgb, {imgSize.x, imgSize.y, 1}, 1, 6, vk::SampleCountFlagBits::e1,
+			vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8A8Srgb, {imgSize.x, imgSize.y, 1}, 1, 6, vk::SampleCountFlagBits::e1,
 				vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
 			vma::AllocationCreateInfo texAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
 			vk::BufferCreateInfo uploadCI({}, totalSize, vk::BufferUsageFlagBits::eTransferSrc, vk::SharingMode::eExclusive);
@@ -132,7 +132,7 @@ namespace Cacao {
 			allocator.destroyBuffer(upload, ualloc);
 
 			//Create image view
-			vk::ImageViewCreateInfo viewCI({}, nativeData->texture.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8Srgb,
+			vk::ImageViewCreateInfo viewCI({}, nativeData->texture.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8A8Srgb,
 				{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
 				{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			nativeData->iview = dev.createImageView(viewCI);

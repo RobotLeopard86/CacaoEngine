@@ -194,12 +194,11 @@ namespace Cacao {
 			CheckException(std::filesystem::exists(dfNode["z+"].Scalar()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing skybox definition: 'z+' field refers to a nonexistent file!")
 			CheckException(std::filesystem::exists(dfNode["z-"].Scalar()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing skybox definition: 'z-' field refers to a nonexistent file!")
 
-			//Create and compile skybox texture
+			//Create and compile skybox cubemap
 			Cubemap* cube = new Cubemap(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
-			;
-			cube->Compile();
+			cube->Compile().get();
 
-			//Create skybox asset
+			//Create skybox
 			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(cube);
 
 			//Add asset to cache and return handle

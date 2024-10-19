@@ -457,8 +457,10 @@ namespace Cacao {
 		f.cmd.setDepthTestEnable(VK_TRUE);
 
 		//Start rendering
+		constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
+		glm::vec3 clearColorLinear = glm::pow(clearColorSRGB, glm::vec3 {2.2f});
 		vk::RenderingAttachmentInfo colorAttachment(imageViews[imgIdx], vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
-			vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {float(0xCF) / 255, 1.0f, float(0x4D) / 255, 1.0f}));
+			vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {clearColorLinear.r, clearColorLinear.g, clearColorLinear.b, 1.0f}));
 		vk::RenderingAttachmentInfo depthAttachment(depthView, vk::ImageLayout::eDepthAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eDontCare, vk::ClearDepthStencilValue(1.0f, 0.0f));
 		vk::RenderingInfo renderingInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment, &depthAttachment);
@@ -528,17 +530,14 @@ namespace Cacao {
 			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcColor, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
 			f.cmd.setDepthTestEnable(VK_FALSE);
 
-			//Bind UI shader
-			uivsm->Bind();
-
 			//Draw quad
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
 			f.cmd.bindVertexBuffers(0, uiQuadBuffer.obj, offsets);
 			f.cmd.draw(18, 1, 0, 0);
 
 			//Unbind UI shader and view
-			uivsm->Unbind();
 			Engine::GetInstance()->GetGlobalUIView()->Unbind();
+			uivsm->Unbind();
 		}
 
 		//End rendering
