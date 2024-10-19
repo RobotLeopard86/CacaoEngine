@@ -238,15 +238,18 @@
 </span><span id="line-48"><span class="w">        </span><span class="c1">//Update the graphics state</span>
 </span><span id="line-49"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateGraphicsState</span><span class="p">();</span>
 </span><span id="line-50">
-</span><span id="line-51"><span class="w">        </span><span class="c1">//Queue of frames to render</span>
-</span><span id="line-52"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Frame</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">frameQueue</span><span class="p">;</span>
+</span><span id="line-51"><span class="w">        </span><span class="c1">//Wait for GPU idle before termination</span>
+</span><span id="line-52"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">WaitGPUIdleBeforeTerminate</span><span class="p">();</span>
 </span><span id="line-53">
-</span><span id="line-54"><span class="w">        </span><span class="c1">//Thread safety constructs</span>
-</span><span id="line-55"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">fqMutex</span><span class="p">;</span>
+</span><span id="line-54"><span class="w">        </span><span class="c1">//Queue of frames to render</span>
+</span><span id="line-55"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Frame</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">frameQueue</span><span class="p">;</span>
 </span><span id="line-56">
-</span><span id="line-57"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isInitialized</span><span class="p">;</span>
-</span><span id="line-58"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-59"><span class="p">}</span>
+</span><span id="line-57"><span class="w">        </span><span class="c1">//Thread safety constructs</span>
+</span><span id="line-58"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">fqMutex</span><span class="p">;</span>
+</span><span id="line-59">
+</span><span id="line-60"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isInitialized</span><span class="p">;</span>
+</span><span id="line-61"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-62"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
