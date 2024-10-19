@@ -246,6 +246,7 @@ namespace Cacao {
 			//Create pipeline
 			vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
 				&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, layout);
+			pipelineCI.pNext = &pipelineRenderingInfo;
 			auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
 			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!")
 			nd->pipeline = pipelineResult.value;
@@ -322,6 +323,7 @@ namespace Cacao {
 
 		//Make us not the active shader
 		if(activeShader == nd) activeShader = nullptr;
+		std::stringstream pp;
 
 		//Vulkan has no concept of unbinding a pipeline, also since command buffers shift around state is wiped clean every time
 		bound = false;

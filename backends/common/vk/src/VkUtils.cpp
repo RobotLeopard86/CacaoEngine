@@ -2,6 +2,8 @@
 
 #include "VulkanCoreObjects.hpp"
 #include "Graphics/Window.hpp"
+#include "UI/Shaders.hpp"
+#include "UIViewShaderManager.hpp"
 
 namespace Cacao {
 	void GenFrameObjects() {
@@ -131,6 +133,16 @@ namespace Cacao {
 			depthView = dev.createImageView(depthViewCI);
 		} catch(vk::SystemError& err) {
 			std::rethrow_exception(std::current_exception());
+		}
+
+		if(!didGenShaders) {
+			//Generate UI shaders (they need the surface fornat)
+			//Compile UI view shader
+			uivsm.Compile();
+
+			//Generate other UI shaders
+			GenShaders();
+			didGenShaders = true;
 		}
 
 		//Regenerate frame objects

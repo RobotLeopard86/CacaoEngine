@@ -322,11 +322,7 @@ namespace Cacao {
 		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
-		//Compile UI view shader
-		uivsm.Compile();
-
-		//Generate other UI shaders
-		GenShaders();
+		didGenShaders = false;
 
 		frameCycle = 0;
 	}
@@ -339,9 +335,12 @@ namespace Cacao {
 	void RenderController::UpdateGraphicsState() {}
 
 	void RenderController::Shutdown() {
-		//Cleanup UI shaders
-		DelShaders();
-		uivsm.Release();
+		if(didGenShaders) {
+			//Cleanup UI shaders
+			DelShaders();
+			uivsm.Release();
+			didGenShaders = false;
+		}
 
 		//Destroy Vulkan objects
 		allocator.unmapMemory(globalsUBO.alloc);

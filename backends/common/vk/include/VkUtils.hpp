@@ -18,4 +18,6 @@ namespace Cacao {
 		vma::Allocation alloc;
 		T obj;
 	};
+
+	inline bool didGenShaders = false;
 }
