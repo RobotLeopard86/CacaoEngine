@@ -89,7 +89,7 @@ namespace Cacao {
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
 					vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
-					vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+					vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 				vk::DependencyInfo cdDI({}, {}, {}, barrier);
 				imm.cmd.pipelineBarrier2(cdDI);
 			}
@@ -105,7 +105,7 @@ namespace Cacao {
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
 					vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
-					vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+					vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 				vk::DependencyInfo cdDI({}, {}, {}, barrier);
 				imm.cmd.pipelineBarrier2(cdDI);
 			}

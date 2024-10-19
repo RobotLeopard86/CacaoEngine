@@ -87,8 +87,20 @@ namespace Cacao {
 		try {
 			graphicsQueue.presentKHR(pi);
 		} catch(vk::SystemError& err) {
+			if(err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eSuboptimalKHR) {
+				try {
+					//Regen swapchain
+					GenSwapchain();
+
+					return;
+				} catch(std::exception& e) {
+					std::stringstream emsg;
+					emsg << "Failed to regenerate swapchain: " << e.what();
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+				}
+			}
 			std::stringstream emsg;
-			emsg << "Present failed: " << err.what();
+			emsg << "Failed to present frame: " << err.what();
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
 		}
 	}

@@ -122,19 +122,19 @@ namespace Cacao {
 	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
 		CheckException(trCharInfos.contains(this), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot draw text renderable that hasn't been preprocessed!")
 
+		//Fetch text character infos
+		std::vector<CharacterInfo> infos = trCharInfos.at(this);
+
 		//Create temporary Vulkan objects
 		Allocated<vk::Buffer> vertex;
 
 		//Create buffer
-		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
+		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6 * infos.size(), vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
 		{
 			auto [buf, alloc] = allocator.createBuffer(bufferCI, allocCI);
 			vertex = {.alloc = alloc, .obj = buf};
 		}
-
-		//Fetch text character infos
-		std::vector<CharacterInfo> infos = trCharInfos.at(this);
 
 		//Map vertex buffer memory
 		void* vertexBuffer;
@@ -144,9 +144,11 @@ namespace Cacao {
 		TextShaders::shader->Bind();
 
 		//Draw characters
+		std::size_t offset = 0;
 		for(const CharacterInfo& character : infos) {
 			//Copy vertex data into buffer
-			std::memcpy(vertexBuffer, character.vertices.data(), sizeof(UIVertex) * 6);
+			std::memcpy(vertexBuffer + offset, character.vertices.data(), sizeof(UIVertex) * 6);
+			offset += sizeof(UIVertex) * 6;
 
 			//Upload uniform data
 			ShaderUploadData up;
@@ -156,8 +158,7 @@ namespace Cacao {
 			TextShaders::shader->UploadData(up);
 
 			//Draw glyph
-			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
-			uiCmd->bindVertexBuffers(0, vertex.obj, offsets);
+			uiCmd->bindVertexBuffers(0, vertex.obj, vk::DeviceSize(offset));
 			uiCmd->draw(6, 1, 0, 0);
 
 			//Unbind texture

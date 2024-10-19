@@ -81,6 +81,9 @@ namespace Cacao {
 		//Update the graphics state
 		void UpdateGraphicsState();
 
+		//Wait for GPU idle before termination
+		void WaitGPUIdleBeforeTerminate();
+
 		//Queue of frames to render
 		std::queue<std::shared_ptr<Frame>> frameQueue;
 

@@ -334,7 +334,14 @@ namespace Cacao {
 
 	void RenderController::UpdateGraphicsState() {}
 
+	void RenderController::WaitGPUIdleBeforeTerminate() {
+		dev.waitIdle();
+	}
+
 	void RenderController::Shutdown() {
+		//Wait for the device to be idle
+		dev.waitIdle();
+
 		if(didGenShaders) {
 			//Cleanup UI shaders
 			DelShaders();
@@ -563,31 +570,8 @@ namespace Cacao {
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!")
 		}
 
-		//Present the frame
-		vk::PresentInfoKHR presentInfo(f.renderSemaphore, swapchain, imgIdx);
-		try {
-			graphicsQueue.presentKHR(presentInfo);
-		} catch(vk::SystemError& err) {
-			if(err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eSuboptimalKHR) {
-				try {
-					//Regen swapchain
-					GenSwapchain();
-
-					//Get new frame object (they get re-created)
-					VkFrame f = frames[frameCycle];
-					activeFrame = &f;
-
-					goto acquire;
-				} catch(std::exception& e) {
-					std::stringstream emsg;
-					emsg << "Failed to regenerate swapchain: " << e.what();
-					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
-				}
-			}
-			std::stringstream emsg;
-			emsg << "Failed to present frame: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
-		}
+		//Set submission for presenting
+		submission = {.sem = f.renderSemaphore, .image = imgIdx};
 
 		//Cycle the frame
 		frameCycle = (frameCycle + 1) % frames.size();

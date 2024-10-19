@@ -72,5 +72,8 @@ namespace Cacao {
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
 		}
+
+		//Make sure the GPU is idle before termination
+		WaitGPUIdleBeforeTerminate();
 	}
 }

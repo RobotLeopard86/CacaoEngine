@@ -241,4 +241,6 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(104, "RenderThread");
 		Exception::RegisterExceptionCode(105, "UnsupportedType");
 	}
+
+	void RenderController::WaitGPUIdleBeforeTerminate() {}
 }

@@ -257,7 +257,7 @@ namespace Cacao {
 			}
 
 			//Create and map locals UBO
-			vk::BufferCreateInfo localsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+			vk::BufferCreateInfo localsCI({}, sizeof(glm::mat4), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
 			vma::AllocationCreateInfo localsAllocCI({}, vma::MemoryUsage::eCpuToGpu);
 			try {
 				auto [locals, alloc] = allocator.createBuffer(localsCI, localsAllocCI);
@@ -330,11 +330,8 @@ namespace Cacao {
 	}
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
-		struct CombinedViewProjection {
-			glm::mat4 p;
-			glm::mat4 v;
-		} cvp = {.p = projection, .v = view};
-		std::memcpy(globalsMem, &cvp, sizeof(cvp));
+		glm::mat4 cvp[2] = {projection, view};
+		std::memcpy(globalsMem, cvp, sizeof(glm::mat4) * 2);
 	}
 
 	void Shader::UploadCacaoLocals(glm::mat4 transform) {

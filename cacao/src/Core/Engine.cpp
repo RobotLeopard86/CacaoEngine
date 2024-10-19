@@ -173,6 +173,9 @@ namespace Cacao {
 		Logging::EngineLog("Stopping dynamic tick controller...");
 		DynTickController::GetInstance()->Stop();
 
+		//Clean up common skybox resources
+		Skybox::CommonCleanup();
+
 		//Call game module exit hook
 		Logging::EngineLog("Running game module shutdown hook...");
 		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
