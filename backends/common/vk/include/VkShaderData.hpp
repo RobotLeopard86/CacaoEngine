@@ -36,4 +36,7 @@ namespace Cacao {
 		vk::ImageView view;
 		int* slot;
 	};
+
+	//I hate this
+	inline bool isCompilingSkyboxShader = false;
 }

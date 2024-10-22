@@ -133,7 +133,7 @@ namespace Cacao {
 
 			//Create image view
 			vk::ImageViewCreateInfo viewCI({}, nativeData->texture.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8A8Srgb,
-				{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+				{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eOne},
 				{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			nativeData->iview = dev.createImageView(viewCI);
 
