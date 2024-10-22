@@ -125,6 +125,7 @@ namespace Cacao {
 		vk::ColorBlendEquationEXT equ(vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcAlpha);
 		imm.cmd.setColorBlendEquationEXT(0, equ);
 		imm.cmd.setDepthTestEnable(VK_FALSE);
+		imm.cmd.setDepthCompareOp(vk::CompareOp::eAlways);
 
 		//Transition image to drawable state
 		{

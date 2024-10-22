@@ -144,22 +144,22 @@ namespace Cacao {
 		TextShaders::shader->Bind();
 
 		//Draw characters
-		std::size_t offset = 0;
+		unsigned int start = 0;
+		uiCmd->bindVertexBuffers(0, vertex.obj, {0});
 		for(const CharacterInfo& character : infos) {
 			//Copy vertex data into buffer
-			std::memcpy(vertexBuffer + offset, character.vertices.data(), sizeof(UIVertex) * 6);
-			offset += sizeof(UIVertex) * 6;
+			std::memcpy(static_cast<unsigned char*>(vertexBuffer) + (sizeof(UIVertex) * start), character.vertices.data(), sizeof(UIVertex) * 6);
 
 			//Upload uniform data
 			ShaderUploadData up;
 			RawVkTexture upTex = {.view = character.glyph.view, .slot = new int(-1)};
 			up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
 			up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
-			TextShaders::shader->UploadData(up);
+			TextShaders::shader->UploadData(up, glm::identity<glm::mat4>());
 
 			//Draw glyph
-			uiCmd->bindVertexBuffers(0, vertex.obj, vk::DeviceSize(offset));
-			uiCmd->draw(6, 1, 0, 0);
+			uiCmd->draw(6, 1, start, 0);
+			start += 6;
 
 			//Unbind texture
 			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
@@ -211,7 +211,7 @@ namespace Cacao {
 		ImageShaders::shader->Bind();
 		ShaderUploadData up;
 		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
-		ImageShaders::shader->UploadData(up);
+		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
 
 		//Draw image
 		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};

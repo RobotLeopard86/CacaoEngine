@@ -17,6 +17,7 @@
 #include "spirv_reflect.hpp"
 #include "spirv_cross.hpp"
 #include "spirv_parser.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 //See VkShaderData.hpp for why there's this "impl" thing
 //Basically this just makes it easier to use and keeps the arrow operator method of
@@ -47,31 +48,17 @@ namespace Cacao {
 		//Get shader data block size and offsets
 		bool foundSD = false;
 		for(auto pcb : vr.push_constant_buffers) {
-			if(pcb.name.compare("type.PushConstant.ShaderData") == 0 || pcb.name.compare("shader") == 0) {
+			if(pcb.name.compare("type.PushConstant.ObjectData") == 0 || pcb.name.compare("object") == 0) {
 				spirv_cross::SPIRType type = vertReflector.get_type(pcb.base_type_id);
 				mod->shaderDataSize = vertReflector.get_declared_struct_size(type);
 				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
 					mod->offsets.insert_or_assign(vertReflector.get_member_name(pcb.base_type_id, i), vertReflector.type_struct_member_offset(type, i));
 				}
 				foundSD = true;
-				mod->pushConstantFromFragment = false;
 				break;
 			}
 		}
-		if(!foundSD) {
-			for(auto pcb : fr.push_constant_buffers) {
-				if(pcb.name.compare("type.PushConstant.ShaderData") == 0 || pcb.name.compare("shader") == 0) {
-					spirv_cross::SPIRType type = fragReflector.get_type(pcb.base_type_id);
-					mod->shaderDataSize = fragReflector.get_declared_struct_size(type);
-					for(unsigned int i = 0; i < type.member_types.size(); ++i) {
-						mod->offsets.insert_or_assign(fragReflector.get_member_name(pcb.base_type_id, i), fragReflector.type_struct_member_offset(type, i));
-					}
-					foundSD = true;
-					mod->pushConstantFromFragment = true;
-					break;
-				}
-			}
-		}
+		CheckException(foundSD, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Shaders must contain the ObjectData push constant block!")
 
 		//Get valid image slots
 		for(auto tex : fr.sampled_images) {
@@ -86,6 +73,7 @@ namespace Cacao {
 			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.entryName)) || mod->offsets.contains(sii.entryName), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!")
 		}
 		for(auto offset : mod->offsets) {
+			if(offset.first.compare("transform") == 0) continue;
 			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.entryName) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!")
 		}
 		for(auto slot : mod->imageSlots) {
@@ -197,7 +185,8 @@ namespace Cacao {
 				vk::DynamicState::eScissor,
 				vk::DynamicState::eColorBlendEquationEXT,
 				vk::DynamicState::eColorBlendEnableEXT,
-				vk::DynamicState::eDepthTestEnable};
+				vk::DynamicState::eDepthTestEnable,
+				vk::DynamicState::eDepthCompareOp};
 			vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
 			//Create pipeline rendering info
@@ -228,18 +217,14 @@ namespace Cacao {
 			//Create descriptor set layout
 			std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
 			dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
-			dsBindings.emplace_back(1, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
 			for(auto slot : nd->imageSlots) {
 				dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
 			}
 			vk::DescriptorSetLayout dsLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
 			//Create pipeline layout
-			vk::PipelineLayoutCreateInfo layoutCI({}, dsLayout);
-			if(nd->shaderDataSize > 0) {
-				vk::PushConstantRange pcr((nd->pushConstantFromFragment ? vk::ShaderStageFlagBits::eFragment : vk::ShaderStageFlagBits::eVertex), 0, nd->shaderDataSize);
-				layoutCI.setPushConstantRanges(pcr);
-			}
+			vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4));
+			vk::PipelineLayoutCreateInfo layoutCI({}, dsLayout, pcr);
 			vk::PipelineLayout layout = dev.createPipelineLayout(layoutCI);
 			nd->pipelineLayout = layout;
 
@@ -251,23 +236,8 @@ namespace Cacao {
 			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!")
 			nd->pipeline = pipelineResult.value;
 
-			if(nd->shaderDataSize > 0) {
-				//Allocate shader data memory (scary)
-				nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize);
-			}
-
-			//Create and map locals UBO
-			vk::BufferCreateInfo localsCI({}, sizeof(glm::mat4), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
-			vma::AllocationCreateInfo localsAllocCI({}, vma::MemoryUsage::eCpuToGpu);
-			try {
-				auto [locals, alloc] = allocator.createBuffer(localsCI, localsAllocCI);
-				nd->localsUBO = {.alloc = alloc, .obj = locals};
-			} catch(vk::SystemError& err) {
-				std::stringstream emsg;
-				emsg << "Failed to create locals uniform buffer: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
-			}
-			CheckException(allocator.mapMemory(nd->localsUBO.alloc, &nd->locals) == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to map locals uniform buffer memory!")
+			//Allocate shader data memory (scary)
+			nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
 
 			compiled = true;
 		};
@@ -282,10 +252,6 @@ namespace Cacao {
 		for(auto slotPair : nd->imageSlots) {
 			dev.destroySampler(slotPair.second.sampler);
 		}
-
-		//Unmap and destroy locals UBO
-		allocator.unmapMemory(nd->localsUBO.alloc);
-		allocator.destroyBuffer(nd->localsUBO.obj, nd->localsUBO.alloc);
 
 		//Free shader data memory
 		free(nd->shaderData);
@@ -304,12 +270,10 @@ namespace Cacao {
 		//Bind pipeline object
 		activeFrame->cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, nd->pipeline);
 
-		//Bind descriptors
+		//Bind globals UBO
 		vk::DescriptorBufferInfo globalsDBI(globalsUBO.obj, 0, vk::WholeSize);
-		vk::DescriptorBufferInfo localsDBI(nd->localsUBO.obj, 0, vk::WholeSize);
-		std::array<vk::WriteDescriptorSet, 2> dsWrites {{{VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI},
-			{VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &localsDBI}}};
-		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, dsWrites);
+		vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI);
+		activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, dsWrite);
 
 		//Mark us as the active shader
 		activeShader = nd;
@@ -334,12 +298,7 @@ namespace Cacao {
 		std::memcpy(globalsMem, cvp, sizeof(glm::mat4) * 2);
 	}
 
-	void Shader::UploadCacaoLocals(glm::mat4 transform) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot uplaod locals data to uncompiled shader!")
-		std::memcpy(nd->locals, &transform, sizeof(glm::mat4));
-	}
-
-	void Shader::UploadData(ShaderUploadData& data) {
+	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!")
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!")
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!")
@@ -374,6 +333,7 @@ namespace Cacao {
 				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
 				offset = nd->offsets[item.target];
 			}
+			offset += sizeof(glm::mat4);
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
@@ -641,7 +601,10 @@ namespace Cacao {
 			if(nd->shaderDataSize > 0) std::memcpy(nd->shaderData + offset, data, dataSize);
 		}
 
+		//Copy transformation matrix
+		std::memcpy(nd->shaderData, glm::value_ptr(transformation), sizeof(glm::mat4));
+
 		//Push constants if there are any
-		if(nd->shaderDataSize > 0) activeFrame->cmd.pushConstants(nd->pipelineLayout, (nd->pushConstantFromFragment ? vk::ShaderStageFlagBits::eFragment : vk::ShaderStageFlagBits::eVertex), 0, nd->shaderDataSize, nd->shaderData);
+		activeFrame->cmd.pushConstants(nd->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4), nd->shaderData);
 	}
 }

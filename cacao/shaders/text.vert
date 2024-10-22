@@ -7,19 +7,23 @@ layout(std140,binding=0) uniform CacaoGlobals {
     mat4 view;
 } globals;
 
-//This is unused as positions come in pixels, but it's required
-layout(std140,binding=1) uniform CacaoLocals {
-    mat4 transform;
-} locals;
+layout(push_constant) uniform ObjectData {
+	//Unused but required
+	mat4 transform;
+	
+	vec3 color;
+} object;
 
 layout(location=0) in vec3 pos;
 layout(location=1) in vec2 tc;
 
 layout(location=0) out CacaoTextElem {
     vec2 texCoords;
+	vec3 color;
 } V2F;
 
 void main() {
     V2F.texCoords = tc;
+	V2F.color = object.color;
     gl_Position = globals.projection * vec4(pos.xy, 0.0, 1.0);
 }

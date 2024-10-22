@@ -138,19 +138,19 @@ namespace Cacao {
 		skyboxShader->Bind();
 
 		//Upload data to shader
-		skyboxShader->UploadCacaoLocals(skyTransform);
 		ShaderUploadData sud;
 		ShaderUploadItem skySampler;
 		skySampler.data = std::any(texture);
 		skySampler.target = "skybox";
 		sud.push_back(skySampler);
-		skyboxShader->UploadData(sud);
+		skyboxShader->UploadData(sud, skyTransform);
 
 		//Bind vertex buffer
 		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
 		f.cmd.bindVertexBuffers(0, nativeData->vertexBuffer.obj, offsets);
 
 		//Draw skybox
+		f.cmd.setDepthCompareOp(vk::CompareOp::eLessOrEqual);
 		f.cmd.draw(std::size(skyboxVerts), 1, 0, 0);
 
 		//Unbind skybox shader and texture

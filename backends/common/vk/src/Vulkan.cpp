@@ -462,6 +462,7 @@ namespace Cacao {
 		f.cmd.setColorBlendEnableEXT(0, VK_FALSE);
 		f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd, vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd));
 		f.cmd.setDepthTestEnable(VK_TRUE);
+		f.cmd.setDepthCompareOp(vk::CompareOp::eLess);
 
 		//Start rendering
 		constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
@@ -479,8 +480,7 @@ namespace Cacao {
 			obj.material.shader->Bind();
 
 			//Upload material data to shader
-			obj.material.shader->UploadData(obj.material.data);
-			obj.material.shader->UploadCacaoLocals(obj.transformMatrix);
+			obj.material.shader->UploadData(obj.material.data, obj.transformMatrix);
 
 			//Draw the mesh
 			obj.mesh->Draw();
@@ -529,13 +529,14 @@ namespace Cacao {
 			ShaderUploadData uiud;
 			uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
 			uivsm->Bind();
-			uivsm->UploadData(uiud);
+			uivsm->UploadData(uiud, glm::identity<glm::mat4>());
 			Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
 
 			//Modify dynamic state
 			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);
 			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcColor, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
 			f.cmd.setDepthTestEnable(VK_FALSE);
+			f.cmd.setDepthCompareOp(vk::CompareOp::eAlways);
 
 			//Draw quad
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
