@@ -249,25 +249,23 @@
 </span><span id="line-59"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
 </span><span id="line-60"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-61">
-</span><span id="line-62"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadData</span><span class="p">(</span><span class="n">ShaderUploadData</span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+</span><span id="line-62"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadData</span><span class="p">(</span><span class="n">ShaderUploadData</span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">transformation</span><span class="p">);</span>
 </span><span id="line-63">
 </span><span id="line-64"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadCacaoGlobals</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">projection</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">view</span><span class="p">);</span>
 </span><span id="line-65">
-</span><span id="line-66"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadCacaoLocals</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">transform</span><span class="p">);</span>
-</span><span id="line-67">
-</span><span id="line-68"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-69"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">"SHADER"</span><span class="p">;</span>
-</span><span id="line-70"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-71">
-</span><span id="line-72"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-73"><span class="w">        </span><span class="c1">//Backend-implemented data type</span>
-</span><span id="line-74"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">ShaderData</span><span class="p">;</span>
-</span><span id="line-75">
-</span><span id="line-76"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">bound</span><span class="p">;</span>
-</span><span id="line-77"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ShaderData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
-</span><span id="line-78"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
-</span><span id="line-79"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-80"><span class="p">}</span>
+</span><span id="line-66"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-67"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">"SHADER"</span><span class="p">;</span>
+</span><span id="line-68"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-69">
+</span><span id="line-70"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-71"><span class="w">        </span><span class="c1">//Backend-implemented data type</span>
+</span><span id="line-72"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">ShaderData</span><span class="p">;</span>
+</span><span id="line-73">
+</span><span id="line-74"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">bound</span><span class="p">;</span>
+</span><span id="line-75"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ShaderData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
+</span><span id="line-76"><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
+</span><span id="line-77"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-78"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
