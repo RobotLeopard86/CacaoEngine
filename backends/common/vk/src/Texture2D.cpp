@@ -127,10 +127,11 @@ namespace Cacao {
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!")
 		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no bound shader!")
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no active frame!")
-		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; });
+		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
 
 		//Create update info
-		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
@@ -143,10 +144,12 @@ namespace Cacao {
 	void Texture2D::Unbind() {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled texture!")
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound texture!")
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind texture when there is no bound shader!")
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind texture when there is no active frame!")
+		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info
-		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set

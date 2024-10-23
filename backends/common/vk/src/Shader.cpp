@@ -207,15 +207,15 @@ namespace Cacao {
 			}
 
 			//Create image slot samplers
-			for(auto& slot : nd->imageSlots) {
+			for(auto slot : nd->imageSlots) {
 				if(slot.second.dimensionality == spv::Dim::DimCube) {
 					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
 						vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-					slot.second.sampler = dev.createSampler(samplerCI);
+					nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 				} else {
 					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
 						vk::SamplerAddressMode::eRepeat, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-					slot.second.sampler = dev.createSampler(samplerCI);
+					nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 				}
 			}
 

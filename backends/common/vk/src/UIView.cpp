@@ -46,11 +46,11 @@ namespace Cacao {
 	void UIView::Bind(int slot) {
 		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!")
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind UI view when there is no bound shader!")
-		CheckException(std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; }) != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; });
+		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
 
 		//Create update info
-		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, frontBuffer->view, vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, frontBuffer->view, vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
@@ -63,9 +63,11 @@ namespace Cacao {
 	void UIView::Unbind() {
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!")
 		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind UI view when there is no bound shader!")
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind UI view when there is no active frame!")
+		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info
-		vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
