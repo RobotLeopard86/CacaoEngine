@@ -38,7 +38,7 @@ namespace Cacao {
 		return instance;
 	}
 
-	void EarlyWindowingInit() {
+	void Engine::EarlyWindowingInit() {
 #ifdef __linux__
 		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
 #endif

@@ -1,4 +1,4 @@
-#include "SDLHooks.hpp"
+#include "VulkanCoreObjects.hpp"
 
 #include "SDL3/SDL.h"
 #include "SDL3/SDL_vulkan.h"
@@ -7,7 +7,7 @@
 #include "Graphics/Window.hpp"
 #include "Core/Exception.hpp"
 #include "SDLWindowData.hpp"
-#include "VulkanCoreObjects.hpp"
+#include "SDLHooks.hpp"
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 #include "UI/Shaders.hpp"
