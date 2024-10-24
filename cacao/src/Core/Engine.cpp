@@ -188,12 +188,21 @@ namespace Cacao {
 		//Destroy global UI view
 		uiView.reset();
 
-		//Shut down rendering backend
-		Logging::EngineLog("Shutting down rendering backend...");
-		RenderController::GetInstance()->Shutdown();
+		if(backendShutdownAfterWindow) {
+			//Close the window
+			Window::GetInstance()->Close();
 
-		//Close window
-		Window::GetInstance()->Close();
+			//Shutdown rendering backend
+			Logging::EngineLog("Shutting down rendering backend...");
+			RenderController::GetInstance()->Shutdown();
+		} else {
+			//Shut down rendering backend
+			Logging::EngineLog("Shutting down rendering backend...");
+			RenderController::GetInstance()->Shutdown();
+
+			//Close the window
+			Window::GetInstance()->Close();
+		}
 
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");

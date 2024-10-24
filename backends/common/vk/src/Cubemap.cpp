@@ -35,6 +35,7 @@ namespace Cacao {
 			//Load images
 			glm::uvec2 imgSize = {0, 0};
 			std::array<unsigned char*, 6> faces;
+			stbi_set_flip_vertically_on_load(true);
 			for(unsigned int i = 0; i < textures.size(); i++) {
 				int w, h, _;
 

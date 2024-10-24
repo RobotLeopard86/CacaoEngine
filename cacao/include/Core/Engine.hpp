@@ -19,6 +19,7 @@ using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jth
 
 ///@cond
 extern bool backendInitBeforeWindow;
+extern bool backendShutdownAfterWindow;
 ///@endcond
 
 namespace Cacao {

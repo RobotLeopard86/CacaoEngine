@@ -16,9 +16,12 @@
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 bool backendInitBeforeWindow = true;
+bool backendShutdownAfterWindow = true;
 
 namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
+	Allocated<vk::Buffer> uiQuadUBO;
+	void* uiQuadUBOMem;
 
 	void RenderController::Init() {
 		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
@@ -159,6 +162,7 @@ namespace Cacao {
 			EngineAssert(false, "Could not create rendering command pool!");
 		}
 
+		//Create immediate objects
 		vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
 		for(int i = 0; i < poolThreads.size(); i++) {
 			Immediate imm;
@@ -247,6 +251,46 @@ namespace Cacao {
 			EngineAssert(false, "Could not map globals uniform buffer memory!");
 		}
 
+		//Create UI quad globals UBO
+		try {
+			auto [globals, alloc] = allocator.createBuffer(globalsCI, globalsAllocCI);
+			uiQuadUBO = {.alloc = alloc, .obj = globals};
+		} catch(vk::SystemError& err) {
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
+				dev.destroyFence(immediates[poolThreads[i]].fence);
+				immediates.erase(poolThreads[i]);
+			}
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create UI quad globals uniform buffer: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
+		//Map globals UBO
+		if(allocator.mapMemory(uiQuadUBO.alloc, &uiQuadUBOMem) != vk::Result::eSuccess) {
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
+				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
+				dev.destroyFence(immediates[poolThreads[i]].fence);
+				immediates.erase(poolThreads[i]);
+			}
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			EngineAssert(false, "Could not map UI quad globals uniform buffer memory!");
+		}
+
 		//Find good depth image format
 		constexpr std::array<vk::Format, 3> allowedDepthFormats {{vk::Format::eD32Sfloat,
 			vk::Format::eD32SfloatS8Uint,
@@ -259,6 +303,8 @@ namespace Cacao {
 			}
 		}
 		if(selectedDF == vk::Format::eUndefined) {
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			for(int i = 0; i < immediates.size(); i++) {
@@ -350,8 +396,13 @@ namespace Cacao {
 		}
 
 		//Destroy Vulkan objects
+		allocator.unmapMemory(uiQuadUBO.alloc);
+		allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
 		allocator.unmapMemory(globalsUBO.alloc);
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+		allocator.destroyBuffer(uiQuadBuffer.obj, uiQuadBuffer.alloc);
+		dev.destroyImageView(depthView);
+		allocator.destroyImage(depthImage.obj, depthImage.alloc);
 		std::vector<vk::CommandBuffer> cbufs;
 		for(auto imm : immediates) {
 			dev.freeCommandBuffers(imm.second.pool, imm.second.cmd);
@@ -530,7 +581,13 @@ namespace Cacao {
 			uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
 			uivsm->Bind();
 			uivsm->UploadData(uiud, glm::identity<glm::mat4>());
-			Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
+
+			//Set up our own globals uniform buffer
+			glm::mat4 uiGlobalsData[2] = {project, glm::identity<glm::mat4>()};
+			std::memcpy(uiQuadUBOMem, uiGlobalsData, 2 * sizeof(glm::mat4));
+			vk::DescriptorBufferInfo uiGlobalsDBI(uiQuadUBO.obj, 0, vk::WholeSize);
+			vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiGlobalsDBI);
+			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
 
 			//Modify dynamic state
 			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);

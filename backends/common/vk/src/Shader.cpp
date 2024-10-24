@@ -164,7 +164,7 @@ namespace Cacao {
 			//Create rasterization info
 			vk::PipelineRasterizationStateCreateInfo rasterizerCI(
 				{}, VK_FALSE, VK_FALSE, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack,
-				vk::FrontFace::eClockwise, VK_FALSE, 0, 0, 0, 1.0f);
+				vk::FrontFace::eCounterClockwise, VK_FALSE, 0, 0, 0, 1.0f);
 			vk::PipelineMultisampleStateCreateInfo multisamplingCI({}, vk::SampleCountFlagBits::e1, VK_FALSE);
 
 			//Define viewport state
@@ -225,21 +225,24 @@ namespace Cacao {
 			for(auto slot : nd->imageSlots) {
 				dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
 			}
-			vk::DescriptorSetLayout dsLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
+			nd->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
 			//Create pipeline layout
 			vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4));
-			vk::PipelineLayoutCreateInfo layoutCI({}, dsLayout, pcr);
-			vk::PipelineLayout layout = dev.createPipelineLayout(layoutCI);
-			nd->pipelineLayout = layout;
+			vk::PipelineLayoutCreateInfo layoutCI({}, nd->setLayout, pcr);
+			nd->pipelineLayout = dev.createPipelineLayout(layoutCI);
 
 			//Create pipeline
 			vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
-				&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, layout);
+				&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, nd->pipelineLayout);
 			pipelineCI.pNext = &pipelineRenderingInfo;
 			auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
 			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!")
 			nd->pipeline = pipelineResult.value;
+
+			//Free shader modules now that we don't need them
+			dev.destroyShaderModule(vertexMod);
+			dev.destroyShaderModule(fragmentMod);
 
 			//Allocate shader data memory (scary)
 			nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
@@ -265,6 +268,12 @@ namespace Cacao {
 
 		//Destroy pipeline
 		dev.destroyPipeline(nd->pipeline);
+
+		//Destroy pipeline layout
+		dev.destroyPipelineLayout(nd->pipelineLayout);
+
+		//Destroy descriptor set layout
+		dev.destroyDescriptorSetLayout(nd->setLayout);
 
 		compiled = false;
 	}

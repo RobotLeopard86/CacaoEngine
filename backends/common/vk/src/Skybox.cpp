@@ -122,6 +122,9 @@ namespace Cacao {
 			imm.queue.submit2(si, imm.fence);
 			dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 
+			//Delete upload buffer
+			allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
+
 			nativeData->vbufReady = true;
 		}
 

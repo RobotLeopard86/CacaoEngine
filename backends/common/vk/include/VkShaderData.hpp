@@ -24,6 +24,7 @@ namespace Cacao {
 		std::map<std::string, uint32_t> offsets;	   //Named offsets into the shader data (how to arrange the shader data)
 		std::map<std::string, ImageSlot> imageSlots;   //List of valid image slots
 		vk::PipelineLayout pipelineLayout;			   //Pipeline layout
+		vk::DescriptorSetLayout setLayout;			   //Descriptor set layout
 	};
 
 	//Actual implementation of the shader native data, containing the above struct
