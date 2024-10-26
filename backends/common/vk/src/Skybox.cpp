@@ -49,10 +49,10 @@ namespace Cacao {
 		std::vector<uint32_t> f(fsCode, std::end(fsCode));
 
 		//Create and compile skybox shader object
-		//Compile future is intentionally discarded as it will be done by the time this is used
-		isCompilingSkyboxShader = true;
+		compileMode = ShaderCompileMode::VertexOnly;
 		skyboxShader = new Shader(v, f, spec);
-		skyboxShader->Compile();
+		skyboxShader->Compile().get();
+		compileMode = ShaderCompileMode::Standard;
 
 		isSetup = true;
 	}

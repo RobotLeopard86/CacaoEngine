@@ -86,6 +86,9 @@ namespace Cacao {
 			//Record a resource copy from the upload buffers to the real buffers
 			Immediate imm = immediates[std::this_thread::get_id()];
 			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+			std::stringstream l;
+			l << "Using immediate of " << std::this_thread::get_id();
+			Logging::EngineLog(l.str());
 			imm.cmd.begin(copyBegin);
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,

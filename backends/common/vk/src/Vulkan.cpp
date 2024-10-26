@@ -33,8 +33,8 @@ namespace Cacao {
 		//Create instance
 		std::vector<const char*> layers = {};
 #ifdef DEBUG
-		layers.push_back("VK_LAYER_KHRONOS_validation");
-		if(auto ad = std::getenv("ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
+		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
+		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
 		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_2);
 		auto requiredInstanceExts = GetRequiredInstanceExts();
@@ -98,7 +98,7 @@ namespace Cacao {
 
 		//Get pool threads
 		MultiFuture<std::thread::id> poolThreadsFut;
-		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
+		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size() - 1; i++) {
 			poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
 				return std::this_thread::get_id();
 			}));
@@ -211,6 +211,9 @@ namespace Cacao {
 				EngineAssert(false, "Could not create immediate fences!");
 			}
 			immediates.insert_or_assign(poolThreads[i], imm);
+			std::stringstream l;
+			l << "Generated immediate for " << poolThreads[i];
+			Logging::EngineLog(l.str());
 		}
 
 		//Create globals UBO
@@ -369,8 +372,8 @@ namespace Cacao {
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
 		didGenShaders = false;
-
 		frameCycle = 0;
+		compileMode = ShaderCompileMode::Standard;
 	}
 
 	void RegisterGraphicsExceptions() {

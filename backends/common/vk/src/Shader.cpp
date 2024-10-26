@@ -200,10 +200,15 @@ namespace Cacao {
 				{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, bitangent)},
 				{4, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)}}};
 			vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
-			if(isCompilingSkyboxShader) {
+			if(compileMode == ShaderCompileMode::VertexOnly) {
 				inputBinding.stride = sizeof(float) * 3;
 				inputStateCI.setVertexBindingDescriptions(inputBinding);
 				inputStateCI.setVertexAttributeDescriptions(inputAttrs[0]);
+			} else if(compileMode == ShaderCompileMode::VertexAndTexCoord) {
+				inputBinding.stride = sizeof(float) * 5;
+				inputStateCI.setVertexBindingDescriptions(inputBinding);
+				std::array<vk::VertexInputAttributeDescription, 2> vtcAttrs = {inputAttrs[0], inputAttrs[1]};
+				inputStateCI.setVertexAttributeDescriptions(vtcAttrs);
 			}
 
 			//Create image slot samplers
@@ -248,8 +253,6 @@ namespace Cacao {
 			nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
 
 			compiled = true;
-
-			if(isCompilingSkyboxShader) isCompilingSkyboxShader = false;
 		};
 		return Engine::GetInstance()->GetThreadPool()->enqueue(doCompile).share();
 	}
@@ -368,16 +371,16 @@ namespace Cacao {
 								dataSize = sizeof(bool);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::ivec2>(&item.data));
-								dataSize = sizeof(glm::ivec2);
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec2>(item.data))));
+								dataSize = sizeof(glm::bvec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::ivec3>(&item.data));
-								dataSize = sizeof(glm::ivec3);
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec3>(item.data))));
+								dataSize = sizeof(glm::bvec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::ivec4>(&item.data));
-								dataSize = sizeof(glm::ivec4);
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec4>(item.data))));
+								dataSize = sizeof(glm::bvec4);
 								break;
 						}
 						break;
@@ -388,15 +391,15 @@ namespace Cacao {
 								dataSize = sizeof(int);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::ivec2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec2>(item.data))));
 								dataSize = sizeof(glm::ivec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::ivec3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec3>(item.data))));
 								dataSize = sizeof(glm::ivec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::ivec4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec4>(item.data))));
 								dataSize = sizeof(glm::ivec4);
 								break;
 						}
@@ -442,15 +445,15 @@ namespace Cacao {
 								dataSize = sizeof(unsigned int);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::uvec2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec2>(item.data))));
 								dataSize = sizeof(glm::uvec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::uvec3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec3>(item.data))));
 								dataSize = sizeof(glm::uvec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::uvec4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec4>(item.data))));
 								dataSize = sizeof(glm::uvec4);
 								break;
 						}
@@ -462,51 +465,51 @@ namespace Cacao {
 								dataSize = sizeof(float);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::vec2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec2>(item.data))));
 								dataSize = sizeof(glm::vec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::vec3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec3>(item.data))));
 								dataSize = sizeof(glm::vec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::vec4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec4>(item.data))));
 								dataSize = sizeof(glm::vec4);
 								break;
 							case 6:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2>(item.data))));
 								dataSize = sizeof(glm::mat2);
 								break;
 							case 7:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat2x3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2x3>(item.data))));
 								dataSize = sizeof(glm::mat2x3);
 								break;
 							case 8:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat2x4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2x4>(item.data))));
 								dataSize = sizeof(glm::mat2x4);
 								break;
 							case 10:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat3x2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3x2>(item.data))));
 								dataSize = sizeof(glm::mat3x2);
 								break;
 							case 11:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3>(item.data))));
 								dataSize = sizeof(glm::mat3);
 								break;
 							case 12:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat3x4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3x4>(item.data))));
 								dataSize = sizeof(glm::mat3x4);
 								break;
 							case 14:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat4x2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4x2>(item.data))));
 								dataSize = sizeof(glm::mat4x2);
 								break;
 							case 15:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat4x3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4x3>(item.data))));
 								dataSize = sizeof(glm::mat4x3);
 								break;
 							case 16:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::mat4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4>(item.data))));
 								dataSize = sizeof(glm::mat4);
 								break;
 						}
@@ -518,51 +521,51 @@ namespace Cacao {
 								dataSize = sizeof(double);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dvec2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dvec2>(item.data))));
 								dataSize = sizeof(glm::dvec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dvec3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dvec3>(item.data))));
 								dataSize = sizeof(glm::dvec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dvec4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dvec4>(item.data))));
 								dataSize = sizeof(glm::dvec4);
 								break;
 							case 6:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat2>(item.data))));
 								dataSize = sizeof(glm::dmat2);
 								break;
 							case 7:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat2x3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data))));
 								dataSize = sizeof(glm::dmat2x3);
 								break;
 							case 8:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat2x4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data))));
 								dataSize = sizeof(glm::dmat2x4);
 								break;
 							case 10:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat3x2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data))));
 								dataSize = sizeof(glm::dmat3x2);
 								break;
 							case 11:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat3>(item.data))));
 								dataSize = sizeof(glm::dmat3);
 								break;
 							case 12:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat3x4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data))));
 								dataSize = sizeof(glm::dmat3x4);
 								break;
 							case 14:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat4x2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data))));
 								dataSize = sizeof(glm::dmat4x2);
 								break;
 							case 15:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat4x3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data))));
 								dataSize = sizeof(glm::dmat4x3);
 								break;
 							case 16:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::dmat4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat4>(item.data))));
 								dataSize = sizeof(glm::dmat4);
 								break;
 						}
@@ -574,15 +577,15 @@ namespace Cacao {
 								dataSize = sizeof(int64_t);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::i64vec2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::i64vec2>(item.data))));
 								dataSize = sizeof(glm::i64vec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::i64vec3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::i64vec3>(item.data))));
 								dataSize = sizeof(glm::i64vec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::i64vec4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::i64vec4>(item.data))));
 								dataSize = sizeof(glm::i64vec4);
 								break;
 						}
@@ -594,15 +597,15 @@ namespace Cacao {
 								dataSize = sizeof(uint64_t);
 								break;
 							case 2:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::u64vec2>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::u64vec2>(item.data))));
 								dataSize = sizeof(glm::u64vec2);
 								break;
 							case 3:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::u64vec3>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::u64vec3>(item.data))));
 								dataSize = sizeof(glm::u64vec3);
 								break;
 							case 4:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<glm::u64vec4>(&item.data));
+								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::u64vec4>(item.data))));
 								dataSize = sizeof(glm::u64vec4);
 								break;
 						}

@@ -39,5 +39,10 @@ namespace Cacao {
 	};
 
 	//I hate this
-	inline bool isCompilingSkyboxShader = false;
+	//Controls what attributes the vertex buffer designed for a shader has
+	inline enum class ShaderCompileMode {
+		Standard,
+		VertexOnly,
+		VertexAndTexCoord
+	} compileMode;
 }
