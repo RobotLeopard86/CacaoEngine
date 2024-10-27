@@ -7,5 +7,5 @@ layout(location = 0) in Vertex2Fragment {
 } V2F;
 
 void main() {
-	color = vec4(V2F.pos.y, V2F.pos.x, V2F.pos.z, 1.0f);
+	color = vec4(V2F.pos.z, V2F.pos.x, V2F.pos.y, 1.0f);
 }

@@ -55,11 +55,9 @@ IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: true
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
-Macros:
-- CheckException(x,y,z)=if(!(x)) throw Exception{z, y};
 MaxEmptyLinesToKeep: 3
 NamespaceIndentation: All
-ObjCBlockIndentWidth: 2
+ObjCBlockIndentWidth: 4
 ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: true
 PenaltyBreakAssignment: 2

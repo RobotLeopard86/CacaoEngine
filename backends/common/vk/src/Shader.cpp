@@ -27,7 +27,7 @@
 namespace Cacao {
 	//Sets up shader data according to the shader spec
 	void PrepShaderData(const ShaderSpec& spec, VkShaderData* mod) {
-		CheckException(mod, Exception::GetExceptionCodeFromMeaning("NullValue"), "Passed-in shader data pointer is invalid!")
+		CheckException(mod, Exception::GetExceptionCodeFromMeaning("NullValue"), "Passed-in shader data pointer is invalid!");
 
 		//Copy the SPIR-V because SPIRV-Cross requires a move
 		std::vector<uint32_t> vc = mod->vertexCode;
@@ -58,7 +58,7 @@ namespace Cacao {
 				break;
 			}
 		}
-		CheckException(foundSD, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Shaders must contain the ObjectData push constant block!")
+		CheckException(foundSD, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Shaders must contain the ObjectData push constant block!");
 
 		//Get valid image slots
 		for(auto tex : fr.sampled_images) {
@@ -70,30 +70,30 @@ namespace Cacao {
 
 		//Make sure that shader data matches spec
 		for(const ShaderItemInfo& sii : spec) {
-			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.entryName)) || mod->offsets.contains(sii.entryName), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!")
+			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.entryName)) || mod->offsets.contains(sii.entryName), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!");
 		}
 		for(auto offset : mod->offsets) {
 			if(offset.first.compare("transform") == 0) continue;
-			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.entryName) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!")
+			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.entryName) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
 		}
 		for(auto slot : mod->imageSlots) {
-			CheckException(std::find_if(spec.begin(), spec.end(), [&slot](const ShaderItemInfo& sii) { return slot.first.compare(sii.entryName) == 0 && sii.type == SpvType::SampledImage; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Texture found in shader that is not in shader spec!")
+			CheckException(std::find_if(spec.begin(), spec.end(), [&slot](const ShaderItemInfo& sii) { return slot.first.compare(sii.entryName) == 0 && sii.type == SpvType::SampledImage; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Texture found in shader that is not in shader spec!");
 		}
 	}
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
 	  : Asset(false), bound(false), specification(spec) {
 		//Validate that these paths exist
-		CheckException(std::filesystem::exists(vertexPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent vertex shader file!")
-		CheckException(std::filesystem::exists(fragmentPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent fragment shader file!")
+		CheckException(std::filesystem::exists(vertexPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent vertex shader file!");
+		CheckException(std::filesystem::exists(fragmentPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent fragment shader file!");
 
 		//Load SPIR-V code
 
 		//Open file streams
 		FILE* vf = fopen(vertexPath.c_str(), "rb");
-		CheckException(vf, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open vertex shader file!")
+		CheckException(vf, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open vertex shader file!");
 		FILE* ff = fopen(fragmentPath.c_str(), "rb");
-		CheckException(ff, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open fragment shader file!")
+		CheckException(ff, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open fragment shader file!");
 
 		//Get size of shader files
 		fseek(vf, 0, SEEK_END);
@@ -110,13 +110,13 @@ namespace Cacao {
 			//Clean up file streams before exception throw
 			fclose(vf);
 			fclose(ff);
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read vertex shader data from file!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read vertex shader data from file!");
 		}
 		if(fread(fbuf.data(), sizeof(uint32_t), flen, ff) != std::size_t(flen)) {
 			//Clean up file streams before exception throw
 			fclose(vf);
 			fclose(ff);
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read fragment shader data from file!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read fragment shader data from file!");
 		}
 
 		//Close file streams
@@ -147,7 +147,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Shader::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
 		const auto doCompile = [this]() {
 			//Create shader modules
 			vk::ShaderModuleCreateInfo vertexModCI({}, nd->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->vertexCode.data()));
@@ -242,7 +242,7 @@ namespace Cacao {
 				&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, nd->pipelineLayout);
 			pipelineCI.pNext = &pipelineRenderingInfo;
 			auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
-			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!")
+			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!");
 			nd->pipeline = pipelineResult.value;
 
 			//Free shader modules now that we don't need them
@@ -258,8 +258,8 @@ namespace Cacao {
 	}
 
 	void Shader::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound shader!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound shader!");
 
 		//Destroy image slot samplers
 		for(auto slotPair : nd->imageSlots) {
@@ -282,9 +282,9 @@ namespace Cacao {
 	}
 
 	void Shader::Bind() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind shader when there is no active frame object!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind shader when there is no active frame object!");
 
 		//Bind pipeline object
 		activeFrame->cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, nd->pipeline);
@@ -301,8 +301,8 @@ namespace Cacao {
 	}
 
 	void Shader::Unbind() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!");
 
 		//Make us not the active shader
 		if(activeShader == nd) activeShader = nullptr;
@@ -318,10 +318,10 @@ namespace Cacao {
 	}
 
 	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!")
-		CheckException(!(nd->shaderDataSize == 0 && nd->imageSlots.size() == 0 && data.size() > 0), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!");
+		CheckException(!(nd->shaderDataSize == 0 && nd->imageSlots.size() == 0 && data.size() > 0), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!");
 
 		//Do data upload
 		std::map<std::string, ShaderItemInfo> foundItems;
@@ -337,27 +337,27 @@ namespace Cacao {
 					}
 				}
 			}
-			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!")
+			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!");
 
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];
 
 			//Find offset or image binding
-			unsigned int offset;
+			unsigned int offset = 0;
 			VkShaderData::ImageSlot slot;
 			if(info.type == SpvType::SampledImage) {
-				CheckException(nd->imageSlots.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
+				CheckException(nd->imageSlots.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
 				slot = nd->imageSlots[item.target];
 			} else {
-				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!")
+				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
 				offset = nd->offsets[item.target];
 			}
 			offset += sizeof(glm::mat4);
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
-			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!")
-			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!")
+			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!");
+			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!");
 
 			//Cast data to correct type to get it out of std::any
 			unsigned char* data;
@@ -405,7 +405,7 @@ namespace Cacao {
 						}
 						break;
 					case SpvType::SampledImage:
-						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!")
+						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!");
 
 						//Bind texture to the slot specified
 						if(item.data.type() == typeid(Texture2D*)) {
@@ -434,7 +434,7 @@ namespace Cacao {
 							*(raw.slot) = slot.binding;
 						} else {
 							Logging::EngineLog(item.data.type().name());
-							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!")
+							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!");
 						}
 
 						break;
@@ -612,7 +612,7 @@ namespace Cacao {
 						break;
 				}
 			} catch(const std::bad_cast&) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "Failed cast of shader upload value to type specified in target!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "Failed cast of shader upload value to type specified in target!");
 			}
 
 

@@ -9,15 +9,15 @@ namespace Cacao {
 
 	Font::Font(std::string path)
 	  : Asset(false) {
-		CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load font from nonexistent file!")
+		CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load font from nonexistent file!");
 		filePath = path;
 	}
 
 	std::shared_future<void> Font::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled font!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled font!");
 
 		//Load FreeType font face
-		CheckException(!FT_New_Face(ftLib, filePath.c_str(), 0, &face), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load font face!")
+		CheckException(!FT_New_Face(ftLib, filePath.c_str(), 0, &face), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load font face!");
 
 		compiled = true;
 
@@ -28,7 +28,7 @@ namespace Cacao {
 	}
 
 	void Font::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled font!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled font!");
 
 		//Destroy FreeType font face
 		FT_Done_Face(face);

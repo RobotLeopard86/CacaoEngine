@@ -48,7 +48,7 @@ namespace Cacao {
 	}
 
 	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
-		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!")
+		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
 
 		size = initialSize;
 
@@ -78,7 +78,7 @@ namespace Cacao {
 	}
 
 	void Window::Close() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
 		//Clean up the graphics API
 		CleanupGraphicsAPI();
@@ -134,7 +134,7 @@ namespace Cacao {
 				//Confirm that we have at least one
 				if(fullscreenModesC < 1) {
 					mode = lastMode;
-					CheckException(false, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "There are no fullscreen modes available to use!")
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "There are no fullscreen modes available to use!");
 				}
 
 				//Set to fullscreen
@@ -153,7 +153,7 @@ namespace Cacao {
 	}
 
 	void Window::Update() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
 		//Continuously fetch and process SDL events
 		SDL_Event event;
@@ -219,7 +219,7 @@ namespace Cacao {
 	}
 
 	void Window::SetTitle(std::string title) {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 		SDL_SetWindowTitle(nativeData->win, title.c_str());
 	}
 

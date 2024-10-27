@@ -31,7 +31,7 @@ namespace Cacao {
 		template<typename T>
 		void CreateWorld(std::string name) {
 			static_assert(std::is_base_of<Camera, T>(), "You must create a world with a camera type extending Camera!");
-			CheckException(!worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "A world with the provided name already exists!")
+			CheckException(!worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "A world with the provided name already exists!");
 
 			worlds.insert_or_assign(name, World {new T()});
 		}

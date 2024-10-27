@@ -12,6 +12,7 @@
 #include "ExceptionCodes.hpp"
 #include "UIViewShaderManager.hpp"
 #include "UI/Shaders.hpp"
+#include "UIDrawUBO.hpp"
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
@@ -24,7 +25,7 @@ namespace Cacao {
 	void* uiQuadUBOMem;
 
 	void RenderController::Init() {
-		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
+		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!");
 		isInitialized = true;
 
 		//Initialize base Vulkan functions
@@ -98,7 +99,7 @@ namespace Cacao {
 
 		//Get pool threads
 		MultiFuture<std::thread::id> poolThreadsFut;
-		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size() - 1; i++) {
+		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
 			poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
 				return std::this_thread::get_id();
 			}));
@@ -106,7 +107,8 @@ namespace Cacao {
 		poolThreadsFut.WaitAll();
 		std::vector<std::thread::id> poolThreads;
 		for(int i = 0; i < poolThreadsFut.size(); i++) {
-			poolThreads.push_back(poolThreadsFut[i].get());
+			std::thread::id tid = poolThreadsFut[i].get();
+			if(std::find(poolThreads.cbegin(), poolThreads.cend(), tid) == poolThreads.cend()) poolThreads.push_back(tid);
 		}
 		poolThreads.push_back(std::this_thread::get_id());
 
@@ -171,7 +173,7 @@ namespace Cacao {
 				imm.pool = dev.createCommandPool(ipoolCI);
 			} catch(vk::SystemError& err) {
 				for(; i >= 0; i--) {
-					dev.destroyCommandPool(immediates[poolThreads[i]].pool);
+					dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
 					immediates.erase(poolThreads[i]);
 				}
 				dev.destroyCommandPool(renderPool);
@@ -185,8 +187,8 @@ namespace Cacao {
 				imm.cmd = dev.allocateCommandBuffers(allocCI)[0];
 			} catch(vk::SystemError& err) {
 				for(; i >= 0; i--) {
-					dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-					dev.destroyCommandPool(immediates[poolThreads[i]].pool);
+					dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+					dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
 					immediates.erase(poolThreads[i]);
 				}
 				dev.destroyCommandPool(renderPool);
@@ -199,9 +201,9 @@ namespace Cacao {
 				imm.fence = dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 			} catch(vk::SystemError& err) {
 				for(; i >= 0; i--) {
-					dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-					dev.destroyCommandPool(immediates[poolThreads[i]].pool);
-					dev.destroyFence(immediates[poolThreads[i]].fence);
+					dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+					dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+					dev.destroyFence(immediates.at(poolThreads[i]).fence);
 					immediates.erase(poolThreads[i]);
 				}
 				dev.destroyCommandPool(renderPool);
@@ -211,9 +213,6 @@ namespace Cacao {
 				EngineAssert(false, "Could not create immediate fences!");
 			}
 			immediates.insert_or_assign(poolThreads[i], imm);
-			std::stringstream l;
-			l << "Generated immediate for " << poolThreads[i];
-			Logging::EngineLog(l.str());
 		}
 
 		//Create globals UBO
@@ -224,9 +223,9 @@ namespace Cacao {
 			globalsUBO = {.alloc = alloc, .obj = globals};
 		} catch(vk::SystemError& err) {
 			for(int i = 0; i < immediates.size(); i++) {
-				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
-				dev.destroyFence(immediates[poolThreads[i]].fence);
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
 				immediates.erase(poolThreads[i]);
 			}
 			dev.destroyCommandPool(renderPool);
@@ -242,9 +241,9 @@ namespace Cacao {
 		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			for(int i = 0; i < immediates.size(); i++) {
-				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
-				dev.destroyFence(immediates[poolThreads[i]].fence);
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
 				immediates.erase(poolThreads[i]);
 			}
 			dev.destroyCommandPool(renderPool);
@@ -262,9 +261,9 @@ namespace Cacao {
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			for(int i = 0; i < immediates.size(); i++) {
-				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
-				dev.destroyFence(immediates[poolThreads[i]].fence);
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
 				immediates.erase(poolThreads[i]);
 			}
 			dev.destroyCommandPool(renderPool);
@@ -282,9 +281,9 @@ namespace Cacao {
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			for(int i = 0; i < immediates.size(); i++) {
-				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
-				dev.destroyFence(immediates[poolThreads[i]].fence);
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
 				immediates.erase(poolThreads[i]);
 			}
 			dev.destroyCommandPool(renderPool);
@@ -292,6 +291,50 @@ namespace Cacao {
 			dev.destroy();
 			vk_instance.destroy();
 			EngineAssert(false, "Could not map UI quad globals uniform buffer memory!");
+		}
+
+		//Create UI drawing globals UBO
+		try {
+			auto [globals, alloc] = allocator.createBuffer(globalsCI, globalsAllocCI);
+			uiUBO = {.alloc = alloc, .obj = globals};
+		} catch(vk::SystemError& err) {
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
+				immediates.erase(poolThreads[i]);
+			}
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create UI drawing globals uniform buffer: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
+		//Map globals UBO
+		if(allocator.mapMemory(uiUBO.alloc, &uiUBOMem) != vk::Result::eSuccess) {
+			allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			for(int i = 0; i < immediates.size(); i++) {
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
+				immediates.erase(poolThreads[i]);
+			}
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			EngineAssert(false, "Could not map UI drawing globals uniform buffer memory!");
 		}
 
 		//Find good depth image format
@@ -306,14 +349,16 @@ namespace Cacao {
 			}
 		}
 		if(selectedDF == vk::Format::eUndefined) {
+			allocator.unmapMemory(uiUBO.alloc);
+			allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
 			allocator.unmapMemory(uiQuadUBO.alloc);
 			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			for(int i = 0; i < immediates.size(); i++) {
-				dev.freeCommandBuffers(immediates[poolThreads[i]].pool, immediates[poolThreads[i]].cmd);
-				dev.destroyCommandPool(immediates[poolThreads[i]].pool);
-				dev.destroyFence(immediates[poolThreads[i]].fence);
+				dev.freeCommandBuffers(immediates.at(poolThreads[i]).pool, immediates.at(poolThreads[i]).cmd);
+				dev.destroyCommandPool(immediates.at(poolThreads[i]).pool);
+				dev.destroyFence(immediates.at(poolThreads[i]).fence);
 				immediates.erase(poolThreads[i]);
 			}
 			dev.destroyCommandPool(renderPool);
@@ -351,7 +396,7 @@ namespace Cacao {
 		allocator.mapMemory(vertexUp.alloc, &gpuMem);
 		std::memcpy(gpuMem, quadData, vbsz);
 		allocator.unmapMemory(vertexUp.alloc);
-		Immediate imm = immediates[std::this_thread::get_id()];
+		Immediate imm = immediates.at(std::this_thread::get_id());
 		vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
 		imm.cmd.begin(copyBegin);
 		{
@@ -362,7 +407,7 @@ namespace Cacao {
 		imm.cmd.end();
 		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
 			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 			dev.resetFences(imm.fence);
 		}
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
@@ -399,6 +444,8 @@ namespace Cacao {
 		}
 
 		//Destroy Vulkan objects
+		allocator.unmapMemory(uiUBO.alloc);
+		allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
 		allocator.unmapMemory(uiQuadUBO.alloc);
 		allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
 		allocator.unmapMemory(globalsUBO.alloc);
@@ -461,12 +508,12 @@ namespace Cacao {
 				} catch(std::exception& e) {
 					std::stringstream emsg;
 					emsg << "Failed to regenerate swapchain: " << e.what();
-					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
 				}
 			}
 			std::stringstream emsg;
 			emsg << "Failed to acquire swapchain image: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str())
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
 		}
 
 		//Wait for image acquisition
@@ -628,7 +675,7 @@ namespace Cacao {
 		vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 		vk::SubmitInfo submitInfo(f.acquireSemaphore, waitStage, f.cmd, f.renderSemaphore);
 		if(graphicsQueue.submit(1, &submitInfo, f.fence) != vk::Result::eSuccess) {
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!");
 		}
 
 		//Set submission for presenting

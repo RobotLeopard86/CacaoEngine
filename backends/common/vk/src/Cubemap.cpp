@@ -21,8 +21,7 @@ namespace Cacao {
 		nativeData.reset(new CubemapData());
 
 		for(std::string tex : filePaths) {
-			CheckException(std::filesystem::exists(tex), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create cubemap from nonexistent file!")
-			;
+			CheckException(std::filesystem::exists(tex), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create cubemap from nonexistent file!");
 		}
 
 		textures = filePaths;
@@ -30,7 +29,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Cubemap::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!");
 		const auto doCompile = [this]() {
 			//Load images
 			glm::uvec2 imgSize = {0, 0};
@@ -42,15 +41,15 @@ namespace Cacao {
 				//Load texture data from file
 				unsigned char* data = stbi_load(textures[i].c_str(), &w, &h, &_, 4);
 				if(data) {
-					if(imgSize.x == 0 || imgSize.y == 0) imgSize = {w, h};
-			CheckException(w == imgSize.x && h == imgSize.y, Exception::GetExceptionCodeFromMeaning("BadValue"), "All cubemap faces must be the same size!")
+					if(imgSize.x == 0 || imgSize.y == 0) imgSize = glm::uvec2(w, h);
+					CheckException(w == imgSize.x && h == imgSize.y, Exception::GetExceptionCodeFromMeaning("BadValue"), "All cubemap faces must be the same size!");
 
 					faces[i] = data;
 				} else {
 					//Free whatever junk we have
 					stbi_image_free(data);
 
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open cubemap face image file!")
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open cubemap face image file!");
 				}
 			}
 
@@ -84,11 +83,8 @@ namespace Cacao {
 			}
 
 			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = immediates[std::this_thread::get_id()];
+			Immediate imm = immediates.at(std::this_thread::get_id());
 			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-			std::stringstream l;
-			l << "Using immediate of " << std::this_thread::get_id();
-			Logging::EngineLog(l.str());
 			imm.cmd.begin(copyBegin);
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
@@ -118,7 +114,7 @@ namespace Cacao {
 			//Wait for and reset fence just in case
 			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
 				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 				dev.resetFences(imm.fence);
 			}
 
@@ -147,8 +143,8 @@ namespace Cacao {
 	}
 
 	void Cubemap::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled cubemap!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound cubemap!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled cubemap!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release bound cubemap!");
 
 		//Destroy objects
 		dev.destroyImageView(nativeData->iview);
@@ -158,12 +154,12 @@ namespace Cacao {
 	}
 
 	void Cubemap::Bind(int slot) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled cubemap!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound cubemap!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no active frame!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled cubemap!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound cubemap!");
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind cubemap when there is no active frame!");
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; });
-		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!");
 
 		//Create update info
 		vk::DescriptorImageInfo dii(imageSlot->second.sampler, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -177,10 +173,10 @@ namespace Cacao {
 	}
 
 	void Cubemap::Unbind() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled cubemap!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound cubemap!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind cubemap when there is no bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind cubemap when there is no active frame!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled cubemap!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound cubemap!");
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind cubemap when there is no bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind cubemap when there is no active frame!");
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info

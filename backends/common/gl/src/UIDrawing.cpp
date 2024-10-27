@@ -7,7 +7,7 @@
 #include "GLUtils.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
-#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2))
+#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2));
 
 namespace Cacao {
 	struct VBOEntry {
@@ -63,7 +63,7 @@ namespace Cacao {
 			FT_Set_Pixel_Sizes(fontFace, 0, charSize);
 			for(unsigned int i = 0; i < ln.glyphCount; i++) {
 				FT_Error err = FT_Load_Glyph(fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER);
-				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!")
+				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!");
 
 				//Get bitmap
 				FT_Bitmap& bitmap = fontFace->glyph->bitmap;

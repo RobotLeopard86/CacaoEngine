@@ -77,7 +77,7 @@ namespace Cacao {
 		 * @throws Exception When called
 		 */
 		void Consume(Event& event) override final {
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Signal event consumers cannot consume events without signals!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Signal event consumers cannot consume events without signals!");
 		}
 
 	  private:

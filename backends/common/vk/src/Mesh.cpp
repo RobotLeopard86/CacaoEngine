@@ -16,7 +16,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Mesh::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
 		const auto doCompile = [this]() {
 			//Unpack index buffer data from vec3 to floats
 			std::vector<unsigned int> ibd(indices.size() * 3);
@@ -70,7 +70,7 @@ namespace Cacao {
 			allocator.unmapMemory(indexUp.alloc);
 
 			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = immediates[std::this_thread::get_id()];
+			Immediate imm = immediates.at(std::this_thread::get_id());
 			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
 			imm.cmd.begin(copyBegin);
 			{
@@ -88,7 +88,7 @@ namespace Cacao {
 			//Wait for and reset fence just in case
 			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
 				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 				dev.resetFences(imm.fence);
 			}
 
@@ -112,7 +112,7 @@ namespace Cacao {
 	}
 
 	void Mesh::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled mesh!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled mesh!");
 
 		//Destroy buffers
 		allocator.destroyBuffer(nativeData->vertexBuffer.obj, nativeData->vertexBuffer.alloc);
@@ -122,8 +122,8 @@ namespace Cacao {
 	}
 
 	void Mesh::Draw() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw mesh when there is no active frame object!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw mesh when there is no active frame object!");
 		VkFrame f = *activeFrame;
 
 		//Bind vertex and index buffer

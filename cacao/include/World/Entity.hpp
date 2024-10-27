@@ -162,14 +162,14 @@ namespace Cacao {
 		std::shared_ptr<T> GetComponent(xg::Guid guid) {
 			static_assert(std::is_base_of<Component, T>(), "Can only get subclasses of Component!");
 			std::lock_guard lk(componentsMtx);
-			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!")
+			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
 			;
 
 			//Try to cast the value
 			try {
 				return std::dynamic_pointer_cast<T>(components[guid]);
 			} catch(std::bad_cast) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "The requested compnent's type does not match the requested type!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "The requested compnent's type does not match the requested type!");
 			}
 		}
 
@@ -184,7 +184,7 @@ namespace Cacao {
 		 */
 		void DeleteComponent(xg::Guid guid) {
 			std::lock_guard lk(componentsMtx);
-			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!")
+			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
 			;
 
 			components[guid].reset();

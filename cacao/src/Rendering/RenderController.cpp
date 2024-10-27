@@ -22,7 +22,7 @@ namespace Cacao {
 	}
 
 	void RenderController::Run() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!");
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()) {

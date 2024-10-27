@@ -27,8 +27,8 @@ namespace Cacao {
 	}
 
 	void FreetypeOwner::Init() {
-		CheckException(!didInit, Exception::GetExceptionCodeFromMeaning("BadInitState"), "FreeType is already initialized!")
-		CheckException(!FT_Init_FreeType(&lib), Exception::GetExceptionCodeFromMeaning("External"), "Failed to initialize FreeType!")
+		CheckException(!didInit, Exception::GetExceptionCodeFromMeaning("BadInitState"), "FreeType is already initialized!");
+		CheckException(!FT_Init_FreeType(&lib), Exception::GetExceptionCodeFromMeaning("External"), "Failed to initialize FreeType!");
 
 		didInit = true;
 	}

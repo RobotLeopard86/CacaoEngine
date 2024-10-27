@@ -49,13 +49,12 @@ namespace Cacao {
 		//Set error callback
 		glfwSetErrorCallback([](int ec, const char* message) {
 			//Always false exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLFW"), std::string("(GLFW error ") + std::to_string(ec) + ") " + message)
-			;
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLFW"), std::string("(GLFW error ") + std::to_string(ec) + ") " + message);
 		});
 	}
 
 	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
-		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!")
+		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
 
 		size = initialSize;
 
@@ -149,7 +148,7 @@ namespace Cacao {
 	}
 
 	void Window::Close() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
 		//Clean up the graphics API
 		CleanupGraphicsAPI();
@@ -218,14 +217,14 @@ namespace Cacao {
 	}
 
 	void Window::Update() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
 		//Have GLFW check for events
 		glfwPollEvents();
 	}
 
 	void Window::SetTitle(std::string title) {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 		glfwSetWindowTitle(nativeData->win, title.c_str());
 	}
 

@@ -24,7 +24,7 @@ namespace Cacao {
 				this->Compile();
 			});
 		}
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!");
 
 		//Generate buffers and vertex array
 		glGenVertexArrays(1, &nativeData->vao);
@@ -87,7 +87,7 @@ namespace Cacao {
 				std::rethrow_exception(std::current_exception());
 			}
 		}
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled mesh!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled mesh!");
 
 		//Delete buffers
 		glDeleteBuffers(1, &nativeData->vbo);
@@ -97,8 +97,8 @@ namespace Cacao {
 	}
 
 	void Mesh::Draw() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot draw mesh in non-rendering thread!")
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot draw mesh in non-rendering thread!");
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!");
 
 		//Bind vertex array
 		glBindVertexArray(nativeData->vao);

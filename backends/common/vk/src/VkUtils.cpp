@@ -94,7 +94,7 @@ namespace Cacao {
 
 		//Check for present mode
 		auto pmodes = physDev.getSurfacePresentModesKHR(surface);
-		CheckException(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "The requested present mode is not available!")
+		CheckException(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "The requested present mode is not available!");
 
 		//Make new swapchain
 		vk::SwapchainCreateInfoKHR swapchainCI(

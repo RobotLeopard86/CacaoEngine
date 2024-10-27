@@ -34,7 +34,7 @@ namespace Cacao {
 	}
 
 	void Skybox::CommonSetup() {
-		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!")
+		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!");
 
 		//Define skybox shader specification
 		ShaderSpec spec;
@@ -58,7 +58,7 @@ namespace Cacao {
 	}
 
 	void Skybox::CommonCleanup() {
-		CheckException(isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot clean up skybox resources that are not set up!")
+		CheckException(isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot clean up skybox resources that are not set up!");
 
 		skyboxShader->Release();
 		delete skyboxShader;
@@ -68,7 +68,7 @@ namespace Cacao {
 
 	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
 		//Confirm that texture is compiled
-		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!")
+		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!");
 
 		//If the vertex buffer isn't set up, do so
 		if(!nativeData->vbufReady) {
@@ -99,7 +99,7 @@ namespace Cacao {
 			allocator.unmapMemory(vertexUp.alloc);
 
 			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = immediates[std::this_thread::get_id()];
+			Immediate imm = immediates.at(std::this_thread::get_id());
 			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
 			imm.cmd.begin(copyBegin);
 			{
@@ -112,7 +112,7 @@ namespace Cacao {
 			//Wait for and reset fence just in case
 			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
 				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 				dev.resetFences(imm.fence);
 			}
 
@@ -129,7 +129,7 @@ namespace Cacao {
 		}
 
 		//Get frame object
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw skybox when there is no active frame object!")
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw skybox when there is no active frame object!");
 		VkFrame f = *activeFrame;
 
 		//Create skybox transform matrix

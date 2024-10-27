@@ -33,7 +33,7 @@ namespace Cacao {
 	}
 
 	void Skybox::CommonSetup() {
-		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!")
+		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!");
 
 		//Define skybox shader specification
 		ShaderSpec spec;
@@ -56,7 +56,7 @@ namespace Cacao {
 	}
 
 	void Skybox::CommonCleanup() {
-		CheckException(isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot clean up skybox resources that are not set up!")
+		CheckException(isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot clean up skybox resources that are not set up!");
 
 		//Temporary shader pointer for capturing
 		Shader* shader = skyboxShader;
@@ -84,7 +84,7 @@ namespace Cacao {
 		}
 
 		//Confirm that texture is compiled
-		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!")
+		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!");
 
 		//Set up OpenGL VAO if not already
 		if(!nativeData->vaoReady) {

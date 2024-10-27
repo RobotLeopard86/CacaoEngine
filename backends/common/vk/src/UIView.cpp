@@ -6,6 +6,7 @@
 #include "VulkanCoreObjects.hpp"
 #include "Graphics/Window.hpp"
 #include "UIViewShaderManager.hpp"
+#include "UIDrawUBO.hpp"
 
 namespace Cacao {
 	//Required initialization of static members
@@ -44,10 +45,10 @@ namespace Cacao {
 	}
 
 	void UIView::Bind(int slot) {
-		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!")
+		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!");
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; });
-		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!");
 
 		//Create update info
 		vk::DescriptorImageInfo dii(imageSlot->second.sampler, frontBuffer->view, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -61,9 +62,9 @@ namespace Cacao {
 	}
 
 	void UIView::Unbind() {
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind UI view when there is no bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind UI view when there is no active frame!")
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!");
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind UI view when there is no bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind UI view when there is no active frame!");
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info
@@ -94,7 +95,7 @@ namespace Cacao {
 		backBuffer->view = dev.createImageView(imageViewCI);
 
 		//Fetch immediate
-		Immediate imm = immediates[std::this_thread::get_id()];
+		Immediate imm = immediates.at(std::this_thread::get_id());
 
 		//Create projection matrix
 		glm::mat4 project = projectionCorrection * glm::ortho(0.0f, float(size.x), 0.0f, float(size.y));
@@ -109,6 +110,10 @@ namespace Cacao {
 		vk::CommandBufferBeginInfo begin(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
 		imm.cmd.reset({});
 		imm.cmd.begin(begin);
+
+		//Upload new UI drawing globals data
+		glm::mat4 uiDrawGlobalsData[2] = {project, glm::identity<glm::mat4>()};
+		std::memcpy(uiUBOMem, uiDrawGlobalsData, sizeof(glm::mat4) * 2);
 
 		//Calculate extent
 		vk::Extent2D extent((unsigned int)size.x, (unsigned int)size.y);
@@ -190,7 +195,7 @@ namespace Cacao {
 		//Wait for and reset fence just in case
 		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
 			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 			dev.resetFences(imm.fence);
 		}
 

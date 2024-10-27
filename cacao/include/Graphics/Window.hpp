@@ -86,7 +86,7 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void SetSize(glm::uvec2 newSize) {
-			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!");
 			size = newSize;
 			UpdateWindowSize();
 		}
@@ -107,7 +107,7 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void SetVSyncEnabled(bool value) {
-			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!");
 			useVSync = value;
 			UpdateVSyncState();
 		}
@@ -149,7 +149,7 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void SetWindowVisibility(bool value) {
-			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!");
 			isVisible = value;
 			UpdateVisibilityState();
 		}

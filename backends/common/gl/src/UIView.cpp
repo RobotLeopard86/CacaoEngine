@@ -41,7 +41,7 @@ namespace Cacao {
 
 				//Confirm framebuffer "completeness"
 				GLenum fbStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-			CheckException(fbStatus == GL_FRAMEBUFFER_COMPLETE, Exception::GetExceptionCodeFromMeaning("GLError"), "UI view framebuffer is not complete!")
+				CheckException(fbStatus == GL_FRAMEBUFFER_COMPLETE, Exception::GetExceptionCodeFromMeaning("GLError"), "UI view framebuffer is not complete!");
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 				//Unbind texture and renderbuffer
@@ -65,9 +65,9 @@ namespace Cacao {
 	}
 
 	void UIView::Bind(int slot) {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind UI view in non-rendering thread!")
-		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind UI view in non-rendering thread!");
+		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!");
 
 		//Bind the front buffer to the requested slot
 		currentSlot = slot;
@@ -77,8 +77,8 @@ namespace Cacao {
 	}
 
 	void UIView::Unbind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind UI view in non-rendering thread!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind UI view in non-rendering thread!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!");
 
 		//Unbind the texture from its current slot
 		glActiveTexture(GL_TEXTURE0 + currentSlot);

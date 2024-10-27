@@ -6,6 +6,7 @@
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 #include "VulkanCoreObjects.hpp"
+#include "UIDrawUBO.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
 #define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (tr->linegap / 2))
@@ -38,7 +39,7 @@ namespace Cacao {
 			FT_Set_Pixel_Sizes(tr->fontFace, 0, tr->charSize);
 			for(unsigned int i = 0; i < ln.glyphCount; i++) {
 				FT_Error err = FT_Load_Glyph(tr->fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER);
-				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!")
+				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!");
 
 				CharacterInfo info = {};
 
@@ -120,7 +121,7 @@ namespace Cacao {
 	}
 
 	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
-		CheckException(trCharInfos.contains(this), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot draw text renderable that hasn't been preprocessed!")
+		CheckException(trCharInfos.contains(this), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot draw text renderable that hasn't been preprocessed!");
 
 		//Fetch text character infos
 		std::vector<CharacterInfo> infos = trCharInfos.at(this);
@@ -142,6 +143,11 @@ namespace Cacao {
 
 		//Bind text shader
 		TextShaders::shader->Bind();
+
+		//Bind UI drawing globals UBO
+		vk::DescriptorBufferInfo uiDrawGlobalsDBI(uiUBO.obj, 0, vk::WholeSize);
+		vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiDrawGlobalsDBI);
+		uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
 
 		//Draw characters
 		unsigned int start = 0;
@@ -212,6 +218,11 @@ namespace Cacao {
 		ShaderUploadData up;
 		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
 		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+
+		//Bind UI drawing globals UBO
+		vk::DescriptorBufferInfo uiDrawGlobalsDBI(uiUBO.obj, 0, vk::WholeSize);
+		vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiDrawGlobalsDBI);
+		uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
 
 		//Draw image
 		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};

@@ -7,7 +7,7 @@
 namespace Cacao {
 
 	AudioPlayer::AudioPlayer() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to create an audio player!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to create an audio player!");
 
 		//Create OpenAL source object
 		alGenSources(1, &source);
@@ -77,7 +77,7 @@ namespace Cacao {
 	}
 
 	bool AudioPlayer::IsPlaying() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get playback state!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get playback state!");
 
 		ALenum isPlaying;
 		alGetSourcei(source, AL_SOURCE_STATE, &isPlaying);
@@ -85,7 +85,7 @@ namespace Cacao {
 	}
 
 	bool AudioPlayer::IsPaused() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get pause state!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get pause state!");
 
 		ALenum isPlaying;
 		alGetSourcei(source, AL_SOURCE_STATE, &isPlaying);
@@ -93,9 +93,9 @@ namespace Cacao {
 	}
 
 	void AudioPlayer::Play() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to play sound!")
-		CheckException(!IsPlaying(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot play a sound while playing one!")
-		CheckException(!sound.IsNull(), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot play null sound!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to play sound!");
+		CheckException(!IsPlaying(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot play a sound while playing one!");
+		CheckException(!sound.IsNull(), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot play null sound!");
 
 		//Play the sound
 		alSourcei(source, AL_BUFFER, sound->buf);
@@ -103,8 +103,8 @@ namespace Cacao {
 	}
 
 	void AudioPlayer::TogglePause() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to pause sound playback!")
-		CheckException(IsPlaying() || IsPaused(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot pause a sound when not playing one!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to pause sound playback!");
+		CheckException(IsPlaying() || IsPaused(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot pause a sound when not playing one!");
 
 		if(IsPaused()) {
 			//This will continue playback if paused (which it is)
@@ -115,21 +115,21 @@ namespace Cacao {
 	}
 
 	void AudioPlayer::Stop() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to stop sound playback!")
-		CheckException(IsPlaying() || IsPaused(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop a sound when not playing one!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to stop sound playback!");
+		CheckException(IsPlaying() || IsPaused(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop a sound when not playing one!");
 
 		alSourceStop(source);
 		alSourcei(source, AL_BUFFER, AL_NONE);
 	}
 
 	void AudioPlayer::SetLooping(bool val) {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change looping state!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change looping state!");
 
 		alSourcei(source, AL_LOOPING, val ? AL_TRUE : AL_FALSE);
 	}
 
 	bool AudioPlayer::GetLooping() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get looping state!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get looping state!");
 
 		ALint retval;
 		alGetSourcei(source, AL_LOOPING, &retval);
@@ -137,13 +137,13 @@ namespace Cacao {
 	}
 
 	void AudioPlayer::SetGain(float val) {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change gain!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change gain!");
 
 		alSourcef(source, AL_GAIN, val);
 	}
 
 	float AudioPlayer::GetGain() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get gain!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get gain!");
 
 		float retval;
 		alGetSourcef(source, AL_GAIN, &retval);
@@ -151,13 +151,13 @@ namespace Cacao {
 	}
 
 	void AudioPlayer::SetPitchMultiplier(float val) {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change pitch multiplier!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change pitch multiplier!");
 
 		alSourcef(source, AL_PITCH, val);
 	}
 
 	float AudioPlayer::GetPitchMultiplier() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get pitch multiplier!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get pitch multiplier!");
 
 		float retval;
 		alGetSourcef(source, AL_PITCH, &retval);
@@ -165,13 +165,13 @@ namespace Cacao {
 	}
 
 	void AudioPlayer::SetPlaybackTime(float val) {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change playback time!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to change playback time!");
 
 		alSourcef(source, AL_SEC_OFFSET, val);
 	}
 
 	float AudioPlayer::GetPlaybackTime() {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get playback time!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get playback time!");
 
 		float retval;
 		alGetSourcef(source, AL_SEC_OFFSET, &retval);

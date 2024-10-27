@@ -163,7 +163,7 @@ namespace Cacao {
 	}
 
 	void RenderController::Init() {
-		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
+		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!");
 		isInitialized = true;
 
 		//Enable SRGB
@@ -201,7 +201,7 @@ namespace Cacao {
 	}
 
 	void RenderController::Shutdown() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!");
 
 		//Release UI element shaders
 		DelShaders();

@@ -28,7 +28,7 @@ namespace Cacao {
 	}
 
 	void DynTickController::Start() {
-		CheckException(!isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot start the already started dynamic tick controller!")
+		CheckException(!isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot start the already started dynamic tick controller!");
 		isRunning = true;
 
 		//Create thread to run controller
@@ -36,7 +36,7 @@ namespace Cacao {
 	}
 
 	void DynTickController::Stop() {
-		CheckException(isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop the unstarted dynamic tick controller!")
+		CheckException(isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop the unstarted dynamic tick controller!");
 		//Stop run thread
 		thread->request_stop();
 		thread->join();

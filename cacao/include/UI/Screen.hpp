@@ -17,7 +17,7 @@ namespace Cacao {
 		 * @throws Exception If this element already exists in the screen
 		 */
 		void AddElement(std::shared_ptr<UIElement> elem) {
-			CheckException(!HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
+			CheckException(!HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!");
 			elements.push_back(elem);
 		}
 
@@ -40,7 +40,7 @@ namespace Cacao {
 		 * @throws Exception If this element doesn't exists in the screen
 		 */
 		void DeleteElement(std::shared_ptr<UIElement> elem) {
-			CheckException(HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!")
+			CheckException(HasElement(elem), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot add a duplicate element to UI screen!");
 			elements.erase(std::find(elements.begin(), elements.end(), elem));
 		}
 

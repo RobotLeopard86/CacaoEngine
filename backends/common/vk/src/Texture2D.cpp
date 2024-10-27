@@ -23,7 +23,7 @@ namespace Cacao {
 		//Load image
 		dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 0);
 
-		CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!")
+		CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
 
 		bound = false;
 		currentSlot = -1;
@@ -39,7 +39,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Texture2D::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
 		const auto doCompile = [this]() {
 			//Allocate texture and upload buffer
 			vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, nativeData->format, {(unsigned int)imgSize.x, (unsigned int)imgSize.y, 1}, 1, 1, vk::SampleCountFlagBits::e1,
@@ -57,7 +57,7 @@ namespace Cacao {
 			allocator.unmapMemory(ualloc);
 
 			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = immediates[std::this_thread::get_id()];
+			Immediate imm = immediates.at(std::this_thread::get_id());
 			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
 			imm.cmd.begin(copyBegin);
 			{
@@ -84,7 +84,7 @@ namespace Cacao {
 			//Wait for and reset fence just in case
 			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
 				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!")
+				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 				dev.resetFences(imm.fence);
 			}
 
@@ -113,7 +113,7 @@ namespace Cacao {
 	}
 
 	void Texture2D::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled texture!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled texture!");
 
 		//Destroy objects
 		dev.destroyImageView(nativeData->iview);
@@ -123,12 +123,12 @@ namespace Cacao {
 	}
 
 	void Texture2D::Bind(int slot) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled texture!")
-		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no active frame!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled texture!");
+		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound texture!");
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot bind texture when there is no active frame!");
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [slot](auto is) { return is.second.binding == slot; });
-		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!")
+		CheckException(imageSlot != activeShader->imageSlots.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Requested texture slot does not exist in bound shader!");
 
 		//Create update info
 		vk::DescriptorImageInfo dii(imageSlot->second.sampler, nativeData->iview, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -142,10 +142,10 @@ namespace Cacao {
 	}
 
 	void Texture2D::Unbind() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled texture!")
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound texture!")
-		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind texture when there is no bound shader!")
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind texture when there is no active frame!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled texture!");
+		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound texture!");
+		CheckException(activeShader, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind texture when there is no bound shader!");
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot unbind texture when there is no active frame!");
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info

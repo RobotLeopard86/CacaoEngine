@@ -45,7 +45,7 @@ namespace Cacao {
 	}
 
 	void Window::Present() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!");
 		SDL_GL_SwapWindow(nativeData->win);
 	}
 }

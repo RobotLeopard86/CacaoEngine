@@ -39,7 +39,7 @@ namespace Cacao {
 	}
 
 	void Window::Present() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!");
 		glfwSwapBuffers(nativeData->win);
 	}
 }

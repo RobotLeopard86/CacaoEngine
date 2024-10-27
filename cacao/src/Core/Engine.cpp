@@ -49,11 +49,11 @@ namespace Cacao {
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");
-		CheckException(std::filesystem::exists("launchconfig.cacao.yml"), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch config file exists!")
+		CheckException(std::filesystem::exists("launchconfig.cacao.yml"), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch config file exists!");
 		YAML::Node launchRoot = YAML::LoadFile("launchconfig.cacao.yml");
-		CheckException(launchRoot.IsMap(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config is not a map!")
-		CheckException(launchRoot["launch"].IsScalar(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config does not contain the \"launch\" parameter or it isn't a scalar!")
-		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!")
+		CheckException(launchRoot.IsMap(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config is not a map!");
+		CheckException(launchRoot["launch"].IsScalar(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config does not contain the \"launch\" parameter or it isn't a scalar!");
+		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!");
 
 		//Load game module and module config
 		gameLib.reset(new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()));
@@ -123,7 +123,7 @@ namespace Cacao {
 		cfg.targetDynTPS = 60;
 		cfg.maxFrameLag = 10;
 
-		//Start the thread pool (subtract one threads for the dedicated dynamic tick controller)
+		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
 		Logging::EngineLog("Starting thread pool...");
 		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
 
