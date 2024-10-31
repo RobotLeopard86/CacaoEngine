@@ -374,8 +374,8 @@ namespace Cacao {
 			1.0f, 1.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.0f,
-			1.0f, 0.0f, 0.0f,
-			1.0f, 1.0f, 0.0f};
+			1.0f, 1.0f, 0.0f,
+			1.0f, 0.0f, 0.0f};
 		auto vbsz = sizeof(float) * 18;
 		vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer);
 		vk::BufferCreateInfo vertexUpCI({}, vbsz, vk::BufferUsageFlagBits::eTransferSrc);
@@ -625,6 +625,8 @@ namespace Cacao {
 		if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
 			//Create projection matrix
 			glm::mat4 project = projectionCorrection * glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
+			project[1][1] *= -1;//Flip
+			project[3][1] -= 2; //Move into viewable area
 
 			//Upload uniforms
 			ShaderUploadData uiud;
@@ -641,14 +643,14 @@ namespace Cacao {
 
 			//Modify dynamic state
 			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);
-			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcColor, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
+			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
 			f.cmd.setDepthTestEnable(VK_FALSE);
 			f.cmd.setDepthCompareOp(vk::CompareOp::eAlways);
 
 			//Draw quad
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
 			f.cmd.bindVertexBuffers(0, uiQuadBuffer.obj, offsets);
-			f.cmd.draw(18, 1, 0, 0);
+			f.cmd.draw(6, 1, 0, 0);
 
 			//Unbind UI shader and view
 			Engine::GetInstance()->GetGlobalUIView()->Unbind();

@@ -197,11 +197,12 @@ namespace Cacao {
 		Allocated<vk::Buffer> vertex;
 		UIVertex vertexData[6] = {
 			{{topLeft.x, topLeft.y, 0.0f}, {0.0f, 1.0f}},
-			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
 			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
 			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
+			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
+			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
 			{{topLeft.x + size.x, topLeft.y - size.y, 0.0f}, {1.0f, 0.0f}},
-			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}}};
+		};
 		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
 		{

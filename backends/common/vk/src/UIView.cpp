@@ -129,7 +129,7 @@ namespace Cacao {
 		imm.cmd.setViewport(0, viewport);
 		imm.cmd.setScissor(0, scissor);
 		imm.cmd.setColorBlendEnableEXT(0, VK_TRUE);
-		vk::ColorBlendEquationEXT equ(vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcColor, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcAlpha);
+		vk::ColorBlendEquationEXT equ(vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcAlpha);
 		imm.cmd.setColorBlendEquationEXT(0, equ);
 		imm.cmd.setDepthTestEnable(VK_FALSE);
 		imm.cmd.setDepthCompareOp(vk::CompareOp::eAlways);

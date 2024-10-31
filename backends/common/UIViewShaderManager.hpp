@@ -20,7 +20,6 @@ namespace Cacao {
 			std::vector<uint32_t> f(UIView::fsCode, std::end(UIView::fsCode));
 
 			//Create and compile UI view shader object
-			//Compile future is intentionally discarded as it will be done by the time this is used
 			UIView::shader = new Shader(v, f, spec);
 			UIView::shader->Compile();
 		}
