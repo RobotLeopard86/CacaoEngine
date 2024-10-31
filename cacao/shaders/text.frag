@@ -12,5 +12,6 @@ layout(binding=2) uniform sampler2D glyph;
 void main() {
 	vec3 textColor = pow(V2F.color, vec3(2.2));
     color = vec4(textColor, texture(glyph, V2F.texCoords).r);
+	color.a = 1;
 	if(color.a == 0) discard;
 }

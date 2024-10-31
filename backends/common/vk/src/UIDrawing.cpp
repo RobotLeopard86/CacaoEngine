@@ -59,12 +59,12 @@ namespace Cacao {
 				float h = bitmap.rows;
 				float xpos = x + tr->fontFace->glyph->bitmap_left;
 				float ypos = y - (h - tr->fontFace->glyph->bitmap_top);
-				info.vertices[0] = {{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}};
+				info.vertices[0] = {{xpos, ypos, 0.0f}, {0.0f, 1.0f}};
 				info.vertices[1] = {{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}};
-				info.vertices[2] = {{xpos, ypos, 0.0f}, {0.0f, 1.0f}};
-				info.vertices[3] = {{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}};
+				info.vertices[2] = {{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}};
+				info.vertices[3] = {{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}};
 				info.vertices[4] = {{xpos + w, ypos + h, 0.0f}, {1.0f, 0.0f}};
-				info.vertices[5] = {{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}};
+				info.vertices[5] = {{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}};
 
 				//Create glyph image and image view
 				vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, vk::Format::eR8Unorm, {bitmap.width, bitmap.rows, 1}, 1, 1, vk::SampleCountFlagBits::e1,
@@ -196,12 +196,12 @@ namespace Cacao {
 		//Create vertex buffer
 		Allocated<vk::Buffer> vertex;
 		UIVertex vertexData[6] = {
+			{{topLeft.x, topLeft.y, 0.0f}, {0.0f, 1.0f}},
+			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
 			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
 			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
-			{{topLeft.x, topLeft.y, 0.0f}, {0.0f, 1.0f}},
-			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
 			{{topLeft.x + size.x, topLeft.y - size.y, 0.0f}, {1.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}}};
+			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}}};
 		vk::BufferCreateInfo bufferCI({}, sizeof(UIVertex) * 6, vk::BufferUsageFlagBits::eVertexBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
 		{

@@ -352,7 +352,6 @@ namespace Cacao {
 				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
 				offset = nd->offsets[item.target];
 			}
-			offset += sizeof(glm::mat4);
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
