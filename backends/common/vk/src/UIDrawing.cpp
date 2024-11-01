@@ -69,25 +69,35 @@ namespace Cacao {
 				//Create glyph image and image view
 				vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, vk::Format::eR8Unorm, {bitmap.width, bitmap.rows, 1}, 1, 1, vk::SampleCountFlagBits::e1,
 					vk::ImageTiling::eLinear, vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive, 0);
+
 				vma::AllocationCreateInfo texAllocCI {};
 				texAllocCI.requiredFlags = vk::MemoryPropertyFlagBits::eHostVisible;
 				vma::Allocation alloc;
+				vk::SubresourceLayout subLayout;
 				try {
 					auto [image, _alloc] = allocator.createImage(texCI, texAllocCI);
 					alloc = _alloc;
 					info.glyph.image = {.alloc = alloc, .obj = image};
 					vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,
-						{vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eR},
+						{vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eOne},
 						{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 					info.glyph.view = dev.createImageView(viewCI);
+					subLayout = dev.getImageSubresourceLayout(image, vk::ImageSubresource(vk::ImageAspectFlagBits::eColor, 0, 0));
 				} catch(vk::SystemError& verr) {
 					Logging::EngineLog(verr.what(), LogLevel::Error);
 				}
 
 				//Copy image data to GPU
-				void* gpuMem;
-				allocator.mapMemory(alloc, &gpuMem);
-				std::memcpy(gpuMem, bitmap.buffer, bitmap.width * bitmap.rows);
+				unsigned char* gpuMem;
+				allocator.mapMemory(alloc, reinterpret_cast<void**>(&gpuMem));
+				for(unsigned int i = 0; i < bitmap.rows; i++) {
+					/*
+					To explain:
+					Linear-tiled images have a row pitch (number of bytes between rows) that typically doesn't align with FreeType's pitch
+					What we do here is copy each row of glyph data to the the buffer then skip until we find the next row as Vulkan expects it
+					*/
+					std::memcpy(gpuMem + (subLayout.rowPitch * i), bitmap.buffer + (bitmap.width * i), bitmap.width);
+				}
 				allocator.unmapMemory(alloc);
 
 				//Transition image to shader resource state
