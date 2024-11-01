@@ -428,6 +428,8 @@ namespace Cacao {
 
 	void RenderController::UpdateGraphicsState() {}
 
+	void PreShaderCreateHook() {}
+
 	void RenderController::WaitGPUIdleBeforeTerminate() {
 		dev.waitIdle();
 	}

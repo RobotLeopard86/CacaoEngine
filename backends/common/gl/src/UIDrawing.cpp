@@ -7,7 +7,7 @@
 #include "GLUtils.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
-#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2));
+#define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2))
 
 namespace Cacao {
 	struct VBOEntry {
@@ -100,7 +100,7 @@ namespace Cacao {
 				RawGLTexture upTex = {.texObj = tex, .slot = new int(-1)};
 				up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
 				up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
-				TextShaders::shader->UploadData(up);
+				TextShaders::shader->UploadData(up, glm::identity<glm::mat4>());
 
 				//Draw glyph
 				glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -168,7 +168,7 @@ namespace Cacao {
 		ImageShaders::shader->Bind();
 		ShaderUploadData up;
 		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
-		ImageShaders::shader->UploadData(up);
+		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
 
 		//Draw image
 		glDrawArrays(GL_TRIANGLES, 0, 6);

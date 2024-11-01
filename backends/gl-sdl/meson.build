@@ -82,7 +82,8 @@ backend_deplist = [
 	dr_libs_dep,
 	dynalo_dep,
 	spdlog_dep,
-	thread_pool_dep
+	thread_pool_dep,
+	yaml_dep
 ]
 
 if host_machine.system() == 'windows'

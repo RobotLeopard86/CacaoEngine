@@ -33,4 +33,7 @@ namespace Cacao {
 			default: return 0;
 		}
 	}
+
+	//I hate this
+	inline bool currentShaderUnusedTransformFlag = false;
 }

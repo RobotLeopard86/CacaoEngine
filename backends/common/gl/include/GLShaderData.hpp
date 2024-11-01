@@ -7,8 +7,9 @@
 namespace Cacao {
 	//Struct for data required for an OpenGL shader
 	struct Shader::ShaderData {
-		GLuint gpuID, localsUBO;
+		GLuint gpuID;
 		std::string vertexCode, fragmentCode;
+		bool unusedTransform;
 
 		static GLuint uboIndexCounter;
 	};

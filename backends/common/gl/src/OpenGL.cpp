@@ -69,12 +69,11 @@ namespace Cacao {
 
 			//Render main scene
 			for(RenderObject& obj : frame->objects) {
-				//Upload material data to shader
-				obj.material.shader->UploadData(obj.material.data);
-				obj.material.shader->UploadCacaoLocals(obj.transformMatrix);
-
 				//Bind shader
 				obj.material.shader->Bind();
+
+				//Upload material data and transformation matrix to shader
+				obj.material.shader->UploadData(obj.material.data, obj.transformMatrix);
 
 				//Configure OpenGL
 				glEnable(GL_DEPTH_TEST);
@@ -128,7 +127,7 @@ namespace Cacao {
 				ShaderUploadData uiud;
 				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
 				uivsm->Bind();
-				uivsm->UploadData(uiud);
+				uivsm->UploadData(uiud, glm::identity<glm::mat4>());
 				Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
 
 				//Configure OpenGL
@@ -176,6 +175,7 @@ namespace Cacao {
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		//Compile UI view shader
+		currentShaderUnusedTransformFlag = true;
 		uivsm.Compile();
 
 		//Set up UI view quad
@@ -198,6 +198,12 @@ namespace Cacao {
 
 		//Compile UI element shaders
 		GenShaders();
+
+		currentShaderUnusedTransformFlag = false;
+	}
+
+	void PreShaderCreateHook() {
+		currentShaderUnusedTransformFlag = true;
 	}
 
 	void RenderController::Shutdown() {

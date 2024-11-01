@@ -118,13 +118,12 @@ namespace Cacao {
 		skyboxShader->Bind();
 
 		//Upload data to shader
-		skyboxShader->UploadCacaoLocals(skyTransform);
 		ShaderUploadData sud;
 		ShaderUploadItem skySampler;
 		skySampler.data = std::any(texture);
 		skySampler.target = "skybox";
 		sud.push_back(skySampler);
-		skyboxShader->UploadData(sud);
+		skyboxShader->UploadData(sud, skyTransform);
 
 		//Ensure skybox always drawn
 		glDepthFunc(GL_LEQUAL);

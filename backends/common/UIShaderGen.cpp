@@ -8,6 +8,7 @@ namespace Cacao {
 		tspec.emplace_back(ShaderItemInfo {.type = SpvType::Float, .size = {3, 1}, .entryName = "color"});
 		std::vector<uint32_t> tV(TextShaders::vertex, std::end(TextShaders::vertex));
 		std::vector<uint32_t> tF(TextShaders::fragment, std::end(TextShaders::fragment));
+		PreShaderCreateHook();
 		TextShaders::shader = new Shader(tV, tF, tspec);
 		TextShaders::shader->Compile();
 
@@ -16,6 +17,7 @@ namespace Cacao {
 		ispec.emplace_back(ShaderItemInfo {.type = SpvType::SampledImage, .size = {1, 1}, .entryName = "image"});
 		std::vector<uint32_t> iV(ImageShaders::vertex, std::end(ImageShaders::vertex));
 		std::vector<uint32_t> iF(ImageShaders::fragment, std::end(ImageShaders::fragment));
+		PreShaderCreateHook();
 		ImageShaders::shader = new Shader(iV, iF, ispec);
 		ImageShaders::shader->Compile();
 	}
