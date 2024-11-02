@@ -7,15 +7,15 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>GLSL Shaders | Cacao Engine Docs</title>
-<meta content="GLSL Shaders | Cacao Engine Docs" property="og:title"/>
-<meta content="GLSL Shaders | Cacao Engine Docs" name="twitter:title"/>
+<title>Backend vk-glfw | Cacao Engine Docs</title>
+<meta content="Backend vk-glfw | Cacao Engine Docs" property="og:title"/>
+<meta content="Backend vk-glfw | Cacao Engine Docs" name="twitter:title"/>
 <link href="../../_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="../../_static/theme.css?v=ecdfb4fc" rel="stylesheet" type="text/css"/>
 <link href="../../_static/collapsible-lists/css/tree_view.css?v=a885cde7" rel="stylesheet" type="text/css"/>
 <link href="../../search.html" rel="search" title="Search"/>
-<link href="hlsl.html" rel="next" title="HLSL Shaders"/>
-<link href="../shaders.html" rel="prev" title="Shader Guide"/>
+<link href="vk-sdl.html" rel="next" title="Backend vk-sdl"/>
+<link href="gl-sdl.html" rel="prev" title="Backend gl-sdl"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -84,16 +84,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../excodes.html">Exception Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../deffiles.html">Definition Files</a></li>
-<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../shaders.html">Shader Guide<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">GLSL Shaders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hlsl.html">HLSL Shaders</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../shaders.html">Shader Guide<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../shaders/glsl.html">GLSL Shaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../shaders/hlsl.html">HLSL Shaders</a></li>
 </ul>
 </li>
-<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
-<li class="toctree-l3"><a class="reference internal" href="../backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../backends/vk-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../backends/vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
+<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -190,78 +190,53 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../../manual.html">Cacao Engine Manual</a>
-<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../shaders.html">Shader Guide</a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">GLSL Shaders</span>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../backends.html">Cacao Engine Backends</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></span>
 </nav>
 <div id="content" role="main">
-<section id="glsl-shaders">
-<h1>GLSL Shaders<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#glsl-shaders"><span></span></a></h1>
-<p>Cacao Engine shaders must be written in Vulkan GLSL so they can be compiled to SPIR-V. They should only use <code class="docutils literal notranslate"><span class="pre">#version</span> <span class="pre">450</span> <span class="pre">core</span></code> or above.</p>
-<section id="inputs">
-<h2>Inputs<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#inputs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#inputs'"><span></span></a></h2>
-<p>Cacao Engine provides vertex input attributes in a specific order. Below is the code for accessing every single one, but feel free to pick and choose what you need.</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
-</span><span id="line-2"><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec2</span><span class="w"> </span><span class="n">texCoords</span><span class="p">;</span>
-</span><span id="line-3"><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">tangent</span><span class="p">;</span>
-</span><span id="line-4"><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">bitangent</span><span class="p">;</span>
-</span><span id="line-5"><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec3</span><span class="w"> </span><span class="n">normal</span><span class="p">;</span>
-</span></code></pre></div>
-</div>
+<section id="backend-vk-glfw">
+<h1>Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#backend-vk-glfw"><span></span></a></h1>
+<p>This backend uses Vulkan 1.2 with some extensions and GLFW.</p>
+<section id="limitations">
+<h2>Limitations<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#limitations" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#limitations'"><span></span></a></h2>
+<ul class="simple">
+<li><p>Running under Wayland causes a crash immediately after startup. This appears to be a GLFW bug. Run under X11 or XWayland instead.</p></li>
+</ul>
 </section>
-<section id="uniform-blocks">
-<h2>Uniform Blocks<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#uniform-blocks" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#uniform-blocks'"><span></span></a></h2>
-<p>All GLSL vertex shaders must have the uniform <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> block object, which is how engine information is passed to shaders.<br/>
-Below is an example of how this should be declared. <strong>The order of members is important!</strong></p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="n">binding</span><span class="o">=</span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CacaoGlobals</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-2"><span class="w">    </span><span class="kt">mat4</span><span class="w"> </span><span class="n">projection</span><span class="p">;</span>
-</span><span id="line-3"><span class="w">    </span><span class="kt">mat4</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
-</span><span id="line-4"><span class="p">}</span><span class="w"> </span><span class="n">globals</span><span class="p">;</span>
-</span></code></pre></div>
-</div>
+<section id="vulkan-extension-requirements">
+<h2>Vulkan Extension Requirements<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#vulkan-extension-requirements" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#vulkan-extension-requirements'"><span></span></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_swapchain</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_dynamic_rendering</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_synchronization2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_dedicated_allocation</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_copy_commands2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_get_memory_requirements2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_push_descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_EXT_extended_dynamic_state</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_EXT_extended_dynamic_state3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_EXT_robustness2</span></code></p></li>
+</ul>
 </section>
-<section id="local-object-data">
-<h2>Local Object Data<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#local-object-data" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#local-object-data'"><span></span></a></h2>
-<p>All data pertaining to an individual object (the transformation matrix plus any custom shader data) must be declared within a single push constant block, which must be declared as follows:</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">layout</span><span class="p">(</span><span class="n">push_constant</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">ObjectData</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-2"><span class="w">	</span><span class="kt">mat4</span><span class="w"> </span><span class="n">transform</span>
-</span><span id="line-3"><span class="w">	</span><span class="c1">//Custom shader data goes here...</span>
-</span><span id="line-4"><span class="p">}</span><span class="w"> </span><span class="n">object</span><span class="p">;</span>
-</span></code></pre></div>
-</div>
-</section>
-<section id="texture-bindings">
-<h2>Texture Bindings<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#texture-bindings" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#texture-bindings'"><span></span></a></h2>
-<p>In Vulkan GLSL, every uniform must have a declared <code class="docutils literal notranslate"><span class="pre">binding</span></code> value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can’t have a <code class="docutils literal notranslate"><span class="pre">binding=0</span></code> in your fragment shader, as that’s already assigned to the <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> uniform block.</p>
-</section>
-<section id="applying-the-matrices">
-<h2>Applying the Matrices<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#applying-the-matrices" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#applying-the-matrices'"><span></span></a></h2>
-<p>To get the final <code class="docutils literal notranslate"><span class="pre">gl_Position</span></code> value, you should write that assignment as follows:</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">projection</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">view</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">object</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
-</span></code></pre></div>
-</div>
-</section>
-<section id="passing-data-between-shader-stages">
-<h2>Passing Data Between Shader Stages<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#passing-data-between-shader-stages" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#passing-data-between-shader-stages'"><span></span></a></h2>
-<p>Any data that is to be passed between shader stages must be declared as follows:</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Vertex2Fragment</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-2"><span class="w">	</span><span class="kt">vec4</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span>
-</span><span id="line-3"><span class="p">}</span><span class="w"> </span><span class="n">V2F</span><span class="p">;</span>
-</span></code></pre></div>
-</div>
+<section id="dependencies">
+<h2>Dependencies<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dependencies" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dependencies'"><span></span></a></h2>
+<ul class="simple">
+<li><p>Vulkan SDK</p></li>
+</ul>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="../shaders.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="gl-sdl.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Shader Guide
+        Backend gl-sdl
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="hlsl.html">
-        HLSL Shaders
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="vk-sdl.html">
+        Backend vk-sdl
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
@@ -270,12 +245,9 @@ Below is an example of how this should be declared. <strong>The order of members
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
-<li><a :data-current="activeSection === '#inputs'" class="reference internal" href="#inputs">Inputs</a></li>
-<li><a :data-current="activeSection === '#uniform-blocks'" class="reference internal" href="#uniform-blocks">Uniform Blocks</a></li>
-<li><a :data-current="activeSection === '#local-object-data'" class="reference internal" href="#local-object-data">Local Object Data</a></li>
-<li><a :data-current="activeSection === '#texture-bindings'" class="reference internal" href="#texture-bindings">Texture Bindings</a></li>
-<li><a :data-current="activeSection === '#applying-the-matrices'" class="reference internal" href="#applying-the-matrices">Applying the Matrices</a></li>
-<li><a :data-current="activeSection === '#passing-data-between-shader-stages'" class="reference internal" href="#passing-data-between-shader-stages">Passing Data Between Shader Stages</a></li>
+<li><a :data-current="activeSection === '#limitations'" class="reference internal" href="#limitations">Limitations</a></li>
+<li><a :data-current="activeSection === '#vulkan-extension-requirements'" class="reference internal" href="#vulkan-extension-requirements">Vulkan Extension Requirements</a></li>
+<li><a :data-current="activeSection === '#dependencies'" class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </div>
 </aside>
