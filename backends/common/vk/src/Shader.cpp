@@ -65,6 +65,7 @@ namespace Cacao {
 			VkShaderData::ImageSlot slotVal = {};
 			slotVal.binding = fragReflector.get_decoration(tex.id, spv::DecorationBinding);
 			slotVal.dimensionality = fragReflector.get_type(tex.base_type_id).image.dim;
+			slotVal.wrapMode = generatedSamplersClamp2Edge ? vk::SamplerAddressMode::eClampToEdge : vk::SamplerAddressMode::eRepeat;
 			mod->imageSlots.insert_or_assign(fragReflector.get_name(tex.id), slotVal);
 		}
 
@@ -218,8 +219,8 @@ namespace Cacao {
 						vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
 					nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 				} else {
-					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
-						vk::SamplerAddressMode::eRepeat, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, slot.second.wrapMode, slot.second.wrapMode,
+						slot.second.wrapMode, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
 					nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 				}
 			}

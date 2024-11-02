@@ -119,10 +119,6 @@ namespace Cacao {
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();
 			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count()) / 1000);
 
-			std::stringstream loggo;
-			loggo << "Tick took " << std::chrono::duration_cast<std::chrono::microseconds>(tickEnd - tickStart);
-			Logging::EngineLog(loggo.str(), LogLevel::Trace);
-
 			//If we stopped before the ideal max time, wait until that point
 			//Otherwise, run the next tick immediately
 			if(tickEnd < idealStopTime) std::this_thread::sleep_until(idealStopTime);

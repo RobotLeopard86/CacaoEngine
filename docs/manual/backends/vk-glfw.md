@@ -1,7 +1,9 @@
-# Backend `vk-glfw` Info
+# Backend `vk-glfw`
+
+This backend uses Vulkan 1.2 with some extensions and GLFW.
 
 ## Limitations
-* Running under Wayland causes a crash immediately after startup. This appears to be a GLFW bug.
+* Running under Wayland causes a crash immediately after startup. This appears to be a GLFW bug. Run under X11 or XWayland instead.
 
 ## Vulkan Extension Requirements
 * `VK_KHR_swapchain`

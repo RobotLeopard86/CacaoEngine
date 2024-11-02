@@ -419,6 +419,7 @@ namespace Cacao {
 		didGenShaders = false;
 		frameCycle = 0;
 		compileMode = ShaderCompileMode::Standard;
+		generatedSamplersClamp2Edge = false;
 	}
 
 	void RegisterGraphicsExceptions() {
@@ -428,7 +429,9 @@ namespace Cacao {
 
 	void RenderController::UpdateGraphicsState() {}
 
-	void PreShaderCreateHook() {}
+	void PreShaderCreateHook() {
+		generatedSamplersClamp2Edge = true;
+	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {
 		dev.waitIdle();

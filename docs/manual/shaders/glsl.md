@@ -13,17 +13,22 @@ layout(location = 4) in vec3 normal;
 ```
 
 ## Uniform Blocks
-All GLSL vertex shaders must have two uniform block objects, `CacaoGlobals` and `CacaoLocals`, which are how engine information is passed to shaders.  
-Below is an example of how those should be declared. **The order of members in these objects is important!**  
+All GLSL vertex shaders must have the uniform `CacaoGlobals` block object, which is how engine information is passed to shaders.  
+Below is an example of how this should be declared. **The order of members is important!**  
 ```{code-block} glsl
 layout(std140,binding=0) uniform CacaoGlobals {
     mat4 projection;
     mat4 view;
 } globals;
+``` 
 
-layout(std140,binding=1) uniform CacaoLocals {
-    mat4 transform;
-} locals;
+## Local Object Data
+All data pertaining to an individual object (the transformation matrix plus any custom shader data) must be declared within a single push constant block, which must be declared as follows:
+```{code-block} glsl
+layout(push_constant) uniform ObjectData {
+	mat4 transform
+	//Custom shader data goes here...
+} object;
 ```  
 
 ## Texture Bindings
@@ -32,16 +37,8 @@ In Vulkan GLSL, every uniform must have a declared `binding` value (as seen abov
 ## Applying the Matrices
 To get the final `gl_Position` value, you should write that assignment as follows:
 ```{code-block} glsl
-gl_Position = globals.projection * globals.view * locals.transform * vec4(position, 1.0);
+gl_Position = globals.projection * globals.view * object.transform * vec4(position, 1.0);
 ```
-
-## Custom Shader Data
-Any custom data must be declared within a single push constant block, which must be declared as follows:
-```{code-block} glsl
-layout(push_constant) uniform ShaderData {
-	//Data goes here...
-} shader;
-```  
 
 ## Passing Data Between Shader Stages
 Any data that is to be passed between shader stages must be declared as follows:

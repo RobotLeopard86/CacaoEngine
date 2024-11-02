@@ -1,7 +1,9 @@
-# Backend `vk-glfw` Info
+# Backend `vk-sdl`
+
+This backend uses Vulkan 1.2 with some extensions and SDL (Simple DirectMedia Layer).
 
 ## Limitations
-* Running under Wayland causes a crash immediately after startup. This appears to be a GLFW bug.
+* The grave/tilde and F25 keys are not detected as key input
 
 ## Vulkan Extension Requirements
 * `VK_KHR_swapchain`

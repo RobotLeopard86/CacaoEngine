@@ -13,9 +13,10 @@ namespace Cacao {
 	//This is separate because it needs to be visible to the rest of the backend
 	struct VkShaderData {
 		struct ImageSlot {
-			int binding;			//Shader binding
-			spv::Dim dimensionality;//2D texture or cubemap?
-			vk::Sampler sampler;	//Texture sampler
+			int binding;					//Shader binding
+			spv::Dim dimensionality;		//2D texture or cubemap?
+			vk::Sampler sampler;			//Texture sampler
+			vk::SamplerAddressMode wrapMode;//Texture wrapping behavior (ignored for cubemaps)
 		};
 		vk::Pipeline pipeline;						   //Graphics pipeline
 		unsigned char* shaderData;					   //Shader data buffer
@@ -45,4 +46,7 @@ namespace Cacao {
 		VertexOnly,
 		VertexAndTexCoord
 	} compileMode;
+
+	//Controls if generated samplers should clamp textures to edge
+	inline bool generatedSamplersClamp2Edge = false;
 }
