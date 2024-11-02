@@ -47,13 +47,11 @@ namespace Cacao {
 				std::shared_ptr<Frame> next = frameQueue.front();
 				frameQueue.pop();
 
-				std::chrono::steady_clock::time_point fb = std::chrono::steady_clock::now();
-
 				//Release lock
 				lock.unlock();
 
 				//If the global UI is dirty, re-render
-				if(Engine::GetInstance()->GetGlobalUIView()->GetScreen() /* && Engine::GetInstance()->GetGlobalUIView()->GetScreen()->IsDirty()*/) {
+				if(Engine::GetInstance()->GetGlobalUIView()->GetScreen() && Engine::GetInstance()->GetGlobalUIView()->GetScreen()->IsDirty()) {
 					Engine::GetInstance()->GetGlobalUIView()->Render();
 				}
 

@@ -7,7 +7,7 @@ layout(location=0) in CacaoTextElem {
 	vec3 color;
 } V2F;
 
-layout(binding=2) uniform sampler2D glyph;
+layout(binding=1) uniform sampler2D glyph;
 
 void main() {
 	vec3 textColor = pow(V2F.color, vec3(2.2));

@@ -170,6 +170,7 @@ namespace Cacao {
 				return std::dynamic_pointer_cast<T>(components[guid]);
 			} catch(std::bad_cast) {
 				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "The requested compnent's type does not match the requested type!");
+				return std::shared_ptr<T>();
 			}
 		}
 

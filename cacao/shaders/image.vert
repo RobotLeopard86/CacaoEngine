@@ -15,7 +15,7 @@ layout(push_constant) uniform ObjectData {
 layout(location=0) in vec3 pos;
 layout(location=1) in vec2 tc;
 
-layout(location=0) out CacaoTextElem {
+layout(location=0) out CacaoImageElem {
     vec2 texCoords;
 } V2F;
 
