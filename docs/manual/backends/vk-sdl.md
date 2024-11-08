@@ -3,7 +3,7 @@
 This backend uses Vulkan 1.2 with some extensions and SDL (Simple DirectMedia Layer).
 
 ## Limitations
-* The grave/tilde and F25 keys are not detected as key input
+* The F25 key is not detected as key input
 
 ## Vulkan Extension Requirements
 * `VK_KHR_swapchain`

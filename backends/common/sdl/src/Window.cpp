@@ -43,8 +43,8 @@ namespace Cacao {
 		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
 #endif
 
-		//Initialize GLFW
-		EngineAssert(SDL_Init(SDL_INIT_VIDEO) == 0, "Could not initialize SDL library, no window can be created.");
+		//Initialize SDL
+		EngineAssert(SDL_Init(SDL_INIT_VIDEO), "Could not initialize SDL library, no window can be created.");
 	}
 
 	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
@@ -86,7 +86,7 @@ namespace Cacao {
 		//Destroy the window
 		SDL_DestroyWindow(nativeData->win);
 
-		//Clean up GLFW
+		//Clean up SDL
 		SDL_Quit();
 
 		isOpen = false;
@@ -124,12 +124,12 @@ namespace Cacao {
 				SDL_SetWindowSize(nativeData->win, size.x, size.y);
 				SDL_SetWindowFullscreen(nativeData->win, false);
 				SDL_SetWindowPosition(nativeData->win, windowedPosition.x, windowedPosition.y);
-				SDL_SetWindowBordered(nativeData->win, SDL_TRUE);
+				SDL_SetWindowBordered(nativeData->win, true);
 				break;
 			case WindowMode::Fullscreen: {
 				//Get the fullscreen display modes
 				int fullscreenModesC;
-				const SDL_DisplayMode** fullscreenModesV = SDL_GetFullscreenDisplayModes(SDL_GetPrimaryDisplay(), &fullscreenModesC);
+				SDL_DisplayMode** fullscreenModesV = SDL_GetFullscreenDisplayModes(SDL_GetPrimaryDisplay(), &fullscreenModesC);
 
 				//Confirm that we have at least one
 				if(fullscreenModesC < 1) {
@@ -195,12 +195,12 @@ namespace Cacao {
 					break;
 				}
 				case SDL_EVENT_KEY_UP: {
-					DataEvent<int> kue("KeyUp", SDLKey2Cacao(event.key.keysym.sym));
+					DataEvent<int> kue("KeyUp", SDLKey2Cacao(event.key.key));
 					EventManager::GetInstance()->Dispatch(kue);
 					break;
 				}
 				case SDL_EVENT_KEY_DOWN: {
-					DataEvent<int> kde("KeyDown", SDLKey2Cacao(event.key.keysym.sym));
+					DataEvent<int> kde("KeyDown", SDLKey2Cacao(event.key.key));
 					EventManager::GetInstance()->Dispatch(kde);
 					break;
 				}

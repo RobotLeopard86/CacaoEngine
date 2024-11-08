@@ -4,6 +4,7 @@
 
 #include <queue>
 #include <mutex>
+#include <future>
 
 namespace Cacao {
 	void GenSwapchain();
@@ -17,6 +18,12 @@ namespace Cacao {
 		vma::Allocation alloc;
 		T obj;
 	};
+
+	struct CommandBufferSubmission {
+		vk::SubmitInfo2 submitInfo;
+		vk::Fence fence;
+	};
+	std::future<void> SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence);
 
 	inline bool didGenShaders = false;
 }

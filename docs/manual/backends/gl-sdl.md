@@ -3,7 +3,7 @@
 This backend uses OpenGL 4.1 Core Profile and SDL (Simple DirectMedia Layer).
 
 ## Limitations
-* The grave/tilde and F25 keys are not detected as key input
+* The F25 key is not detected as key input
 
 ## Dependencies
 * Fedora-based (e.g. RHEL) Linux: wayland-devel wayland-protocols-devel libxkbcommon-devel libXcursor-devel libXfixes-devel libXi-devel libXinerama-devel libXrandr-devel libdecor-devel libdrm-devel ibus-devel fcitx-devel

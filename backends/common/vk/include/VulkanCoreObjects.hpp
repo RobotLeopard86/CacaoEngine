@@ -16,12 +16,11 @@ namespace Cacao {
 		vk::CommandPool pool;
 		vk::CommandBuffer cmd;
 		vk::Fence fence;
-		vk::Queue queue;
 	};
 	inline vk::Instance vk_instance;
 	inline vk::PhysicalDevice physDev;
 	inline vk::Device dev;
-	inline vk::Queue graphicsQueue;
+	inline vk::Queue queue;
 	inline vk::SurfaceKHR surface;
 	inline vk::SurfaceFormatKHR surfaceFormat;
 	inline vk::SwapchainKHR swapchain;

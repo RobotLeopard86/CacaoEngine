@@ -86,7 +86,7 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!");
 		vk::PresentInfoKHR pi(submission.sem, swapchain, submission.image);
 		try {
-			graphicsQueue.presentKHR(pi);
+			queue.presentKHR(pi);
 		} catch(vk::SystemError& err) {
 			if(err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eSuboptimalKHR) {
 				try {

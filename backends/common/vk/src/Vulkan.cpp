@@ -19,10 +19,49 @@ VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 bool backendInitBeforeWindow = true;
 bool backendShutdownAfterWindow = true;
 
+using ConditionFunction = std::function<bool(const vk::PhysicalDevice&)>;
+
 namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
 	Allocated<vk::Buffer> uiQuadUBO;
 	void* uiQuadUBOMem;
+
+	struct SubmissionWithPromise {
+		std::promise<void> promise;
+		CommandBufferSubmission submit;
+
+		//Stupid copy constructor
+		SubmissionWithPromise(const SubmissionWithPromise& other)
+		  : promise(), submit(other.submit) {}
+
+		SubmissionWithPromise(CommandBufferSubmission submission)
+		  : promise(), submit(submission) {}
+	};
+
+	//Queue of outstanding Vulkan command buffers to submit
+	std::queue<SubmissionWithPromise> cmdBufferSubmitQueue;
+	std::mutex submitQueueMtx;
+
+	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
+	void RankPhysicalDevices(std::vector<vk::PhysicalDevice>* devices, const std::vector<std::function<bool(const vk::PhysicalDevice&)>>& tests) {
+		std::vector<int> scores(devices->size(), 0);
+
+		//Run each test on each device
+		for(size_t i = 0; i < devices->size(); ++i) {
+			for(const auto& test : tests) {
+				if(test((*devices)[i])) {
+					scores[i]++;
+				}
+			}
+		}
+
+		//Sort devices in descending order based on scores
+		std::sort(devices->begin(), devices->end(), [&scores, devices](const vk::PhysicalDevice& a, const vk::PhysicalDevice& b) {
+			auto indexA = std::distance(devices->begin(), std::find(devices->begin(), devices->end(), a));
+			auto indexB = std::distance(devices->begin(), std::find(devices->begin(), devices->end(), b));
+			return scores[indexA] > scores[indexB];
+		});
+	}
 
 	void RenderController::Init() {
 		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!");
@@ -72,6 +111,7 @@ namespace Cacao {
 #endif
 		auto physicalDevices = vk_instance.enumeratePhysicalDevices();
 		EngineAssert(!physicalDevices.empty(), "There are no Vulkan-compatible devices!");
+		std::vector<vk::PhysicalDevice> okDevs;
 		for(vk::PhysicalDevice& pdev : physicalDevices) {
 			std::vector<vk::ExtensionProperties> availableExts = pdev.enumerateDeviceExtensionProperties();
 			bool good = true;
@@ -87,11 +127,21 @@ namespace Cacao {
 					good = false;
 					break;
 				}
-				std::this_thread::sleep_for(std::chrono::milliseconds(40));
 			}
-			if(!good) break;
-			physDev = pdev;
+			if(good) okDevs.push_back(pdev);
 		}
+		std::vector<std::function<bool(const vk::PhysicalDevice&)>> physDevChecks = {
+			//Check for real GPU
+			[](const vk::PhysicalDevice& device) {
+				auto type = device.getProperties().deviceType;
+				return type == vk::PhysicalDeviceType::eDiscreteGpu || type != vk::PhysicalDeviceType::eIntegratedGpu;
+			},
+			//Check for discrete GPU
+			[](const vk::PhysicalDevice& device) {
+				return device.getProperties().deviceType == vk::PhysicalDeviceType::eDiscreteGpu;
+			}};
+		RankPhysicalDevices(&okDevs, physDevChecks);
+		physDev = okDevs[0];
 		if(!physDev) {
 			vk_instance.destroy();
 			EngineAssert(false, "No devices support the required Vulkan extensions!");
@@ -113,11 +163,8 @@ namespace Cacao {
 		poolThreads.push_back(std::this_thread::get_id());
 
 		//Create logical device
-		std::vector<float> queuePriorities = {0.5f};
-		for(int i = 0; i < poolThreads.size(); i++) {
-			queuePriorities.push_back(1.0f);
-		}
-		vk::DeviceQueueCreateInfo queueCI({}, 0, queuePriorities);
+		float qp = 1.0f;
+		vk::DeviceQueueCreateInfo queueCI({}, 0, 1, &qp);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
 		vk::PhysicalDeviceExtendedDynamicState3FeaturesEXT extendedDynamicState3Features {};
@@ -140,7 +187,7 @@ namespace Cacao {
 		VULKAN_HPP_DEFAULT_DISPATCHER.init(vk_instance, dev);
 
 		//Get graphics queue
-		graphicsQueue = dev.getQueue(0, 0);
+		queue = dev.getQueue(0, 0);
 
 		//Create memory allocator
 		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);
@@ -168,7 +215,6 @@ namespace Cacao {
 		vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
 		for(int i = 0; i < poolThreads.size(); i++) {
 			Immediate imm;
-			imm.queue = dev.getQueue(0, i + 1);
 			try {
 				imm.pool = dev.createCommandPool(ipoolCI);
 			} catch(vk::SystemError& err) {
@@ -412,7 +458,7 @@ namespace Cacao {
 		}
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
-		imm.queue.submit2(si, imm.fence);
+		queue.submit2(si, imm.fence);
 		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
@@ -427,7 +473,26 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(101, "WaitExpired");
 	}
 
-	void RenderController::UpdateGraphicsState() {}
+	void RenderController::UpdateGraphicsState() {
+		//Since this is guaranteed to run on the render thread we can safely use the queue
+		std::lock_guard lk(submitQueueMtx);
+		while(!cmdBufferSubmitQueue.empty()) {
+			SubmissionWithPromise& submit = cmdBufferSubmitQueue.front();
+			queue.submit2(submit.submit.submitInfo, submit.submit.fence);
+			cmdBufferSubmitQueue.pop();
+			submit.promise.set_value();
+		}
+	}
+
+	std::future<void> SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence) {
+		CommandBufferSubmission submission {.submitInfo = submitInfo, .fence = fence};
+		SubmissionWithPromise subWithPromise(submission);
+		{
+			std::lock_guard lk(submitQueueMtx);
+			cmdBufferSubmitQueue.push(subWithPromise);
+		}
+		return subWithPromise.promise.get_future();
+	}
 
 	void PreShaderCreateHook() {
 		generatedSamplersClamp2Edge = true;
@@ -681,7 +746,7 @@ namespace Cacao {
 		//Submit the command buffer to the queue
 		vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 		vk::SubmitInfo submitInfo(f.acquireSemaphore, waitStage, f.cmd, f.renderSemaphore);
-		if(graphicsQueue.submit(1, &submitInfo, f.fence) != vk::Result::eSuccess) {
+		if(queue.submit(1, &submitInfo, f.fence) != vk::Result::eSuccess) {
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!");
 		}
 
