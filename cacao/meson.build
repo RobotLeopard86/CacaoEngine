@@ -142,7 +142,6 @@ exe_deps = [
 	meson.get_compiler('cpp').find_library('atomic', required: host_machine.system() == 'linux')
 ]
 
-python = find_program('python')
 need_pipewire = run_command([ python, meson.project_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()
 if need_pipewire == 0
 	find_program('pkg-config', required: true)

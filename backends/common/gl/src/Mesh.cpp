@@ -97,7 +97,7 @@ namespace Cacao {
 	}
 
 	void Mesh::Draw() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot draw mesh in non-rendering thread!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot draw mesh in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!");
 
 		//Bind vertex array

@@ -122,6 +122,10 @@ CACAO_KEY_RIGHT_CONTROL
 CACAO_KEY_RIGHT_ALT 
 CACAO_KEY_RIGHT_SUPER 
 CACAO_KEY_MENU 
+```
+
+This is a list of all valid mouse button mappings in Cacao Engine:
+```{code-block} text
 CACAO_MOUSE_BUTTON_1
 CACAO_MOUSE_BUTTON_2
 CACAO_MOUSE_BUTTON_3

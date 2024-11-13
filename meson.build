@@ -1,4 +1,4 @@
-project('cacaoengine', 'cpp', 'c', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
+project('cacaoengine', 'cpp', 'c', meson_version: '>=1.1', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
 
 playground = get_option('build_playground')
 backend = get_option('use_backend')
@@ -7,7 +7,7 @@ if backend == '__DEFAULT__'
 	error('A backend must be specified!')
 endif
 
-python = find_program('python')
+python = find_program('python3')
 
 if get_option('backend') == 'xcode'
 	warning('Generation of Xcode projects is not supported by Cacao Engine yet, so things may or may not work! Continue at your own risk!')
@@ -55,7 +55,7 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 endif
 
 if host_machine.system() == 'darwin'
-	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation'], required: true), language: ['c', 'cpp'])
+	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio'], required: true), language: ['c', 'cpp'])
 	add_project_arguments('-fexperimental-library', language: 'cpp')
 	add_project_link_arguments('-fexperimental-library', language: 'cpp')
 endif
@@ -95,8 +95,6 @@ core_shaders_s = glslc_text_gen.process([
 core_shaders = declare_dependency(sources: [
 	core_shaders_s
 ])
-
-python = find_program('python')
 
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
 icu = icu_sp.get_variable('icuuc_dep')

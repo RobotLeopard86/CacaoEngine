@@ -3,12 +3,14 @@
 #include <atomic>
 #include <string>
 #include <map>
+#include <queue>
 
 #include "dynalo/dynalo.hpp"
 #include "thread_pool/thread_pool.h"
 
 #include "EngineConfig.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Utilities/Task.hpp"
 #include "UI/UIView.hpp"
 
 /**
@@ -54,6 +56,17 @@ namespace Cacao {
 		std::shared_ptr<UIView> GetGlobalUIView() {
 			return uiView;
 		}
+
+		/**
+		 * @brief Run some code on the main thread
+		 * 
+		 * @param func The function to execute
+		 * 
+		 * @returns A future that will resolve when the task completes
+		 * 
+		 * @warning Use this function sparingly as it may cause performance issues
+		 */
+		std::shared_future<void> RunOnMainThread(std::function<void()> func);
 
 		/**
 		 * @brief Check if the engine is running
@@ -111,6 +124,10 @@ namespace Cacao {
 		//Top-level UI view
 		std::shared_ptr<UIView> uiView;
 
+		//Main thread task queue
+		std::queue<Task> mainThreadTasks;
+		std::mutex mainThreadTaskMutex;
+
 		Engine() {}
 
 		//Run the core startup and shutdown systems of the engine (render thread has to be on main and running early to process graphics stuff, so startup work gets forked off)
@@ -124,5 +141,7 @@ namespace Cacao {
 		//To be implemented by backend
 		//Initialize windowing backend early if necessary
 		void EarlyWindowingInit();
+
+		friend class RenderController;
 	};
 }

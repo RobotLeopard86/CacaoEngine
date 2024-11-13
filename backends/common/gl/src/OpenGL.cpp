@@ -245,8 +245,7 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(101, "BadBindState");
 		Exception::RegisterExceptionCode(102, "GLError");
 		Exception::RegisterExceptionCode(103, "UniformUploadFailure");
-		Exception::RegisterExceptionCode(104, "RenderThread");
-		Exception::RegisterExceptionCode(105, "UnsupportedType");
+		Exception::RegisterExceptionCode(104, "UnsupportedType");
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {}

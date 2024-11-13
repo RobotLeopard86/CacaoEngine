@@ -31,7 +31,7 @@ namespace Cacao {
 	}
 
 	void Engine::CoreStartup() {
-		//Register some basic exception codes
+		//Register core exception codes
 		Exception::RegisterExceptionCode(0, "External");
 		Exception::RegisterExceptionCode(1, "FileNotFound");
 		Exception::RegisterExceptionCode(2, "NonexistentValue");
@@ -46,6 +46,7 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(11, "IO");
 		Exception::RegisterExceptionCode(12, "BadCompileState");
 		Exception::RegisterExceptionCode(13, "BadValue");
+		Exception::RegisterExceptionCode(14, "BadThread");
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");
@@ -214,6 +215,16 @@ namespace Cacao {
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");
 		EventManager::GetInstance()->Shutdown();
+	}
+
+	std::shared_future<void> Engine::RunOnMainThread(std::function<void()> func) {
+		Task task(func);
+		std::shared_future<void> ret = task.status->get_future().share();
+		{
+			std::lock_guard lk(mainThreadTaskMutex);
+			mainThreadTasks.push(task);
+		}
+		return ret;
 	}
 
 }

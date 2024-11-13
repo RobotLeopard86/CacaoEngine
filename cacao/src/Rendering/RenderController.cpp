@@ -23,12 +23,30 @@ namespace Cacao {
 
 	void RenderController::Run() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the main thread!");
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()) {
-			//Update window and graphics state
+			//Update window
 			Window::GetInstance()->Update();
+
+			//Update graphics state (mostly for immediate-mode backends)
 			UpdateGraphicsState();
+
+			//Run main thread tasks
+			{
+				std::lock_guard lk(Engine::GetInstance()->mainThreadTaskMutex);
+				while(!Engine::GetInstance()->mainThreadTasks.empty()) {
+					auto task = Engine::GetInstance()->mainThreadTasks.front();
+					try {
+						task.func();
+					} catch(...) {
+						task.status->set_exception(std::current_exception());
+					}
+					task.status->set_value();
+					Engine::GetInstance()->mainThreadTasks.pop();
+				}
+			}
 
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
