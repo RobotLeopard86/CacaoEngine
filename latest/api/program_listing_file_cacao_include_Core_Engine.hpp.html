@@ -198,88 +198,98 @@
 </span><span id="line-3"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
 </span><span id="line-4"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 </span><span id="line-5"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
-</span><span id="line-6">
-</span><span id="line-7"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"dynalo/dynalo.hpp"</span>
-</span><span id="line-8"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"thread_pool/thread_pool.h"</span>
-</span><span id="line-9">
-</span><span id="line-10"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"EngineConfig.hpp"</span>
-</span><span id="line-11"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Utilities/MiscUtils.hpp"</span>
-</span><span id="line-12"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"UI/UIView.hpp"</span>
-</span><span id="line-13">
-</span><span id="line-14"><span class="k">using</span><span class="w"> </span><span class="n">thread_pool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dp</span><span class="o">::</span><span class="n">thread_pool</span><span class="o">&lt;</span><span class="n">dp</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">default_function_type</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">jthread</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="line-6"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"dynalo/dynalo.hpp"</span>
+</span><span id="line-9"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"thread_pool/thread_pool.h"</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"EngineConfig.hpp"</span>
+</span><span id="line-12"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Utilities/MiscUtils.hpp"</span>
+</span><span id="line-13"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Utilities/Task.hpp"</span>
+</span><span id="line-14"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"UI/UIView.hpp"</span>
 </span><span id="line-15">
-</span><span id="line-16"><span class="k">extern</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">backendInitBeforeWindow</span><span class="p">;</span>
-</span><span id="line-17"><span class="k">extern</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">backendShutdownAfterWindow</span><span class="p">;</span>
-</span><span id="line-18">
-</span><span id="line-19"><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-20"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Engine</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-21"><span class="w">      </span><span class="k">public</span><span class="o">:</span>
-</span><span id="line-22"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Engine</span><span class="o">*</span><span class="w"> </span><span class="n">GetInstance</span><span class="p">();</span>
-</span><span id="line-23">
-</span><span id="line-24"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">();</span>
+</span><span id="line-16"><span class="k">using</span><span class="w"> </span><span class="n">thread_pool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dp</span><span class="o">::</span><span class="n">thread_pool</span><span class="o">&lt;</span><span class="n">dp</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">default_function_type</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">jthread</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="k">extern</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">backendInitBeforeWindow</span><span class="p">;</span>
+</span><span id="line-19"><span class="k">extern</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">backendShutdownAfterWindow</span><span class="p">;</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-22"><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Engine</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-23"><span class="w">      </span><span class="k">public</span><span class="o">:</span>
+</span><span id="line-24"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Engine</span><span class="o">*</span><span class="w"> </span><span class="n">GetInstance</span><span class="p">();</span>
 </span><span id="line-25">
-</span><span id="line-26"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Stop</span><span class="p">();</span>
+</span><span id="line-26"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Run</span><span class="p">();</span>
 </span><span id="line-27">
-</span><span id="line-28"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetThreadPool</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-29"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">threadPool</span><span class="p">;</span>
-</span><span id="line-30"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-31">
-</span><span id="line-32"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetGlobalUIView</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-33"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">uiView</span><span class="p">;</span>
-</span><span id="line-34"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-35">
-</span><span id="line-36"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsRunning</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-37"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">run</span><span class="p">;</span>
-</span><span id="line-38"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-28"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Stop</span><span class="p">();</span>
+</span><span id="line-29">
+</span><span id="line-30"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetThreadPool</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-31"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">threadPool</span><span class="p">;</span>
+</span><span id="line-32"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-33">
+</span><span id="line-34"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetGlobalUIView</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-35"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">uiView</span><span class="p">;</span>
+</span><span id="line-36"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-37">
+</span><span id="line-38"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">RunOnMainThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="p">);</span>
 </span><span id="line-39">
-</span><span id="line-40"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsShuttingDown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-41"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">shuttingDown</span><span class="p">;</span>
+</span><span id="line-40"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsRunning</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-41"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">run</span><span class="p">;</span>
 </span><span id="line-42"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-43">
-</span><span id="line-44"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="n">GetThreadID</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-45"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">threadID</span><span class="p">;</span>
+</span><span id="line-44"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsShuttingDown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-45"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">shuttingDown</span><span class="p">;</span>
 </span><span id="line-46"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-47">
-</span><span id="line-48"><span class="w">        </span><span class="n">EngineConfig</span><span class="w"> </span><span class="n">cfg</span><span class="p">;</span>
-</span><span id="line-49">
-</span><span id="line-50"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-51"><span class="w">        </span><span class="c1">//Singleton members</span>
-</span><span id="line-52"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Engine</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
-</span><span id="line-53"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
-</span><span id="line-54">
-</span><span id="line-55"><span class="w">        </span><span class="c1">//Should the engine run?</span>
-</span><span id="line-56"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_bool</span><span class="w"> </span><span class="n">run</span><span class="p">;</span>
-</span><span id="line-57">
-</span><span id="line-58"><span class="w">        </span><span class="c1">//Is shutdown running?</span>
-</span><span id="line-59"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_bool</span><span class="w"> </span><span class="n">shuttingDown</span><span class="p">;</span>
-</span><span id="line-60">
-</span><span id="line-61"><span class="w">        </span><span class="c1">//Thread pool</span>
-</span><span id="line-62"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">threadPool</span><span class="p">;</span>
-</span><span id="line-63">
-</span><span id="line-64"><span class="w">        </span><span class="c1">//Engine thread ID</span>
-</span><span id="line-65"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="n">threadID</span><span class="p">;</span>
-</span><span id="line-66">
-</span><span id="line-67"><span class="w">        </span><span class="c1">//Game library</span>
-</span><span id="line-68"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">dynalo</span><span class="o">::</span><span class="n">library</span><span class="o">&gt;</span><span class="w"> </span><span class="n">gameLib</span><span class="p">;</span>
-</span><span id="line-69">
-</span><span id="line-70"><span class="w">        </span><span class="c1">//Top-level UI view</span>
-</span><span id="line-71"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">uiView</span><span class="p">;</span>
-</span><span id="line-72">
-</span><span id="line-73"><span class="w">        </span><span class="n">Engine</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="line-74">
-</span><span id="line-75"><span class="w">        </span><span class="c1">//Run the core startup and shutdown systems of the engine (render thread has to be on main and running early to process graphics stuff, so startup work gets forked off)</span>
-</span><span id="line-76"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CoreStartup</span><span class="p">();</span>
-</span><span id="line-77"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CoreShutdown</span><span class="p">();</span>
-</span><span id="line-78">
-</span><span id="line-79"><span class="w">        </span><span class="c1">//To be implemented by backend</span>
-</span><span id="line-80"><span class="w">        </span><span class="c1">//Register backend-specific exception codes</span>
-</span><span id="line-81"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RegisterBackendExceptions</span><span class="p">();</span>
+</span><span id="line-48"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="nf">GetThreadID</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-49"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">threadID</span><span class="p">;</span>
+</span><span id="line-50"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-51">
+</span><span id="line-52"><span class="w">        </span><span class="n">EngineConfig</span><span class="w"> </span><span class="n">cfg</span><span class="p">;</span>
+</span><span id="line-53">
+</span><span id="line-54"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-55"><span class="w">        </span><span class="c1">//Singleton members</span>
+</span><span id="line-56"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Engine</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+</span><span id="line-57"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
+</span><span id="line-58">
+</span><span id="line-59"><span class="w">        </span><span class="c1">//Should the engine run?</span>
+</span><span id="line-60"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_bool</span><span class="w"> </span><span class="n">run</span><span class="p">;</span>
+</span><span id="line-61">
+</span><span id="line-62"><span class="w">        </span><span class="c1">//Is shutdown running?</span>
+</span><span id="line-63"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_bool</span><span class="w"> </span><span class="n">shuttingDown</span><span class="p">;</span>
+</span><span id="line-64">
+</span><span id="line-65"><span class="w">        </span><span class="c1">//Thread pool</span>
+</span><span id="line-66"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">threadPool</span><span class="p">;</span>
+</span><span id="line-67">
+</span><span id="line-68"><span class="w">        </span><span class="c1">//Engine thread ID</span>
+</span><span id="line-69"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="n">threadID</span><span class="p">;</span>
+</span><span id="line-70">
+</span><span id="line-71"><span class="w">        </span><span class="c1">//Game library</span>
+</span><span id="line-72"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">dynalo</span><span class="o">::</span><span class="n">library</span><span class="o">&gt;</span><span class="w"> </span><span class="n">gameLib</span><span class="p">;</span>
+</span><span id="line-73">
+</span><span id="line-74"><span class="w">        </span><span class="c1">//Top-level UI view</span>
+</span><span id="line-75"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIView</span><span class="o">&gt;</span><span class="w"> </span><span class="n">uiView</span><span class="p">;</span>
+</span><span id="line-76">
+</span><span id="line-77"><span class="w">        </span><span class="c1">//Main thread task queue</span>
+</span><span id="line-78"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mainThreadTasks</span><span class="p">;</span>
+</span><span id="line-79"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mainThreadTaskMutex</span><span class="p">;</span>
+</span><span id="line-80">
+</span><span id="line-81"><span class="w">        </span><span class="n">Engine</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 </span><span id="line-82">
-</span><span id="line-83"><span class="w">        </span><span class="c1">//To be implemented by backend</span>
-</span><span id="line-84"><span class="w">        </span><span class="c1">//Initialize windowing backend early if necessary</span>
-</span><span id="line-85"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">EarlyWindowingInit</span><span class="p">();</span>
-</span><span id="line-86"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-87"><span class="p">}</span>
+</span><span id="line-83"><span class="w">        </span><span class="c1">//Run the core startup and shutdown systems of the engine (render thread has to be on main and running early to process graphics stuff, so startup work gets forked off)</span>
+</span><span id="line-84"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CoreStartup</span><span class="p">();</span>
+</span><span id="line-85"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CoreShutdown</span><span class="p">();</span>
+</span><span id="line-86">
+</span><span id="line-87"><span class="w">        </span><span class="c1">//To be implemented by backend</span>
+</span><span id="line-88"><span class="w">        </span><span class="c1">//Register backend-specific exception codes</span>
+</span><span id="line-89"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RegisterBackendExceptions</span><span class="p">();</span>
+</span><span id="line-90">
+</span><span id="line-91"><span class="w">        </span><span class="c1">//To be implemented by backend</span>
+</span><span id="line-92"><span class="w">        </span><span class="c1">//Initialize windowing backend early if necessary</span>
+</span><span id="line-93"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">EarlyWindowingInit</span><span class="p">();</span>
+</span><span id="line-94">
+</span><span id="line-95"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RenderController</span><span class="p">;</span>
+</span><span id="line-96"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-97"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
