@@ -18,4 +18,7 @@ This backend uses Vulkan 1.2 with some extensions and SDL (Simple DirectMedia La
 * `VK_EXT_robustness2`
 
 ## Dependencies
-* Vulkan SDK
+* All Platforms: Vulkan SDK
+* Fedora-based (e.g. RHEL) Linux: Packages `wayland-devel`, `wayland-protocols-devel`, `libxkbcommon-devel`, `libXcursor-devel`, `libXfixes-devel`, `libXi-devel`, `libXinerama-devel`, `libXrandr-devel`, `libdecor-devel`, `libdrm-devel`, `ibus-devel`, `fcitx-devel`
+* Debian-based (e.g. Ubuntu) Linux: Packages `libwayland-dev`, `libxkbcommon-dev`, `libxfixes-dev`, `xorg-dev`, `wayland-protocols`, `libdecor0-dev`, `libdrm-dev`, `libibus-1.0-dev`, `fcitx`
+* Arch-based (e.g. Manjaro) Linux: Packages `libglvnd`, `libxkbcommon`, `extra-cmake-modules`, `libxcursor`, `libxi`, `libxfixes`, `libxinerama`, `libxrandr`, `mesa`, `wayland-protocols`, `libibus`, `libdrm`, `fcitx`
