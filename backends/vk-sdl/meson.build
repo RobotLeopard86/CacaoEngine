@@ -37,6 +37,8 @@ sdl_opts.add_cmake_defines({
 	'SDL_POWER': 'OFF',
 	'SDL_SENSOR': 'OFF',
 	'SDL_DIALOG': 'OFF',
+	'SDL_METAL': 'OFF',
+	'SDL_VULKAN': 'ON',
 	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
 	'SDL_WAYLAND': 'ON',
 	'SDL_WAYLAND_SHARED': 'ON',
@@ -48,6 +50,7 @@ sdl_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
+sdl_opts.append_compile_args('c', '-Dhid_darwin_set_open_exclusive(x)=;')
 sdl3_sp = cmake.subproject('sdl3', options: sdl_opts, required: true)
 sdl3 = sdl3_sp.dependency('SDL3-static')
 

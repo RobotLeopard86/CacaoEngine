@@ -55,7 +55,7 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 endif
 
 if host_machine.system() == 'darwin'
-	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio'], required: true), language: ['c', 'cpp'])
+	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio', 'CoreVideo', 'Carbon'], required: true), language: ['c', 'cpp'])
 	add_project_arguments('-fexperimental-library', language: 'cpp')
 	add_project_link_arguments('-fexperimental-library', language: 'cpp')
 endif
