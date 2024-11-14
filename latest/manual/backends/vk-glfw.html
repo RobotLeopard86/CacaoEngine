@@ -89,7 +89,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../shaders/hlsl.html">HLSL Shaders</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Cacao Engine Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../backends.html">Backends<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="compatibility.html">. Compatibility Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
@@ -190,7 +191,7 @@
 </svg>
 </a>
 <div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../../manual.html">Cacao Engine Manual</a>
-<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../backends.html">Cacao Engine Backends</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../backends.html">Backends</a>
 <div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></span>
 </nav>
 <div id="content" role="main">
@@ -221,7 +222,10 @@
 <section id="dependencies">
 <h2>Dependencies<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dependencies" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dependencies'"><span></span></a></h2>
 <ul class="simple">
-<li><p>Vulkan SDK</p></li>
+<li><p>All Platforms: Vulkan SDK</p></li>
+<li><p>Fedora-based (e.g. RHEL) Linux: Packages <code class="docutils literal notranslate"><span class="pre">wayland-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXcursor-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXi-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXinerama-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXrandr-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">extra-cmake-modules</span></code></p></li>
+<li><p>Debian-based (e.g. Ubuntu) Linux: Packages <code class="docutils literal notranslate"><span class="pre">libwayland-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">xorg-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols</span></code></p></li>
+<li><p>Arch-based (e.g. Manjaro) Linux: Packages <code class="docutils literal notranslate"><span class="pre">libglvnd</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon</span></code>, <code class="docutils literal notranslate"><span class="pre">extra-cmake-modules</span></code>, <code class="docutils literal notranslate"><span class="pre">libxcursor</span></code>, <code class="docutils literal notranslate"><span class="pre">libxi</span></code>, <code class="docutils literal notranslate"><span class="pre">libxinerama</span></code>, <code class="docutils literal notranslate"><span class="pre">libxrandr</span></code>, <code class="docutils literal notranslate"><span class="pre">mesa</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols</span></code></p></li>
 </ul>
 </section>
 </section>
