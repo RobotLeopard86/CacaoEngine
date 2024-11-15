@@ -198,10 +198,10 @@
 <section id="backend-vk-glfw">
 <h1>Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#backend-vk-glfw"><span></span></a></h1>
 <p>This backend uses Vulkan 1.2 with some extensions and GLFW.</p>
-<section id="limitations">
-<h2>Limitations<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#limitations" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#limitations'"><span></span></a></h2>
+<section id="known-issues">
+<h2>Known Issues<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#known-issues" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#known-issues'"><span></span></a></h2>
 <ul class="simple">
-<li><p>Running under Wayland causes a crash immediately after startup. This appears to be a GLFW bug. Run under X11 or XWayland instead.</p></li>
+<li><p>Minimizing the window on Wayland causes a crash. Unknown if this occurs on X11.</p></li>
 </ul>
 </section>
 <section id="vulkan-extension-requirements">
@@ -249,7 +249,7 @@
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
-<li><a :data-current="activeSection === '#limitations'" class="reference internal" href="#limitations">Limitations</a></li>
+<li><a :data-current="activeSection === '#known-issues'" class="reference internal" href="#known-issues">Known Issues</a></li>
 <li><a :data-current="activeSection === '#vulkan-extension-requirements'" class="reference internal" href="#vulkan-extension-requirements">Vulkan Extension Requirements</a></li>
 <li><a :data-current="activeSection === '#dependencies'" class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>

@@ -280,48 +280,56 @@
 </span><span id="line-84"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
 </span><span id="line-85"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-86">
-</span><span id="line-87"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="nf">GetInstance</span><span class="p">();</span>
-</span><span id="line-88">
-</span><span id="line-89"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-90"><span class="w">        </span><span class="n">Window</span><span class="p">()</span>
-</span><span id="line-91"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">isOpen</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="w"> </span><span class="n">mode</span><span class="p">(</span><span class="n">WindowMode</span><span class="o">::</span><span class="n">Window</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="line-87"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsMinimized</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-88"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isOpen</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">minimized</span><span class="p">;</span>
+</span><span id="line-89"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-90">
+</span><span id="line-91"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="nf">GetInstance</span><span class="p">();</span>
 </span><span id="line-92">
-</span><span id="line-93"><span class="w">        </span><span class="c1">//Singleton data</span>
-</span><span id="line-94"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
-</span><span id="line-95"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
+</span><span id="line-93"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-94"><span class="w">        </span><span class="n">Window</span><span class="p">()</span>
+</span><span id="line-95"><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">isOpen</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="w"> </span><span class="n">mode</span><span class="p">(</span><span class="n">WindowMode</span><span class="o">::</span><span class="n">Window</span><span class="p">),</span><span class="w"> </span><span class="n">minimized</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </span><span id="line-96">
-</span><span id="line-97"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isOpen</span><span class="p">;</span>
-</span><span id="line-98"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isVisible</span><span class="p">;</span>
-</span><span id="line-99">
-</span><span id="line-100"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">useVSync</span><span class="p">;</span>
-</span><span id="line-101"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-</span><span id="line-102"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">windowTitle</span><span class="p">;</span>
+</span><span id="line-97"><span class="w">        </span><span class="c1">//Singleton data</span>
+</span><span id="line-98"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+</span><span id="line-99"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">instanceExists</span><span class="p">;</span>
+</span><span id="line-100">
+</span><span id="line-101"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isOpen</span><span class="p">;</span>
+</span><span id="line-102"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isVisible</span><span class="p">;</span>
 </span><span id="line-103">
-</span><span id="line-104"><span class="w">        </span><span class="n">WindowMode</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
-</span><span id="line-105">
-</span><span id="line-106"><span class="w">        </span><span class="c1">//The last known window position</span>
-</span><span id="line-107"><span class="w">        </span><span class="c1">//Used for switching between modes</span>
-</span><span id="line-108"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">ivec2</span><span class="w"> </span><span class="n">windowedPosition</span><span class="p">;</span>
-</span><span id="line-109">
-</span><span id="line-110"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateVSyncState</span><span class="p">();</span>
-</span><span id="line-111"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateWindowSize</span><span class="p">();</span>
-</span><span id="line-112"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateVisibilityState</span><span class="p">();</span>
-</span><span id="line-113"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateModeState</span><span class="p">(</span><span class="n">WindowMode</span><span class="w"> </span><span class="n">lastMode</span><span class="p">);</span>
+</span><span id="line-104"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">useVSync</span><span class="p">;</span>
+</span><span id="line-105"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+</span><span id="line-106"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">windowTitle</span><span class="p">;</span>
+</span><span id="line-107">
+</span><span id="line-108"><span class="w">        </span><span class="n">WindowMode</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+</span><span id="line-109"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">minimized</span><span class="p">;</span>
+</span><span id="line-110">
+</span><span id="line-111"><span class="w">        </span><span class="c1">//The last known window position</span>
+</span><span id="line-112"><span class="w">        </span><span class="c1">//Used for switching between modes</span>
+</span><span id="line-113"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">ivec2</span><span class="w"> </span><span class="n">windowedPosition</span><span class="p">;</span>
 </span><span id="line-114">
-</span><span id="line-115"><span class="w">        </span><span class="c1">//For changing the window size from implementation without generating more resize events</span>
-</span><span id="line-116"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ChangeSize</span><span class="p">(</span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-117"><span class="w">            </span><span class="n">win</span><span class="o">-&gt;</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-</span><span id="line-118"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-119"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">WindowResizer</span><span class="p">;</span>
-</span><span id="line-120">
-</span><span id="line-121"><span class="w">        </span><span class="c1">//Backend-implemented data type</span>
-</span><span id="line-122"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">WindowData</span><span class="p">;</span>
-</span><span id="line-123">
-</span><span id="line-124"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">WindowData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
-</span><span id="line-125">
-</span><span id="line-126"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Text</span><span class="p">;</span>
-</span><span id="line-127"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-128"><span class="p">}</span>
+</span><span id="line-115"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateVSyncState</span><span class="p">();</span>
+</span><span id="line-116"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateWindowSize</span><span class="p">();</span>
+</span><span id="line-117"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateVisibilityState</span><span class="p">();</span>
+</span><span id="line-118"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateModeState</span><span class="p">(</span><span class="n">WindowMode</span><span class="w"> </span><span class="n">lastMode</span><span class="p">);</span>
+</span><span id="line-119">
+</span><span id="line-120"><span class="w">        </span><span class="c1">//For changing the window size from implementation without generating more resize events</span>
+</span><span id="line-121"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ChangeSize</span><span class="p">(</span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-122"><span class="w">            </span><span class="n">win</span><span class="o">-&gt;</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+</span><span id="line-123"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-124"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">NotifyMinimizeState</span><span class="p">(</span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">newState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-125"><span class="w">            </span><span class="n">win</span><span class="o">-&gt;</span><span class="n">minimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newState</span><span class="p">;</span>
+</span><span id="line-126"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-127"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">WindowResizer</span><span class="p">;</span>
+</span><span id="line-128">
+</span><span id="line-129"><span class="w">        </span><span class="c1">//Backend-implemented data type</span>
+</span><span id="line-130"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">WindowData</span><span class="p">;</span>
+</span><span id="line-131">
+</span><span id="line-132"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">WindowData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
+</span><span id="line-133">
+</span><span id="line-134"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Text</span><span class="p">;</span>
+</span><span id="line-135"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-136"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
