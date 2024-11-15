@@ -1,4 +1,4 @@
-# . Compatibility Matrix
+# Compatibility Matrix
 
 | ID | What | Windows | Mac | Linux* | More Info |
 | -- | ---- | ------- | --- | ------ | --------- |
