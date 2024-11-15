@@ -81,10 +81,11 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				Close();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 Close();
+								 })
+				.get();
 			return;
 		}
 
@@ -105,11 +106,12 @@ namespace Cacao {
 		int x, y;
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			glm::uvec2* ret = new glm::uvec2(0);
-			Engine::GetInstance()->RunOnMainThread([this, ret](){
-				*ret = GetContentAreaSize();
-			}).get();
+			Engine::GetInstance()->RunOnMainThread([this, ret]() {
+									 *ret = GetContentAreaSize();
+								 })
+				.get();
 			return *ret;
 		}
 
@@ -119,10 +121,11 @@ namespace Cacao {
 
 	void Window::UpdateWindowSize() {
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				UpdateWindowSize();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 UpdateWindowSize();
+								 })
+				.get();
 			return;
 		}
 
@@ -135,10 +138,11 @@ namespace Cacao {
 
 	void Window::UpdateVisibilityState() {
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				UpdateVisibilityState();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 UpdateVisibilityState();
+								 })
+				.get();
 			return;
 		}
 
@@ -151,10 +155,11 @@ namespace Cacao {
 
 	void Window::UpdateModeState(WindowMode lastMode) {
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this, &lastMode](){
-				UpdateModeState(lastMode);
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
+									 UpdateModeState(lastMode);
+								 })
+				.get();
 			return;
 		}
 
@@ -198,10 +203,11 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				Update();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 Update();
+								 })
+				.get();
 			return;
 		}
 
@@ -264,6 +270,18 @@ namespace Cacao {
 					EventManager::GetInstance()->Dispatch(mpe);
 					break;
 				}
+				case SDL_EVENT_WINDOW_MINIMIZED: {
+					Event e("WindowMinimize");
+					EventManager::GetInstance()->Dispatch(e);
+					minimized = true;
+					break;
+				}
+				case SDL_EVENT_WINDOW_RESTORED: {
+					Event e("WindowRestore");
+					EventManager::GetInstance()->Dispatch(e);
+					minimized = false;
+					break;
+				}
 			}
 		}
 	}
@@ -272,10 +290,11 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this, &title](){
-				SetTitle(title);
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this, &title]() {
+									 SetTitle(title);
+								 })
+				.get();
 			return;
 		}
 

@@ -23,7 +23,7 @@ namespace Cacao {
 
 	void RenderController::Run() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!");
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the main thread!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the main thread!");
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()) {

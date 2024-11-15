@@ -17,7 +17,7 @@ Cacao Engine is a game engine developed by RobotLeopard86. It is written in C++ 
 More features may come in the future, so stay tuned!
 
 ## Building
-See the [build instructions page](BUILD.md) for information.
+See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/latest/manual/building.html) for information.
 
 ## Documentation
 Documentation is built and deployed automatically to https://robotleopard86.github.io/CacaoEngine.  

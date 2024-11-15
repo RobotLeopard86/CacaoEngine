@@ -170,7 +170,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Shader::Compile() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
 				this->Compile();
@@ -283,7 +283,7 @@ namespace Cacao {
 	}
 
 	void Shader::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
@@ -302,7 +302,7 @@ namespace Cacao {
 	}
 
 	void Shader::Bind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind shader in non-rendering thread!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind shader in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
 
@@ -311,7 +311,7 @@ namespace Cacao {
 	}
 
 	void Shader::Unbind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind shader in non-rendering thread!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind shader in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!");
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!");
 
@@ -322,7 +322,7 @@ namespace Cacao {
 	}
 
 	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			InvokeGL([this, data, transformation]() {
 				this->UploadData(const_cast<ShaderUploadData&>(data), transformation);
@@ -602,7 +602,7 @@ namespace Cacao {
 	}
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			InvokeGL([projection, view]() {
 				UploadCacaoGlobals(projection, view);

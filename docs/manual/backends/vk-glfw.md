@@ -2,8 +2,8 @@
 
 This backend uses Vulkan 1.2 with some extensions and GLFW.
 
-## Limitations
-* Running under Wayland causes a crash immediately after startup. This appears to be a GLFW bug. Run under X11 or XWayland instead.
+## Known Issues
+* Minimizing the window on Wayland causes a crash. Unknown if this occurs on X11.
 
 ## Vulkan Extension Requirements
 * `VK_KHR_swapchain`

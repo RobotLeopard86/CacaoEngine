@@ -59,11 +59,11 @@ namespace Cacao {
 
 		/**
 		 * @brief Run some code on the main thread
-		 * 
+		 *
 		 * @param func The function to execute
-		 * 
+		 *
 		 * @returns A future that will resolve when the task completes
-		 * 
+		 *
 		 * @warning Use this function sparingly as it may cause performance issues
 		 */
 		std::shared_future<void> RunOnMainThread(std::function<void()> func);
@@ -90,7 +90,7 @@ namespace Cacao {
 		 * @brief Get the thread ID that @ref Run was called on
 		 * @details Useful for identifying the main thread
 		 */
-		std::thread::id GetThreadID() {
+		std::thread::id GetMainThreadID() {
 			return threadID;
 		}
 

@@ -19,11 +19,8 @@ namespace Cacao {
 		T obj;
 	};
 
-	struct CommandBufferSubmission {
-		vk::SubmitInfo2 submitInfo;
-		vk::Fence fence;
-	};
-	std::future<void> SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence);
+	//Utility for submitting command buffers
+	void SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence);
 
 	inline bool didGenShaders = false;
 }

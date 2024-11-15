@@ -18,11 +18,16 @@ namespace Cacao {
 	bool Window::instanceExists = false;
 
 	//Simple friend struct to set window size without function that causes more size events
+	//Also here it does minimization (yes the title is misleading, cry about it in b minor)
 	struct WindowResizer {
 		friend Window;
 
 		void Resize(glm::uvec2 size) {
 			ChangeSize(Window::GetInstance(), size);
+		}
+
+		void SetMinimize(bool isMinimized) {
+			NotifyMinimizeState(Window::GetInstance(), isMinimized);
 		}
 	};
 
@@ -133,6 +138,9 @@ namespace Cacao {
 		glfwSetFramebufferSizeCallback(nativeData->win, [](GLFWwindow* win, int w, int h) {
 			Engine::GetInstance()->GetGlobalUIView()->SetSize({(unsigned int)w, (unsigned int)h});
 		});
+		glfwSetWindowIconifyCallback(nativeData->win, [](GLFWwindow* win, int iconified) {
+			WindowResizer().SetMinimize(iconified == GLFW_TRUE);
+		});
 
 		//Initialize graphics api
 		SetupGraphicsAPI(nativeData->win);
@@ -151,10 +159,11 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				Close();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 Close();
+								 })
+				.get();
 			return;
 		}
 
@@ -172,10 +181,11 @@ namespace Cacao {
 
 	void Window::UpdateWindowSize() {
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				UpdateWindowSize();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 UpdateWindowSize();
+								 })
+				.get();
 			return;
 		}
 
@@ -188,10 +198,11 @@ namespace Cacao {
 
 	void Window::UpdateVisibilityState() {
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				UpdateVisibilityState();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 UpdateVisibilityState();
+								 })
+				.get();
 			return;
 		}
 
@@ -204,13 +215,14 @@ namespace Cacao {
 
 	void Window::UpdateModeState(WindowMode lastMode) {
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this, &lastMode](){
-				UpdateModeState(lastMode);
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
+									 UpdateModeState(lastMode);
+								 })
+				.get();
 			return;
 		}
-		
+
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* modeInfo = glfwGetVideoMode(monitor);
 		if(lastMode == WindowMode::Window) {
@@ -246,14 +258,15 @@ namespace Cacao {
 		int x, y;
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			glm::uvec2* ret = new glm::uvec2(0);
-			Engine::GetInstance()->RunOnMainThread([this, ret](){
-				*ret = GetContentAreaSize();
-			}).get();
+			Engine::GetInstance()->RunOnMainThread([this, ret]() {
+									 *ret = GetContentAreaSize();
+								 })
+				.get();
 			return *ret;
 		}
-		
+
 		glfwGetFramebufferSize(nativeData->win, &x, &y);
 		return glm::uvec2 {(unsigned int)x, (unsigned int)y};
 	}
@@ -262,13 +275,14 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this](){
-				Update();
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 Update();
+								 })
+				.get();
 			return;
 		}
-		
+
 		//Have GLFW check for events
 		glfwPollEvents();
 	}
@@ -277,13 +291,14 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 
 		//Run on the main thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this, &title](){
-				SetTitle(title);
-			}).get();
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this, &title]() {
+									 SetTitle(title);
+								 })
+				.get();
 			return;
 		}
-		
+
 		glfwSetWindowTitle(nativeData->win, title.c_str());
 	}
 

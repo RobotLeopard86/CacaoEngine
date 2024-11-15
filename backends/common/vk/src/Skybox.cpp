@@ -119,7 +119,7 @@ namespace Cacao {
 			//Submit and wait
 			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 			vk::SubmitInfo2 si({}, {}, cbsi);
-			SubmitCommandBuffer(si, imm.fence).wait();
+			SubmitCommandBuffer(si, imm.fence);
 			dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 
 			//Delete upload buffer

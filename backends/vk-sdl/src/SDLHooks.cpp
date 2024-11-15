@@ -70,39 +70,4 @@ namespace Cacao {
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
 		}
 	}
-
-	void Window::UpdateVSyncState() {
-		presentMode = (useVSync ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eImmediate);
-		try {
-			GenSwapchain();
-		} catch(vk::SystemError& err) {
-			std::stringstream emsg;
-			emsg << "Swapchain recreation failed: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
-		}
-	}
-
-	void Window::Present() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!");
-		vk::PresentInfoKHR pi(submission.sem, swapchain, submission.image);
-		try {
-			queue.presentKHR(pi);
-		} catch(vk::SystemError& err) {
-			if(err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eSuboptimalKHR) {
-				try {
-					//Regen swapchain
-					GenSwapchain();
-
-					return;
-				} catch(std::exception& e) {
-					std::stringstream emsg;
-					emsg << "Failed to regenerate swapchain: " << e.what();
-					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
-				}
-			}
-			std::stringstream emsg;
-			emsg << "Failed to present frame: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
-		}
-	}
 }

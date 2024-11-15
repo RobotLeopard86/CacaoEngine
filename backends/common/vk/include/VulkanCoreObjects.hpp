@@ -10,6 +10,7 @@
 #include <vector>
 #include <thread>
 #include <map>
+#include <mutex>
 
 namespace Cacao {
 	struct Immediate {
@@ -21,6 +22,7 @@ namespace Cacao {
 	inline vk::PhysicalDevice physDev;
 	inline vk::Device dev;
 	inline vk::Queue queue;
+	inline std::mutex queueMtx;
 	inline vk::SurfaceKHR surface;
 	inline vk::SurfaceFormatKHR surfaceFormat;
 	inline vk::SwapchainKHR swapchain;

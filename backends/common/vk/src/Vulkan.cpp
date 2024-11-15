@@ -26,22 +26,6 @@ namespace Cacao {
 	Allocated<vk::Buffer> uiQuadUBO;
 	void* uiQuadUBOMem;
 
-	struct SubmissionWithPromise {
-		std::promise<void> promise;
-		CommandBufferSubmission submit;
-
-		//Stupid copy constructor
-		SubmissionWithPromise(const SubmissionWithPromise& other)
-		  : promise(), submit(other.submit) {}
-
-		SubmissionWithPromise(CommandBufferSubmission submission)
-		  : promise(), submit(submission) {}
-	};
-
-	//Queue of outstanding Vulkan command buffers to submit
-	std::queue<SubmissionWithPromise> cmdBufferSubmitQueue;
-	std::mutex submitQueueMtx;
-
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
 	void RankPhysicalDevices(std::vector<vk::PhysicalDevice>* devices, const std::vector<std::function<bool(const vk::PhysicalDevice&)>>& tests) {
 		std::vector<int> scores(devices->size(), 0);
@@ -146,6 +130,7 @@ namespace Cacao {
 			vk_instance.destroy();
 			EngineAssert(false, "No devices support the required Vulkan extensions!");
 		}
+		Logging::EngineLog(std::string("Selected Vulkan device ") + (std::string)physDev.getProperties().deviceName, LogLevel::Trace);
 
 		//Get pool threads
 		MultiFuture<std::thread::id> poolThreadsFut;
@@ -473,26 +458,12 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(101, "WaitExpired");
 	}
 
-	void RenderController::UpdateGraphicsState() {
-		//Since this is guaranteed to run on the render thread we can safely use the queue
-		std::lock_guard lk(submitQueueMtx);
-		while(!cmdBufferSubmitQueue.empty()) {
-			SubmissionWithPromise& submit = cmdBufferSubmitQueue.front();
-			queue.submit2(submit.submit.submitInfo, submit.submit.fence);
-			cmdBufferSubmitQueue.pop();
-			submit.promise.set_value();
-		}
+	void SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence) {
+		std::lock_guard lk(queueMtx);
+		queue.submit2(submitInfo, fence);
 	}
 
-	std::future<void> SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence) {
-		CommandBufferSubmission submission {.submitInfo = submitInfo, .fence = fence};
-		SubmissionWithPromise subWithPromise(submission);
-		{
-			std::lock_guard lk(submitQueueMtx);
-			cmdBufferSubmitQueue.push(subWithPromise);
-		}
-		return subWithPromise.promise.get_future();
-	}
+	void RenderController::UpdateGraphicsState() {}
 
 	void PreShaderCreateHook() {
 		generatedSamplersClamp2Edge = true;
@@ -544,6 +515,12 @@ namespace Cacao {
 	}
 
 	void RenderController::ProcessFrame(std::shared_ptr<Frame> frame) {
+		//Skip if window is minimized; can cause Vulkan issues
+		if(Window::GetInstance()->IsMinimized()) {
+			frameCycle = (frameCycle + 1) % frames.size();
+			return;
+		}
+
 		//Fetch current Vulkan frame object
 		VkFrame f = frames[frameCycle];
 		activeFrame = &f;
@@ -755,5 +732,44 @@ namespace Cacao {
 
 		//Cycle the frame
 		frameCycle = (frameCycle + 1) % frames.size();
+	}
+
+	void Window::UpdateVSyncState() {
+		presentMode = (useVSync ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eImmediate);
+		try {
+			GenSwapchain();
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Swapchain recreation failed: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
+		}
+	}
+
+	void Window::Present() {
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!");
+
+		//Skip if window is minimized
+		if(minimized) return;
+
+		vk::PresentInfoKHR pi(submission.sem, swapchain, submission.image);
+		try {
+			queue.presentKHR(pi);
+		} catch(vk::SystemError& err) {
+			if(err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eSuboptimalKHR) {
+				try {
+					//Regen swapchain
+					GenSwapchain();
+
+					return;
+				} catch(std::exception& e) {
+					std::stringstream emsg;
+					emsg << "Failed to regenerate swapchain: " << e.what();
+					CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
+				}
+			}
+			std::stringstream emsg;
+			emsg << "Failed to present frame: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
+		}
 	}
 }

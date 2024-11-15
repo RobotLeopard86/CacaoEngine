@@ -71,7 +71,7 @@ namespace Cacao {
 	}
 
 	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this, projectionMatrix, viewMatrix]() {

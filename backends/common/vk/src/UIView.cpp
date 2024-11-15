@@ -5,6 +5,7 @@
 #include "ActiveItems.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "Graphics/Window.hpp"
+#include "Graphics/Rendering/RenderController.hpp"
 #include "UIViewShaderManager.hpp"
 #include "UIDrawUBO.hpp"
 
@@ -202,7 +203,7 @@ namespace Cacao {
 		//Submit command buffer and wait
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
-		SubmitCommandBuffer(si, imm.fence).wait();
+		SubmitCommandBuffer(si, imm.fence);
 		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 
 		//Clean up allocated objects
