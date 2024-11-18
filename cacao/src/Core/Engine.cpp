@@ -91,7 +91,7 @@ namespace Cacao {
 		Logging::EngineLog("Initializing audio system...");
 		AudioSystem::GetInstance()->Init();
 
-		//Create a short-lived dummy audio player (for whatever reason this is required to get normal players workimng)
+		//Create a short-lived dummy audio player (for whatever reason this is required to get normal players working)
 		{
 			AudioPlayer ap;
 		}

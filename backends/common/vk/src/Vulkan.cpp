@@ -130,7 +130,7 @@ namespace Cacao {
 			vk_instance.destroy();
 			EngineAssert(false, "No devices support the required Vulkan extensions!");
 		}
-		Logging::EngineLog(std::string("Selected Vulkan device ") + (std::string)physDev.getProperties().deviceName, LogLevel::Trace);
+		Logging::EngineLog(std::string("Selected Vulkan device ") + std::string(physDev.getProperties().deviceName.data()), LogLevel::Trace);
 
 		//Get pool threads
 		MultiFuture<std::thread::id> poolThreadsFut;

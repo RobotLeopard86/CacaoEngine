@@ -21,7 +21,7 @@ namespace Cacao {
 
 			//Create and compile UI view shader object
 			UIView::shader = new Shader(v, f, spec);
-			UIView::shader->Compile();
+			UIView::shader->CompileAsync();
 		}
 		void Release() {
 			UIView::shader->Release();

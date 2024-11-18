@@ -54,13 +54,22 @@ namespace Cacao {
 		void Unbind() override;
 
 		/**
-		 * @brief Compile the raw image data into a format that can be sampled by the GPU
+		 * @brief Compile the raw image data into a format that can be sampled by the GPU asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
 		 * @throws Exception If the cubemap was already compiled
 		 */
-		std::shared_future<void> Compile() override;
+		std::shared_future<void> CompileAsync() override;
+
+		/**
+		 * @brief Compile the raw image data into a format that can be sampled by the GPU synchronously
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the cubemap was already compiled
+		 */
+		void CompileSync() override;
 
 		/**
 		 * @brief Delete the compiled data

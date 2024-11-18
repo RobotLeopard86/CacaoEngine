@@ -38,78 +38,80 @@ namespace Cacao {
 		}
 	}
 
-	std::shared_future<void> Texture2D::Compile() {
+	std::shared_future<void> Texture2D::CompileAsync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
-		const auto doCompile = [this]() {
-			//Allocate texture and upload buffer
-			vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, nativeData->format, {(unsigned int)imgSize.x, (unsigned int)imgSize.y, 1}, 1, 1, vk::SampleCountFlagBits::e1,
-				vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
-			vma::AllocationCreateInfo texAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
-			vk::BufferCreateInfo uploadCI({}, imgSize.x * imgSize.y * numImgChannels, vk::BufferUsageFlagBits::eTransferSrc, vk::SharingMode::eExclusive);
-			vma::AllocationCreateInfo uploadAllocCI({}, vma::MemoryUsage::eCpuToGpu);
-			auto [image, ialloc] = allocator.createImage(texCI, texAllocCI);
-			auto [upload, ualloc] = allocator.createBuffer(uploadCI, uploadAllocCI);
+		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+	}
 
-			//Transfer data to upload buffer
-			void* gpuMem;
-			allocator.mapMemory(ualloc, &gpuMem);
-			std::memcpy(gpuMem, dataBuffer, imgSize.x * imgSize.y * numImgChannels);
-			allocator.unmapMemory(ualloc);
+	void Texture2D::CompileSync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
+		//Allocate texture and upload buffer
+		vk::ImageCreateInfo texCI({}, vk::ImageType::e2D, nativeData->format, {(unsigned int)imgSize.x, (unsigned int)imgSize.y, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
+		vma::AllocationCreateInfo texAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
+		vk::BufferCreateInfo uploadCI({}, imgSize.x * imgSize.y * numImgChannels, vk::BufferUsageFlagBits::eTransferSrc, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo uploadAllocCI({}, vma::MemoryUsage::eCpuToGpu);
+		auto [image, ialloc] = allocator.createImage(texCI, texAllocCI);
+		auto [upload, ualloc] = allocator.createBuffer(uploadCI, uploadAllocCI);
 
-			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = immediates.at(std::this_thread::get_id());
-			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-			imm.cmd.begin(copyBegin);
-			{
-				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-					vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
-					vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
-				vk::DependencyInfo cdDI({}, {}, {}, barrier);
-				imm.cmd.pipelineBarrier2(cdDI);
-			}
-			{
-				vk::BufferImageCopy2 copy(0UL, 0, 0, {vk::ImageAspectFlagBits::eColor, 0, 0, 1}, {0}, {(unsigned int)imgSize.x, (unsigned int)imgSize.y, 1});
-				vk::CopyBufferToImageInfo2 copyInfo(upload, image, vk::ImageLayout::eTransferDstOptimal, copy);
-				imm.cmd.copyBufferToImage2(copyInfo);
-			}
-			{
-				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-					vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
-					vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
-				vk::DependencyInfo cdDI({}, {}, {}, barrier);
-				imm.cmd.pipelineBarrier2(cdDI);
-			}
-			imm.cmd.end();
+		//Transfer data to upload buffer
+		void* gpuMem;
+		allocator.mapMemory(ualloc, &gpuMem);
+		std::memcpy(gpuMem, dataBuffer, imgSize.x * imgSize.y * numImgChannels);
+		allocator.unmapMemory(ualloc);
 
-			//Wait for and reset fence just in case
-			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
-				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
-				dev.resetFences(imm.fence);
-			}
+		//Record a resource copy from the upload buffers to the real buffers
+		Immediate imm = immediates.at(std::this_thread::get_id());
+		vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+		imm.cmd.begin(copyBegin);
+		{
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+			vk::DependencyInfo cdDI({}, {}, {}, barrier);
+			imm.cmd.pipelineBarrier2(cdDI);
+		}
+		{
+			vk::BufferImageCopy2 copy(0UL, 0, 0, {vk::ImageAspectFlagBits::eColor, 0, 0, 1}, {0}, {(unsigned int)imgSize.x, (unsigned int)imgSize.y, 1});
+			vk::CopyBufferToImageInfo2 copyInfo(upload, image, vk::ImageLayout::eTransferDstOptimal, copy);
+			imm.cmd.copyBufferToImage2(copyInfo);
+		}
+		{
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+			vk::DependencyInfo cdDI({}, {}, {}, barrier);
+			imm.cmd.pipelineBarrier2(cdDI);
+		}
+		imm.cmd.end();
 
-			//Submit and wait
-			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
-			vk::SubmitInfo2 si({}, {}, cbsi);
-			SubmitCommandBuffer(si, imm.fence);
-			dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		//Wait for and reset fence just in case
+		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
+			dev.resetFences(imm.fence);
+		}
 
-			//Assign to native data
-			nativeData->texture.alloc = ialloc;
-			nativeData->texture.obj = image;
+		//Submit and wait
+		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+		vk::SubmitInfo2 si({}, {}, cbsi);
+		SubmitCommandBuffer(si, imm.fence);
+		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
 
-			//Destroy upload buffer
-			allocator.destroyBuffer(upload, ualloc);
+		//Assign to native data
+		nativeData->texture.alloc = ialloc;
+		nativeData->texture.obj = image;
 
-			//Create image view
-			vk::ImageViewCreateInfo viewCI({}, nativeData->texture.obj, vk::ImageViewType::e2D, nativeData->format,
-				{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
-				{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
-			nativeData->iview = dev.createImageView(viewCI);
+		//Destroy upload buffer
+		allocator.destroyBuffer(upload, ualloc);
 
-			compiled = true;
-		};
-		return Engine::GetInstance()->GetThreadPool()->enqueue(doCompile).share();
+		//Create image view
+		vk::ImageViewCreateInfo viewCI({}, nativeData->texture.obj, vk::ImageViewType::e2D, nativeData->format,
+			{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+		nativeData->iview = dev.createImageView(viewCI);
+
+		compiled = true;
 	}
 
 	void Texture2D::Release() {

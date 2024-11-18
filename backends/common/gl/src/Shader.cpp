@@ -92,7 +92,7 @@ namespace Cacao {
 		}
 
 		//Compile SPIR-V to GLSL
-		return std::make_pair<std::string, std::string>(vertGLSL.compile(), fragGLSL.compile());
+		return std::make_pair<std::string, std::string>(vertGLSL.CompileAsync(), fragGLSL.CompileAsync());
 	}
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
@@ -169,11 +169,15 @@ namespace Cacao {
 		}
 	}
 
-	std::shared_future<void> Shader::Compile() {
+	void Shader::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Shader::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");

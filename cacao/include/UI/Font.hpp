@@ -29,13 +29,20 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Compile the raw font data into a usable font face
+		 * @brief Compile the raw font data into a usable font face asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
 		 * @throws Exception If the font face was already compiled
 		 */
-		std::shared_future<void> Compile() override;
+		std::shared_future<void> CompileAsync() override;
+
+		/**
+		 * @brief Compile the raw font data into a usable font face synchronously
+		 *
+		 * @throws Exception If the font face was already compiled
+		 */
+		void CompileSync() override;
 
 		/**
 		 * @brief Delete the compiled data

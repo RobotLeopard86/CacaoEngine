@@ -93,13 +93,20 @@ namespace Cacao {
 		void Unbind();
 
 		/**
-		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU
+		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
 		 * @throws Exception If the shader was already compiled or the SPIR-V is invalid
 		 */
-		std::shared_future<void> Compile() override;
+		std::shared_future<void> CompileAsync() override;
+
+		/**
+		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU synchronously
+		 *
+		 * @throws Exception If the shader was already compiled or the SPIR-V is invalid
+		 */
+		void CompileSync() override;
 
 		/**
 		 * @brief Delete the compiled data

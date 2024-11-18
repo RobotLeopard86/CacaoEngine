@@ -1,6 +1,7 @@
 #include "Audio/Sound.hpp"
 
 #include "Core/Exception.hpp"
+#include "Core/Engine.hpp"
 #include "Audio/AudioSystem.hpp"
 
 #define DR_MP3_IMPLEMENTATION
@@ -90,7 +91,12 @@ namespace Cacao {
 		CheckException(goodFormat, Exception::GetExceptionCodeFromMeaning("WrongType"), "The provided sound file is of an unsupported format!");
 	}
 
-	std::shared_future<void> Sound::Compile() {
+	std::shared_future<void> Sound::CompileAsync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
+		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+	}
+
+	void Sound::CompileSync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
 		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
 
@@ -108,11 +114,6 @@ namespace Cacao {
 		EventManager::GetInstance()->SubscribeConsumer("AudioShutdown", sec);
 
 		compiled = true;
-
-		//Return an already completed future
-		std::promise<void> p;
-		p.set_value();
-		return p.get_future().share();
 	}
 
 	void Sound::Release() {

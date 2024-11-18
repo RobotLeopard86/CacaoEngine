@@ -51,7 +51,7 @@ namespace Cacao {
 		//Create and compile skybox shader object
 		compileMode = ShaderCompileMode::VertexOnly;
 		skyboxShader = new Shader(v, f, spec);
-		skyboxShader->Compile().get();
+		skyboxShader->CompileSync();
 		compileMode = ShaderCompileMode::Standard;
 
 		isSetup = true;

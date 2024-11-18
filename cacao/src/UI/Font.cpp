@@ -1,6 +1,7 @@
 #include "UI/Font.hpp"
 
 #include "Core/Exception.hpp"
+#include "Core/Engine.hpp"
 #include "UI/FreetypeOwner.hpp"
 
 #include <filesystem>
@@ -13,18 +14,18 @@ namespace Cacao {
 		filePath = path;
 	}
 
-	std::shared_future<void> Font::Compile() {
+	std::shared_future<void> Font::CompileAsync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled font!");
+		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+	}
+
+	void Font::CompileSync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled font!");
 
 		//Load FreeType font face
 		CheckException(!FT_New_Face(ftLib, filePath.c_str(), 0, &face), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load font face!");
 
 		compiled = true;
-
-		//Return an already completed future
-		std::promise<void> p;
-		p.set_value();
-		return p.get_future().share();
 	}
 
 	void Font::Release() {

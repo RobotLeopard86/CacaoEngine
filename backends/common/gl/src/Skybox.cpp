@@ -50,7 +50,7 @@ namespace Cacao {
 		//Create and compile skybox shader object
 		//Compile future is intentionally discarded as it will be done by the time this is used
 		skyboxShader = new Shader(v, f, spec);
-		skyboxShader->Compile();
+		skyboxShader->CompileAsync();
 
 		isSetup = true;
 	}

@@ -7,6 +7,9 @@
 
 #include "yaml-cpp/yaml.h"
 
+#include <filesystem>
+#include <array>
+
 namespace Cacao {
 	//Required static variable initialization
 	AssetManager* AssetManager::instance = nullptr;
@@ -46,7 +49,7 @@ namespace Cacao {
 			//Validate and try to build spec
 			int specEntryCounter = 1;
 			ShaderSpec spec;
-			constexpr std::array validTypes {
+			constexpr std::array<const char*, 8> validTypes {
 				"bool", "int", "int64", "uint", "uint64", "double", "float", "texture"};
 
 			for(auto node : dfNode["spec"]) {
@@ -116,7 +119,7 @@ namespace Cacao {
 
 			//Construct shader
 			std::shared_ptr<Shader> asset = std::make_shared<Shader>(dfNode["vertex"].Scalar(), dfNode["fragment"].Scalar(), spec);
-			asset->Compile().get();
+			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(definitionPath, std::weak_ptr<Shader> {asset});
@@ -134,7 +137,7 @@ namespace Cacao {
 
 			//Construct an asset, add it to cache, and return a handle
 			std::shared_ptr<Texture2D> tex = std::make_shared<Texture2D>(path);
-			tex->Compile().get();
+			tex->CompileSync();
 			this->assetCache.insert_or_assign(path, std::weak_ptr<Texture2D> {tex});
 			return AssetHandle<Texture2D>(path, tex);
 		});
@@ -164,7 +167,7 @@ namespace Cacao {
 
 			//Create and compile cubemap
 			std::shared_ptr<Cubemap> asset = std::make_shared<Cubemap>(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
-			asset->Compile().get();
+			asset->CompileSync();
 
 			//Add asset to cache and return handle
 			this->assetCache.insert_or_assign(definitionPath, std::weak_ptr<Cubemap> {asset});
@@ -196,7 +199,7 @@ namespace Cacao {
 
 			//Create and compile skybox cubemap
 			Cubemap* cube = new Cubemap(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
-			cube->Compile().get();
+			cube->CompileSync();
 
 			//Create skybox
 			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(cube);
@@ -230,7 +233,7 @@ namespace Cacao {
 			//Extract mesh, compile it, and add it to asset cache
 			std::shared_ptr<Mesh> asset;
 			asset.reset(mod.ExtractMesh(mesh));
-			asset->Compile().get();
+			asset->CompileSync();
 			this->assetCache.insert_or_assign(location, std::weak_ptr<Mesh> {asset});
 
 			//Return asset handle
@@ -246,7 +249,7 @@ namespace Cacao {
 
 			//Construct an asset, add it to cache, and return a handle
 			std::shared_ptr<Sound> snd = std::make_shared<Sound>(path);
-			snd->Compile().get();
+			snd->CompileSync();
 			this->assetCache.insert_or_assign(path, std::weak_ptr<Sound> {snd});
 
 			return AssetHandle<Sound>(path, snd);
@@ -261,7 +264,7 @@ namespace Cacao {
 
 			//Construct an asset, add it to cache, and return a handle
 			std::shared_ptr<Font> font = std::make_shared<Font>(path);
-			font->Compile().get();
+			font->CompileSync();
 			this->assetCache.insert_or_assign(path, std::weak_ptr<Font> {font});
 
 			return AssetHandle<Font>(path, font);

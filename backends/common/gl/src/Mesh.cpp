@@ -17,11 +17,15 @@ namespace Cacao {
 		nativeData.reset(new MeshData());
 	}
 
-	std::shared_future<void> Mesh::Compile() {
+	void Mesh::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Mesh::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!");

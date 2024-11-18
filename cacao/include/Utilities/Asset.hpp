@@ -13,15 +13,24 @@ namespace Cacao {
 	class Asset {
 	  public:
 		/**
-		 * @brief Compile the raw asset data into a format that can be used
+		 * @brief Compile the raw asset data into a format that can be used asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
 		 * @throws Exception If the asset was already compiled
 		 */
-		virtual std::shared_future<void> Compile() {
+		virtual std::shared_future<void> CompileAsync() {
 			Logging::EngineLog("Cannot compile base asset type!", LogLevel::Error);
 			return {};
+		}
+
+		/**
+		 * @brief Compile the raw asset data into a format that can be used synchronously
+		 *
+		 * @throws Exception If the asset was already compiled
+		 */
+		virtual void CompileSync() {
+			Logging::EngineLog("Cannot compile base asset type!", LogLevel::Error);
 		}
 
 		/**

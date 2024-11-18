@@ -29,11 +29,15 @@ namespace Cacao {
 		currentSlot = -1;
 	}
 
-	std::shared_future<void> Cubemap::Compile() {
+	void Cubemap::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Cubemap::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!");

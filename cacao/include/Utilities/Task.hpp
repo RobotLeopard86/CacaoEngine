@@ -30,7 +30,7 @@ namespace Cacao {
 		/**
 		 * @brief Create a task and a new status promise
 		 */
-		explicit Task(std::function<void()> job)
+		Task(std::function<void()> job)
 		  : func(job) {
 			status.reset(new std::promise<void>());
 		}

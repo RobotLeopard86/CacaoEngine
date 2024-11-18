@@ -147,115 +147,117 @@ namespace Cacao {
 		PrepShaderData(spec, nd);
 	}
 
-	std::shared_future<void> Shader::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
-		const auto doCompile = [this]() {
-			//Create shader modules
-			vk::ShaderModuleCreateInfo vertexModCI({}, nd->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->vertexCode.data()));
-			vk::ShaderModule vertexMod = dev.createShaderModule(vertexModCI);
-			vk::ShaderModuleCreateInfo fragmentModCI({}, nd->fragmentCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->fragmentCode.data()));
-			vk::ShaderModule fragmentMod = dev.createShaderModule(fragmentModCI);
-			vk::PipelineShaderStageCreateInfo vertexStageCI({}, vk::ShaderStageFlagBits::eVertex, vertexMod, "main");
-			vk::PipelineShaderStageCreateInfo fragmentStageCI({}, vk::ShaderStageFlagBits::eFragment, fragmentMod, "main");
-			std::array<vk::PipelineShaderStageCreateInfo, 2> shaderStages = {vertexStageCI, fragmentStageCI};
+	std::shared_future<void> Shader::CompileAsync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
+		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+	}
 
-			//Create input assembly info
-			vk::PipelineInputAssemblyStateCreateInfo inputAssemblyCI({}, vk::PrimitiveTopology::eTriangleList, VK_FALSE);
+	void Shader::CompileSync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
+		//Create shader modules
+		vk::ShaderModuleCreateInfo vertexModCI({}, nd->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->vertexCode.data()));
+		vk::ShaderModule vertexMod = dev.createShaderModule(vertexModCI);
+		vk::ShaderModuleCreateInfo fragmentModCI({}, nd->fragmentCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->fragmentCode.data()));
+		vk::ShaderModule fragmentMod = dev.createShaderModule(fragmentModCI);
+		vk::PipelineShaderStageCreateInfo vertexStageCI({}, vk::ShaderStageFlagBits::eVertex, vertexMod, "main");
+		vk::PipelineShaderStageCreateInfo fragmentStageCI({}, vk::ShaderStageFlagBits::eFragment, fragmentMod, "main");
+		std::array<vk::PipelineShaderStageCreateInfo, 2> shaderStages = {vertexStageCI, fragmentStageCI};
 
-			//Create rasterization info
-			vk::PipelineRasterizationStateCreateInfo rasterizerCI(
-				{}, VK_FALSE, VK_FALSE, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack,
-				vk::FrontFace::eCounterClockwise, VK_FALSE, 0, 0, 0, 1.0f);
-			vk::PipelineMultisampleStateCreateInfo multisamplingCI({}, vk::SampleCountFlagBits::e1, VK_FALSE);
+		//Create input assembly info
+		vk::PipelineInputAssemblyStateCreateInfo inputAssemblyCI({}, vk::PrimitiveTopology::eTriangleList, VK_FALSE);
 
-			//Define viewport state
-			vk::PipelineViewportStateCreateInfo viewportState({}, 1, nullptr, 1, nullptr);
+		//Create rasterization info
+		vk::PipelineRasterizationStateCreateInfo rasterizerCI(
+			{}, VK_FALSE, VK_FALSE, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack,
+			vk::FrontFace::eCounterClockwise, VK_FALSE, 0, 0, 0, 1.0f);
+		vk::PipelineMultisampleStateCreateInfo multisamplingCI({}, vk::SampleCountFlagBits::e1, VK_FALSE);
 
-			//Create color and depth-stencil attachments
-			vk::PipelineDepthStencilStateCreateInfo depthStencilCI(
-				{}, VK_TRUE, VK_TRUE, vk::CompareOp::eLess,
-				VK_FALSE, VK_FALSE, {}, {}, 1.0f, 1.0f);
-			vk::PipelineColorBlendAttachmentState colorBlendAttach(
-				VK_FALSE, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
-				vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
-			vk::PipelineColorBlendStateCreateInfo colorBlendCI({}, VK_FALSE, vk::LogicOp::eCopy, colorBlendAttach, {0.0f, 0.0f, 0.0f, 0.0f});
+		//Define viewport state
+		vk::PipelineViewportStateCreateInfo viewportState({}, 1, nullptr, 1, nullptr);
 
-			//Create dynamic state info
-			std::vector<vk::DynamicState> dynamicStates = {
-				vk::DynamicState::eViewport,
-				vk::DynamicState::eScissor,
-				vk::DynamicState::eColorBlendEquationEXT,
-				vk::DynamicState::eColorBlendEnableEXT,
-				vk::DynamicState::eDepthTestEnable,
-				vk::DynamicState::eDepthCompareOp};
-			vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
+		//Create color and depth-stencil attachments
+		vk::PipelineDepthStencilStateCreateInfo depthStencilCI(
+			{}, VK_TRUE, VK_TRUE, vk::CompareOp::eLess,
+			VK_FALSE, VK_FALSE, {}, {}, 1.0f, 1.0f);
+		vk::PipelineColorBlendAttachmentState colorBlendAttach(
+			VK_FALSE, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
+			vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
+		vk::PipelineColorBlendStateCreateInfo colorBlendCI({}, VK_FALSE, vk::LogicOp::eCopy, colorBlendAttach, {0.0f, 0.0f, 0.0f, 0.0f});
 
-			//Create pipeline rendering info
-			vk::PipelineRenderingCreateInfo pipelineRenderingInfo(0, surfaceFormat.format, selectedDF);
+		//Create dynamic state info
+		std::vector<vk::DynamicState> dynamicStates = {
+			vk::DynamicState::eViewport,
+			vk::DynamicState::eScissor,
+			vk::DynamicState::eColorBlendEquationEXT,
+			vk::DynamicState::eColorBlendEnableEXT,
+			vk::DynamicState::eDepthTestEnable,
+			vk::DynamicState::eDepthCompareOp};
+		vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
-			//Create input attributes and bindings
-			vk::VertexInputBindingDescription inputBinding(0, sizeof(Vertex), vk::VertexInputRate::eVertex);
-			std::array<vk::VertexInputAttributeDescription, 5> inputAttrs {{{0, 0, vk::Format::eR32G32B32Sfloat, 0},
-				{1, 0, vk::Format::eR32G32Sfloat, offsetof(Vertex, texCoords)},
-				{2, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, tangent)},
-				{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, bitangent)},
-				{4, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)}}};
-			vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
-			if(compileMode == ShaderCompileMode::VertexOnly) {
-				inputBinding.stride = sizeof(float) * 3;
-				inputStateCI.setVertexBindingDescriptions(inputBinding);
-				inputStateCI.setVertexAttributeDescriptions(inputAttrs[0]);
-			} else if(compileMode == ShaderCompileMode::VertexAndTexCoord) {
-				inputBinding.stride = sizeof(float) * 5;
-				inputStateCI.setVertexBindingDescriptions(inputBinding);
-				std::array<vk::VertexInputAttributeDescription, 2> vtcAttrs = {inputAttrs[0], inputAttrs[1]};
-				inputStateCI.setVertexAttributeDescriptions(vtcAttrs);
+		//Create pipeline rendering info
+		vk::PipelineRenderingCreateInfo pipelineRenderingInfo(0, surfaceFormat.format, selectedDF);
+
+		//Create input attributes and bindings
+		vk::VertexInputBindingDescription inputBinding(0, sizeof(Vertex), vk::VertexInputRate::eVertex);
+		std::array<vk::VertexInputAttributeDescription, 5> inputAttrs {{{0, 0, vk::Format::eR32G32B32Sfloat, 0},
+			{1, 0, vk::Format::eR32G32Sfloat, offsetof(Vertex, texCoords)},
+			{2, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, tangent)},
+			{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, bitangent)},
+			{4, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)}}};
+		vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
+		if(compileMode == ShaderCompileMode::VertexOnly) {
+			inputBinding.stride = sizeof(float) * 3;
+			inputStateCI.setVertexBindingDescriptions(inputBinding);
+			inputStateCI.setVertexAttributeDescriptions(inputAttrs[0]);
+		} else if(compileMode == ShaderCompileMode::VertexAndTexCoord) {
+			inputBinding.stride = sizeof(float) * 5;
+			inputStateCI.setVertexBindingDescriptions(inputBinding);
+			std::array<vk::VertexInputAttributeDescription, 2> vtcAttrs = {inputAttrs[0], inputAttrs[1]};
+			inputStateCI.setVertexAttributeDescriptions(vtcAttrs);
+		}
+
+		//Create image slot samplers
+		for(auto slot : nd->imageSlots) {
+			if(slot.second.dimensionality == spv::Dim::DimCube) {
+				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
+					vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+				nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
+			} else {
+				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, slot.second.wrapMode, slot.second.wrapMode,
+					slot.second.wrapMode, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+				nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 			}
+		}
 
-			//Create image slot samplers
-			for(auto slot : nd->imageSlots) {
-				if(slot.second.dimensionality == spv::Dim::DimCube) {
-					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
-						vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-					nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
-				} else {
-					vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, slot.second.wrapMode, slot.second.wrapMode,
-						slot.second.wrapMode, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-					nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
-				}
-			}
+		//Create descriptor set layout
+		std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
+		dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
+		for(auto slot : nd->imageSlots) {
+			dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
+		}
+		nd->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
-			//Create descriptor set layout
-			std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
-			dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
-			for(auto slot : nd->imageSlots) {
-				dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
-			}
-			nd->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
+		//Create pipeline layout
+		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4));
+		vk::PipelineLayoutCreateInfo layoutCI({}, nd->setLayout, pcr);
+		nd->pipelineLayout = dev.createPipelineLayout(layoutCI);
 
-			//Create pipeline layout
-			vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4));
-			vk::PipelineLayoutCreateInfo layoutCI({}, nd->setLayout, pcr);
-			nd->pipelineLayout = dev.createPipelineLayout(layoutCI);
+		//Create pipeline
+		vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
+			&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, nd->pipelineLayout);
+		pipelineCI.pNext = &pipelineRenderingInfo;
+		auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
+		CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!");
+		nd->pipeline = pipelineResult.value;
 
-			//Create pipeline
-			vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
-				&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, nd->pipelineLayout);
-			pipelineCI.pNext = &pipelineRenderingInfo;
-			auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
-			CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!");
-			nd->pipeline = pipelineResult.value;
+		//Free shader modules now that we don't need them
+		dev.destroyShaderModule(vertexMod);
+		dev.destroyShaderModule(fragmentMod);
 
-			//Free shader modules now that we don't need them
-			dev.destroyShaderModule(vertexMod);
-			dev.destroyShaderModule(fragmentMod);
+		//Allocate shader data memory (scary)
+		nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
 
-			//Allocate shader data memory (scary)
-			nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
-
-			compiled = true;
-		};
-		return Engine::GetInstance()->GetThreadPool()->enqueue(doCompile).share();
+		compiled = true;
 	}
 
 	void Shader::Release() {

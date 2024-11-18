@@ -40,11 +40,15 @@ namespace Cacao {
 		}
 	}
 
-	std::shared_future<void> Texture2D::Compile() {
+	void Cubemap::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Texture2D::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
