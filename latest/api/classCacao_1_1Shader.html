@@ -289,15 +289,25 @@
 </dl>
 </dd></dl>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7CompileEv">
-<span id="_CPPv3N5Cacao6Shader7CompileEv"></span><span id="_CPPv2N5Cacao6Shader7CompileEv"></span><span id="Cacao::Shader::Compile"></span><span class="target" id="classCacao_1_1Shader_1ae2372978dff65722c4cb72b4948748e7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader7CompileEv'"><span></span></a><br/></dt>
-<dd><p>Compile the raw SPIR-V code into a format that can be run by the GPU. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader12CompileAsyncEv">
+<span id="_CPPv3N5Cacao6Shader12CompileAsyncEv"></span><span id="_CPPv2N5Cacao6Shader12CompileAsyncEv"></span><span id="Cacao::Shader::CompileAsync"></span><span class="target" id="classCacao_1_1Shader_1ac2a02cc2f04d01e86c00e9b954fc5669"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompileAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader12CompileAsyncEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader12CompileAsyncEv'"><span></span></a><br/></dt>
+<dd><p>Compile the raw SPIR-V code into a format that can be run by the GPU asynchronously. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was already compiled or the SPIR-V is invalid </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A future that will resolve when compilation is done</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader11CompileSyncEv">
+<span id="_CPPv3N5Cacao6Shader11CompileSyncEv"></span><span id="_CPPv2N5Cacao6Shader11CompileSyncEv"></span><span id="Cacao::Shader::CompileSync"></span><span class="target" id="classCacao_1_1Shader_1ae5f295f35e335e4645d856eea640e5b6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompileSync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao6Shader11CompileSyncEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao6Shader11CompileSyncEv'"><span></span></a><br/></dt>
+<dd><p>Compile the raw SPIR-V code into a format that can be run by the GPU synchronously. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was already compiled or the SPIR-V is invalid </p>
 </dd>
 </dl>
 </dd></dl>
@@ -411,7 +421,8 @@
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao6ShaderD0Ev'" class="reference internal" href="#_CPPv4N5Cacao6ShaderD0Ev"><code class="docutils literal notranslate"><span class="pre">Shader::~Shader()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader4BindEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader4BindEv"><code class="docutils literal notranslate"><span class="pre">Shader::Bind()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader6UnbindEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader6UnbindEv"><code class="docutils literal notranslate"><span class="pre">Shader::Unbind()</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader7CompileEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader7CompileEv"><code class="docutils literal notranslate"><span class="pre">Shader::Compile()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader12CompileAsyncEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Shader::CompileAsync()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader11CompileSyncEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Shader::CompileSync()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader7ReleaseEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Shader::Release()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao6Shader7IsBoundEv'" class="reference internal" href="#_CPPv4N5Cacao6Shader7IsBoundEv"><code class="docutils literal notranslate"><span class="pre">Shader::IsBound()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4NK5Cacao6Shader7GetSpecEv'" class="reference internal" href="#_CPPv4NK5Cacao6Shader7GetSpecEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetSpec()</span></code></a></li>

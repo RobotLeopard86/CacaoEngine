@@ -239,9 +239,9 @@
 <span id="_CPPv3N5Cacao5SoundD0Ev"></span><span id="_CPPv2N5Cacao5SoundD0Ev"></span><span id="Cacao::Sound::~Sound"></span><span class="target" id="classCacao_1_1Sound_1a192ee40ab7dacde4084ce4f67df998c5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Sound</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5SoundD0Ev" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5SoundD0Ev'"><span></span></a><br/></dt>
 <dd></dd></dl>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound7CompileEv">
-<span id="_CPPv3N5Cacao5Sound7CompileEv"></span><span id="_CPPv2N5Cacao5Sound7CompileEv"></span><span id="Cacao::Sound::Compile"></span><span class="target" id="classCacao_1_1Sound_1a42147d817d720a314d1f2e6c60ff3592"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Compile</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Sound7CompileEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Sound7CompileEv'"><span></span></a><br/></dt>
-<dd><p>Compile the raw sound data into a format that can be played. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound12CompileAsyncEv">
+<span id="_CPPv3N5Cacao5Sound12CompileAsyncEv"></span><span id="_CPPv2N5Cacao5Sound12CompileAsyncEv"></span><span id="Cacao::Sound::CompileAsync"></span><span class="target" id="classCacao_1_1Sound_1a24314f5ccdaf89b8de5853235dd2cdba"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompileAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Sound12CompileAsyncEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Sound12CompileAsyncEv'"><span></span></a><br/></dt>
+<dd><p>Compile the raw sound data into a format that can be played asynchronously. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The compiled data will be automatically released when at <a class="reference internal" href="classCacao_1_1AudioSystem.html#classCacao_1_1AudioSystem"><span class="std std-ref">AudioSystem</span></a> shuts down</p>
@@ -252,6 +252,20 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A future that will resolve when compilation is done</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound11CompileSyncEv">
+<span id="_CPPv3N5Cacao5Sound11CompileSyncEv"></span><span id="_CPPv2N5Cacao5Sound11CompileSyncEv"></span><span id="Cacao::Sound::CompileSync"></span><span class="target" id="classCacao_1_1Sound_1afa6a234c89fb1d32a70705120fb7e459"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompileSync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#_CPPv4N5Cacao5Sound11CompileSyncEv" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#_CPPv4N5Cacao5Sound11CompileSyncEv'"><span></span></a><br/></dt>
+<dd><p>Compile the raw sound data into a format that can be played synchronously. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The compiled data will be automatically released when at <a class="reference internal" href="classCacao_1_1AudioSystem.html#classCacao_1_1AudioSystem"><span class="std std-ref">AudioSystem</span></a> shuts down</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the sound was already compiled or the audio system is uninitialized </p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,7 +316,8 @@
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao5SoundE'" class="reference internal" href="#_CPPv4N5Cacao5SoundE"><code class="docutils literal notranslate"><span class="pre">Sound</span></code></a><ul>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao5Sound5SoundENSt6stringE'" class="reference internal" href="#_CPPv4N5Cacao5Sound5SoundENSt6stringE"><code class="docutils literal notranslate"><span class="pre">Sound::Sound()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao5SoundD0Ev'" class="reference internal" href="#_CPPv4N5Cacao5SoundD0Ev"><code class="docutils literal notranslate"><span class="pre">Sound::~Sound()</span></code></a></li>
-<li><a :data-current="activeSection === '#_CPPv4N5Cacao5Sound7CompileEv'" class="reference internal" href="#_CPPv4N5Cacao5Sound7CompileEv"><code class="docutils literal notranslate"><span class="pre">Sound::Compile()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao5Sound12CompileAsyncEv'" class="reference internal" href="#_CPPv4N5Cacao5Sound12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Sound::CompileAsync()</span></code></a></li>
+<li><a :data-current="activeSection === '#_CPPv4N5Cacao5Sound11CompileSyncEv'" class="reference internal" href="#_CPPv4N5Cacao5Sound11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Sound::CompileSync()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao5Sound7ReleaseEv'" class="reference internal" href="#_CPPv4N5Cacao5Sound7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Sound::Release()</span></code></a></li>
 <li><a :data-current="activeSection === '#_CPPv4N5Cacao5Sound7GetTypeEv'" class="reference internal" href="#_CPPv4N5Cacao5Sound7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Sound::GetType()</span></code></a></li>
 </ul>

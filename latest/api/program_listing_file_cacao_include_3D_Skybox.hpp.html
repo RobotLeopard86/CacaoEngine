@@ -220,96 +220,100 @@
 </span><span id="line-24"><span class="w">            </span><span class="n">_InitCopyND</span><span class="p">();</span>
 </span><span id="line-25"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-26">
-</span><span id="line-27"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Compile</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-28"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">Compile</span><span class="p">();</span>
+</span><span id="line-27"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CompileAsync</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-28"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">CompileAsync</span><span class="p">();</span>
 </span><span id="line-29"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-30">
-</span><span id="line-31"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Release</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-32"><span class="w">            </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">Release</span><span class="p">();</span>
+</span><span id="line-31"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">CompileSync</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-32"><span class="w">            </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">CompileSync</span><span class="p">();</span>
 </span><span id="line-33"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-34">
-</span><span id="line-35"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsCompiled</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-36"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">IsCompiled</span><span class="p">();</span>
+</span><span id="line-35"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Release</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-36"><span class="w">            </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">Release</span><span class="p">();</span>
 </span><span id="line-37"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-38">
-</span><span id="line-39"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-40"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">"SKYBOX"</span><span class="p">;</span>
+</span><span id="line-39"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsCompiled</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-40"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">texture</span><span class="o">-&gt;</span><span class="n">IsCompiled</span><span class="p">();</span>
 </span><span id="line-41"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-42">
-</span><span id="line-43"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">projectionMatrix</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">viewMatrix</span><span class="p">);</span>
-</span><span id="line-44">
-</span><span id="line-45"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">CommonSetup</span><span class="p">();</span>
+</span><span id="line-43"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-44"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">"SKYBOX"</span><span class="p">;</span>
+</span><span id="line-45"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-46">
-</span><span id="line-47"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">CommonCleanup</span><span class="p">();</span>
+</span><span id="line-47"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">projectionMatrix</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">viewMatrix</span><span class="p">);</span>
 </span><span id="line-48">
-</span><span id="line-49"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">rotation</span><span class="p">;</span>
+</span><span id="line-49"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">CommonSetup</span><span class="p">();</span>
 </span><span id="line-50">
-</span><span id="line-51"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-52"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">textureOwner</span><span class="p">;</span>
-</span><span id="line-53"><span class="w">        </span><span class="n">Cubemap</span><span class="o">*</span><span class="w"> </span><span class="n">texture</span><span class="p">;</span>
+</span><span id="line-51"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">CommonCleanup</span><span class="p">();</span>
+</span><span id="line-52">
+</span><span id="line-53"><span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">rotation</span><span class="p">;</span>
 </span><span id="line-54">
-</span><span id="line-55"><span class="w">        </span><span class="c1">//Initialize native data on copy</span>
-</span><span id="line-56"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitCopyND</span><span class="p">();</span>
-</span><span id="line-57">
-</span><span id="line-58"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Shader</span><span class="o">*</span><span class="w"> </span><span class="n">skyboxShader</span><span class="p">;</span>
-</span><span id="line-59"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">skyboxVerts</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-60"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-61"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-62"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-63"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-64"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-65"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-66"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-67"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-68"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-55"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-56"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">textureOwner</span><span class="p">;</span>
+</span><span id="line-57"><span class="w">        </span><span class="n">Cubemap</span><span class="o">*</span><span class="w"> </span><span class="n">texture</span><span class="p">;</span>
+</span><span id="line-58">
+</span><span id="line-59"><span class="w">        </span><span class="c1">//Initialize native data on copy</span>
+</span><span id="line-60"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitCopyND</span><span class="p">();</span>
+</span><span id="line-61">
+</span><span id="line-62"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Shader</span><span class="o">*</span><span class="w"> </span><span class="n">skyboxShader</span><span class="p">;</span>
+</span><span id="line-63"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">skyboxVerts</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-64"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-65"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-66"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-67"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-68"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
 </span><span id="line-69"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-70"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-71"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-72"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-73"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-74"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-75"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-76"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-77"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-78"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-79"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-80"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-81"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-82"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-83"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-84"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-85"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-86"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-87"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-88"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-89"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-90"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-91"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-92"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-93"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
-</span><span id="line-94"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
-</span><span id="line-95"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
-</span><span id="line-96">
-</span><span id="line-97"><span class="w">        </span><span class="c1">//Vertex shader SPIR-V code (and yes, the name joke is intentional)</span>
-</span><span id="line-98"><span class="w">        </span><span class="c1">//Generated by glslc at build-time</span>
-</span><span id="line-99"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">vsCode</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span>
-</span><span id="line-100"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"skybox.vert.txt"</span>
-</span><span id="line-101"><span class="w">            </span><span class="p">;</span>
-</span><span id="line-102">
-</span><span id="line-103"><span class="w">        </span><span class="c1">//Fragment shader SPIR-V code</span>
-</span><span id="line-104"><span class="w">        </span><span class="c1">//Generated by glslc at build-time</span>
-</span><span id="line-105"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">fsCode</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span>
-</span><span id="line-106"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"skybox.frag.txt"</span>
-</span><span id="line-107"><span class="w">            </span><span class="p">;</span>
-</span><span id="line-108">
-</span><span id="line-109"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSetup</span><span class="p">;</span>
-</span><span id="line-110">
-</span><span id="line-111"><span class="w">        </span><span class="c1">//Backend-implemented data type</span>
-</span><span id="line-112"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SkyboxData</span><span class="p">;</span>
-</span><span id="line-113">
-</span><span id="line-114"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SkyboxData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
-</span><span id="line-115"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-116"><span class="p">}</span>
+</span><span id="line-70"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-71"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-72"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-73"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-74"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-75"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-76"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-77"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-78"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-79"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-80"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-81"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-82"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-83"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-84"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-85"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-86"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-87"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-88"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-89"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-90"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-91"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-92"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-93"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-94"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-95"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-96"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-97"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span>
+</span><span id="line-98"><span class="w">            </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span>
+</span><span id="line-99"><span class="w">            </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">};</span>
+</span><span id="line-100">
+</span><span id="line-101"><span class="w">        </span><span class="c1">//Vertex shader SPIR-V code (and yes, the name joke is intentional)</span>
+</span><span id="line-102"><span class="w">        </span><span class="c1">//Generated by glslc at build-time</span>
+</span><span id="line-103"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">vsCode</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span>
+</span><span id="line-104"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"skybox.vert.txt"</span>
+</span><span id="line-105"><span class="w">            </span><span class="p">;</span>
+</span><span id="line-106">
+</span><span id="line-107"><span class="w">        </span><span class="c1">//Fragment shader SPIR-V code</span>
+</span><span id="line-108"><span class="w">        </span><span class="c1">//Generated by glslc at build-time</span>
+</span><span id="line-109"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">fsCode</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span>
+</span><span id="line-110"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"skybox.frag.txt"</span>
+</span><span id="line-111"><span class="w">            </span><span class="p">;</span>
+</span><span id="line-112">
+</span><span id="line-113"><span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSetup</span><span class="p">;</span>
+</span><span id="line-114">
+</span><span id="line-115"><span class="w">        </span><span class="c1">//Backend-implemented data type</span>
+</span><span id="line-116"><span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SkyboxData</span><span class="p">;</span>
+</span><span id="line-117">
+</span><span id="line-118"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SkyboxData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
+</span><span id="line-119"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-120"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
