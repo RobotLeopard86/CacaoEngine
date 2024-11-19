@@ -160,4 +160,6 @@ namespace Cacao {
 		//Regenerate frame objects
 		GenFrameObjects();
 	}
+
+	std::map<std::thread::id, Immediate> Immediate::immediates = std::map<std::thread::id, Immediate>();
 }

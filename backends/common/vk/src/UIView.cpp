@@ -96,7 +96,7 @@ namespace Cacao {
 		backBuffer->view = dev.createImageView(imageViewCI);
 
 		//Fetch immediate
-		Immediate imm = immediates.at(std::this_thread::get_id());
+		Immediate imm = Immediate::Get();
 
 		//Create projection matrix
 		glm::mat4 project = projectionCorrection * glm::ortho(0.0f, float(size.x), 0.0f, float(size.y));
