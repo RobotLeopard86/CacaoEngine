@@ -176,7 +176,7 @@ namespace Cacao {
 
 		//Compile UI view shader
 		currentShaderUnusedTransformFlag = true;
-		uivsm.CompileAsync();
+		uivsm.Compile();
 
 		//Set up UI view quad
 		glGenVertexArrays(1, &uiVao);

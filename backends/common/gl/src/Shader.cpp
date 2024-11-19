@@ -92,7 +92,7 @@ namespace Cacao {
 		}
 
 		//Compile SPIR-V to GLSL
-		return std::make_pair<std::string, std::string>(vertGLSL.CompileAsync(), fragGLSL.CompileAsync());
+		return std::make_pair<std::string, std::string>(vertGLSL.compile(), fragGLSL.compile());
 	}
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)

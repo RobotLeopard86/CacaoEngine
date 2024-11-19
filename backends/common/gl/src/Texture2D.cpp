@@ -40,7 +40,7 @@ namespace Cacao {
 		}
 	}
 
-	void Cubemap::CompileSync() {
+	void Texture2D::CompileSync() {
 		CompileAsync().get();
 	}
 
