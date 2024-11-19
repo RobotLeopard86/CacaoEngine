@@ -9,7 +9,7 @@ Shaders *MUST* use row-major matrix packing because the DirectX Shader Compiler 
 You can either mark each matrix with the `row_major` qualifier, or add `#pragma pack_matrix(row_major)` to the top of your file.
 
 ## Compile Arguments
-When using `dxc` for shader compilation, you **MUST** ensure that `-fspv-reflect` and `-fvk-use-gl-layout` are added to the command line, or else the engine will fail to understand your shader.
+When using `dxc` for shader compilation, you **MUST** ensure that the `-fvk-use-gl-layout` flag is added to the command line, or else the engine may not be able to use your shader.
 
 ## Main Functions
 The main functions of all shader stages must have the name `main`, otherwise Cacao Engine will fail to use them properly.  

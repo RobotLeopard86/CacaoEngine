@@ -132,20 +132,23 @@ namespace Cacao {
 		}
 		Logging::EngineLog(std::string("Selected Vulkan device ") + std::string(physDev.getProperties().deviceName.data()), LogLevel::Trace);
 
-		//Get pool threads
-		MultiFuture<std::thread::id> poolThreadsFut;
-		for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
-			poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
-				return std::this_thread::get_id();
-			}));
-		}
-		poolThreadsFut.WaitAll();
+		//Get pool threads (we loop because occasionally we don't get all the threads)
 		std::vector<std::thread::id> poolThreads;
-		for(int i = 0; i < poolThreadsFut.size(); i++) {
-			std::thread::id tid = poolThreadsFut[i].get();
-			if(std::find(poolThreads.cbegin(), poolThreads.cend(), tid) == poolThreads.cend()) poolThreads.push_back(tid);
+		while(poolThreads.size() <= Engine::GetInstance()->GetThreadPool()->size()) {
+			poolThreads.clear();
+			MultiFuture<std::thread::id> poolThreadsFut;
+			for(int i = 0; i < Engine::GetInstance()->GetThreadPool()->size(); i++) {
+				poolThreadsFut.push_back(Engine::GetInstance()->GetThreadPool()->enqueue([]() {
+					return std::this_thread::get_id();
+				}));
+			}
+			poolThreadsFut.WaitAll();
+			for(int i = 0; i < poolThreadsFut.size(); i++) {
+				std::thread::id tid = poolThreadsFut[i].get();
+				if(std::find(poolThreads.cbegin(), poolThreads.cend(), tid) == poolThreads.cend()) poolThreads.push_back(tid);
+			}
+			poolThreads.push_back(std::this_thread::get_id());
 		}
-		poolThreads.push_back(std::this_thread::get_id());
 
 		//Create logical device
 		float qp = 1.0f;

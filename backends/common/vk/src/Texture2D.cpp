@@ -38,6 +38,7 @@ namespace Cacao {
 			if(has3) {
 				stbi_image_free(dataBuffer);
 				dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 4);
+				numImgChannels = 4;
 				CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
 			}
 		}
