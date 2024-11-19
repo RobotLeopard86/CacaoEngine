@@ -31,10 +31,15 @@ namespace Cacao {
 		//Determine image format
 		if(numImgChannels == 1) {
 			nativeData->format = vk::Format::eR8Unorm;
-		} else if(numImgChannels == 3) {
-			nativeData->format = vk::Format::eR8G8B8Srgb;
-		} else if(numImgChannels == 4) {
+		} else if(auto has3 = numImgChannels == 3; has3 || numImgChannels == 4) {
 			nativeData->format = vk::Format::eR8G8B8A8Srgb;
+
+			//We have to reload the data buffer to have 4 channels now
+			if(has3) {
+				stbi_image_free(dataBuffer);
+				dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 4);
+				CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
+			}
 		}
 	}
 
