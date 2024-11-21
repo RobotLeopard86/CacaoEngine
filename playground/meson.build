@@ -12,12 +12,12 @@ launch_module = shared_module('launch', name_prefix: '', dependencies: cacao_dep
 	shaders
 ], build_by_default: true)
 
-run_target('bundle', command: [python, meson.project_source_root()/'scripts'/'bundle.py'], depends: [
+run_target('bundle', command: [python, meson.project_source_root()/'scripts'/'bundle.py', get_option('exe_name')], depends: [
 	launch_module,
 	cacao_exe
 ])
 
-run_target('run', command: [python, meson.project_source_root()/'scripts'/'bundleandrun.py'], depends: [
+run_target('run', command: [python, meson.project_source_root()/'scripts'/'bundleandrun.py', get_option('exe_name')], depends: [
 	launch_module,
 	cacao_exe
 ])
