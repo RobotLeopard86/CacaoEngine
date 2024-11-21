@@ -30,4 +30,4 @@ for file in (buildroot / 'playground' / ('launch' + so_suffix + '.p')).rglob('*.
 	shutil.copy2(file, bundleroot / 'assets' / 'shaders')
 
 def get_engine_path():
-	return (bundleroot / ('cacaoengine' + exe_suffix))
+	return (bundleroot / (sys.argv[1] + exe_suffix))
