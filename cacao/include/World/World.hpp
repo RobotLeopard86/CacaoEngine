@@ -20,20 +20,16 @@ namespace Cacao {
 		std::shared_ptr<Entity> rootEntity;///<Root entity (set this as an Entity's parent to add it to the world)
 
 		/**
-		 * @brief Find an Entity by its GUID
+		 * @brief Find an Entity by some arbitrary condition
 		 *
-		 * @param guid The GUID to search for
+		 * @param predicate The predicate to check each entity against
 		 *
 		 * @return An optional that contains the entity if it was found
 		 */
-		std::optional<std::shared_ptr<Entity>> FindEntityByGUID(xg::Guid guid) {
-			//Create a function to check if the GUID matches
-			auto checkGUID = [guid](std::shared_ptr<Entity> e) {
-				return guid == e->guid;
-			};
-
+		template<typename P>
+		std::optional<std::shared_ptr<Entity>> FindEntity(P predicate) {
 			//Search for the object
-			return entitySearchRunner(rootEntity->GetChildrenAsList(), checkGUID);
+			return entitySearchRunner(rootEntity->GetChildrenAsList(), predicate);
 		}
 
 		/**

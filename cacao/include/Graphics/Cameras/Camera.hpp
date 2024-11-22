@@ -21,7 +21,7 @@ namespace Cacao {
 		}
 
 		///@brief Destroy a camera
-		~Camera() {
+		virtual ~Camera() {
 			EventManager::GetInstance()->UnsubscribeConsumer("WindowResize", resizeConsumer);
 			delete resizeConsumer;
 		}

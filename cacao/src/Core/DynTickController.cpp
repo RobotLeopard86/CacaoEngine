@@ -45,6 +45,8 @@ namespace Cacao {
 		delete thread;
 		thread = nullptr;
 
+		tickScriptList.clear();
+
 		isRunning = false;
 	}
 

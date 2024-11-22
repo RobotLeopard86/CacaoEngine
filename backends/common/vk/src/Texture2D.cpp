@@ -21,6 +21,7 @@ namespace Cacao {
 		nativeData.reset(new Tex2DData());
 
 		//Load image
+		stbi_set_flip_vertically_on_load(true);
 		dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 0);
 
 		CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
