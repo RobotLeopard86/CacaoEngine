@@ -210,7 +210,7 @@
 </span><span id="line-14"><span class="w">            </span><span class="n">EventManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SubscribeConsumer</span><span class="p">(</span><span class="s">"WindowResize"</span><span class="p">,</span><span class="w"> </span><span class="n">resizeConsumer</span><span class="p">);</span>
 </span><span id="line-15"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-16">
-</span><span id="line-17"><span class="w">        </span><span class="o">~</span><span class="n">Camera</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-17"><span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Camera</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="line-18"><span class="w">            </span><span class="n">EventManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">UnsubscribeConsumer</span><span class="p">(</span><span class="s">"WindowResize"</span><span class="p">,</span><span class="w"> </span><span class="n">resizeConsumer</span><span class="p">);</span>
 </span><span id="line-19"><span class="w">            </span><span class="k">delete</span><span class="w"> </span><span class="n">resizeConsumer</span><span class="p">;</span>
 </span><span id="line-20"><span class="w">        </span><span class="p">}</span>

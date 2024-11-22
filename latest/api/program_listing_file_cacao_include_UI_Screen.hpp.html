@@ -227,24 +227,26 @@
 </span><span id="line-31"><span class="w">            </span><span class="n">dirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 </span><span id="line-32"><span class="w">        </span><span class="p">}</span>
 </span><span id="line-33">
-</span><span id="line-34"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
-</span><span id="line-35"><span class="w">        </span><span class="c1">//Contained elements</span>
-</span><span id="line-36"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIElement</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">elements</span><span class="p">;</span>
-</span><span id="line-37">
-</span><span id="line-38"><span class="w">        </span><span class="c1">//Are we dirty (have changed)?</span>
-</span><span id="line-39"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">dirty</span><span class="p">;</span>
-</span><span id="line-40">
-</span><span id="line-41"><span class="w">        </span><span class="c1">//Notify that changes have been recorded so we're no longer dirty</span>
-</span><span id="line-42"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">NotifyClean</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="line-43"><span class="w">            </span><span class="n">dirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-</span><span id="line-44"><span class="w">        </span><span class="p">}</span>
-</span><span id="line-45">
-</span><span id="line-46"><span class="w">        </span><span class="c1">//Check to see if we are dirty</span>
-</span><span id="line-47"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RefreshDirtyState</span><span class="p">();</span>
-</span><span id="line-48">
-</span><span id="line-49"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UIView</span><span class="p">;</span>
-</span><span id="line-50"><span class="w">    </span><span class="p">};</span>
-</span><span id="line-51"><span class="p">}</span>
+</span><span id="line-34"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">PurgeElements</span><span class="p">();</span>
+</span><span id="line-35">
+</span><span id="line-36"><span class="w">      </span><span class="k">private</span><span class="o">:</span>
+</span><span id="line-37"><span class="w">        </span><span class="c1">//Contained elements</span>
+</span><span id="line-38"><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIElement</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">elements</span><span class="p">;</span>
+</span><span id="line-39">
+</span><span id="line-40"><span class="w">        </span><span class="c1">//Are we dirty (have changed)?</span>
+</span><span id="line-41"><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">dirty</span><span class="p">;</span>
+</span><span id="line-42">
+</span><span id="line-43"><span class="w">        </span><span class="c1">//Notify that changes have been recorded so we're no longer dirty</span>
+</span><span id="line-44"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">NotifyClean</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-45"><span class="w">            </span><span class="n">dirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</span><span id="line-46"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-47">
+</span><span id="line-48"><span class="w">        </span><span class="c1">//Check to see if we are dirty</span>
+</span><span id="line-49"><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RefreshDirtyState</span><span class="p">();</span>
+</span><span id="line-50">
+</span><span id="line-51"><span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UIView</span><span class="p">;</span>
+</span><span id="line-52"><span class="w">    </span><span class="p">};</span>
+</span><span id="line-53"><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </section>
