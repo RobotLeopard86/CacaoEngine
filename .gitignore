@@ -30,3 +30,9 @@ docs/*
 !docs/assets
 !docs/README.md
 !docs/requirements.txt
+
+# Don't send Visual Studio things
+.vs
+x64
+*.vcxproj*
+*.sln
