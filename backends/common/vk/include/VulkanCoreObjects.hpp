@@ -21,6 +21,7 @@ namespace Cacao {
 
 		static Immediate Get();
 		static void Cleanup();
+
 	  private:
 		static std::map<std::thread::id, Immediate> immediates;
 	};
@@ -44,7 +45,7 @@ namespace Cacao {
 	inline vk::Format selectedDF;
 	constexpr inline glm::mat4 projectionCorrection(
 		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change
-		{0.0f, -1.0f, 0.0f, 0.0f},//Flip Y
-		{0.0f, 0.0f, 0.5f, 0.5f}, //Adjust depth range (OpenGL [-1, 1] -> Vulkan [0, 1])
-		{0.0f, 0.0f, 0.0f, 1.0f});//No W change
+		{0.0f, -1.0f, 0.0f, 0.0f},//Invert Y
+		{0.0f, 0.0f, 0.5f, 0.0f}, //Halve depth range: [-1, 1] (OpenGL range) -> [-0.5, 0.5]
+		{0.0f, 0.0f, 0.5f, 1.0f});//Shift depth range: [-0.5, 0.5] => [0, 1] (Vulkan range)
 }
