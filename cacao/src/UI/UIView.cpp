@@ -8,7 +8,7 @@
 
 namespace Cacao {
 	void UIView::Render() {
-		CheckException(screen, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "No screen has been set to render!")
+		CheckException(screen, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "No screen has been set to render!");
 
 		//Calculate chunk size for parallelization
 		//This is used for both renderable processing and depth sorting

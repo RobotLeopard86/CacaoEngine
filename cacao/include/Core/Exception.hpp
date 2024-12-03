@@ -6,26 +6,9 @@
 #include <sstream>
 #include <map>
 
-#include "Core/Log.hpp"
+#include "yaml-cpp/yaml.h"
 
-//Quick utility to check for a condition and throw an exception if false
-//Write first argument as a normal condition, it will be wrapped in parentheses
-/**
- * @brief Check if the condition is true, and throw an exception if not
- *
- * @param condition The condition to check. No parenthetical wrapping necessary.
- * @param exceptionCode The exception code to use. Must have been registered prior to use.
- * @note See the page "Exception Codes" in the manual for a list of codes.
- * @param exceptionDescription The human-readable message to print if the condition is false
- *
- * @throws Cacao::Exception Thrown if the condition is false
- */
-#define CheckException(condition, exceptionCode, exceptionDescription) \
-	if(!(condition)) {                                                 \
-		Cacao::Exception ex {exceptionDescription, exceptionCode};     \
-		Cacao::Logging::EngineLog(ex.what(), LogLevel::Error);         \
-		throw ex;                                                      \
-	}
+#include "Core/Log.hpp"
 
 namespace Cacao {
 	/**
@@ -161,4 +144,59 @@ namespace Cacao {
 
 	//Static member definition
 	inline std::map<unsigned int, std::string> Exception::exceptionCodeMap = std::map<unsigned int, std::string>();
+
+	/**
+	 * @brief Checks if the condition is true, and throws an exception if not
+	 *
+	 * @param condition The condition to check.
+	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
+	 * @note See the page "Exception Codes" in the manual for a list of codes.
+	 * @param exceptionDescription The human-readable message to print if the condition is false
+	 *
+	 * @throws Cacao::Exception Thrown if the condition is false
+	 */
+	inline void CheckException(bool condition, unsigned int exceptionCode, std::string exceptionDescription) {
+		if(!condition) {
+			Exception ex {exceptionDescription, exceptionCode};
+			Logging::EngineLog(ex.what(), LogLevel::Error);
+			throw ex;
+		}
+	}
+
+	/**
+	 * @brief Checks if the YAML node exists, and throws an exception if not
+	 *
+	 * @param condition The condition to check. No parenthetical wrapping necessary.
+	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
+	 * @note See the page "Exception Codes" in the manual for a list of codes.
+	 * @param exceptionDescription The human-readable message to print if the condition is false
+	 *
+	 * @throws Cacao::Exception Thrown if the condition is false
+	 */
+	inline void CheckException(YAML::Node node, unsigned int exceptionCode, std::string exceptionDescription) {
+		if(!(bool)node) {
+			Exception ex {exceptionDescription, exceptionCode};
+			Logging::EngineLog(ex.what(), LogLevel::Error);
+			throw ex;
+		}
+	}
+
+	/**
+	 * @brief Checks if the shared_ptr contains a value, and throws an exception if not
+	 *
+	 * @param condition The condition to check. No parenthetical wrapping necessary.
+	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
+	 * @note See the page "Exception Codes" in the manual for a list of codes.
+	 * @param exceptionDescription The human-readable message to print if the condition is false
+	 *
+	 * @throws Cacao::Exception Thrown if the condition is false
+	 */
+	template<typename T>
+	inline void CheckException(std::shared_ptr<T> ptr, unsigned int exceptionCode, std::string exceptionDescription) {
+		if(!(bool)ptr) {
+			Exception ex {exceptionDescription, exceptionCode};
+			Logging::EngineLog(ex.what(), LogLevel::Error);
+			throw ex;
+		}
+	}
 }

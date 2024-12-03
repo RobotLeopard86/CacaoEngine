@@ -2,7 +2,7 @@
 
 #include "Events/EventSystem.hpp"
 #include "Utilities/Task.hpp"
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include <future>
 #include <memory>
@@ -21,7 +21,7 @@ namespace Cacao {
 		int* slot;
 	};
 
-	inline GLuint globalsUBO = 37;
+	inline GLuint globalsUBO = 0;
 
 	inline GLenum GetTextureMemoryFormat(GLenum internalFormat) {
 		switch(internalFormat) {
@@ -33,4 +33,7 @@ namespace Cacao {
 			default: return 0;
 		}
 	}
+
+	//I hate this
+	inline bool currentShaderUnusedTransformFlag = false;
 }

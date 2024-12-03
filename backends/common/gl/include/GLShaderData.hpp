@@ -1,14 +1,15 @@
 #pragma once
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include <string>
 
 namespace Cacao {
-	//Struct for data required for an OpenGL (ES) shader
+	//Struct for data required for an OpenGL shader
 	struct Shader::ShaderData {
-		GLuint gpuID, localsUBO;
+		GLuint gpuID;
 		std::string vertexCode, fragmentCode;
+		bool unusedTransform;
 
 		static GLuint uboIndexCounter;
 	};

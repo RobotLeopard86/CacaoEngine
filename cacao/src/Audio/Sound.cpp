@@ -1,6 +1,7 @@
 #include "Audio/Sound.hpp"
 
 #include "Core/Exception.hpp"
+#include "Core/Engine.hpp"
 #include "Audio/AudioSystem.hpp"
 
 #define DR_MP3_IMPLEMENTATION
@@ -27,7 +28,7 @@
 namespace Cacao {
 	Sound::Sound(std::string filePath)
 	  : Asset(false), filePath(filePath) {
-		CheckException(std::filesystem::exists(filePath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load sound from nonexistent file!")
+		CheckException(std::filesystem::exists(filePath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load sound from nonexistent file!");
 
 		//Determine audio file format by reading header
 
@@ -36,6 +37,7 @@ namespace Cacao {
 		std::ifstream file(filePath, std::ios::binary);
 		if(!file.is_open()) {
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open the sound file!");
+			;
 		}
 		file.read(header.data(), header.size());
 
@@ -86,12 +88,17 @@ namespace Cacao {
 		file.close();
 
 		//Now we handle the potential bad header circumstance because we have closed the file
-		CheckException(goodFormat, Exception::GetExceptionCodeFromMeaning("WrongType"), "The provided sound file is of an unsupported format!")
+		CheckException(goodFormat, Exception::GetExceptionCodeFromMeaning("WrongType"), "The provided sound file is of an unsupported format!");
 	}
 
-	std::shared_future<void> Sound::Compile() {
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!")
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
+	std::shared_future<void> Sound::CompileAsync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
+		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+	}
+
+	void Sound::CompileSync() {
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
 
 		//Create buffer object
 		alGenBuffers(1, &buf);
@@ -107,16 +114,11 @@ namespace Cacao {
 		EventManager::GetInstance()->SubscribeConsumer("AudioShutdown", sec);
 
 		compiled = true;
-
-		//Return an already completed future
-		std::promise<void> p;
-		p.set_value();
-		return p.get_future().share();
 	}
 
 	void Sound::Release() {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled sound!")
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled sound!");
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
 
 		//Send out an event to let all players using this sound stop
 		DataEvent<ALuint> iAmBeingReleased("SoundRelease", buf);
@@ -198,7 +200,7 @@ namespace Cacao {
 			} else if(samplesRead < 0) {
 				//Oh no, an error!
 				ov_clear(&vf);
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read Ogg Vorbis file!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read Ogg Vorbis file!");
 			} else {
 				//Add the PCM data to the end
 				audioData.insert(audioData.end(), pcm, pcm + (samplesRead / channelCount));
@@ -232,7 +234,7 @@ namespace Cacao {
 			} else if(samplesRead < 0) {
 				//Oh no, an error!
 				op_free(opus);
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read Opus file!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read Opus file!");
 			} else {
 				//Add the PCM data to the end
 				audioData.insert(audioData.end(), pcm, pcm + (samplesRead * channelCount));

@@ -8,7 +8,7 @@
 
 #include <future>
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
@@ -33,7 +33,7 @@ namespace Cacao {
 	}
 
 	void Skybox::CommonSetup() {
-		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!")
+		CheckException(!isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot set up skybox resources that are already set up!");
 
 		//Define skybox shader specification
 		ShaderSpec spec;
@@ -50,12 +50,14 @@ namespace Cacao {
 		//Create and compile skybox shader object
 		//Compile future is intentionally discarded as it will be done by the time this is used
 		skyboxShader = new Shader(v, f, spec);
-		skyboxShader->Compile();
+		skyboxShader->CompileAsync();
 
 		isSetup = true;
 	}
 
 	void Skybox::CommonCleanup() {
+		CheckException(isSetup, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot clean up skybox resources that are not set up!");
+
 		//Temporary shader pointer for capturing
 		Shader* shader = skyboxShader;
 		Task cleanupJob([shader]() {
@@ -69,8 +71,8 @@ namespace Cacao {
 	}
 
 	void Skybox::Draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Try to invoke OpenGL (ES) and throw any exceptions back to the initial caller
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this, projectionMatrix, viewMatrix]() {
 					this->Draw(projectionMatrix, viewMatrix);
@@ -82,9 +84,9 @@ namespace Cacao {
 		}
 
 		//Confirm that texture is compiled
-		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!")
+		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!");
 
-		//Set up OpenGL (ES) VAO if not already
+		//Set up OpenGL VAO if not already
 		if(!nativeData->vaoReady) {
 			//Generate vertex array and buffer
 			glGenVertexArrays(1, &(nativeData->vao));
@@ -116,13 +118,12 @@ namespace Cacao {
 		skyboxShader->Bind();
 
 		//Upload data to shader
-		skyboxShader->UploadCacaoLocals(skyTransform);
 		ShaderUploadData sud;
 		ShaderUploadItem skySampler;
 		skySampler.data = std::any(texture);
 		skySampler.target = "skybox";
 		sud.push_back(skySampler);
-		skyboxShader->UploadData(sud);
+		skyboxShader->UploadData(sud, skyTransform);
 
 		//Ensure skybox always drawn
 		glDepthFunc(GL_LEQUAL);

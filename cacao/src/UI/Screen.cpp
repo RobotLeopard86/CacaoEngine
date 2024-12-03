@@ -4,6 +4,10 @@
 #include "Utilities/MultiFuture.hpp"
 
 namespace Cacao {
+	void Screen::PurgeElements() {
+		elements.clear();
+	}
+
 	void Screen::RefreshDirtyState() {
 		MultiFuture<void> dirtyCheck;
 

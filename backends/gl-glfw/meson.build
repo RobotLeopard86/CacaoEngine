@@ -1,6 +1,4 @@
-cmake = import('cmake')
-
-glad_dep = subproject('glad', required: true, default_options: [ 'what=gl' ]).get_variable('glad_dep')
+glad_dep = subproject('glad', required: true).get_variable('glad_dep')
 stb_dep = subproject('stb', required: true).get_variable('stb_dep')
 
 spv_opts = cmake.subproject_options()
@@ -46,10 +44,6 @@ include_dirs = [
 	'../common/gl/include',
 	'../common/glfw/include',
 	'../common',
-	'../../libs/spdlog/include',
-	'../../libs/thread-pool/include',
-	'../../libs/dynalo/include',
-	'../../libs/glm',
 	include_directories('../../cacao')
 ]
 
@@ -70,7 +64,13 @@ backend_deplist = [
 	harfbuzz,
 	harfbuzz_icu,
 	harfbuzz_sub,
-	core_shaders
+	core_shaders,
+	glm_dep,
+	dr_libs_dep,
+	dynalo_dep,
+	spdlog_dep,
+	thread_pool_dep,
+	yaml_dep
 ]
 
 if host_machine.system() == 'windows'
@@ -78,7 +78,6 @@ if host_machine.system() == 'windows'
 endif
 
 libbackend = static_library('cacaobackend', include_directories: include_dirs, sources: [
-	'src/GLHooks.cpp',
 	'src/GLFWHooks.cpp',
 	'../common/glfw/src/Window.cpp',
 	'../common/gl/src/Texture2D.cpp',
@@ -89,7 +88,7 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/gl/src/OpenGL.cpp',
 	'../common/gl/src/UIDrawing.cpp',
 	'../common/gl/src/UIView.cpp',
-	'../common/gl/src/UIShaderGen.cpp',
+	'../common/UIShaderGen.cpp',
 	'../common/ExceptionCodes.cpp'
 ], dependencies: backend_deplist)
 

@@ -6,10 +6,9 @@ layout(location=0) in CacaoImageElem {
     vec2 texCoords;
 } V2F;
 
-layout(binding=2) uniform sampler2D image;
+layout(binding=1) uniform sampler2D image;
 
 void main() {
     vec4 sampled = texture(image, V2F.texCoords);
-	//if(sampled.a > 0 && sampled.a < 1) sampled.a = round(sampled.a);
 	color = sampled;
 }

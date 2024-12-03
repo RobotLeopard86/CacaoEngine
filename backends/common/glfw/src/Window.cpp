@@ -5,6 +5,7 @@
 
 #include "Core/Exception.hpp"
 #include "Core/Log.hpp"
+#include "Core/Engine.hpp"
 #include "Events/EventSystem.hpp"
 #include "GLFWWindowData.hpp"
 #include "GLFWHooks.hpp"
@@ -17,11 +18,16 @@ namespace Cacao {
 	bool Window::instanceExists = false;
 
 	//Simple friend struct to set window size without function that causes more size events
+	//Also here it does minimization (yes the title is misleading, cry about it in b minor)
 	struct WindowResizer {
 		friend Window;
 
 		void Resize(glm::uvec2 size) {
 			ChangeSize(Window::GetInstance(), size);
+		}
+
+		void SetMinimize(bool isMinimized) {
+			NotifyMinimizeState(Window::GetInstance(), isMinimized);
 		}
 	};
 
@@ -37,6 +43,21 @@ namespace Cacao {
 		return instance;
 	}
 
+	void Engine::EarlyWindowingInit() {
+#ifdef __linux__
+		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
+
+		//Initialize GLFW
+		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library!");
+
+		//Set error callback
+		glfwSetErrorCallback([](int ec, const char* message) {
+			//Always false exception
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLFW"), std::string("(GLFW error ") + std::to_string(ec) + ") " + message);
+		});
+	}
+
 	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
 		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
 
@@ -44,19 +65,6 @@ namespace Cacao {
 
 		//Create native data
 		nativeData.reset(new WindowData());
-
-#ifdef __linux__
-		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-#endif
-
-		//Initialize GLFW
-		EngineAssert(glfwInit() == GLFW_TRUE, "Could not initialize GLFW library, no window can be created.");
-
-		//Set error callback
-		glfwSetErrorCallback([](int ec, const char* message) {
-			//Always false exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLFW"), std::string("(GLFW error ") + std::to_string(ec) + ") " + message);
-		});
 
 		//Set window initialization hints
 		SetGLFWHints();
@@ -130,6 +138,9 @@ namespace Cacao {
 		glfwSetFramebufferSizeCallback(nativeData->win, [](GLFWwindow* win, int w, int h) {
 			Engine::GetInstance()->GetGlobalUIView()->SetSize({(unsigned int)w, (unsigned int)h});
 		});
+		glfwSetWindowIconifyCallback(nativeData->win, [](GLFWwindow* win, int iconified) {
+			WindowResizer().SetMinimize(iconified == GLFW_TRUE);
+		});
 
 		//Initialize graphics api
 		SetupGraphicsAPI(nativeData->win);
@@ -147,6 +158,15 @@ namespace Cacao {
 	void Window::Close() {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 Close();
+								 })
+				.get();
+			return;
+		}
+
 		//Clean up the graphics API
 		CleanupGraphicsAPI();
 
@@ -160,6 +180,15 @@ namespace Cacao {
 	}
 
 	void Window::UpdateWindowSize() {
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 UpdateWindowSize();
+								 })
+				.get();
+			return;
+		}
+
 		//Update window size
 		glfwSetWindowSize(nativeData->win, size.x, size.y);
 
@@ -168,6 +197,15 @@ namespace Cacao {
 	}
 
 	void Window::UpdateVisibilityState() {
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 UpdateVisibilityState();
+								 })
+				.get();
+			return;
+		}
+
 		if(isVisible) {
 			glfwShowWindow(nativeData->win);
 		} else {
@@ -176,6 +214,15 @@ namespace Cacao {
 	}
 
 	void Window::UpdateModeState(WindowMode lastMode) {
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
+									 UpdateModeState(lastMode);
+								 })
+				.get();
+			return;
+		}
+
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* modeInfo = glfwGetVideoMode(monitor);
 		if(lastMode == WindowMode::Window) {
@@ -209,6 +256,17 @@ namespace Cacao {
 	glm::uvec2 Window::GetContentAreaSize() {
 		if(!isOpen) return glm::uvec2 {0};
 		int x, y;
+
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			glm::uvec2* ret = new glm::uvec2(0);
+			Engine::GetInstance()->RunOnMainThread([this, ret]() {
+									 *ret = GetContentAreaSize();
+								 })
+				.get();
+			return *ret;
+		}
+
 		glfwGetFramebufferSize(nativeData->win, &x, &y);
 		return glm::uvec2 {(unsigned int)x, (unsigned int)y};
 	}
@@ -216,12 +274,31 @@ namespace Cacao {
 	void Window::Update() {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this]() {
+									 Update();
+								 })
+				.get();
+			return;
+		}
+
 		//Have GLFW check for events
 		glfwPollEvents();
 	}
 
 	void Window::SetTitle(std::string title) {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
+
+		//Run on the main thread if we aren't on it
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			Engine::GetInstance()->RunOnMainThread([this, &title]() {
+									 SetTitle(title);
+								 })
+				.get();
+			return;
+		}
+
 		glfwSetWindowTitle(nativeData->win, title.c_str());
 	}
 

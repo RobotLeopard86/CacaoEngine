@@ -16,7 +16,7 @@ namespace Cacao {
 
 	Model::Model(std::string filePath) {
 		//Confirm that provided file path exists
-		CheckException(std::filesystem::exists(filePath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), ("Cannot load nonexistent model file \"" + filePath + "\"!"))
+		CheckException(std::filesystem::exists(filePath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), ("Cannot load nonexistent model file \"" + filePath + "\"!"));
 
 		//Create Assimp importer
 		Assimp::Importer importer;
@@ -35,8 +35,8 @@ namespace Cacao {
 		const aiScene* scene = importer.ReadFile(filePath, aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_SortByPType);
 
 		//Perform checks
-		CheckException(scene != nullptr, Exception::GetExceptionCodeFromMeaning("NullValue"), (std::string("Model loading failed, Assimp error: ") + importer.GetErrorString()))
-		CheckException(scene->HasMeshes(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Model file does not contain any meshes!")
+		CheckException(scene != nullptr, Exception::GetExceptionCodeFromMeaning("NullValue"), (std::string("Model loading failed, Assimp error: ") + importer.GetErrorString()));
+		CheckException(scene->HasMeshes(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Model file does not contain any meshes!");
 
 		//Load meshes data
 		for(int i = 0; i < scene->mNumMeshes; i++) {
@@ -138,7 +138,7 @@ namespace Cacao {
 	}
 
 	Mesh* Model::ExtractMesh(std::string id) {
-		CheckException(meshes.contains(id), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot extract mesh that model does not contain!")
+		CheckException(meshes.contains(id), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Cannot extract mesh that model does not contain!");
 
 		Mesh* mesh = meshes.at(id);
 		return mesh;

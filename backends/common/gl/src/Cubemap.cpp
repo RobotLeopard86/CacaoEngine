@@ -9,7 +9,7 @@
 
 #include "stb_image.h"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include <future>
 #include <filesystem>
@@ -22,17 +22,22 @@ namespace Cacao {
 
 		for(std::string tex : filePaths) {
 			CheckException(std::filesystem::exists(tex), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create cubemap from nonexistent file!");
+			;
 		}
 
 		textures = filePaths;
 		currentSlot = -1;
 	}
 
-	std::shared_future<void> Cubemap::Compile() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
+	void Cubemap::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Cubemap::CompileAsync() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!");
@@ -65,7 +70,7 @@ namespace Cacao {
 				//Free whatever junk we have
 				stbi_image_free(data);
 
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open cubemap face image file!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to open cubemap face image file!");
 			}
 		}
 
@@ -88,9 +93,9 @@ namespace Cacao {
 	}
 
 	void Cubemap::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
-			//Try to invoke OpenGL (ES) and throw any exceptions back to the initial caller
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Invoke OpenGL on the main thread
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
 					this->Release();
@@ -108,7 +113,7 @@ namespace Cacao {
 	}
 
 	void Cubemap::Bind(int slot) {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind cubemap in non-rendering thread!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind cubemap in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled cubemap!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound cubemap!");
 
@@ -120,7 +125,7 @@ namespace Cacao {
 	}
 
 	void Cubemap::Unbind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind cubemap in non-rendering thread!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind cubemap in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled cubemap!");
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound cubemap!");
 

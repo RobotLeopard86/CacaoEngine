@@ -1,11 +1,7 @@
 # Backend `gl-sdl` Info
 
 ## Limitations
-* For some reason, the SDL header does not contain the grave/tilde key (`` ` ``/`~`), so it won't be detected as key input
-* SDL does not support the F25 key (if you have that for some reason), so it won't be detected as key input
-
-## Notes
-* On Linux, presumably due to a bug with the pre-release SDL version, "corrupted double-linked list" is printed after total engine shutdown. This is to be expected.
+* The F25 key is not detected as key input
 
 ## Dependencies
 Windows and macOS: Platform-specific SDKs  

@@ -7,7 +7,7 @@
 
 #include <future>
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace Cacao {
@@ -17,14 +17,18 @@ namespace Cacao {
 		nativeData.reset(new MeshData());
 	}
 
-	std::shared_future<void> Mesh::Compile() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
+	void Mesh::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Mesh::CompileAsync() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
-		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!")
+		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!");
 
 		//Generate buffers and vertex array
 		glGenVertexArrays(1, &nativeData->vao);
@@ -76,8 +80,8 @@ namespace Cacao {
 	}
 
 	void Mesh::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Try to invoke OpenGL (ES) and throw any exceptions back to the initial caller
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
 					this->Release();
@@ -87,7 +91,7 @@ namespace Cacao {
 				std::rethrow_exception(std::current_exception());
 			}
 		}
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled mesh!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled mesh!");
 
 		//Delete buffers
 		glDeleteBuffers(1, &nativeData->vbo);
@@ -97,8 +101,8 @@ namespace Cacao {
 	}
 
 	void Mesh::Draw() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot draw mesh in non-rendering thread!")
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot draw mesh in non-rendering thread!");
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!");
 
 		//Bind vertex array
 		glBindVertexArray(nativeData->vao);

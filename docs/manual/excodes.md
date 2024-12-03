@@ -16,3 +16,5 @@ Cacao Engine exceptions rely on a code system to give further context about the 
 10. `WrongType` - A value of a different type than the expected one was passed
 11. `IO` - An IO error occurred
 12. `BadCompileState` - Something was in the wrong compilation state
+13. `BadValue` - A given value was not the expected one
+14. `BadThread` - A function was called on an unsupported thread

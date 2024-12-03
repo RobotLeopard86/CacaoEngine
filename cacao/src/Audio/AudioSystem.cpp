@@ -23,11 +23,11 @@ namespace Cacao {
 	}
 
 	void AudioSystem::Init() {
-		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized audio system!")
+		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized audio system!");
 
 		//Initialize OpenAL-Soft
 		dev = alcOpenDevice(nullptr);
-		CheckException(dev, Exception::GetExceptionCodeFromMeaning("External"), "Failed to open the OpenAL device!")
+		CheckException(dev, Exception::GetExceptionCodeFromMeaning("External"), "Failed to open the OpenAL device!");
 		ctx = alcCreateContext(dev, nullptr);
 
 		//Make audio context current
@@ -40,7 +40,7 @@ namespace Cacao {
 	}
 
 	void AudioSystem::Shutdown() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized audio system!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized audio system!");
 
 		//Alert all audio objects that it is shutdown time
 		Event e("AudioShutdown");
@@ -55,13 +55,13 @@ namespace Cacao {
 	}
 
 	void AudioSystem::SetGlobalGain(float value) {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to set the global gain!")
+		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to set the global gain!");
 
 		alListenerf(AL_GAIN, value);
 	}
 
 	float AudioSystem::GetGlobalGain() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get the global gain!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to get the global gain!");
 
 		float retval;
 		alGetListenerf(AL_GAIN, &retval);

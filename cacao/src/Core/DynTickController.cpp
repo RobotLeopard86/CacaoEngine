@@ -28,7 +28,7 @@ namespace Cacao {
 	}
 
 	void DynTickController::Start() {
-		CheckException(!isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot start the already started dynamic tick controller!")
+		CheckException(!isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot start the already started dynamic tick controller!");
 		isRunning = true;
 
 		//Create thread to run controller
@@ -36,7 +36,7 @@ namespace Cacao {
 	}
 
 	void DynTickController::Stop() {
-		CheckException(isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop the unstarted dynamic tick controller!")
+		CheckException(isRunning, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot stop the unstarted dynamic tick controller!");
 		//Stop run thread
 		thread->request_stop();
 		thread->join();
@@ -44,6 +44,8 @@ namespace Cacao {
 		//Delete thread object
 		delete thread;
 		thread = nullptr;
+
+		tickScriptList.clear();
 
 		isRunning = false;
 	}
@@ -118,10 +120,6 @@ namespace Cacao {
 			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();
 			timestep = (((double)std::chrono::duration_cast<std::chrono::milliseconds>((tickEnd - tickStart) + (tickEnd < idealStopTime ? (idealStopTime - tickEnd) : std::chrono::seconds(0))).count()) / 1000);
-
-			std::stringstream loggo;
-			loggo << "Tick took " << std::chrono::duration_cast<std::chrono::microseconds>(tickEnd - tickStart);
-			Logging::EngineLog(loggo.str(), LogLevel::Trace);
 
 			//If we stopped before the ideal max time, wait until that point
 			//Otherwise, run the next tick immediately

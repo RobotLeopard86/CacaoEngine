@@ -71,11 +71,11 @@ namespace Cacao {
 				}
 			}
 
-			CheckException(consumerIndex != insertValue.end(), Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot unsubscribe consumer which was not subscribed!")
+			CheckException(consumerIndex != insertValue.end(), Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot unsubscribe consumer which was not subscribed!");
 
 			insertValue.erase(consumerIndex);
 		} else {
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot unsubscribe consumer from event type with no consumers!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot unsubscribe consumer from event type with no consumers!");
 		}
 
 		consumers.insert_or_assign(type, insertValue);
@@ -119,6 +119,7 @@ namespace Cacao {
 					sec.push_back(dynamic_cast<SignalEventConsumer*>(consumer));
 				} catch(std::bad_cast) {
 					CheckException(false, Exception::GetExceptionCodeFromMeaning("EventManager"), "Cannot dispatch signaled event to non-signal-processing consumer!");
+					;
 				}
 			}
 

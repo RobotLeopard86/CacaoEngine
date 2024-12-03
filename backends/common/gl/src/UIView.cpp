@@ -1,6 +1,6 @@
 #include "UI/UIView.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "GLUIView.hpp"
 #include "GLUtils.hpp"
@@ -41,7 +41,7 @@ namespace Cacao {
 
 				//Confirm framebuffer "completeness"
 				GLenum fbStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-			CheckException(fbStatus == GL_FRAMEBUFFER_COMPLETE, Exception::GetExceptionCodeFromMeaning("GLError"), "UI view framebuffer is not complete!")
+				CheckException(fbStatus == GL_FRAMEBUFFER_COMPLETE, Exception::GetExceptionCodeFromMeaning("GLError"), "UI view framebuffer is not complete!");
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 				//Unbind texture and renderbuffer
@@ -65,7 +65,7 @@ namespace Cacao {
 	}
 
 	void UIView::Bind(int slot) {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind UI view in non-rendering thread!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind UI view in non-rendering thread!");
 		CheckException(hasRendered, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind unrendered UI view!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound UI view!");
 
@@ -77,7 +77,7 @@ namespace Cacao {
 	}
 
 	void UIView::Unbind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind UI view in non-rendering thread!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind UI view in non-rendering thread!");
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound UI view!");
 
 		//Unbind the texture from its current slot
@@ -96,7 +96,7 @@ namespace Cacao {
 
 		//Regenerate textures and renderbuffers
 		glBindTexture(GL_TEXTURE_2D, backBuffer->colorTex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, size.x, size.y, 0, GL_RGBA8, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glBindRenderbuffer(GL_RENDERBUFFER, backBuffer->rbo);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, backBuffer->rbo);

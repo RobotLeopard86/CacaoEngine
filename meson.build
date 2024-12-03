@@ -1,4 +1,4 @@
-project('cacaoengine', 'cpp', 'c', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
+project('cacaoengine', 'cpp', 'c', meson_version: '>=1.1', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
 
 playground = get_option('build_playground')
 backend = get_option('use_backend')
@@ -7,7 +7,7 @@ if backend == '__DEFAULT__'
 	error('A backend must be specified!')
 endif
 
-python = find_program('python')
+python = find_program('python3')
 
 if get_option('backend') == 'xcode'
 	warning('Generation of Xcode projects is not supported by Cacao Engine yet, so things may or may not work! Continue at your own risk!')
@@ -54,6 +54,12 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 	subsystem = 'windows'
 endif
 
+if host_machine.system() == 'darwin'
+	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio', 'CoreVideo', 'Carbon'], required: true), language: ['c', 'cpp'])
+	add_project_arguments('-fexperimental-library', language: 'cpp')
+	add_project_link_arguments('-fexperimental-library', language: 'cpp')
+endif
+
 cmake_build_type = ''
 cmake_msvc_lib = 'MultiThreaded'
 if bt.contains('debug')
@@ -90,8 +96,6 @@ core_shaders = declare_dependency(sources: [
 	core_shaders_s
 ])
 
-python = find_program('python')
-
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
 icu = icu_sp.get_variable('icuuc_dep')
 
@@ -103,16 +107,37 @@ harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
 harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
 harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 
+glm_dep = subproject('glm', required: true).get_variable('glm_dep')
+spdlog_dep = subproject('spdlog', required: true).get_variable('spdlog_dep')
+dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
+thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
+dr_libs_dep = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
+
+cmake = import('cmake')
+
+yaml_opts = cmake.subproject_options()
+yaml_opts.add_cmake_defines({
+	'BUILD_SHARED_LIBS': 'OFF',
+	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
+	'YAML_CPP_BUILD_TOOLS': 'OFF',
+	'YAML_CPP_BUILD_TESTS': 'OFF',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
+})
+yaml_opts.set_install(true)
+yaml_dep = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
+
+if bt.contains('debug')
+	add_project_arguments(['-DDEBUG'], language: 'cpp')
+endif
+
 subdir('backends' / backend)
 subdir('cacao')
 
 cacao_dep = declare_dependency(include_directories: [
 	'cacao/include',
-	'libs/spdlog/include',
-	'libs/thread-pool/include',
-	'libs/dynalo/include',
-	'libs/glm',
-	include_directories('cacao')
 ], dependencies: [
 	yaml_dep,
 	assimp_dep,
@@ -138,7 +163,12 @@ cacao_dep = declare_dependency(include_directories: [
 	icu,
 	harfbuzz,
 	harfbuzz_icu,
-	harfbuzz_sub
+	harfbuzz_sub,
+	glm_dep,
+	dr_libs_dep,
+	dynalo_dep,
+	spdlog_dep,
+	thread_pool_dep
 ], link_with: cacao_exe)
 
 if playground

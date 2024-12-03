@@ -31,7 +31,7 @@ namespace Cacao {
 	}
 
 	void Engine::CoreStartup() {
-		//Register some basic exception codes
+		//Register core exception codes
 		Exception::RegisterExceptionCode(0, "External");
 		Exception::RegisterExceptionCode(1, "FileNotFound");
 		Exception::RegisterExceptionCode(2, "NonexistentValue");
@@ -45,14 +45,16 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(10, "WrongType");
 		Exception::RegisterExceptionCode(11, "IO");
 		Exception::RegisterExceptionCode(12, "BadCompileState");
+		Exception::RegisterExceptionCode(13, "BadValue");
+		Exception::RegisterExceptionCode(14, "BadThread");
 
 		//Load the launch configuration
 		Logging::EngineLog("Loading launch config...");
-		CheckException(std::filesystem::exists("launchconfig.cacao.yml"), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch config file exists!")
+		CheckException(std::filesystem::exists("launchconfig.cacao.yml"), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch config file exists!");
 		YAML::Node launchRoot = YAML::LoadFile("launchconfig.cacao.yml");
-		CheckException(launchRoot.IsMap(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config is not a map!")
-		CheckException(launchRoot["launch"].IsScalar(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config does not contain the \"launch\" parameter or it isn't a scalar!")
-		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!")
+		CheckException(launchRoot.IsMap(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config is not a map!");
+		CheckException(launchRoot["launch"].IsScalar(), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "Launch config does not contain the \"launch\" parameter or it isn't a scalar!");
+		CheckException(std::filesystem::exists(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "No launch module found at specified launch path!");
 
 		//Load game module and module config
 		gameLib.reset(new dynalo::library(launchRoot["launch"].Scalar() + "/launch." + dynalo::native::name::extension()));
@@ -89,7 +91,7 @@ namespace Cacao {
 		Logging::EngineLog("Initializing audio system...");
 		AudioSystem::GetInstance()->Init();
 
-		//Create a short-lived dummy audio player (for whatever reason this is required to get normal players workimng)
+		//Create a short-lived dummy audio player (for whatever reason this is required to get normal players working)
 		{
 			AudioPlayer ap;
 		}
@@ -122,16 +124,28 @@ namespace Cacao {
 		cfg.targetDynTPS = 60;
 		cfg.maxFrameLag = 10;
 
-		//Open the window
-		Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
-
-		//Initialize rendering backend
-		Logging::EngineLog("Initializing rendering backend...");
-		RenderController::GetInstance()->Init();
-
-		//Start the thread pool (subtract one threads for the dedicated dynamic tick controller)
+		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
 		Logging::EngineLog("Starting thread pool...");
 		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
+
+		//Initialize windowing system (NOT THE WINDOW)
+		EarlyWindowingInit();
+
+		if(backendInitBeforeWindow) {
+			//Initialize rendering backend
+			Logging::EngineLog("Initializing rendering backend...");
+			RenderController::GetInstance()->Init();
+
+			//Open the window
+			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+		} else {
+			//Open the window
+			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+
+			//Initialize rendering backend
+			Logging::EngineLog("Initializing rendering backend...");
+			RenderController::GetInstance()->Init();
+		}
 
 		//Asynchronously run core startup
 		threadPool->enqueue_detach([this]() {
@@ -160,6 +174,9 @@ namespace Cacao {
 		Logging::EngineLog("Stopping dynamic tick controller...");
 		DynTickController::GetInstance()->Stop();
 
+		//Clean up common skybox resources
+		Skybox::CommonCleanup();
+
 		//Call game module exit hook
 		Logging::EngineLog("Running game module shutdown hook...");
 		auto exitFunc = gameLib->get_function<void(void)>("_CacaoExiting");
@@ -172,12 +189,21 @@ namespace Cacao {
 		//Destroy global UI view
 		uiView.reset();
 
-		//Shut down rendering backend
-		Logging::EngineLog("Shutting down rendering backend...");
-		RenderController::GetInstance()->Shutdown();
+		if(backendShutdownAfterWindow) {
+			//Close the window
+			Window::GetInstance()->Close();
 
-		//Close window
-		Window::GetInstance()->Close();
+			//Shutdown rendering backend
+			Logging::EngineLog("Shutting down rendering backend...");
+			RenderController::GetInstance()->Shutdown();
+		} else {
+			//Shut down rendering backend
+			Logging::EngineLog("Shutting down rendering backend...");
+			RenderController::GetInstance()->Shutdown();
+
+			//Close the window
+			Window::GetInstance()->Close();
+		}
 
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");
@@ -189,6 +215,16 @@ namespace Cacao {
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");
 		EventManager::GetInstance()->Shutdown();
+	}
+
+	std::shared_future<void> Engine::RunOnMainThread(std::function<void()> func) {
+		Task task(func);
+		std::shared_future<void> ret = task.status->get_future().share();
+		{
+			std::lock_guard lk(mainThreadTaskMutex);
+			mainThreadTasks.push(task);
+		}
+		return ret;
 	}
 
 }

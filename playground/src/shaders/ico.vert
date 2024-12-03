@@ -7,15 +7,15 @@ layout(std140,binding=0) uniform CacaoGlobals {
     mat4 view;
 } globals;
 
-layout(std140,binding=1) uniform CacaoLocals {
+layout(push_constant) uniform ObjectData {
     mat4 transform;
-} locals;
+} object;
 
 layout(location = 0) out Vertex2Fragment {
 	vec4 pos;
 } V2F;
 
 void main() {
-	gl_Position = globals.projection * globals.view * locals.transform * vec4(position, 1.0);
+	gl_Position = globals.projection * globals.view * object.transform * vec4(position, 1.0);
 	V2F.pos = gl_Position;
 }

@@ -1,19 +1,3 @@
-cmake = import('cmake')
-
-yaml_opts = cmake.subproject_options()
-yaml_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
-	'YAML_CPP_BUILD_TOOLS': 'OFF',
-	'YAML_CPP_BUILD_TESTS': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-yaml_opts.set_install(true)
-yaml_dep = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
-
 assimp_opts = cmake.subproject_options()
 assimp_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',
@@ -92,15 +76,6 @@ else
 endif
 guid_dep = cmake.subproject('guid', options: guid_opts, required: true).dependency('crossguid')
 
-includes = [
-	'include',
-	'../libs/spdlog/include',
-	'../libs/thread-pool/include',
-	'../libs/dynalo/include',
-	'../libs/glm',
-	'../libs/dr_libs'
-]
-
 cxx = meson.get_compiler('cpp')
 libdl = cxx.find_library('dl', required: false, static: true)
 
@@ -153,16 +128,20 @@ frontend_deps = [
 	icu,
 	harfbuzz,
 	harfbuzz_icu,
-	harfbuzz_sub
+	harfbuzz_sub,
+	glm_dep,
+	dr_libs_dep,
+	thread_pool_dep,
+	dynalo_dep,
+	spdlog_dep
 ]
-libfrontend = static_library('cacaofrontend', sources: sources, include_directories: includes, dependencies: frontend_deps, pic: true)
+libfrontend = static_library('cacaofrontend', sources: sources, include_directories: 'include', dependencies: frontend_deps, pic: true)
 
 exe_deps = [
 	frontend_deps,
 	meson.get_compiler('cpp').find_library('atomic', required: host_machine.system() == 'linux')
 ]
 
-python = find_program('python')
 need_pipewire = run_command([ python, meson.project_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()
 if need_pipewire == 0
 	find_program('pkg-config', required: true)
@@ -183,10 +162,10 @@ if host_machine.system() == 'windows'
 	exe_deps += meson.get_compiler('cpp').find_library('winmm', required: true)
 	exe_deps += meson.get_compiler('cpp').find_library('version', required: true)
 	exe_deps += meson.get_compiler('cpp').find_library('setupapi', required: true)
-	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: includes, 
+	cacao_exe = executable(get_option('exe_name'), 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: 'include', 
 		build_rpath: '.', link_whole: [ libcacaoengine ], export_dynamic: true, implib: true, dependencies: exe_deps, vs_module_defs: vs_def, link_args: lnk_args)
 else
-	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', include_directories: includes, 
+	cacao_exe = executable(get_option('exe_name'), 'src/Core/Startup.cpp', include_directories: 'include', 
 		build_rpath: '.', link_whole: [ libfrontend, libbackend ], export_dynamic: true, dependencies: exe_deps)
 endif
 

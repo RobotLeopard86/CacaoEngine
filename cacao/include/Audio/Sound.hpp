@@ -30,7 +30,7 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Compile the raw sound data into a format that can be played
+		 * @brief Compile the raw sound data into a format that can be played asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
@@ -38,7 +38,16 @@ namespace Cacao {
 		 *
 		 * @throws Exception If the sound was already compiled or the audio system is uninitialized
 		 */
-		std::shared_future<void> Compile() override;
+		std::shared_future<void> CompileAsync() override;
+
+		/**
+		 * @brief Compile the raw sound data into a format that can be played synchronously
+		 *
+		 * @note The compiled data will be automatically released when at AudioSystem shuts down
+		 *
+		 * @throws Exception If the sound was already compiled or the audio system is uninitialized
+		 */
+		void CompileSync() override;
 
 		/**
 		 * @brief Delete the compiled data

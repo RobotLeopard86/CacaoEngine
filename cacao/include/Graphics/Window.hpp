@@ -86,7 +86,7 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void SetSize(glm::uvec2 newSize) {
-			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!");
 			size = newSize;
 			UpdateWindowSize();
 		}
@@ -107,7 +107,7 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void SetVSyncEnabled(bool value) {
-			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!");
 			useVSync = value;
 			UpdateVSyncState();
 		}
@@ -149,7 +149,7 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void SetWindowVisibility(bool value) {
-			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!")
+			CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the size of an unopened window!");
 			isVisible = value;
 			UpdateVisibilityState();
 		}
@@ -189,6 +189,15 @@ namespace Cacao {
 		}
 
 		/**
+		 * @brief Check if the window is minimized/iconified
+		 *
+		 * @return If the window is minimized or true if the window isn't open
+		 */
+		bool IsMinimized() {
+			return (!isOpen) || minimized;
+		}
+
+		/**
 		 * @brief Get the instance and create one if there isn't one
 		 *
 		 * @return The instance
@@ -197,7 +206,7 @@ namespace Cacao {
 
 	  private:
 		Window()
-		  : isOpen(false), mode(WindowMode::Window) {}
+		  : isOpen(false), mode(WindowMode::Window), minimized(false) {}
 
 		//Singleton data
 		static Window* instance;
@@ -211,6 +220,7 @@ namespace Cacao {
 		std::string windowTitle;
 
 		WindowMode mode;
+		bool minimized;
 
 		//The last known window position
 		//Used for switching between modes
@@ -224,6 +234,9 @@ namespace Cacao {
 		//For changing the window size from implementation without generating more resize events
 		friend void ChangeSize(Window* win, glm::uvec2 size) {
 			win->size = size;
+		}
+		friend void NotifyMinimizeState(Window* win, bool newState) {
+			win->minimized = newState;
 		}
 		friend struct WindowResizer;
 

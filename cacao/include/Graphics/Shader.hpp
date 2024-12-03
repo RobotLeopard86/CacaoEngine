@@ -93,13 +93,20 @@ namespace Cacao {
 		void Unbind();
 
 		/**
-		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU
+		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
 		 * @throws Exception If the shader was already compiled or the SPIR-V is invalid
 		 */
-		std::shared_future<void> Compile() override;
+		std::shared_future<void> CompileAsync() override;
+
+		/**
+		 * @brief Compile the raw SPIR-V code into a format that can be run by the GPU synchronously
+		 *
+		 * @throws Exception If the shader was already compiled or the SPIR-V is invalid
+		 */
+		void CompileSync() override;
 
 		/**
 		 * @brief Delete the compiled data
@@ -129,13 +136,14 @@ namespace Cacao {
 		/**
 		 * @brief Upload data to the shader
 		 *
-		 * @warning Temporarily binds the shader, but previous shader is restored after
+		 * @param data The material data to upload to the shader
+		 * @param transformation The transformation matrix of the next object
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throws Exception If the data uploaded does not match the shader specification or the shader was not compiled
+		 * @throws Exception If the data uploaded does not match the shader specification, the shader was not bound or the shader was not compiled
 		 */
-		void UploadData(ShaderUploadData& data);
+		void UploadData(ShaderUploadData& data, const glm::mat4& transformation);
 
 		/**
 		 * @brief Upload engine global data
@@ -146,15 +154,6 @@ namespace Cacao {
 		 * @note For use by the engine only
 		 */
 		static void UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view);
-
-		/**
-		 * @brief Upload object local data
-		 *
-		 * @param transform The transformation matrix
-		 *
-		 * @note For use by the engine only
-		 */
-		void UploadCacaoLocals(glm::mat4 transform);
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() override {

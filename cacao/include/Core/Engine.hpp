@@ -3,12 +3,14 @@
 #include <atomic>
 #include <string>
 #include <map>
+#include <queue>
 
 #include "dynalo/dynalo.hpp"
 #include "thread_pool/thread_pool.h"
 
 #include "EngineConfig.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Utilities/Task.hpp"
 #include "UI/UIView.hpp"
 
 /**
@@ -16,6 +18,11 @@
  * @see dp::thread_pool for its API.
  */
 using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
+
+///@cond
+extern bool backendInitBeforeWindow;
+extern bool backendShutdownAfterWindow;
+///@endcond
 
 namespace Cacao {
 	///@brief Singleton representing the engine
@@ -51,6 +58,17 @@ namespace Cacao {
 		}
 
 		/**
+		 * @brief Run some code on the main thread
+		 *
+		 * @param func The function to execute
+		 *
+		 * @returns A future that will resolve when the task completes
+		 *
+		 * @warning Use this function sparingly as it may cause performance issues
+		 */
+		std::shared_future<void> RunOnMainThread(std::function<void()> func);
+
+		/**
 		 * @brief Check if the engine is running
 		 *
 		 * @return If the engine is running
@@ -72,7 +90,7 @@ namespace Cacao {
 		 * @brief Get the thread ID that @ref Run was called on
 		 * @details Useful for identifying the main thread
 		 */
-		std::thread::id GetThreadID() {
+		std::thread::id GetMainThreadID() {
 			return threadID;
 		}
 
@@ -106,6 +124,10 @@ namespace Cacao {
 		//Top-level UI view
 		std::shared_ptr<UIView> uiView;
 
+		//Main thread task queue
+		std::queue<Task> mainThreadTasks;
+		std::mutex mainThreadTaskMutex;
+
 		Engine() {}
 
 		//Run the core startup and shutdown systems of the engine (render thread has to be on main and running early to process graphics stuff, so startup work gets forked off)
@@ -115,5 +137,11 @@ namespace Cacao {
 		//To be implemented by backend
 		//Register backend-specific exception codes
 		void RegisterBackendExceptions();
+
+		//To be implemented by backend
+		//Initialize windowing backend early if necessary
+		void EarlyWindowingInit();
+
+		friend class RenderController;
 	};
 }

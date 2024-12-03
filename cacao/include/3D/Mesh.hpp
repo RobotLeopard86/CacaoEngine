@@ -40,13 +40,22 @@ namespace Cacao {
 		void Draw();
 
 		/**
-		 * @brief Compile the raw mesh data into a format that can be drawn
+		 * @brief Compile the raw mesh data into a format that can be drawn asynchronously
 		 *
 		 * @return A future that will resolve when compilation is done
 		 *
 		 * @throws Exception If the mesh was already compiled
 		 */
-		std::shared_future<void> Compile() override;
+		std::shared_future<void> CompileAsync() override;
+
+		/**
+		 * @brief Compile the raw mesh data into a format that can be drawn synchronously
+		 *
+		 * @return A future that will resolve when compilation is done
+		 *
+		 * @throws Exception If the mesh was already compiled
+		 */
+		void CompileSync() override;
 
 		/**
 		 * @brief Delete the compiled data

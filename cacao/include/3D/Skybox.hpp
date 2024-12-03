@@ -45,15 +45,23 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Compile the cubemap.
+		 * @brief Compile the cubemap asynchronously
 		 * @see Cubemap::Compile
 		 */
-		std::shared_future<void> Compile() override {
-			return texture->Compile();
+		std::shared_future<void> CompileAsync() override {
+			return texture->CompileAsync();
 		}
 
 		/**
-		 * @brief Release the cubemap data.
+		 * @brief Compile the cubemap synchronously
+		 * @see Cubemap::Compile
+		 */
+		void CompileSync() override {
+			texture->CompileSync();
+		}
+
+		/**
+		 * @brief Release the cubemap data
 		 * @see Cubemap::Release
 		 */
 		void Release() override {
@@ -61,7 +69,7 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Check if the cubemap is compiled.
+		 * @brief Check if the cubemap is compiled
 		 * @see Cubemap::IsCompiled
 		 */
 		bool IsCompiled() override {

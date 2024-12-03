@@ -15,6 +15,7 @@ Table of Contents:
 	manual/building
 	manual/vs
 	manual/bundles
+	manual/env
 	manual/events
 	manual/excodes
 	manual/inputmappings

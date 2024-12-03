@@ -8,6 +8,10 @@ cacao-engine.log
 # Don't send Wrap-downloaded things
 subprojects/*
 !subprojects/*.wrap
+!subprojects/packagefiles
+!subprojects/glad
+!subprojects/stb
+!subprojects/dr_libs
 
 # Don't send Python crap from utility scripts
 scripts/__pycache__
@@ -26,3 +30,9 @@ docs/*
 !docs/assets
 !docs/README.md
 !docs/requirements.txt
+
+# Don't send Visual Studio things
+.vs
+x64
+*.vcxproj*
+*.sln

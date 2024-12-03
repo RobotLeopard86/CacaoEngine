@@ -22,13 +22,31 @@ namespace Cacao {
 	}
 
 	void RenderController::Run() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the main thread!");
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()) {
-			//Update window and graphics state
+			//Update window
 			Window::GetInstance()->Update();
+
+			//Update graphics state (mostly for immediate-mode backends)
 			UpdateGraphicsState();
+
+			//Run main thread tasks
+			{
+				std::lock_guard lk(Engine::GetInstance()->mainThreadTaskMutex);
+				while(!Engine::GetInstance()->mainThreadTasks.empty()) {
+					auto task = Engine::GetInstance()->mainThreadTasks.front();
+					try {
+						task.func();
+					} catch(...) {
+						task.status->set_exception(std::current_exception());
+					}
+					task.status->set_value();
+					Engine::GetInstance()->mainThreadTasks.pop();
+				}
+			}
 
 			//Acquire a lock on the queue
 			std::unique_lock<std::mutex> lock(fqMutex);
@@ -47,8 +65,6 @@ namespace Cacao {
 				std::shared_ptr<Frame> next = frameQueue.front();
 				frameQueue.pop();
 
-				std::chrono::steady_clock::time_point fb = std::chrono::steady_clock::now();
-
 				//Release lock
 				lock.unlock();
 
@@ -62,15 +78,14 @@ namespace Cacao {
 
 				//Present rendered frame to window
 				Window::GetInstance()->Present();
-
-				std::stringstream loggo;
-				loggo << "Render took " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - fb);
-				Logging::EngineLog(loggo.str(), LogLevel::Trace);
 			} else {
 				//Release lock and wait for a bit to avoid wasting CPU cycles
 				lock.unlock();
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
 		}
+
+		//Make sure the GPU is idle before termination
+		WaitGPUIdleBeforeTerminate();
 	}
 }

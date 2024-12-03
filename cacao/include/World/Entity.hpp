@@ -163,12 +163,14 @@ namespace Cacao {
 			static_assert(std::is_base_of<Component, T>(), "Can only get subclasses of Component!");
 			std::lock_guard lk(componentsMtx);
 			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
+			;
 
 			//Try to cast the value
 			try {
 				return std::dynamic_pointer_cast<T>(components[guid]);
 			} catch(std::bad_cast) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "The requested compnent's type does not match the requested type!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "The requested compnent's type does not match the requested type!");
+				return std::shared_ptr<T>();
 			}
 		}
 
@@ -184,6 +186,7 @@ namespace Cacao {
 		void DeleteComponent(xg::Guid guid) {
 			std::lock_guard lk(componentsMtx);
 			CheckException(components.contains(guid), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "No component with the provided GUID exists in this entity!");
+			;
 
 			components[guid].reset();
 			components.erase(guid);
@@ -198,7 +201,7 @@ namespace Cacao {
 		 */
 		void SetParent(std::shared_ptr<Entity> newParent) {
 			//If we aren't orphaned, remove ourselves from the current parent
-			if(parent.lock() != self) {
+			if(!parent.expired() && parent.lock() != self) {
 				std::shared_ptr<Entity> parentLk = parent.lock();
 				auto it = std::find(parentLk->children.begin(), parentLk->children.end(), self);
 				if(it != parentLk->children.end()) parentLk->children.erase(it);
@@ -215,6 +218,8 @@ namespace Cacao {
 		 * @brief Destroy the entity and release references to components and child entities
 		 */
 		~Entity() {
+			SetParent(self);
+
 			//Release ownership of all components
 			{
 				std::lock_guard lk(componentsMtx);

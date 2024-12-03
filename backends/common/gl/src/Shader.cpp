@@ -7,9 +7,8 @@
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "GLUtils.hpp"
-#include "GLHooks.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 #include "spirv_glsl.hpp"
 #include "spirv_cross.hpp"
 #include "spirv_parser.hpp"
@@ -31,7 +30,9 @@ namespace Cacao {
 
 		//Create common options
 		spirv_cross::CompilerGLSL::Options options;
-		ConfigureSPIRV(&options);
+		options.es = false;
+		options.version = 410;
+		options.enable_420pack_extension = false;
 
 		//Parse SPIR-V IR
 		spirv_cross::Parser vertParse(std::move(vbuf));
@@ -52,9 +53,6 @@ namespace Cacao {
 				if(ubo.name.compare("type.cacao_globals") == 0 || ubo.name.compare("cacao_globals") == 0 || ubo.name.compare("type.ConstantBuffer.CacaoGlobals") == 0 || ubo.name.compare("globals") == 0) {
 					vertGLSL.set_name(ubo.base_type_id, "CacaoGlobals");
 				}
-				if(ubo.name.compare("type.cacao_locals") == 0 || ubo.name.compare("cacao_locals") == 0 || ubo.name.compare("type.ConstantBuffer.CacaoLocals") == 0 || ubo.name.compare("locals") == 0) {
-					vertGLSL.set_name(ubo.base_type_id, "CacaoLocals");
-				}
 			}
 			for(auto& out : vertRes.stage_outputs) {
 				if(out.name.starts_with("out.var.")) {
@@ -64,8 +62,8 @@ namespace Cacao {
 				}
 			}
 			for(auto& pcb : vertRes.push_constant_buffers) {
-				if(pcb.name.compare("type.PushConstant.ShaderData") == 0 || pcb.name.compare("shader") == 0) {
-					vertGLSL.set_name(pcb.base_type_id, "ShaderData");
+				if(pcb.name.compare("type.PushConstant.ObjectData") == 0 || pcb.name.compare("object") == 0) {
+					vertGLSL.set_name(pcb.base_type_id, "ObjectData");
 				}
 			}
 		}
@@ -100,16 +98,16 @@ namespace Cacao {
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
 	  : Asset(false), bound(false), specification(spec) {
 		//Validate that these paths exist
-		CheckException(std::filesystem::exists(vertexPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent vertex shader file!")
-		CheckException(std::filesystem::exists(fragmentPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent fragment shader file!")
+		CheckException(std::filesystem::exists(vertexPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent vertex shader file!");
+		CheckException(std::filesystem::exists(fragmentPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot create a shader from a non-existent fragment shader file!");
 
 		//Load SPIR-V code
 
 		//Open file streams
 		FILE* vf = fopen(vertexPath.c_str(), "rb");
-		CheckException(vf, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open vertex shader file!")
+		CheckException(vf, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open vertex shader file!");
 		FILE* ff = fopen(fragmentPath.c_str(), "rb");
-		CheckException(ff, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open fragment shader file!")
+		CheckException(ff, Exception::GetExceptionCodeFromMeaning("FileOpenFailure"), "Failed to open fragment shader file!");
 
 		//Get size of shader files
 		fseek(vf, 0, SEEK_END);
@@ -126,13 +124,13 @@ namespace Cacao {
 			//Clean up file streams before exception throw
 			fclose(vf);
 			fclose(ff);
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read vertex shader data from file!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read vertex shader data from file!");
 		}
 		if(fread(fbuf.data(), sizeof(uint32_t), flen, ff) != std::size_t(flen)) {
 			//Clean up file streams before exception throw
 			fclose(vf);
 			fclose(ff);
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read fragment shader data from file!")
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to read fragment shader data from file!");
 		}
 
 		//Close file streams
@@ -146,6 +144,12 @@ namespace Cacao {
 		auto glsl = RunSpvCross(vbuf, fbuf);
 		nativeData->vertexCode = glsl.first;
 		nativeData->fragmentCode = glsl.second;
+
+		//Apply unused transform flag
+		if(currentShaderUnusedTransformFlag) {
+			nativeData->unusedTransform = true;
+			currentShaderUnusedTransformFlag = false;
+		}
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
@@ -157,13 +161,23 @@ namespace Cacao {
 		auto glsl = RunSpvCross(vertex, fragment);
 		nativeData->vertexCode = glsl.first;
 		nativeData->fragmentCode = glsl.second;
+
+		//Apply unused transform flag
+		if(currentShaderUnusedTransformFlag) {
+			nativeData->unusedTransform = true;
+			currentShaderUnusedTransformFlag = false;
+		}
 	}
 
-	std::shared_future<void> Shader::Compile() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
+	void Shader::CompileSync() {
+		CompileAsync().get();
+	}
+
+	std::shared_future<void> Shader::CompileAsync() {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Invoke OpenGL on the main thread
 			return InvokeGL([this]() {
-				this->Compile();
+				this->CompileAsync();
 			});
 		}
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
@@ -188,7 +202,7 @@ namespace Cacao {
 			//Clean up resources
 			glDeleteShader(compiledVertexShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Vertex shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLError"), std::string("Vertex shader compilation failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -213,7 +227,7 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Fragment shader compilation failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLError"), std::string("Fragment shader compilation failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -241,7 +255,7 @@ namespace Cacao {
 			glDeleteShader(compiledVertexShader);
 			glDeleteShader(compiledFragmentShader);
 			//Throw exception
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLESError"), std::string("Shader linking failure: ") + infoLog.data());
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("GLError"), std::string("Shader linking failure: ") + infoLog.data());
 			return {};
 		}
 
@@ -251,27 +265,18 @@ namespace Cacao {
 		glDeleteShader(compiledVertexShader);
 		glDeleteShader(compiledFragmentShader);
 
-		//Setup local UBO
-		glGenBuffers(1, &(nativeData->localsUBO));
-		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->localsUBO);
-		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
 		//Link global UBO
 		GLuint globalUBOIdx = glGetUniformBlockIndex(program, "CacaoGlobals");
-		CheckException(globalUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the Cacao Engine globals uniform block!")
+		CheckException(globalUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the Cacao Engine globals uniform block!");
 		glUniformBlockBinding(program, globalUBOIdx, 0);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalsUBO);
 
-		//Link local UBO
-		GLuint localUBOIdx = glGetUniformBlockIndex(program, "CacaoLocals");
-		CheckException(localUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the Cacao Engine locals uniform block!")
-		glUniformBlockBinding(program, localUBOIdx, ShaderData::uboIndexCounter);
-		glBindBufferBase(GL_UNIFORM_BUFFER, ShaderData::uboIndexCounter, nativeData->localsUBO);
+		if(!nativeData->unusedTransform) {
+			CheckException(glGetUniformLocation(program, "object.transform") != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the transformation matrix uniform!");
+		}
 
 		//Increment UBO index counter
 		ShaderData::uboIndexCounter++;
-		if(ShaderData::uboIndexCounter == globalsUBO) ShaderData::uboIndexCounter++;
 
 		//Set GPU ID and compiled values
 		nativeData->gpuID = program;
@@ -282,8 +287,8 @@ namespace Cacao {
 	}
 
 	void Shader::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Try to invoke OpenGL (ES) and throw any exceptions back to the initial caller
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
 					this->Release();
@@ -301,7 +306,7 @@ namespace Cacao {
 	}
 
 	void Shader::Bind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot bind shader in non-rendering thread!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind shader in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
 
@@ -310,7 +315,7 @@ namespace Cacao {
 	}
 
 	void Shader::Unbind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetThreadID(), Exception::GetExceptionCodeFromMeaning("RenderThread"), "Cannot unbind shader in non-rendering thread!")
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind shader in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!");
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!");
 
@@ -320,15 +325,32 @@ namespace Cacao {
 		bound = false;
 	}
 
-	void Shader::UploadData(ShaderUploadData& data) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
-			InvokeGL([this, data]() {
-				this->UploadData(const_cast<ShaderUploadData&>(data));
+	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Invoke OpenGL on the main thread
+			InvokeGL([this, data, transformation]() {
+				this->UploadData(const_cast<ShaderUploadData&>(data), transformation);
 			});
 			return;
 		}
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!")
+		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!");
+
+		//Get ID of currently bound shader (to restore later)
+		//Only do this if we are not currently bound
+		GLint currentlyBound = -1;
+		if(!bound) {
+			glGetIntegerv(GL_CURRENT_PROGRAM, &currentlyBound);
+
+			//Bind shader
+			Bind();
+		}
+
+		//Upload transformation matrix if used (the GLSL compiler tends to get rid of it if it's unused)
+		if(!nativeData->unusedTransform) {
+			GLint transULOC = glGetUniformLocation(nativeData->gpuID, "object.transform");
+			CheckException(transULOC != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the transformation matrix uniform!");
+			glUniformMatrix4fv(transULOC, 1, GL_FALSE, glm::value_ptr(transformation));
+		}
 
 		//Create a map for quicker reference later
 		std::map<std::string, ShaderItemInfo> foundItems;
@@ -344,35 +366,21 @@ namespace Cacao {
 					}
 				}
 			}
-			CheckException(found, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Can't locate targeted item in shader specification!")
+			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!");
 
 			//Grab shader item info
 			ShaderItemInfo info = foundItems[item.target];
 
 			//Obtain uniform location
 			std::stringstream ulocPath;
-			ulocPath << (info.type == SpvType::SampledImage ? "" : "shader.") << item.target;
+			ulocPath << (info.type == SpvType::SampledImage ? "" : "object.") << item.target;
 			GLint uniformLocation = glGetUniformLocation(nativeData->gpuID, ulocPath.str().c_str());
-			CheckException(uniformLocation != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the requested uniform!")
-
-			//Confirm that spec does not contain types that aren't supported
-			UniformTypeCheckResponse res = CheckUniformType(info.type);
-			CheckException(res.ok, Exception::GetExceptionCodeFromMeaning("UnsupportedType"), res.err)
+			CheckException(uniformLocation != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the requested uniform!");
 
 			//Turn dimensions into single number (easier for uploading)
 			int dims = (4 * info.size.y) - (4 - info.size.x);
-			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!")
-			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!")
-
-			//Get ID of currently bound shader (to restore later)
-			//Only do this if we are not currently bound
-			GLint currentlyBound = -1;
-			if(!bound) {
-				glGetIntegerv(GL_CURRENT_PROGRAM, &currentlyBound);
-
-				//Bind shader
-				Bind();
-			}
+			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!");
+			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!");
 
 			int imageSlotCounter = 0;
 
@@ -414,7 +422,7 @@ namespace Cacao {
 						break;
 					case SpvType::SampledImage:
 						//Confirm valid dimensions
-						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!")
+						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!");
 
 						//Bind texture to the next available slot
 						if(item.data.type() == typeid(Texture2D*)) {
@@ -441,7 +449,7 @@ namespace Cacao {
 							glBindTexture(GL_TEXTURE_2D, tex.texObj);
 							(*tex.slot) = imageSlotCounter;
 						} else {
-							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!")
+							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!");
 						}
 
 						//Upload slot ID to shader
@@ -510,25 +518,96 @@ namespace Cacao {
 						}
 						break;
 					case SpvType::Double:
+						switch(dims) {
+							case 1:
+								glUniform1d(uniformLocation, std::any_cast<double>(item.data));
+								break;
+							case 2:
+								glUniform2dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec2>(item.data)));
+								break;
+							case 3:
+								glUniform3dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec3>(item.data)));
+								break;
+							case 4:
+								glUniform4dv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::dvec4>(item.data)));
+								break;
+							case 6:
+								glUniformMatrix2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2>(item.data)));
+								break;
+							case 7:
+								glUniformMatrix2x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data)));
+								break;
+							case 8:
+								glUniformMatrix2x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data)));
+								break;
+							case 10:
+								glUniformMatrix3x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data)));
+								break;
+							case 11:
+								glUniformMatrix3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3>(item.data)));
+								break;
+							case 12:
+								glUniformMatrix3x4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data)));
+								break;
+							case 14:
+								glUniformMatrix4x2dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data)));
+								break;
+							case 15:
+								glUniformMatrix4x3dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data)));
+								break;
+							case 16:
+								glUniformMatrix4dv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::dmat4>(item.data)));
+								break;
+						}
+						break;
 					case SpvType::Int64:
+						switch(dims) {
+							case 1:
+								glUniform1i64ARB(uniformLocation, std::any_cast<int64_t>(item.data));
+								break;
+							case 2:
+								glUniform2i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec2>(item.data)));
+								break;
+							case 3:
+								glUniform3i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec3>(item.data)));
+								break;
+							case 4:
+								glUniform4i64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::i64vec4>(item.data)));
+								break;
+						}
+						break;
 					case SpvType::UInt64:
-						Handle64BitTypes(uniformLocation, item, info, dims);
+						switch(dims) {
+							case 1:
+								glUniform1ui64ARB(uniformLocation, std::any_cast<uint64_t>(item.data));
+								break;
+							case 2:
+								glUniform2ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec2>(item.data)));
+								break;
+							case 3:
+								glUniform3ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec3>(item.data)));
+								break;
+							case 4:
+								glUniform4ui64vARB(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::u64vec4>(item.data)));
+								break;
+						}
+						break;
 				}
 			} catch(const std::bad_cast&) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Failed cast of shader upload value to type specified in target!")
+				CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Failed cast of shader upload value to type specified in target!");
 			}
+		}
 
-			//Restore previous shader (only if we weren't bound before)
-			if(currentlyBound != -1) {
-				Unbind();
-				glUseProgram(currentlyBound);
-			}
+		//Restore previous shader (only if we weren't bound before)
+		if(currentlyBound != -1) {
+			Unbind();
+			glUseProgram(currentlyBound);
 		}
 	}
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
+		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+			//Invoke OpenGL on the main thread
 			InvokeGL([projection, view]() {
 				UploadCacaoGlobals(projection, view);
 			});
@@ -541,26 +620,6 @@ namespace Cacao {
 		//Upload data
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
-
-		//Unbind UBO
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-
-	void Shader::UploadCacaoLocals(glm::mat4 transform) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetThreadID()) {
-			//Invoke OpenGL (ES) on the main thread
-			InvokeGL([this, transform]() {
-				this->UploadCacaoLocals(transform);
-			});
-			return;
-		}
-		CheckException(this->compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload locals data to uncompiled shader!")
-
-		//Bind UBO
-		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->localsUBO);
-
-		//Upload data
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(transform));
 
 		//Unbind UBO
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);

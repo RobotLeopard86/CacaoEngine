@@ -5,6 +5,8 @@ This is a list of all built-in events:
 * `WindowFocus`: The window has gained focus
 * `WindowUnfocus`: The window has lost focus
 * `WindowResize`: The size of the window has changed
+* `WindowMinimize`: The window has been minimized
+* `WindowRestore`: The window has been restored
 * `MouseMove`: The cursor has moved
 * `MouseScroll`: The mouse wheel has been scrolled
 * `MousePress`: A mouse button has been pressed

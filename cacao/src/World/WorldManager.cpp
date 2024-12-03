@@ -21,12 +21,13 @@ namespace Cacao {
 	}
 
 	void WorldManager::RemoveWorld(std::string name) {
-		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't remove world because one with the specified name doesn't exist!")
+		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't remove world because one with the specified name doesn't exist!");
+		delete worlds.at(name).cam;
 		worlds.erase(name);
 	}
 
 	void WorldManager::SetActiveWorld(std::string name) {
-		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't set active world to a nonexistent one!")
+		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't set active world to a nonexistent one!");
 		activeWorld = name;
 	}
 
@@ -35,7 +36,7 @@ namespace Cacao {
 	}
 
 	World& WorldManager::GetWorld(std::string name) {
-		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't get access to a nonexistent world!")
+		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't get access to a nonexistent world!");
 
 		return worlds.at(name);
 	}

@@ -1,7 +1,7 @@
 #include "SDLHooks.hpp"
 
 #include "SDL3/SDL.h"
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "Core/Assert.hpp"
 #include "Graphics/Window.hpp"
@@ -11,12 +11,12 @@
 namespace Cacao {
 	void ConfigureSDL() {
 #ifdef __APPLE__
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG, SDL_TRUE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 #endif
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-		SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, SDL_TRUE);
+		SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, true);
 	}
 
 	SDL_WindowFlags GetSDLFlags() {
@@ -31,7 +31,7 @@ namespace Cacao {
 	}
 
 	void CleanupGraphicsAPI() {
-		SDL_GL_DeleteContext(SDL_GL_GetCurrentContext());
+		SDL_GL_DestroyContext(SDL_GL_GetCurrentContext());
 	}
 
 	void ResizeViewport(SDL_Window* win) {
@@ -45,7 +45,7 @@ namespace Cacao {
 	}
 
 	void Window::Present() {
-		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!")
+		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot present to unopened window!");
 		SDL_GL_SwapWindow(nativeData->win);
 	}
 }

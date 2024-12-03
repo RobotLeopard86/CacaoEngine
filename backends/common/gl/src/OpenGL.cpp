@@ -1,6 +1,6 @@
 #include "Graphics/Rendering/RenderController.hpp"
 
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "Graphics/Window.hpp"
 #include "Events/EventSystem.hpp"
@@ -12,11 +12,15 @@
 #include "UI/Shaders.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "GLUIView.hpp"
+#include "UIViewShaderManager.hpp"
 
 constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
 
+bool backendInitBeforeWindow = false;
+bool backendShutdownAfterWindow = false;
+
 namespace Cacao {
-	//Queue of OpenGL (ES) tasks to process
+	//Queue of OpenGL tasks to process
 	static std::queue<Task> glQueue;
 
 	//Queue mutex
@@ -24,10 +28,9 @@ namespace Cacao {
 
 	//UI quad assets
 	static GLuint uiVao, uiVbo;
-	static UIViewShaderManager uivsm;
 
 	void RenderController::UpdateGraphicsState() {
-		//Process OpenGL (ES) tasks
+		//Process OpenGL tasks
 		while(!glQueue.empty()) {
 			//Acquire next task
 			queueMutex.lock();
@@ -66,14 +69,13 @@ namespace Cacao {
 
 			//Render main scene
 			for(RenderObject& obj : frame->objects) {
-				//Upload material data to shader
-				obj.material.shader->UploadData(obj.material.data);
-				obj.material.shader->UploadCacaoLocals(obj.transformMatrix);
-
 				//Bind shader
 				obj.material.shader->Bind();
 
-				//Configure OpenGL (ES)
+				//Upload material data and transformation matrix to shader
+				obj.material.shader->UploadData(obj.material.data, obj.transformMatrix);
+
+				//Configure OpenGL
 				glEnable(GL_DEPTH_TEST);
 				glDisable(GL_BLEND);
 				glDepthFunc(GL_LESS);
@@ -125,10 +127,10 @@ namespace Cacao {
 				ShaderUploadData uiud;
 				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
 				uivsm->Bind();
-				uivsm->UploadData(uiud);
+				uivsm->UploadData(uiud, glm::identity<glm::mat4>());
 				Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
 
-				//Configure OpenGL (ES)
+				//Configure OpenGL
 				glDisable(GL_DEPTH_TEST);
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -138,7 +140,7 @@ namespace Cacao {
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 				glBindVertexArray(0);
 
-				//Reset OpenGL (ES) configurations to normal
+				//Reset OpenGL configurations to normal
 				glEnable(GL_DEPTH_TEST);
 				glDepthFunc(GL_LESS);
 				glDisable(GL_BLEND);
@@ -160,15 +162,11 @@ namespace Cacao {
 	}
 
 	void RenderController::Init() {
-		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!")
+		CheckException(!isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot initialize the initialized render controller!");
 		isInitialized = true;
 
-		uivsm = {};
-
-#ifndef ES
-		//Enable SRGB (on by default for OpenGL ES)
+		//Enable SRGB
 		glEnable(GL_FRAMEBUFFER_SRGB);
-#endif
 
 		//Create globals UBO
 		glGenBuffers(1, &globalsUBO);
@@ -177,6 +175,7 @@ namespace Cacao {
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		//Compile UI view shader
+		currentShaderUnusedTransformFlag = true;
 		uivsm.Compile();
 
 		//Set up UI view quad
@@ -199,10 +198,16 @@ namespace Cacao {
 
 		//Compile UI element shaders
 		GenShaders();
+
+		currentShaderUnusedTransformFlag = false;
+	}
+
+	void PreShaderCreateHook() {
+		currentShaderUnusedTransformFlag = true;
 	}
 
 	void RenderController::Shutdown() {
-		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!")
+		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!");
 
 		//Release UI element shaders
 		DelShaders();
@@ -214,7 +219,7 @@ namespace Cacao {
 		//Release UI view shader
 		uivsm.Release();
 
-		//Take care of any remaining OpenGL (ES) tasks
+		//Take care of any remaining OpenGL tasks
 		while(!glQueue.empty()) {
 			//Acquire next task
 			Task& task = glQueue.front();
@@ -240,7 +245,8 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(101, "BadBindState");
 		Exception::RegisterExceptionCode(102, "GLError");
 		Exception::RegisterExceptionCode(103, "UniformUploadFailure");
-		Exception::RegisterExceptionCode(104, "RenderThread");
-		Exception::RegisterExceptionCode(105, "UnsupportedType");
+		Exception::RegisterExceptionCode(104, "UnsupportedType");
 	}
+
+	void RenderController::WaitGPUIdleBeforeTerminate() {}
 }

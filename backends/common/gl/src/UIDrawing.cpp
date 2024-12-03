@@ -1,4 +1,4 @@
-#include "GLHeaders.hpp"
+#include "glad/gl.h"
 
 #include "UI/Text.hpp"
 #include "UI/Image.hpp"
@@ -11,17 +11,17 @@
 
 namespace Cacao {
 	struct VBOEntry {
-		glm::vec2 vert;
+		glm::vec3 vert;
 		glm::vec2 tc;
 	};
 
 	void Text::Renderable::Draw(glm::uvec2 screenSize, const glm::mat4& projection) {
-		//Configure OpenGL (ES)
+		//Configure OpenGL
 		GLint originalUnpack;
 		glGetIntegerv(GL_UNPACK_ALIGNMENT, &originalUnpack);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		//Create temporary OpenGL (ES) objects
+		//Create temporary OpenGL objects
 		GLuint vao, vbo, tex;
 		glGenVertexArrays(1, &vao);
 		glGenBuffers(1, &vbo);
@@ -63,7 +63,7 @@ namespace Cacao {
 			FT_Set_Pixel_Sizes(fontFace, 0, charSize);
 			for(unsigned int i = 0; i < ln.glyphCount; i++) {
 				FT_Error err = FT_Load_Glyph(fontFace, ln.glyphInfo[i].codepoint, FT_LOAD_RENDER);
-				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!")
+				CheckException(!err, Exception::GetExceptionCodeFromMeaning("External"), "Failed to load glyph from font!");
 
 				//Get bitmap
 				FT_Bitmap& bitmap = fontFace->glyph->bitmap;
@@ -74,12 +74,12 @@ namespace Cacao {
 				float xpos = x + fontFace->glyph->bitmap_left;
 				float ypos = y - (h - fontFace->glyph->bitmap_top);
 				VBOEntry vboData[6] = {
-					{{xpos, ypos + h}, {0.0f, 0.0f}},
-					{{xpos + w, ypos}, {1.0f, 1.0f}},
-					{{xpos, ypos}, {0.0f, 1.0f}},
-					{{xpos, ypos + h}, {0.0f, 0.0f}},
-					{{xpos + w, ypos + h}, {1.0f, 0.0f}},
-					{{xpos + w, ypos}, {1.0f, 1.0f}}};
+					{{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}},
+					{{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}},
+					{{xpos, ypos, 0.0f}, {0.0f, 1.0f}},
+					{{xpos, ypos + h, 0.0f}, {0.0f, 0.0f}},
+					{{xpos + w, ypos + h, 0.0f}, {1.0f, 0.0f}},
+					{{xpos + w, ypos, 0.0f}, {1.0f, 1.0f}}};
 
 				//Update VBO
 				glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -100,7 +100,7 @@ namespace Cacao {
 				RawGLTexture upTex = {.texObj = tex, .slot = new int(-1)};
 				up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
 				up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
-				TextShaders::shader->UploadData(up);
+				TextShaders::shader->UploadData(up, glm::identity<glm::mat4>());
 
 				//Draw glyph
 				glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -109,6 +109,7 @@ namespace Cacao {
 				glActiveTexture(GL_TEXTURE0 + (*upTex.slot));
 				glBindTexture(GL_TEXTURE_2D, 0);
 				TextShaders::shader->Unbind();
+				delete upTex.slot;
 
 				//Advance cursor for next glyph
 				x += (ln.advances[i].adv.x / 64.0f);
@@ -124,13 +125,13 @@ namespace Cacao {
 		}
 		glBindVertexArray(0);
 
-		//Reset OpenGL (ES)
+		//Reset OpenGL
 		glPixelStorei(GL_UNPACK_ALIGNMENT, originalUnpack);
 
 		//Destroy Harfbuzz font representation
 		hb_font_destroy(hbf);
 
-		//Clean up OpenGL (ES) objects
+		//Clean up OpenGL objects
 		glDeleteTextures(1, &tex);
 		glDeleteBuffers(1, &vbo);
 		glDeleteVertexArrays(1, &vao);
@@ -143,14 +144,14 @@ namespace Cacao {
 
 		//Create vertex buffer
 		VBOEntry vboData[6] = {
-			{{topLeft.x, topLeft.y - size.y}, {0.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}},
-			{{topLeft.x, topLeft.y}, {0.0f, 1.0f}},
-			{{topLeft.x, topLeft.y - size.y}, {0.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y - size.y}, {1.0f, 0.0f}},
-			{{topLeft.x + size.x, topLeft.y}, {1.0f, 1.0f}}};
+			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}},
+			{{topLeft.x, topLeft.y, 0.0f}, {0.0f, 1.0f}},
+			{{topLeft.x, topLeft.y - size.y, 0.0f}, {0.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y - size.y, 0.0f}, {1.0f, 0.0f}},
+			{{topLeft.x + size.x, topLeft.y, 0.0f}, {1.0f, 1.0f}}};
 
-		//Create temporary OpenGL (ES) objects
+		//Create temporary OpenGL objects
 		GLuint vao, vbo;
 		glGenVertexArrays(1, &vao);
 		glGenBuffers(1, &vbo);
@@ -166,8 +167,8 @@ namespace Cacao {
 		//Upload uniforms
 		ImageShaders::shader->Bind();
 		ShaderUploadData up;
-		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex.GetManagedAsset().get())});
-		ImageShaders::shader->UploadData(up);
+		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
+		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
 
 		//Draw image
 		glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -177,7 +178,7 @@ namespace Cacao {
 		ImageShaders::shader->Unbind();
 		glBindVertexArray(0);
 
-		//Clean up OpenGL (ES) objects
+		//Clean up OpenGL objects
 		glDeleteBuffers(1, &vbo);
 		glDeleteVertexArrays(1, &vao);
 	}
