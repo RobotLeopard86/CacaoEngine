@@ -4,33 +4,36 @@ import os
 import re
 
 def parse_compile_commands(file_path):
-    # Load the compile_commands.json file
-    with open(file_path, 'r') as f:
-        compile_commands = json.load(f)
-    
-    include_paths = set()  # Use a set to avoid duplicates
-    script_dir = os.getcwd()  # Directory where the script is run
+	# Load the compile_commands.json file
+	with open(file_path, 'r') as f:
+		compile_commands = json.load(f)
+	
+	include_paths = set()  # Use a set to avoid duplicates
+	script_dir = os.getcwd()  # Directory where the script is run
 
-    # Iterate through each entry in the JSON
-    for entry in compile_commands:
-        # Extract the compiler command or arguments
-        command = entry.get('command', '') or ' '.join(entry.get('arguments', []))
-        
-        # Match include paths (-Ipath or /Ipath)
-        matches = re.findall(r'(?:-I|/I)(\S+)', command)
-        
-        for match in matches:
-            # Convert relative paths to absolute paths based on the directory of the current entry
-            base_dir = entry.get('directory', '.')
-            abs_path = os.path.normpath(os.path.join(base_dir, match))
-            
-            # Make the path relative to the script directory
-            rel_path = os.path.relpath(abs_path, script_dir)
-            
-            # Format as $(ProjectDir)path;
-            include_paths.add(f'$(ProjectDir){rel_path};')
+	# Iterate through each entry in the JSON
+	for entry in compile_commands:
+		# Extract the compiler command or arguments
+		command = entry.get('command', '') or ' '.join(entry.get('arguments', []))
+		
+		# Match include paths (-Ipath or /Ipath)
+		matches = re.findall(r'(?:-I|/I)(\S+)', command)
+		
+		for match in matches:
+			# Convert relative paths to absolute paths based on the directory of the current entry
+			base_dir = entry.get('directory', '.')
+			abs_path = os.path.normpath(os.path.join(base_dir, match))
 
-    return ''.join(include_paths)
+			ins_path = abs_path
+			
+			# Make the path relative to the script directory if it is
+			if abs_path.startswith(os.path.normpath(script_dir)):
+				ins_path = os.path.relpath(abs_path, script_dir)
+			
+			# Format as $(ProjectDir)path;
+			include_paths.add(f'$(ProjectDir){ins_path};')
+
+	return ''.join(include_paths)
 
 # Solution file
 print("Writing solution file...")
@@ -130,7 +133,7 @@ with open('Cacao.vcxproj', 'w') as vcx:
 		'  <PropertyGroup Label="UserMacros" />\n',
 		'  <PropertyGroup Condition="\'$(Configuration)|$(Platform)\'==\'Debug|x64\'">\n',
 		'    <NMakeBuildCommandLine>meson compile -C $(Configuration) bundle</NMakeBuildCommandLine>\n',
-		'    <NMakeOutput>$(Configuration)\\playground.bundled\\cacaoengine.exe</NMakeOutput>\n',
+		'    <NMakeOutput>$(Configuration)\\playground-bundled\\cacaoengine.exe</NMakeOutput>\n',
 		'    <NMakeCleanCommandLine>meson compile -C $(Configuration) --clean</NMakeCleanCommandLine>\n',
 		'    <NMakeReBuildCommandLine>meson compile -C $(Configuration) --clean &amp;&amp; meson compile -C $(Configuration) bundle</NMakeReBuildCommandLine>\n',
 		'    <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>\n',
@@ -138,7 +141,7 @@ with open('Cacao.vcxproj', 'w') as vcx:
 		'  </PropertyGroup>\n',
 		'  <PropertyGroup Condition="\'$(Configuration)|$(Platform)\'==\'Release|x64\'">\n',
 		'    <NMakeBuildCommandLine>meson compile -C $(Configuration) playground</NMakeBuildCommandLine>\n',
-		'    <NMakeOutput>$(Configuration)\\playground.bundled\\cacaoengine.exe</NMakeOutput>\n',
+		'    <NMakeOutput>$(Configuration)\\playground-bundled\\cacaoengine.exe</NMakeOutput>\n',
 		'    <NMakeCleanCommandLine>meson compile -C $(Configuration) --clean</NMakeCleanCommandLine>\n',
 		'    <NMakeReBuildCommandLine>meson compile -C $(Configuration) --clean &amp;&amp; meson compile -C $(Configuration) bundle</NMakeReBuildCommandLine>\n',
 		'    <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>\n',
