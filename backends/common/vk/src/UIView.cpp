@@ -138,7 +138,7 @@ namespace Cacao {
 		//Transition image to drawable state
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eColorAttachmentWrite,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, 0, 0, backBuffer->tex.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
 			imm.cmd.pipelineBarrier2(cdDI);
@@ -183,8 +183,8 @@ namespace Cacao {
 
 		//Transition image to sampleable state
 		{
-			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eColorAttachmentWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, backBuffer->tex.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
 			imm.cmd.pipelineBarrier2(cdDI);

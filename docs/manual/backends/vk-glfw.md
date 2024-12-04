@@ -1,19 +1,13 @@
 # Backend `vk-glfw`
 
-This backend uses Vulkan 1.2 with some extensions and GLFW.
+This backend uses Vulkan 1.3 with some extensions and GLFW.
 
 ## Known Issues
 * Minimizing the window on Wayland causes a crash. Unknown if this occurs on X11.
 
 ## Vulkan Extension Requirements
 * `VK_KHR_swapchain`
-* `VK_KHR_dynamic_rendering`
-* `VK_KHR_synchronization2`
-* `VK_KHR_dedicated_allocation`
-* `VK_KHR_copy_commands2`
-* `VK_KHR_get_memory_requirements2`
 * `VK_KHR_push_descriptor`
-* `VK_EXT_extended_dynamic_state`
 * `VK_EXT_extended_dynamic_state3`
 * `VK_EXT_robustness2`
 

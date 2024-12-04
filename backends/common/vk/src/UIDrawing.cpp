@@ -103,7 +103,7 @@ namespace Cacao {
 				//Transition image to shader resource state
 				{
 					vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 						vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, info.glyph.image.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 					vk::DependencyInfo cdDI({}, {}, {}, barrier);
 					uiCmd->pipelineBarrier2(cdDI);
