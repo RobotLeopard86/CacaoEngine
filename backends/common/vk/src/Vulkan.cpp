@@ -82,7 +82,7 @@ namespace Cacao {
 		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
 		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
-		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_2);
+		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_3);
 		auto requiredInstanceExts = GetRequiredInstanceExts();
 #ifdef __APPLE__
 		requiredInstanceExts.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
@@ -103,14 +103,8 @@ namespace Cacao {
 		//Find best device
 		std::vector<const char*> requiredDevExts = {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-			VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
-			VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME,
 			VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME,
-			VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
-			VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
 			VK_EXT_ROBUSTNESS_2_EXTENSION_NAME,
-			VK_KHR_COPY_COMMANDS_2_EXTENSION_NAME,
-			VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME,
 			VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME};
 #ifdef __linux__
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);

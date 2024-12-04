@@ -64,6 +64,11 @@ namespace Cacao {
 			dirty = true;
 		}
 
+		/**
+		 * @brief Delete all elements from the screen
+		 */
+		void PurgeElements();
+
 	  private:
 		//Contained elements
 		std::vector<std::shared_ptr<UIElement>> elements;

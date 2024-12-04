@@ -162,10 +162,10 @@ if host_machine.system() == 'windows'
 	exe_deps += meson.get_compiler('cpp').find_library('winmm', required: true)
 	exe_deps += meson.get_compiler('cpp').find_library('version', required: true)
 	exe_deps += meson.get_compiler('cpp').find_library('setupapi', required: true)
-	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: 'include', 
+	cacao_exe = executable(get_option('exe_name'), 'src/Core/Startup.cpp', win_subsystem: subsystem, include_directories: 'include', 
 		build_rpath: '.', link_whole: [ libcacaoengine ], export_dynamic: true, implib: true, dependencies: exe_deps, vs_module_defs: vs_def, link_args: lnk_args)
 else
-	cacao_exe = executable('cacaoengine', 'src/Core/Startup.cpp', include_directories: 'include', 
+	cacao_exe = executable(get_option('exe_name'), 'src/Core/Startup.cpp', include_directories: 'include', 
 		build_rpath: '.', link_whole: [ libfrontend, libbackend ], export_dynamic: true, dependencies: exe_deps)
 endif
 

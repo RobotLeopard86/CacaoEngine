@@ -201,7 +201,7 @@ namespace Cacao {
 		 */
 		void SetParent(std::shared_ptr<Entity> newParent) {
 			//If we aren't orphaned, remove ourselves from the current parent
-			if(parent.lock() != self) {
+			if(!parent.expired() && parent.lock() != self) {
 				std::shared_ptr<Entity> parentLk = parent.lock();
 				auto it = std::find(parentLk->children.begin(), parentLk->children.end(), self);
 				if(it != parentLk->children.end()) parentLk->children.erase(it);
@@ -218,6 +218,8 @@ namespace Cacao {
 		 * @brief Destroy the entity and release references to components and child entities
 		 */
 		~Entity() {
+			SetParent(self);
+
 			//Release ownership of all components
 			{
 				std::lock_guard lk(componentsMtx);

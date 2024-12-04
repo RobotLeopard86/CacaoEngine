@@ -10,7 +10,7 @@ buildroot = pathlib.Path(os.environ['MESON_BUILD_ROOT'])
 if not buildroot.exists():
 	raise FileNotFoundError('Build directory does not exist.')
 
-bundleroot = (buildroot / 'playground.bundled')
+bundleroot = (buildroot / 'playground-bundled')
 if bundleroot.exists():
 	shutil.rmtree(bundleroot)
 
@@ -22,7 +22,7 @@ so_suffix = '.dll' if os.name == 'nt' else '.dylib' if sys.platform.startswith('
 
 playground = pathlib.Path(sys.argv[0]).parent.parent / 'playground'
 
-shutil.copy2(buildroot / 'cacao' / ('cacaoengine' + exe_suffix), bundleroot)
+shutil.copy2(buildroot / 'cacao' / (sys.argv[1] + exe_suffix), bundleroot)
 shutil.copytree(playground / 'assets', bundleroot / 'assets')
 shutil.copy2(playground / 'launchconfig.cacao.yml', bundleroot)
 shutil.copy2(buildroot / 'playground' / ('launch' + so_suffix), bundleroot)
@@ -30,4 +30,4 @@ for file in (buildroot / 'playground' / ('launch' + so_suffix + '.p')).rglob('*.
 	shutil.copy2(file, bundleroot / 'assets' / 'shaders')
 
 def get_engine_path():
-	return (bundleroot / ('cacaoengine' + exe_suffix))
+	return (bundleroot / (sys.argv[1] + exe_suffix))

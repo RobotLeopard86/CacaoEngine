@@ -33,3 +33,9 @@ docs/*
 
 # Don't send macOS .DS_Store files
 .DS_Store
+
+# Don't send Visual Studio things
+.vs
+x64
+*.vcxproj*
+*.sln

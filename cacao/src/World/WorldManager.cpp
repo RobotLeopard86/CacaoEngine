@@ -22,6 +22,7 @@ namespace Cacao {
 
 	void WorldManager::RemoveWorld(std::string name) {
 		CheckException(worlds.contains(name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't remove world because one with the specified name doesn't exist!");
+		delete worlds.at(name).cam;
 		worlds.erase(name);
 	}
 
