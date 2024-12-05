@@ -78,36 +78,22 @@ namespace Cacao {
 		if(!nativeData->vbufReady) {
 			//Create allocation info
 			auto vbsz = sizeof(float) * std::size(skyboxVerts);
-			vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer);
-			vk::BufferCreateInfo vertexUpCI({}, vbsz, vk::BufferUsageFlagBits::eTransferSrc);
-			vma::AllocationCreateInfo uploadAllocCI({}, vma::MemoryUsage::eCpuToGpu);
-			vma::AllocationCreateInfo bufferAllocCI({}, vma::MemoryUsage::eGpuOnly);
+			vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eVertexBuffer);
+			vma::AllocationCreateInfo allocCI{};
+			allocCI.requiredFlags = vk::MemoryPropertyFlagBits::eHostVisible;
 
-			//Create buffer objects
-			Allocated<vk::Buffer> vertexUp = {};
+			//Create buffer object
 			{
-				auto [buffer, alloc] = allocator.createBuffer(vertexCI, bufferAllocCI);
+				auto [buffer, alloc] = allocator.createBuffer(vertexCI, allocCI);
 				nativeData->vertexBuffer.alloc = alloc;
 				nativeData->vertexBuffer.obj = buffer;
-			}
-			{
-				auto [buffer, alloc] = allocator.createBuffer(vertexUpCI, uploadAllocCI);
-				vertexUp.alloc = alloc;
-				vertexUp.obj = buffer;
 			}
 
 			//Upload data to the GPU
 			void* gpuMem;
-			allocator.mapMemory(vertexUp.alloc, &gpuMem);
+			allocator.mapMemory(nativeData->vertexBuffer.alloc, &gpuMem);
 			std::memcpy(gpuMem, skyboxVerts, vbsz);
-			allocator.unmapMemory(vertexUp.alloc);
-
-			//Record a resource copy from the upload buffers to the real buffers
-			{
-				vk::BufferCopy2 copy(0UL, 0UL, vbsz);
-				vk::CopyBufferInfo2 copyInfo(vertexUp.obj, nativeData->vertexBuffer.obj, copy);
-				f.cmd.copyBuffer2(copyInfo);
-			}
+			allocator.unmapMemory(nativeData->vertexBuffer.alloc);
 
 			nativeData->vbufReady = true;
 		}

@@ -710,10 +710,16 @@ namespace Cacao {
 		f.cmd.end();
 
 		//Submit the command buffer to the queue
-		vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-		vk::SubmitInfo submitInfo(f.acquireSemaphore, waitStage, f.cmd, f.renderSemaphore);
-		if(auto res = queue.submit(1, &submitInfo, f.fence); res != vk::Result::eSuccess) {
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!");
+		vk::SemaphoreSubmitInfo semWait(f.acquireSemaphore, 0, vk::PipelineStageFlagBits2::eAllCommands);
+		vk::CommandBufferSubmitInfo cbsi(f.cmd);
+		vk::SemaphoreSubmitInfo semSignal(f.renderSemaphore, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+		vk::SubmitInfo2 si({}, semWait, cbsi, semSignal);
+		try {
+			SubmitCommandBuffer(si, f.fence);
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Failed to submit frame command buffer: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
 		}
 
 		//Set submission for presenting
