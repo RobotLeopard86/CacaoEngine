@@ -28,12 +28,14 @@ def parse_compile_commands(file_path):
 			
 			# Make the path relative to the script directory if it is
 			if abs_path.startswith(os.path.normpath(script_dir)):
-				ins_path = os.path.relpath(abs_path, script_dir)
+				ins_path = '$(ProjectDir)' + os.path.relpath(abs_path, script_dir)
 			
-			# Format as $(ProjectDir)path;
-			include_paths.add(f'$(ProjectDir){ins_path};')
+			if ins_path[-1] == '"':
+				ins_path = ins_path[:-1]
+			
+			include_paths.add(ins_path)
 
-	return ''.join(include_paths)
+	return ';'.join(include_paths)
 
 # Solution file
 print("Writing solution file...")

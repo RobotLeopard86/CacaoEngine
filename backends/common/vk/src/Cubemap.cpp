@@ -126,7 +126,7 @@ namespace Cacao {
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
 		SubmitCommandBuffer(si, imm.fence);
-		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
 
 		//Assign to native data
 		nativeData->texture.alloc = ialloc;
@@ -182,7 +182,7 @@ namespace Cacao {
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info
-		vk::DescriptorImageInfo dii(imageSlot->second.sampler, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set

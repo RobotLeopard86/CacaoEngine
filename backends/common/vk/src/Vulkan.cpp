@@ -2,6 +2,7 @@
 #include "VulkanCoreObjects.hpp"
 
 #include "VkHooks.hpp"
+#include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 #include "Core/Assert.hpp"
@@ -51,7 +52,9 @@ namespace Cacao {
 		//Check if we have an immediate for this thread already
 		auto threadID = std::this_thread::get_id();
 		if(immediates.contains(threadID)) {
-			return immediates.at(threadID);
+			Immediate ret = immediates.at(threadID);
+			ret.cmd.reset();
+			return ret;
 		}
 
 		//Make a new immediate
@@ -346,7 +349,7 @@ namespace Cacao {
 		allocator.mapMemory(vertexUp.alloc, &gpuMem);
 		std::memcpy(gpuMem, quadData, vbsz);
 		allocator.unmapMemory(vertexUp.alloc);
-		vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+		vk::CommandBufferBeginInfo copyBegin {};
 		imm.cmd.begin(copyBegin);
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, vbsz);
@@ -359,12 +362,70 @@ namespace Cacao {
 			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 			dev.resetFences(imm.fence);
 		}
-		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
-		vk::SubmitInfo2 si({}, {}, cbsi);
-		queue.submit2(si, imm.fence);
-		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		{
+			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+			vk::SubmitInfo2 si({}, {}, cbsi);
+			SubmitCommandBuffer(si, imm.fence);
+		}
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
+		//Create "null" texture
+		vk::ImageCreateInfo nullCI({}, vk::ImageType::e2D, vk::Format::eR8G8B8A8Srgb, {1, 1, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive, 0);
+		vma::AllocationCreateInfo nullAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
+		try {
+			auto [img, alloc] = allocator.createImage(nullCI, nullAllocCI);
+			nullImage = {.alloc = alloc, .obj = img};
+		} catch(vk::SystemError& err) {
+			allocator.unmapMemory(uiUBO.alloc);
+			allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			allocator.destroyBuffer(uiQuadBuffer.obj, uiQuadBuffer.alloc);
+			Immediate::Cleanup();
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create null texture image: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
+		//Transition "null" image to shader read-only layout
+		vk::CommandBufferBeginInfo nullImageStateBegin {};
+		imm.cmd.reset();
+		imm.cmd.begin(nullImageStateBegin);
+		{
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
+				vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, nullImage.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+			vk::DependencyInfo cdDI({}, {}, {}, barrier);
+			imm.cmd.pipelineBarrier2(cdDI);
+		}
+		imm.cmd.end();
+		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
+			dev.resetFences(imm.fence);
+		}
+		{
+			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+			vk::SubmitInfo2 si({}, {}, cbsi);
+			SubmitCommandBuffer(si, imm.fence);
+		}
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
+
+		//Create "null" image view
+		vk::ImageViewCreateInfo nullViewCI({}, nullImage.obj, vk::ImageViewType::e2D, vk::Format::eR8G8B8A8Srgb,
+			{vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero},
+			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+		nullView = dev.createImageView(nullViewCI);
+
+		//Set up some basic variables
 		didGenShaders = false;
 		frameCycle = 0;
 		compileMode = ShaderCompileMode::Standard;
@@ -418,6 +479,7 @@ namespace Cacao {
 		}
 
 		//Destroy Vulkan objects
+		allocator.destroyImage(nullImage.obj, nullImage.alloc);
 		allocator.unmapMemory(uiUBO.alloc);
 		allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
 		allocator.unmapMemory(uiQuadUBO.alloc);

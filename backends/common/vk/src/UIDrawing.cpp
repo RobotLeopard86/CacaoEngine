@@ -178,7 +178,7 @@ namespace Cacao {
 			start += 6;
 
 			//Unbind texture
-			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
+			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
 			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(upTex.slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
 			uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 			delete upTex.slot;

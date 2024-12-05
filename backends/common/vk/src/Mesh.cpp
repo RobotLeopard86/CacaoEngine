@@ -100,7 +100,7 @@ namespace Cacao {
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
 		SubmitCommandBuffer(si, imm.fence);
-		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
 
 		//Destroy upload buffers
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);

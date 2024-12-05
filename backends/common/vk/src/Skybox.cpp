@@ -70,6 +70,10 @@ namespace Cacao {
 		//Confirm that texture is compiled
 		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!");
 
+		//Get frame object
+		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw skybox when there is no active frame object!");
+		VkFrame f = *activeFrame;
+
 		//If the vertex buffer isn't set up, do so
 		if(!nativeData->vbufReady) {
 			//Create allocation info
@@ -99,38 +103,14 @@ namespace Cacao {
 			allocator.unmapMemory(vertexUp.alloc);
 
 			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = Immediate::Get();
-			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-			imm.cmd.begin(copyBegin);
 			{
 				vk::BufferCopy2 copy(0UL, 0UL, vbsz);
 				vk::CopyBufferInfo2 copyInfo(vertexUp.obj, nativeData->vertexBuffer.obj, copy);
-				imm.cmd.copyBuffer2(copyInfo);
+				f.cmd.copyBuffer2(copyInfo);
 			}
-			imm.cmd.end();
-
-			//Wait for and reset fence just in case
-			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
-				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
-				dev.resetFences(imm.fence);
-			}
-
-			//Submit and wait
-			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
-			vk::SubmitInfo2 si({}, {}, cbsi);
-			SubmitCommandBuffer(si, imm.fence);
-			dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
-
-			//Delete upload buffer
-			allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
 			nativeData->vbufReady = true;
 		}
-
-		//Get frame object
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw skybox when there is no active frame object!");
-		VkFrame f = *activeFrame;
 
 		//Create skybox transform matrix
 		glm::mat4 skyTransform(1.0);
