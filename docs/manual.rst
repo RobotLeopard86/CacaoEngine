@@ -1,4 +1,4 @@
-Cacao Engine Manual
+Manual
 =======================
 
 Welcome to the Cacao Engine Manual.
@@ -12,6 +12,7 @@ Table of Contents:
 	:titlesonly:
 
 	manual/quickstart
+	manual/platforms
 	manual/building
 	manual/vs
 	manual/bundles

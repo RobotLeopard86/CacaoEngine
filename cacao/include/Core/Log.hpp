@@ -33,7 +33,7 @@ namespace Cacao {
 		 * @brief Log a message from the engine
 		 *
 		 * @param message The message to log
-		 * @param level The @ref LogLevel to use. (optional, defaults to Info)
+		 * @param level The LogLevel to use. (optional, defaults to Info)
 		 *
 		 * @note For use only by the engine internally.
 		 */
@@ -43,7 +43,7 @@ namespace Cacao {
 		 * @brief Log a message from the game
 		 *
 		 * @param message The message to log
-		 * @param level The @ref LogLevel to use. (optional, defaults to Info)
+		 * @param level The LogLevel to use. (optional, defaults to Info)
 		 *
 		 * @note For use by games using the engine.
 		 */

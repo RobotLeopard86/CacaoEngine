@@ -1,4 +1,4 @@
-# Cacao Engine Environment Variables
+# Environment Variables
 
 Cacao Engine will obey the following environment variables if they are set to `YES` (case-sensitive):
 * (**Linux Only**) `CACAO_FORCE_X11` - Forces the engine to run under X11

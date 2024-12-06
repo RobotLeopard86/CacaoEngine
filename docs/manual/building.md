@@ -1,4 +1,4 @@
-# Cacao Engine Build Instructions
+# Build Instructions
 
 ## Prerequisites
 * Git

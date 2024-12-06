@@ -6,7 +6,9 @@
 #include "UIRenderable.hpp"
 
 namespace Cacao {
-	//An image element
+	/**
+	 * @brief An image UI element
+	 */
 	class Image final : public UIElement {
 	  public:
 		/**
