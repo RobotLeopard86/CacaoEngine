@@ -19,7 +19,7 @@ jobs:
       - name: Install Doxygen
         run: |
           sudo apt-get update;
-          sudo apt install doxygen -y
+          sudo apt-get install doxygen -y
       - name: Checkout
         uses: actions/checkout@v4
         with:
