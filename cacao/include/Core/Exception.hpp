@@ -12,64 +12,9 @@
 
 namespace Cacao {
 	/**
-	 * @brief Checks if the condition is true, and throws an exception if not
-	 *
-	 * @param condition The condition to check.
-	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
-	 * @note See the page "Exception Codes" in the manual for a list of codes.
-	 * @param exceptionDescription The human-readable message to print if the condition is false
-	 *
-	 * @throws Cacao::Exception Thrown if the condition is false
-	 */
-	inline void CheckException(bool condition, unsigned int exceptionCode, std::string exceptionDescription) {
-		if(!condition) {
-			Exception ex {exceptionDescription, exceptionCode};
-			Logging::EngineLog(ex.what(), LogLevel::Error);
-			throw ex;
-		}
-	}
-
-	/**
-	 * @brief Checks if the YAML node exists, and throws an exception if not
-	 *
-	 * @param node The node to check for.
-	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
-	 * @note See the page "Exception Codes" in the manual for a list of codes.
-	 * @param exceptionDescription The human-readable message to print if the condition is false
-	 *
-	 * @throws Cacao::Exception Thrown if the condition is false
-	 */
-	inline void CheckException(YAML::Node node, unsigned int exceptionCode, std::string exceptionDescription) {
-		if(!(bool)node) {
-			Exception ex {exceptionDescription, exceptionCode};
-			Logging::EngineLog(ex.what(), LogLevel::Error);
-			throw ex;
-		}
-	}
-
-	/**
-	 * @brief Checks if the shared_ptr contains a value, and throws an exception if not
-	 *
-	 * @param ptr The shared_ptr to check for a value.
-	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
-	 * @note See the page "Exception Codes" in the manual for a list of codes.
-	 * @param exceptionDescription The human-readable message to print if the condition is false
-	 *
-	 * @throws Cacao::Exception Thrown if the condition is false
-	 */
-	template<typename T>
-	inline void CheckException(std::shared_ptr<T> ptr, unsigned int exceptionCode, std::string exceptionDescription) {
-		if(!(bool)ptr) {
-			Exception ex {exceptionDescription, exceptionCode};
-			Logging::EngineLog(ex.what(), LogLevel::Error);
-			throw ex;
-		}
-	}
-
-	/**
 	 * @brief A Cacao Engine exception. Do not subclass this. Prefer over standard library exceptions.
 	 *
-	 * @note Recommended to use @ref CheckException to generate exceptions.
+	 * @note Recommended to use CheckException to generate exceptions.
 	 */
 	class Exception : public std::exception {
 	  public:
@@ -199,4 +144,59 @@ namespace Cacao {
 
 	//Static member definition
 	inline std::map<unsigned int, std::string> Exception::exceptionCodeMap = std::map<unsigned int, std::string>();
+
+	/**
+	 * @brief Checks if the condition is true, and throws an exception if not
+	 *
+	 * @param condition The condition to check.
+	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
+	 * @note See the page "Exception Codes" in the manual for a list of codes.
+	 * @param exceptionDescription The human-readable message to print if the condition is false
+	 *
+	 * @throws Cacao::Exception Thrown if the condition is false
+	 */
+	inline void CheckException(bool condition, unsigned int exceptionCode, std::string exceptionDescription) {
+		if(!condition) {
+			Exception ex {exceptionDescription, exceptionCode};
+			Logging::EngineLog(ex.what(), LogLevel::Error);
+			throw ex;
+		}
+	}
+
+	/**
+	 * @brief Checks if the YAML node exists, and throws an exception if not
+	 *
+	 * @param node The node to check for.
+	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
+	 * @note See the page "Exception Codes" in the manual for a list of codes.
+	 * @param exceptionDescription The human-readable message to print if the condition is false
+	 *
+	 * @throws Cacao::Exception Thrown if the condition is false
+	 */
+	inline void CheckException(YAML::Node node, unsigned int exceptionCode, std::string exceptionDescription) {
+		if(!(bool)node) {
+			Exception ex {exceptionDescription, exceptionCode};
+			Logging::EngineLog(ex.what(), LogLevel::Error);
+			throw ex;
+		}
+	}
+
+	/**
+	 * @brief Checks if the shared_ptr contains a value, and throws an exception if not
+	 *
+	 * @param ptr The shared_ptr to check for a value.
+	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
+	 * @note See the page "Exception Codes" in the manual for a list of codes.
+	 * @param exceptionDescription The human-readable message to print if the condition is false
+	 *
+	 * @throws Cacao::Exception Thrown if the condition is false
+	 */
+	template<typename T>
+	inline void CheckException(std::shared_ptr<T> ptr, unsigned int exceptionCode, std::string exceptionDescription) {
+		if(!(bool)ptr) {
+			Exception ex {exceptionDescription, exceptionCode};
+			Logging::EngineLog(ex.what(), LogLevel::Error);
+			throw ex;
+		}
+	}
 }

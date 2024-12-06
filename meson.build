@@ -54,10 +54,13 @@ if get_option('windows_noconsole') and host_machine.system() == 'windows'
 	subsystem = 'windows'
 endif
 
+compiler_args = []
+
 if host_machine.system() == 'darwin'
 	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio', 'CoreVideo', 'Carbon'], required: true), language: ['c', 'cpp'])
 	add_project_arguments('-fexperimental-library', language: 'cpp')
 	add_project_link_arguments('-fexperimental-library', language: 'cpp')
+	compiler_args += '-fexperimental-library'
 endif
 
 cmake_build_type = ''
@@ -169,7 +172,7 @@ cacao_dep = declare_dependency(include_directories: [
 	dynalo_dep,
 	spdlog_dep,
 	thread_pool_dep
-], link_with: cacao_exe)
+], link_with: cacao_exe, compile_args: compiler_args, link_args: compiler_args)
 
 if playground
 	subdir('playground')
