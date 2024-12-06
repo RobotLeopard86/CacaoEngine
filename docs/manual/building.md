@@ -21,14 +21,14 @@ Cacao Engine also requires libuuid. The packages for that are listed below:
 * Fedora-based: `libuuid-devel`
 * Arch-based: `util-linux-libs`
 
-
 ## Compilers
-Cacao Engine is designed to build using Clang with LLD on Linux and macOS. On Windows, MSVC is the target. If problems are encountered when using alternative compilers (e.g. GCC or Clang with Gold linker), they are officially unsupported. Clang (including Apple's modified Clang) with LLD and MSVC are the ONLY supported compilers. Regarding installation of these compilers, MSVC is available through Visual Studio, which can be downloaded [here](https://visualstudio.microsoft.com). In the Visual Studio Installer, select the `Desktop development with C++` workload before installing, or in the `Modify` UI after. As for Linux, they should be available in your package manager. On macOS, you'll need the Xcode command line tools (install with `xcode-select --install`), and then install the `llvm` and `lld` [Homebrew](https://brew.sh) packages. That will install Clang and LLD to your system. While other compilers may work, they are officially not supported.
+Cacao Engine is designed to build using Clang with LLD on Linux and macOS and using MSVC on Windows. If problems are encountered when using alternative compilers (e.g. GCC or Clang with Gold linker), they are officially unsupported. Clang (including Apple's modified Clang) with LLD and MSVC are the ONLY supported compilers. Regarding installation of these compilers, MSVC is available through Visual Studio, which can be downloaded [here](https://visualstudio.microsoft.com). In the Visual Studio Installer, select the `Desktop development with C++` workload before installing, or in the `Modify` UI after. As for Linux, they should be available in your package manager. On macOS, you'll need the Xcode command line tools (install with `xcode-select --install`), and then install the `llvm` and `lld` [Homebrew](https://brew.sh) packages. That will install Clang and LLD to your system. While other compilers may work, they are officially not supported.
 
 ## Known Building Platforms
 * x86_64 GNU/Linux with Clang and LLD
 * aarch64 GNU/Linux with Clang and LLD
 * x86_64 Windows with MSVC
+* aarch64 macOS with Clang and LLD
 
 ## 1. Prerequisite Installation
 To build Cacao Engine, you need the prerequisites listed above.  

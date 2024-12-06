@@ -5,6 +5,8 @@
 * macOS
 * GNU/Linux (most distros)
 
+Note that Cacao Engine **only supports 64-bit operating systems**. x86_64 is the only supported architecture on Windows and GNU/Linux, whereas only aarch64/arm64 is supported on macOS.
+  
 More operating systems/platforms may be supported in the future, though this is not guaranteed.
 
 ## Support Policy
