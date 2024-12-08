@@ -3,7 +3,7 @@
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
@@ -19,7 +19,7 @@
 #include "spirv_parser.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-//See VkShaderData.hpp for why there's this "impl" thing
+//See VkShader.hpp for why there's this "impl" thing
 //Basically this just makes it easier to use and keeps the arrow operator method of
 //accessing native data intact
 #define nd (&(this->nativeData->impl))
@@ -65,7 +65,6 @@ namespace Cacao {
 			VkShaderData::ImageSlot slotVal = {};
 			slotVal.binding = fragReflector.get_decoration(tex.id, spv::DecorationBinding);
 			slotVal.dimensionality = fragReflector.get_type(tex.base_type_id).image.dim;
-			slotVal.wrapMode = generatedSamplersClamp2Edge ? vk::SamplerAddressMode::eClampToEdge : vk::SamplerAddressMode::eRepeat;
 			mod->imageSlots.insert_or_assign(fragReflector.get_name(tex.id), slotVal);
 		}
 
@@ -129,6 +128,9 @@ namespace Cacao {
 		nd->vertexCode = vbuf;
 		nd->fragmentCode = fbuf;
 
+		//Register native data
+		shaderDataLookup.insert_or_assign(this, &(nativeData->impl));
+
 		//Prepare native data
 		PrepShaderData(spec, nd);
 	}
@@ -143,6 +145,9 @@ namespace Cacao {
 		nd->vertexCode = vertex;
 		nd->fragmentCode = fragment;
 
+		//Register native data
+		shaderDataLookup.insert_or_assign(this, &(nativeData->impl));
+
 		//Prepare native data
 		PrepShaderData(spec, nd);
 	}
@@ -154,10 +159,24 @@ namespace Cacao {
 
 	void Shader::CompileSync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
+
+		//If custom compilation is not used, invoke the compiler with default settings
+		if(!nd->usesCustomCompile) {
+			ShaderCompileSettings settings {};
+			settings.blend = ShaderCompileSettings::Blending::Standard;
+			settings.depth = ShaderCompileSettings::Depth::Less;
+			settings.input = ShaderCompileSettings::InputType::Standard;
+			DoVkShaderCompile(&(nativeData->impl), settings);
+		}
+
+		compiled = true;
+	}
+
+	void DoVkShaderCompile(VkShaderData* shader, const ShaderCompileSettings& settings) {
 		//Create shader modules
-		vk::ShaderModuleCreateInfo vertexModCI({}, nd->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->vertexCode.data()));
+		vk::ShaderModuleCreateInfo vertexModCI({}, shader->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(shader->vertexCode.data()));
 		vk::ShaderModule vertexMod = dev.createShaderModule(vertexModCI);
-		vk::ShaderModuleCreateInfo fragmentModCI({}, nd->fragmentCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->fragmentCode.data()));
+		vk::ShaderModuleCreateInfo fragmentModCI({}, shader->fragmentCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(shader->fragmentCode.data()));
 		vk::ShaderModule fragmentMod = dev.createShaderModule(fragmentModCI);
 		vk::PipelineShaderStageCreateInfo vertexStageCI({}, vk::ShaderStageFlagBits::eVertex, vertexMod, "main");
 		vk::PipelineShaderStageCreateInfo fragmentStageCI({}, vk::ShaderStageFlagBits::eFragment, fragmentMod, "main");
@@ -187,11 +206,7 @@ namespace Cacao {
 		//Create dynamic state info
 		std::vector<vk::DynamicState> dynamicStates = {
 			vk::DynamicState::eViewport,
-			vk::DynamicState::eScissor,
-			vk::DynamicState::eColorBlendEquationEXT,
-			vk::DynamicState::eColorBlendEnableEXT,
-			vk::DynamicState::eDepthTestEnable,
-			vk::DynamicState::eDepthCompareOp};
+			vk::DynamicState::eScissor};
 		vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
 		//Create pipeline rendering info
@@ -205,11 +220,11 @@ namespace Cacao {
 			{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, bitangent)},
 			{4, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)}}};
 		vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
-		if(compileMode == ShaderCompileMode::VertexOnly) {
+		if(settings.input == ShaderCompileSettings::InputType::VertexOnly) {
 			inputBinding.stride = sizeof(float) * 3;
 			inputStateCI.setVertexBindingDescriptions(inputBinding);
 			inputStateCI.setVertexAttributeDescriptions(inputAttrs[0]);
-		} else if(compileMode == ShaderCompileMode::VertexAndTexCoord) {
+		} else if(settings.input == ShaderCompileSettings::InputType::VertexAndTexCoord) {
 			inputBinding.stride = sizeof(float) * 5;
 			inputStateCI.setVertexBindingDescriptions(inputBinding);
 			std::array<vk::VertexInputAttributeDescription, 2> vtcAttrs = {inputAttrs[0], inputAttrs[1]};
@@ -217,47 +232,42 @@ namespace Cacao {
 		}
 
 		//Create image slot samplers
-		for(auto slot : nd->imageSlots) {
+		for(auto slot : shader->imageSlots) {
 			if(slot.second.dimensionality == spv::Dim::DimCube) {
 				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
 					vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-				nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
+				shader->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 			} else {
-				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, slot.second.wrapMode, slot.second.wrapMode,
-					slot.second.wrapMode, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-				nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
+				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, settings.wrapModes.at(slot.first), settings.wrapModes.at(slot.first),
+					settings.wrapModes.at(slot.first), 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+				shader->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 			}
 		}
 
 		//Create descriptor set layout
 		std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
 		dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
-		for(auto slot : nd->imageSlots) {
+		for(auto slot : shader->imageSlots) {
 			dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
 		}
-		nd->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
+		shader->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
 		//Create pipeline layout
-		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4));
-		vk::PipelineLayoutCreateInfo layoutCI({}, nd->setLayout, pcr);
-		nd->pipelineLayout = dev.createPipelineLayout(layoutCI);
+		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4));
+		vk::PipelineLayoutCreateInfo layoutCI({}, shader->setLayout, pcr);
+		shader->pipelineLayout = dev.createPipelineLayout(layoutCI);
 
 		//Create pipeline
 		vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
-			&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, nd->pipelineLayout);
+			&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, shader->pipelineLayout);
 		pipelineCI.pNext = &pipelineRenderingInfo;
 		auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
 		CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!");
-		nd->pipeline = pipelineResult.value;
+		shader->pipeline = pipelineResult.value;
 
 		//Free shader modules now that we don't need them
 		dev.destroyShaderModule(vertexMod);
 		dev.destroyShaderModule(fragmentMod);
-
-		//Allocate shader data memory (scary)
-		nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
-
-		compiled = true;
 	}
 
 	void Shader::Release() {
@@ -268,9 +278,6 @@ namespace Cacao {
 		for(auto slotPair : nd->imageSlots) {
 			dev.destroySampler(slotPair.second.sampler);
 		}
-
-		//Free shader data memory
-		free(nd->shaderData);
 
 		//Destroy pipeline
 		dev.destroyPipeline(nd->pipeline);
@@ -520,16 +527,6 @@ namespace Cacao {
 			} catch(const std::bad_cast&) {
 				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "Failed cast of shader upload value to type specified in target!");
 			}
-
-
-			//Copy data into buffer if we need to
-			if(nd->shaderDataSize > 0) std::memcpy(nd->shaderData + offset, data, dataSize);
 		}
-
-		//Copy transformation matrix
-		std::memcpy(nd->shaderData, glm::value_ptr(transformation), sizeof(glm::mat4));
-
-		//Push constants if there are any
-		activeFrame->cmd.pushConstants(nd->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4), nd->shaderData);
 	}
 }

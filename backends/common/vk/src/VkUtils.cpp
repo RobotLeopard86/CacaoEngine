@@ -3,7 +3,7 @@
 #include "VulkanCoreObjects.hpp"
 #include "Graphics/Window.hpp"
 #include "UI/Shaders.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 #include "UIViewShaderManager.hpp"
 
 namespace Cacao {

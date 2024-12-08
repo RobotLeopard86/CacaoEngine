@@ -12,7 +12,7 @@ layout(location = 3) in vec3 bitangent;
 layout(location = 4) in vec3 normal;
 ```
 
-## Uniform Blocks
+## Cacao Engine Data
 All GLSL vertex shaders must have the uniform `CacaoGlobals` block object, which is how engine information is passed to shaders.  
 Below is an example of how this should be declared. **The order of members is important!**  
 ```{code-block} glsl
@@ -22,22 +22,28 @@ layout(std140,binding=0) uniform CacaoGlobals {
 } globals;
 ``` 
 
-## Local Object Data
-All data pertaining to an individual object (the transformation matrix plus any custom shader data) must be declared within a single push constant block, which must be declared as follows:
+## Transform Matrix
+All shaders must declare the transformation matrix as a push constant. This is done as follows:
 ```{code-block} glsl
-layout(push_constant) uniform ObjectData {
-	mat4 transform
-	//Custom shader data goes here...
+layout(push_constant) uniform Transformation {
+	mat4 transform;
+};
+
+## Local Object Data
+All data for individual objects (material data) must be declared within another uniform block, which must be declared as follows:
+```{code-block} glsl
+layout(std140,binding=1) uniform ObjectData {
+	//Material data goes here...
 } object;
 ```  
 
 ## Texture Bindings
-In Vulkan GLSL, every uniform must have a declared `binding` value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can't have a `binding=0` in your fragment shader, as that's already assigned to the `CacaoGlobals` uniform block.
+In Vulkan GLSL, every uniform must have a declared `binding` value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can't have a `binding=0` or `binding=1` in your fragment shader, as those are already assigned to the `CacaoGlobals` and `ObjectData` uniform blocks.
 
 ## Applying the Matrices
 To get the final `gl_Position` value, you should write that assignment as follows:
 ```{code-block} glsl
-gl_Position = globals.projection * globals.view * object.transform * vec4(position, 1.0);
+gl_Position = globals.projection * globals.view * transform * vec4(position, 1.0);
 ```
 
 ## Passing Data Between Shader Stages

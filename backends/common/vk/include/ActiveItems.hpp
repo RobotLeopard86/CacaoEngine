@@ -1,7 +1,7 @@
 #pragma once
 
 #include "VkFrame.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 
 namespace Cacao {
 	inline struct FrameSubmission {

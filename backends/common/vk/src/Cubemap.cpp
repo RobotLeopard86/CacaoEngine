@@ -4,7 +4,7 @@
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "VkCubemapData.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
