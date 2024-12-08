@@ -413,8 +413,8 @@
 </pre></div>
 </div>
 </section>
-<section id="uniform-blocks">
-<h2>Uniform Blocks<a class="headerlink" href="#uniform-blocks" title="Link to this heading"><span/></a></h2>
+<section id="cacao-engine-data">
+<h2>Cacao Engine Data<a class="headerlink" href="#cacao-engine-data" title="Link to this heading"><span/></a></h2>
 <p>All GLSL vertex shaders must have the uniform <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> block object, which is how engine information is passed to shaders.<br />
 Below is an example of how this should be declared. <strong>The order of members is important!</strong></p>
 <div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="n">binding</span><span class="o">=</span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CacaoGlobals</span><span class="w"> </span><span class="p">{</span>
@@ -424,24 +424,30 @@ Below is an example of how this should be declared. <strong>The order of members
 </pre></div>
 </div>
 </section>
-<section id="local-object-data">
-<h2>Local Object Data<a class="headerlink" href="#local-object-data" title="Link to this heading"><span/></a></h2>
-<p>All data pertaining to an individual object (the transformation matrix plus any custom shader data) must be declared within a single push constant block, which must be declared as follows:</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="k">layout</span><span class="p">(</span><span class="n">push_constant</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">ObjectData</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	</span><span class="kt">mat4</span><span class="w"> </span><span class="n">transform</span>
-<span class="w">	</span><span class="c1">//Custom shader data goes here...</span>
+<section id="transform-matrix">
+<h2>Transform Matrix<a class="headerlink" href="#transform-matrix" title="Link to this heading"><span/></a></h2>
+<p>All shaders must declare the transformation matrix as a push constant. This is done as follows:</p>
+<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="k">layout</span><span class="p">(</span><span class="n">push_constant</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">Transformation</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="kt">mat4</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cp">## Local Object Data</span>
+<span class="n">All</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">individual</span><span class="w"> </span><span class="n">objects</span><span class="w"> </span><span class="p">(</span><span class="n">material</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="n">must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">declared</span><span class="w"> </span><span class="n">within</span><span class="w"> </span><span class="n">another</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">block</span><span class="p">,</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="n">must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">declared</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">follows</span><span class="o">:</span>
+<span class="err">```</span><span class="p">{</span><span class="n">code</span><span class="o">-</span><span class="n">block</span><span class="p">}</span><span class="w"> </span><span class="n">glsl</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="n">binding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">ObjectData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="c1">//Material data goes here...</span>
 <span class="p">}</span><span class="w"> </span><span class="n">object</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
 <section id="texture-bindings">
 <h2>Texture Bindings<a class="headerlink" href="#texture-bindings" title="Link to this heading"><span/></a></h2>
-<p>In Vulkan GLSL, every uniform must have a declared <code class="docutils literal notranslate"><span class="pre">binding</span></code> value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can’t have a <code class="docutils literal notranslate"><span class="pre">binding=0</span></code> in your fragment shader, as that’s already assigned to the <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> uniform block.</p>
+<p>In Vulkan GLSL, every uniform must have a declared <code class="docutils literal notranslate"><span class="pre">binding</span></code> value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can’t have a <code class="docutils literal notranslate"><span class="pre">binding=0</span></code> or <code class="docutils literal notranslate"><span class="pre">binding=1</span></code> in your fragment shader, as those are already assigned to the <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> and <code class="docutils literal notranslate"><span class="pre">ObjectData</span></code> uniform blocks.</p>
 </section>
 <section id="applying-the-matrices">
 <h2>Applying the Matrices<a class="headerlink" href="#applying-the-matrices" title="Link to this heading"><span/></a></h2>
 <p>To get the final <code class="docutils literal notranslate"><span class="pre">gl_Position</span></code> value, you should write that assignment as follows:</p>
-<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">projection</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">view</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">object</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
+<div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">projection</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">view</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
@@ -504,8 +510,8 @@ Below is an example of how this should be declared. <strong>The order of members
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-blocks">Uniform Blocks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-object-data">Local Object Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cacao-engine-data">Cacao Engine Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-matrix">Transform Matrix</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#texture-bindings">Texture Bindings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applying-the-matrices">Applying the Matrices</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#passing-data-between-shader-stages">Passing Data Between Shader Stages</a></li>
