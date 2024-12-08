@@ -48,11 +48,20 @@ namespace Cacao {
 		std::vector<uint32_t> v(vsCode, std::end(vsCode));
 		std::vector<uint32_t> f(fsCode, std::end(fsCode));
 
-		//Create and compile skybox shader object
-		compileMode = ShaderCompileMode::VertexOnly;
+		//Create skybox shader object
 		skyboxShader = new Shader(v, f, spec);
+
+		//Do custom compilation
+		VkShaderData* sd = shaderDataLookup.at(skyboxShader);
+		sd->usesCustomCompile = true;
+		ShaderCompileSettings settings {};
+		settings.blend = ShaderCompileSettings::Blending::Standard;
+		settings.depth = ShaderCompileSettings::Depth::Lequal;
+		settings.input = ShaderCompileSettings::InputType::VertexOnly;
+		DoVkShaderCompile(sd, settings);
+
+		//"Compile" the shader so it knows that it's good
 		skyboxShader->CompileSync();
-		compileMode = ShaderCompileMode::Standard;
 
 		isSetup = true;
 	}
@@ -79,7 +88,7 @@ namespace Cacao {
 			//Create allocation info
 			auto vbsz = sizeof(float) * std::size(skyboxVerts);
 			vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eVertexBuffer);
-			vma::AllocationCreateInfo allocCI{};
+			vma::AllocationCreateInfo allocCI {};
 			allocCI.requiredFlags = vk::MemoryPropertyFlagBits::eHostVisible;
 
 			//Create buffer object
@@ -120,7 +129,6 @@ namespace Cacao {
 		f.cmd.bindVertexBuffers(0, nativeData->vertexBuffer.obj, offsets);
 
 		//Draw skybox
-		f.cmd.setDepthCompareOp(vk::CompareOp::eLessOrEqual);
 		f.cmd.draw(std::size(skyboxVerts), 1, 0, 0);
 
 		//Unbind skybox shader and texture

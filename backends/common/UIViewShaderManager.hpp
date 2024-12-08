@@ -6,6 +6,7 @@
 namespace Cacao {
 	class UIViewShaderManager {
 	  public:
+		void PreCompileHook();
 		void Compile() {
 			//Define UI view shader specification
 			ShaderSpec spec;
@@ -21,6 +22,7 @@ namespace Cacao {
 
 			//Create and compile UI view shader object
 			UIView::shader = new Shader(v, f, spec);
+			PreCompileHook();
 			UIView::shader->CompileAsync();
 		}
 		void Release() {

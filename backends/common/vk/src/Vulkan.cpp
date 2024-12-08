@@ -427,8 +427,6 @@ namespace Cacao {
 		//Set up some basic variables
 		didGenShaders = false;
 		frameCycle = 0;
-		compileMode = ShaderCompileMode::Standard;
-		generatedSamplersClamp2Edge = false;
 	}
 
 	void RegisterGraphicsExceptions() {
@@ -443,8 +441,30 @@ namespace Cacao {
 
 	void RenderController::UpdateGraphicsState() {}
 
-	void PreShaderCreateHook() {
-		generatedSamplersClamp2Edge = true;
+	void PreShaderCompileHook(Shader* shader) {
+		//Set custom compile
+		VkShaderData* sd = shaderDataLookup.at(shader);
+		sd->usesCustomCompile = true;
+
+		//Since we do custom compilation, we just do it here and let the "compile" call do nothing
+		ShaderCompileSettings settings {};
+		settings.blend = ShaderCompileSettings::Blending::One;
+		settings.depth = ShaderCompileSettings::Depth::Off;
+		settings.input = ShaderCompileSettings::InputType::VertexAndTexCoord;
+		DoVkShaderCompile(sd, settings);
+	}
+
+	void UIViewShaderManager::PreCompileHook() {
+		//Set custom compile
+		VkShaderData* sd = shaderDataLookup.at(UIView::shader);
+		sd->usesCustomCompile = true;
+
+		//Since we do custom compilation, we just do it here and let the "compile" call do nothing
+		ShaderCompileSettings settings {};
+		settings.blend = ShaderCompileSettings::Blending::Src;
+		settings.depth = ShaderCompileSettings::Depth::Off;
+		settings.input = ShaderCompileSettings::InputType::VertexAndTexCoord;
+		DoVkShaderCompile(sd, settings);
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {
@@ -595,10 +615,6 @@ namespace Cacao {
 		vk::Rect2D scissor({0, 0}, extent);
 		f.cmd.setViewport(0, viewport);
 		f.cmd.setScissor(0, scissor);
-		f.cmd.setColorBlendEnableEXT(0, VK_FALSE);
-		f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd, vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd));
-		f.cmd.setDepthTestEnable(VK_TRUE);
-		f.cmd.setDepthCompareOp(vk::CompareOp::eLess);
 
 		//Start rendering
 		constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
@@ -675,12 +691,6 @@ namespace Cacao {
 			vk::DescriptorBufferInfo uiGlobalsDBI(uiQuadUBO.obj, 0, vk::WholeSize);
 			vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiGlobalsDBI);
 			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
-
-			//Modify dynamic state
-			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);
-			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
-			f.cmd.setDepthTestEnable(VK_FALSE);
-			f.cmd.setDepthCompareOp(vk::CompareOp::eAlways);
 
 			//Draw quad
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};

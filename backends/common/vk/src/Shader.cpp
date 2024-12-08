@@ -198,9 +198,24 @@ namespace Cacao {
 		vk::PipelineDepthStencilStateCreateInfo depthStencilCI(
 			{}, VK_TRUE, VK_TRUE, vk::CompareOp::eLess,
 			VK_FALSE, VK_FALSE, {}, {}, 1.0f, 1.0f);
+		if(settings.depth == ShaderCompileSettings::Depth::Lequal) {
+			depthStencilCI.depthCompareOp = vk::CompareOp::eLessOrEqual;
+		} else if(settings.depth == ShaderCompileSettings::Depth::Off) {
+			depthStencilCI.depthCompareOp = vk::CompareOp::eAlways;
+			depthStencilCI.depthTestEnable = VK_FALSE;
+		}
 		vk::PipelineColorBlendAttachmentState colorBlendAttach(
 			VK_FALSE, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
 			vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
+		if(settings.blend != ShaderCompileSettings::Blending::Standard) {
+			colorBlendAttach.blendEnable = VK_TRUE;
+			colorBlendAttach.dstColorBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
+			colorBlendAttach.dstAlphaBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
+			if(settings.blend == ShaderCompileSettings::Blending::Src) {
+				colorBlendAttach.srcColorBlendFactor = vk::BlendFactor::eSrcAlpha;
+				colorBlendAttach.srcAlphaBlendFactor = vk::BlendFactor::eSrcAlpha;
+			}
+		}
 		vk::PipelineColorBlendStateCreateInfo colorBlendCI({}, VK_FALSE, vk::LogicOp::eCopy, colorBlendAttach, {0.0f, 0.0f, 0.0f, 0.0f});
 
 		//Create dynamic state info
