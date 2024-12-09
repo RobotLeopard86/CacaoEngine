@@ -445,9 +445,9 @@ You can either mark each matrix with the <code class="docutils literal notransla
 </table>
 </div>
 </section>
-<section id="constant-buffers">
-<h2>Constant Buffers<a class="headerlink" href="#constant-buffers" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine sends engine data to shaders via a constant buffers. Below is an example of how this should be declared. <strong>The order of members  is important!</strong></p>
+<section id="cacao-engine-data">
+<h2>Cacao Engine Data<a class="headerlink" href="#cacao-engine-data" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine sends engine data to shaders via a constant buffer. Below is an example of how this should be declared. <strong>The order of members  is important!</strong></p>
 <div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="n">CacaoGlobals</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">projection</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
@@ -456,30 +456,38 @@ You can either mark each matrix with the <code class="docutils literal notransla
 </pre></div>
 </div>
 </section>
+<section id="transform-matrix">
+<h2>Transform Matrix<a class="headerlink" href="#transform-matrix" title="Link to this heading"><span/></a></h2>
+<p>All shaders must declare the transformation matrix as a push constant. This is done as follows:</p>
+<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="n">Transformation</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">mat4</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">push_constant</span><span class="p">]]</span><span class="w"> </span><span class="n">Transformation</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
 <section id="local-object-data">
 <h2>Local Object Data<a class="headerlink" href="#local-object-data" title="Link to this heading"><span/></a></h2>
-<p>All data pertaining to an individual object (the transformation matrix plus any custom shader data) must be part of a struct named <code class="docutils literal notranslate"><span class="pre">ObjectData</span></code>, and must have an instance declared that is marked with the <code class="docutils literal notranslate"><span class="pre">[[vk::push_constant]]</span></code> annotation and named <code class="docutils literal notranslate"><span class="pre">object</span></code>. Here’s an example:</p>
+<p>All data for individual objects (material data) must be declared within another uniform block, which must be declared as follows:</p>
 <div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="n">ObjectData</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kt">float4x4</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
-<span class="w">  </span><span class="c1">//Custom shader data goes here...</span>
+<span class="w">  </span><span class="c1">//Material data goes here...</span>
 <span class="p">};</span>
-
-<span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">push_constant</span><span class="p">]]</span><span class="w"> </span><span class="n">ObjectData</span><span class="w"> </span><span class="n">object</span><span class="p">;</span>
+<span class="n">ConstantBuffer</span><span class="o">&lt;</span><span class="n">ObjectData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">object</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
 <section id="applying-the-matrices">
 <h2>Applying the Matrices<a class="headerlink" href="#applying-the-matrices" title="Link to this heading"><span/></a></h2>
 <p>Since all of the matrices are row-major, apply them in the order below. This example assumes the output struct contains a member declared as <code class="docutils literal notranslate"><span class="pre">float4</span> <span class="pre">Pos</span> <span class="pre">:</span> <span class="pre">SV_POSITION;</span></code>, the output struct is named <code class="docutils literal notranslate"><span class="pre">output</span></code>, the input struct contains a member declared as <code class="docutils literal notranslate"><span class="pre">float3</span> <span class="pre">Pos</span> <span class="pre">:</span> <span class="pre">POSITION0;</span></code> and that the input struct is named <code class="docutils literal notranslate"><span class="pre">input</span></code>.</p>
-<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">.</span><span class="n">Pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">object</span><span class="p">.</span><span class="n">transform</span><span class="p">,</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">globals</span><span class="p">.</span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">projection</span><span class="p">)));</span>
+<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">.</span><span class="n">Pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">transform</span><span class="p">,</span><span class="w"> </span><span class="nb">mul</span><span class="p">(</span><span class="n">globals</span><span class="p">.</span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">globals</span><span class="p">.</span><span class="n">projection</span><span class="p">)));</span>
 </pre></div>
 </div>
 </section>
 <section id="textures-and-samplers">
 <h2>Textures and Samplers<a class="headerlink" href="#textures-and-samplers" title="Link to this heading"><span/></a></h2>
 <p>In HLSL, samplers and textures are separate objects. This model is not compatible with all APIs. A <code class="docutils literal notranslate"><span class="pre">SamplerState</span></code> associated with a texture must have the same register number as that texture (e.g. <code class="docutils literal notranslate"><span class="pre">register(t0)</span></code> on the texture is connected to the sampler with <code class="docutils literal notranslate"><span class="pre">register(s0)</span></code>). <code class="docutils literal notranslate"><span class="pre">SamplerState</span></code>s and textures must also all be marked with the <code class="docutils literal notranslate"><span class="pre">[[vk::combinedImageSampler]]</span></code> annotation. In addition, you all textures must be given a binding number. This is different than HLSL registers, and they are shared between the vertex and fragment stages. Since binding <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> is used by the engine constant buffer, you must start with binding number <code class="docutils literal notranslate"><span class="pre">1</span></code>. Apply bindings with the <code class="docutils literal notranslate"><span class="pre">[[vk::binding(NUMBER)]]</span></code> annotation. Here’s an example:</p>
-<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">binding</span><span class="p">(</span><span class="mi">1</span><span class="p">)]]</span><span class="w"> </span><span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">combinedImageSampler</span><span class="p">]]</span><span class="w"> </span><span class="kt">Texture2D</span><span class="w"> </span><span class="n">tex</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">t0</span><span class="p">);</span>
-<span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">binding</span><span class="p">(</span><span class="mi">1</span><span class="p">)]]</span><span class="w"> </span><span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">combinedImageSampler</span><span class="p">]]</span><span class="w"> </span><span class="kt">SamplerState</span><span class="w"> </span><span class="n">texSampler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">s0</span><span class="p">);</span>
+<div class="highlight-hlsl notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">binding</span><span class="p">(</span><span class="mi">2</span><span class="p">)]]</span><span class="w"> </span><span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">combinedImageSampler</span><span class="p">]]</span><span class="w"> </span><span class="kt">Texture2D</span><span class="w"> </span><span class="n">tex</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">t0</span><span class="p">);</span>
+<span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">binding</span><span class="p">(</span><span class="mi">2</span><span class="p">)]]</span><span class="w"> </span><span class="p">[[</span><span class="n">vk</span><span class="o">::</span><span class="n">combinedImageSampler</span><span class="p">]]</span><span class="w"> </span><span class="kt">SamplerState</span><span class="w"> </span><span class="n">texSampler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">register</span><span class="p">(</span><span class="n">s0</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>If dealing with all of that is a lot, just write a macro for all of that put together. Here’s one you can just copy-paste in:</p>
@@ -487,8 +495,8 @@ You can either mark each matrix with the <code class="docutils literal notransla
 <span class="cp">								[[vk::binding(reg)]] [[vk::combinedImageSampler]] SamplerState name##Sampler : register(s##reg)</span>
 </pre></div>
 </div>
-<p>Then you can just do this instead: <code class="docutils literal notranslate"><span class="pre">CacaoTexture(tex,</span> <span class="pre">1);</span></code><br />
-For simplicity, maybe place this macro in a <code class="docutils literal notranslate"><span class="pre">texmacro.hlsl</span></code> file and <code class="docutils literal notranslate"><span class="pre">#include</span></code> it for ease-of-use.</p>
+<p>Then you can just do this instead: <code class="docutils literal notranslate"><span class="pre">CacaoTexture(tex,</span> <span class="pre">2);</span></code><br />
+For simplicity, you could place this macro in a <code class="docutils literal notranslate"><span class="pre">texmacro.hlsl</span></code> file and <code class="docutils literal notranslate"><span class="pre">#include</span></code> it for ease-of-use.</p>
 </section>
 </section>
 
@@ -543,7 +551,8 @@ For simplicity, maybe place this macro in a <code class="docutils literal notran
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compile-arguments">Compile Arguments</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-functions">Main Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-buffers">Constant Buffers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cacao-engine-data">Cacao Engine Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-matrix">Transform Matrix</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-object-data">Local Object Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applying-the-matrices">Applying the Matrices</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#textures-and-samplers">Textures and Samplers</a></li>
