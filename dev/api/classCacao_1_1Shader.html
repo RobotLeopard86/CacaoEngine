@@ -327,16 +327,13 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
@@ -417,6 +414,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -486,6 +486,9 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -514,12 +517,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
@@ -714,8 +711,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7IsBoundEv">
-<span id="_CPPv3N5Cacao6Shader7IsBoundEv"></span><span id="_CPPv2N5Cacao6Shader7IsBoundEv"></span><span id="Cacao::Shader::IsBound"></span><span class="target" id="classCacao_1_1Shader_1a7a9b90f78a868103f9b508dd135b8186"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsBound</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader7IsBoundEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Shader7IsBoundEv">
+<span id="_CPPv3NK5Cacao6Shader7IsBoundEv"></span><span id="_CPPv2NK5Cacao6Shader7IsBoundEv"></span><span id="Cacao::Shader::IsBoundC"></span><span class="target" id="classCacao_1_1Shader_1a69e45773708cc699d4982e052c71ecdb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsBound</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Shader7IsBoundEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check if the shader is bound. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -736,29 +733,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadDataRKN3glm4mat4E">
-<span id="_CPPv3N5Cacao6Shader10UploadDataER16ShaderUploadDataRKN3glm4mat4E"></span><span id="_CPPv2N5Cacao6Shader10UploadDataER16ShaderUploadDataRKN3glm4mat4E"></span><span id="Cacao::Shader::UploadData__ShaderUploadDataR.glm::mat4CR"></span><span class="target" id="classCacao_1_1Shader_1a3816094e1d624baf566c2e38cb220f91"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UploadData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html#_CPPv4N5Cacao16ShaderUploadDataE" title="Cacao::ShaderUploadData"><span class="n"><span class="pre">ShaderUploadData</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">transformation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadDataRKN3glm4mat4E" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Upload data to the shader. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For use by the engine only</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – The material data to upload to the shader </p></li>
-<li><p><strong>transformation</strong> – The transformation matrix of the next object</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the data uploaded does not match the shader specification, the shader was not bound or the shader was not compiled </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7GetTypeEv">
-<span id="_CPPv3N5Cacao6Shader7GetTypeEv"></span><span id="_CPPv2N5Cacao6Shader7GetTypeEv"></span><span id="Cacao::Shader::GetType"></span><span class="target" id="classCacao_1_1Shader_1af66bf499b52279a8b0704fa0ebf45cb4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Shader7GetTypeEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Shader7GetTypeEv">
+<span id="_CPPv3NK5Cacao6Shader7GetTypeEv"></span><span id="_CPPv2NK5Cacao6Shader7GetTypeEv"></span><span id="Cacao::Shader::GetTypeC"></span><span class="target" id="classCacao_1_1Shader_1af37d31368f59ee1dc80d2f730caf31b4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Shader7GetTypeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Gets the type of this asset. Needed for safe downcasting from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a>. </p>
 </dd></dl>
 
@@ -850,10 +826,9 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Shader::CompileAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Shader::CompileSync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Shader::Release()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader7IsBoundEv"><code class="docutils literal notranslate"><span class="pre">Shader::IsBound()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7IsBoundEv"><code class="docutils literal notranslate"><span class="pre">Shader::IsBound()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7GetSpecEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetSpec()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader10UploadDataER16ShaderUploadDataRKN3glm4mat4E"><code class="docutils literal notranslate"><span class="pre">Shader::UploadData()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetType()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetType()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"><code class="docutils literal notranslate"><span class="pre">Shader::UploadCacaoGlobals()</span></code></a></li>
 </ul>
 </li>

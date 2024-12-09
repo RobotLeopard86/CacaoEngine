@@ -392,11 +392,11 @@
 <span class="w">            </span><span class="n">Logging</span><span class="o">::</span><span class="n">EngineLog</span><span class="p">(</span><span class="s">&quot;Cannot release base asset type!&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">LogLevel</span><span class="o">::</span><span class="n">Error</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsCompiled</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsCompiled</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">compiled</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GetType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;N/A&quot;</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 

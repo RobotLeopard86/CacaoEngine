@@ -373,7 +373,6 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;filesystem&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;any&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Log.hpp&quot;</span>
@@ -385,22 +384,23 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/glm.hpp&quot;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">SpvType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">SPIRType</span><span class="o">::</span><span class="n">BaseType</span><span class="p">;</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SpvType</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">SPIRType</span><span class="o">::</span><span class="n">BaseType</span><span class="o">::</span><span class="n">Int</span><span class="p">,</span>
+<span class="w">        </span><span class="n">UInt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">SPIRType</span><span class="o">::</span><span class="n">BaseType</span><span class="o">::</span><span class="n">UInt</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">SPIRType</span><span class="o">::</span><span class="n">BaseType</span><span class="o">::</span><span class="n">Float</span><span class="p">,</span>
+<span class="w">        </span><span class="n">SampledImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">SPIRType</span><span class="o">::</span><span class="n">BaseType</span><span class="o">::</span><span class="n">SampledImage</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Unknown</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">SPIRType</span><span class="o">::</span><span class="n">BaseType</span><span class="o">::</span><span class="n">Unknown</span>
+<span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ShaderItemInfo</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">spirv_cross</span><span class="o">::</span><span class="n">TypeID</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">        </span><span class="n">SpvType</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">entryName</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ShaderItemInfo</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ShaderUploadItem</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">target</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">any</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ShaderUploadData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ShaderUploadItem</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Material</span><span class="p">;</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Shader</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
@@ -411,6 +411,7 @@
 <span class="w">        </span><span class="o">~</span><span class="n">Shader</span><span class="p">()</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">compiled</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">bound</span><span class="p">)</span><span class="w"> </span><span class="n">Unbind</span><span class="p">();</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">compiled</span><span class="p">)</span><span class="w"> </span><span class="n">Release</span><span class="p">();</span>
+<span class="w">            </span><span class="n">_BackendDestruct</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Bind</span><span class="p">();</span>
@@ -423,7 +424,7 @@
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Release</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsBound</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsBound</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">bound</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -431,13 +432,14 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadData</span><span class="p">(</span><span class="n">ShaderUploadData</span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">transformation</span><span class="p">);</span>
-
 <span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadCacaoGlobals</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">projection</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">view</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;SHADER&quot;</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CreateMaterial</span><span class="p">();</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">//Backend-implemented data type</span>
@@ -446,6 +448,11 @@
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">bound</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ShaderData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">//Backend-implemented destruction hook</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_BackendDestruct</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Material</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

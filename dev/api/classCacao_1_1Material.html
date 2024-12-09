@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Struct ShaderUploadItem &#8212; Cacao Engine Docs</title>
+    <title>Class Material &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/structCacao_1_1ShaderUploadItem';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Material';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct Task" href="structCacao_1_1Task.html" />
-    <link rel="prev" title="Struct ShaderItemInfo" href="structCacao_1_1ShaderItemInfo.html" />
+    <link rel="next" title="Class Mesh" href="classCacao_1_1Mesh.html" />
+    <link rel="prev" title="Class Logging" href="classCacao_1_1Logging.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -327,16 +327,13 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
-</ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct ShaderUploadItem</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
@@ -416,6 +413,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
 </ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Material</a></li>
+</ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 </ul>
@@ -486,6 +486,9 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -514,12 +517,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
@@ -561,7 +558,7 @@
     
     <li class="breadcrumb-item"><a href="library_root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct ShaderUploadItem</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Material</span></li>
   </ul>
 </nav>
 </div>
@@ -578,29 +575,116 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="struct-shaderuploaditem">
-<span id="exhale-struct-structcacao-1-1shaderuploaditem"></span><h1>Struct ShaderUploadItem<a class="headerlink" href="#struct-shaderuploaditem" title="Link to this heading"><span/></a></h1>
+  <section id="class-material">
+<span id="exhale-class-classcacao-1-1material"></span><h1>Class Material<a class="headerlink" href="#class-material" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_cacao_include_Graphics_Shader.hpp.html#file-cacao-include-graphics-shader-hpp"><span class="std std-ref">File Shader.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_cacao_include_Graphics_Material.hpp.html#file-cacao-include-graphics-material-hpp"><span class="std std-ref">File Material.hpp</span></a></p></li>
 </ul>
-<section id="struct-documentation">
-<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao16ShaderUploadItemE">
-<span id="_CPPv3N5Cacao16ShaderUploadItemE"></span><span id="_CPPv2N5Cacao16ShaderUploadItemE"></span><span id="Cacao::ShaderUploadItem"></span><span class="target" id="structCacao_1_1ShaderUploadItem"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ShaderUploadItem</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao16ShaderUploadItemE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Item of data to upload to a shader. </p>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8MaterialE">
+<span id="_CPPv3N5Cacao8MaterialE"></span><span id="_CPPv2N5Cacao8MaterialE"></span><span id="Cacao::Material"></span><span class="target" id="classCacao_1_1Material"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Material</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8MaterialE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A shader and arguments to it to draw with. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Can only be created by Shader::CreateMaterial </p>
+</div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao16ShaderUploadItem6targetE">
-<span id="_CPPv3N5Cacao16ShaderUploadItem6targetE"></span><span id="_CPPv2N5Cacao16ShaderUploadItem6targetE"></span><span id="Cacao::ShaderUploadItem::target__ss"></span><span class="target" id="structCacao_1_1ShaderUploadItem_1a4f9b882db0add6bdb91bbd3c31fdb6a6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao16ShaderUploadItem6targetE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The name of the <a class="reference internal" href="structCacao_1_1ShaderItemInfo.html#structCacao_1_1ShaderItemInfo"><span class="std std-ref">ShaderItemInfo</span></a> to target. </p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material14ValueContainerE">
+<span id="_CPPv3N5Cacao8Material14ValueContainerE"></span><span id="_CPPv2N5Cacao8Material14ValueContainerE"></span><span class="target" id="classCacao_1_1Material_1aace6c768d8ba6973d4e0137304893e50"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValueContainer</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1RawTexture.html#_CPPv4N5Cacao10RawTextureE" title="Cacao::RawTexture"><span class="n"><span class="pre">RawTexture</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Texture.html#_CPPv4N5Cacao7TextureE" title="Cacao::Texture"><span class="n"><span class="pre">Texture</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Cubemap.html#_CPPv4N5Cacao7CubemapE" title="Cacao::Cubemap"><span class="n"><span class="pre">Cubemap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Texture2D.html#_CPPv4N5Cacao9Texture2DE" title="Cacao::Texture2D"><span class="n"><span class="pre">Texture2D</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1UIView.html#_CPPv4N5Cacao6UIViewE" title="Cacao::UIView"><span class="n"><span class="pre">UIView</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5Cacao8Material14ValueContainerE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Shorthand for container of possible data types. </p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao16ShaderUploadItem4dataE">
-<span id="_CPPv3N5Cacao16ShaderUploadItem4dataE"></span><span id="_CPPv2N5Cacao16ShaderUploadItem4dataE"></span><span id="Cacao::ShaderUploadItem::data__std::any"></span><span class="target" id="structCacao_1_1ShaderUploadItem_1a7c4b3c97c9ca5d6bf9d46ec26a2ccd91"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao16ShaderUploadItem4dataE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The data to upload. </p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material9GetShaderEv">
+<span id="_CPPv3N5Cacao8Material9GetShaderEv"></span><span id="_CPPv2N5Cacao8Material9GetShaderEv"></span><span id="Cacao::Material::GetShader"></span><span class="target" id="classCacao_1_1Material_1a86286ffb05b390f2f36c8f5433d37866"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Shader.html#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetShader</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material9GetShaderEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the associated shader object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A constant handle to the shader object </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material10WriteValueENSt6stringE14ValueContainer">
+<span id="_CPPv3N5Cacao8Material10WriteValueENSt6stringE14ValueContainer"></span><span id="_CPPv2N5Cacao8Material10WriteValueENSt6stringE14ValueContainer"></span><span id="Cacao::Material::WriteValue__ss.ValueContainer"></span><span class="target" id="classCacao_1_1Material_1a7ee9aa109f151506a3f2834ff0ed4df1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WriteValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span>, <a class="reference internal" href="#_CPPv4N5Cacao8Material14ValueContainerE" title="Cacao::Material::ValueContainer"><span class="n"><span class="pre">ValueContainer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material10WriteValueENSt6stringE14ValueContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Write a value into the material to be used. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to write to. Must be a valid entry in the associated shader spec. </p></li>
+<li><p><strong>val</strong> – The value to write</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the key is not a valid entry in the shader spec </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao8Material9ReadValueE1TNSt6stringE">
+<span id="_CPPv3I0EN5Cacao8Material9ReadValueENSt6stringE"></span><span id="_CPPv2I0EN5Cacao8Material9ReadValueENSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Material_1aaf9c52723675747cf98ba1318ae5176a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao8Material9ReadValueE1TNSt6stringE" title="Cacao::Material::ReadValue::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ReadValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao8Material9ReadValueE1TNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Read a value from the material. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> – The key to read. Must be a valid entry in the associated shader spec.</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the key is not a valid entry in the shader spec or if the value is not of the type provided as a template </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The value of the key</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material8ActivateEv">
+<span id="_CPPv3N5Cacao8Material8ActivateEv"></span><span id="_CPPv2N5Cacao8Material8ActivateEv"></span><span id="Cacao::Material::Activate"></span><span class="target" id="classCacao_1_1Material_1a47372a1c190de328e8893f5db549b638"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Activate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material8ActivateEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set this material as the active material for drawing. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the material is already active, the shader is not compiled, or if not called on the engine thread </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material10DeactivateEv">
+<span id="_CPPv3N5Cacao8Material10DeactivateEv"></span><span id="_CPPv2N5Cacao8Material10DeactivateEv"></span><span id="Cacao::Material::Deactivate"></span><span class="target" id="classCacao_1_1Material_1a6492ad210639291aafdfec64caf61cfc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Deactivate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material10DeactivateEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Unset this material as the active material for drawing. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the material is not active or if not called on the engine thread </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material16IsActiveMaterialEv">
+<span id="_CPPv3N5Cacao8Material16IsActiveMaterialEv"></span><span id="_CPPv2N5Cacao8Material16IsActiveMaterialEv"></span><span id="Cacao::Material::IsActiveMaterial"></span><span class="target" id="classCacao_1_1Material_1a6380a2c345a6316525c1d9cf798ec658"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsActiveMaterial</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material16IsActiveMaterialEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check if the material is the active one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the material is the active one or not </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -620,20 +704,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="structCacao_1_1ShaderItemInfo.html"
+       href="classCacao_1_1Logging.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Struct ShaderItemInfo</p>
+        <p class="prev-next-title">Class Logging</p>
       </div>
     </a>
     <a class="right-next"
-       href="structCacao_1_1Task.html"
+       href="classCacao_1_1Mesh.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct Task</p>
+        <p class="prev-next-title">Class Mesh</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -656,10 +740,15 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16ShaderUploadItemE"><code class="docutils literal notranslate"><span class="pre">ShaderUploadItem</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16ShaderUploadItem6targetE"><code class="docutils literal notranslate"><span class="pre">ShaderUploadItem::target</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16ShaderUploadItem4dataE"><code class="docutils literal notranslate"><span class="pre">ShaderUploadItem::data</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialE"><code class="docutils literal notranslate"><span class="pre">Material</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material14ValueContainerE"><code class="docutils literal notranslate"><span class="pre">Material::ValueContainer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material9GetShaderEv"><code class="docutils literal notranslate"><span class="pre">Material::GetShader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material10WriteValueENSt6stringE14ValueContainer"><code class="docutils literal notranslate"><span class="pre">Material::WriteValue()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao8Material9ReadValueE1TNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Material::ReadValue()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material8ActivateEv"><code class="docutils literal notranslate"><span class="pre">Material::Activate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material10DeactivateEv"><code class="docutils literal notranslate"><span class="pre">Material::Deactivate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material16IsActiveMaterialEv"><code class="docutils literal notranslate"><span class="pre">Material::IsActiveMaterial()</span></code></a></li>
 </ul>
 </li>
 </ul>

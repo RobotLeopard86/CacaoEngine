@@ -375,6 +375,8 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">RawTexture</span><span class="w"> </span><span class="p">{};</span>
+
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Texture</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Bind</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
@@ -393,6 +395,8 @@
 <span class="w">        </span><span class="c1">//Constructor for initialization purposes</span>
 <span class="w">        </span><span class="n">Texture</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">initialState</span><span class="p">)</span>
 <span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">Asset</span><span class="p">(</span><span class="n">initialState</span><span class="p">),</span><span class="w"> </span><span class="n">bound</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Material</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

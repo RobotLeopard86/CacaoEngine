@@ -54,7 +54,7 @@
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Struct ShaderItemInfo" href="structCacao_1_1ShaderItemInfo.html" />
-    <link rel="prev" title="Struct Material" href="structCacao_1_1Material.html" />
+    <link rel="prev" title="Struct RawTexture" href="structCacao_1_1RawTexture.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -327,16 +327,13 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct RenderObject</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
@@ -417,6 +414,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -486,6 +486,9 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -514,12 +517,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
@@ -593,7 +590,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material">
-<span id="_CPPv3N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material"></span><span id="_CPPv2N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material"></span><span id="Cacao::RenderObject::RenderObject__glm::mat4.AssetHandle:Mesh:.Material"></span><span class="target" id="structCacao_1_1RenderObject_1a5ea1f53038a66d1296b0f969ebf59117"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RenderObject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">transform</span></span>, <a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mesh</span></span>, <a class="reference internal" href="structCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material"></span><span id="_CPPv2N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material"></span><span id="Cacao::RenderObject::RenderObject__glm::mat4.AssetHandle:Mesh:.Material"></span><span class="target" id="structCacao_1_1RenderObject_1a5ea1f53038a66d1296b0f969ebf59117"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RenderObject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">transform</span></span>, <a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mesh</span></span>, <a class="reference internal" href="classCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12RenderObject12RenderObjectEN3glm4mat4E11AssetHandleI4MeshE8Material" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a render object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -623,7 +620,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12RenderObject8materialE">
-<span id="_CPPv3N5Cacao12RenderObject8materialE"></span><span id="_CPPv2N5Cacao12RenderObject8materialE"></span><span id="Cacao::RenderObject::material__Material"></span><span class="target" id="structCacao_1_1RenderObject_1a74c94336665227412e462c853f06e297"></span><a class="reference internal" href="structCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">material</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao12RenderObject8materialE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao12RenderObject8materialE"></span><span id="_CPPv2N5Cacao12RenderObject8materialE"></span><span id="Cacao::RenderObject::material__Material"></span><span class="target" id="structCacao_1_1RenderObject_1a74c94336665227412e462c853f06e297"></span><a class="reference internal" href="classCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">material</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao12RenderObject8materialE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>The material to draw the mesh with. </p>
 </dd></dl>
 
@@ -644,12 +641,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="structCacao_1_1Material.html"
+       href="structCacao_1_1RawTexture.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Struct Material</p>
+        <p class="prev-next-title">Struct RawTexture</p>
       </div>
     </a>
     <a class="right-next"

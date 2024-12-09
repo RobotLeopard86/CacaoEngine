@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct ShaderUploadItem" href="structCacao_1_1ShaderUploadItem.html" />
+    <link rel="next" title="Struct Task" href="structCacao_1_1Task.html" />
     <link rel="prev" title="Struct RenderObject" href="structCacao_1_1RenderObject.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -327,16 +327,13 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct ShaderItemInfo</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
@@ -417,6 +414,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -486,6 +486,9 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -514,12 +517,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
@@ -593,8 +590,8 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao14ShaderItemInfo4typeE">
-<span id="_CPPv3N5Cacao14ShaderItemInfo4typeE"></span><span id="_CPPv2N5Cacao14ShaderItemInfo4typeE"></span><span id="Cacao::ShaderItemInfo::type__spirv_cross::TypeID"></span><span class="target" id="structCacao_1_1ShaderItemInfo_1ac0f734b99bc4fd3c2fdba58e49af808a"></span><span class="n"><span class="pre">spirv_cross</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">TypeID</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14ShaderItemInfo4typeE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Base data type. </p>
+<span id="_CPPv3N5Cacao14ShaderItemInfo4typeE"></span><span id="_CPPv2N5Cacao14ShaderItemInfo4typeE"></span><span id="Cacao::ShaderItemInfo::type__SpvType"></span><span class="target" id="structCacao_1_1ShaderItemInfo_1ab349ee450d2b00a18c4108e5c58e9a43"></span><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html#_CPPv4N5Cacao7SpvTypeE" title="Cacao::SpvType"><span class="n"><span class="pre">SpvType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14ShaderItemInfo4typeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of data. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -604,9 +601,9 @@
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14ShaderItemInfo9entryNameE">
-<span id="_CPPv3N5Cacao14ShaderItemInfo9entryNameE"></span><span id="_CPPv2N5Cacao14ShaderItemInfo9entryNameE"></span><span id="Cacao::ShaderItemInfo::entryName__ss"></span><span class="target" id="structCacao_1_1ShaderItemInfo_1a6a961115637616d652ab05686bead554"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">entryName</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14ShaderItemInfo9entryNameE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Name of the entry and how it is referenced. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14ShaderItemInfo4nameE">
+<span id="_CPPv3N5Cacao14ShaderItemInfo4nameE"></span><span id="_CPPv2N5Cacao14ShaderItemInfo4nameE"></span><span id="Cacao::ShaderItemInfo::name__ss"></span><span class="target" id="structCacao_1_1ShaderItemInfo_1acf033f1e892a17985e4574303fe12b40"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14ShaderItemInfo4nameE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Name of the item in the shader source. </p>
 </dd></dl>
 
 </div>
@@ -635,11 +632,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="structCacao_1_1ShaderUploadItem.html"
+       href="structCacao_1_1Task.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct ShaderUploadItem</p>
+        <p class="prev-next-title">Struct Task</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -666,7 +663,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ShaderItemInfoE"><code class="docutils literal notranslate"><span class="pre">ShaderItemInfo</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ShaderItemInfo4typeE"><code class="docutils literal notranslate"><span class="pre">ShaderItemInfo::type</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ShaderItemInfo4sizeE"><code class="docutils literal notranslate"><span class="pre">ShaderItemInfo::size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ShaderItemInfo9entryNameE"><code class="docutils literal notranslate"><span class="pre">ShaderItemInfo::entryName</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ShaderItemInfo4nameE"><code class="docutils literal notranslate"><span class="pre">ShaderItemInfo::name</span></code></a></li>
 </ul>
 </li>
 </ul>

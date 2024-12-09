@@ -327,16 +327,13 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material.html">Struct Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderUploadItem.html">Struct ShaderUploadItem</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
@@ -417,6 +414,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -486,6 +486,9 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -514,12 +517,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a5dc337a6c3c573fb6fde3d14d1ed9d3d.html">Typedef Cacao::ShaderUploadData</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a09c2c17c833f8b561d44efcaa6c130bd.html">Typedef Cacao::SpvType</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
@@ -697,8 +694,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7GetTypeEv">
-<span id="_CPPv3N5Cacao7Cubemap7GetTypeEv"></span><span id="_CPPv2N5Cacao7Cubemap7GetTypeEv"></span><span id="Cacao::Cubemap::GetType"></span><span class="target" id="classCacao_1_1Cubemap_1a7b95c1897fac85d49d5d5ce7dd98a5ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap7GetTypeEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao7Cubemap7GetTypeEv">
+<span id="_CPPv3NK5Cacao7Cubemap7GetTypeEv"></span><span id="_CPPv2NK5Cacao7Cubemap7GetTypeEv"></span><span id="Cacao::Cubemap::GetTypeC"></span><span class="target" id="classCacao_1_1Cubemap_1a9529a3c061c203f4d9ed8bb016a78f2c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK5Cacao7Cubemap7GetTypeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Gets the type of this asset. Needed for safe downcasting from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a>. </p>
 </dd></dl>
 
@@ -781,7 +778,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::CompileAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::CompileSync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Release()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::GetType()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao7Cubemap7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::GetType()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap8texturesE"><code class="docutils literal notranslate"><span class="pre">Cubemap::textures</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap10nativeDataE"><code class="docutils literal notranslate"><span class="pre">Cubemap::nativeData</span></code></a></li>
 </ul>
