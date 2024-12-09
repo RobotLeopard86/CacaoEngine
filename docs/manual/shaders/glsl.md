@@ -28,6 +28,7 @@ All shaders must declare the transformation matrix as a push constant. This is d
 layout(push_constant) uniform Transformation {
 	mat4 transform;
 };
+```
 
 ## Local Object Data
 All data for individual objects (material data) must be declared within another uniform block, which must be declared as follows:
@@ -37,14 +38,14 @@ layout(std140,binding=1) uniform ObjectData {
 } object;
 ```  
 
-## Texture Bindings
-In Vulkan GLSL, every uniform must have a declared `binding` value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can't have a `binding=0` or `binding=1` in your fragment shader, as those are already assigned to the `CacaoGlobals` and `ObjectData` uniform blocks.
-
 ## Applying the Matrices
 To get the final `gl_Position` value, you should write that assignment as follows:
 ```{code-block} glsl
 gl_Position = globals.projection * globals.view * transform * vec4(position, 1.0);
 ```
+
+## Texture Bindings
+In Vulkan GLSL, every uniform must have a declared `binding` value (as seen above with the uniform blocks). This includes texture samplers. They must have distinct binding values from every other binding, so you can't have a `binding=0` or `binding=1` in your fragment shader, as those are already assigned to the `CacaoGlobals` and `ObjectData` uniform blocks.
 
 ## Passing Data Between Shader Stages
 Any data that is to be passed between shader stages must be declared as follows:
