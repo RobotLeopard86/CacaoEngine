@@ -60,7 +60,7 @@ namespace Cacao {
 	inline std::map<Shader*, VkShaderData*> shaderDataLookup;
 
 	//Raw Vulkan texture (for shader uploading in text)
-	struct RawVkTexture {
+	struct RawVkTexture : public RawTexture {
 		vk::ImageView view;
 		int* slot;
 	};

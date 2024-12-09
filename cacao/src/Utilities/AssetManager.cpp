@@ -49,8 +49,7 @@ namespace Cacao {
 			//Validate and try to build spec
 			int specEntryCounter = 1;
 			ShaderSpec spec;
-			constexpr std::array<const char*, 5> validTypes {
-				"bool", "int", "uint", "float", "texture"};
+			constexpr std::array<const char*, 5> validTypes {"int", "uint", "float", "texture"};
 
 			for(auto node : dfNode["spec"]) {
 				//Convience string generator function
@@ -84,19 +83,16 @@ namespace Cacao {
 				}
 
 				switch(idx) {
-					case 0://bool
-						inf.type = SpvType::Boolean;
-						break;
-					case 1://int
+					case 0://int
 						inf.type = SpvType::Int;
 						break;
-					case 2://uint
+					case 1://uint
 						inf.type = SpvType::UInt;
 						break;
-					case 3://float
+					case 2://float
 						inf.type = SpvType::Float;
 						break;
-					case 4://image
+					case 3://image
 						inf.type = SpvType::SampledImage;
 						break;
 					default:

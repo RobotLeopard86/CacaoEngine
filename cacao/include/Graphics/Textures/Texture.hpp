@@ -6,6 +6,13 @@
 
 namespace Cacao {
 	/**
+	 * @brief Base class for "raw" textures (used by the backend)
+	 *
+	 * @note For use by the engine only
+	 */
+	struct RawTexture {};
+
+	/**
 	 * @brief Base texture asset
 	 */
 	class Texture : public Asset {
@@ -47,5 +54,7 @@ namespace Cacao {
 		//Constructor for initialization purposes
 		Texture(bool initialState)
 		  : Asset(initialState), bound(false) {}
+
+		friend class Material;
 	};
 }

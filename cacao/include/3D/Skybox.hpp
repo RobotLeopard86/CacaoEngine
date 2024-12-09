@@ -77,7 +77,7 @@ namespace Cacao {
 		}
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
-		std::string GetType() override {
+		std::string GetType() const override {
 			return "SKYBOX";
 		}
 

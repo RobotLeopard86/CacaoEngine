@@ -47,12 +47,12 @@ namespace Cacao {
 
 		//Get shader data block size and offsets
 		bool foundSD = false;
-		for(auto pcb : vr.push_constant_buffers) {
-			if(pcb.name.compare("type.PushConstant.ObjectData") == 0 || pcb.name.compare("object") == 0) {
-				spirv_cross::SPIRType type = vertReflector.get_type(pcb.base_type_id);
+		for(auto ubo : vr.uniform_buffers) {
+			if(ubo.name.compare("type.PushConstant.ObjectData") == 0 || ubo.name.compare("object") == 0) {
+				spirv_cross::SPIRType type = vertReflector.get_type(ubo.base_type_id);
 				mod->shaderDataSize = vertReflector.get_declared_struct_size(type);
 				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
-					mod->offsets.insert_or_assign(vertReflector.get_member_name(pcb.base_type_id, i), vertReflector.type_struct_member_offset(type, i));
+					mod->offsets.insert_or_assign(vertReflector.get_member_name(ubo.base_type_id, i), vertReflector.type_struct_member_offset(type, i));
 				}
 				foundSD = true;
 				break;
@@ -70,14 +70,13 @@ namespace Cacao {
 
 		//Make sure that shader data matches spec
 		for(const ShaderItemInfo& sii : spec) {
-			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.entryName)) || mod->offsets.contains(sii.entryName), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!");
+			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.name)) || mod->offsets.contains(sii.name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!");
 		}
 		for(auto offset : mod->offsets) {
-			if(offset.first.compare("transform") == 0) continue;
-			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.entryName) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
+			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.name) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
 		}
 		for(auto slot : mod->imageSlots) {
-			CheckException(std::find_if(spec.begin(), spec.end(), [&slot](const ShaderItemInfo& sii) { return slot.first.compare(sii.entryName) == 0 && sii.type == SpvType::SampledImage; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Texture found in shader that is not in shader spec!");
+			CheckException(std::find_if(spec.begin(), spec.end(), [&slot](const ShaderItemInfo& sii) { return slot.first.compare(sii.name) == 0 && sii.type == SpvType::SampledImage; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Texture found in shader that is not in shader spec!");
 		}
 	}
 
@@ -170,6 +169,10 @@ namespace Cacao {
 		}
 
 		compiled = true;
+	}
+
+	void Shader::_BackendDestruct() {
+		if(auto it = std::find(shaderDataLookup.begin(), shaderDataLookup.end(), this); it != shaderDataLookup.end()) shaderDataLookup.erase(it);
 	}
 
 	void DoVkShaderCompile(VkShaderData* shader, const ShaderCompileSettings& settings) {
@@ -342,7 +345,7 @@ namespace Cacao {
 		std::memcpy(globalsMem, cvp, sizeof(glm::mat4) * 2);
 	}
 
-	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
+	/*void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!");
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!");
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!");
@@ -543,5 +546,5 @@ namespace Cacao {
 				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "Failed cast of shader upload value to type specified in target!");
 			}
 		}
-	}
+	}*/
 }

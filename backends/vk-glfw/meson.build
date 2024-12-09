@@ -98,6 +98,7 @@ libbackend = static_library('cacaobackend', include_directories: include_dirs, s
 	'../common/vk/src/Skybox.cpp',
 	'../common/vk/src/UIView.cpp',
 	'../common/vk/src/UIDrawing.cpp',
+	'../common/vk/src/Material.cpp',
 	'../common/UIShaderGen.cpp'
 ], dependencies: backend_deplist, cpp_args: ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', '-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1002000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', '-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1'])
 

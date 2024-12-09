@@ -47,12 +47,12 @@ namespace Cacao {
 		 *
 		 * @return Whether the asset is compiled or not
 		 */
-		virtual bool IsCompiled() {
+		virtual bool IsCompiled() const {
 			return compiled;
 		}
 
 		///@brief Get the asset type (not useful here because this is the base asset)
-		virtual std::string GetType() {
+		virtual std::string GetType() const {
 			return "N/A";
 		}
 
