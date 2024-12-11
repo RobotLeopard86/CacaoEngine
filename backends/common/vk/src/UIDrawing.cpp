@@ -7,6 +7,9 @@
 #include "ActiveItems.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "UIDrawUBO.hpp"
+#include "Graphics/Material.hpp"
+
+#include "glm/gtc/type_ptr.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
 #define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (tr->linegap / 2))
@@ -151,13 +154,23 @@ namespace Cacao {
 		void* vertexBuffer;
 		allocator.mapMemory(vertex.alloc, &vertexBuffer);
 
-		//Bind text shader
-		TextShaders::shader->Bind();
+		//Create temporary material
+		std::shared_ptr<Material> m = TextShaders::shader->CreateMaterial();
+
+		//Write material values (texture is not written because it changes frequently and so must be done manually)
+		m->WriteValue("color", color);
+
+		//Activate material
+		m->Activate();
 
 		//Bind UI drawing globals UBO
 		vk::DescriptorBufferInfo uiDrawGlobalsDBI(uiUBO.obj, 0, vk::WholeSize);
 		vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiDrawGlobalsDBI);
 		uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
+
+		//Push identity transform matrix
+		glm::mat4 identityTransform = glm::identity<glm::mat4>();
+		uiCmd->pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(identityTransform));
 
 		//Draw characters
 		unsigned int start = 0;
@@ -166,26 +179,27 @@ namespace Cacao {
 			//Copy vertex data into buffer
 			std::memcpy(static_cast<unsigned char*>(vertexBuffer) + (sizeof(UIVertex) * start), character.vertices.data(), sizeof(UIVertex) * 6);
 
-			//Upload uniform data
-			ShaderUploadData up;
-			RawVkTexture upTex = {.view = character.glyph.view, .slot = new int(-1)};
-			up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
-			up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
-			TextShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+			//Bind texture
+			{
+				vk::DescriptorImageInfo dii(VK_NULL_HANDLE, character.glyph.view, vk::ImageLayout::eShaderReadOnlyOptimal);
+				vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 2, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+				uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			}
 
 			//Draw glyph
 			uiCmd->draw(6, 1, start, 0);
 			start += 6;
 
 			//Unbind texture
-			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
-			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(upTex.slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
-			uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
-			delete upTex.slot;
+			{
+				vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
+				vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 2, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+				uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			}
 		}
 
-		//Unbind text shader
-		TextShaders::shader->Unbind();
+		//Deactivate material
+		m->Deactivate();
 
 		//Unmap vertex buffer
 		allocator.unmapMemory(vertex.alloc);
@@ -224,11 +238,12 @@ namespace Cacao {
 		std::memcpy(vertexBuffer, vertexData, sizeof(UIVertex) * 6);
 		allocator.unmapMemory(vertex.alloc);
 
-		//Upload uniforms
-		ImageShaders::shader->Bind();
-		ShaderUploadData up;
-		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
-		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+		//Make temporary material
+		std::shared_ptr<Material> m = ImageShaders::shader->CreateMaterial();
+		m->WriteValue("image", tex);
+
+		//Activate material
+		m->Activate();
 
 		//Bind UI drawing globals UBO
 		vk::DescriptorBufferInfo uiDrawGlobalsDBI(uiUBO.obj, 0, vk::WholeSize);
@@ -240,9 +255,8 @@ namespace Cacao {
 		uiCmd->bindVertexBuffers(0, vertex.obj, offsets);
 		uiCmd->draw(6, 1, 0, 0);
 
-		//Unbind objects
-		tex->Unbind();
-		ImageShaders::shader->Unbind();
+		//Deactivate material
+		m->Deactivate();
 
 		//Add vertex buffer to allocated list
 		allocatedObjects.emplace_back(vertex);

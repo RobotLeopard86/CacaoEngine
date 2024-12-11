@@ -15,6 +15,8 @@
 #include "UI/Shaders.hpp"
 #include "UIDrawUBO.hpp"
 
+#include "glm/gtc/type_ptr.hpp"
+
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 bool backendInitBeforeWindow = true;
@@ -26,6 +28,7 @@ namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
 	Allocated<vk::Buffer> uiQuadUBO;
 	void* uiQuadUBOMem;
+	std::shared_ptr<Material> uiQuadMat;
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
 	void RankPhysicalDevices(std::vector<vk::PhysicalDevice>* devices, const std::vector<std::function<bool(const vk::PhysicalDevice&)>>& tests) {
@@ -451,6 +454,8 @@ namespace Cacao {
 		settings.blend = ShaderCompileSettings::Blending::One;
 		settings.depth = ShaderCompileSettings::Depth::Off;
 		settings.input = ShaderCompileSettings::InputType::VertexAndTexCoord;
+		settings.wrapModes.insert_or_assign("glyph", vk::SamplerAddressMode::eClampToEdge);
+		settings.wrapModes.insert_or_assign("image", vk::SamplerAddressMode::eClampToEdge);
 		DoVkShaderCompile(sd, settings);
 	}
 
@@ -464,7 +469,12 @@ namespace Cacao {
 		settings.blend = ShaderCompileSettings::Blending::Src;
 		settings.depth = ShaderCompileSettings::Depth::Off;
 		settings.input = ShaderCompileSettings::InputType::VertexAndTexCoord;
+		settings.wrapModes.insert_or_assign("uiTex", vk::SamplerAddressMode::eRepeat);
 		DoVkShaderCompile(sd, settings);
+
+		//Create the material for the UI quad
+		uiQuadMat = uivsm->CreateMaterial();
+		uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {
@@ -628,45 +638,17 @@ namespace Cacao {
 
 		//Draw scene
 		for(RenderObject& obj : frame->objects) {
-			//Bind shader
-			obj.material.shader->Bind();
+			//Activate material
+			obj.material.Activate();
 
-			//Upload material data to shader
-			obj.material.shader->UploadData(obj.material.data, obj.transformMatrix);
+			//Push transformation matrix
+			f.cmd.pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(obj.transformMatrix));
 
 			//Draw the mesh
 			obj.mesh->Draw();
 
-			//Unbind any textures
-			const ShaderSpec& spec = obj.material.shader->GetSpec();
-			for(ShaderUploadItem& sui : obj.material.data) {
-				if(std::find_if(spec.begin(), spec.end(), [&sui](ShaderItemInfo sii) {
-					   return (sii.type == SpvType::SampledImage && sii.entryName == sui.target);
-				   }) != spec.end()) {
-					if(sui.data.type() == typeid(Texture2D*)) {
-						Texture2D* tex = std::any_cast<Texture2D*>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(Cubemap*)) {
-						Cubemap* tex = std::any_cast<Cubemap*>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(UIView*)) {
-						UIView* view = std::any_cast<UIView*>(sui.data);
-						view->Unbind();
-					} else if(sui.data.type() == typeid(AssetHandle<Texture2D>)) {
-						AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(AssetHandle<Cubemap>)) {
-						AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(AssetHandle<UIView>)) {
-						AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(sui.data);
-						view->Unbind();
-					}
-				}
-			}
-
-			//Unbind shader
-			obj.material.shader->Unbind();
+			//Deactivate material
+			obj.material.Deactivate();
 		}
 
 		//Draw skybox (if one exists)
@@ -679,27 +661,27 @@ namespace Cacao {
 			project[1][1] *= -1;//Flip
 			project[3][1] -= 2; //Move into viewable area
 
-			//Upload uniforms
-			ShaderUploadData uiud;
-			uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
-			uivsm->Bind();
-			uivsm->UploadData(uiud, glm::identity<glm::mat4>());
+			//Activate UI quad material
+			uiQuadMat->Activate();
 
-			//Set up our own globals uniform buffer
+			//Push identity transform matrix
+			glm::mat4 identityTransform = glm::identity<glm::mat4>();
+			f.cmd.pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(identityTransform));
+
+			//Set up the special UI quad globals uniform buffer
 			glm::mat4 uiGlobalsData[2] = {project, glm::identity<glm::mat4>()};
 			std::memcpy(uiQuadUBOMem, uiGlobalsData, 2 * sizeof(glm::mat4));
 			vk::DescriptorBufferInfo uiGlobalsDBI(uiQuadUBO.obj, 0, vk::WholeSize);
 			vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiGlobalsDBI);
-			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
+			f.cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
 
 			//Draw quad
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
 			f.cmd.bindVertexBuffers(0, uiQuadBuffer.obj, offsets);
 			f.cmd.draw(6, 1, 0, 0);
 
-			//Unbind UI shader and view
-			Engine::GetInstance()->GetGlobalUIView()->Unbind();
-			uivsm->Unbind();
+			//Deactivate UI quad material
+			uiQuadMat->Deactivate();
 		}
 
 		//End rendering

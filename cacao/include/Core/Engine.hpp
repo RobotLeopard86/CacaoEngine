@@ -58,7 +58,7 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Run some code on the main thread
+		 * @brief Run some code on the engine thread
 		 *
 		 * @param func The function to execute
 		 *

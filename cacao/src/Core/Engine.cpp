@@ -152,7 +152,7 @@ namespace Cacao {
 			this->CoreStartup();
 		});
 
-		//Run the rendering controller on the main thread
+		//Run the rendering controller on the engine thread
 		RenderController::GetInstance()->Run();
 
 		//Run the shutdown functions

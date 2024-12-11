@@ -49,6 +49,10 @@ if bt == 'debug'
 	endif
 endif
 
+if meson.get_compiler('c').get_id() != 'msvc'
+	add_project_arguments(['-Wno-nullability-completeness'], language: ['c', 'cpp'])
+endif
+
 subsystem = 'console'
 if get_option('windows_noconsole') and host_machine.system() == 'windows'
 	subsystem = 'windows'
@@ -131,6 +135,26 @@ yaml_opts.add_cmake_defines({
 })
 yaml_opts.set_install(true)
 yaml_dep = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
+
+alsoft_opts = cmake.subproject_options()
+alsoft_opts.add_cmake_defines({
+	'BUILD_TESTING': 'OFF',
+	'BUILD_SHARED_LIBS': 'OFF',
+	'LIBTYPE': 'STATIC',
+	'ALSOFT_DLOPEN': 'OFF',
+	'ALSOFT_EXAMPLES': 'OFF',
+	'ALSOFT_NO_CONFIG_UTIL': 'ON',
+	'ALSOFT_EAX': 'OFF',
+	'ALSOFT_UTILS': 'OFF',
+	'ALSOFT_RTKIT': 'OFF',
+	'ALSOFT_EMBED_HRTF_DATA': 'OFF',
+	'ALSOFT_BACKEND_WINMM': 'OFF',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
+})
+alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
 
 if bt.contains('debug')
 	add_project_arguments(['-DDEBUG'], language: 'cpp')

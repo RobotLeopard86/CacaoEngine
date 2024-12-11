@@ -3,6 +3,8 @@
 #include "Graphics/Shader.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Mesh.hpp"
+#include "Graphics/Material.hpp"
+#include "Utilities/Asset.hpp"
 
 #include "glm/vec2.hpp"
 #include "glm/mat4x4.hpp"
@@ -24,15 +26,7 @@ namespace Cacao {
 		 *
 		 * @param tex A cubemap to use as the skybox texture
 		 */
-		Skybox(Cubemap* tex);
-
-		/**
-		 * @brief Destroy the skybox
-		 * @warning If created from Cubemap pointer, the associated memory will be freed
-		 */
-		~Skybox() {
-			if(textureOwner) delete texture;
-		}
+		Skybox(AssetHandle<Cubemap> tex);
 
 		/**
 		 * @brief Copy-construct a skybox
@@ -72,7 +66,7 @@ namespace Cacao {
 		 * @brief Check if the cubemap is compiled
 		 * @see Cubemap::IsCompiled
 		 */
-		bool IsCompiled() override {
+		bool IsCompiled() const override {
 			return texture->IsCompiled();
 		}
 
@@ -113,7 +107,8 @@ namespace Cacao {
 
 	  private:
 		bool textureOwner;
-		Cubemap* texture;
+		AssetHandle<Cubemap> texture;
+		std::shared_ptr<Material> mat;
 
 		//Initialize native data on copy
 		void _InitCopyND();

@@ -6,23 +6,30 @@
 #include "UI/UIView.hpp"
 #include "Core/Exception.hpp"
 
+#include "glm/glm.hpp"
+
 #include <variant>
 
 namespace Cacao {
 	/**
 	 * @brief A shader and arguments to it to draw with
 	 *
-	 * @note Can only be created by Shader::CreateMaterial
+	 * @note Can only be legally created by Shader::CreateMaterial
 	 */
 	class Material {
 	  public:
 		///@brief Shorthand for container of possible data types
-		using ValueContainer = std::variant<int, unsigned int, float, RawTexture*, Texture*, AssetHandle<Cubemap>, AssetHandle<Texture2D>, std::shared_ptr<UIView>>;
+		using ValueContainer = std::variant<int, unsigned int, float,
+			glm::vec2, glm::vec3, glm::vec4,
+			glm::mat2, glm::mat2x3, glm::mat2x4,
+			glm::mat3x2, glm::mat3, glm::mat3x4,
+			glm::mat4x2, glm::mat4x3, glm::mat4,
+			RawTexture*, Texture*, AssetHandle<Cubemap>, AssetHandle<Texture2D>, std::shared_ptr<UIView>>;
 
 		/**
 		 * @brief Get the associated shader object
 		 *
-		 * @return A constant handle to the shader object
+		 * @return A handle to the shader object or a null handle if the backup raw shader is in use
 		 */
 		AssetHandle<Shader> GetShader() {
 			return shader;
@@ -95,11 +102,28 @@ namespace Cacao {
 			return active;
 		}
 
+		~Material();
+
+		Material(const Material&);
+		Material& operator=(const Material&);
+		Material(Material&&) = delete;
+		Material& operator=(Material&&) = delete;
+
 	  private:
+		//Chill constructor
 		Material(AssetHandle<Shader> shader);
+
+		//Scary raw constructor
+		Material(Shader* rawShader);
 
 		//The shader to use
 		AssetHandle<Shader> shader;
+
+		//Backup shader pointer in case the shader isn't in the asset cache (DANGER)
+		Shader* rawShader;
+
+		//Common initialization
+		void _CommonInit();
 
 		//Backend-implemented data type
 		struct MaterialData;
@@ -108,6 +132,9 @@ namespace Cacao {
 		//Data map
 		std::map<std::string, ValueContainer> values;
 
+		//If the material is active
 		bool active;
+
+		friend class Shader;
 	};
 }

@@ -175,7 +175,7 @@ namespace Cacao {
 
 	std::shared_future<void> Shader::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL on the engine thread
 			return InvokeGL([this]() {
 				this->CompileAsync();
 			});
@@ -327,7 +327,7 @@ namespace Cacao {
 
 	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL on the engine thread
 			InvokeGL([this, data, transformation]() {
 				this->UploadData(const_cast<ShaderUploadData&>(data), transformation);
 			});
@@ -532,7 +532,7 @@ namespace Cacao {
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL on the engine thread
 			InvokeGL([projection, view]() {
 				UploadCacaoGlobals(projection, view);
 			});

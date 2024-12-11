@@ -35,7 +35,7 @@ namespace Cacao {
 
 	std::shared_future<void> Cubemap::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL on the engine thread
 			return InvokeGL([this]() {
 				this->CompileAsync();
 			});
@@ -94,7 +94,7 @@ namespace Cacao {
 
 	void Cubemap::Release() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL on the engine thread
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {

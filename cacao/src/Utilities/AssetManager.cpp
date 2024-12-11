@@ -73,7 +73,7 @@ namespace Cacao {
 
 				//Build spec entry
 				ShaderItemInfo inf;
-				inf.entryName = node["name"].Scalar();
+				inf.name = node["name"].Scalar();
 				inf.size = {node["sizex"].as<int>(INT_MIN), node["sizey"].as<int>(INT_MIN)};
 
 				//Find index of value in valid type array
@@ -185,11 +185,11 @@ namespace Cacao {
 			CheckException(std::filesystem::exists(dfNode["z-"].Scalar()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing skybox definition: 'z-' field refers to a nonexistent file!");
 
 			//Create and compile skybox cubemap
-			Cubemap* cube = new Cubemap(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
+			std::shared_ptr<Cubemap> cube = std::make_shared<Cubemap>(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
 			cube->CompileSync();
 
 			//Create skybox
-			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(cube);
+			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(AssetHandle<Cubemap>(definitionPath, cube));
 
 			//Add asset to cache and return handle
 			this->assetCache.insert_or_assign(definitionPath, std::weak_ptr<Skybox> {asset});

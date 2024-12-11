@@ -14,13 +14,14 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Cacao {
 	//Initialize static resources
 	bool Skybox::isSetup = false;
 	Shader* Skybox::skyboxShader = nullptr;
 
-	Skybox::Skybox(Cubemap* tex)
+	Skybox::Skybox(AssetHandle<Cubemap> tex)
 	  : Asset(false), rotation({0, 0, 0}), textureOwner(true), texture(tex) {
 		//Create native data
 		nativeData.reset(new SkyboxData());
@@ -39,7 +40,7 @@ namespace Cacao {
 		//Define skybox shader specification
 		ShaderSpec spec;
 		ShaderItemInfo skySamplerInfo;
-		skySamplerInfo.entryName = "skybox";
+		skySamplerInfo.name = "skybox";
 		skySamplerInfo.size = {1, 1};
 		skySamplerInfo.type = SpvType::SampledImage;
 		spec.push_back(skySamplerInfo);
@@ -83,6 +84,12 @@ namespace Cacao {
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw skybox when there is no active frame object!");
 		VkFrame f = *activeFrame;
 
+		//If the material isn't set up, do so
+		if(!mat) {
+			mat = skyboxShader->CreateMaterial();
+			mat->WriteValue("skybox", texture);
+		}
+
 		//If the vertex buffer isn't set up, do so
 		if(!nativeData->vbufReady) {
 			//Create allocation info
@@ -108,21 +115,16 @@ namespace Cacao {
 		}
 
 		//Create skybox transform matrix
-		glm::mat4 skyTransform(1.0);
+		glm::mat4 skyTransform = glm::identity<glm::mat4>();
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.x), {1.0, 0.0, 0.0});
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.y), {0.0, 1.0, 0.0});
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.z), {0.0, 0.0, 1.0});
 
-		//Bind skybox shader
-		skyboxShader->Bind();
+		//Activate skybox material
+		mat->Activate();
 
-		//Upload data to shader
-		ShaderUploadData sud;
-		ShaderUploadItem skySampler;
-		skySampler.data = std::any(texture);
-		skySampler.target = "skybox";
-		sud.push_back(skySampler);
-		skyboxShader->UploadData(sud, skyTransform);
+		//Push transformation matrix
+		f.cmd.pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(skyTransform));
 
 		//Bind vertex buffer
 		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
@@ -131,8 +133,7 @@ namespace Cacao {
 		//Draw skybox
 		f.cmd.draw(std::size(skyboxVerts), 1, 0, 0);
 
-		//Unbind skybox shader and texture
-		texture->Unbind();
-		skyboxShader->Unbind();
+		//Deactivate skybox material
+		mat->Deactivate();
 	}
 }

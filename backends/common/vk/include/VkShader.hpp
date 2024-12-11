@@ -7,6 +7,7 @@
 
 #include "VkUtils.hpp"
 #include "Graphics/Shader.hpp"
+#include "Graphics/Textures/Texture.hpp"
 
 namespace Cacao {
 	//Struct for data required for a Vulkan shader
@@ -62,6 +63,5 @@ namespace Cacao {
 	//Raw Vulkan texture (for shader uploading in text)
 	struct RawVkTexture : public RawTexture {
 		vk::ImageView view;
-		int* slot;
 	};
 }

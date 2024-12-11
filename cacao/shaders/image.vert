@@ -7,10 +7,10 @@ layout(std140,binding=0) uniform CacaoGlobals {
     mat4 view;
 } globals;
 
-layout(push_constant) uniform ObjectData {
-	//Unused but required
+//Unused but required
+layout(push_constant) uniform Transformation {
 	mat4 transform;
-} object;
+};
 
 layout(location=0) in vec3 pos;
 layout(location=1) in vec2 tc;

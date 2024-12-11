@@ -11,7 +11,7 @@ namespace Cacao {
 			//Define UI view shader specification
 			ShaderSpec spec;
 			ShaderItemInfo samplerInfo;
-			samplerInfo.entryName = "uiTex";
+			samplerInfo.name = "uiTex";
 			samplerInfo.size = {1, 1};
 			samplerInfo.type = SpvType::SampledImage;
 			spec.push_back(samplerInfo);

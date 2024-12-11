@@ -319,14 +319,9 @@ void PlaygroundApp::Launch() {
 	img = imgFuture.get();
 
 	//Create materials
-	icoMat = std::make_shared<Cacao::Material>();
-	icoMat->shader = icoShader;
-	prisMat = std::make_shared<Cacao::Material>();
-	prisMat->shader = prisShader;
-	Cacao::ShaderUploadItem prismData_Tex;
-	prismData_Tex.target = "texSample";
-	prismData_Tex.data = prisTex.GetManagedAsset().get();
-	prisMat->data.push_back(prismData_Tex);
+	icoMat = icoShader->CreateMaterial();
+	prisMat = prisShader->CreateMaterial();
+	prisMat->WriteValue("texSample", prisTex);
 
 	//Create camera manager
 	cameraManager = std::make_shared<Cacao::Entity>("Camera Manager");

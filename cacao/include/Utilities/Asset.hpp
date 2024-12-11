@@ -118,8 +118,19 @@ namespace Cacao {
 
 		/**
 		 * @brief Access the managed asset
+		 *
+		 * @return The managed asset shared_ptr
 		 */
 		std::shared_ptr<T>& operator->() {
+			return asset;
+		}
+
+		/**
+		 * @brief Access the managed asset in a const manner
+		 *
+		 * @return A const shared_ptr for the managed asset
+		 */
+		const std::shared_ptr<T>& operator->() const {
 			return asset;
 		}
 

@@ -49,7 +49,7 @@ namespace Cacao {
 		 * @param fragment SPIR-V code for the vertex shader
 		 * @param spec The shader specification
 		 *
-		 * @note Not recommended for use by games, but if it's necessary to put SPIR-V in code, go ahead...
+		 * @note Not recommended for use by games, but if it's necessary to embed SPIR-V in code, go ahead...
 		 */
 		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
 
@@ -149,7 +149,6 @@ namespace Cacao {
 			return "SHADER";
 		}
 
-	  private:
 		/**
 		 * @brief Create a new material from this shader
 		 *

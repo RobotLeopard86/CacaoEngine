@@ -23,7 +23,7 @@ namespace Cacao {
 
 	std::shared_future<void> Mesh::CompileAsync() {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the main thread
+			//Invoke OpenGL on the engine thread
 			return InvokeGL([this]() {
 				this->CompileAsync();
 			});

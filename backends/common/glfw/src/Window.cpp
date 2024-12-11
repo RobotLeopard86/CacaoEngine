@@ -158,7 +158,7 @@ namespace Cacao {
 	void Window::Close() {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			Engine::GetInstance()->RunOnMainThread([this]() {
 									 Close();
@@ -180,7 +180,7 @@ namespace Cacao {
 	}
 
 	void Window::UpdateWindowSize() {
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			Engine::GetInstance()->RunOnMainThread([this]() {
 									 UpdateWindowSize();
@@ -197,7 +197,7 @@ namespace Cacao {
 	}
 
 	void Window::UpdateVisibilityState() {
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			Engine::GetInstance()->RunOnMainThread([this]() {
 									 UpdateVisibilityState();
@@ -214,7 +214,7 @@ namespace Cacao {
 	}
 
 	void Window::UpdateModeState(WindowMode lastMode) {
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
 									 UpdateModeState(lastMode);
@@ -257,7 +257,7 @@ namespace Cacao {
 		if(!isOpen) return glm::uvec2 {0};
 		int x, y;
 
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			glm::uvec2* ret = new glm::uvec2(0);
 			Engine::GetInstance()->RunOnMainThread([this, ret]() {
@@ -274,7 +274,7 @@ namespace Cacao {
 	void Window::Update() {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			Engine::GetInstance()->RunOnMainThread([this]() {
 									 Update();
@@ -290,7 +290,7 @@ namespace Cacao {
 	void Window::SetTitle(std::string title) {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 
-		//Run on the main thread if we aren't on it
+		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			Engine::GetInstance()->RunOnMainThread([this, &title]() {
 									 SetTitle(title);

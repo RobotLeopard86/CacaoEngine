@@ -73,6 +73,7 @@ backend_deplist = [
 	dynalo_dep,
 	spdlog_dep,
 	thread_pool_dep,
+	alsoft_dep,
 	vkheaders,
 	vkhpp,
 	vma,

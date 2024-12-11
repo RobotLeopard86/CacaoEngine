@@ -17,8 +17,8 @@ All GLSL vertex shaders must have the uniform `CacaoGlobals` block object, which
 Below is an example of how this should be declared. **The order of members is important!**  
 ```{code-block} glsl
 layout(std140,binding=0) uniform CacaoGlobals {
-    mat4 projection;
-    mat4 view;
+	mat4 projection;
+	mat4 view;
 } globals;
 ``` 
 

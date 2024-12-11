@@ -10,7 +10,13 @@ namespace Cacao {
 	 *
 	 * @note For use by the engine only
 	 */
-	struct RawTexture {};
+	struct RawTexture {
+	  public:
+		int* slot;
+
+	  protected:
+		RawTexture() {}
+	};
 
 	/**
 	 * @brief Base texture asset
@@ -24,7 +30,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the engine thread
 		 */
 		virtual void Bind(int slot) {}
 
@@ -33,7 +39,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the engine thread
 		 */
 		virtual void Unbind() {}
 

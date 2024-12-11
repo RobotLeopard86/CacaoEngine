@@ -10,6 +10,7 @@
 #include "3D/Vertex.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
+#include "Utilities/AssetManager.hpp"
 
 #include <future>
 #include <filesystem>
@@ -17,7 +18,6 @@
 #include "spirv_reflect.hpp"
 #include "spirv_cross.hpp"
 #include "spirv_parser.hpp"
-#include "glm/gtc/type_ptr.hpp"
 
 //See VkShader.hpp for why there's this "impl" thing
 //Basically this just makes it easier to use and keeps the arrow operator method of
@@ -48,7 +48,7 @@ namespace Cacao {
 		//Get shader data block size and offsets
 		bool foundSD = false;
 		for(auto ubo : vr.uniform_buffers) {
-			if(ubo.name.compare("type.PushConstant.ObjectData") == 0 || ubo.name.compare("object") == 0) {
+			if(ubo.name.compare("type.ConstantBuffer.ObjectData") == 0 || ubo.name.compare("object") == 0) {
 				spirv_cross::SPIRType type = vertReflector.get_type(ubo.base_type_id);
 				mod->shaderDataSize = vertReflector.get_declared_struct_size(type);
 				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
@@ -58,7 +58,9 @@ namespace Cacao {
 				break;
 			}
 		}
-		CheckException(foundSD, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Shaders must contain the ObjectData push constant block!");
+		if(!foundSD) {
+			mod->shaderDataSize = 0;
+		}
 
 		//Get valid image slots
 		for(auto tex : fr.sampled_images) {
@@ -165,14 +167,17 @@ namespace Cacao {
 			settings.blend = ShaderCompileSettings::Blending::Standard;
 			settings.depth = ShaderCompileSettings::Depth::Less;
 			settings.input = ShaderCompileSettings::InputType::Standard;
-			DoVkShaderCompile(&(nativeData->impl), settings);
+			for(auto kv : nd->imageSlots) {
+				settings.wrapModes.insert_or_assign(kv.first, vk::SamplerAddressMode::eRepeat);
+			}
+			DoVkShaderCompile(nd, settings);
 		}
 
 		compiled = true;
 	}
 
 	void Shader::_BackendDestruct() {
-		if(auto it = std::find(shaderDataLookup.begin(), shaderDataLookup.end(), this); it != shaderDataLookup.end()) shaderDataLookup.erase(it);
+		if(auto it = shaderDataLookup.find(this); it != shaderDataLookup.end()) shaderDataLookup.erase(it);
 	}
 
 	void DoVkShaderCompile(VkShaderData* shader, const ShaderCompileSettings& settings) {
@@ -265,6 +270,7 @@ namespace Cacao {
 		//Create descriptor set layout
 		std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
 		dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
+		if(shader->shaderDataSize > 0) dsBindings.emplace_back(1, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
 		for(auto slot : shader->imageSlots) {
 			dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
 		}
@@ -345,206 +351,17 @@ namespace Cacao {
 		std::memcpy(globalsMem, cvp, sizeof(glm::mat4) * 2);
 	}
 
-	/*void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!");
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!");
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!");
-		CheckException(!(nd->shaderDataSize == 0 && nd->imageSlots.size() == 0 && data.size() > 0), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!");
+	std::shared_ptr<Material> Shader::CreateMaterial() {
+		AssetHandle<Shader> selfHandle = AssetManager::GetInstance()->GetHandleFromPointer(this);
 
-		//Do data upload
-		std::map<std::string, ShaderItemInfo> foundItems;
-		for(ShaderUploadItem& item : data) {
-			//Attempt to locate item in shader spec
-			bool found = false;
-			if(!foundItems.contains(item.target)) {
-				for(ShaderItemInfo sii : specification) {
-					foundItems.insert_or_assign(sii.entryName, sii);
-					if(sii.entryName.compare(item.target) == 0) {
-						found = true;
-						break;
-					}
-				}
-			}
-			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!");
-
-			//Grab shader item info
-			ShaderItemInfo info = foundItems[item.target];
-
-			//Find offset or image binding
-			unsigned int offset = 0;
-			VkShaderData::ImageSlot slot;
-			if(info.type == SpvType::SampledImage) {
-				CheckException(nd->imageSlots.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
-				slot = nd->imageSlots[item.target];
-			} else {
-				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
-				offset = nd->offsets[item.target];
-			}
-
-			//Turn dimensions into single number (easier for uploading)
-			int dims = (4 * info.size.y) - (4 - info.size.x);
-			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!");
-			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!");
-
-			//Cast data to correct type to get it out of std::any
-			unsigned char* data;
-			std::size_t dataSize = 0;
-			try {
-				switch(info.type) {
-					case SpvType::Boolean:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<bool>(&item.data));
-								dataSize = sizeof(bool);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec2>(item.data))));
-								dataSize = sizeof(glm::bvec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec3>(item.data))));
-								dataSize = sizeof(glm::bvec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec4>(item.data))));
-								dataSize = sizeof(glm::bvec4);
-								break;
-						}
-						break;
-					case SpvType::Int:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<int>(&item.data));
-								dataSize = sizeof(int);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec2>(item.data))));
-								dataSize = sizeof(glm::ivec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec3>(item.data))));
-								dataSize = sizeof(glm::ivec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec4>(item.data))));
-								dataSize = sizeof(glm::ivec4);
-								break;
-						}
-						break;
-					case SpvType::SampledImage:
-						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!");
-
-						//Bind texture to the slot specified
-						if(item.data.type() == typeid(Texture2D*)) {
-							Texture2D* tex = std::any_cast<Texture2D*>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(Cubemap*)) {
-							Cubemap* tex = std::any_cast<Cubemap*>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(UIView*)) {
-							UIView* view = std::any_cast<UIView*>(item.data);
-							view->Bind(slot.binding);
-						} else if(item.data.type() == typeid(AssetHandle<Texture2D>)) {
-							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(AssetHandle<Cubemap>)) {
-							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
-							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
-							view->Bind(slot.binding);
-						} else if(item.data.type() == typeid(RawVkTexture)) {
-							RawVkTexture raw = std::any_cast<RawVkTexture>(item.data);
-							vk::DescriptorImageInfo dii(slot.sampler, raw.view, vk::ImageLayout::eShaderReadOnlyOptimal);
-							vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot.binding, 0, vk::DescriptorType::eCombinedImageSampler, dii);
-							activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, wds);
-							*(raw.slot) = slot.binding;
-						} else {
-							Logging::EngineLog(item.data.type().name());
-							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!");
-						}
-
-						break;
-					case SpvType::UInt:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<unsigned int>(&item.data));
-								dataSize = sizeof(unsigned int);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec2>(item.data))));
-								dataSize = sizeof(glm::uvec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec3>(item.data))));
-								dataSize = sizeof(glm::uvec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec4>(item.data))));
-								dataSize = sizeof(glm::uvec4);
-								break;
-						}
-						break;
-					case SpvType::Float:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<float>(&item.data));
-								dataSize = sizeof(float);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec2>(item.data))));
-								dataSize = sizeof(glm::vec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec3>(item.data))));
-								dataSize = sizeof(glm::vec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec4>(item.data))));
-								dataSize = sizeof(glm::vec4);
-								break;
-							case 6:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2>(item.data))));
-								dataSize = sizeof(glm::mat2);
-								break;
-							case 7:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2x3>(item.data))));
-								dataSize = sizeof(glm::mat2x3);
-								break;
-							case 8:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2x4>(item.data))));
-								dataSize = sizeof(glm::mat2x4);
-								break;
-							case 10:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3x2>(item.data))));
-								dataSize = sizeof(glm::mat3x2);
-								break;
-							case 11:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3>(item.data))));
-								dataSize = sizeof(glm::mat3);
-								break;
-							case 12:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3x4>(item.data))));
-								dataSize = sizeof(glm::mat3x4);
-								break;
-							case 14:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4x2>(item.data))));
-								dataSize = sizeof(glm::mat4x2);
-								break;
-							case 15:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4x3>(item.data))));
-								dataSize = sizeof(glm::mat4x3);
-								break;
-							case 16:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4>(item.data))));
-								dataSize = sizeof(glm::mat4);
-								break;
-						}
-						break;
-				}
-			} catch(const std::bad_cast&) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "Failed cast of shader upload value to type specified in target!");
-			}
+		//Unfortunately, we have to do it this way because make_shared doesn't work well with friend classes
+		Material* m;
+		if(selfHandle.IsNull()) {
+			//We should never have to do this except for engine-internal shaders that aren't cached
+			m = new Material(this);
+		} else {
+			m = new Material(selfHandle);
 		}
-	}*/
+		return std::shared_ptr<Material>(m);
+	}
 }
