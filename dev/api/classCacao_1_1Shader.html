@@ -603,7 +603,7 @@
 <dd><p>Create a shader from SPIR-V code. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Not recommended for use by games, but if it’s necessary to put SPIR-V in code, go ahead… </p>
+<p>Not recommended for use by games, but if it’s necessary to embed SPIR-V in code, go ahead… </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -738,6 +738,17 @@
 <dd><p>Gets the type of this asset. Needed for safe downcasting from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a>. </p>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader14CreateMaterialEv">
+<span id="_CPPv3N5Cacao6Shader14CreateMaterialEv"></span><span id="_CPPv2N5Cacao6Shader14CreateMaterialEv"></span><span id="Cacao::Shader::CreateMaterial"></span><span class="target" id="classCacao_1_1Shader_1a791a4bd683d2f8cc22caa99eecbce64c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CreateMaterial</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader14CreateMaterialEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new material from this shader. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new material that can be used for drawing </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
@@ -829,6 +840,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7IsBoundEv"><code class="docutils literal notranslate"><span class="pre">Shader::IsBound()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7GetSpecEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetSpec()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetType()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader14CreateMaterialEv"><code class="docutils literal notranslate"><span class="pre">Shader::CreateMaterial()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"><code class="docutils literal notranslate"><span class="pre">Shader::UploadCacaoGlobals()</span></code></a></li>
 </ul>
 </li>

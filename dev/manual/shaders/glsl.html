@@ -418,8 +418,8 @@
 <p>All GLSL vertex shaders must have the uniform <code class="docutils literal notranslate"><span class="pre">CacaoGlobals</span></code> block object, which is how engine information is passed to shaders.<br />
 Below is an example of how this should be declared. <strong>The order of members is important!</strong></p>
 <div class="highlight-glsl notranslate"><div class="highlight"><pre><span></span><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span><span class="n">binding</span><span class="o">=</span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">uniform</span><span class="w"> </span><span class="n">CacaoGlobals</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">mat4</span><span class="w"> </span><span class="n">projection</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">mat4</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
+<span class="w">	</span><span class="kt">mat4</span><span class="w"> </span><span class="n">projection</span><span class="p">;</span>
+<span class="w">	</span><span class="kt">mat4</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
 <span class="p">}</span><span class="w"> </span><span class="n">globals</span><span class="p">;</span>
 </pre></div>
 </div>

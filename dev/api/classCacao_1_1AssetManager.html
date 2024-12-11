@@ -736,6 +736,25 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T">
+<span id="_CPPv3I0EN5Cacao12AssetManager20GetHandleFromPointerEP1T"></span><span id="_CPPv2I0EN5Cacao12AssetManager20GetHandleFromPointerEP1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1AssetManager_1a6d7d65a583ac6a2a25a3a29c500e2a9c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T" title="Cacao::AssetManager::GetHandleFromPointer::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetHandleFromPointer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T" title="Cacao::AssetManager::GetHandleFromPointer::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get an <a class="reference internal" href="classCacao_1_1AssetHandle.html#classCacao_1_1AssetHandle"><span class="std std-ref">AssetHandle</span></a> from the asset’s stored pointer. </p>
+<p>This is used for assets to be able to retrieve their own handle, typically for passing to another object</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ptr</strong> – A raw pointer to the asset (typically obtained from this)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An asset handle, which will be a null handle if the asset was not found in the cache </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
@@ -813,6 +832,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadSound()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadFont()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::UncacheAsset()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T"><code class="docutils literal notranslate"><span class="pre">AssetManager::GetHandleFromPointer()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager11GetInstanceEv"><code class="docutils literal notranslate"><span class="pre">AssetManager::GetInstance()</span></code></a></li>
 </ul>
 </li>

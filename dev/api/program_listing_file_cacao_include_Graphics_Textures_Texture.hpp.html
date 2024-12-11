@@ -375,7 +375,13 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">RawTexture</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">RawTexture</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">slot</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
+<span class="w">        </span><span class="n">RawTexture</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Texture</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
