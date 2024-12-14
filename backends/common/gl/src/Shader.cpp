@@ -53,6 +53,9 @@ namespace Cacao {
 				if(ubo.name.compare("type.cacao_globals") == 0 || ubo.name.compare("cacao_globals") == 0 || ubo.name.compare("type.ConstantBuffer.CacaoGlobals") == 0 || ubo.name.compare("globals") == 0) {
 					vertGLSL.set_name(ubo.base_type_id, "CacaoGlobals");
 				}
+				if(ubo.name.compare("type.object_data") == 0 || ubo.name.compare("object_data") == 0 || ubo.name.compare("type.ConstantBuffer.ObjectData") == 0 || ubo.name.compare("object") == 0) {
+					vertGLSL.set_name(ubo.base_type_id, "ObjectData");
+				}
 			}
 			for(auto& out : vertRes.stage_outputs) {
 				if(out.name.starts_with("out.var.")) {
@@ -62,8 +65,9 @@ namespace Cacao {
 				}
 			}
 			for(auto& pcb : vertRes.push_constant_buffers) {
-				if(pcb.name.compare("type.PushConstant.ObjectData") == 0 || pcb.name.compare("object") == 0) {
-					vertGLSL.set_name(pcb.base_type_id, "ObjectData");
+				if(ubo.name.compare("type.transformation") == 0 || ubo.name.compare("transformation") == 0 || pcb.name.compare("type.PushConstant.Transformation") == 0 || pcb.name.compare("transform") == 0) {
+					vertGLSL.set_name(pcb.base_type_id, "Transformation");
+					vertGLSL.set_name(pcb.id, "transform");
 				}
 			}
 		}
@@ -265,15 +269,21 @@ namespace Cacao {
 		glDeleteShader(compiledVertexShader);
 		glDeleteShader(compiledFragmentShader);
 
-		//Link global UBO
+		//Link globals UBO
 		GLuint globalUBOIdx = glGetUniformBlockIndex(program, "CacaoGlobals");
 		CheckException(globalUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the Cacao Engine globals uniform block!");
 		glUniformBlockBinding(program, globalUBOIdx, 0);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalsUBO);
 
+		//Set up transformation matrix
 		if(!nativeData->unusedTransform) {
-			CheckException(glGetUniformLocation(program, "object.transform") != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the transformation matrix uniform!");
+			GLuint transformULoc = glGetUniformLocation(program, "transform.transform");
+			CheckException(transformULoc != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the transformation matrix uniform!");
+			nativeData->transformLoc = transformULoc;
 		}
+
+		//Confirm object data UBO
+		GLuint objectUBOIdx = glGetUniformBlockIndex(program, "ObjectData");
 
 		//Increment UBO index counter
 		ShaderData::uboIndexCounter++;
@@ -325,7 +335,7 @@ namespace Cacao {
 		bound = false;
 	}
 
-	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
+	/* void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			//Invoke OpenGL on the engine thread
 			InvokeGL([this, data, transformation]() {
@@ -528,7 +538,7 @@ namespace Cacao {
 			Unbind();
 			glUseProgram(currentlyBound);
 		}
-	}
+	}*/
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {

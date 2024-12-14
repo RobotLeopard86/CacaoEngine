@@ -10,6 +10,7 @@ namespace Cacao {
 		GLuint gpuID;
 		std::string vertexCode, fragmentCode;
 		bool unusedTransform;
+		GLuint transformLoc;
 
 		static GLuint uboIndexCounter;
 	};

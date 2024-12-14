@@ -249,4 +249,6 @@ namespace Cacao {
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {}
+	void UIViewShaderManager::PreCompileHook() {}
+	void PreShaderCompileHook(Shader*) {}
 }
