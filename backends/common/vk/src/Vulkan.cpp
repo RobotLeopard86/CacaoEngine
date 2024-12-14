@@ -474,7 +474,6 @@ namespace Cacao {
 
 		//Create the material for the UI quad
 		uiQuadMat = uivsm->CreateMaterial();
-		uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {
@@ -662,6 +661,7 @@ namespace Cacao {
 			project[3][1] -= 2; //Move into viewable area
 
 			//Activate UI quad material
+			uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
 			uiQuadMat->Activate();
 
 			//Push identity transform matrix

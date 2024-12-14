@@ -14,6 +14,8 @@
 #define EXPORT
 #endif
 
+inline bool exiting = false;
+
 class PlaygroundApp {
   public:
 	static PlaygroundApp* GetInstance() {
@@ -99,10 +101,12 @@ class SussyScript final : public Cacao::Script {
 		Cacao::Logging::ClientLog("I'm asleep!");
 	}
 	void Exit() {
+		exiting = true;
 		Cacao::Engine::GetInstance()->GetThreadPool()->enqueue_detach([]() {
 			PlaygroundApp::GetInstance()->PlayStopTone();
 			Cacao::Engine::GetInstance()->Stop();
 		});
+		SetActive(false);
 	}
 	void OnTick(double timestep) override {
 		if(Cacao::Input::GetInstance()->IsKeyPressed(CACAO_KEY_ESCAPE)) Exit();
@@ -231,6 +235,7 @@ class PingPong : public Cacao::Script {
 		GetOwner().lock()->GetLocalTransform().SetPosition(p1);
 	}
 	void OnTick(double timestep) override {
+		if(exiting) SetActive(false);
 		float distanceToInterpolate = timestep;
 
 		if(forward) {
@@ -268,6 +273,7 @@ class PingPong : public Cacao::Script {
 class Spinner : public Cacao::Script {
   public:
 	void OnTick(double timestep) {
+		if(exiting) SetActive(false);
 		glm::vec3 rot = GetOwner().lock()->GetLocalTransform().GetRotation();
 		rot.y += 50.0f * timestep;
 		while(rot.y >= 360) rot.y -= 360;

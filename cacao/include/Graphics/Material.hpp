@@ -32,7 +32,7 @@ namespace Cacao {
 		 * @return A handle to the shader object or a null handle if the backup raw shader is in use
 		 */
 		AssetHandle<Shader> GetShader() {
-			return shader;
+			return shader.shaderHandle;
 		}
 
 		/**
@@ -116,11 +116,18 @@ namespace Cacao {
 		//Scary raw constructor
 		Material(Shader* rawShader);
 
-		//The shader to use
-		AssetHandle<Shader> shader;
+		//Shader wrapper
+		struct ShaderWrapper {
+			//The shader to use
+			AssetHandle<Shader> shaderHandle;
 
-		//Backup shader pointer in case the shader isn't in the asset cache (DANGER)
-		Shader* rawShader;
+			//Backup shader pointer in case the shader isn't in the asset cache (DANGER)
+			Shader* rawShader;
+
+			Shader* operator->() {
+				return shaderHandle.IsNull() ? rawShader : shaderHandle.GetManagedAsset().get();
+			}
+		} shader;
 
 		//Common initialization
 		void _CommonInit();

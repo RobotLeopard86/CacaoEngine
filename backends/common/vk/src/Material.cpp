@@ -5,7 +5,7 @@
 #include "VkShader.hpp"
 #include "ActiveItems.hpp"
 
-#define shaderND (&(rawShader->nativeData->impl))
+#define shaderND (&(shader->nativeData->impl))
 
 namespace Cacao {
 	struct Material::MaterialData {
@@ -14,6 +14,16 @@ namespace Cacao {
 	};
 
 	void Material::_CommonInit() {
+		//Create native data
+		nativeData.reset(new MaterialData());
+
+		//Yeah... we're not active when constructed, right?
+		active = false;
+
+		//We don't need to do anything else if we don't need a shader data buffer
+		if(shaderND->shaderDataSize <= 0) return;
+
+		//Create a uniform buffer
 		vk::BufferCreateInfo uboCI({}, shaderND->shaderDataSize, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
 		try {
@@ -25,23 +35,24 @@ namespace Cacao {
 			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
 		}
 
+		//Map UBO memory
 		CheckException(allocator.mapMemory(nativeData->ubo.alloc, &(nativeData->uboMem)) == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to map material uniform buffer!");
 	}
 
 	Material::Material(AssetHandle<Shader> shader)
-	  : shader(shader), rawShader(shader.GetManagedAsset().get()) {
+	  : shader({.shaderHandle = shader, .rawShader = shader.GetManagedAsset().get()}) {
 		_CommonInit();
 	}
 
 	Material::Material(Shader* rawShader)
-	  : shader(), rawShader(rawShader) {
+	  : shader({.shaderHandle = {}, .rawShader = rawShader}) {
 		_CommonInit();
 	}
 
-	Material::Material(const Material& other)
-	  : Material(other.rawShader) {
+	Material::Material(const Material& other) {
 		shader = other.shader;
 		values = other.values;
+		_CommonInit();
 	}
 
 	Material& Material::operator=(const Material& other) {
@@ -56,17 +67,18 @@ namespace Cacao {
 
 	Material::~Material() {
 		if(active) Deactivate();
+		if(shaderND->shaderDataSize <= 0) return;
 		allocator.unmapMemory(nativeData->ubo.alloc);
 		allocator.destroyBuffer(nativeData->ubo.obj, nativeData->ubo.alloc);
 	}
 
 	void Material::Activate() {
 		CheckException(!active, Exception::GetExceptionCodeFromMeaning("BadState"), "Cannot activate active material!");
-		CheckException(rawShader->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot activate material with uncompiled shader!");
+		CheckException(shader->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot activate material with uncompiled shader!");
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot activate material when their is no active frame!");
 
 		//Bind shader
-		rawShader->Bind();
+		shader->Bind();
 
 		//Check if we have to do anything else (some shaders have no parameters)
 		if(shaderND->shaderDataSize == 0 && shaderND->imageSlots.size() == 0) goto activate_done;
@@ -77,7 +89,7 @@ namespace Cacao {
 			void* current;
 			for(auto kv : values) {
 				//Don't bother if it's not an image
-				if(kv.second.index() > 15) continue;
+				if(kv.second.index() > 14) continue;
 
 				//Get buffer offset
 				uint32_t offset = shaderND->offsets.at(kv.first);
@@ -201,17 +213,24 @@ namespace Cacao {
 			}
 		}
 
+		//Bind UBO
+		if(shaderND->shaderDataSize > 0) {
+			vk::DescriptorBufferInfo dbi(nativeData->ubo.obj, 0, vk::WholeSize);
+			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
+			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+		}
+
 		//Bind any and all textures
 		for(auto& kv : values) {
 			ValueContainer& vc = kv.second;
-			if(vc.index() < 16) continue;
+			if(vc.index() < 15) continue;
 
 			//Get the image slot
 			int slot = shaderND->imageSlots.at(kv.first).binding;
 
 			//Actually bind the texture
 			switch(vc.index()) {
-				case 16: {
+				case 15: {
 					RawVkTexture* rvkt = static_cast<RawVkTexture*>(std::get<RawTexture*>(vc));
 					*(rvkt->slot) = slot;
 					vk::DescriptorImageInfo dii(VK_NULL_HANDLE, rvkt->view, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -219,16 +238,16 @@ namespace Cacao {
 					activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 					break;
 				}
-				case 17:
+				case 16:
 					std::get<Texture*>(vc)->Bind(slot);
+					break;
+				case 17:
+					std::get<AssetHandle<Cubemap>>(vc)->Bind(slot);
 					break;
 				case 18:
 					std::get<AssetHandle<Texture2D>>(vc)->Bind(slot);
 					break;
 				case 19:
-					std::get<AssetHandle<Cubemap>>(vc)->Bind(slot);
-					break;
-				case 20:
 					std::get<std::shared_ptr<UIView>>(vc)->Bind(slot);
 					break;
 			}
@@ -242,33 +261,42 @@ namespace Cacao {
 		CheckException(active, Exception::GetExceptionCodeFromMeaning("BadState"), "Cannot deactivate inactive material!");
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot deactivate material when their is no active frame!");
 
+		//Unbind UBO
+		if(shaderND->shaderDataSize > 0) {
+			vk::DescriptorBufferInfo dbi(VK_NULL_HANDLE, 0, vk::WholeSize);
+			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
+			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+		}
+
 		//Unbind all textures
 		for(auto& kv : values) {
 			ValueContainer& vc = kv.second;
-			if(vc.index() < 16) continue;
+			if(vc.index() < 15) continue;
 			switch(vc.index()) {
-				case 16: {
+				case 15: {
 					vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
 					vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(static_cast<RawVkTexture*>(std::get<RawTexture*>(vc))->slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
 					activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 					break;
 				}
-				case 17:
+				case 16:
 					std::get<Texture*>(vc)->Unbind();
+					break;
+				case 17:
+					std::get<AssetHandle<Cubemap>>(vc)->Unbind();
 					break;
 				case 18:
 					std::get<AssetHandle<Texture2D>>(vc)->Unbind();
 					break;
 				case 19:
-					std::get<AssetHandle<Cubemap>>(vc)->Unbind();
-					break;
-				case 20:
 					std::get<std::shared_ptr<UIView>>(vc)->Unbind();
 					break;
 			}
 		}
 
 		//Unbind shader
-		rawShader->Unbind();
+		shader->Unbind();
+
+		active = false;
 	}
 }

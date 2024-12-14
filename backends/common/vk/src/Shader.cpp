@@ -48,7 +48,7 @@ namespace Cacao {
 		//Get shader data block size and offsets
 		bool foundSD = false;
 		for(auto ubo : vr.uniform_buffers) {
-			if(ubo.name.compare("type.ConstantBuffer.ObjectData") == 0 || ubo.name.compare("object") == 0) {
+			if(ubo.name.compare("ObjectData") == 0 || ubo.name.compare("object_data") == 0 || ubo.name.compare("type.ConstantBuffer.ObjectData") == 0 || ubo.name.compare("object") == 0) {
 				spirv_cross::SPIRType type = vertReflector.get_type(ubo.base_type_id);
 				mod->shaderDataSize = vertReflector.get_declared_struct_size(type);
 				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
