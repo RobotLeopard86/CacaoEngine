@@ -391,7 +391,7 @@
 <span class="w">            </span><span class="n">RawTexture</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">Texture</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Cubemap</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Texture2D</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIView</span><span class="o">&gt;&gt;</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Shader</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetShader</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">shader</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">shader</span><span class="p">.</span><span class="n">shaderHandle</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">WriteValue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">ValueContainer</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -439,11 +439,18 @@
 <span class="w">        </span><span class="c1">//Scary raw constructor</span>
 <span class="w">        </span><span class="n">Material</span><span class="p">(</span><span class="n">Shader</span><span class="o">*</span><span class="w"> </span><span class="n">rawShader</span><span class="p">);</span>
 
-<span class="w">        </span><span class="c1">//The shader to use</span>
-<span class="w">        </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Shader</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shader</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">//Shader wrapper</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">ShaderWrapper</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">//The shader to use</span>
+<span class="w">            </span><span class="n">AssetHandle</span><span class="o">&lt;</span><span class="n">Shader</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shaderHandle</span><span class="p">;</span>
 
-<span class="w">        </span><span class="c1">//Backup shader pointer in case the shader isn&#39;t in the asset cache (DANGER)</span>
-<span class="w">        </span><span class="n">Shader</span><span class="o">*</span><span class="w"> </span><span class="n">rawShader</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">//Backup shader pointer in case the shader isn&#39;t in the asset cache (DANGER)</span>
+<span class="w">            </span><span class="n">Shader</span><span class="o">*</span><span class="w"> </span><span class="n">rawShader</span><span class="p">;</span>
+
+<span class="w">            </span><span class="n">Shader</span><span class="o">*</span><span class="w"> </span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">shaderHandle</span><span class="p">.</span><span class="n">IsNull</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">rawShader</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shaderHandle</span><span class="p">.</span><span class="n">GetManagedAsset</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">shader</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Common initialization</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_CommonInit</span><span class="p">();</span>
