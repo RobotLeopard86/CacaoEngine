@@ -24,6 +24,8 @@ bool backendShutdownAfterWindow = true;
 
 using ConditionFunction = std::function<bool(const vk::PhysicalDevice&)>;
 
+constexpr char* nul = "NULIMG";
+
 namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
 	Allocated<vk::Buffer> uiQuadUBO;
@@ -182,7 +184,7 @@ namespace Cacao {
 
 		//Create memory allocator
 		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);
-		vma::AllocatorCreateInfo allocatorCI({}, physDev, dev, 0UL, 0, 0, 0, &vkFuncs, vk_instance, VK_API_VERSION_1_2);
+		vma::AllocatorCreateInfo allocatorCI({}, physDev, dev, 0UL, 0, 0, 0, &vkFuncs, vk_instance, VK_API_VERSION_1_3);
 		try {
 			allocator = vma::createAllocator(allocatorCI);
 		} catch(vk::SystemError& err) {
@@ -468,7 +470,7 @@ namespace Cacao {
 		ShaderCompileSettings settings {};
 		settings.blend = ShaderCompileSettings::Blending::Src;
 		settings.depth = ShaderCompileSettings::Depth::Off;
-		settings.input = ShaderCompileSettings::InputType::VertexAndTexCoord;
+		settings.input = ShaderCompileSettings::InputType::VertexOnly;
 		settings.wrapModes.insert_or_assign("uiTex", vk::SamplerAddressMode::eRepeat);
 		DoVkShaderCompile(sd, settings);
 
@@ -493,11 +495,14 @@ namespace Cacao {
 	}
 
 	void RenderController::Shutdown() {
-		//Wait for the device to be idle
+		//Wait for the device to be idle so it's safe to destroy things
 		dev.waitIdle();
 
 		//Clean up immediate objects
 		Immediate::Cleanup();
+
+		//Release UI quad material
+		uiQuadMat.reset();
 
 		if(didGenShaders) {
 			//Cleanup UI shaders

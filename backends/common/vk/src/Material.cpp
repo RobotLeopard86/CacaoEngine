@@ -216,7 +216,7 @@ namespace Cacao {
 		//Bind UBO
 		if(shaderND->shaderDataSize > 0) {
 			vk::DescriptorBufferInfo dbi(nativeData->ubo.obj, 0, vk::WholeSize);
-			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
+			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
 			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 		}
 
@@ -264,7 +264,7 @@ namespace Cacao {
 		//Unbind UBO
 		if(shaderND->shaderDataSize > 0) {
 			vk::DescriptorBufferInfo dbi(VK_NULL_HANDLE, 0, vk::WholeSize);
-			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
+			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
 			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 		}
 
