@@ -82,7 +82,7 @@ namespace Cacao {
 					alloc = _alloc;
 					info.glyph.image = {.alloc = alloc, .obj = image};
 					vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,
-						{vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eOne},
+						{vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eOne},
 						{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 					info.glyph.view = dev.createImageView(viewCI);
 					subLayout = dev.getImageSubresourceLayout(image, vk::ImageSubresource(vk::ImageAspectFlagBits::eColor, 0, 0));
@@ -156,6 +156,7 @@ namespace Cacao {
 
 		//Create temporary material
 		std::shared_ptr<Material> m = TextShaders::shader->CreateMaterial();
+		tempMatHandles.emplace_back(m);
 
 		//Write material values (texture is not written because it changes frequently and so must be done manually)
 		m->WriteValue("color", color);
@@ -240,6 +241,7 @@ namespace Cacao {
 
 		//Make temporary material
 		std::shared_ptr<Material> m = ImageShaders::shader->CreateMaterial();
+		tempMatHandles.emplace_back(m);
 		m->WriteValue("image", tex);
 
 		//Activate material

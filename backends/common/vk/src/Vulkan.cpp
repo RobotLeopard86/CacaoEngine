@@ -24,8 +24,6 @@ bool backendShutdownAfterWindow = true;
 
 using ConditionFunction = std::function<bool(const vk::PhysicalDevice&)>;
 
-constexpr char* nul = "NULIMG";
-
 namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
 	Allocated<vk::Buffer> uiQuadUBO;
@@ -111,7 +109,6 @@ namespace Cacao {
 		//Find best device
 		std::vector<const char*> requiredDevExts = {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-			VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME,
 			VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME};
 #ifdef __linux__
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
@@ -160,14 +157,8 @@ namespace Cacao {
 		vk::DeviceQueueCreateInfo queueCI({}, 0, 1, &qp);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
-		vk::PhysicalDeviceExtendedDynamicState3FeaturesEXT extendedDynamicState3Features {};
-		extendedDynamicState3Features.extendedDynamicState3ColorBlendEnable = VK_TRUE;
-		extendedDynamicState3Features.extendedDynamicState3ColorBlendEquation = VK_TRUE;
-		extendedDynamicState3Features.pNext = &extendedDynamicStateFeatures;
-		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicState3Features);
-		vk::PhysicalDeviceRobustness2FeaturesEXT robustnessFeatures(VK_FALSE, VK_FALSE, VK_TRUE, &sync2Features);
-		vk::PhysicalDeviceFeatures2 deviceFeatures2 {};
-		deviceFeatures2.pNext = &robustnessFeatures;
+		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
+		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &sync2Features);
 		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts, nullptr, &deviceFeatures2);
 		try {
 			dev = physDev.createDevice(deviceCI);
@@ -399,6 +390,30 @@ namespace Cacao {
 			EngineAssert(false, emsg.str());
 		}
 
+		//Create "null" buffer
+		vk::BufferCreateInfo nullBufCI({}, 1, vk::BufferUsageFlagBits::eUniformBuffer);
+		try {
+			auto [buf, alloc] = allocator.createBuffer(nullBufCI, nullAllocCI);
+			nullBuffer = {.alloc = alloc, .obj = buf};
+		} catch(vk::SystemError& err) {
+			allocator.destroyImage(nullImage.obj, nullImage.alloc);
+			allocator.unmapMemory(uiUBO.alloc);
+			allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			allocator.destroyBuffer(uiQuadBuffer.obj, uiQuadBuffer.alloc);
+			Immediate::Cleanup();
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create null buffer: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
 		//Transition "null" image to shader read-only layout
 		vk::CommandBufferBeginInfo nullImageStateBegin {};
 		imm.cmd.reset();
@@ -512,6 +527,8 @@ namespace Cacao {
 		}
 
 		//Destroy Vulkan objects
+		allocator.destroyBuffer(nullBuffer.obj, nullBuffer.alloc);
+		dev.destroyImageView(nullView);
 		allocator.destroyImage(nullImage.obj, nullImage.alloc);
 		allocator.unmapMemory(uiUBO.alloc);
 		allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
@@ -636,7 +653,7 @@ namespace Cacao {
 		vk::RenderingAttachmentInfo colorAttachment(imageViews[imgIdx], vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {clearColorLinear.r, clearColorLinear.g, clearColorLinear.b, 1.0f}));
 		vk::RenderingAttachmentInfo depthAttachment(depthView, vk::ImageLayout::eDepthAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
-			vk::AttachmentStoreOp::eDontCare, vk::ClearDepthStencilValue(1.0f, 0.0f));
+			vk::AttachmentStoreOp::eStore, vk::ClearDepthStencilValue(1.0f, 0.0f));
 		vk::RenderingInfo renderingInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment, &depthAttachment);
 		f.cmd.beginRendering(renderingInfo);
 

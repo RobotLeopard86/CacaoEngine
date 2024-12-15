@@ -222,6 +222,10 @@ namespace Cacao {
 			}
 		}
 		allocatedObjects.clear();
+		for(auto& ptr : tempMatHandles) {
+			ptr.reset();
+		}
+		tempMatHandles.clear();
 
 		//Restore the real frame object
 		VkFrame* fake = activeFrame;

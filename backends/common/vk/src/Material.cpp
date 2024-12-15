@@ -11,6 +11,7 @@ namespace Cacao {
 	struct Material::MaterialData {
 		Allocated<vk::Buffer> ubo;
 		void* uboMem;
+		bool didAllocUBO = false;
 	};
 
 	void Material::_CommonInit() {
@@ -22,6 +23,9 @@ namespace Cacao {
 
 		//We don't need to do anything else if we don't need a shader data buffer
 		if(shaderND->shaderDataSize <= 0) return;
+
+		//Yes, we allocated a UBO
+		nativeData->didAllocUBO = true;
 
 		//Create a uniform buffer
 		vk::BufferCreateInfo uboCI({}, shaderND->shaderDataSize, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
@@ -67,7 +71,7 @@ namespace Cacao {
 
 	Material::~Material() {
 		if(active) Deactivate();
-		if(shaderND->shaderDataSize <= 0) return;
+		if(!nativeData->didAllocUBO) return;
 		allocator.unmapMemory(nativeData->ubo.alloc);
 		allocator.destroyBuffer(nativeData->ubo.obj, nativeData->ubo.alloc);
 	}
@@ -81,10 +85,10 @@ namespace Cacao {
 		shader->Bind();
 
 		//Check if we have to do anything else (some shaders have no parameters)
-		if(shaderND->shaderDataSize == 0 && shaderND->imageSlots.size() == 0) goto activate_done;
+		if(nativeData->didAllocUBO && shaderND->imageSlots.size() == 0) goto activate_done;
 
 		//Upload everything to the GPU that isn't an image
-		if(shaderND->shaderDataSize != 0) {
+		if(nativeData->didAllocUBO) {
 			std::size_t currentsz;
 			void* current;
 			for(auto kv : values) {
@@ -211,10 +215,8 @@ namespace Cacao {
 				//Free the memory used for the copy source
 				free(current);
 			}
-		}
 
-		//Bind UBO
-		if(shaderND->shaderDataSize > 0) {
+			//Bind object UBO
 			vk::DescriptorBufferInfo dbi(nativeData->ubo.obj, 0, vk::WholeSize);
 			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
 			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
@@ -262,8 +264,8 @@ namespace Cacao {
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot deactivate material when their is no active frame!");
 
 		//Unbind UBO
-		if(shaderND->shaderDataSize > 0) {
-			vk::DescriptorBufferInfo dbi(VK_NULL_HANDLE, 0, vk::WholeSize);
+		if(nativeData->didAllocUBO) {
+			vk::DescriptorBufferInfo dbi(nullBuffer.obj, 0, vk::WholeSize);
 			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
 			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
 		}

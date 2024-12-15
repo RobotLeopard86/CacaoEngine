@@ -67,6 +67,8 @@ namespace Cacao {
 		 * @param sz The new size in pixels
 		 */
 		void SetSize(glm::uvec2 sz) {
+			//Mark the screen dirty to force a re-render at the new size
+			if(screen) screen->ForceDirty();
 			size = sz;
 		}
 
