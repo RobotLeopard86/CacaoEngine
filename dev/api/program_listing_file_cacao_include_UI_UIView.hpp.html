@@ -398,6 +398,8 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetSize</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">sz</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">//Mark the screen dirty to force a re-render at the new size</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span><span class="w"> </span><span class="n">screen</span><span class="o">-&gt;</span><span class="n">ForceDirty</span><span class="p">();</span>
 <span class="w">            </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sz</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
