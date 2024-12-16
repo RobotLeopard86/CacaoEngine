@@ -18,6 +18,6 @@ layout(location=0) out CacaoSky {
 void main() {
 	V2F.texCoords = pos;
 	mat4 view = mat4(mat3(globals.view));
-	vec4 skypos = globals.projection * view * vec4(pos, 1.0);
+	vec4 skypos = globals.projection * view * transform * vec4(pos, 1.0);
 	gl_Position = skypos.xyww;
 }

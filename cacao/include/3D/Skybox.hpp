@@ -34,7 +34,7 @@ namespace Cacao {
 		 * @param other The skybox to copy from
 		 */
 		Skybox(const Skybox& other)
-		  : Asset(other.compiled), rotation(other.rotation), textureOwner(false), texture(other.texture) {
+		  : Asset(other.compiled), rotation(other.rotation), texture(other.texture) {
 			_InitCopyND();
 		}
 
@@ -106,7 +106,6 @@ namespace Cacao {
 		glm::vec3 rotation;///<The rotation of the skybox
 
 	  private:
-		bool textureOwner;
 		AssetHandle<Cubemap> texture;
 		std::shared_ptr<Material> mat;
 

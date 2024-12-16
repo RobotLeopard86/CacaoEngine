@@ -7,6 +7,8 @@
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "GLUtils.hpp"
+#include "Utilities/AssetManager.hpp"
+#include "Graphics/Material.hpp"
 
 #include "glad/gl.h"
 #include "spirv_glsl.hpp"
@@ -21,11 +23,19 @@
 #include <future>
 #include <iostream>
 
+//See GLShaderData.hpp for why there's this "impl" thing
+//Basically this just makes it easier to use and keeps the arrow operator method of
+//accessing native data intact
+#define nd (&(this->nativeData->impl))
+
 namespace Cacao {
 	//Required static member initialization
-	GLuint Shader::ShaderData::uboIndexCounter = 1;
+	GLuint ShaderDataImpl::uboIndexCounter = 1;
 
-	std::pair<std::string, std::string> RunSpvCross(std::vector<uint32_t>& vbuf, std::vector<uint32_t>& fbuf) {
+	//Sets up shader data according to the shader spec
+	void PrepShaderData(const ShaderSpec& spec, ShaderDataImpl* mod, std::vector<uint32_t> vertSpv, std::vector<uint32_t> fragSpv) {
+		CheckException(mod, Exception::GetExceptionCodeFromMeaning("NullValue"), "Passed-in shader data pointer is invalid!");
+
 		//Convert SPIR-V to GLSL
 
 		//Create common options
@@ -35,9 +45,9 @@ namespace Cacao {
 		options.enable_420pack_extension = false;
 
 		//Parse SPIR-V IR
-		spirv_cross::Parser vertParse(std::move(vbuf));
+		spirv_cross::Parser vertParse(std::move(vertSpv));
 		vertParse.parse();
-		spirv_cross::Parser fragParse(std::move(fbuf));
+		spirv_cross::Parser fragParse(std::move(fragSpv));
 		fragParse.parse();
 
 		//Load vertex shader
@@ -64,11 +74,12 @@ namespace Cacao {
 					vertGLSL.set_name(out.id, newName.str());
 				}
 			}
-			for(auto& pcb : vertRes.push_constant_buffers) {
-				if(ubo.name.compare("type.transformation") == 0 || ubo.name.compare("transformation") == 0 || pcb.name.compare("type.PushConstant.Transformation") == 0 || pcb.name.compare("transform") == 0) {
-					vertGLSL.set_name(pcb.base_type_id, "Transformation");
-					vertGLSL.set_name(pcb.id, "transform");
-				}
+		}
+		for(auto& pcb : vertRes.push_constant_buffers) {
+			std::string typeName = vertGLSL.get_name(pcb.base_type_id);
+			if(typeName.compare("type.transform") == 0 || typeName.compare("transform") == 0 || typeName.compare("type.PushConstant.Transformation") == 0 || typeName.compare("Transformation") == 0) {
+				vertGLSL.set_name(pcb.base_type_id, "Transformation");
+				vertGLSL.set_name(pcb.id, "transform");
 			}
 		}
 
@@ -90,13 +101,45 @@ namespace Cacao {
 			}
 		}
 
-		//Remove image decorations
+		//Remove image descriptor decorations
 		for(auto& img : fragRes.sampled_images) {
 			fragGLSL.unset_decoration(img.id, spv::DecorationDescriptorSet);
 		}
 
-		//Compile SPIR-V to GLSL
-		return std::make_pair<std::string, std::string>(vertGLSL.compile(), fragGLSL.compile());
+		//Emit GLSL
+		mod->vertexCode = vertGLSL.compile();
+		mod->fragmentCode = fragGLSL.compile();
+
+		//Get shader data block size and offsets
+		bool foundSD = false;
+		for(auto ubo : vertRes.uniform_buffers) {
+			if(ubo.name.compare("ObjectData") == 0) {
+				spirv_cross::SPIRType type = vertGLSL.get_type(ubo.base_type_id);
+				mod->shaderDataSize = vertGLSL.get_declared_struct_size(type);
+				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
+					mod->offsets.insert_or_assign(vertGLSL.get_member_name(ubo.base_type_id, i), vertGLSL.type_struct_member_offset(type, i));
+				}
+				foundSD = true;
+				break;
+			}
+		}
+		if(!foundSD) {
+			mod->shaderDataSize = 0;
+		}
+
+		//Gather list of textures
+		std::vector<std::string> texNames;
+		for(auto image : fragRes.sampled_images) {
+			texNames.push_back(image.name);
+		}
+
+		//Make sure that shader data matches spec
+		for(const ShaderItemInfo& sii : spec) {
+			CheckException((sii.type == SpvType::SampledImage && std::find(texNames.cbegin(), texNames.cend(), sii.name) != texNames.cend()) || mod->offsets.contains(sii.name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!");
+		}
+		for(auto offset : mod->offsets) {
+			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.name) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
+		}
 	}
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
@@ -144,16 +187,19 @@ namespace Cacao {
 		//Create native data
 		nativeData.reset(new ShaderData());
 
-		//Get shader code
-		auto glsl = RunSpvCross(vbuf, fbuf);
-		nativeData->vertexCode = glsl.first;
-		nativeData->fragmentCode = glsl.second;
+		//Pre-process shader data
+		PrepShaderData(specification, nd, vbuf, fbuf);
 
 		//Apply unused transform flag
 		if(currentShaderUnusedTransformFlag) {
-			nativeData->unusedTransform = true;
+			nd->unusedTransform = true;
 			currentShaderUnusedTransformFlag = false;
 		}
+
+		//Check for images in spec
+		nd->hasImages = std::find_if(specification.cbegin(), specification.cend(), [](const ShaderItemInfo& sii) {
+			return sii.type == SpvType::SampledImage;
+		}) != specification.cend();
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)
@@ -161,14 +207,12 @@ namespace Cacao {
 		//Create native data
 		nativeData.reset(new ShaderData());
 
-		//Get shader code
-		auto glsl = RunSpvCross(vertex, fragment);
-		nativeData->vertexCode = glsl.first;
-		nativeData->fragmentCode = glsl.second;
+		//Pre-process shader data
+		PrepShaderData(specification, nd, vertex, fragment);
 
 		//Apply unused transform flag
 		if(currentShaderUnusedTransformFlag) {
-			nativeData->unusedTransform = true;
+			nd->unusedTransform = true;
 			currentShaderUnusedTransformFlag = false;
 		}
 	}
@@ -188,7 +232,7 @@ namespace Cacao {
 
 		//Create vertex shader base
 		GLuint compiledVertexShader = glCreateShader(GL_VERTEX_SHADER);
-		const GLchar* vertexSrc = nativeData->vertexCode.c_str();
+		const GLchar* vertexSrc = nd->vertexCode.c_str();
 
 		//Compile vertex shader
 		glShaderSource(compiledVertexShader, 1, &vertexSrc, 0);
@@ -212,7 +256,7 @@ namespace Cacao {
 
 		//Create fragment shader base
 		GLuint compiledFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		const GLchar* fragmentSrc = nativeData->fragmentCode.c_str();
+		const GLchar* fragmentSrc = nd->fragmentCode.c_str();
 
 		//Compile fragment shader
 		glShaderSource(compiledFragmentShader, 1, &fragmentSrc, 0);
@@ -276,20 +320,27 @@ namespace Cacao {
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalsUBO);
 
 		//Set up transformation matrix
-		if(!nativeData->unusedTransform) {
-			GLuint transformULoc = glGetUniformLocation(program, "transform.transform");
+		if(!nd->unusedTransform) {
+			GLint transformULoc = glGetUniformLocation(program, "transform.transform");
 			CheckException(transformULoc != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the transformation matrix uniform!");
-			nativeData->transformLoc = transformULoc;
+			nd->transformLoc = transformULoc;
 		}
 
 		//Confirm object data UBO
 		GLuint objectUBOIdx = glGetUniformBlockIndex(program, "ObjectData");
+		if(nd->offsets.size() > 0) {
+			CheckException(objectUBOIdx != GL_INVALID_INDEX, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader contains non-texture uniforms but has no object data uniform block!");
 
-		//Increment UBO index counter
-		ShaderData::uboIndexCounter++;
+			//Link object data UBO binding
+			nd->shaderUBOBinding = ShaderDataImpl::uboIndexCounter;
+			glUniformBlockBinding(program, objectUBOIdx, nd->shaderUBOBinding);
+
+			//Increment UBO index counter
+			ShaderDataImpl::uboIndexCounter++;
+		}
 
 		//Set GPU ID and compiled values
-		nativeData->gpuID = program;
+		nd->gpuID = program;
 		compiled = true;
 
 		//Return an empty future
@@ -311,7 +362,7 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled shader!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot release bound shader!");
 
-		glDeleteProgram(nativeData->gpuID);
+		glDeleteProgram(nd->gpuID);
 		compiled = false;
 	}
 
@@ -320,7 +371,8 @@ namespace Cacao {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
 
-		glUseProgram(nativeData->gpuID);
+		glUseProgram(nd->gpuID);
+		activeShader = nd;
 		bound = true;
 	}
 
@@ -331,214 +383,10 @@ namespace Cacao {
 
 		//Clear current program
 		glUseProgram(0);
+		activeShader = nullptr;
 
 		bound = false;
 	}
-
-	/* void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			//Invoke OpenGL on the engine thread
-			InvokeGL([this, data, transformation]() {
-				this->UploadData(const_cast<ShaderUploadData&>(data), transformation);
-			});
-			return;
-		}
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!");
-
-		//Get ID of currently bound shader (to restore later)
-		//Only do this if we are not currently bound
-		GLint currentlyBound = -1;
-		if(!bound) {
-			glGetIntegerv(GL_CURRENT_PROGRAM, &currentlyBound);
-
-			//Bind shader
-			Bind();
-		}
-
-		//Upload transformation matrix if used (the GLSL compiler tends to get rid of it if it's unused)
-		if(!nativeData->unusedTransform) {
-			GLint transULOC = glGetUniformLocation(nativeData->gpuID, "object.transform");
-			CheckException(transULOC != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the transformation matrix uniform!");
-			glUniformMatrix4fv(transULOC, 1, GL_FALSE, glm::value_ptr(transformation));
-		}
-
-		//Create a map for quicker reference later
-		std::map<std::string, ShaderItemInfo> foundItems;
-		for(ShaderUploadItem& item : data) {
-			//Attempt to locate item in shader spec
-			bool found = false;
-			if(!foundItems.contains(item.target)) {
-				for(ShaderItemInfo sii : specification) {
-					foundItems.insert_or_assign(sii.entryName, sii);
-					if(sii.entryName.compare(item.target) == 0) {
-						found = true;
-						break;
-					}
-				}
-			}
-			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!");
-
-			//Grab shader item info
-			ShaderItemInfo info = foundItems[item.target];
-
-			//Obtain uniform location
-			std::stringstream ulocPath;
-			ulocPath << (info.type == SpvType::SampledImage ? "" : "object.") << item.target;
-			GLint uniformLocation = glGetUniformLocation(nativeData->gpuID, ulocPath.str().c_str());
-			CheckException(uniformLocation != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the requested uniform!");
-
-			//Turn dimensions into single number (easier for uploading)
-			int dims = (4 * info.size.y) - (4 - info.size.x);
-			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!");
-			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!");
-
-			int imageSlotCounter = 0;
-
-			//Attempt to cast data to correct type and upload it
-			//It is so annoying that this is how this must be done
-			try {
-				switch(info.type) {
-					case SpvType::Boolean:
-						switch(dims) {
-							case 1:
-								glUniform1i(uniformLocation, std::any_cast<bool>(item.data));
-								break;
-							case 2:
-								glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec2(std::any_cast<glm::ivec2>(item.data))));
-								break;
-							case 3:
-								glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec3(std::any_cast<glm::ivec3>(item.data))));
-								break;
-							case 4:
-								glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(glm::ivec4(std::any_cast<glm::ivec4>(item.data))));
-								break;
-						}
-						break;
-					case SpvType::Int:
-						switch(dims) {
-							case 1:
-								glUniform1i(uniformLocation, std::any_cast<int>(item.data));
-								break;
-							case 2:
-								glUniform2iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec2>(item.data)));
-								break;
-							case 3:
-								glUniform3iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec3>(item.data)));
-								break;
-							case 4:
-								glUniform4iv(uniformLocation, 1, glm::value_ptr<int>(std::any_cast<glm::ivec4>(item.data)));
-								break;
-						}
-						break;
-					case SpvType::SampledImage:
-						//Confirm valid dimensions
-						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!");
-
-						//Bind texture to the next available slot
-						if(item.data.type() == typeid(Texture2D*)) {
-							Texture2D* tex = std::any_cast<Texture2D*>(item.data);
-							tex->Bind(imageSlotCounter);
-						} else if(item.data.type() == typeid(Cubemap*)) {
-							Cubemap* tex = std::any_cast<Cubemap*>(item.data);
-							tex->Bind(imageSlotCounter);
-						} else if(item.data.type() == typeid(UIView*)) {
-							UIView* view = std::any_cast<UIView*>(item.data);
-							view->Bind(imageSlotCounter);
-						} else if(item.data.type() == typeid(AssetHandle<Texture2D>)) {
-							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(item.data);
-							tex->Bind(imageSlotCounter);
-						} else if(item.data.type() == typeid(AssetHandle<Cubemap>)) {
-							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(item.data);
-							tex->Bind(imageSlotCounter);
-						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
-							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
-							view->Bind(imageSlotCounter);
-						} else if(item.data.type() == typeid(RawGLTexture)) {
-							glActiveTexture(GL_TEXTURE0 + imageSlotCounter);
-							RawGLTexture tex = std::any_cast<RawGLTexture>(item.data);
-							glBindTexture(GL_TEXTURE_2D, tex.texObj);
-							(*tex.slot) = imageSlotCounter;
-						} else {
-							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!");
-						}
-
-						//Upload slot ID to shader
-						glUniform1i(uniformLocation, imageSlotCounter);
-
-						//Increment slot counter
-						imageSlotCounter++;
-						break;
-					case SpvType::UInt:
-						switch(dims) {
-							case 1:
-								glUniform1ui(uniformLocation, std::any_cast<unsigned int>(item.data));
-								break;
-							case 2:
-								glUniform2uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec2>(item.data)));
-								break;
-							case 3:
-								glUniform3uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec3>(item.data)));
-								break;
-							case 4:
-								glUniform4uiv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::uvec4>(item.data)));
-								break;
-						}
-						break;
-					case SpvType::Float:
-						switch(dims) {
-							case 1:
-								glUniform1f(uniformLocation, std::any_cast<float>(item.data));
-								break;
-							case 2:
-								glUniform2fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec2>(item.data)));
-								break;
-							case 3:
-								glUniform3fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec3>(item.data)));
-								break;
-							case 4:
-								glUniform4fv(uniformLocation, 1, glm::value_ptr(std::any_cast<glm::vec4>(item.data)));
-								break;
-							case 6:
-								glUniformMatrix2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2>(item.data)));
-								break;
-							case 7:
-								glUniformMatrix2x3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2x3>(item.data)));
-								break;
-							case 8:
-								glUniformMatrix2x4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat2x4>(item.data)));
-								break;
-							case 10:
-								glUniformMatrix3x2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3x2>(item.data)));
-								break;
-							case 11:
-								glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3>(item.data)));
-								break;
-							case 12:
-								glUniformMatrix3x4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat3x4>(item.data)));
-								break;
-							case 14:
-								glUniformMatrix4x2fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4x2>(item.data)));
-								break;
-							case 15:
-								glUniformMatrix4x3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4x3>(item.data)));
-								break;
-							case 16:
-								glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(std::any_cast<glm::mat4>(item.data)));
-								break;
-						}
-						break;
-				}
-			} catch(const std::bad_cast&) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Failed cast of shader upload value to type specified in target!");
-			}
-		}
-
-		//Restore previous shader (only if we weren't bound before)
-		if(currentlyBound != -1) {
-			Unbind();
-			glUseProgram(currentlyBound);
-		}
-	}*/
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
@@ -558,5 +406,21 @@ namespace Cacao {
 
 		//Unbind UBO
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	void Shader::_BackendDestruct() {}
+
+	std::shared_ptr<Material> Shader::CreateMaterial() {
+		AssetHandle<Shader> selfHandle = AssetManager::GetInstance()->GetHandleFromPointer(this);
+
+		//Unfortunately, we have to do it this way because make_shared doesn't work well with friend classes
+		Material* m;
+		if(selfHandle.IsNull()) {
+			//We should never have to do this except for engine-internal shaders that aren't cached
+			m = new Material(this);
+		} else {
+			m = new Material(selfHandle);
+		}
+		return std::shared_ptr<Material>(m);
 	}
 }

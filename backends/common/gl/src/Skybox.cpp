@@ -5,6 +5,7 @@
 #include "Core/Exception.hpp"
 #include "GLSkyboxData.hpp"
 #include "GLUtils.hpp"
+#include "GLShaderData.hpp"
 
 #include <future>
 
@@ -12,6 +13,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Cacao {
 
@@ -19,8 +21,8 @@ namespace Cacao {
 	bool Skybox::isSetup = false;
 	Shader* Skybox::skyboxShader = nullptr;
 
-	Skybox::Skybox(Cubemap* tex)
-	  : Asset(false), rotation({0, 0, 0}), textureOwner(true), texture(tex) {
+	Skybox::Skybox(AssetHandle<Cubemap> tex)
+	  : Asset(false), rotation({0, 0, 0}), texture(tex) {
 		//Create native data
 		nativeData.reset(new SkyboxData());
 		nativeData->vaoReady = false;
@@ -38,7 +40,7 @@ namespace Cacao {
 		//Define skybox shader specification
 		ShaderSpec spec;
 		ShaderItemInfo skySamplerInfo;
-		skySamplerInfo.entryName = "skybox";
+		skySamplerInfo.name = "skybox";
 		skySamplerInfo.size = {1, 1};
 		skySamplerInfo.type = SpvType::SampledImage;
 		spec.push_back(skySamplerInfo);
@@ -108,6 +110,12 @@ namespace Cacao {
 			nativeData->vaoReady = true;
 		}
 
+		//If the material isn't set up, do so
+		if(!mat) {
+			mat = skyboxShader->CreateMaterial();
+			mat->WriteValue("skybox", texture);
+		}
+
 		//Create skybox transform matrix
 		glm::mat4 skyTransform(1.0);
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.x), {1.0, 0.0, 0.0});
@@ -117,13 +125,11 @@ namespace Cacao {
 		//Bind skybox shader and texture
 		skyboxShader->Bind();
 
-		//Upload data to shader
-		ShaderUploadData sud;
-		ShaderUploadItem skySampler;
-		skySampler.data = std::any(texture);
-		skySampler.target = "skybox";
-		sud.push_back(skySampler);
-		skyboxShader->UploadData(sud, skyTransform);
+		//Activate skybox material
+		mat->Activate();
+
+		//Upload transformation matrix
+		glUniformMatrix4fv(activeShader->transformLoc, 1, GL_FALSE, glm::value_ptr(skyTransform));
 
 		//Ensure skybox always drawn
 		glDepthFunc(GL_LEQUAL);
@@ -136,8 +142,7 @@ namespace Cacao {
 		//Reset draw mode to make sure other objects draw correctly
 		glDepthFunc(GL_LESS);
 
-		//Unbind shader and texture
-		texture->Unbind();
-		skyboxShader->Unbind();
+		//Deactivate skybox material
+		mat->Deactivate();
 	}
 }

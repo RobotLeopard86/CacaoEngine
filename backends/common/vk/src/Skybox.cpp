@@ -22,7 +22,7 @@ namespace Cacao {
 	Shader* Skybox::skyboxShader = nullptr;
 
 	Skybox::Skybox(AssetHandle<Cubemap> tex)
-	  : Asset(false), rotation({0, 0, 0}), textureOwner(true), texture(tex) {
+	  : Asset(false), rotation({0, 0, 0}), texture(tex) {
 		//Create native data
 		nativeData.reset(new SkyboxData());
 		nativeData->vbufReady = false;

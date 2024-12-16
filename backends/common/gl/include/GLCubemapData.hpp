@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities/MiscUtils.hpp"
+#include "Graphics/Textures/Cubemap.hpp"
 
 #include "glad/gl.h"
 

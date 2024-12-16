@@ -63,5 +63,8 @@ namespace Cacao {
 	//Raw Vulkan texture (for shader uploading in text)
 	struct RawVkTexture : public RawTexture {
 		vk::ImageView view;
+
+		RawVkTexture(vk::ImageView view)
+		  : RawTexture(), view(view) {}
 	};
 }

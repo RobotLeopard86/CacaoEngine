@@ -14,8 +14,18 @@ namespace Cacao {
 	  public:
 		int* slot;
 
+		~RawTexture() {
+			delete slot;
+		}
+
+		RawTexture(const RawTexture&) = delete;
+		RawTexture operator=(const RawTexture&) = delete;
+		RawTexture(RawTexture&&) = delete;
+		RawTexture operator=(RawTexture&&) = delete;
+
 	  protected:
-		RawTexture() {}
+		RawTexture()
+		  : slot(new int(-1)) {}
 	};
 
 	/**

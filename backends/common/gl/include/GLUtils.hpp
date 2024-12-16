@@ -2,6 +2,8 @@
 
 #include "Events/EventSystem.hpp"
 #include "Utilities/Task.hpp"
+#include "Graphics/Textures/Texture.hpp"
+
 #include "glad/gl.h"
 
 #include <future>
@@ -16,9 +18,11 @@ namespace Cacao {
 		return glJob.status->get_future().share();
 	}
 
-	struct RawGLTexture {
+	struct RawGLTexture : public RawTexture {
 		GLuint texObj;
-		int* slot;
+
+		RawGLTexture(GLuint texObj)
+		  : RawTexture(), texObj(texObj) {}
 	};
 
 	inline GLuint globalsUBO = 0;

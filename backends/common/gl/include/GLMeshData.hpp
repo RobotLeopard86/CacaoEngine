@@ -2,7 +2,7 @@
 
 #include "glad/gl.h"
 
-#include "Utilities/MiscUtils.hpp"
+#include "3D/Mesh.hpp"
 
 namespace Cacao {
 	//Struct for data required for an OpenGL mesh

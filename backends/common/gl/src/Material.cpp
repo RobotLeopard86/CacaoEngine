@@ -1,16 +1,13 @@
 #include "Graphics/Material.hpp"
 
-#include "VulkanCoreObjects.hpp"
-#include "VkUtils.hpp"
-#include "VkShader.hpp"
-#include "ActiveItems.hpp"
+#include "GLUtils.hpp"
+#include "GLShaderData.hpp"
 
 #define shaderND (&(shader->nativeData->impl))
 
 namespace Cacao {
 	struct Material::MaterialData {
-		Allocated<vk::Buffer> ubo;
-		void* uboMem;
+		GLuint ubo;
 		bool didAllocUBO = false;
 	};
 
@@ -21,26 +18,14 @@ namespace Cacao {
 		//Yeah... we're not active when constructed, right?
 		active = false;
 
-		//We don't need to do anything else if we don't need a shader data buffer
-		if(shaderND->shaderDataSize <= 0) return;
+		//We don't need to do anything else if we don't need a shader data buffer (it's UBO bi)
+		if(shaderND->offsets.size() <= 0) return;
 
 		//Yes, we allocated a UBO
 		nativeData->didAllocUBO = true;
 
 		//Create a uniform buffer
-		vk::BufferCreateInfo uboCI({}, shaderND->shaderDataSize, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
-		vma::AllocationCreateInfo allocCI({}, vma::MemoryUsage::eCpuToGpu);
-		try {
-			auto [buf, alloc] = allocator.createBuffer(uboCI, allocCI);
-			nativeData->ubo = {.alloc = alloc, .obj = buf};
-		} catch(vk::SystemError& err) {
-			std::stringstream emsg;
-			emsg << "Failed to create material uniform buffer: " << err.what();
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
-		}
-
-		//Map UBO memory
-		CheckException(allocator.mapMemory(nativeData->ubo.alloc, &(nativeData->uboMem)) == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to map material uniform buffer!");
+		glGenBuffers(1, &nativeData->ubo);
 	}
 
 	Material::Material(AssetHandle<Shader> shader)
@@ -72,20 +57,18 @@ namespace Cacao {
 	Material::~Material() {
 		if(active) Deactivate();
 		if(!nativeData->didAllocUBO) return;
-		allocator.unmapMemory(nativeData->ubo.alloc);
-		allocator.destroyBuffer(nativeData->ubo.obj, nativeData->ubo.alloc);
+		glDeleteBuffers(1, &nativeData->ubo);
 	}
 
 	void Material::Activate() {
 		CheckException(!active, Exception::GetExceptionCodeFromMeaning("BadState"), "Cannot activate active material!");
 		CheckException(shader->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot activate material with uncompiled shader!");
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot activate material when their is no active frame!");
 
 		//Bind shader
 		shader->Bind();
 
 		//Check if we have to do anything else (some shaders have no parameters)
-		if(!nativeData->didAllocUBO && shaderND->imageSlots.size() == 0) goto activate_done;
+		if(!nativeData->didAllocUBO && !shaderND->hasImages) goto activate_done;
 
 		//Upload everything to the GPU that isn't an image
 		if(nativeData->didAllocUBO) {
@@ -94,9 +77,6 @@ namespace Cacao {
 			for(auto kv : values) {
 				//Don't bother if it's not an image
 				if(kv.second.index() > 14) continue;
-
-				//Get buffer offset
-				uint32_t offset = shaderND->offsets.at(kv.first);
 
 				//Extract the value to a pointer for copying
 				switch(kv.second.index()) {
@@ -209,49 +189,63 @@ namespace Cacao {
 						break;
 				}
 
+				//Bind buffer for copying (get the old one to restore)
+				GLint prevBound;
+				glGetIntegerv(GL_UNIFORM_BUFFER, &prevBound);
+				glBindBuffer(GL_UNIFORM_BUFFER, nativeData->ubo);
+
 				//Do the copy
-				std::memcpy((unsigned char*)nativeData->uboMem + offset, current, currentsz);
+				glBufferSubData(GL_UNIFORM_BUFFER, shaderND->offsets.at(kv.first), currentsz, current);
 
 				//Free the memory used for the copy source
 				free(current);
+
+				//Restore old buffer
+				if(prevBound != 0) glBindBuffer(GL_UNIFORM_BUFFER, prevBound);
 			}
 
-			//Bind object UBO
-			vk::DescriptorBufferInfo dbi(nativeData->ubo.obj, 0, vk::WholeSize);
-			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
-			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			//Bind UBO to shader
+			glBindBufferBase(GL_UNIFORM_BUFFER, shaderND->shaderUBOBinding, nativeData->ubo);
 		}
 
-		//Bind any and all textures
-		for(auto& kv : values) {
-			ValueContainer& vc = kv.second;
-			if(vc.index() < 15) continue;
+		{
+			int imageSlotCounter = 0;
 
-			//Get the image slot
-			int slot = shaderND->imageSlots.at(kv.first).binding;
+			//Bind any and all textures
+			for(auto& kv : values) {
+				ValueContainer& vc = kv.second;
+				if(vc.index() < 15) continue;
 
-			//Actually bind the texture
-			switch(vc.index()) {
-				case 15: {
-					RawVkTexture* rvkt = static_cast<RawVkTexture*>(std::get<RawTexture*>(vc));
-					*(rvkt->slot) = slot;
-					vk::DescriptorImageInfo dii(VK_NULL_HANDLE, rvkt->view, vk::ImageLayout::eShaderReadOnlyOptimal);
-					vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
-					activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
-					break;
+				//Actually bind the texture
+				switch(vc.index()) {
+					case 15: {
+						RawGLTexture* rglt = static_cast<RawGLTexture*>(std::get<RawTexture*>(vc));
+						*(rglt->slot) = imageSlotCounter;
+						glActiveTexture(GL_TEXTURE0 + imageSlotCounter);
+						glBindTexture(GL_TEXTURE_2D, rglt->texObj);
+						break;
+					}
+					case 16:
+						std::get<Texture*>(vc)->Bind(imageSlotCounter);
+						break;
+					case 17:
+						std::get<AssetHandle<Cubemap>>(vc)->Bind(imageSlotCounter);
+						break;
+					case 18:
+						std::get<AssetHandle<Texture2D>>(vc)->Bind(imageSlotCounter);
+						break;
+					case 19:
+						std::get<std::shared_ptr<UIView>>(vc)->Bind(imageSlotCounter);
+						break;
 				}
-				case 16:
-					std::get<Texture*>(vc)->Bind(slot);
-					break;
-				case 17:
-					std::get<AssetHandle<Cubemap>>(vc)->Bind(slot);
-					break;
-				case 18:
-					std::get<AssetHandle<Texture2D>>(vc)->Bind(slot);
-					break;
-				case 19:
-					std::get<std::shared_ptr<UIView>>(vc)->Bind(slot);
-					break;
+
+				//Upload slot ID to shader
+				GLint uniformLocation = glGetUniformLocation(shaderND->gpuID, kv.first.c_str());
+				CheckException(uniformLocation != -1, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Shader does not contain the requested texture uniform binding!");
+				glUniform1i(uniformLocation, imageSlotCounter);
+
+				//Increment the slot counter
+				imageSlotCounter++;
 			}
 		}
 
@@ -261,13 +255,11 @@ namespace Cacao {
 
 	void Material::Deactivate() {
 		CheckException(active, Exception::GetExceptionCodeFromMeaning("BadState"), "Cannot deactivate inactive material!");
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot deactivate material when their is no active frame!");
 
 		//Unbind UBO
 		if(nativeData->didAllocUBO) {
-			vk::DescriptorBufferInfo dbi(nullBuffer.obj, 0, vk::WholeSize);
-			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &dbi);
-			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			//Unbind UBO from shader
+			glBindBufferBase(GL_UNIFORM_BUFFER, shaderND->shaderUBOBinding, 0);
 		}
 
 		//Unbind all textures
@@ -276,9 +268,9 @@ namespace Cacao {
 			if(vc.index() < 15) continue;
 			switch(vc.index()) {
 				case 15: {
-					vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
-					vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(static_cast<RawVkTexture*>(std::get<RawTexture*>(vc))->slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
-					activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+					RawGLTexture* rglt = static_cast<RawGLTexture*>(std::get<RawTexture*>(vc));
+					glActiveTexture(GL_TEXTURE0 + *(rglt->slot));
+					glBindTexture(GL_TEXTURE_2D, 0);
 					break;
 				}
 				case 16:
