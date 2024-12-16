@@ -140,6 +140,11 @@ namespace Cacao {
 		for(auto offset : mod->offsets) {
 			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.name) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
 		}
+
+		//Check for images in spec
+		mod->hasImages = std::find_if(spec.cbegin(), spec.cend(), [](const ShaderItemInfo& sii) {
+			return sii.type == SpvType::SampledImage;
+		}) != spec.cend();
 	}
 
 	Shader::Shader(std::string vertexPath, std::string fragmentPath, ShaderSpec spec)
@@ -195,11 +200,6 @@ namespace Cacao {
 			nd->unusedTransform = true;
 			currentShaderUnusedTransformFlag = false;
 		}
-
-		//Check for images in spec
-		nd->hasImages = std::find_if(specification.cbegin(), specification.cend(), [](const ShaderItemInfo& sii) {
-			return sii.type == SpvType::SampledImage;
-		}) != specification.cend();
 	}
 
 	Shader::Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec)

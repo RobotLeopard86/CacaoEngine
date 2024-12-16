@@ -6,3 +6,4 @@ Cacao Engine will obey the following environment variables if they are set to `Y
 Cacao Engine also has the following environment variables that only exist in debug builds:
 * (**Vulkan Backend Only**) `CACAO_DISABLE_VULKAN_VALIDATION` - Disables the Vulkan validation layers (can improve performance)
 * (**Vulkan Backend Only**) `CACAO_ENABLE_APIDUMP` - Dumps Vulkan API calls to the console. Probably not needed unless debugging.
+* `CACAO_ALWAYS_UI_RERENDER` - Disables caching of drawn UI and forces the engine to redraw it every frame.

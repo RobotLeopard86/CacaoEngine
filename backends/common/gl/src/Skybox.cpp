@@ -122,9 +122,6 @@ namespace Cacao {
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.y), {0.0, 1.0, 0.0});
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.z), {0.0, 0.0, 1.0});
 
-		//Bind skybox shader and texture
-		skyboxShader->Bind();
-
 		//Activate skybox material
 		mat->Activate();
 

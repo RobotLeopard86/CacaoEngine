@@ -26,6 +26,9 @@ namespace Cacao {
 
 		//Create a uniform buffer
 		glGenBuffers(1, &nativeData->ubo);
+		glBindBuffer(GL_UNIFORM_BUFFER, nativeData->ubo);
+		glBufferData(GL_UNIFORM_BUFFER, shaderND->shaderDataSize, nullptr, GL_STATIC_DRAW);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
 	Material::Material(AssetHandle<Shader> shader)
