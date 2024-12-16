@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Build Instructions" href="building.html" />
+    <link rel="next" title="Versioning Scheme" href="versioning.html" />
     <link rel="prev" title="Quickstart" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -320,6 +320,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
@@ -411,20 +412,23 @@
 <section id="support-policy">
 <h2>Support Policy<a class="headerlink" href="#support-policy" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Windows platforms will have the current OS release supported for the latest two versions (e.g. Windows 11 23H2 and 24H2)</p></li>
-<li><p>macOS will be supported through the last two major OS releases for all patch versions (e.g. Sonoma and Sequoia)</p>
+<li><p>All minor versions will be supported as long as their respective major version is</p></li>
+<li><p>Windows platforms will have the current OS release supported for the <strong>latest two versions</strong> (e.g. Windows 11 23H2 and 24H2)</p></li>
+<li><p>macOS will be supported through the <strong>last two major OS releases</strong> for all patch versions (e.g. Sonoma and Sequoia)</p>
 <ul>
 <li><p>macOS is supported for more releases than Windows because macOS receives yearly releases compared to Windows, which sticks on one “release” (e.g. Windows 11) with multiple yearly updates over its lifespan</p></li>
 </ul>
 </li>
-<li><p>GNU/Linux distros will generally be supported for their last two releases in addition to the latest LTS version that is not in the previous category (including minor releases for distros that do that)</p>
+<li><p>GNU/Linux distros will generally be supported for their <strong>last two releases in addition to the latest LTS version</strong> that is not one of the last two</p>
 <ul>
 <li><p>Example: Ubuntu 22.04, 24.04, and 24.10</p></li>
+<li><p>Distros that do not make LTS releases will have their last <strong>three</strong> releases supported instead of two.</p></li>
 <li><p>Rolling release distros will be supported generally, but support may not be offered if the system is too out-of-date</p></li>
-<li><p>For distros that do not release major versions often (e.g. Debian), support will only be offered for the latest version</p></li>
+<li><p>For distros that do not release major versions often (e.g. Debian, RHEL), support will only be offered for the latest version</p></li>
 <li><p>For now, X11 and Wayland are both officially supported, but X11 support may be dropped in the future</p></li>
 </ul>
 </li>
+<li><p>Any version set to go out of support with new releases will have a transitional period of 3 months offered, after which new support requests for those versions will no longer be accepted (existing requests will be fulfilled)</p></li>
 </ul>
 </section>
 <section id="currently-supported-gnu-linux-distros">
@@ -432,14 +436,10 @@
 <p>Not every GNU/LINUX distro is supported, but most popular ones are:</p>
 <ul class="simple">
 <li><p>Debian and derivatives (e.g. Ubuntu, Linux Mint, Pop!_OS)</p></li>
-<li><p>Fedora and derivatives (e.g. Nobara)</p>
-<ul>
-<li><p>As RHEL is based on comparatively old versions of Fedora, it is NOT supported</p></li>
-</ul>
-</li>
+<li><p>Fedora and derivatives (e.g. Nobara)</p></li>
 <li><p>Arch and derivatives (e.g. EndeavourOS, Garuda, Manjaro)</p></li>
 </ul>
-<p>As of now, SteamOS is in a bit of limbo with support, as the only way to run it off of the Steam Deck is with unofficial ISOs. It will generally be supported like most Arch derivatives, but SteamOS quirks may be difficult to resolve. If SteamOS is released onto desktop, it will be fully supported</p>
+<p>As of now, SteamOS is in a bit of limbo with support, as the only way to run it off of the Steam Deck is with unofficial ISOs. It will generally be supported like most Arch derivatives, but SteamOS quirks may be difficult to resolve. If SteamOS is ever released onto desktop, it will be fully supported</p>
 </section>
 <section id="currently-supported-os-versions">
 <h2>Currently Supported OS Versions<a class="headerlink" href="#currently-supported-os-versions" title="Link to this heading"><span/></a></h2>
@@ -474,11 +474,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="building.html"
+       href="versioning.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Build Instructions</p>
+        <p class="prev-next-title">Versioning Scheme</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
