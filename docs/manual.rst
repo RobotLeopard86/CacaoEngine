@@ -13,6 +13,7 @@ Table of Contents:
 
 	manual/quickstart
 	manual/platforms
+	manual/versioning
 	manual/building
 	manual/vs
 	manual/bundles
