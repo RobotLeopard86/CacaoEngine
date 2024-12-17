@@ -69,7 +69,7 @@ namespace Cacao {
 		/**
 		 * @brief Set the camera's FOV
 		 *
-		 * @param rot The new FOV in degrees
+		 * @param newFov The new FOV in degrees
 		 */
 		void SetFOV(float newFov) {
 			fov = newFov;

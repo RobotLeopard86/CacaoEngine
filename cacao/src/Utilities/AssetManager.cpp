@@ -49,8 +49,7 @@ namespace Cacao {
 			//Validate and try to build spec
 			int specEntryCounter = 1;
 			ShaderSpec spec;
-			constexpr std::array<const char*, 8> validTypes {
-				"bool", "int", "int64", "uint", "uint64", "double", "float", "texture"};
+			constexpr std::array<const char*, 5> validTypes {"int", "uint", "float", "texture"};
 
 			for(auto node : dfNode["spec"]) {
 				//Convience string generator function
@@ -74,7 +73,7 @@ namespace Cacao {
 
 				//Build spec entry
 				ShaderItemInfo inf;
-				inf.entryName = node["name"].Scalar();
+				inf.name = node["name"].Scalar();
 				inf.size = {node["sizex"].as<int>(INT_MIN), node["sizey"].as<int>(INT_MIN)};
 
 				//Find index of value in valid type array
@@ -84,28 +83,16 @@ namespace Cacao {
 				}
 
 				switch(idx) {
-					case 0://bool
-						inf.type = SpvType::Boolean;
-						break;
-					case 1://int
+					case 0://int
 						inf.type = SpvType::Int;
 						break;
-					case 2://int64
-						inf.type = SpvType::Int64;
-						break;
-					case 3://uint
+					case 1://uint
 						inf.type = SpvType::UInt;
 						break;
-					case 4://uint64
-						inf.type = SpvType::UInt64;
-						break;
-					case 5://float
+					case 2://float
 						inf.type = SpvType::Float;
 						break;
-					case 6://double
-						inf.type = SpvType::Double;
-						break;
-					case 7://image
+					case 3://image
 						inf.type = SpvType::SampledImage;
 						break;
 					default:
@@ -198,11 +185,11 @@ namespace Cacao {
 			CheckException(std::filesystem::exists(dfNode["z-"].Scalar()), Exception::GetExceptionCodeFromMeaning("InvalidYAML"), "While parsing skybox definition: 'z-' field refers to a nonexistent file!");
 
 			//Create and compile skybox cubemap
-			Cubemap* cube = new Cubemap(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
+			std::shared_ptr<Cubemap> cube = std::make_shared<Cubemap>(std::vector<std::string> {dfNode["x+"].Scalar(), dfNode["x-"].Scalar(), dfNode["y+"].Scalar(), dfNode["y-"].Scalar(), dfNode["z+"].Scalar(), dfNode["z-"].Scalar()});
 			cube->CompileSync();
 
 			//Create skybox
-			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(cube);
+			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(AssetHandle<Cubemap>(definitionPath, cube));
 
 			//Add asset to cache and return handle
 			this->assetCache.insert_or_assign(definitionPath, std::weak_ptr<Skybox> {asset});

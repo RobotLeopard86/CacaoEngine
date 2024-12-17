@@ -14,7 +14,7 @@ namespace Cacao {
 	/**
 	 * @brief A Cacao Engine exception. Do not subclass this. Prefer over standard library exceptions.
 	 *
-	 * @note Recommended to use @ref CheckException to generate exceptions.
+	 * @note Recommended to use CheckException to generate exceptions.
 	 */
 	class Exception : public std::exception {
 	  public:
@@ -166,7 +166,7 @@ namespace Cacao {
 	/**
 	 * @brief Checks if the YAML node exists, and throws an exception if not
 	 *
-	 * @param condition The condition to check. No parenthetical wrapping necessary.
+	 * @param node The node to check for.
 	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
 	 * @note See the page "Exception Codes" in the manual for a list of codes.
 	 * @param exceptionDescription The human-readable message to print if the condition is false
@@ -184,7 +184,7 @@ namespace Cacao {
 	/**
 	 * @brief Checks if the shared_ptr contains a value, and throws an exception if not
 	 *
-	 * @param condition The condition to check. No parenthetical wrapping necessary.
+	 * @param ptr The shared_ptr to check for a value.
 	 * @param exceptionCode The exception code to use. Must have been registered prior to use.
 	 * @note See the page "Exception Codes" in the manual for a list of codes.
 	 * @param exceptionDescription The human-readable message to print if the condition is false

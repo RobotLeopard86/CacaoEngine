@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities/MiscUtils.hpp"
+#include "3D/Skybox.hpp"
 #include "GLUtils.hpp"
 
 #include "glad/gl.h"

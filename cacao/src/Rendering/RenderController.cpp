@@ -23,7 +23,10 @@ namespace Cacao {
 
 	void RenderController::Run() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!");
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the main thread!");
+		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the engine thread!");
+
+		auto uiRerenderVar = std::getenv("CACAO_ALWAYS_UI_RERENDER");
+		bool alwaysRerenderUI = (uiRerenderVar != nullptr && std::string(uiRerenderVar).compare("YES") == 0);
 
 		//Run while the engine does
 		while(Engine::GetInstance()->IsRunning()) {
@@ -69,7 +72,7 @@ namespace Cacao {
 				lock.unlock();
 
 				//If the global UI is dirty, re-render
-				if(Engine::GetInstance()->GetGlobalUIView()->GetScreen() && Engine::GetInstance()->GetGlobalUIView()->GetScreen()->IsDirty()) {
+				if(Engine::GetInstance()->GetGlobalUIView()->GetScreen() && (Engine::GetInstance()->GetGlobalUIView()->GetScreen()->IsDirty() || alwaysRerenderUI)) {
 					Engine::GetInstance()->GetGlobalUIView()->Render();
 				}
 

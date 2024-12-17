@@ -103,7 +103,7 @@ namespace Cacao {
 		/**
 		 * @brief Set the size and make the element dirty
 		 *
-		 * @param o The new size. Range is 0-1 as a percentage of the screen.
+		 * @param s The new size. Range is 0-1 as a percentage of the screen.
 		 */
 		void SetSize(glm::vec2 s) {
 			size = s;
@@ -113,7 +113,7 @@ namespace Cacao {
 		/**
 		 * @brief Set the depth and make the element dirty
 		 *
-		 * @param a The new depth (higher = further back)
+		 * @param d The new depth (higher = further back)
 		 */
 		void SetDepth(unsigned short d) {
 			depth = d;

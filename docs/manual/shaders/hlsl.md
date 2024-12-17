@@ -24,8 +24,8 @@ All vertex shader inputs should be within a `VSInput` struct. The struct can con
 | `float3` | `BITANGENT0` |
 | `float3` | `NORMAL0` |  
 
-## Constant Buffers
-Cacao Engine sends engine data to shaders via a constant buffers. Below is an example of how this should be declared. **The order of members  is important!**  
+## Cacao Engine Data
+Cacao Engine sends engine data to shaders via a constant buffer. Below is an example of how this should be declared. **The order of members  is important!**  
 ```{code-block} hlsl
 struct CacaoGlobals {
   float4x4 projection;
@@ -34,33 +34,40 @@ struct CacaoGlobals {
 ConstantBuffer<CacaoGlobals> globals : register(b0);
 ```  
 
+## Transform Matrix
+All shaders must declare the transformation matrix as a push constant. This is done as follows:
+```{code-block} hlsl
+struct Transformation {
+  mat4 transform;
+};
+[[vk::push_constant]] Transformation transform;
+```
+
 ## Local Object Data
-All data pertaining to an individual object (the transformation matrix plus any custom shader data) must be part of a struct named `ObjectData`, and must have an instance declared that is marked with the `[[vk::push_constant]]` annotation and named `object`. Here's an example:  
+All data for individual objects (material data) must be declared within another uniform block, which must be declared as follows: 
 ```{code-block} hlsl
 struct ObjectData {
-  float4x4 transform;
-  //Custom shader data goes here...
+  //Material data goes here...
 };
-
-[[vk::push_constant]] ObjectData object;
+ConstantBuffer<ObjectData> object;
 ```  
 
 ## Applying the Matrices
 Since all of the matrices are row-major, apply them in the order below. This example assumes the output struct contains a member declared as `float4 Pos : SV_POSITION;`, the output struct is named `output`, the input struct contains a member declared as `float3 Pos : POSITION0;` and that the input struct is named `input`.  
 ```{code-block} hlsl
-output.Pos = mul(input.pos, mul(object.transform, mul(globals.view, globals.projection)));
+output.Pos = mul(input.pos, mul(transform.transform, mul(globals.view, globals.projection)));
 ```  
 
 ## Textures and Samplers
 In HLSL, samplers and textures are separate objects. This model is not compatible with all APIs. A `SamplerState` associated with a texture must have the same register number as that texture (e.g. `register(t0)` on the texture is connected to the sampler with `register(s0)`). `SamplerState`s and textures must also all be marked with the `[[vk::combinedImageSampler]]` annotation. In addition, you all textures must be given a binding number. This is different than HLSL registers, and they are shared between the vertex and fragment stages. Since binding `0` and `1` is used by the engine constant buffer, you must start with binding number `1`. Apply bindings with the `[[vk::binding(NUMBER)]]` annotation. Here's an example:  
 ```{code-block} hlsl
-[[vk::binding(1)]] [[vk::combinedImageSampler]] Texture2D tex : register(t0);
-[[vk::binding(1)]] [[vk::combinedImageSampler]] SamplerState texSampler : register(s0);
+[[vk::binding(2)]] [[vk::combinedImageSampler]] Texture2D tex : register(t0);
+[[vk::binding(2)]] [[vk::combinedImageSampler]] SamplerState texSampler : register(s0);
 ```  
 If dealing with all of that is a lot, just write a macro for all of that put together. Here's one you can just copy-paste in:
 ```{code-block} hlsl
 #define CacaoTexture(name, reg) [[vk::binding(reg)]] [[vk::combinedImageSampler]] Texture2D name : register(t##reg);\
 								[[vk::binding(reg)]] [[vk::combinedImageSampler]] SamplerState name##Sampler : register(s##reg)
 ```  
-Then you can just do this instead: `CacaoTexture(tex, 1);`  
-For simplicity, maybe place this macro in a `texmacro.hlsl` file and `#include` it for ease-of-use.
+Then you can just do this instead: `CacaoTexture(tex, 2);`  
+For simplicity, you could place this macro in a `texmacro.hlsl` file and `#include` it for ease-of-use.

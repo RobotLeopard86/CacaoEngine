@@ -30,6 +30,10 @@ docs/*
 !docs/assets
 !docs/README.md
 !docs/requirements.txt
+!docs/switcher.json
+
+# Don't send macOS .DS_Store files
+.DS_Store
 
 # Don't send Visual Studio things
 .vs

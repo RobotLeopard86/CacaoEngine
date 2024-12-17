@@ -47,12 +47,12 @@ namespace Cacao {
 		 *
 		 * @return Whether the asset is compiled or not
 		 */
-		virtual bool IsCompiled() {
+		virtual bool IsCompiled() const {
 			return compiled;
 		}
 
 		///@brief Get the asset type (not useful here because this is the base asset)
-		virtual std::string GetType() {
+		virtual std::string GetType() const {
 			return "N/A";
 		}
 
@@ -118,8 +118,19 @@ namespace Cacao {
 
 		/**
 		 * @brief Access the managed asset
+		 *
+		 * @return The managed asset shared_ptr
 		 */
 		std::shared_ptr<T>& operator->() {
+			return asset;
+		}
+
+		/**
+		 * @brief Access the managed asset in a const manner
+		 *
+		 * @return A const shared_ptr for the managed asset
+		 */
+		const std::shared_ptr<T>& operator->() const {
 			return asset;
 		}
 

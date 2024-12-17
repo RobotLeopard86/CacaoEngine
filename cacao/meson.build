@@ -40,26 +40,6 @@ vorbisfile = audio_sp.dependency('vorbisfile')
 opus = audio_sp.dependency('opus')
 opusfile = audio_sp.dependency('opusfile')
 
-alsoft_opts = cmake.subproject_options()
-alsoft_opts.add_cmake_defines({
-	'BUILD_TESTING': 'OFF',
-	'BUILD_SHARED_LIBS': 'OFF',
-	'LIBTYPE': 'STATIC',
-	'ALSOFT_DLOPEN': 'OFF',
-	'ALSOFT_EXAMPLES': 'OFF',
-	'ALSOFT_NO_CONFIG_UTIL': 'ON',
-	'ALSOFT_EAX': 'OFF',
-	'ALSOFT_UTILS': 'OFF',
-	'ALSOFT_RTKIT': 'OFF',
-	'ALSOFT_EMBED_HRTF_DATA': 'OFF',
-	'ALSOFT_BACKEND_WINMM': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
-
 guid_opts = cmake.subproject_options()
 guid_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',

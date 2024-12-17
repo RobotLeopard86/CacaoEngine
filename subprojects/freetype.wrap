@@ -2,3 +2,4 @@
 url = https://gitlab.freedesktop.org/freetype/freetype.git
 depth = 1
 revision = VER-2-13-3
+diff_files = ft-bz2disablefix.patch

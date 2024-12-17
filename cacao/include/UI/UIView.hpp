@@ -27,7 +27,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throws Exception If the view hasn't been rendered, already bound, or if not called on the main thread
+		 * @throws Exception If the view hasn't been rendered, already bound, or if not called on the engine thread
 		 */
 		void Bind(int slot);
 
@@ -36,7 +36,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throws Exception If the view isn't bound, or if not called on the main thread
+		 * @throws Exception If the view isn't bound, or if not called on the engine thread
 		 */
 		void Unbind();
 
@@ -67,6 +67,8 @@ namespace Cacao {
 		 * @param sz The new size in pixels
 		 */
 		void SetSize(glm::uvec2 sz) {
+			//Mark the screen dirty to force a re-render at the new size
+			if(screen) screen->ForceDirty();
 			size = sz;
 		}
 

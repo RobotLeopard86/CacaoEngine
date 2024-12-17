@@ -8,7 +8,9 @@ Install the dependencies as listed in the [build instructions](./building).
 If you'd like to use Visual Studio, see the [Visual Studio compatibility guide](./vs) for info on how to set up a Visual Studio Solution.  
 Otherwise, run `meson setup build` if on Windows or `meson setup build --native-file posix_native.ini` if on Linux or macOS to create a build directory, then run `ninja -C build run` to build and run the template.
 If all goes well, you should see something like this:  
-![Template](../assets/quickstart-template.png)
+```{image} ../assets/quickstart-template.png
+:class: dark-light p-2
+```
 
 ## Breaking down the template
 The main part of this template is the `src/Game.cpp` file. It is the entrypoint for your game. Let's walk through it step-by-step.  

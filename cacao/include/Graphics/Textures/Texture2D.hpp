@@ -40,7 +40,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the engine thread
 		 */
 		void Bind(int slot) override;
 
@@ -49,7 +49,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the engine thread
 		 */
 		void Unbind() override;
 
@@ -79,7 +79,7 @@ namespace Cacao {
 		void Release() override;
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
-		std::string GetType() override {
+		std::string GetType() const override {
 			return "2DTEX";
 		}
 

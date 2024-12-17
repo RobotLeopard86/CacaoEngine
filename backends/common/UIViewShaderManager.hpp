@@ -6,11 +6,12 @@
 namespace Cacao {
 	class UIViewShaderManager {
 	  public:
+		void PreCompileHook();
 		void Compile() {
 			//Define UI view shader specification
 			ShaderSpec spec;
 			ShaderItemInfo samplerInfo;
-			samplerInfo.entryName = "uiTex";
+			samplerInfo.name = "uiTex";
 			samplerInfo.size = {1, 1};
 			samplerInfo.type = SpvType::SampledImage;
 			spec.push_back(samplerInfo);
@@ -21,6 +22,7 @@ namespace Cacao {
 
 			//Create and compile UI view shader object
 			UIView::shader = new Shader(v, f, spec);
+			PreCompileHook();
 			UIView::shader->CompileAsync();
 		}
 		void Release() {

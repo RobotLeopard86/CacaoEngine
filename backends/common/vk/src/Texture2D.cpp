@@ -4,7 +4,7 @@
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
 #include "VkTexture2DData.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
@@ -84,8 +84,8 @@ namespace Cacao {
 			imm.cmd.copyBufferToImage2(copyInfo);
 		}
 		{
-			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, image, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
 			imm.cmd.pipelineBarrier2(cdDI);
@@ -103,7 +103,7 @@ namespace Cacao {
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
 		SubmitCommandBuffer(si, imm.fence);
-		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
 
 		//Assign to native data
 		nativeData->texture.alloc = ialloc;
@@ -158,7 +158,7 @@ namespace Cacao {
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info
-		vk::DescriptorImageInfo dii(imageSlot->second.sampler, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set

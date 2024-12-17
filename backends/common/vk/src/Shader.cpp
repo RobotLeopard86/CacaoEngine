@@ -3,13 +3,14 @@
 #include "Core/Log.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 #include "3D/Vertex.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
+#include "Utilities/AssetManager.hpp"
 
 #include <future>
 #include <filesystem>
@@ -17,9 +18,8 @@
 #include "spirv_reflect.hpp"
 #include "spirv_cross.hpp"
 #include "spirv_parser.hpp"
-#include "glm/gtc/type_ptr.hpp"
 
-//See VkShaderData.hpp for why there's this "impl" thing
+//See VkShader.hpp for why there's this "impl" thing
 //Basically this just makes it easier to use and keeps the arrow operator method of
 //accessing native data intact
 #define nd (&(this->nativeData->impl))
@@ -47,38 +47,38 @@ namespace Cacao {
 
 		//Get shader data block size and offsets
 		bool foundSD = false;
-		for(auto pcb : vr.push_constant_buffers) {
-			if(pcb.name.compare("type.PushConstant.ObjectData") == 0 || pcb.name.compare("object") == 0) {
-				spirv_cross::SPIRType type = vertReflector.get_type(pcb.base_type_id);
+		for(auto ubo : vr.uniform_buffers) {
+			if(ubo.name.compare("ObjectData") == 0 || ubo.name.compare("object_data") == 0 || ubo.name.compare("type.ConstantBuffer.ObjectData") == 0 || ubo.name.compare("object") == 0) {
+				spirv_cross::SPIRType type = vertReflector.get_type(ubo.base_type_id);
 				mod->shaderDataSize = vertReflector.get_declared_struct_size(type);
 				for(unsigned int i = 0; i < type.member_types.size(); ++i) {
-					mod->offsets.insert_or_assign(vertReflector.get_member_name(pcb.base_type_id, i), vertReflector.type_struct_member_offset(type, i));
+					mod->offsets.insert_or_assign(vertReflector.get_member_name(ubo.base_type_id, i), vertReflector.type_struct_member_offset(type, i));
 				}
 				foundSD = true;
 				break;
 			}
 		}
-		CheckException(foundSD, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Shaders must contain the ObjectData push constant block!");
+		if(!foundSD) {
+			mod->shaderDataSize = 0;
+		}
 
 		//Get valid image slots
 		for(auto tex : fr.sampled_images) {
 			VkShaderData::ImageSlot slotVal = {};
 			slotVal.binding = fragReflector.get_decoration(tex.id, spv::DecorationBinding);
 			slotVal.dimensionality = fragReflector.get_type(tex.base_type_id).image.dim;
-			slotVal.wrapMode = generatedSamplersClamp2Edge ? vk::SamplerAddressMode::eClampToEdge : vk::SamplerAddressMode::eRepeat;
 			mod->imageSlots.insert_or_assign(fragReflector.get_name(tex.id), slotVal);
 		}
 
 		//Make sure that shader data matches spec
 		for(const ShaderItemInfo& sii : spec) {
-			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.entryName)) || mod->offsets.contains(sii.entryName), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!");
+			CheckException((sii.type == SpvType::SampledImage && mod->imageSlots.contains(sii.name)) || mod->offsets.contains(sii.name), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader spec that is not present in shader!");
 		}
 		for(auto offset : mod->offsets) {
-			if(offset.first.compare("transform") == 0) continue;
-			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.entryName) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
+			CheckException(std::find_if(spec.begin(), spec.end(), [&offset](const ShaderItemInfo& sii) { return offset.first.compare(sii.name) == 0; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Value found in shader that is not in shader spec!");
 		}
 		for(auto slot : mod->imageSlots) {
-			CheckException(std::find_if(spec.begin(), spec.end(), [&slot](const ShaderItemInfo& sii) { return slot.first.compare(sii.entryName) == 0 && sii.type == SpvType::SampledImage; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Texture found in shader that is not in shader spec!");
+			CheckException(std::find_if(spec.begin(), spec.end(), [&slot](const ShaderItemInfo& sii) { return slot.first.compare(sii.name) == 0 && sii.type == SpvType::SampledImage; }) != spec.end(), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Texture found in shader that is not in shader spec!");
 		}
 	}
 
@@ -129,6 +129,9 @@ namespace Cacao {
 		nd->vertexCode = vbuf;
 		nd->fragmentCode = fbuf;
 
+		//Register native data
+		shaderDataLookup.insert_or_assign(this, &(nativeData->impl));
+
 		//Prepare native data
 		PrepShaderData(spec, nd);
 	}
@@ -143,6 +146,9 @@ namespace Cacao {
 		nd->vertexCode = vertex;
 		nd->fragmentCode = fragment;
 
+		//Register native data
+		shaderDataLookup.insert_or_assign(this, &(nativeData->impl));
+
 		//Prepare native data
 		PrepShaderData(spec, nd);
 	}
@@ -154,10 +160,31 @@ namespace Cacao {
 
 	void Shader::CompileSync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
+
+		//If custom compilation is not used, invoke the compiler with default settings
+		if(!nd->usesCustomCompile) {
+			ShaderCompileSettings settings {};
+			settings.blend = ShaderCompileSettings::Blending::Standard;
+			settings.depth = ShaderCompileSettings::Depth::Less;
+			settings.input = ShaderCompileSettings::InputType::Standard;
+			for(auto kv : nd->imageSlots) {
+				settings.wrapModes.insert_or_assign(kv.first, vk::SamplerAddressMode::eRepeat);
+			}
+			DoVkShaderCompile(nd, settings);
+		}
+
+		compiled = true;
+	}
+
+	void Shader::_BackendDestruct() {
+		if(auto it = shaderDataLookup.find(this); it != shaderDataLookup.end()) shaderDataLookup.erase(it);
+	}
+
+	void DoVkShaderCompile(VkShaderData* shader, const ShaderCompileSettings& settings) {
 		//Create shader modules
-		vk::ShaderModuleCreateInfo vertexModCI({}, nd->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->vertexCode.data()));
+		vk::ShaderModuleCreateInfo vertexModCI({}, shader->vertexCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(shader->vertexCode.data()));
 		vk::ShaderModule vertexMod = dev.createShaderModule(vertexModCI);
-		vk::ShaderModuleCreateInfo fragmentModCI({}, nd->fragmentCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(nd->fragmentCode.data()));
+		vk::ShaderModuleCreateInfo fragmentModCI({}, shader->fragmentCode.size() * sizeof(uint32_t), reinterpret_cast<const uint32_t*>(shader->fragmentCode.data()));
 		vk::ShaderModule fragmentMod = dev.createShaderModule(fragmentModCI);
 		vk::PipelineShaderStageCreateInfo vertexStageCI({}, vk::ShaderStageFlagBits::eVertex, vertexMod, "main");
 		vk::PipelineShaderStageCreateInfo fragmentStageCI({}, vk::ShaderStageFlagBits::eFragment, fragmentMod, "main");
@@ -179,19 +206,30 @@ namespace Cacao {
 		vk::PipelineDepthStencilStateCreateInfo depthStencilCI(
 			{}, VK_TRUE, VK_TRUE, vk::CompareOp::eLess,
 			VK_FALSE, VK_FALSE, {}, {}, 1.0f, 1.0f);
+		if(settings.depth == ShaderCompileSettings::Depth::Lequal) {
+			depthStencilCI.depthCompareOp = vk::CompareOp::eLessOrEqual;
+		} else if(settings.depth == ShaderCompileSettings::Depth::Off) {
+			depthStencilCI.depthCompareOp = vk::CompareOp::eAlways;
+			depthStencilCI.depthTestEnable = VK_FALSE;
+		}
 		vk::PipelineColorBlendAttachmentState colorBlendAttach(
 			VK_FALSE, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
 			vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
+		if(settings.blend != ShaderCompileSettings::Blending::Standard) {
+			colorBlendAttach.blendEnable = VK_TRUE;
+			colorBlendAttach.dstColorBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
+			colorBlendAttach.dstAlphaBlendFactor = vk::BlendFactor::eOneMinusSrcAlpha;
+			if(settings.blend == ShaderCompileSettings::Blending::Src) {
+				colorBlendAttach.srcColorBlendFactor = vk::BlendFactor::eSrcAlpha;
+				colorBlendAttach.srcAlphaBlendFactor = vk::BlendFactor::eSrcAlpha;
+			}
+		}
 		vk::PipelineColorBlendStateCreateInfo colorBlendCI({}, VK_FALSE, vk::LogicOp::eCopy, colorBlendAttach, {0.0f, 0.0f, 0.0f, 0.0f});
 
 		//Create dynamic state info
 		std::vector<vk::DynamicState> dynamicStates = {
 			vk::DynamicState::eViewport,
-			vk::DynamicState::eScissor,
-			vk::DynamicState::eColorBlendEquationEXT,
-			vk::DynamicState::eColorBlendEnableEXT,
-			vk::DynamicState::eDepthTestEnable,
-			vk::DynamicState::eDepthCompareOp};
+			vk::DynamicState::eScissor};
 		vk::PipelineDynamicStateCreateInfo dynStateCI({}, dynamicStates);
 
 		//Create pipeline rendering info
@@ -205,11 +243,11 @@ namespace Cacao {
 			{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, bitangent)},
 			{4, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)}}};
 		vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
-		if(compileMode == ShaderCompileMode::VertexOnly) {
+		if(settings.input == ShaderCompileSettings::InputType::VertexOnly) {
 			inputBinding.stride = sizeof(float) * 3;
 			inputStateCI.setVertexBindingDescriptions(inputBinding);
 			inputStateCI.setVertexAttributeDescriptions(inputAttrs[0]);
-		} else if(compileMode == ShaderCompileMode::VertexAndTexCoord) {
+		} else if(settings.input == ShaderCompileSettings::InputType::VertexAndTexCoord) {
 			inputBinding.stride = sizeof(float) * 5;
 			inputStateCI.setVertexBindingDescriptions(inputBinding);
 			std::array<vk::VertexInputAttributeDescription, 2> vtcAttrs = {inputAttrs[0], inputAttrs[1]};
@@ -217,47 +255,43 @@ namespace Cacao {
 		}
 
 		//Create image slot samplers
-		for(auto slot : nd->imageSlots) {
+		for(auto slot : shader->imageSlots) {
 			if(slot.second.dimensionality == spv::Dim::DimCube) {
 				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge,
 					vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-				nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
+				shader->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 			} else {
-				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, slot.second.wrapMode, slot.second.wrapMode,
-					slot.second.wrapMode, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
-				nd->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
+				vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, settings.wrapModes.at(slot.first), settings.wrapModes.at(slot.first),
+					settings.wrapModes.at(slot.first), 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+				shader->imageSlots[slot.first].sampler = dev.createSampler(samplerCI);
 			}
 		}
 
 		//Create descriptor set layout
 		std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
 		dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
-		for(auto slot : nd->imageSlots) {
+		if(shader->shaderDataSize > 0) dsBindings.emplace_back(1, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, VK_NULL_HANDLE);
+		for(auto slot : shader->imageSlots) {
 			dsBindings.emplace_back(slot.second.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment, &slot.second.sampler);
 		}
-		nd->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
+		shader->setLayout = dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
 		//Create pipeline layout
-		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4));
-		vk::PipelineLayoutCreateInfo layoutCI({}, nd->setLayout, pcr);
-		nd->pipelineLayout = dev.createPipelineLayout(layoutCI);
+		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4));
+		vk::PipelineLayoutCreateInfo layoutCI({}, shader->setLayout, pcr);
+		shader->pipelineLayout = dev.createPipelineLayout(layoutCI);
 
 		//Create pipeline
 		vk::GraphicsPipelineCreateInfo pipelineCI({}, shaderStages, &inputStateCI, &inputAssemblyCI, nullptr, &viewportState, &rasterizerCI,
-			&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, nd->pipelineLayout);
+			&multisamplingCI, &depthStencilCI, &colorBlendCI, &dynStateCI, shader->pipelineLayout);
 		pipelineCI.pNext = &pipelineRenderingInfo;
 		auto pipelineResult = dev.createGraphicsPipeline({}, pipelineCI);
 		CheckException(pipelineResult.result == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to create shader pipeline!");
-		nd->pipeline = pipelineResult.value;
+		shader->pipeline = pipelineResult.value;
 
 		//Free shader modules now that we don't need them
 		dev.destroyShaderModule(vertexMod);
 		dev.destroyShaderModule(fragmentMod);
-
-		//Allocate shader data memory (scary)
-		nd->shaderData = (unsigned char*)malloc(nd->shaderDataSize + sizeof(glm::mat4));
-
-		compiled = true;
 	}
 
 	void Shader::Release() {
@@ -268,9 +302,6 @@ namespace Cacao {
 		for(auto slotPair : nd->imageSlots) {
 			dev.destroySampler(slotPair.second.sampler);
 		}
-
-		//Free shader data memory
-		free(nd->shaderData);
 
 		//Destroy pipeline
 		dev.destroyPipeline(nd->pipeline);
@@ -320,312 +351,17 @@ namespace Cacao {
 		std::memcpy(globalsMem, cvp, sizeof(glm::mat4) * 2);
 	}
 
-	void Shader::UploadData(ShaderUploadData& data, const glm::mat4& transformation) {
-		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot upload data to uncompiled shader!");
-		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot upload data to bound shader!");
-		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to shader when there is no active frame object!");
-		CheckException(!(nd->shaderDataSize == 0 && nd->imageSlots.size() == 0 && data.size() > 0), Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot upload data to a shader that doesn't support data uploads!");
+	std::shared_ptr<Material> Shader::CreateMaterial() {
+		AssetHandle<Shader> selfHandle = AssetManager::GetInstance()->GetHandleFromPointer(this);
 
-		//Do data upload
-		std::map<std::string, ShaderItemInfo> foundItems;
-		for(ShaderUploadItem& item : data) {
-			//Attempt to locate item in shader spec
-			bool found = false;
-			if(!foundItems.contains(item.target)) {
-				for(ShaderItemInfo sii : specification) {
-					foundItems.insert_or_assign(sii.entryName, sii);
-					if(sii.entryName.compare(item.target) == 0) {
-						found = true;
-						break;
-					}
-				}
-			}
-			CheckException(found, Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader specification!");
-
-			//Grab shader item info
-			ShaderItemInfo info = foundItems[item.target];
-
-			//Find offset or image binding
-			unsigned int offset = 0;
-			VkShaderData::ImageSlot slot;
-			if(info.type == SpvType::SampledImage) {
-				CheckException(nd->imageSlots.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
-				slot = nd->imageSlots[item.target];
-			} else {
-				CheckException(nd->offsets.contains(item.target), Exception::GetExceptionCodeFromMeaning("ContainerValue"), "Can't locate item targeted by upload in shader offsets!");
-				offset = nd->offsets[item.target];
-			}
-
-			//Turn dimensions into single number (easier for uploading)
-			int dims = (4 * info.size.y) - (4 - info.size.x);
-			CheckException(!(info.size.x == 1 && info.size.y >= 2), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with one column and 2+ rows!");
-			CheckException(!(info.size.x > 1 && info.size.y > 1 && info.type != SpvType::Float && info.type != SpvType::Double), Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have data with 2+ columns and rows that are not floats or doubles!");
-
-			//Cast data to correct type to get it out of std::any
-			unsigned char* data;
-			std::size_t dataSize = 0;
-			try {
-				switch(info.type) {
-					case SpvType::Boolean:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<bool>(&item.data));
-								dataSize = sizeof(bool);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec2>(item.data))));
-								dataSize = sizeof(glm::bvec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec3>(item.data))));
-								dataSize = sizeof(glm::bvec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::bvec4>(item.data))));
-								dataSize = sizeof(glm::bvec4);
-								break;
-						}
-						break;
-					case SpvType::Int:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<int>(&item.data));
-								dataSize = sizeof(int);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec2>(item.data))));
-								dataSize = sizeof(glm::ivec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec3>(item.data))));
-								dataSize = sizeof(glm::ivec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::ivec4>(item.data))));
-								dataSize = sizeof(glm::ivec4);
-								break;
-						}
-						break;
-					case SpvType::SampledImage:
-						CheckException(dims == 1, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Shaders cannot have arrays or matrices of textures!");
-
-						//Bind texture to the slot specified
-						if(item.data.type() == typeid(Texture2D*)) {
-							Texture2D* tex = std::any_cast<Texture2D*>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(Cubemap*)) {
-							Cubemap* tex = std::any_cast<Cubemap*>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(UIView*)) {
-							UIView* view = std::any_cast<UIView*>(item.data);
-							view->Bind(slot.binding);
-						} else if(item.data.type() == typeid(AssetHandle<Texture2D>)) {
-							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(AssetHandle<Cubemap>)) {
-							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(item.data);
-							tex->Bind(slot.binding);
-						} else if(item.data.type() == typeid(AssetHandle<UIView>)) {
-							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(item.data);
-							view->Bind(slot.binding);
-						} else if(item.data.type() == typeid(RawVkTexture)) {
-							RawVkTexture raw = std::any_cast<RawVkTexture>(item.data);
-							vk::DescriptorImageInfo dii(slot.sampler, raw.view, vk::ImageLayout::eShaderReadOnlyOptimal);
-							vk::WriteDescriptorSet wds(VK_NULL_HANDLE, slot.binding, 0, vk::DescriptorType::eCombinedImageSampler, dii);
-							activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, nd->pipelineLayout, 0, wds);
-							*(raw.slot) = slot.binding;
-						} else {
-							Logging::EngineLog(item.data.type().name());
-							CheckException(false, Exception::GetExceptionCodeFromMeaning("UniformUploadFailure"), "Non-texture value supplied to texture uniform!");
-						}
-
-						break;
-					case SpvType::UInt:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<unsigned int>(&item.data));
-								dataSize = sizeof(unsigned int);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec2>(item.data))));
-								dataSize = sizeof(glm::uvec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec3>(item.data))));
-								dataSize = sizeof(glm::uvec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::uvec4>(item.data))));
-								dataSize = sizeof(glm::uvec4);
-								break;
-						}
-						break;
-					case SpvType::Float:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<float>(&item.data));
-								dataSize = sizeof(float);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec2>(item.data))));
-								dataSize = sizeof(glm::vec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec3>(item.data))));
-								dataSize = sizeof(glm::vec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::vec4>(item.data))));
-								dataSize = sizeof(glm::vec4);
-								break;
-							case 6:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2>(item.data))));
-								dataSize = sizeof(glm::mat2);
-								break;
-							case 7:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2x3>(item.data))));
-								dataSize = sizeof(glm::mat2x3);
-								break;
-							case 8:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat2x4>(item.data))));
-								dataSize = sizeof(glm::mat2x4);
-								break;
-							case 10:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3x2>(item.data))));
-								dataSize = sizeof(glm::mat3x2);
-								break;
-							case 11:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3>(item.data))));
-								dataSize = sizeof(glm::mat3);
-								break;
-							case 12:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat3x4>(item.data))));
-								dataSize = sizeof(glm::mat3x4);
-								break;
-							case 14:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4x2>(item.data))));
-								dataSize = sizeof(glm::mat4x2);
-								break;
-							case 15:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4x3>(item.data))));
-								dataSize = sizeof(glm::mat4x3);
-								break;
-							case 16:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::mat4>(item.data))));
-								dataSize = sizeof(glm::mat4);
-								break;
-						}
-						break;
-					case SpvType::Double:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<double>(&item.data));
-								dataSize = sizeof(double);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dvec2>(item.data))));
-								dataSize = sizeof(glm::dvec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dvec3>(item.data))));
-								dataSize = sizeof(glm::dvec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dvec4>(item.data))));
-								dataSize = sizeof(glm::dvec4);
-								break;
-							case 6:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat2>(item.data))));
-								dataSize = sizeof(glm::dmat2);
-								break;
-							case 7:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat2x3>(item.data))));
-								dataSize = sizeof(glm::dmat2x3);
-								break;
-							case 8:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat2x4>(item.data))));
-								dataSize = sizeof(glm::dmat2x4);
-								break;
-							case 10:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat3x2>(item.data))));
-								dataSize = sizeof(glm::dmat3x2);
-								break;
-							case 11:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat3>(item.data))));
-								dataSize = sizeof(glm::dmat3);
-								break;
-							case 12:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat3x4>(item.data))));
-								dataSize = sizeof(glm::dmat3x4);
-								break;
-							case 14:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat4x2>(item.data))));
-								dataSize = sizeof(glm::dmat4x2);
-								break;
-							case 15:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat4x3>(item.data))));
-								dataSize = sizeof(glm::dmat4x3);
-								break;
-							case 16:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::dmat4>(item.data))));
-								dataSize = sizeof(glm::dmat4);
-								break;
-						}
-						break;
-					case SpvType::Int64:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<int64_t>(&item.data));
-								dataSize = sizeof(int64_t);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::i64vec2>(item.data))));
-								dataSize = sizeof(glm::i64vec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::i64vec3>(item.data))));
-								dataSize = sizeof(glm::i64vec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::i64vec4>(item.data))));
-								dataSize = sizeof(glm::i64vec4);
-								break;
-						}
-						break;
-					case SpvType::UInt64:
-						switch(dims) {
-							case 1:
-								data = reinterpret_cast<unsigned char*>(std::any_cast<uint64_t>(&item.data));
-								dataSize = sizeof(uint64_t);
-								break;
-							case 2:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::u64vec2>(item.data))));
-								dataSize = sizeof(glm::u64vec2);
-								break;
-							case 3:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::u64vec3>(item.data))));
-								dataSize = sizeof(glm::u64vec3);
-								break;
-							case 4:
-								data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(glm::value_ptr(std::any_cast<glm::u64vec4>(item.data))));
-								dataSize = sizeof(glm::u64vec4);
-								break;
-						}
-						break;
-				}
-			} catch(const std::bad_cast&) {
-				CheckException(false, Exception::GetExceptionCodeFromMeaning("WrongType"), "Failed cast of shader upload value to type specified in target!");
-			}
-
-
-			//Copy data into buffer if we need to
-			if(nd->shaderDataSize > 0) std::memcpy(nd->shaderData + offset, data, dataSize);
+		//Unfortunately, we have to do it this way because make_shared doesn't work well with friend classes
+		Material* m;
+		if(selfHandle.IsNull()) {
+			//We should never have to do this except for engine-internal shaders that aren't cached
+			m = new Material(this);
+		} else {
+			m = new Material(selfHandle);
 		}
-
-		//Copy transformation matrix
-		std::memcpy(nd->shaderData, glm::value_ptr(transformation), sizeof(glm::mat4));
-
-		//Push constants if there are any
-		activeFrame->cmd.pushConstants(nd->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, nd->shaderDataSize + sizeof(glm::mat4), nd->shaderData);
+		return std::shared_ptr<Material>(m);
 	}
 }

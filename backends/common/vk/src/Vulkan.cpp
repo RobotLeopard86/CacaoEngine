@@ -2,6 +2,7 @@
 #include "VulkanCoreObjects.hpp"
 
 #include "VkHooks.hpp"
+#include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
 #include "Core/Assert.hpp"
@@ -14,6 +15,8 @@
 #include "UI/Shaders.hpp"
 #include "UIDrawUBO.hpp"
 
+#include "glm/gtc/type_ptr.hpp"
+
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 bool backendInitBeforeWindow = true;
@@ -25,6 +28,7 @@ namespace Cacao {
 	Allocated<vk::Buffer> uiQuadBuffer;
 	Allocated<vk::Buffer> uiQuadUBO;
 	void* uiQuadUBOMem;
+	std::shared_ptr<Material> uiQuadMat;
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
 	void RankPhysicalDevices(std::vector<vk::PhysicalDevice>* devices, const std::vector<std::function<bool(const vk::PhysicalDevice&)>>& tests) {
@@ -51,7 +55,9 @@ namespace Cacao {
 		//Check if we have an immediate for this thread already
 		auto threadID = std::this_thread::get_id();
 		if(immediates.contains(threadID)) {
-			return immediates.at(threadID);
+			Immediate ret = immediates.at(threadID);
+			ret.cmd.reset();
+			return ret;
 		}
 
 		//Make a new immediate
@@ -82,7 +88,7 @@ namespace Cacao {
 		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
 		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
-		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_2);
+		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_3);
 		auto requiredInstanceExts = GetRequiredInstanceExts();
 #ifdef __APPLE__
 		requiredInstanceExts.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
@@ -103,14 +109,6 @@ namespace Cacao {
 		//Find best device
 		std::vector<const char*> requiredDevExts = {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-			VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
-			VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME,
-			VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME,
-			VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
-			VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
-			VK_EXT_ROBUSTNESS_2_EXTENSION_NAME,
-			VK_KHR_COPY_COMMANDS_2_EXTENSION_NAME,
-			VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME,
 			VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME};
 #ifdef __linux__
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
@@ -159,14 +157,8 @@ namespace Cacao {
 		vk::DeviceQueueCreateInfo queueCI({}, 0, 1, &qp);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
-		vk::PhysicalDeviceExtendedDynamicState3FeaturesEXT extendedDynamicState3Features {};
-		extendedDynamicState3Features.extendedDynamicState3ColorBlendEnable = VK_TRUE;
-		extendedDynamicState3Features.extendedDynamicState3ColorBlendEquation = VK_TRUE;
-		extendedDynamicState3Features.pNext = &extendedDynamicStateFeatures;
-		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicState3Features);
-		vk::PhysicalDeviceRobustness2FeaturesEXT robustnessFeatures(VK_FALSE, VK_FALSE, VK_TRUE, &sync2Features);
-		vk::PhysicalDeviceFeatures2 deviceFeatures2 {};
-		deviceFeatures2.pNext = &robustnessFeatures;
+		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
+		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &sync2Features);
 		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts, nullptr, &deviceFeatures2);
 		try {
 			dev = physDev.createDevice(deviceCI);
@@ -183,7 +175,7 @@ namespace Cacao {
 
 		//Create memory allocator
 		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);
-		vma::AllocatorCreateInfo allocatorCI({}, physDev, dev, 0UL, 0, 0, 0, &vkFuncs, vk_instance, VK_API_VERSION_1_2);
+		vma::AllocatorCreateInfo allocatorCI({}, physDev, dev, 0UL, 0, 0, 0, &vkFuncs, vk_instance, VK_API_VERSION_1_3);
 		try {
 			allocator = vma::createAllocator(allocatorCI);
 		} catch(vk::SystemError& err) {
@@ -352,7 +344,7 @@ namespace Cacao {
 		allocator.mapMemory(vertexUp.alloc, &gpuMem);
 		std::memcpy(gpuMem, quadData, vbsz);
 		allocator.unmapMemory(vertexUp.alloc);
-		vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+		vk::CommandBufferBeginInfo copyBegin {};
 		imm.cmd.begin(copyBegin);
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, vbsz);
@@ -365,16 +357,96 @@ namespace Cacao {
 			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
 			dev.resetFences(imm.fence);
 		}
-		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
-		vk::SubmitInfo2 si({}, {}, cbsi);
-		queue.submit2(si, imm.fence);
-		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		{
+			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+			vk::SubmitInfo2 si({}, {}, cbsi);
+			SubmitCommandBuffer(si, imm.fence);
+		}
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
 		allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
 
+		//Create "null" texture
+		vk::ImageCreateInfo nullCI({}, vk::ImageType::e2D, vk::Format::eR8G8B8A8Srgb, {1, 1, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled, vk::SharingMode::eExclusive, 0);
+		vma::AllocationCreateInfo nullAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
+		try {
+			auto [img, alloc] = allocator.createImage(nullCI, nullAllocCI);
+			nullImage = {.alloc = alloc, .obj = img};
+		} catch(vk::SystemError& err) {
+			allocator.unmapMemory(uiUBO.alloc);
+			allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			allocator.destroyBuffer(uiQuadBuffer.obj, uiQuadBuffer.alloc);
+			Immediate::Cleanup();
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create null texture image: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
+		//Create "null" buffer
+		vk::BufferCreateInfo nullBufCI({}, 1, vk::BufferUsageFlagBits::eUniformBuffer);
+		try {
+			auto [buf, alloc] = allocator.createBuffer(nullBufCI, nullAllocCI);
+			nullBuffer = {.alloc = alloc, .obj = buf};
+		} catch(vk::SystemError& err) {
+			allocator.destroyImage(nullImage.obj, nullImage.alloc);
+			allocator.unmapMemory(uiUBO.alloc);
+			allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
+			allocator.unmapMemory(uiQuadUBO.alloc);
+			allocator.destroyBuffer(uiQuadUBO.obj, uiQuadUBO.alloc);
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			allocator.destroyBuffer(uiQuadBuffer.obj, uiQuadBuffer.alloc);
+			Immediate::Cleanup();
+			dev.destroyCommandPool(renderPool);
+			allocator.destroy();
+			dev.destroy();
+			vk_instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create null buffer: " << err.what();
+			EngineAssert(false, emsg.str());
+		}
+
+		//Transition "null" image to shader read-only layout
+		vk::CommandBufferBeginInfo nullImageStateBegin {};
+		imm.cmd.reset();
+		imm.cmd.begin(nullImageStateBegin);
+		{
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
+				vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, nullImage.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+			vk::DependencyInfo cdDI({}, {}, {}, barrier);
+			imm.cmd.pipelineBarrier2(cdDI);
+		}
+		imm.cmd.end();
+		if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
+			dev.resetFences(imm.fence);
+		}
+		{
+			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
+			vk::SubmitInfo2 si({}, {}, cbsi);
+			SubmitCommandBuffer(si, imm.fence);
+		}
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
+
+		//Create "null" image view
+		vk::ImageViewCreateInfo nullViewCI({}, nullImage.obj, vk::ImageViewType::e2D, vk::Format::eR8G8B8A8Srgb,
+			{vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero},
+			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
+		nullView = dev.createImageView(nullViewCI);
+
+		//Set up some basic variables
 		didGenShaders = false;
 		frameCycle = 0;
-		compileMode = ShaderCompileMode::Standard;
-		generatedSamplersClamp2Edge = false;
 	}
 
 	void RegisterGraphicsExceptions() {
@@ -389,8 +461,36 @@ namespace Cacao {
 
 	void RenderController::UpdateGraphicsState() {}
 
-	void PreShaderCreateHook() {
-		generatedSamplersClamp2Edge = true;
+	void PreShaderCompileHook(Shader* shader) {
+		//Set custom compile
+		VkShaderData* sd = shaderDataLookup.at(shader);
+		sd->usesCustomCompile = true;
+
+		//Since we do custom compilation, we just do it here and let the "compile" call do nothing
+		ShaderCompileSettings settings {};
+		settings.blend = ShaderCompileSettings::Blending::One;
+		settings.depth = ShaderCompileSettings::Depth::Off;
+		settings.input = ShaderCompileSettings::InputType::VertexAndTexCoord;
+		settings.wrapModes.insert_or_assign("glyph", vk::SamplerAddressMode::eClampToEdge);
+		settings.wrapModes.insert_or_assign("image", vk::SamplerAddressMode::eClampToEdge);
+		DoVkShaderCompile(sd, settings);
+	}
+
+	void UIViewShaderManager::PreCompileHook() {
+		//Set custom compile
+		VkShaderData* sd = shaderDataLookup.at(UIView::shader);
+		sd->usesCustomCompile = true;
+
+		//Since we do custom compilation, we just do it here and let the "compile" call do nothing
+		ShaderCompileSettings settings {};
+		settings.blend = ShaderCompileSettings::Blending::Src;
+		settings.depth = ShaderCompileSettings::Depth::Off;
+		settings.input = ShaderCompileSettings::InputType::VertexOnly;
+		settings.wrapModes.insert_or_assign("uiTex", vk::SamplerAddressMode::eRepeat);
+		DoVkShaderCompile(sd, settings);
+
+		//Create the material for the UI quad
+		uiQuadMat = uivsm->CreateMaterial();
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {
@@ -410,11 +510,14 @@ namespace Cacao {
 	}
 
 	void RenderController::Shutdown() {
-		//Wait for the device to be idle
+		//Wait for the device to be idle so it's safe to destroy things
 		dev.waitIdle();
 
 		//Clean up immediate objects
 		Immediate::Cleanup();
+
+		//Release UI quad material
+		uiQuadMat.reset();
 
 		if(didGenShaders) {
 			//Cleanup UI shaders
@@ -424,6 +527,9 @@ namespace Cacao {
 		}
 
 		//Destroy Vulkan objects
+		allocator.destroyBuffer(nullBuffer.obj, nullBuffer.alloc);
+		dev.destroyImageView(nullView);
+		allocator.destroyImage(nullImage.obj, nullImage.alloc);
 		allocator.unmapMemory(uiUBO.alloc);
 		allocator.destroyBuffer(uiUBO.obj, uiUBO.alloc);
 		allocator.unmapMemory(uiQuadUBO.alloc);
@@ -540,10 +646,6 @@ namespace Cacao {
 		vk::Rect2D scissor({0, 0}, extent);
 		f.cmd.setViewport(0, viewport);
 		f.cmd.setScissor(0, scissor);
-		f.cmd.setColorBlendEnableEXT(0, VK_FALSE);
-		f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd, vk::BlendFactor::eZero, vk::BlendFactor::eOne, vk::BlendOp::eAdd));
-		f.cmd.setDepthTestEnable(VK_TRUE);
-		f.cmd.setDepthCompareOp(vk::CompareOp::eLess);
 
 		//Start rendering
 		constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
@@ -551,51 +653,23 @@ namespace Cacao {
 		vk::RenderingAttachmentInfo colorAttachment(imageViews[imgIdx], vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {clearColorLinear.r, clearColorLinear.g, clearColorLinear.b, 1.0f}));
 		vk::RenderingAttachmentInfo depthAttachment(depthView, vk::ImageLayout::eDepthAttachmentOptimal, {}, {}, {}, vk::AttachmentLoadOp::eClear,
-			vk::AttachmentStoreOp::eDontCare, vk::ClearDepthStencilValue(1.0f, 0.0f));
+			vk::AttachmentStoreOp::eStore, vk::ClearDepthStencilValue(1.0f, 0.0f));
 		vk::RenderingInfo renderingInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment, &depthAttachment);
 		f.cmd.beginRendering(renderingInfo);
 
 		//Draw scene
 		for(RenderObject& obj : frame->objects) {
-			//Bind shader
-			obj.material.shader->Bind();
+			//Activate material
+			obj.material.Activate();
 
-			//Upload material data to shader
-			obj.material.shader->UploadData(obj.material.data, obj.transformMatrix);
+			//Push transformation matrix
+			f.cmd.pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(obj.transformMatrix));
 
 			//Draw the mesh
 			obj.mesh->Draw();
 
-			//Unbind any textures
-			const ShaderSpec& spec = obj.material.shader->GetSpec();
-			for(ShaderUploadItem& sui : obj.material.data) {
-				if(std::find_if(spec.begin(), spec.end(), [&sui](ShaderItemInfo sii) {
-					   return (sii.type == SpvType::SampledImage && sii.entryName == sui.target);
-				   }) != spec.end()) {
-					if(sui.data.type() == typeid(Texture2D*)) {
-						Texture2D* tex = std::any_cast<Texture2D*>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(Cubemap*)) {
-						Cubemap* tex = std::any_cast<Cubemap*>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(UIView*)) {
-						UIView* view = std::any_cast<UIView*>(sui.data);
-						view->Unbind();
-					} else if(sui.data.type() == typeid(AssetHandle<Texture2D>)) {
-						AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(AssetHandle<Cubemap>)) {
-						AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(sui.data);
-						tex->Unbind();
-					} else if(sui.data.type() == typeid(AssetHandle<UIView>)) {
-						AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(sui.data);
-						view->Unbind();
-					}
-				}
-			}
-
-			//Unbind shader
-			obj.material.shader->Unbind();
+			//Deactivate material
+			obj.material.Deactivate();
 		}
 
 		//Draw skybox (if one exists)
@@ -608,33 +682,28 @@ namespace Cacao {
 			project[1][1] *= -1;//Flip
 			project[3][1] -= 2; //Move into viewable area
 
-			//Upload uniforms
-			ShaderUploadData uiud;
-			uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
-			uivsm->Bind();
-			uivsm->UploadData(uiud, glm::identity<glm::mat4>());
+			//Activate UI quad material
+			uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
+			uiQuadMat->Activate();
 
-			//Set up our own globals uniform buffer
+			//Push identity transform matrix
+			glm::mat4 identityTransform = glm::identity<glm::mat4>();
+			f.cmd.pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(identityTransform));
+
+			//Set up the special UI quad globals uniform buffer
 			glm::mat4 uiGlobalsData[2] = {project, glm::identity<glm::mat4>()};
 			std::memcpy(uiQuadUBOMem, uiGlobalsData, 2 * sizeof(glm::mat4));
 			vk::DescriptorBufferInfo uiGlobalsDBI(uiQuadUBO.obj, 0, vk::WholeSize);
 			vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiGlobalsDBI);
-			activeFrame->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
-
-			//Modify dynamic state
-			f.cmd.setColorBlendEnableEXT(0, VK_TRUE);
-			f.cmd.setColorBlendEquationEXT(0, vk::ColorBlendEquationEXT(vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, vk::BlendFactor::eSrcAlpha, vk::BlendFactor::eOneMinusSrcAlpha));
-			f.cmd.setDepthTestEnable(VK_FALSE);
-			f.cmd.setDepthCompareOp(vk::CompareOp::eAlways);
+			f.cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
 
 			//Draw quad
 			constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
 			f.cmd.bindVertexBuffers(0, uiQuadBuffer.obj, offsets);
 			f.cmd.draw(6, 1, 0, 0);
 
-			//Unbind UI shader and view
-			Engine::GetInstance()->GetGlobalUIView()->Unbind();
-			uivsm->Unbind();
+			//Deactivate UI quad material
+			uiQuadMat->Deactivate();
 		}
 
 		//End rendering
@@ -654,10 +723,16 @@ namespace Cacao {
 		f.cmd.end();
 
 		//Submit the command buffer to the queue
-		vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-		vk::SubmitInfo submitInfo(f.acquireSemaphore, waitStage, f.cmd, f.renderSemaphore);
-		if(auto res = queue.submit(1, &submitInfo, f.fence); res != vk::Result::eSuccess) {
-			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), "Failed to submit frame command buffer!");
+		vk::SemaphoreSubmitInfo semWait(f.acquireSemaphore, 0, vk::PipelineStageFlagBits2::eAllCommands);
+		vk::CommandBufferSubmitInfo cbsi(f.cmd);
+		vk::SemaphoreSubmitInfo semSignal(f.renderSemaphore, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+		vk::SubmitInfo2 si({}, semWait, cbsi, semSignal);
+		try {
+			SubmitCommandBuffer(si, f.fence);
+		} catch(vk::SystemError& err) {
+			std::stringstream emsg;
+			emsg << "Failed to submit frame command buffer: " << err.what();
+			CheckException(false, Exception::GetExceptionCodeFromMeaning("Vulkan"), emsg.str());
 		}
 
 		//Set submission for presenting

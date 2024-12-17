@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Latest development commit",
+        "version": "dev",
+        "url": "https://robotleopard86.github.io/CacaoEngine/dev"
+    },
+	{
+        "name": "Latest stable development version",
+        "version": "dev",
+        "url": "https://robotleopard86.github.io/CacaoEngine/main"
+    }
+]

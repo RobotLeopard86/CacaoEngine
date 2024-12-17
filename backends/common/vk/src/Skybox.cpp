@@ -14,14 +14,15 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Cacao {
 	//Initialize static resources
 	bool Skybox::isSetup = false;
 	Shader* Skybox::skyboxShader = nullptr;
 
-	Skybox::Skybox(Cubemap* tex)
-	  : Asset(false), rotation({0, 0, 0}), textureOwner(true), texture(tex) {
+	Skybox::Skybox(AssetHandle<Cubemap> tex)
+	  : Asset(false), rotation({0, 0, 0}), texture(tex) {
 		//Create native data
 		nativeData.reset(new SkyboxData());
 		nativeData->vbufReady = false;
@@ -39,7 +40,7 @@ namespace Cacao {
 		//Define skybox shader specification
 		ShaderSpec spec;
 		ShaderItemInfo skySamplerInfo;
-		skySamplerInfo.entryName = "skybox";
+		skySamplerInfo.name = "skybox";
 		skySamplerInfo.size = {1, 1};
 		skySamplerInfo.type = SpvType::SampledImage;
 		spec.push_back(skySamplerInfo);
@@ -48,11 +49,20 @@ namespace Cacao {
 		std::vector<uint32_t> v(vsCode, std::end(vsCode));
 		std::vector<uint32_t> f(fsCode, std::end(fsCode));
 
-		//Create and compile skybox shader object
-		compileMode = ShaderCompileMode::VertexOnly;
+		//Create skybox shader object
 		skyboxShader = new Shader(v, f, spec);
+
+		//Do custom compilation
+		VkShaderData* sd = shaderDataLookup.at(skyboxShader);
+		sd->usesCustomCompile = true;
+		ShaderCompileSettings settings {};
+		settings.blend = ShaderCompileSettings::Blending::Standard;
+		settings.depth = ShaderCompileSettings::Depth::Lequal;
+		settings.input = ShaderCompileSettings::InputType::VertexOnly;
+		DoVkShaderCompile(sd, settings);
+
+		//"Compile" the shader so it knows that it's good
 		skyboxShader->CompileSync();
-		compileMode = ShaderCompileMode::Standard;
 
 		isSetup = true;
 	}
@@ -70,95 +80,60 @@ namespace Cacao {
 		//Confirm that texture is compiled
 		CheckException(texture->IsCompiled(), Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Skybox texture has not been compiled!");
 
-		//If the vertex buffer isn't set up, do so
-		if(!nativeData->vbufReady) {
-			//Create allocation info
-			auto vbsz = sizeof(float) * std::size(skyboxVerts);
-			vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer);
-			vk::BufferCreateInfo vertexUpCI({}, vbsz, vk::BufferUsageFlagBits::eTransferSrc);
-			vma::AllocationCreateInfo uploadAllocCI({}, vma::MemoryUsage::eCpuToGpu);
-			vma::AllocationCreateInfo bufferAllocCI({}, vma::MemoryUsage::eGpuOnly);
-
-			//Create buffer objects
-			Allocated<vk::Buffer> vertexUp = {};
-			{
-				auto [buffer, alloc] = allocator.createBuffer(vertexCI, bufferAllocCI);
-				nativeData->vertexBuffer.alloc = alloc;
-				nativeData->vertexBuffer.obj = buffer;
-			}
-			{
-				auto [buffer, alloc] = allocator.createBuffer(vertexUpCI, uploadAllocCI);
-				vertexUp.alloc = alloc;
-				vertexUp.obj = buffer;
-			}
-
-			//Upload data to the GPU
-			void* gpuMem;
-			allocator.mapMemory(vertexUp.alloc, &gpuMem);
-			std::memcpy(gpuMem, skyboxVerts, vbsz);
-			allocator.unmapMemory(vertexUp.alloc);
-
-			//Record a resource copy from the upload buffers to the real buffers
-			Immediate imm = Immediate::Get();
-			vk::CommandBufferBeginInfo copyBegin(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-			imm.cmd.begin(copyBegin);
-			{
-				vk::BufferCopy2 copy(0UL, 0UL, vbsz);
-				vk::CopyBufferInfo2 copyInfo(vertexUp.obj, nativeData->vertexBuffer.obj, copy);
-				imm.cmd.copyBuffer2(copyInfo);
-			}
-			imm.cmd.end();
-
-			//Wait for and reset fence just in case
-			if(dev.getFenceStatus(imm.fence) == vk::Result::eSuccess) {
-				vk::Result fenceWait = dev.waitForFences(imm.fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
-				CheckException(fenceWait == vk::Result::eSuccess, Exception::GetExceptionCodeFromMeaning("WaitExpired"), "Waited too long for immediate fence reset!");
-				dev.resetFences(imm.fence);
-			}
-
-			//Submit and wait
-			vk::CommandBufferSubmitInfo cbsi(imm.cmd);
-			vk::SubmitInfo2 si({}, {}, cbsi);
-			SubmitCommandBuffer(si, imm.fence);
-			dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
-
-			//Delete upload buffer
-			allocator.destroyBuffer(vertexUp.obj, vertexUp.alloc);
-
-			nativeData->vbufReady = true;
-		}
-
 		//Get frame object
 		CheckException(activeFrame, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot draw skybox when there is no active frame object!");
 		VkFrame f = *activeFrame;
 
+		//If the material isn't set up, do so
+		if(!mat) {
+			mat = skyboxShader->CreateMaterial();
+			mat->WriteValue("skybox", texture);
+		}
+
+		//If the vertex buffer isn't set up, do so
+		if(!nativeData->vbufReady) {
+			//Create allocation info
+			auto vbsz = sizeof(float) * std::size(skyboxVerts);
+			vk::BufferCreateInfo vertexCI({}, vbsz, vk::BufferUsageFlagBits::eVertexBuffer);
+			vma::AllocationCreateInfo allocCI {};
+			allocCI.requiredFlags = vk::MemoryPropertyFlagBits::eHostVisible;
+
+			//Create buffer object
+			{
+				auto [buffer, alloc] = allocator.createBuffer(vertexCI, allocCI);
+				nativeData->vertexBuffer.alloc = alloc;
+				nativeData->vertexBuffer.obj = buffer;
+			}
+
+			//Upload data to the GPU
+			void* gpuMem;
+			allocator.mapMemory(nativeData->vertexBuffer.alloc, &gpuMem);
+			std::memcpy(gpuMem, skyboxVerts, vbsz);
+			allocator.unmapMemory(nativeData->vertexBuffer.alloc);
+
+			nativeData->vbufReady = true;
+		}
+
 		//Create skybox transform matrix
-		glm::mat4 skyTransform(1.0);
+		glm::mat4 skyTransform = glm::identity<glm::mat4>();
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.x), {1.0, 0.0, 0.0});
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.y), {0.0, 1.0, 0.0});
 		skyTransform = glm::rotate(skyTransform, glm::radians(rotation.z), {0.0, 0.0, 1.0});
 
-		//Bind skybox shader
-		skyboxShader->Bind();
+		//Activate skybox material
+		mat->Activate();
 
-		//Upload data to shader
-		ShaderUploadData sud;
-		ShaderUploadItem skySampler;
-		skySampler.data = std::any(texture);
-		skySampler.target = "skybox";
-		sud.push_back(skySampler);
-		skyboxShader->UploadData(sud, skyTransform);
+		//Push transformation matrix
+		f.cmd.pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(skyTransform));
 
 		//Bind vertex buffer
 		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
 		f.cmd.bindVertexBuffers(0, nativeData->vertexBuffer.obj, offsets);
 
 		//Draw skybox
-		f.cmd.setDepthCompareOp(vk::CompareOp::eLessOrEqual);
 		f.cmd.draw(std::size(skyboxVerts), 1, 0, 0);
 
-		//Unbind skybox shader and texture
-		texture->Unbind();
-		skyboxShader->Unbind();
+		//Deactivate skybox material
+		mat->Deactivate();
 	}
 }

@@ -3,7 +3,6 @@
 #include <vector>
 #include <filesystem>
 #include <map>
-#include <any>
 #include <future>
 
 #include "Core/Log.hpp"
@@ -16,26 +15,27 @@
 
 namespace Cacao {
 	///@brief Shorthand type for shader data types
-	using SpvType = spirv_cross::SPIRType::BaseType;
+	enum class SpvType {
+		Int = spirv_cross::SPIRType::BaseType::Int,
+		UInt = spirv_cross::SPIRType::BaseType::UInt,
+		Float = spirv_cross::SPIRType::BaseType::Float,
+		SampledImage = spirv_cross::SPIRType::BaseType::SampledImage,
+		Unknown = spirv_cross::SPIRType::BaseType::Unknown
+	};
 
 	///@brief Item in a ShaderSpec
 	struct ShaderItemInfo {
-		spirv_cross::TypeID type;///<Base data type
-		glm::uvec2 size;		 ///<Size (x is columns, y is rows). Example: scalars are {1, 1}, vectors are {size, 1}, matrices are {x, y}
-		std::string entryName;	 ///<Name of the entry and how it is referenced
+		SpvType type;	 ///<Type of data
+		glm::uvec2 size; ///<Size (x is columns, y is rows). Example: scalars are {1, 1}, vectors are {size, 1}, matrices are {x, y}
+		std::string name;///<Name of the item in the shader source
 	};
 
 	///@brief Collection of shader input items
 	using ShaderSpec = std::vector<ShaderItemInfo>;
 
-	///@brief Item of data to upload to a shader
-	struct ShaderUploadItem {
-		std::string target;///<The name of the ShaderItemInfo to target
-		std::any data;	   ///<The data to upload
-	};
-
-	///@brief Collection of items to upload to a shader
-	using ShaderUploadData = std::vector<ShaderUploadItem>;
+	///@cond
+	class Material;
+	///@endcond
 
 	/**
 	 * @brief A shader program. Implementation is backend-dependent
@@ -49,7 +49,7 @@ namespace Cacao {
 		 * @param fragment SPIR-V code for the vertex shader
 		 * @param spec The shader specification
 		 *
-		 * @note Not recommended for use by games, but if it's necessary to put SPIR-V in code, go ahead...
+		 * @note Not recommended for use by games, but if it's necessary to embed SPIR-V in code, go ahead...
 		 */
 		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
 
@@ -72,6 +72,7 @@ namespace Cacao {
 		~Shader() final {
 			if(compiled && bound) Unbind();
 			if(compiled) Release();
+			_BackendDestruct();
 		}
 
 		/**
@@ -120,7 +121,7 @@ namespace Cacao {
 		 *
 		 * @return If the shader is bound
 		 */
-		bool IsBound() {
+		bool IsBound() const {
 			return bound;
 		}
 
@@ -134,18 +135,6 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Upload data to the shader
-		 *
-		 * @param data The material data to upload to the shader
-		 * @param transformation The transformation matrix of the next object
-		 *
-		 * @note For use by the engine only
-		 *
-		 * @throws Exception If the data uploaded does not match the shader specification, the shader was not bound or the shader was not compiled
-		 */
-		void UploadData(ShaderUploadData& data, const glm::mat4& transformation);
-
-		/**
 		 * @brief Upload engine global data
 		 *
 		 * @param projection The projection matrix
@@ -156,9 +145,16 @@ namespace Cacao {
 		static void UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view);
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
-		std::string GetType() override {
+		std::string GetType() const override {
 			return "SHADER";
 		}
+
+		/**
+		 * @brief Create a new material from this shader
+		 *
+		 * @return A new material that can be used for drawing
+		 */
+		std::shared_ptr<Material> CreateMaterial();
 
 	  private:
 		//Backend-implemented data type
@@ -167,5 +163,10 @@ namespace Cacao {
 		bool bound;
 		std::shared_ptr<ShaderData> nativeData;
 		const ShaderSpec specification;
+
+		//Backend-implemented destruction hook
+		void _BackendDestruct();
+
+		friend class Material;
 	};
 }

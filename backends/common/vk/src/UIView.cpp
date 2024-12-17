@@ -69,7 +69,7 @@ namespace Cacao {
 		auto imageSlot = std::find_if(activeShader->imageSlots.begin(), activeShader->imageSlots.end(), [this](auto is) { return is.second.binding == currentSlot; });
 
 		//Create update info
-		vk::DescriptorImageInfo dii(imageSlot->second.sampler, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
+		vk::DescriptorImageInfo dii(imageSlot->second.sampler, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet wds(VK_NULL_HANDLE, currentSlot, 0, vk::DescriptorType::eCombinedImageSampler, dii);
 
 		//Update descriptor set
@@ -129,16 +129,11 @@ namespace Cacao {
 		vk::Rect2D scissor({0, 0}, extent);
 		imm.cmd.setViewport(0, viewport);
 		imm.cmd.setScissor(0, scissor);
-		imm.cmd.setColorBlendEnableEXT(0, VK_TRUE);
-		vk::ColorBlendEquationEXT equ(vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, vk::BlendFactor::eOne, vk::BlendFactor::eOneMinusSrcAlpha);
-		imm.cmd.setColorBlendEquationEXT(0, equ);
-		imm.cmd.setDepthTestEnable(VK_FALSE);
-		imm.cmd.setDepthCompareOp(vk::CompareOp::eAlways);
 
 		//Transition image to drawable state
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eColorAttachmentWrite,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, 0, 0, backBuffer->tex.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
 			imm.cmd.pipelineBarrier2(cdDI);
@@ -183,8 +178,8 @@ namespace Cacao {
 
 		//Transition image to sampleable state
 		{
-			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eColorAttachmentWrite,
+				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, backBuffer->tex.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
 			imm.cmd.pipelineBarrier2(cdDI);
@@ -204,7 +199,7 @@ namespace Cacao {
 		vk::CommandBufferSubmitInfo cbsi(imm.cmd);
 		vk::SubmitInfo2 si({}, {}, cbsi);
 		SubmitCommandBuffer(si, imm.fence);
-		dev.waitForFences(imm.fence, VK_TRUE, INFINITY);
+		dev.waitForFences(imm.fence, VK_TRUE, UINT64_MAX);
 
 		//Clean up allocated objects
 		for(auto obj : allocatedObjects) {
@@ -227,6 +222,10 @@ namespace Cacao {
 			}
 		}
 		allocatedObjects.clear();
+		for(auto& ptr : tempMatHandles) {
+			ptr.reset();
+		}
+		tempMatHandles.clear();
 
 		//Restore the real frame object
 		VkFrame* fake = activeFrame;

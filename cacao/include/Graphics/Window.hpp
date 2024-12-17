@@ -125,7 +125,7 @@ namespace Cacao {
 		/**
 		 * @brief Set the window title
 		 *
-		 * @param value The new title
+		 * @param title The new title
 		 *
 		 * @throws Exception If the window isn't open
 		 */
@@ -167,7 +167,7 @@ namespace Cacao {
 		/**
 		 * @brief Set the window mode
 		 *
-		 * @param value The new mode
+		 * @param newMode The new mode
 		 *
 		 * @throws Exception If the window isn't open
 		 */

@@ -116,6 +116,28 @@ namespace Cacao {
 			assetCache.erase(assetID);
 		}
 
+		/**
+		 * @brief Get an AssetHandle from the asset's stored pointer
+		 * @details This is used for assets to be able to retrieve their own handle, typically for passing to another object
+		 *
+		 * @note For use by the engine only
+		 *
+		 * @param ptr A raw pointer to the asset (typically obtained from this)
+		 *
+		 * @return An asset handle, which will be a null handle if the asset was not found in the cache
+		 */
+		template<typename T>
+		AssetHandle<T> GetHandleFromPointer(T* ptr) {
+			if(auto it = std::find_if(assetCache.begin(), assetCache.end(), [ptr](auto& kv) {
+				   return kv.second.lock().get() == ptr;
+			   });
+				it != assetCache.end()) {
+				return AssetHandle<T>(it->first, std::dynamic_pointer_cast<Shader>(it->second.lock()));
+			} else {
+				return AssetHandle<T>();
+			}
+		}
+
 	  private:
 		//Singleton members
 		static AssetManager* instance;

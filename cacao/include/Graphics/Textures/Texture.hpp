@@ -6,6 +6,29 @@
 
 namespace Cacao {
 	/**
+	 * @brief Base class for "raw" textures (used by the backend)
+	 *
+	 * @note For use by the engine only
+	 */
+	struct RawTexture {
+	  public:
+		int* slot;
+
+		~RawTexture() {
+			delete slot;
+		}
+
+		RawTexture(const RawTexture&) = delete;
+		RawTexture operator=(const RawTexture&) = delete;
+		RawTexture(RawTexture&&) = delete;
+		RawTexture operator=(RawTexture&&) = delete;
+
+	  protected:
+		RawTexture()
+		  : slot(new int(-1)) {}
+	};
+
+	/**
 	 * @brief Base texture asset
 	 */
 	class Texture : public Asset {
@@ -17,7 +40,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the engine thread
 		 */
 		virtual void Bind(int slot) {}
 
@@ -26,7 +49,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only
 		 *
-		 * @throw Exception If texture is already bound, not compiled, or if not called on the main thread
+		 * @throw Exception If texture is already bound, not compiled, or if not called on the engine thread
 		 */
 		virtual void Unbind() {}
 
@@ -47,5 +70,7 @@ namespace Cacao {
 		//Constructor for initialization purposes
 		Texture(bool initialState)
 		  : Asset(initialState), bound(false) {}
+
+		friend class Material;
 	};
 }

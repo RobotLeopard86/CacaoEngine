@@ -3,7 +3,7 @@
 #include "VulkanCoreObjects.hpp"
 #include "Graphics/Window.hpp"
 #include "UI/Shaders.hpp"
-#include "VkShaderData.hpp"
+#include "VkShader.hpp"
 #include "UIViewShaderManager.hpp"
 
 namespace Cacao {
@@ -139,21 +139,17 @@ namespace Cacao {
 		if(!didGenShaders) {
 			//Generate UI shaders (they need the surface fornat)
 			//Compile UI view shader
-			compileMode = ShaderCompileMode::VertexOnly;
 			uivsm.Compile();
 			while(!uivsm->IsCompiled()) {
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
 
 			//Generate other UI shaders
-			compileMode = ShaderCompileMode::VertexAndTexCoord;
 			GenShaders();
 			while(!TextShaders::shader->IsCompiled() || !ImageShaders::shader->IsCompiled()) {
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
-			generatedSamplersClamp2Edge = false;
 
-			compileMode = ShaderCompileMode::Standard;
 			didGenShaders = true;
 		}
 

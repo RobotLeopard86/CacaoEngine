@@ -7,6 +7,9 @@
 #include "ActiveItems.hpp"
 #include "VulkanCoreObjects.hpp"
 #include "UIDrawUBO.hpp"
+#include "Graphics/Material.hpp"
+
+#include "glm/gtc/type_ptr.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
 #define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (tr->linegap / 2))
@@ -79,7 +82,7 @@ namespace Cacao {
 					alloc = _alloc;
 					info.glyph.image = {.alloc = alloc, .obj = image};
 					vk::ImageViewCreateInfo viewCI({}, image, vk::ImageViewType::e2D, vk::Format::eR8Unorm,
-						{vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eOne},
+						{vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eZero, vk::ComponentSwizzle::eOne},
 						{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 					info.glyph.view = dev.createImageView(viewCI);
 					subLayout = dev.getImageSubresourceLayout(image, vk::ImageSubresource(vk::ImageAspectFlagBits::eColor, 0, 0));
@@ -103,7 +106,7 @@ namespace Cacao {
 				//Transition image to shader resource state
 				{
 					vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
-						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
+						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 						vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, info.glyph.image.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 					vk::DependencyInfo cdDI({}, {}, {}, barrier);
 					uiCmd->pipelineBarrier2(cdDI);
@@ -151,13 +154,24 @@ namespace Cacao {
 		void* vertexBuffer;
 		allocator.mapMemory(vertex.alloc, &vertexBuffer);
 
-		//Bind text shader
-		TextShaders::shader->Bind();
+		//Create temporary material
+		std::shared_ptr<Material> m = TextShaders::shader->CreateMaterial();
+		tempMatHandles.emplace_back(m);
+
+		//Write material values (texture is not written because it changes frequently and so must be done manually)
+		m->WriteValue("color", color);
+
+		//Activate material
+		m->Activate();
 
 		//Bind UI drawing globals UBO
 		vk::DescriptorBufferInfo uiDrawGlobalsDBI(uiUBO.obj, 0, vk::WholeSize);
 		vk::WriteDescriptorSet dsWrite(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &uiDrawGlobalsDBI);
 		uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, dsWrite);
+
+		//Push identity transform matrix
+		glm::mat4 identityTransform = glm::identity<glm::mat4>();
+		uiCmd->pushConstants(activeShader->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), glm::value_ptr(identityTransform));
 
 		//Draw characters
 		unsigned int start = 0;
@@ -166,26 +180,27 @@ namespace Cacao {
 			//Copy vertex data into buffer
 			std::memcpy(static_cast<unsigned char*>(vertexBuffer) + (sizeof(UIVertex) * start), character.vertices.data(), sizeof(UIVertex) * 6);
 
-			//Upload uniform data
-			ShaderUploadData up;
-			RawVkTexture upTex = {.view = character.glyph.view, .slot = new int(-1)};
-			up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
-			up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
-			TextShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+			//Bind texture
+			{
+				vk::DescriptorImageInfo dii(VK_NULL_HANDLE, character.glyph.view, vk::ImageLayout::eShaderReadOnlyOptimal);
+				vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 2, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+				uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			}
 
 			//Draw glyph
 			uiCmd->draw(6, 1, start, 0);
 			start += 6;
 
 			//Unbind texture
-			vk::DescriptorImageInfo dii(VK_NULL_HANDLE, VK_NULL_HANDLE, vk::ImageLayout::eUndefined);
-			vk::WriteDescriptorSet wds(VK_NULL_HANDLE, *(upTex.slot), 0, vk::DescriptorType::eCombinedImageSampler, dii);
-			uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
-			delete upTex.slot;
+			{
+				vk::DescriptorImageInfo dii(VK_NULL_HANDLE, nullView, vk::ImageLayout::eShaderReadOnlyOptimal);
+				vk::WriteDescriptorSet wds(VK_NULL_HANDLE, 2, 0, vk::DescriptorType::eCombinedImageSampler, dii);
+				uiCmd->pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, activeShader->pipelineLayout, 0, wds);
+			}
 		}
 
-		//Unbind text shader
-		TextShaders::shader->Unbind();
+		//Deactivate material
+		m->Deactivate();
 
 		//Unmap vertex buffer
 		allocator.unmapMemory(vertex.alloc);
@@ -224,11 +239,13 @@ namespace Cacao {
 		std::memcpy(vertexBuffer, vertexData, sizeof(UIVertex) * 6);
 		allocator.unmapMemory(vertex.alloc);
 
-		//Upload uniforms
-		ImageShaders::shader->Bind();
-		ShaderUploadData up;
-		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
-		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+		//Make temporary material
+		std::shared_ptr<Material> m = ImageShaders::shader->CreateMaterial();
+		tempMatHandles.emplace_back(m);
+		m->WriteValue("image", tex);
+
+		//Activate material
+		m->Activate();
 
 		//Bind UI drawing globals UBO
 		vk::DescriptorBufferInfo uiDrawGlobalsDBI(uiUBO.obj, 0, vk::WholeSize);
@@ -240,9 +257,8 @@ namespace Cacao {
 		uiCmd->bindVertexBuffers(0, vertex.obj, offsets);
 		uiCmd->draw(6, 1, 0, 0);
 
-		//Unbind objects
-		tex->Unbind();
-		ImageShaders::shader->Unbind();
+		//Deactivate material
+		m->Deactivate();
 
 		//Add vertex buffer to allocated list
 		allocatedObjects.emplace_back(vertex);

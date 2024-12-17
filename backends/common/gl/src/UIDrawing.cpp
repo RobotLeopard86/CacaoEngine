@@ -5,6 +5,7 @@
 #include "Core/Exception.hpp"
 #include "UI/Shaders.hpp"
 #include "GLUtils.hpp"
+#include "Graphics/Material.hpp"
 
 //Special value that helps align single-line text to the anchor point properly (it looks too high otherwise)
 #define SINGLE_LINE_ALIGNMENT (float(screenSize.y) * (linegap / 2))
@@ -35,6 +36,12 @@ namespace Cacao {
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)offsetof(VBOEntry, tc));
 		glBindVertexArray(vao);
 		glBindVertexArray(0);
+
+		//Create temporary material
+		std::shared_ptr<Material> m = TextShaders::shader->CreateMaterial();
+
+		//Write material values
+		m->WriteValue("color", color);
 
 		//Write lines
 		int lineCounter = 0;
@@ -94,22 +101,16 @@ namespace Cacao {
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-				//Upload uniforms
-				TextShaders::shader->Bind();
-				ShaderUploadData up;
-				RawGLTexture upTex = {.texObj = tex, .slot = new int(-1)};
-				up.emplace_back(ShaderUploadItem {.target = "glyph", .data = std::any(upTex)});
-				up.emplace_back(ShaderUploadItem {.target = "color", .data = std::any(color)});
-				TextShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+				//Activate material
+				RawGLTexture upTex(tex);
+				m->WriteValue("glyph", &upTex);
+				m->Activate();
 
 				//Draw glyph
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 
-				//Unbind objects
-				glActiveTexture(GL_TEXTURE0 + (*upTex.slot));
-				glBindTexture(GL_TEXTURE_2D, 0);
-				TextShaders::shader->Unbind();
-				delete upTex.slot;
+				//Deactivate material
+				m->Deactivate();
 
 				//Advance cursor for next glyph
 				x += (ln.advances[i].adv.x / 64.0f);
@@ -164,18 +165,22 @@ namespace Cacao {
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VBOEntry), (void*)offsetof(VBOEntry, tc));
 		glBindVertexArray(vao);
 
-		//Upload uniforms
-		ImageShaders::shader->Bind();
-		ShaderUploadData up;
-		up.emplace_back(ShaderUploadItem {.target = "image", .data = std::any(tex)});
-		ImageShaders::shader->UploadData(up, glm::identity<glm::mat4>());
+		//Create temporary material
+		std::shared_ptr<Material> m = ImageShaders::shader->CreateMaterial();
+
+		//Write material values
+		m->WriteValue("image", tex);
+
+		//Activate material
+		m->Activate();
 
 		//Draw image
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		//Unbind objects
-		tex->Unbind();
-		ImageShaders::shader->Unbind();
+		//Deactivate material
+		m->Deactivate();
+
+		//Unbind vertex array
 		glBindVertexArray(0);
 
 		//Clean up OpenGL objects

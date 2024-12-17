@@ -12,8 +12,8 @@ namespace Cacao {
 	//Clean up shaders
 	void DelShaders();
 
-	//Run this before shader creation
-	void PreShaderCreateHook();
+	//Runs before shader compilation
+	void PreShaderCompileHook(Shader* shader);
 
 	namespace TextShaders {
 		constexpr uint32_t vertex[] =

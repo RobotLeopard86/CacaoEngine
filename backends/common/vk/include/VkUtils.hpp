@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vk_mem_alloc.hpp"
+#include "vulkan/vulkan.hpp"
 
 #include <queue>
 #include <mutex>
@@ -23,4 +24,11 @@ namespace Cacao {
 	void SubmitCommandBuffer(vk::SubmitInfo2 submitInfo, vk::Fence fence);
 
 	inline bool didGenShaders = false;
+
+	//"Null" image (set active when a texture is unbound)
+	inline Allocated<vk::Image> nullImage;
+	inline vk::ImageView nullView;
+
+	//"Null" buffer (set active when a buffer needs to be unbound, typically uniform buffer)
+	inline Allocated<vk::Buffer> nullBuffer;
 }

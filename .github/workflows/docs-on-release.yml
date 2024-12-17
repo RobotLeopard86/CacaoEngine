@@ -18,7 +18,7 @@ jobs:
       - name: Install Doxygen
         run: |
           sudo apt-get update;
-          sudo apt install doxygen -y
+          sudo apt-get install doxygen -y
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -30,7 +30,7 @@ jobs:
         uses: sphinx-notes/pages@v2
         with:
           sphinx_options: "-j auto -a"
-          target_path: latest
+          target_path: $RELEASE_VERSION
           target_branch: gh-pages
           sphinx_version: "7.3.7"
           requirements_path: "docs/requirements.txt"

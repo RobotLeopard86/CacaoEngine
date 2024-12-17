@@ -13,6 +13,9 @@
 #include "Graphics/Textures/Cubemap.hpp"
 #include "GLUIView.hpp"
 #include "UIViewShaderManager.hpp"
+#include "GLShaderData.hpp"
+
+#include "glm/gtc/type_ptr.hpp"
 
 constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
 
@@ -28,6 +31,7 @@ namespace Cacao {
 
 	//UI quad assets
 	static GLuint uiVao, uiVbo;
+	static std::shared_ptr<Material> uiQuadMat;
 
 	void RenderController::UpdateGraphicsState() {
 		//Process OpenGL tasks
@@ -69,11 +73,11 @@ namespace Cacao {
 
 			//Render main scene
 			for(RenderObject& obj : frame->objects) {
-				//Bind shader
-				obj.material.shader->Bind();
+				//Activate material
+				obj.material.Activate();
 
-				//Upload material data and transformation matrix to shader
-				obj.material.shader->UploadData(obj.material.data, obj.transformMatrix);
+				//Upload transformation matrix
+				if(!activeShader->unusedTransform) glUniformMatrix4fv(activeShader->transformLoc, 1, GL_FALSE, glm::value_ptr(obj.transformMatrix));
 
 				//Configure OpenGL
 				glEnable(GL_DEPTH_TEST);
@@ -83,36 +87,8 @@ namespace Cacao {
 				//Draw the mesh
 				obj.mesh->Draw();
 
-				//Unbind any textures
-				const ShaderSpec& spec = obj.material.shader->GetSpec();
-				for(ShaderUploadItem& sui : obj.material.data) {
-					if(std::find_if(spec.begin(), spec.end(), [&sui](ShaderItemInfo sii) {
-						   return (sii.type == SpvType::SampledImage && sii.entryName == sui.target);
-					   }) != spec.end()) {
-						if(sui.data.type() == typeid(Texture2D*)) {
-							Texture2D* tex = std::any_cast<Texture2D*>(sui.data);
-							tex->Unbind();
-						} else if(sui.data.type() == typeid(Cubemap*)) {
-							Cubemap* tex = std::any_cast<Cubemap*>(sui.data);
-							tex->Unbind();
-						} else if(sui.data.type() == typeid(UIView*)) {
-							UIView* view = std::any_cast<UIView*>(sui.data);
-							view->Unbind();
-						} else if(sui.data.type() == typeid(AssetHandle<Texture2D>)) {
-							AssetHandle<Texture2D> tex = std::any_cast<AssetHandle<Texture2D>>(sui.data);
-							tex->Unbind();
-						} else if(sui.data.type() == typeid(AssetHandle<Cubemap>)) {
-							AssetHandle<Cubemap> tex = std::any_cast<AssetHandle<Cubemap>>(sui.data);
-							tex->Unbind();
-						} else if(sui.data.type() == typeid(AssetHandle<UIView>)) {
-							AssetHandle<UIView> view = std::any_cast<AssetHandle<UIView>>(sui.data);
-							view->Unbind();
-						}
-					}
-				}
-
-				//Unbind shader
-				obj.material.shader->Unbind();
+				//Deactivate shader
+				obj.material.Deactivate();
 			}
 
 			//Draw skybox (if one exists)
@@ -123,12 +99,13 @@ namespace Cacao {
 				//Create projection matrix
 				glm::mat4 project = glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
 
-				//Upload uniforms
-				ShaderUploadData uiud;
-				uiud.emplace_back(ShaderUploadItem {.target = "uiTex", .data = std::any(Engine::GetInstance()->GetGlobalUIView().get())});
-				uivsm->Bind();
-				uivsm->UploadData(uiud, glm::identity<glm::mat4>());
-				Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());//Kinda scary but it'll get overwritten for the next frame
+				//Activate UI quad material
+				uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
+				uiQuadMat->Activate();
+
+				//Upload Cacao Engine globals for UI quad
+				//Kinda scary but it'll get overwritten for the next frame
+				Shader::UploadCacaoGlobals(project, glm::identity<glm::mat4>());
 
 				//Configure OpenGL
 				glDisable(GL_DEPTH_TEST);
@@ -145,9 +122,8 @@ namespace Cacao {
 				glDepthFunc(GL_LESS);
 				glDisable(GL_BLEND);
 
-				//Unbind UI view texture and shader
-				uivsm->Unbind();
-				Engine::GetInstance()->GetGlobalUIView()->Unbind();
+				//Deactivate UI quad material
+				uiQuadMat->Deactivate();
 			}
 		});
 
@@ -196,6 +172,9 @@ namespace Cacao {
 		glBindVertexArray(uiVao);
 		glBindVertexArray(0);
 
+		//Create UI quad material
+		uiQuadMat = uivsm->CreateMaterial();
+
 		//Compile UI element shaders
 		GenShaders();
 
@@ -208,6 +187,9 @@ namespace Cacao {
 
 	void RenderController::Shutdown() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Cannot shutdown the uninitialized render controller!");
+
+		//Release UI quad material
+		uiQuadMat.reset();
 
 		//Release UI element shaders
 		DelShaders();
@@ -241,12 +223,17 @@ namespace Cacao {
 	}
 
 	void RegisterGraphicsExceptions() {
-		Exception::RegisterExceptionCode(100, "BadCompileState");
-		Exception::RegisterExceptionCode(101, "BadBindState");
-		Exception::RegisterExceptionCode(102, "GLError");
-		Exception::RegisterExceptionCode(103, "UniformUploadFailure");
-		Exception::RegisterExceptionCode(104, "UnsupportedType");
+		Exception::RegisterExceptionCode(100, "BadBindState");
+		Exception::RegisterExceptionCode(101, "GLError");
+		Exception::RegisterExceptionCode(102, "UniformUploadFailure");
+		Exception::RegisterExceptionCode(103, "UnsupportedType");
 	}
 
 	void RenderController::WaitGPUIdleBeforeTerminate() {}
+	void UIViewShaderManager::PreCompileHook() {
+		currentShaderUnusedTransformFlag = true;
+	}
+	void PreShaderCompileHook(Shader*) {
+		currentShaderUnusedTransformFlag = true;
+	}
 }

@@ -9,7 +9,7 @@ In Cacao Engine, shaders and cubemaps are defined by definition files. These are
 
 ## Shader Entry Attributes
 * `name`: The name of the entry in the shader code
-* `type`: The data type, one of `bool`, `int`, `uint`, `int64`, `uint64`, `double`, `float`, or `texture`
+* `type`: The data type, one of `bool`, `int`, `uint`, `float`, or `texture`
 * `sizex`: The horizontal size of the entry. For example: a GLSL `vec3` has a `sizex` value of 3, because it has three columns.
 * `sizey`: The vertical size of the entry. For example: a GLSL `mat4` has a `sizey` value of 4, because it has four rows.
 

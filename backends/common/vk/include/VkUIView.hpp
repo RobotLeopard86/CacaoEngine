@@ -4,6 +4,7 @@
 
 #include "UI/UIView.hpp"
 #include "Graphics/Shader.hpp"
+#include "Graphics/Material.hpp"
 #include "UI/Text.hpp"
 
 #include <vector>
@@ -17,6 +18,7 @@ namespace Cacao {
 
 	inline vk::CommandBuffer* uiCmd;
 	inline std::vector<std::variant<Allocated<vk::Image>, Allocated<vk::Buffer>, vk::ImageView>> allocatedObjects;
+	inline std::vector<std::shared_ptr<Material>> tempMatHandles;
 
 	void PreprocessTextRenderable(Text::Renderable* renderable, glm::uvec2 screenSize);
 	struct UIVertex {

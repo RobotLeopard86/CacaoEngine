@@ -1,6 +1,6 @@
 # Exception Codes
 
-Cacao Engine exceptions rely on a code system to give further context about the exception. Engine core codes are a one or two-digit number. Backend codes are three digits, beginning with `1` and followed by a two-digit number, prefixed with a `0` if less than ten (example: `104`). All codes registered by your game, should follow a similar format, but beginning with any other number than `1` or `0` (though this is not enforced).  
+Cacao Engine exceptions rely on a code system to give further context about the exception. Engine core codes are a one or two-digit number. Backend codes are three digits, beginning with `1` and followed by a two-digit number, prefixed with a `0` if less than ten (example: `104`). All codes registered by your game should follow a similar format, but beginning with any other number than `1` or `0`.  
 
 ## Engine Core Exception Codes
 0. `External` - The exception came from an external library and is not associated with the engine itself
