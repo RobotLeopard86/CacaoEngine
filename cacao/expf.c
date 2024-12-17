@@ -1,8 +1,21 @@
-//As an exception to the overarching licensing of the Cacao Engine project, this file is designated by the author
-//to the public domain to the full extent as permissible and applicable by law.
+/*
+As an exception to the overarching licensing of the Cacao Engine project, this file and its contents are
+licensed by the author under the terms of the Zero-Clause BSD license:
 
-//Okay so this file ONLY exists because of some weird crap with static libm that has these symbols undefined and causes linker errors
-//So I just made a definition of them to fix that
+Zero-Clause BSD
+=============
+
+Permission to use, copy, modify, and/or distribute this software for
+any purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL
+WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
+DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*/
 
 #include <math.h>
 

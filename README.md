@@ -2,19 +2,7 @@
 #### A C++ game engine  
 
 ## About
-Cacao Engine is a game engine developed by RobotLeopard86. It is written in C++ and uses Meson as the build system.
-
-## Planned Features
-* 2D and 3D rendering capabilties
-* Level editor
-* C++, C#, and Python scripting
-* Support for Windows, macOS, and GNU/Linux
-* AI engine
-* Physics system
-* Support for multiple windowing systems and rendering APIs
-* Controller support
-
-More features may come in the future, so stay tuned!
+Cacao Engine is a 3D game engine developed by RobotLeopard86. It is written in C++ and uses Meson as the build system.
 
 ## Building
 See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/latest/manual/building.html) for information.
@@ -29,4 +17,4 @@ Cacao Engine uses two branches, `main` and `dev`. `main` should be considered st
 ## Licensing
 Cacao Engine is licensed under the Apache License 2.0, which can be found in the root directory. All third-party licenses are present in the `licenses` folder.
 Any third-party code used by these libraries should have their licenses located within the appropriate project directory (these may not be downloaded until build-time by Meson).
-Additionally, the file `expf.c`, located in the `cacao` directory, is designated entirely to the public domain to the extent applicable by law. This is because it's a stupid tiny patch that only exists because of weirdness with the Linux math library that I have encountered, and frankly don't care about.
+Additionally, the file `expf.c`, located in the `cacao` directory, is instead licensed under the [Zero-Clause BSD license](https://opensource.org/license/0bsd). This is because it's a tiny patch that only exists because of an issue with the static Linux math library, and isn't very important.

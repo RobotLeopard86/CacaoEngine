@@ -1,11 +1,11 @@
-name: Update docs on development push
+name: Update docs on main update
 
 permissions: write-all
 
 on:
   push:
     branches:
-      - dev
+      - main
   workflow_dispatch:
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
         uses: sphinx-notes/pages@v2
         with:
           sphinx_options: "-j auto -a"
-          target_path: dev
+          target_path: main
           target_branch: gh-pages
           sphinx_version: "7.3.7"
           requirements_path: "docs/requirements.txt"
