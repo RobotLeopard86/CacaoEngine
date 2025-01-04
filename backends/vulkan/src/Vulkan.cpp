@@ -10,17 +10,16 @@
 #include "Graphics/Window.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
-#include "ExceptionCodes.hpp"
 #include "UIViewShaderManager.hpp"
 #include "UI/Shaders.hpp"
 #include "UIDrawUBO.hpp"
 
 #include "glm/gtc/type_ptr.hpp"
+#include "SDL3/SDL_vulkan.h"
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
-bool backendInitBeforeWindow = true;
-bool backendShutdownAfterWindow = true;
+bool backendInWindowScope = false;
 
 using ConditionFunction = std::function<bool(const vk::PhysicalDevice&)>;
 
@@ -82,17 +81,25 @@ namespace Cacao {
 		//Initialize base Vulkan functions
 		VULKAN_HPP_DEFAULT_DISPATCHER.init();
 
-		//Create instance
+		//Get required layers
 		std::vector<const char*> layers = {};
 #ifdef DEBUG
 		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
 		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
-		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_3);
-		auto requiredInstanceExts = GetRequiredInstanceExts();
+
+		//Get required extensions
+		uint32_t extcount;
+		const char* const* exts = SDL_Vulkan_GetInstanceExtensions(&extcount);
+		EngineAssert(exts, "Could not load instance extension list!");
+		std::vector<const char*> requiredInstanceExts(extcount);
+		std::memcpy(requiredInstanceExts.data(), exts, extcount * sizeof(const char*));
 #ifdef __APPLE__
 		requiredInstanceExts.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 #endif
+
+		//Create instance
+		vk::ApplicationInfo appInfo("Cacao Engine Client", 1, "Cacao Engine", 1, VK_API_VERSION_1_3);
 		vk::InstanceCreateInfo instanceCI({}, &appInfo, layers, requiredInstanceExts);
 #ifdef __APPLE__
 		instanceCI.flags = vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
@@ -449,7 +456,7 @@ namespace Cacao {
 		frameCycle = 0;
 	}
 
-	void RegisterGraphicsExceptions() {
+	void Engine::RegisterBackendExceptions() {
 		Exception::RegisterExceptionCode(100, "Vulkan");
 		Exception::RegisterExceptionCode(101, "WaitExpired");
 	}

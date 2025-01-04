@@ -7,7 +7,6 @@
 #include "GLUtils.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
-#include "ExceptionCodes.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
 #include "UI/Shaders.hpp"
 #include "Graphics/Textures/Cubemap.hpp"
@@ -19,8 +18,7 @@
 
 constexpr glm::vec3 clearColorSRGB {float(0xCF) / 256, 1.0f, float(0x4D) / 256};
 
-bool backendInitBeforeWindow = false;
-bool backendShutdownAfterWindow = false;
+bool backendInWindowScope = true;
 
 namespace Cacao {
 	//Queue of OpenGL tasks to process
@@ -222,7 +220,7 @@ namespace Cacao {
 		isInitialized = false;
 	}
 
-	void RegisterGraphicsExceptions() {
+	void Engine::RegisterBackendExceptions() {
 		Exception::RegisterExceptionCode(100, "BadBindState");
 		Exception::RegisterExceptionCode(101, "GLError");
 		Exception::RegisterExceptionCode(102, "UniformUploadFailure");

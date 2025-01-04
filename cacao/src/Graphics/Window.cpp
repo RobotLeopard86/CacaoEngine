@@ -6,9 +6,6 @@
 #include "Core/Exception.hpp"
 #include "Core/Log.hpp"
 #include "Events/EventSystem.hpp"
-#include "SDLWindowData.hpp"
-#include "KeyAndMouseLUT.hpp"
-#include "SDLHooks.hpp"
 #include "UI/Text.hpp"
 
 namespace Cacao {
@@ -38,7 +35,9 @@ namespace Cacao {
 		return instance;
 	}
 
-	void Engine::EarlyWindowingInit() {
+	void Window::SysInit() {
+		CheckException(!sysInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Can't initialize the already initialized windowing system!");
+
 #ifdef __linux__
 		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) {
 			SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
@@ -56,16 +55,24 @@ namespace Cacao {
 
 	do_init:
 		//Initialize SDL
-		EngineAssert(SDL_Init(SDL_INIT_VIDEO), "Could not initialize SDL library, no window can be created.");
+		EngineAssert(SDL_Init(SDL_INIT_VIDEO), "Failed to initialize SDL!");
+
+		sysInitialized = true;
+	}
+
+	void Window::SysTerminate() {
+		CheckException(sysInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Can't shutdown the uninitialized windowing system!");
+		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't shutdown the windowing system, the window is still open!");
+
+		//Clean up SDL
+		SDL_Quit();
 	}
 
 	void Window::Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode) {
 		CheckException(!isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't open the window, it's already open!");
+		CheckException(sysInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Can't open the window, the windowing system has not been initialized yet!");
 
 		size = initialSize;
-
-		//Create native data
-		nativeData.reset(new WindowData());
 
 		//Configure SDL prior to window creation
 		ConfigureSDL();
@@ -73,11 +80,15 @@ namespace Cacao {
 		//Create window
 		SDL_WindowFlags flags = GetSDLFlags() | SDL_WINDOW_RESIZABLE;
 		if(!startVisible) flags |= SDL_WINDOW_HIDDEN;
-		nativeData->win = SDL_CreateWindow(windowTitle.c_str(), initialSize.x, initialSize.y, flags);
-		EngineAssert(nativeData->win != nullptr, "Failed to open the window!");
+		nativeWin = SDL_CreateWindow(windowTitle.c_str(), initialSize.x, initialSize.y, flags);
+		if(nativeWin == nullptr) {
+			std::stringstream emsg;
+			emsg << "Failed to open the window: " << SDL_GetError();
+			EngineAssert(false, emsg.str());
+		}
 
 		//Initialize graphics API
-		SetupGraphicsAPI(nativeData->win);
+		SetupGraphicsAPI(nativeWin);
 
 		//Mark window open
 		isOpen = true;
@@ -94,10 +105,10 @@ namespace Cacao {
 
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this]() {
-									 Close();
-								 })
-				.get();
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+				Close();
+			});
+			func.get();
 			return;
 		}
 
@@ -105,10 +116,7 @@ namespace Cacao {
 		CleanupGraphicsAPI();
 
 		//Destroy the window
-		SDL_DestroyWindow(nativeData->win);
-
-		//Clean up SDL
-		SDL_Quit();
+		SDL_DestroyWindow(nativeWin);
 
 		isOpen = false;
 	}
@@ -120,70 +128,72 @@ namespace Cacao {
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
 			glm::uvec2* ret = new glm::uvec2(0);
-			Engine::GetInstance()->RunOnMainThread([this, ret]() {
-									 *ret = GetContentAreaSize();
-								 })
-				.get();
-			return *ret;
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this, ret]() {
+				*ret = GetContentAreaSize();
+			});
+			func.get();
+			glm::uvec2 retval = {(*ret).x, (*ret).y};
+			delete ret;
+			return retval;
 		}
 
-		SDL_GetWindowSizeInPixels(nativeData->win, &x, &y);
+		SDL_GetWindowSizeInPixels(nativeWin, &x, &y);
 		return glm::uvec2 {(unsigned int)x, (unsigned int)y};
 	}
 
 	void Window::UpdateWindowSize() {
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this]() {
-									 UpdateWindowSize();
-								 })
-				.get();
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+				UpdateWindowSize();
+			});
+			func.get();
 			return;
 		}
 
 		//Update window size
-		SDL_SetWindowSize(nativeData->win, size.x, size.y);
+		SDL_SetWindowSize(nativeWin, size.x, size.y);
 
 		//Update viewport size
-		ResizeViewport(nativeData->win);
+		ResizeViewport(nativeWin);
 	}
 
 	void Window::UpdateVisibilityState() {
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this]() {
-									 UpdateVisibilityState();
-								 })
-				.get();
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+				UpdateVisibilityState();
+			});
+			func.get();
 			return;
 		}
 
 		if(isVisible) {
-			SDL_ShowWindow(nativeData->win);
+			SDL_ShowWindow(nativeWin);
 		} else {
-			SDL_HideWindow(nativeData->win);
+			SDL_HideWindow(nativeWin);
 		}
 	}
 
 	void Window::UpdateModeState(WindowMode lastMode) {
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
-									 UpdateModeState(lastMode);
-								 })
-				.get();
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
+				UpdateModeState(lastMode);
+			});
+			func.get();
 			return;
 		}
 
 		if(lastMode == WindowMode::Window) {
-			SDL_GetWindowPosition(nativeData->win, &windowedPosition.x, &windowedPosition.y);
+			SDL_GetWindowPosition(nativeWin, &windowedPosition.x, &windowedPosition.y);
 		}
 		switch(mode) {
 			case WindowMode::Window:
-				SDL_SetWindowSize(nativeData->win, size.x, size.y);
-				SDL_SetWindowFullscreen(nativeData->win, false);
-				SDL_SetWindowPosition(nativeData->win, windowedPosition.x, windowedPosition.y);
-				SDL_SetWindowBordered(nativeData->win, true);
+				SDL_SetWindowSize(nativeWin, size.x, size.y);
+				SDL_SetWindowFullscreen(nativeWin, false);
+				SDL_SetWindowPosition(nativeWin, windowedPosition.x, windowedPosition.y);
+				SDL_SetWindowBordered(nativeWin, true);
 				break;
 			case WindowMode::Fullscreen: {
 				//Get the fullscreen display modes
@@ -197,16 +207,16 @@ namespace Cacao {
 				}
 
 				//Set to fullscreen
-				SDL_SetWindowFullscreenMode(nativeData->win, fullscreenModesV[0]);
-				SDL_SetWindowFullscreen(nativeData->win, true);
+				SDL_SetWindowFullscreenMode(nativeWin, fullscreenModesV[0]);
+				SDL_SetWindowFullscreen(nativeWin, true);
 
 				//Free the mode pointer
 				SDL_free(fullscreenModesV);
 				break;
 			}
 			case WindowMode::Borderless:
-				SDL_SetWindowFullscreenMode(nativeData->win, nullptr);
-				SDL_SetWindowFullscreen(nativeData->win, true);
+				SDL_SetWindowFullscreenMode(nativeWin, nullptr);
+				SDL_SetWindowFullscreen(nativeWin, true);
 				break;
 		}
 	}
@@ -216,10 +226,10 @@ namespace Cacao {
 
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this]() {
-									 Update();
-								 })
-				.get();
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+				Update();
+			});
+			func.get();
 			return;
 		}
 
@@ -247,7 +257,7 @@ namespace Cacao {
 						WindowResizer().Resize({event.window.data1, event.window.data2});
 					}
 					Engine::GetInstance()->GetGlobalUIView()->SetSize(GetContentAreaSize());
-					ResizeViewport(nativeData->win);
+					ResizeViewport(nativeWin);
 					DataEvent<glm::uvec2> wre("WindowResize", {event.window.data1, event.window.data2});
 					EventManager::GetInstance()->Dispatch(wre);
 					break;
@@ -263,22 +273,22 @@ namespace Cacao {
 					break;
 				}
 				case SDL_EVENT_KEY_UP: {
-					DataEvent<int> kue("KeyUp", SDLKey2Cacao(event.key.key));
+					DataEvent<int> kue("KeyUp", event.key.key);
 					EventManager::GetInstance()->Dispatch(kue);
 					break;
 				}
 				case SDL_EVENT_KEY_DOWN: {
-					DataEvent<int> kde("KeyDown", SDLKey2Cacao(event.key.key));
+					DataEvent<int> kde("KeyDown", event.key.key);
 					EventManager::GetInstance()->Dispatch(kde);
 					break;
 				}
 				case SDL_EVENT_MOUSE_BUTTON_UP: {
-					DataEvent<int> mre("MouseRelease", SDLMouseButton2Cacao(event.button.button));
+					DataEvent<int> mre("MouseRelease", event.button.button);
 					EventManager::GetInstance()->Dispatch(mre);
 					break;
 				}
 				case SDL_EVENT_MOUSE_BUTTON_DOWN: {
-					DataEvent<int> mpe("MousePress", SDLMouseButton2Cacao(event.button.button));
+					DataEvent<int> mpe("MousePress", event.button.button);
 					EventManager::GetInstance()->Dispatch(mpe);
 					break;
 				}
@@ -303,15 +313,13 @@ namespace Cacao {
 
 		//Run on the engine thread if we aren't on it
 		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			Engine::GetInstance()->RunOnMainThread([this, &title]() {
-									 SetTitle(title);
-								 })
-				.get();
+			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this, &title]() {
+				SetTitle(title);
+			});
+			func.get();
 			return;
 		}
 
-		SDL_SetWindowTitle(nativeData->win, title.c_str());
+		SDL_SetWindowTitle(nativeWin, title.c_str());
 	}
-
-	void RegisterWindowingExceptions() {}
 }

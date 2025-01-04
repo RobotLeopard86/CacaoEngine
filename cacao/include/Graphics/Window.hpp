@@ -5,6 +5,7 @@
 #include <map>
 
 #include "glm/vec2.hpp"
+#include "SDL3/SDL.h"
 
 #include "Utilities/MiscUtils.hpp"
 #include "Core/Engine.hpp"
@@ -34,7 +35,7 @@ namespace Cacao {
 		 *
 		 * @note For use by the engine only and automatically called by it at startup
 		 *
-		 * @throws Exception If the window is open already
+		 * @throws Exception If the window is open already or the windowing system is not initialized
 		 */
 		void Open(std::string title, glm::uvec2 initialSize, bool startVisible, WindowMode mode);
 
@@ -46,6 +47,24 @@ namespace Cacao {
 		 * @throws Exception If the window isn't open
 		 */
 		void Close();
+
+		/**
+		 * @brief Initialize the windowing system
+		 *
+		 * @note For use by the engine only and automatically called by it at startup
+		 *
+		 * @throws Exception If the windowing system is already initialized
+		 */
+		void SysInit();
+
+		/**
+		 * @brief Shut down the windowing system
+		 *
+		 * @note For use by the engine only and automatically called by it at shutdown
+		 *
+		 * @throws Exception If the windowing system is not initialized or the window is open
+		 */
+		void SysTerminate();
 
 		/**
 		 * @brief Check if the window is open or not
@@ -206,7 +225,7 @@ namespace Cacao {
 
 	  private:
 		Window()
-		  : isOpen(false), mode(WindowMode::Window), minimized(false) {}
+		  : isOpen(false), sysInitialized(false), mode(WindowMode::Window), minimized(false) {}
 
 		//Singleton data
 		static Window* instance;
@@ -214,6 +233,7 @@ namespace Cacao {
 
 		bool isOpen;
 		bool isVisible;
+		bool sysInitialized;
 
 		bool useVSync;
 		glm::uvec2 size;
@@ -222,14 +242,25 @@ namespace Cacao {
 		WindowMode mode;
 		bool minimized;
 
+		//Native window object
+		SDL_Window* nativeWin;
+
 		//The last known window position
 		//Used for switching between modes
 		glm::ivec2 windowedPosition;
 
+		//Utility functions to update the actual window state
 		void UpdateVSyncState();
 		void UpdateWindowSize();
 		void UpdateVisibilityState();
 		void UpdateModeState(WindowMode lastMode);
+
+		//"Hook" functions for graphics APIs to implement
+		void ConfigureSDL();
+		SDL_WindowFlags GetSDLFlags();
+		void SetupGraphicsAPI(SDL_Window* win);
+		void CleanupGraphicsAPI();
+		void ResizeViewport(SDL_Window* win);
 
 		//For changing the window size from implementation without generating more resize events
 		friend void ChangeSize(Window* win, glm::uvec2 size) {
@@ -239,12 +270,5 @@ namespace Cacao {
 			win->minimized = newState;
 		}
 		friend struct WindowResizer;
-
-		//Backend-implemented data type
-		struct WindowData;
-
-		std::shared_ptr<WindowData> nativeData;
-
-		friend class Text;
 	};
 }

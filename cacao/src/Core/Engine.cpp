@@ -128,23 +128,24 @@ namespace Cacao {
 		Logging::EngineLog("Starting thread pool...");
 		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
 
-		//Initialize windowing system (NOT THE WINDOW)
-		EarlyWindowingInit();
+		//Initialize windowing system
+		Logging::EngineLog("Intializing windowing system...");
+		Window::GetInstance()->SysInit();
 
-		if(backendInitBeforeWindow) {
+		if(backendInWindowScope) {
+			//Open the window
+			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+
 			//Initialize rendering backend
 			Logging::EngineLog("Initializing rendering backend...");
 			RenderController::GetInstance()->Init();
-
-			//Open the window
-			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
 		} else {
-			//Open the window
-			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
-
 			//Initialize rendering backend
 			Logging::EngineLog("Initializing rendering backend...");
 			RenderController::GetInstance()->Init();
+
+			//Open the window
+			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
 		}
 
 		//Asynchronously run core startup
@@ -189,21 +190,25 @@ namespace Cacao {
 		//Destroy global UI view
 		uiView.reset();
 
-		if(backendShutdownAfterWindow) {
-			//Close the window
-			Window::GetInstance()->Close();
-
-			//Shutdown rendering backend
-			Logging::EngineLog("Shutting down rendering backend...");
-			RenderController::GetInstance()->Shutdown();
-		} else {
+		if(backendInWindowScope) {
 			//Shut down rendering backend
 			Logging::EngineLog("Shutting down rendering backend...");
 			RenderController::GetInstance()->Shutdown();
 
 			//Close the window
 			Window::GetInstance()->Close();
+		} else {
+			//Close the window
+			Window::GetInstance()->Close();
+
+			//Shutdown rendering backend
+			Logging::EngineLog("Shutting down rendering backend...");
+			RenderController::GetInstance()->Shutdown();
 		}
+
+		//Shut down windowing system
+		Logging::EngineLog("Shutting down windowing system...");
+		Window::GetInstance()->SysTerminate();
 
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");

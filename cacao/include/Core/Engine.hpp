@@ -20,8 +20,7 @@
 using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 
 ///@cond
-extern bool backendInitBeforeWindow;
-extern bool backendShutdownAfterWindow;
+extern bool backendInWindowScope;
 ///@endcond
 
 namespace Cacao {
@@ -137,10 +136,6 @@ namespace Cacao {
 		//To be implemented by backend
 		//Register backend-specific exception codes
 		void RegisterBackendExceptions();
-
-		//To be implemented by backend
-		//Initialize windowing backend early if necessary
-		void EarlyWindowingInit();
 
 		friend class RenderController;
 	};

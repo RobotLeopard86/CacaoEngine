@@ -7,6 +7,7 @@
 * Python 3
 * CMake
 * GLSLC
+* **(Windows/macOS only)** Platform-specific SDKs
 
 ## Linux Package Dependencies
 Cacao Engine uses OpenAL-Soft, a software implementation of the OpenAL API which sits atop platform-specific APIs. On Linux, depending on the audio providers you want available, you will need to install additional packages prior to configuring. Find these in the table below.  
@@ -16,10 +17,10 @@ Cacao Engine uses OpenAL-Soft, a software implementation of the OpenAL API which
 | PulseAudio | `libpulse-dev` | `pulseaudio-libs pulseaudio-libs-devel` | `libpulse` |
 | ALSA | `libasound2-dev` | `alsa-lib alsa-lib-devel` | `alsa-lib` |  
 
-Cacao Engine also requires libuuid. The packages for that are listed below:
-* Debian-based: `uuid-dev`
-* Fedora-based: `libuuid-devel`
-* Arch-based: `util-linux-libs`
+Cacao Engine also requires additional system packages. By base distro, these are:
+* Fedora-based (e.g. RHEL): `wayland-devel`, `wayland-protocols-devel`, `libxkbcommon-devel`, `libXcursor-devel`, `libXfixes-devel`, `libXi-devel`, `libXinerama-devel`, `libXrandr-devel`, `libdecor-devel`, `libdrm-devel`, `ibus-devel`, `fcitx-devel`, `libuuid-devel`
+* Debian-based (e.g. Ubuntu): `libwayland-dev`, `libxkbcommon-dev`, `libxfixes-dev`, `xorg-dev`, `wayland-protocols`, `libdecor0-dev`, `libdrm-dev`, `libibus-1.0-dev`, `fcitx`, `uuid-dev`
+* Arch-based (e.g. Manjaro): `libglvnd`, `libxkbcommon`, `extra-cmake-modules`, `libxcursor`, `libxi`, `libxfixes`, `libxinerama`, `libxrandr`, `mesa`, `wayland-protocols`, `libibus`, `libdrm`, `fcitx`, `util-linux-libs`
 
 ## Compilers
 Cacao Engine is designed to build using Clang with LLD on Linux and macOS and using MSVC on Windows. If problems are encountered when using alternative compilers (e.g. GCC or Clang with Gold linker), they are officially unsupported. Clang (including Apple's modified Clang) with LLD and MSVC are the ONLY supported compilers. Regarding installation of these compilers, MSVC is available through Visual Studio, which can be downloaded [here](https://visualstudio.microsoft.com). In the Visual Studio Installer, select the `Desktop development with C++` workload before installing, or in the `Modify` UI after. As for Linux, they should be available in your package manager. On macOS, you'll need the Xcode command line tools (install with `xcode-select --install`), and then install the `llvm` and `lld` [Homebrew](https://brew.sh) packages. That will install Clang and LLD to your system. While other compilers may work, they are officially not supported.
@@ -36,10 +37,11 @@ To install Git, either find it in your package manager if on Linux, with [Homebr
 You can install Meson as listed on their website [here](https://mesonbuild.com/SimpleStart.html#installing-meson). Instructions for installing Python 3 and ninja can also be found there.  
 CMake is also simple. On Linux, it should be available in your package manager. For Windows and macOS users, you can get CMake on their website's [download page](https://cmake.org/download/#latest).  
 Finally, GLSLC is available as part of the Vulkan SDK (download that [here](https://vulkan.lunarg.com/sdk/home)), or can be downloaded standalone from the [project GitHub](https://github.com/google/shaderc/blob/main/downloads.md).
+**Your backend of choice may have additional requirements!** See its page for details on what else you may need to install.
 
 ## 2. Configuring the Build
-**IMPORTANT**: MSVC likely will only be detected properly if run in the Visual Studio Developer Command Prompt/PowerShell.
-Select a backend from [the backends list](backends). Enter the source tree root directory in your terminal, then run the following command `meson setup <build directory> -Dbuild_playground=true|false -Duse_backend=<chosen backend>`. **IMPORTANT**: Add `--native-file posix_native.ini` to your command line if on Linux or macOS. Set the `build_playground` option to `true` if you want to optionally build the playground, or `false` otherwise. If on Windows, you may add `-Dwindows_noconsole=true` to the command to configure a build without a console. Meson runs debug builds by default. See [this page](https://mesonbuild.com/Builtin-options.html#core-options) on Meson's website for the list of types. This command may take some time to complete.
+**IMPORTANT**: MSVC likely will only be detected properly if run in the Visual Studio Developer Command Prompt/PowerShell.  
+Select a backend from [the backends list](backends). Enter the source tree root directory in your terminal, then run the following command `meson setup <build directory> -Dbuild_playground=true|false -Duse_backend=<chosen backend>`. **IMPORTANT**: Add `--native-file posix_native.ini` to your command line if on Linux or macOS. Set the `build_playground` option to `true` if you want to optionally build the playground, or `false` otherwise. If on Windows, you may add `-Dwindows_noconsole=true` to the command to configure a build without a console. You can also customize the name of the Cacao Engine executable by adding `-Dexe_name=(your name of choice)` to the command. Meson runs debug builds by default. See [this page](https://mesonbuild.com/Builtin-options.html#core-options) on Meson's website for the list of types. This command may take some time to complete.
 
 ## 3. Build
 Congratulations, you're ready to build. Simply enter the build directory in your terminal and run `ninja`. Wait for it to complete, and then you're basically good to go. The `cacaoengine` executable on its own won't display anything if the proper files for starting a game aren't found, so see the the following section in which the playground is set up as an example.

@@ -6,8 +6,6 @@
 #include "Core/Assert.hpp"
 #include "Graphics/Window.hpp"
 #include "Core/Exception.hpp"
-#include "SDLWindowData.hpp"
-#include "SDLHooks.hpp"
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 #include "UI/Shaders.hpp"
@@ -16,16 +14,20 @@
 constexpr std::array<vk::Format, 2> acceptableFormats {{vk::Format::eB8G8R8A8Srgb, vk::Format::eR8G8B8A8Srgb}};
 
 namespace Cacao {
-	void ConfigureSDL() {}
+	void Window::ConfigureSDL() {}
 
-	SDL_WindowFlags GetSDLFlags() {
+	SDL_WindowFlags Window::GetSDLFlags() {
 		return SDL_WINDOW_VULKAN;
 	}
 
-	void SetupGraphicsAPI(SDL_Window* win) {
+	void Window::SetupGraphicsAPI(SDL_Window* win) {
 		//Create window surface
 		VkSurfaceKHR cSurface;
-		EngineAssert(SDL_Vulkan_CreateSurface(win, vk_instance, nullptr, &cSurface), "Could not create window surface!");
+		if(!SDL_Vulkan_CreateSurface(win, vk_instance, nullptr, &cSurface)) {
+			std::stringstream emsg;
+			emsg << "Failed to create window surface: " << SDL_GetError();
+			EngineAssert(false, emsg.str());
+		}
 		surface = vk::SurfaceKHR(cSurface);
 		auto formats = physDev.getSurfaceFormatsKHR(surface);
 		if(auto it = std::find_if(formats.begin(), formats.end(), [](vk::SurfaceFormatKHR sf) {
@@ -47,7 +49,7 @@ namespace Cacao {
 		}
 	}
 
-	void CleanupGraphicsAPI() {
+	void Window::CleanupGraphicsAPI() {
 		if(didGenShaders) {
 			//Cleanup UI shaders
 			DelShaders();
@@ -61,7 +63,7 @@ namespace Cacao {
 		vk_instance.destroySurfaceKHR(surface);
 	}
 
-	void ResizeViewport(SDL_Window* win) {
+	void Window::ResizeViewport(SDL_Window* win) {
 		try {
 			GenSwapchain();
 		} catch(vk::SystemError& err) {
