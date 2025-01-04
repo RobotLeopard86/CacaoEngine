@@ -2,7 +2,7 @@
 launch: .
 
 # Target number of dynamic ticks per second (not a hard constraint)
-dynamicTPS: 70
+dynamicTPS: 200
 
 # Window title
 title: Cacao Playground
