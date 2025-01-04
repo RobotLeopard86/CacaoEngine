@@ -40,9 +40,21 @@ namespace Cacao {
 
 	void Engine::EarlyWindowingInit() {
 #ifdef __linux__
-		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
+		if(auto forceX = std::getenv("CACAO_FORCE_X11"); forceX != nullptr && std::string(forceX).compare("YES") == 0) {
+			SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
+			goto do_init;
+		}
+
+		//Enable Wayland if possible and the user hasn't requested X11 specifically
+		for(int i = 0; i < SDL_GetNumVideoDrivers(); i++) {
+			if(std::string(SDL_GetVideoDriver(i)).compare("wayland") == 0) {
+				SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland");
+				break;
+			}
+		}
 #endif
 
+	do_init:
 		//Initialize SDL
 		EngineAssert(SDL_Init(SDL_INIT_VIDEO), "Could not initialize SDL library, no window can be created.");
 	}
