@@ -609,7 +609,7 @@
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the window is open already </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the window is open already or the windowing system is not initialized </p>
 </dd>
 </dl>
 </dd></dl>
@@ -625,6 +625,36 @@
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the window isn’t open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window7SysInitEv">
+<span id="_CPPv3N5Cacao6Window7SysInitEv"></span><span id="_CPPv2N5Cacao6Window7SysInitEv"></span><span id="Cacao::Window::SysInit"></span><span class="target" id="classCacao_1_1Window_1ad930b933d57c8336821241d160e88cd0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SysInit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window7SysInitEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Initialize the windowing system. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only and automatically called by it at startup</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the windowing system is already initialized </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window12SysTerminateEv">
+<span id="_CPPv3N5Cacao6Window12SysTerminateEv"></span><span id="_CPPv2N5Cacao6Window12SysTerminateEv"></span><span id="Cacao::Window::SysTerminate"></span><span class="target" id="classCacao_1_1Window_1a704dd79c7ac2d3551c246c00cb8c4f45"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SysTerminate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window12SysTerminateEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Shut down the windowing system. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only and automatically called by it at shutdown</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the windowing system is not initialized or the window is open </p>
 </dd>
 </dl>
 </dd></dl>
@@ -878,6 +908,8 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6WindowE"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4OpenENSt6stringEN3glm5uvec2Eb10WindowMode"><code class="docutils literal notranslate"><span class="pre">Window::Open()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window5CloseEv"><code class="docutils literal notranslate"><span class="pre">Window::Close()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7SysInitEv"><code class="docutils literal notranslate"><span class="pre">Window::SysInit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window12SysTerminateEv"><code class="docutils literal notranslate"><span class="pre">Window::SysTerminate()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window6IsOpenEv"><code class="docutils literal notranslate"><span class="pre">Window::IsOpen()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window6UpdateEv"><code class="docutils literal notranslate"><span class="pre">Window::Update()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7PresentEv"><code class="docutils literal notranslate"><span class="pre">Window::Present()</span></code></a></li>

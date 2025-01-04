@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Backend gl-sdl &#8212; Cacao Engine Docs</title>
+    <title>Vulkan Backend Info &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/backends/gl-sdl';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/backends/vk';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Backend vk-glfw" href="vk-glfw.html" />
-    <link rel="prev" title="Backend gl-glfw" href="gl-glfw.html" />
+    <link rel="next" title="API Reference" href="../../api/library_root.html" />
+    <link rel="prev" title="OpenGL Backend Info" href="gl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -336,10 +336,8 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../backends.html">Backends</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="vk-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gl.html">OpenGL Backend Info</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Vulkan Backend Info</a></li>
 </ul>
 </details></li>
 </ul>
@@ -383,7 +381,7 @@
     
     <li class="breadcrumb-item"><a href="../backends.html" class="nav-link">Backends</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Vulkan Backend Info</span></li>
   </ul>
 </nav>
 </div>
@@ -400,21 +398,20 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="backend-gl-sdl">
-<h1>Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code><a class="headerlink" href="#backend-gl-sdl" title="Link to this heading"><span/></a></h1>
-<p>This backend uses OpenGL 4.1 Core Profile and SDL (Simple DirectMedia Layer).</p>
-<section id="limitations">
-<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading"><span/></a></h2>
+  <section id="vulkan-backend-info">
+<h1>Vulkan Backend Info<a class="headerlink" href="#vulkan-backend-info" title="Link to this heading"><span/></a></h1>
+<p>This backend uses Vulkan 1.3+ with some extensions.</p>
+<section id="vulkan-extension-requirements">
+<h2>Vulkan Extension Requirements<a class="headerlink" href="#vulkan-extension-requirements" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>The F25 key is not detected as key input</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_swapchain</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VK_KHR_push_descriptor</span></code></p></li>
 </ul>
 </section>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"><span/></a></h2>
+<section id="extra-dependencies">
+<h2>Extra Dependencies<a class="headerlink" href="#extra-dependencies" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Fedora-based (e.g. RHEL) Linux: Packages <code class="docutils literal notranslate"><span class="pre">wayland-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXcursor-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXfixes-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXi-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXinerama-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXrandr-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libdecor-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libdrm-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">ibus-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">fcitx-devel</span></code></p></li>
-<li><p>Debian-based (e.g. Ubuntu) Linux: Packages <code class="docutils literal notranslate"><span class="pre">libwayland-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libxfixes-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">xorg-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols</span></code>, <code class="docutils literal notranslate"><span class="pre">libdecor0-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libdrm-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libibus-1.0-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">fcitx</span></code></p></li>
-<li><p>Arch-based (e.g. Manjaro) Linux: Packages <code class="docutils literal notranslate"><span class="pre">libglvnd</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon</span></code>, <code class="docutils literal notranslate"><span class="pre">extra-cmake-modules</span></code>, <code class="docutils literal notranslate"><span class="pre">libxcursor</span></code>, <code class="docutils literal notranslate"><span class="pre">libxi</span></code>, <code class="docutils literal notranslate"><span class="pre">libxfixes</span></code>, <code class="docutils literal notranslate"><span class="pre">libxinerama</span></code>, <code class="docutils literal notranslate"><span class="pre">libxrandr</span></code>, <code class="docutils literal notranslate"><span class="pre">mesa</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols</span></code>, <code class="docutils literal notranslate"><span class="pre">libibus</span></code>, <code class="docutils literal notranslate"><span class="pre">libdrm</span></code>, <code class="docutils literal notranslate"><span class="pre">fcitx</span></code></p></li>
+<li><p>Vulkan SDK</p></li>
 </ul>
 </section>
 </section>
@@ -430,20 +427,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="gl-glfw.html"
+       href="gl.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></p>
+        <p class="prev-next-title">OpenGL Backend Info</p>
       </div>
     </a>
     <a class="right-next"
-       href="vk-glfw.html"
+       href="../../api/library_root.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></p>
+        <p class="prev-next-title">API Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -466,8 +463,8 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations">Limitations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vulkan-extension-requirements">Vulkan Extension Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extra-dependencies">Extra Dependencies</a></li>
 </ul>
   </nav></div>
 

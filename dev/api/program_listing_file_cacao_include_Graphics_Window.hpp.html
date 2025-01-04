@@ -375,6 +375,7 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/vec2.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;SDL3/SDL.h&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Utilities/MiscUtils.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Engine.hpp&quot;</span>
@@ -391,6 +392,10 @@
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Open</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">initialSize</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">startVisible</span><span class="p">,</span><span class="w"> </span><span class="n">WindowMode</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Close</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SysInit</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SysTerminate</span><span class="p">();</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsOpen</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">isOpen</span><span class="p">;</span>
@@ -462,7 +467,7 @@
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">Window</span><span class="p">()</span>
-<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">isOpen</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="w"> </span><span class="n">mode</span><span class="p">(</span><span class="n">WindowMode</span><span class="o">::</span><span class="n">Window</span><span class="p">),</span><span class="w"> </span><span class="n">minimized</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">isOpen</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="w"> </span><span class="n">sysInitialized</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="w"> </span><span class="n">mode</span><span class="p">(</span><span class="n">WindowMode</span><span class="o">::</span><span class="n">Window</span><span class="p">),</span><span class="w"> </span><span class="n">minimized</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">        </span><span class="c1">//Singleton data</span>
 <span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
@@ -470,6 +475,7 @@
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isOpen</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isVisible</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">sysInitialized</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">useVSync</span><span class="p">;</span>
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
@@ -478,14 +484,25 @@
 <span class="w">        </span><span class="n">WindowMode</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">minimized</span><span class="p">;</span>
 
+<span class="w">        </span><span class="c1">//Native window object</span>
+<span class="w">        </span><span class="n">SDL_Window</span><span class="o">*</span><span class="w"> </span><span class="n">nativeWin</span><span class="p">;</span>
+
 <span class="w">        </span><span class="c1">//The last known window position</span>
 <span class="w">        </span><span class="c1">//Used for switching between modes</span>
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">ivec2</span><span class="w"> </span><span class="n">windowedPosition</span><span class="p">;</span>
 
+<span class="w">        </span><span class="c1">//Utility functions to update the actual window state</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateVSyncState</span><span class="p">();</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateWindowSize</span><span class="p">();</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateVisibilityState</span><span class="p">();</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdateModeState</span><span class="p">(</span><span class="n">WindowMode</span><span class="w"> </span><span class="n">lastMode</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">//&quot;Hook&quot; functions for graphics APIs to implement</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ConfigureSDL</span><span class="p">();</span>
+<span class="w">        </span><span class="n">SDL_WindowFlags</span><span class="w"> </span><span class="nf">GetSDLFlags</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetupGraphicsAPI</span><span class="p">(</span><span class="n">SDL_Window</span><span class="o">*</span><span class="w"> </span><span class="n">win</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CleanupGraphicsAPI</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ResizeViewport</span><span class="p">(</span><span class="n">SDL_Window</span><span class="o">*</span><span class="w"> </span><span class="n">win</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">//For changing the window size from implementation without generating more resize events</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ChangeSize</span><span class="p">(</span><span class="n">Window</span><span class="o">*</span><span class="w"> </span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -495,13 +512,6 @@
 <span class="w">            </span><span class="n">win</span><span class="o">-&gt;</span><span class="n">minimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newState</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">WindowResizer</span><span class="p">;</span>
-
-<span class="w">        </span><span class="c1">//Backend-implemented data type</span>
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">WindowData</span><span class="p">;</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">WindowData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
-
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Text</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
