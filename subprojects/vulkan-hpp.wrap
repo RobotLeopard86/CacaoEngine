@@ -1,5 +1,5 @@
 [wrap-git]
 url = https://github.com/KhronosGroup/Vulkan-Hpp
 depth = 1
-revision = v1.3.295
+revision = v1.3.300
 patch_directory = vkhpp

@@ -1,5 +1,5 @@
 [wrap-git]
 url = https://github.com/KhronosGroup/Vulkan-Headers
 depth = 1
-revision = vulkan-sdk-1.3.296.0
+revision = v1.3.300
 patch_directory = vkheaders
