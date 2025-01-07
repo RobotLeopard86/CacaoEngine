@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
   
   <!-- So that users can add custom icons -->
@@ -398,28 +398,43 @@
   <section id="versioning-scheme">
 <h1>Versioning Scheme<a class="headerlink" href="#versioning-scheme" title="Link to this heading"><span/></a></h1>
 <p><strong>NOTE: As Cacao Engine is still in very early active development, it has not had any releases and is versioned as <code class="docutils literal notranslate"><span class="pre">INDEV</span></code>.</strong></p>
-<section id="stability">
-<h2>Stability<a class="headerlink" href="#stability" title="Link to this heading"><span/></a></h2>
-<p>All prerelease versions of Cacao Engine are <strong>not</strong> guaranteed to be stable and may not function correctly or at all on all devices/platforms. Once a prerelease has been tested on all platforms and functions correctly, that version will be promoted to the full release.<br />
-All full release versions are stable and verified to work correctly on all platforms (though per-device compatibility may vary).</p>
+<section id="versioning-format">
+<h2>Versioning Format<a class="headerlink" href="#versioning-format" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of <code class="docutils literal notranslate"><span class="pre">[Generation].[Major].[Minor].[Mini](-[Stage][Build])</span></code>. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules.</p>
 </section>
-<section id="format">
-<h2>Format<a class="headerlink" href="#format" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine follows the format of <code class="docutils literal notranslate"><span class="pre">[Series].[Major].[Minor][Patch](-pre[Prerelease])</span></code>. The prerelease suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. The patch value is a letter, unlike the others, beginning at <code class="docutils literal notranslate"><span class="pre">a</span></code> and incrementing to <code class="docutils literal notranslate"><span class="pre">z</span></code>. The thinking is that if 26 patches have been made, it’s probably time for a new minor release.</p>
+<section id="stages">
+<h2>Stages<a class="headerlink" href="#stages" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> - Alpha/nightly releases. Likely very unstable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> - Beta releases. Still possibly unstable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rc</span></code> - Release candidates. Should be almost entirely stable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> - Stable releases. Communicates minor bugfix releases when increased past <code class="docutils literal notranslate"><span class="pre">1</span></code> for the first release.</p></li>
+</ul>
 </section>
 <section id="number-incrementing">
 <h2>Number Incrementing<a class="headerlink" href="#number-incrementing" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Series - Incremented for large leaps forward in engine capabilities.</p></li>
-<li><p>Major - Incremented for breaking API or behavioral changes.</p></li>
-<li><p>Minor - Incremented for features added that do not change the behavior of any existing functionality.</p></li>
-<li><p>Patch - Incremented for minor bugfix updates.</p></li>
-<li><p>Prerelease - Incremented for each new prerelease for a given version.</p></li>
+<li><p>Generation - Remains 0 during active development. When the first full release and subsequent versions are released, this number becomes the year when work on the release began.</p></li>
+<li><p>Major - Incremented for large new feature additions or large behavioral changes.</p></li>
+<li><p>Minor - Incremented for smaller breaking changes.</p></li>
+<li><p>Mini - Incremented for non-breaking small feature additions.</p></li>
+<li><p>Build - Takes different formats depending on the Stage:</p>
+<ul>
+<li><p>Stages <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - Monotonic increases with numbers shared so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.)</p></li>
+<li><p>Stage <code class="docutils literal notranslate"><span class="pre">rc</span></code> - Uses format <code class="docutils literal notranslate"><span class="pre">[a].[b]</span></code>, where <code class="docutils literal notranslate"><span class="pre">a</span></code> is the number of the stable release for which this is a candidate and <code class="docutils literal notranslate"><span class="pre">b</span></code> is the monotonically-increasing release candidate number.</p></li>
+<li><p>Stage <code class="docutils literal notranslate"><span class="pre">s</span></code> - Monotonically increases for each release.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="nicknames">
 <h2>Nicknames<a class="headerlink" href="#nicknames" title="Link to this heading"><span/></a></h2>
-<p>Each release of Cacao Engine (excluding patches) receives a new nickname. The first letter of the nicknames goes down the alphabet with each major release (wrapping back to <code class="docutils literal notranslate"><span class="pre">a</span></code> after reaching <code class="docutils literal notranslate"><span class="pre">z</span></code>), and each minor release gets a new nickname with the same first letter as the major.</p>
+<p>Each release of Cacao Engine (excluding patches) receives a new nickname. The first letter of the nicknames goes down the alphabet with each minor version increment (wrapping back to <code class="docutils literal notranslate"><span class="pre">a</span></code> after reaching <code class="docutils literal notranslate"><span class="pre">z</span></code>), and each mini versiion increment gets a new nickname with the same first letter as the minor.</p>
+</section>
+<section id="stability">
+<h2>Stability<a class="headerlink" href="#stability" title="Link to this heading"><span/></a></h2>
+<p>All prerelease versions of Cacao Engine are <strong>not</strong> guaranteed to be stable and may not function correctly or at all on all devices/platforms. Once a prerelease has been tested on all platforms and functions correctly, that version will be promoted to the full release.<br />
+All full release versions are stable and verified to work correctly on all platforms (though per-device compatibility may vary).</p>
 </section>
 </section>
 
@@ -470,10 +485,11 @@ All full release versions are stable and verified to work correctly on all platf
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">Stability</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format">Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versioning-format">Versioning Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stages">Stages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#number-incrementing">Number Incrementing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nicknames">Nicknames</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">Stability</a></li>
 </ul>
   </nav></div>
 
