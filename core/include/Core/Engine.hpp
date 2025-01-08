@@ -41,7 +41,7 @@ namespace Cacao {
 		void Stop();
 
 		///@brief Access the thread pool
-		std::shared_ptr<thread_pool> GetThreadPool() {
+		std::shared_ptr<dp::thread_pool<dp::details::default_function_type, std::jthread>> GetThreadPool() {
 			return threadPool;
 		}
 
