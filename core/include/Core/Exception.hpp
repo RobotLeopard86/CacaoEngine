@@ -7,7 +7,7 @@
 #include <map>
 
 #include "Log.hpp"
-#include "DllHelper.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**

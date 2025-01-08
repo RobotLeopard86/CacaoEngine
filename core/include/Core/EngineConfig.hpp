@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DllHelper.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**

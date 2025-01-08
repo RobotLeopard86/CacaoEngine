@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "DllHelper.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**

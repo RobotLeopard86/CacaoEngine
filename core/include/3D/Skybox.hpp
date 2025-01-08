@@ -5,7 +5,7 @@
 #include "Mesh.hpp"
 #include "Graphics/Material.hpp"
 #include "Utilities/Asset.hpp"
-#include "DllHelper.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/vec2.hpp"
 #include "glm/mat4x4.hpp"

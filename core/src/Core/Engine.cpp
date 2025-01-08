@@ -92,18 +92,17 @@ namespace Cacao {
 		Exception::RegisterExceptionCode(0, "External");
 		Exception::RegisterExceptionCode(1, "FileNotFound");
 		Exception::RegisterExceptionCode(2, "NonexistentValue");
-		Exception::RegisterExceptionCode(3, "InvalidYAML");
-		Exception::RegisterExceptionCode(4, "BadInitState");
-		Exception::RegisterExceptionCode(5, "NullValue");
-		Exception::RegisterExceptionCode(6, "BadState");
-		Exception::RegisterExceptionCode(7, "FileOpenFailure");
-		Exception::RegisterExceptionCode(8, "EventManager");
-		Exception::RegisterExceptionCode(9, "ContainerValue");
-		Exception::RegisterExceptionCode(10, "WrongType");
-		Exception::RegisterExceptionCode(11, "IO");
-		Exception::RegisterExceptionCode(12, "BadCompileState");
-		Exception::RegisterExceptionCode(13, "BadValue");
-		Exception::RegisterExceptionCode(14, "BadThread");
+		Exception::RegisterExceptionCode(3, "BadInitState");
+		Exception::RegisterExceptionCode(4, "NullValue");
+		Exception::RegisterExceptionCode(5, "BadState");
+		Exception::RegisterExceptionCode(6, "FileOpenFailure");
+		Exception::RegisterExceptionCode(7, "EventManager");
+		Exception::RegisterExceptionCode(8, "ContainerValue");
+		Exception::RegisterExceptionCode(9, "WrongType");
+		Exception::RegisterExceptionCode(10, "IO");
+		Exception::RegisterExceptionCode(11, "BadCompileState");
+		Exception::RegisterExceptionCode(12, "BadValue");
+		Exception::RegisterExceptionCode(13, "BadThread");
 
 		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
 		Logging::EngineLog("Starting thread pool...");

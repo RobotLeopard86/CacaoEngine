@@ -8,7 +8,7 @@
 #include "thread_pool/thread_pool.h"
 
 #include "EngineConfig.hpp"
-#include "DllHelper.hpp"
+#include "Core/DllHelper.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Task.hpp"
 #include "UI/UIView.hpp"
