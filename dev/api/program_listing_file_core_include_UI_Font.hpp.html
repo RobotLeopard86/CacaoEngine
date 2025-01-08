@@ -372,9 +372,9 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Utilities/Asset.hpp&quot;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;hb.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ft2build.h&quot;</span>
-<span class="cp">#include FT_FREETYPE_H</span>
+<span class="c1">//FreeType face forward declaration</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">FT_FaceRec_</span><span class="w"> </span><span class="n">FT_FaceRec_</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">FT_FaceRec_</span><span class="o">*</span><span class="w"> </span><span class="n">FT_Face</span><span class="p">;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>

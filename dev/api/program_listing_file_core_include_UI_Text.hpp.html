@@ -420,29 +420,7 @@
 <span class="w">            </span><span class="n">dirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Renderable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIRenderable</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">Advance</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">glm</span><span class="o">::</span><span class="n">i32vec2</span><span class="w"> </span><span class="n">adv</span><span class="p">,</span><span class="w"> </span><span class="n">offset</span><span class="p">;</span>
-<span class="w">                </span><span class="n">Advance</span><span class="p">(</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">xa</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">ya</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">xo</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">yo</span><span class="p">)</span>
-<span class="w">                  </span><span class="o">:</span><span class="w"> </span><span class="n">adv</span><span class="p">(</span><span class="n">xa</span><span class="p">,</span><span class="w"> </span><span class="n">ya</span><span class="p">),</span><span class="w"> </span><span class="n">offset</span><span class="p">(</span><span class="n">xo</span><span class="p">,</span><span class="w"> </span><span class="n">yo</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-<span class="w">            </span><span class="p">};</span>
-<span class="w">            </span><span class="k">struct</span><span class="w"> </span><span class="nc">Line</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">hb_glyph_info_t</span><span class="o">*</span><span class="w"> </span><span class="n">glyphInfo</span><span class="p">;</span>
-<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Advance</span><span class="o">&gt;</span><span class="w"> </span><span class="n">advances</span><span class="p">;</span>
-<span class="w">                </span><span class="n">hb_buffer_t</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
-<span class="w">                </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">glyphCount</span><span class="p">;</span>
-<span class="w">            </span><span class="p">};</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Line</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lines</span><span class="p">;</span>
-<span class="w">            </span><span class="n">FT_Face</span><span class="w"> </span><span class="n">fontFace</span><span class="p">;</span>
-<span class="w">            </span><span class="n">TextAlign</span><span class="w"> </span><span class="n">alignment</span><span class="p">;</span>
-<span class="w">            </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
-<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">linegap</span><span class="p">;</span>
-<span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">lineHeight</span><span class="p">;</span>
-<span class="w">            </span><span class="n">FT_F26Dot6</span><span class="w"> </span><span class="n">charSize</span><span class="p">;</span>
-<span class="w">            </span><span class="n">hb_font_t</span><span class="o">*</span><span class="w"> </span><span class="n">hbf</span><span class="p">;</span>
-
-<span class="w">            </span><span class="kt">void</span><span class="w"> </span><span class="nf">Draw</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span><span class="w"> </span><span class="n">projection</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Renderable</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIRenderable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MakeRenderable</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">screenSize</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 

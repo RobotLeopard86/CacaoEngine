@@ -371,6 +371,13 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="c1">//Cacao Engine header file for client usage</span>
+<span class="c1">//DO NOT INCLUDE THIS FROM THE ENGINE CORE OR FROM A RUNTIME</span>
+
+<span class="cp">#ifdef CACAO_BUILD</span>
+<span class="cp">#undef CACAO_BUILD</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/DllHelper.hpp&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Assert.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Log.hpp&quot;</span>

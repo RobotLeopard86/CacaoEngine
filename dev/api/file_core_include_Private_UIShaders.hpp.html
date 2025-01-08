@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>File FreetypeOwner.hpp &#8212; Cacao Engine Docs</title>
+    <title>File UIShaders.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_core_include_UI_FreetypeOwner.hpp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_core_include_Private_UIShaders.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -316,7 +316,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="program_listing_file_core_include_UI_FreetypeOwner.hpp.html">Program Listing for File FreetypeOwner.hpp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_core_include_Private_UIShaders.hpp.html">Program Listing for File UIShaders.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -352,7 +352,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File FreetypeOwner.hpp</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File UIShaders.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -369,43 +369,62 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="file-freetypeowner-hpp">
-<span id="file-core-include-ui-freetypeowner-hpp"></span><h1>File FreetypeOwner.hpp<a class="headerlink" href="#file-freetypeowner-hpp" title="Link to this heading"><span/></a></h1>
-<p>↰ <a class="reference internal" href="dir_core_include_UI.html#dir-core-include-ui"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">core/include/UI</span></code>)</p>
+  <section id="file-uishaders-hpp">
+<span id="file-core-include-private-uishaders-hpp"></span><h1>File UIShaders.hpp<a class="headerlink" href="#file-uishaders-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="dir_core_include_Private.html#dir-core-include-private"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">core/include/Private</span></code>)</p>
 <nav class="contents local" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#definition-core-include-ui-freetypeowner-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/FreetypeOwner.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#definition-core-include-private-uishaders-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Private/UIShaders.hpp</span></code>)</a></p></li>
 <li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
 <li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
-<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id5">Variables</a></p></li>
 </ul>
 </nav>
-<section id="definition-core-include-ui-freetypeowner-hpp">
-<h2>Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/FreetypeOwner.hpp</span></code>)<a class="headerlink" href="#definition-core-include-ui-freetypeowner-hpp" title="Link to this heading"><span/></a></h2>
+<section id="definition-core-include-private-uishaders-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Private/UIShaders.hpp</span></code>)<a class="headerlink" href="#definition-core-include-private-uishaders-hpp" title="Link to this heading"><span/></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="program_listing_file_core_include_UI_FreetypeOwner.hpp.html">Program Listing for File FreetypeOwner.hpp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_core_include_Private_UIShaders.hpp.html">Program Listing for File UIShaders.hpp</a></li>
 </ul>
 </div>
 </section>
 <section id="includes">
 <h2>Includes<a class="headerlink" href="#includes" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">FT_FREETYPE_H</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ft2build.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Graphics/Shader.hpp</span></code> (<a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#file-core-include-graphics-shader-hpp"><span class="std std-ref">File Shader.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">image.frag.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">image.vert.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">text.frag.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">text.vert.txt</span></code></p></li>
 </ul>
 </section>
 <section id="namespaces">
 <h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="namespace_Cacao.html#namespace-cacao"><span class="std std-ref">Namespace Cacao</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_Cacao__ImageShaders.html#namespace-cacao-imageshaders"><span class="std std-ref">Namespace Cacao::ImageShaders</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_Cacao__TextShaders.html#namespace-cacao-textshaders"><span class="std std-ref">Namespace Cacao::TextShaders</span></a></p></li>
 </ul>
 </section>
-<section id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"><span/></a></h2>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="classCacao_1_1FreetypeOwner.html#exhale-class-classcacao-1-1freetypeowner"><span class="std std-ref">Class FreetypeOwner</span></a></p></li>
+<li><p><a class="reference internal" href="function_UIShaders_8hpp_1a04a639fae584080fccaeb250dd0520fb.html#exhale-function-uishaders-8hpp-1a04a639fae584080fccaeb250dd0520fb"><span class="std std-ref">Function Cacao::DelShaders</span></a></p></li>
+<li><p><a class="reference internal" href="function_UIShaders_8hpp_1a47a9d3f17035368e02c865304cde04e7.html#exhale-function-uishaders-8hpp-1a47a9d3f17035368e02c865304cde04e7"><span class="std std-ref">Function Cacao::GenShaders</span></a></p></li>
+<li><p><a class="reference internal" href="function_UIShaders_8hpp_1ab542c6004bd083364cf664756497c1f7.html#exhale-function-uishaders-8hpp-1ab542c6004bd083364cf664756497c1f7"><span class="std std-ref">Function Cacao::PreShaderCompileHook</span></a></p></li>
+</ul>
+</section>
+<section id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_UIShaders_8hpp_1a2e18f1e61d8969f46db8bdf1f15e2b1b.html#exhale-variable-uishaders-8hpp-1a2e18f1e61d8969f46db8bdf1f15e2b1b"><span class="std std-ref">Variable Cacao::ImageShaders::fragment</span></a></p></li>
+<li><p><a class="reference internal" href="variable_UIShaders_8hpp_1a3d3098e8f5d0c24de450d205a643f617.html#exhale-variable-uishaders-8hpp-1a3d3098e8f5d0c24de450d205a643f617"><span class="std std-ref">Variable Cacao::ImageShaders::shader</span></a></p></li>
+<li><p><a class="reference internal" href="variable_UIShaders_8hpp_1a396c6d5c0412330df0bad289ab9c0400.html#exhale-variable-uishaders-8hpp-1a396c6d5c0412330df0bad289ab9c0400"><span class="std std-ref">Variable Cacao::ImageShaders::vertex</span></a></p></li>
+<li><p><a class="reference internal" href="variable_UIShaders_8hpp_1a4668fab0ec983d9812830918807fa91f.html#exhale-variable-uishaders-8hpp-1a4668fab0ec983d9812830918807fa91f"><span class="std std-ref">Variable Cacao::TextShaders::fragment</span></a></p></li>
+<li><p><a class="reference internal" href="variable_UIShaders_8hpp_1a3164022ed255e60b62484b86c0aedd91.html#exhale-variable-uishaders-8hpp-1a3164022ed255e60b62484b86c0aedd91"><span class="std std-ref">Variable Cacao::TextShaders::shader</span></a></p></li>
+<li><p><a class="reference internal" href="variable_UIShaders_8hpp_1a66833c47b01830c30b60077e191de92c.html#exhale-variable-uishaders-8hpp-1a66833c47b01830c30b60077e191de92c"><span class="std std-ref">Variable Cacao::TextShaders::vertex</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -439,10 +458,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-core-include-ui-freetypeowner-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/FreetypeOwner.hpp</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-core-include-private-uishaders-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Private/UIShaders.hpp</span></code>)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#includes">Includes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a></li>
 </ul>
   </nav></div>
 
