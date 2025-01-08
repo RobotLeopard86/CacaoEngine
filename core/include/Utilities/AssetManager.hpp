@@ -27,78 +27,73 @@ namespace Cacao {
 		static AssetManager* GetInstance();
 
 		/**
-		 * @brief Load a shader from a shader definition file
-		 * See the page "Definition Files" in the manual for their format
+		 * @brief Load a shader by its asset ID
 		 *
-		 * @param definitionPath The path to a definition file
+		 * @param assetID The ID of the shader to load
 		 *
-		 * @throws Exception If the definition file does not exist, has the wrong format, or fails to compile
+		 * @throws Exception If the asset ID is invalid or the shader fails to compile
 		 * @see Shader::Compile
 		 */
-		std::future<AssetHandle<Shader>> LoadShader(std::string definitionPath);
+		std::future<AssetHandle<Shader>> LoadShader(std::string assetID);
 
 		/**
-		 * @brief Load a 2D texture from an image file
+		 * @brief Load a 2D texture by its asset ID
 		 *
-		 * @param path The path to an image
+		 * @param assetID The ID of the texture to load
 		 *
-		 * @throws Exception If the image file does not exist or fails to compile
+		 * @throws Exception If the asset ID is invalid or the texture fails to compile
 		 * @see Texture2D::Compile
 		 */
-		std::future<AssetHandle<Texture2D>> LoadTexture2D(std::string path);
+		std::future<AssetHandle<Texture2D>> LoadTexture2D(std::string assetID);
 
 		/**
-		 * @brief Load a cubemap from a cubemap definition file
-		 * See the page "Definition Files" in the manual for their format
+		 * @brief Load a cubemap by its asset ID
 		 *
-		 * @param definitionPath The path to a definition file
+		 * @param assetID The ID of the cubemap to load
 		 *
-		 * @throws Exception If the definition file does not exist, has the wrong format, or fails to compile
+		 * @throws Exception If the asset ID is invalid or the cubemap fails to compile
 		 * @see Cubemap::Compile
 		 */
-		std::future<AssetHandle<Cubemap>> LoadCubemap(std::string definitionPath);
+		std::future<AssetHandle<Cubemap>> LoadCubemap(std::string assetID);
 
 		/**
-		 * @brief Load a skybox from a cubemap definition file
-		 * See the page "Definition Files" in the manual for their format
+		 * @brief Load a skybox from a cubemap by its asset ID
 		 *
-		 * @param definitionPath The path to a definition file
+		 * @param assetID The ID of the cubemap to load and use
 		 *
-		 * @throws Exception If the definition file does not exist, has the wrong format, or fails to compile
+		 * @throws Exception If the asset ID is invalid or the cubemap fails to compile
 		 * @see Cubemap::Compile,LoadCubemap
 		 */
-		std::future<AssetHandle<Skybox>> LoadSkybox(std::string definitionPath);
+		std::future<AssetHandle<Skybox>> LoadSkybox(std::string assetID);
 
 		/**
-		 * @brief Load a mesh from a given model file
-		 * @details The input format is as follows: (model file path):(mesh name)
+		 * @brief Load a mesh by its asset ID
 		 *
-		 * @param location The location to retrieve the mesh from
+		 * @param assetID The ID of the mesh to load
 		 *
-		 * @throws Exception If the location parameter has the wrong format, the model file does not exist, the model fails to load, the model does not contain the requested mesh, or the mesh fails to compile
+		 * @throws Exception If the asset ID is invalid or the mesh fails to compile
 		 * @see Model::Model,Mesh::Compile
 		 */
-		std::future<AssetHandle<Mesh>> LoadMesh(std::string location);
+		std::future<AssetHandle<Mesh>> LoadMesh(std::string assetID);
 
 		/**
-		 * @brief Load a sound from a file
-		 * @details Supports MP3, WAV, Ogg Vorbis, and Ogg Opus files
+		 * @brief Load a sound by its asset ID
 		 *
-		 * @param path The path to a sound file
+		 * @param assetID The ID of the sound to load
 		 *
-		 * @throws Exception If the sound file does not exist, fails to be read, or fails to compile (which may happen if the audio system is uninitialized)
+		 * @throws Exception If the asset ID is invalid or the sound fails to compile
 		 * @see Sound::Compile
 		 */
-		std::future<AssetHandle<Sound>> LoadSound(std::string path);
+		std::future<AssetHandle<Sound>> LoadSound(std::string assetID);
 
 		/**
-		 * @brief Load a font face from a file
+		 * @brief Load a font face by its asset ID
 		 *
-		 * @param path The path to a font file
+		 * @param assetID The ID of the shader to load
 		 *
-		 * @throws Exception If the font file does not exist or the font face cannot be loaded from it
+		 * @throws Exception If the asset ID is invalid or the font fails to compile
 		 */
-		std::future<AssetHandle<Font>> LoadFont(std::string path);
+		std::future<AssetHandle<Font>> LoadFont(std::string assetID);
 
 		/**
 		 * @brief Remove an asset from the cache

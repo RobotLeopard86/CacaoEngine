@@ -81,7 +81,7 @@ namespace Cacao {
 
 		///@brief Gets the type of this asset. Needed for safe downcasting from Asset
 		std::string GetType() const override {
-			return "2DTEX";
+			return "TEX2D";
 		}
 
 	  private:
