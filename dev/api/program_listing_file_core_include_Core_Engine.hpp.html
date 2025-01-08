@@ -394,7 +394,7 @@
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Stop</span><span class="p">();</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetThreadPool</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">dp</span><span class="o">::</span><span class="n">thread_pool</span><span class="o">&lt;</span><span class="n">dp</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">default_function_type</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">jthread</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">GetThreadPool</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">threadPool</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
