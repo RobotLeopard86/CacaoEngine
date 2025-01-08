@@ -4,6 +4,8 @@
 #include "Core/Engine.hpp"
 #include "UI/FreetypeOwner.hpp"
 
+#include "hb.h"
+
 #include <filesystem>
 
 namespace Cacao {

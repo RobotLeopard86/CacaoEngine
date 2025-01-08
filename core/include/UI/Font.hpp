@@ -2,9 +2,9 @@
 
 #include "Utilities/Asset.hpp"
 
-#include "hb.h"
-#include "ft2build.h"
-#include FT_FREETYPE_H
+//FreeType face forward declaration
+typedef struct FT_FaceRec_ FT_FaceRec_;
+typedef FT_FaceRec_* FT_Face;
 
 namespace Cacao {
 	/**

@@ -30,11 +30,7 @@ namespace Cacao {
 			dirty = true;
 		}
 
-		struct Renderable : public UIRenderable {
-			AssetHandle<Texture2D> tex;
-
-			void Draw(glm::uvec2 screenSize, const glm::mat4& projection) override;
-		};
+		struct Renderable;
 
 		std::shared_ptr<UIRenderable> MakeRenderable(glm::uvec2 screenSize) override;
 

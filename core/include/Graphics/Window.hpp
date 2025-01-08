@@ -5,10 +5,12 @@
 #include <map>
 
 #include "glm/vec2.hpp"
-#include "SDL3/SDL.h"
 
 #include "Utilities/MiscUtils.hpp"
 #include "Core/Engine.hpp"
+
+//Forward declaration of SDL window type
+struct SDL_Window;
 
 namespace Cacao {
 	/**

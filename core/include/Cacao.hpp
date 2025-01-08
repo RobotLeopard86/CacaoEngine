@@ -1,6 +1,13 @@
 #pragma once
 
 //Cacao Engine header file for client usage
+//DO NOT INCLUDE THIS FROM THE ENGINE CORE OR FROM A RUNTIME
+
+#ifdef CACAO_BUILD
+#undef CACAO_BUILD
+#endif
+
+#include "Core/DllHelper.hpp"
 
 #include "Core/Assert.hpp"
 #include "Core/Log.hpp"

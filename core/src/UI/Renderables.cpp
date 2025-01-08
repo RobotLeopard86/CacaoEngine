@@ -1,6 +1,7 @@
 #include "UI/UIRenderable.hpp"
 #include "UI/Text.hpp"
 #include "UI/Image.hpp"
+#include "Private/Renderables.hpp"
 
 #include <vector>
 #include <sstream>
@@ -11,6 +12,8 @@
 #include "hb.h"
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
+#include "ft2build.h"
+#include FT_FREETYPE_H
 
 namespace Cacao {
 	void UIElement::CommonRenderableSetup(std::shared_ptr<UIRenderable> out, glm::uvec2 screenSize) {

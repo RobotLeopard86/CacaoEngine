@@ -7,7 +7,7 @@
 #include "Audio/AudioSystem.hpp"
 #include "Audio/AudioPlayer.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
-#include "UI/FreetypeOwner.hpp"
+#include "Private/FreetypeOwner.hpp"
 #include "Core/RuntimeHooks.hpp"
 
 #include "yaml-cpp/yaml.h"

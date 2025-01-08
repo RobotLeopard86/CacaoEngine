@@ -11,8 +11,7 @@ comps = get_option('components')
 backend = get_option('graphics_backend')
 ignore_bad_compiler = get_option('ignore_bad_compiler')
 
-# Create extra argument lists
-tgt_compiler_args = []
+# Create extra argument list
 dep_compiler_args = []
 
 # Find Python and GLSLC
@@ -71,7 +70,7 @@ if host_machine.system() == 'windows'
 	if get_option('windows_noconsole')
 		subsystem = 'windows'
 	endif
-	add_project_arguments(['-D_MT', '-D_DLL'], language: ['c', 'cpp'])
+	add_project_arguments(['-D_MT', '-D_DLL', '-DCACAO_BUILD'], language: ['c', 'cpp'])
 	add_project_link_arguments(['-Xlinker', '/NODEFAULTLIB'], language: ['c', 'cpp'])
 	if bt == 'debug'
 		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2'], language: ['c', 'cpp'])
@@ -81,8 +80,6 @@ if host_machine.system() == 'windows'
 		add_project_link_arguments(['-lmsvcrt', '-lucrt', '-lvcruntime'], language: ['c', 'cpp'])
 		add_project_link_arguments(['-lmsvcprt'], language: ['cpp'])
 	endif
-	dep_compiler_args += '-DCACAO_API=__declspec(dllimport)'
-	tgt_compiler_args += '-DCACAO_API=__declspec(dllexport)'
 endif
 
 # Set some macOS-specific options

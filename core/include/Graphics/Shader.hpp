@@ -10,17 +10,16 @@
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Asset.hpp"
 
-#include "spirv_cross.hpp"
 #include "glm/glm.hpp"
 
 namespace Cacao {
 	///@brief Shorthand type for shader data types
 	enum class ShaderDataType {
-		Int = spirv_cross::SPIRType::BaseType::Int,
-		UInt = spirv_cross::SPIRType::BaseType::UInt,
-		Float = spirv_cross::SPIRType::BaseType::Float,
-		SampledImage = spirv_cross::SPIRType::BaseType::SampledImage,
-		Unknown = spirv_cross::SPIRType::BaseType::Unknown
+		Unknown = 0,
+		Int = 7,
+		UInt = 8,
+		Float = 13,
+		SampledImage = 17,
 	};
 
 	///@brief Item in a ShaderSpec
