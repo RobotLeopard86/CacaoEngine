@@ -5,12 +5,13 @@
 #include <utility>
 
 #include "Mesh.hpp"
+#include "DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief The representation of a model file
 	 */
-	class Model {
+	class CACAO_API Model {
 	  public:
 		/**
 		 * @brief Load a model from a file path

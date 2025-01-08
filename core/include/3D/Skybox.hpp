@@ -5,6 +5,7 @@
 #include "Mesh.hpp"
 #include "Graphics/Material.hpp"
 #include "Utilities/Asset.hpp"
+#include "DllHelper.hpp"
 
 #include "glm/vec2.hpp"
 #include "glm/mat4x4.hpp"
@@ -16,7 +17,7 @@ namespace Cacao {
 	/**
 	 * @brief A skybox. Implementation is backend-dependent
 	 */
-	class Skybox : public Asset {
+	class CACAO_API Skybox : public Asset {
 	  public:
 		/**
 		 * @brief Create a skybox from a cubemap

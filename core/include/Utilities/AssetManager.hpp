@@ -8,6 +8,7 @@
 #include "Audio/Sound.hpp"
 #include "UI/Font.hpp"
 #include "Core/Exception.hpp"
+#include "Core/DllHelper.hpp"
 #include "Asset.hpp"
 
 #include <future>
@@ -16,7 +17,7 @@ namespace Cacao {
 	/**
 	 * @brief Manages the loading of assets and the asset cache
 	 */
-	class AssetManager {
+	class CACAO_API AssetManager {
 	  public:
 		/**
 		 * @brief Get the instance and create one if there isn't one

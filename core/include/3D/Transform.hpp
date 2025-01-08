@@ -3,11 +3,13 @@
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 
+#include "Core/DllHelper.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief A transform defining position, rotation, and scale
 	 */
-	class Transform {
+	class CACAO_API Transform {
 	  public:
 		/**
 		 * @brief Create a new transform

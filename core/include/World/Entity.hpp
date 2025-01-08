@@ -3,19 +3,19 @@
 #include <vector>
 #include <optional>
 #include <random>
+#include <memory>
+#include <string>
+#include <map>
+#include <vector>
+#include <mutex>
 
 #include "3D/Mesh.hpp"
 #include "Graphics/Material.hpp"
 #include "3D/Transform.hpp"
 #include "Core/Log.hpp"
 #include "Core/Exception.hpp"
+#include "Core/DllHelper.hpp"
 #include "Utilities/MiscUtils.hpp"
-
-#include <memory>
-#include <string>
-#include <map>
-#include <vector>
-#include <mutex>
 
 //This is required for uint64_t used by crossguid (but that doesn't include it for some reason)
 #include <stdint.h>
@@ -35,7 +35,7 @@ namespace Cacao {
 	 *
 	 * @warning You @b MUST keep a reference to an entity as long as it is in a world, or you will cause a segmentation fault
 	 */
-	class Entity {
+	class CACAO_API Entity {
 	  public:
 		///@brief GUID (Globally Unique Identifier)
 		const xg::Guid guid;

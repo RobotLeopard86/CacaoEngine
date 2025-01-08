@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Core/DllHelper.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief Utility that caches changes to an object and applies them on command
 	 */
 	template<typename T>
-	class Flushable {
+	class CACAO_API Flushable {
 	  public:
 		/**
 		 * @brief Create a new flushable

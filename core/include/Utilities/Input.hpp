@@ -3,6 +3,7 @@
 #include "glm/vec2.hpp"
 
 #include "Events/EventSystem.hpp"
+#include "Core/DllHelper.hpp"
 #include "Flushable.hpp"
 
 #include <map>
@@ -11,7 +12,7 @@ namespace Cacao {
 	/**
 	 * @brief Input handler and store
 	 */
-	class Input {
+	class CACAO_API Input {
 	  public:
 		/**
 		 * @brief Get the current cursor position

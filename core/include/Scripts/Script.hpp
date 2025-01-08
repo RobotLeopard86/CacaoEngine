@@ -1,12 +1,13 @@
 #pragma once
 
 #include "World/Component.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief Base class for a script
 	 */
-	class Script : public Component {
+	class CACAO_API Script : public Component {
 	  public:
 		/**
 		 * @brief Runs every dynamic tick

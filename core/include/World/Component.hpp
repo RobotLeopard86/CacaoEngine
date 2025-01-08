@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <string>
 
@@ -8,7 +9,7 @@ namespace Cacao {
 	/**
 	 * @brief A component on an Entity
 	 */
-	class Component {
+	class CACAO_API Component {
 	  public:
 		/**
 		 * @brief Check if this component should be functionally active

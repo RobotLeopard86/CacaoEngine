@@ -4,6 +4,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
 
+#include "Core/DllHelper.hpp"
+
 /**
  * @brief Convert a member function of this object into a form that can be called statically
  * @warning The function must take no arguments, otherwise you will receive weird template instantiation errors that don't help
@@ -14,7 +16,7 @@ namespace Cacao {
 	/**
 	 * @brief Result from Calculate3DVectors
 	 */
-	struct Vectors {
+	struct CACAO_API Vectors {
 		glm::vec3 front, right, up;
 	};
 
@@ -22,7 +24,7 @@ namespace Cacao {
 	 * @brief Calculate a front vector pointing away from the origin at the given rotation and its accompanying right and up vectors
 	 * @details The rotation values must be in degrees
 	 */
-	inline Vectors Calculate3DVectors(glm::vec3 rotation) {
+	CACAO_API inline Vectors Calculate3DVectors(glm::vec3 rotation) {
 		//Get our X and Y rotation in radians
 		float tilt = glm::radians(rotation.x);
 		float pan = glm::radians(rotation.y);

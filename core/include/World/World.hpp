@@ -3,6 +3,7 @@
 #include "Entity.hpp"
 #include "3D/Skybox.hpp"
 #include "Graphics/Cameras/Camera.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <optional>
 #include <algorithm>
@@ -11,7 +12,7 @@ namespace Cacao {
 	/**
 	 * @brief A gameplay space
 	 */
-	class World {
+	class CACAO_API World {
 	  public:
 		AssetHandle<Skybox> skybox;///<Skybox (set to a null asset handle to have no skybox)
 

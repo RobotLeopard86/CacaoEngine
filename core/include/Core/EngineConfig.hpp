@@ -1,10 +1,12 @@
 #pragma once
 
+#include "DllHelper.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief Engine configuration values
 	 */
-	struct EngineConfig {
+	struct CACAO_API EngineConfig {
 		/**
 		 * @brief The number of dynamic ticks that should occur within a second
 		 * @details This is NOT a hard constraint. Attempting to run too many ticks within a second will cause noticeable frame skipping.

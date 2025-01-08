@@ -3,6 +3,7 @@
 #include "Event.hpp"
 #include "Core/Exception.hpp"
 #include "Utilities/MultiFuture.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <functional>
 #include <vector>
@@ -11,7 +12,7 @@ namespace Cacao {
 	/**
 	 * @brief Simple wrapper for a function that consumes an event
 	 */
-	class EventConsumer {
+	class CACAO_API EventConsumer {
 	  public:
 		/**
 		 * @brief Create an event consumer
@@ -51,7 +52,7 @@ namespace Cacao {
 	/**
 	 * @brief An extended event consumer that can signal when it's done via a promise
 	 */
-	class SignalEventConsumer : public EventConsumer {
+	class CACAO_API SignalEventConsumer : public EventConsumer {
 	  public:
 		/**
 		 * @brief Create a new signal event consumer

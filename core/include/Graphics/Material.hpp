@@ -5,6 +5,7 @@
 #include "Textures/Cubemap.hpp"
 #include "UI/UIView.hpp"
 #include "Core/Exception.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/glm.hpp"
 
@@ -16,7 +17,7 @@ namespace Cacao {
 	 *
 	 * @note Can only be legally created by Shader::CreateMaterial
 	 */
-	class Material {
+	class CACAO_API Material {
 	  public:
 		///@brief Shorthand for container of possible data types
 		using ValueContainer = std::variant<int, unsigned int, float,

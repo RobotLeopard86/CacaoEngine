@@ -2,9 +2,11 @@
 
 #include "glm/glm.hpp"
 
+#include "Core/DllHelper.hpp"
+
 namespace Cacao {
 	///@brief A vertex in a mesh
-	struct Vertex {
+	struct CACAO_API Vertex {
 		const glm::vec3 position; ///<The position in local space
 		const glm::vec2 texCoords;///<The texture coordinates
 		const glm::vec3 tangent;  ///<The right vector in tangent space

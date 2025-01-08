@@ -3,9 +3,11 @@
 #include <string>
 
 //Forward-declare logger
+///@cond
 namespace spdlog {
 	class logger;
 }
+///@endcond
 
 namespace Cacao {
 

@@ -7,12 +7,13 @@
 #include "Event.hpp"
 #include "EventConsumer.hpp"
 #include "Utilities/MultiFuture.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief Manages event consumers and event dispatching
 	 */
-	class EventManager {
+	class CACAO_API EventManager {
 	  public:
 		/**
 		 * @brief Subscribe a consumer to the given event type

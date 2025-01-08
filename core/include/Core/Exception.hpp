@@ -6,7 +6,8 @@
 #include <sstream>
 #include <map>
 
-#include "Core/Log.hpp"
+#include "Log.hpp"
+#include "DllHelper.hpp"
 
 namespace Cacao {
 	/**
@@ -14,7 +15,7 @@ namespace Cacao {
 	 *
 	 * @note Recommended to use CheckException to generate exceptions.
 	 */
-	class Exception : public std::exception {
+	class CACAO_API Exception : public std::exception {
 	  public:
 		/**
 		 * @brief Create a new exception
@@ -140,8 +141,9 @@ namespace Cacao {
 		static std::map<unsigned int, std::string> exceptionCodeMap;
 	};
 
-	//Static member definition
+	///@cond
 	inline std::map<unsigned int, std::string> Exception::exceptionCodeMap = std::map<unsigned int, std::string>();
+	///@endcond
 
 	/**
 	 * @brief Checks if the condition is true, and throws an exception if not
@@ -153,7 +155,7 @@ namespace Cacao {
 	 *
 	 * @throws Cacao::Exception Thrown if the condition is false
 	 */
-	inline void CheckException(bool condition, unsigned int exceptionCode, std::string exceptionDescription) {
+	CACAO_API inline void CheckException(bool condition, unsigned int exceptionCode, std::string exceptionDescription) {
 		if(!condition) {
 			Exception ex {exceptionDescription, exceptionCode};
 			Logging::EngineLog(ex.what(), LogLevel::Error);
@@ -172,7 +174,7 @@ namespace Cacao {
 	 * @throws Cacao::Exception Thrown if the condition is false
 	 */
 	template<typename T>
-	inline void CheckException(std::shared_ptr<T> ptr, unsigned int exceptionCode, std::string exceptionDescription) {
+	CACAO_API inline void CheckException(std::shared_ptr<T> ptr, unsigned int exceptionCode, std::string exceptionDescription) {
 		if(!(bool)ptr) {
 			Exception ex {exceptionDescription, exceptionCode};
 			Logging::EngineLog(ex.what(), LogLevel::Error);

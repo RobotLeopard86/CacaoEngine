@@ -8,15 +8,10 @@
 #include "thread_pool/thread_pool.h"
 
 #include "EngineConfig.hpp"
+#include "DllHelper.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Task.hpp"
 #include "UI/UIView.hpp"
-
-/**
- * @brief Shorthand engine thread pool type.
- * @see dp::thread_pool for its API.
- */
-using thread_pool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 
 ///@cond
 extern bool backendInWindowScope;
@@ -24,7 +19,7 @@ extern bool backendInWindowScope;
 
 namespace Cacao {
 	///@brief Singleton representing the engine
-	class Engine {
+	class CACAO_API Engine {
 	  public:
 		/**
 		 * @brief Get the instance and create one if there isn't one
@@ -111,7 +106,7 @@ namespace Cacao {
 		std::atomic_bool shuttingDown;
 
 		//Thread pool
-		std::shared_ptr<thread_pool> threadPool;
+		std::shared_ptr<dp::thread_pool<dp::details::default_function_type, std::jthread>> threadPool;
 
 		//Engine thread ID
 		std::thread::id threadID;

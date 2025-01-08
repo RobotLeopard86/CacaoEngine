@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/glm.hpp"
 
@@ -8,7 +9,7 @@ namespace Cacao {
 	/**
 	 * @brief Perspective camera
 	 */
-	class PerspectiveCamera : public Camera {
+	class CACAO_API PerspectiveCamera : public Camera {
 	  public:
 		/**
 		 * @brief Create a perspective camera

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Log.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <memory>
 #include <string>
@@ -76,7 +77,7 @@ namespace Cacao {
 	 * @brief Reference-counted handle to an asset
 	 */
 	template<typename T>
-	class AssetHandle {
+	class CACAO_API AssetHandle {
 	  public:
 		/**
 		 * @brief Construct an asset handle with an ID and asset

@@ -2,6 +2,7 @@
 
 #include "Utilities/MiscUtils.hpp"
 #include "UI/UIRenderable.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/glm.hpp"
 
@@ -12,7 +13,7 @@ namespace Cacao {
 	/**
 	 * @brief A point on the screen to anchor a UIElement to
 	 */
-	enum class AnchorPoint {
+	enum class CACAO_API AnchorPoint {
 		Center,
 		TopLeft,
 		TopRight,
@@ -27,7 +28,7 @@ namespace Cacao {
 	/**
 	 * @brief Base class for all UI elements
 	 */
-	class UIElement {
+	class CACAO_API UIElement {
 	  public:
 		///@brief Create a new UI element with default settings
 		UIElement()

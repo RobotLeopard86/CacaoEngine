@@ -1,9 +1,9 @@
 #pragma once
 
 #include "World/Component.hpp"
-
 #include "3D/Mesh.hpp"
 #include "Graphics/Material.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <string>
 
@@ -11,7 +11,7 @@ namespace Cacao {
 	/**
 	 * @brief Mesh renderer component
 	 */
-	class MeshComponent : public Component {
+	class CACAO_API MeshComponent : public Component {
 	  public:
 		///@brief Gets the type of this componet. Needed for safe downcasting from Component
 		std::string GetKind() override {

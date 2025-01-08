@@ -2,6 +2,7 @@
 
 #include "Screen.hpp"
 #include "Graphics/Shader.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/glm.hpp"
 
@@ -11,7 +12,7 @@ namespace Cacao {
 	/**
 	 * @brief Renderer for a Screen
 	 */
-	class UIView {
+	class CACAO_API UIView {
 	  public:
 		/**
 		 * @brief Render the selected screen and swap buffers

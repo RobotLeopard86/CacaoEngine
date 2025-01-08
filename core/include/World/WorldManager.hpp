@@ -5,12 +5,13 @@
 #include "World.hpp"
 #include "Utilities/Flushable.hpp"
 #include "Core/Exception.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief Interface for interacting with various worlds
 	 */
-	class WorldManager {
+	class CACAO_API WorldManager {
 	  public:
 		/**
 		 * @brief Get the instance and create one if there isn't one

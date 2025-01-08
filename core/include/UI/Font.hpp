@@ -1,16 +1,19 @@
 #pragma once
 
 #include "Utilities/Asset.hpp"
+#include "Core/DllHelper.hpp"
 
 //FreeType face forward declaration
+///@cond
 typedef struct FT_FaceRec_ FT_FaceRec_;
 typedef FT_FaceRec_* FT_Face;
+///@endcond
 
 namespace Cacao {
 	/**
 	 * @brief A font face for text rendering
 	 */
-	class Font final : public Asset {
+	class CACAO_API Font final : public Asset {
 	  public:
 		/**
 		 * @brief Create a font from a file path

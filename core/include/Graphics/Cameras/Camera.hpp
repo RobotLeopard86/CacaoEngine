@@ -4,6 +4,7 @@
 
 #include "Events/EventSystem.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
@@ -11,7 +12,7 @@ namespace Cacao {
 	 *
 	 * @note Abstract, so cannot be passed by value
 	 */
-	class Camera {
+	class CACAO_API Camera {
 	  public:
 		///@brief Create a camera
 		Camera()

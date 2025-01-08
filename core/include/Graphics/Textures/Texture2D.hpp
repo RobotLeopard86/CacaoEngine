@@ -2,6 +2,7 @@
 
 #include "Texture.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/vec2.hpp"
 
@@ -11,7 +12,7 @@ namespace Cacao {
 	/**
 	 * @brief 2D image texture
 	 */
-	class Texture2D final : public Texture {
+	class CACAO_API Texture2D final : public Texture {
 	  public:
 		/**
 		 * @brief Create a new texture from a file

@@ -3,12 +3,13 @@
 #include "Sound.hpp"
 #include "World/Component.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief A component that plays audio
 	 */
-	class AudioPlayer final : public Component {
+	class CACAO_API AudioPlayer final : public Component {
 	  public:
 		/**
 		 * @brief Create a new audio player.

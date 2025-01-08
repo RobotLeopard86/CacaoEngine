@@ -3,6 +3,7 @@
 #include "Utilities/Asset.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Events/EventSystem.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <memory>
 #include <string>
@@ -11,7 +12,7 @@ namespace Cacao {
 	/**
 	 * @brief A sound that can be played
 	 */
-	class Sound final : public Asset {
+	class CACAO_API Sound final : public Asset {
 	  public:
 		/**
 		 * @brief Load a sound from a path

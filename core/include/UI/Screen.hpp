@@ -2,12 +2,13 @@
 
 #include "UIElement.hpp"
 #include "Core/Exception.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief A layout of UI elements that can be displayed by a UIView
 	 */
-	class Screen {
+	class CACAO_API Screen {
 	  public:
 		/**
 		 * @brief Add an element to the screen

@@ -8,15 +8,18 @@
 
 #include "Utilities/MiscUtils.hpp"
 #include "Core/Engine.hpp"
+#include "Core/DllHelper.hpp"
 
 //Forward declaration of SDL window type
+///@cond
 struct SDL_Window;
+///@endcond
 
 namespace Cacao {
 	/**
 	 * @brief The different window display modes
 	 */
-	enum class WindowMode {
+	enum class CACAO_API WindowMode {
 		Window,	   ///<Normal window
 		Fullscreen,///<Exclusive fullscreen (only on primary monitor)
 		Borderless ///<Borderless fullscreen window (only on primary monitor)
@@ -25,7 +28,7 @@ namespace Cacao {
 	/**
 	 * @brief Window singleton
 	 */
-	class Window {
+	class CACAO_API Window {
 	  public:
 		/**
 		 * @brief Open the window

@@ -4,6 +4,7 @@
 #include "Transform.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Asset.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <vector>
 #include <future>
@@ -12,7 +13,7 @@ namespace Cacao {
 	/**
 	 * @brief A mesh. Implementation is backend-dependent
 	 */
-	class Mesh final : public Asset {
+	class CACAO_API Mesh final : public Asset {
 	  public:
 		/**
 		 * @brief Create a mesh from a list of vertices and indices

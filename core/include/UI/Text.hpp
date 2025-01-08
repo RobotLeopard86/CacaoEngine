@@ -4,10 +4,11 @@
 #include "Font.hpp"
 #include "Utilities/Asset.hpp"
 #include "UIRenderable.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	///@brief The alignment of text within a text box
-	enum class TextAlign {
+	enum class CACAO_API TextAlign {
 		Left,
 		Center,
 		Right
@@ -16,7 +17,7 @@ namespace Cacao {
 	/**
 	 * @brief A text UI element
 	 */
-	class Text final : public UIElement {
+	class CACAO_API Text final : public UIElement {
 	  public:
 		/**
 		 * @brief Get the current text

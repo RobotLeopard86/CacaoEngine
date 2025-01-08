@@ -4,12 +4,13 @@
 #include "Graphics/Textures/Texture2D.hpp"
 #include "Utilities/Asset.hpp"
 #include "UIRenderable.hpp"
+#include "Core/DllHelper.hpp"
 
 namespace Cacao {
 	/**
 	 * @brief An image UI element
 	 */
-	class Image final : public UIElement {
+	class CACAO_API Image final : public UIElement {
 	  public:
 		/**
 		 * @brief Get current image to display

@@ -2,6 +2,7 @@
 
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
+#include "Core/DllHelper.hpp"
 
 #include <string>
 
@@ -9,7 +10,7 @@ namespace Cacao {
 	/**
 	 * @brief An event
 	 */
-	class Event {
+	class CACAO_API Event {
 	  public:
 		/**
 		 * @brief Create a new event
@@ -39,7 +40,7 @@ namespace Cacao {
 	 * @note The data type used must be trivally copy-constructible
 	 */
 	template<typename T>
-	class DataEvent : public Event {
+	class CACAO_API DataEvent : public Event {
 	  public:
 		/**
 		 * @brief Create a new data event

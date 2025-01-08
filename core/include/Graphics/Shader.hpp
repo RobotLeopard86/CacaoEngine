@@ -7,6 +7,7 @@
 
 #include "Core/Log.hpp"
 #include "Core/Assert.hpp"
+#include "Core/DllHelper.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Utilities/Asset.hpp"
 
@@ -14,7 +15,7 @@
 
 namespace Cacao {
 	///@brief Shorthand type for shader data types
-	enum class ShaderDataType {
+	enum class CACAO_API ShaderDataType {
 		Unknown = 0,
 		Int = 7,
 		UInt = 8,
@@ -23,7 +24,7 @@ namespace Cacao {
 	};
 
 	///@brief Item in a ShaderSpec
-	struct ShaderItemInfo {
+	struct CACAO_API ShaderItemInfo {
 		ShaderDataType type;///<Type of data
 		glm::uvec2 size;	///<Size (x is columns, y is rows). Example: scalars are {1, 1}, vectors are {size, 1}, matrices are {x, y}
 		std::string name;	///<Name of the item in the shader source
@@ -39,7 +40,7 @@ namespace Cacao {
 	/**
 	 * @brief A shader program. Implementation is backend-dependent
 	 */
-	class Shader final : public Asset {
+	class CACAO_API Shader final : public Asset {
 	  public:
 		/**
 		 * @brief Create a shader from SPIR-V code

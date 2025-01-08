@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "DllHelper.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief Check if the condition is true, and if not exit
@@ -12,7 +14,7 @@ namespace Cacao {
 	 *
 	 * @note For use only by the engine internally.
 	 */
-	void EngineAssert(bool condition, std::string errorMsg);
+	CACAO_API void EngineAssert(bool condition, std::string errorMsg);
 
 	/**
 	 * @brief Check if the condition is true, and if not exit
@@ -23,7 +25,7 @@ namespace Cacao {
 	 *
 	 * @note For use only by Cacao Engine runtimes.
 	 */
-	void RuntimeAssert(bool condition, std::string errorMsg);
+	CACAO_API void RuntimeAssert(bool condition, std::string errorMsg);
 
 	/**
 	 * @brief Check if the condition is true, and if not exit
@@ -34,5 +36,5 @@ namespace Cacao {
 	 *
 	 * @note For use by games using the engine.
 	 */
-	void ClientAssert(bool condition, std::string errorMsg);
+	CACAO_API void ClientAssert(bool condition, std::string errorMsg);
 }

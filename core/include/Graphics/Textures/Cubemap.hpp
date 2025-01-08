@@ -2,6 +2,7 @@
 
 #include "Texture.hpp"
 #include "Utilities/MiscUtils.hpp"
+#include "Core/DllHelper.hpp"
 
 #include "glm/vec2.hpp"
 
@@ -12,7 +13,7 @@ namespace Cacao {
 	/**
 	 * @brief Cube texture
 	 */
-	class Cubemap final : public Texture {
+	class CACAO_API Cubemap final : public Texture {
 	  public:
 		/**
 		 * @brief Create a new cubemap from a file list
