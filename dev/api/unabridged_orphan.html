@@ -1,0 +1,1404 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Full API &#8212; Cacao Engine Docs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/unabridged_orphan';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/cacaologo.png"/>
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
+    <img src="../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Cacao Engine Documentation</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="library_root.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="library_root.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Full API</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="full-api">
+<h1>Full API<a class="headerlink" href="#full-api" title="Link to this heading"><span/></a></h1>
+<section id="directories">
+<h2>Directories<a class="headerlink" href="#directories" title="Link to this heading"><span/></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core.html">Directory core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core.html#subdirectories">Subdirectories</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include.html">Directory include</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include.html#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_3D.html">Directory 3D</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_3D.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Audio.html">Directory Audio</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Audio.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Core.html">Directory Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Core.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Events.html">Directory Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Events.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Graphics.html">Directory Graphics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Graphics.html#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Graphics.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Graphics_Cameras.html">Directory Cameras</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Graphics_Cameras.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Graphics_Rendering.html">Directory Rendering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Graphics_Rendering.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Graphics_Textures.html">Directory Textures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Graphics_Textures.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Scripts.html">Directory Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Scripts.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_UI.html">Directory UI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_UI.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_Utilities.html">Directory Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_Utilities.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core_include_World.html">Directory World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_core_include_World.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_subprojects.html">Directory subprojects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_subprojects.html#subdirectories">Subdirectories</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_subprojects_thread-pool.html">Directory thread-pool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_subprojects_thread-pool.html#subdirectories">Subdirectories</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_subprojects_thread-pool_include.html">Directory include</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_subprojects_thread-pool_include.html#subdirectories">Subdirectories</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_subprojects_thread-pool_include_thread_pool.html">Directory thread_pool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_subprojects_thread-pool_include_thread_pool.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"><span/></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_Assert.hpp.html">File Assert.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Assert.hpp.html#definition-core-include-core-assert-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/Assert.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_Assert.hpp.html">Program Listing for File Assert.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Assert.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Assert.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Assert.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Assert.hpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_Asset.hpp.html">File Asset.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Asset.hpp.html#definition-core-include-utilities-asset-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/Asset.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_Asset.hpp.html">Program Listing for File Asset.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Asset.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Asset.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Asset.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Asset.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_AssetManager.hpp.html">File AssetManager.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_AssetManager.hpp.html#definition-core-include-utilities-assetmanager-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/AssetManager.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_AssetManager.hpp.html">Program Listing for File AssetManager.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_AssetManager.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_AssetManager.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_AssetManager.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_AssetManager.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Audio_AudioPlayer.hpp.html">File AudioPlayer.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioPlayer.hpp.html#definition-core-include-audio-audioplayer-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Audio/AudioPlayer.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Audio_AudioPlayer.hpp.html">Program Listing for File AudioPlayer.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioPlayer.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioPlayer.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioPlayer.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioPlayer.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Audio_AudioSystem.hpp.html">File AudioSystem.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioSystem.hpp.html#definition-core-include-audio-audiosystem-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Audio/AudioSystem.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Audio_AudioSystem.hpp.html">Program Listing for File AudioSystem.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioSystem.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioSystem.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_AudioSystem.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Cacao.hpp.html">File Cacao.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Cacao.hpp.html#definition-core-include-cacao-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Cacao.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Cacao.hpp.html">Program Listing for File Cacao.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Cacao.hpp.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Cameras_Camera.hpp.html">File Camera.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_Camera.hpp.html#definition-core-include-graphics-cameras-camera-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Cameras/Camera.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Cameras_Camera.hpp.html">Program Listing for File Camera.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_Camera.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_Camera.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_Camera.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_Camera.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_World_Component.hpp.html">File Component.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Component.hpp.html#definition-core-include-world-component-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/World/Component.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_World_Component.hpp.html">Program Listing for File Component.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Component.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Component.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Component.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Component.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html">File Cubemap.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html#definition-core-include-graphics-textures-cubemap-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures/Cubemap.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Textures_Cubemap.hpp.html">Program Listing for File Cubemap.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_DynTickController.hpp.html">File DynTickController.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_DynTickController.hpp.html#definition-core-include-core-dyntickcontroller-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/DynTickController.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_DynTickController.hpp.html">Program Listing for File DynTickController.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_DynTickController.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_DynTickController.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_DynTickController.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html">File Engine.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html#definition-core-include-core-engine-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/Engine.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_Engine.hpp.html">Program Listing for File Engine.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Engine.hpp.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_EngineConfig.hpp.html">File EngineConfig.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_EngineConfig.hpp.html#definition-core-include-core-engineconfig-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/EngineConfig.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_EngineConfig.hpp.html">Program Listing for File EngineConfig.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_EngineConfig.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_EngineConfig.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_EngineConfig.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_World_Entity.hpp.html">File Entity.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Entity.hpp.html#definition-core-include-world-entity-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/World/Entity.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_World_Entity.hpp.html">Program Listing for File Entity.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Entity.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Entity.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Entity.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_Entity.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Events_Event.hpp.html">File Event.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_Event.hpp.html#definition-core-include-events-event-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Events/Event.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Events_Event.hpp.html">Program Listing for File Event.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_Event.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_Event.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_Event.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_Event.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Events_EventConsumer.hpp.html">File EventConsumer.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventConsumer.hpp.html#definition-core-include-events-eventconsumer-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Events/EventConsumer.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Events_EventConsumer.hpp.html">Program Listing for File EventConsumer.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventConsumer.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventConsumer.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventConsumer.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventConsumer.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Events_EventManager.hpp.html">File EventManager.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventManager.hpp.html#definition-core-include-events-eventmanager-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Events/EventManager.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Events_EventManager.hpp.html">Program Listing for File EventManager.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventManager.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventManager.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventManager.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventManager.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Events_EventSystem.hpp.html">File EventSystem.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventSystem.hpp.html#definition-core-include-events-eventsystem-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Events/EventSystem.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Events_EventSystem.hpp.html">Program Listing for File EventSystem.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventSystem.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Events_EventSystem.hpp.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html">File Exception.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html#definition-core-include-core-exception-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/Exception.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_Exception.hpp.html">Program Listing for File Exception.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Exception.hpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_Flushable.hpp.html">File Flushable.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Flushable.hpp.html#definition-core-include-utilities-flushable-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/Flushable.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_Flushable.hpp.html">Program Listing for File Flushable.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Flushable.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Flushable.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Flushable.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_Font.hpp.html">File Font.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Font.hpp.html#definition-core-include-ui-font-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/Font.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_Font.hpp.html">Program Listing for File Font.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Font.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Font.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Font.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Font.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_FreetypeOwner.hpp.html">File FreetypeOwner.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_FreetypeOwner.hpp.html#definition-core-include-ui-freetypeowner-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/FreetypeOwner.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_FreetypeOwner.hpp.html">Program Listing for File FreetypeOwner.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_FreetypeOwner.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_FreetypeOwner.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_FreetypeOwner.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_Image.hpp.html">File Image.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Image.hpp.html#definition-core-include-ui-image-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/Image.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_Image.hpp.html">Program Listing for File Image.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Image.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Image.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Image.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Image.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_Input.hpp.html">File Input.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Input.hpp.html#definition-core-include-utilities-input-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/Input.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_Input.hpp.html">Program Listing for File Input.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Input.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Input.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Input.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Input.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_Log.hpp.html">File Log.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Log.hpp.html#definition-core-include-core-log-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/Log.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_Log.hpp.html">Program Listing for File Log.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Log.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Log.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Log.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Log.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_Log.hpp.html#enums">Enums</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Material.hpp.html">File Material.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Material.hpp.html#definition-core-include-graphics-material-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Material.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Material.hpp.html">Program Listing for File Material.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Material.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Material.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Material.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Material.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_3D_Mesh.hpp.html">File Mesh.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Mesh.hpp.html#definition-core-include-3d-mesh-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/3D/Mesh.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_3D_Mesh.hpp.html">Program Listing for File Mesh.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Mesh.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Mesh.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Mesh.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Mesh.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Rendering_MeshComponent.hpp.html">File MeshComponent.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_MeshComponent.hpp.html#definition-core-include-graphics-rendering-meshcomponent-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Rendering/MeshComponent.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Rendering_MeshComponent.hpp.html">Program Listing for File MeshComponent.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_MeshComponent.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_MeshComponent.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_MeshComponent.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_MeshComponent.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html">File MiscUtils.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#definition-core-include-utilities-miscutils-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/MiscUtils.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_MiscUtils.hpp.html">Program Listing for File MiscUtils.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#defines">Defines</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_3D_Model.hpp.html">File Model.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Model.hpp.html#definition-core-include-3d-model-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/3D/Model.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_3D_Model.hpp.html">Program Listing for File Model.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Model.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Model.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Model.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Model.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_MultiFuture.hpp.html">File MultiFuture.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MultiFuture.hpp.html#definition-core-include-utilities-multifuture-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/MultiFuture.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_MultiFuture.hpp.html">Program Listing for File MultiFuture.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MultiFuture.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MultiFuture.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MultiFuture.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_MultiFuture.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html">File PerspectiveCamera.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html#definition-core-include-graphics-cameras-perspectivecamera-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Cameras/PerspectiveCamera.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html">Program Listing for File PerspectiveCamera.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Cameras_PerspectiveCamera.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderController.hpp.html">File RenderController.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderController.hpp.html#definition-core-include-graphics-rendering-rendercontroller-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Rendering/RenderController.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Rendering_RenderController.hpp.html">Program Listing for File RenderController.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderController.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderController.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderController.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderObjects.hpp.html">File RenderObjects.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderObjects.hpp.html#definition-core-include-graphics-rendering-renderobjects-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Rendering/RenderObjects.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Rendering_RenderObjects.hpp.html">Program Listing for File RenderObjects.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderObjects.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderObjects.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderObjects.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Rendering_RenderObjects.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Core_RuntimeHooks.hpp.html">File RuntimeHooks.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_RuntimeHooks.hpp.html#definition-core-include-core-runtimehooks-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Core/RuntimeHooks.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Core_RuntimeHooks.hpp.html">Program Listing for File RuntimeHooks.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_RuntimeHooks.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Core_RuntimeHooks.hpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_Screen.hpp.html">File Screen.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Screen.hpp.html#definition-core-include-ui-screen-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/Screen.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_Screen.hpp.html">Program Listing for File Screen.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Screen.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Screen.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Screen.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Screen.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Scripts_Script.hpp.html">File Script.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Scripts_Script.hpp.html#definition-core-include-scripts-script-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Scripts/Script.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Scripts_Script.hpp.html">Program Listing for File Script.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Scripts_Script.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Scripts_Script.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Scripts_Script.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Scripts_Script.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html">File Shader.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#definition-core-include-graphics-shader-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Shader.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Shader.hpp.html">Program Listing for File Shader.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_3D_Skybox.hpp.html">File Skybox.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Skybox.hpp.html#definition-core-include-3d-skybox-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/3D/Skybox.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_3D_Skybox.hpp.html">Program Listing for File Skybox.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Skybox.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Skybox.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Skybox.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Skybox.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Audio_Sound.hpp.html">File Sound.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_Sound.hpp.html#definition-core-include-audio-sound-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Audio/Sound.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Audio_Sound.hpp.html">Program Listing for File Sound.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_Sound.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_Sound.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_Sound.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Audio_Sound.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Utilities_Task.hpp.html">File Task.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Task.hpp.html#definition-core-include-utilities-task-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Utilities/Task.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Utilities_Task.hpp.html">Program Listing for File Task.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Task.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Task.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Task.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Utilities_Task.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_Text.hpp.html">File Text.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Text.hpp.html#definition-core-include-ui-text-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/Text.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_Text.hpp.html">Program Listing for File Text.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Text.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Text.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Text.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Text.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_Text.hpp.html#enums">Enums</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture.hpp.html">File Texture.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture.hpp.html#definition-core-include-graphics-textures-texture-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures/Texture.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Textures_Texture.hpp.html">Program Listing for File Texture.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html">File Texture2D.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html#definition-core-include-graphics-textures-texture2d-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures/Texture2D.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Textures_Texture2D.hpp.html">Program Listing for File Texture2D.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html">File thread_pool.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html#definition-subprojects-thread-pool-include-thread-pool-thread-pool-h">Definition (<code class="docutils literal notranslate"><span class="pre">subprojects/thread-pool/include/thread_pool/thread_pool.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html">Program Listing for File thread_pool.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_pool.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html">File thread_safe_queue.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html#definition-subprojects-thread-pool-include-thread-pool-thread-safe-queue-h">Definition (<code class="docutils literal notranslate"><span class="pre">subprojects/thread-pool/include/thread_pool/thread_safe_queue.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html">Program Listing for File thread_safe_queue.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_subprojects_thread-pool_include_thread_pool_thread_safe_queue.h.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_3D_Transform.hpp.html">File Transform.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Transform.hpp.html#definition-core-include-3d-transform-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/3D/Transform.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_3D_Transform.hpp.html">Program Listing for File Transform.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Transform.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Transform.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Transform.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Transform.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html">File UIElement.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html#definition-core-include-ui-uielement-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/UIElement.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_UIElement.hpp.html">Program Listing for File UIElement.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIElement.hpp.html#enums">Enums</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_UIRenderable.hpp.html">File UIRenderable.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIRenderable.hpp.html#definition-core-include-ui-uirenderable-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/UIRenderable.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_UIRenderable.hpp.html">Program Listing for File UIRenderable.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIRenderable.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIRenderable.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIRenderable.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIRenderable.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_UI_UIView.hpp.html">File UIView.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIView.hpp.html#definition-core-include-ui-uiview-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/UI/UIView.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_UI_UIView.hpp.html">Program Listing for File UIView.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIView.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIView.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIView.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_UI_UIView.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_3D_Vertex.hpp.html">File Vertex.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Vertex.hpp.html#definition-core-include-3d-vertex-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/3D/Vertex.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_3D_Vertex.hpp.html">Program Listing for File Vertex.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Vertex.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Vertex.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Vertex.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_3D_Vertex.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html">File Window.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html#definition-core-include-graphics-window-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Window.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_Graphics_Window.hpp.html">Program Listing for File Window.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_Graphics_Window.hpp.html#enums">Enums</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_World_World.hpp.html">File World.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_World.hpp.html#definition-core-include-world-world-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/World/World.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_World_World.hpp.html">Program Listing for File World.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_World.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_World.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_World.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_World.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_core_include_World_WorldManager.hpp.html">File WorldManager.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_WorldManager.hpp.html#definition-core-include-world-worldmanager-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/World/WorldManager.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_core_include_World_WorldManager.hpp.html">Program Listing for File WorldManager.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_WorldManager.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_WorldManager.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_WorldManager.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_core_include_World_WorldManager.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directories">Directories</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#files">Files</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, RobotLeopard86.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Input Mappings &#8212; Cacao Engine Docs</title>
+    <title>Directory include &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/inputmappings';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/dir_subprojects_thread-pool_include';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,6 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Definition Files" href="deffiles.html" />
-    <link rel="prev" title="Exception Codes" href="excodes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -159,7 +157,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
@@ -167,7 +165,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="library_root.html">
     API Reference
   </a>
 </li>
@@ -231,6 +229,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -257,7 +259,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
@@ -265,7 +267,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="library_root.html">
     API Reference
   </a>
 </li>
@@ -313,31 +315,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Input Mappings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="backends.html">Backends</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl.html">OpenGL Backend Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk.html">Vulkan Backend Info</a></li>
-</ul>
-</details></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
     </div>
   
@@ -371,10 +349,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Input Mappings</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Directory include</span></li>
   </ul>
 </nav>
 </div>
@@ -391,233 +366,16 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="input-mappings">
-<h1>Input Mappings<a class="headerlink" href="#input-mappings" title="Link to this heading"><span/></a></h1>
-<p>Below is a list of all valid key mappings in Cacao Engine.<br />
-Any key using the <code class="docutils literal notranslate"><span class="pre">KP</span></code> infix means that it refers to the keypad section of the keyboard.<br />
-The <code class="docutils literal notranslate"><span class="pre">SUPER</span></code> keys refer to what might be considered the Windows key (known as the Super key on Linux), or the Command key on macOS.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CACAO_KEY_ENTER
-CACAO_KEY_ESCAPE
-CACAO_KEY_BACKSPACE
-CACAO_KEY_TAB
-CACAO_KEY_SPACE
-CACAO_KEY_EXCLAMATION
-CACAO_KEY_DOUBLE_APOSTROPHE
-CACAO_KEY_HASH
-CACAO_KEY_DOLLAR
-CACAO_KEY_PERCENT
-CACAO_KEY_AMPERSAND
-CACAO_KEY_APOSTROPHE
-CACAO_KEY_LEFT_PARENTHESIS
-CACAO_KEY_RIGHT_PARENTHESIS
-CACAO_KEY_ASTERISK
-CACAO_KEY_PLUS
-CACAO_KEY_COMMA
-CACAO_KEY_MINUS
-CACAO_KEY_PERIOD
-CACAO_KEY_SLASH
-CACAO_KEY_0
-CACAO_KEY_1
-CACAO_KEY_2
-CACAO_KEY_3
-CACAO_KEY_4
-CACAO_KEY_5
-CACAO_KEY_6
-CACAO_KEY_7
-CACAO_KEY_8
-CACAO_KEY_9
-CACAO_KEY_COLON
-CACAO_KEY_SEMICOLON
-CACAO_KEY_LESS
-CACAO_KEY_EQUAL
-CACAO_KEY_GREATER
-CACAO_KEY_QUESTION
-CACAO_KEY_AT
-CACAO_KEY_LEFT_BRACKET
-CACAO_KEY_BACKSLASH
-CACAO_KEY_RIGHT_BRACKET
-CACAO_KEY_CARET
-CACAO_KEY_UNDERSCORE
-CACAO_KEY_GRAVE
-CACAO_KEY_A
-CACAO_KEY_B
-CACAO_KEY_C
-CACAO_KEY_D
-CACAO_KEY_E
-CACAO_KEY_F
-CACAO_KEY_G
-CACAO_KEY_H
-CACAO_KEY_I
-CACAO_KEY_J
-CACAO_KEY_K
-CACAO_KEY_L
-CACAO_KEY_M
-CACAO_KEY_N
-CACAO_KEY_O
-CACAO_KEY_P
-CACAO_KEY_Q
-CACAO_KEY_R
-CACAO_KEY_S
-CACAO_KEY_T
-CACAO_KEY_U
-CACAO_KEY_V
-CACAO_KEY_W
-CACAO_KEY_X
-CACAO_KEY_Y
-CACAO_KEY_Z
-CACAO_KEY_LEFT_BRACE
-CACAO_KEY_PIPE
-CACAO_KEY_RIGHT_BRACE
-CACAO_KEY_TILDE
-CACAO_KEY_DELETE
-CACAO_KEY_PLUS_MINUS
-CACAO_KEY_CAPS_LOCK
-CACAO_KEY_F1
-CACAO_KEY_F2
-CACAO_KEY_F3
-CACAO_KEY_F4
-CACAO_KEY_F5
-CACAO_KEY_F6
-CACAO_KEY_F7
-CACAO_KEY_F8
-CACAO_KEY_F9
-CACAO_KEY_F10
-CACAO_KEY_F11
-CACAO_KEY_F12
-CACAO_KEY_PRINT_SCREEN
-CACAO_KEY_SCROLL_LOCK
-CACAO_KEY_PAUSE
-CACAO_KEY_INSERT
-CACAO_KEY_HOME
-CACAO_KEY_PAGE_UP
-CACAO_KEY_END
-CACAO_KEY_PAGE_DOWN
-CACAO_KEY_RIGHT
-CACAO_KEY_LEFT
-CACAO_KEY_DOWN
-CACAO_KEY_UP
-CACAO_KEY_NUM_LOCK
-CACAO_KEY_KP_DIVIDE
-CACAO_KEY_KP_MULTIPLY
-CACAO_KEY_KP_MINUS
-CACAO_KEY_KP_PLUS
-CACAO_KEY_KP_ENTER
-CACAO_KEY_KP_1
-CACAO_KEY_KP_2
-CACAO_KEY_KP_3
-CACAO_KEY_KP_4
-CACAO_KEY_KP_5
-CACAO_KEY_KP_6
-CACAO_KEY_KP_7
-CACAO_KEY_KP_8
-CACAO_KEY_KP_9
-CACAO_KEY_KP_0
-CACAO_KEY_KP_PERIOD
-CACAO_KEY_APPLICATION
-CACAO_KEY_POWER
-CACAO_KEY_KP_EQUAL
-CACAO_KEY_F13
-CACAO_KEY_F14
-CACAO_KEY_F15
-CACAO_KEY_F16
-CACAO_KEY_F17
-CACAO_KEY_F18
-CACAO_KEY_F19
-CACAO_KEY_F20
-CACAO_KEY_F21
-CACAO_KEY_F22
-CACAO_KEY_F23
-CACAO_KEY_F24
-CACAO_KEY_EXECUTE
-CACAO_KEY_HELP
-CACAO_KEY_MENU
-CACAO_KEY_SELECT
-CACAO_KEY_STOP
-CACAO_KEY_AGAIN
-CACAO_KEY_UNDO
-CACAO_KEY_CUT
-CACAO_KEY_COPY
-CACAO_KEY_PASTE
-CACAO_KEY_FIND
-CACAO_KEY_MUTE
-CACAO_KEY_VOLUME_UP
-CACAO_KEY_VOLUME_DOWN
-CACAO_KEY_KP_COMMA
-CACAO_KEY_KP_EQUALSAS400
-CACAO_KEY_ALT_ERASE
-CACAO_KEY_SYSREQ
-CACAO_KEY_CANCEL
-CACAO_KEY_CLEAR
-CACAO_KEY_PRIOR
-CACAO_KEY_RETURN2
-CACAO_KEY_SEPARATOR
-CACAO_KEY_OUT
-CACAO_KEY_OPER
-CACAO_KEY_CLEAR_AGAIN
-CACAO_KEY_CRSEL
-CACAO_KEY_EXSEL
-CACAO_KEY_KP_00
-CACAO_KEY_KP_000
-CACAO_KEY_THOUSANDS_SEPARATOR
-CACAO_KEY_DECIMAL_SEPARATOR
-CACAO_KEY_CURRENCY_UNIT
-CACAO_KEY_CURRENCY_SUBUNIT
-CACAO_KEY_KP_LEFTPARENTHESIS
-CACAO_KEY_KP_RIGHTPARENTHESIS
-CACAO_KEY_KP_LEFTBRACE
-CACAO_KEY_KP_RIGHTBRACE
-CACAO_KEY_KP_TAB
-CACAO_KEY_KP_BACKSPACE
-CACAO_KEY_KP_A
-CACAO_KEY_KP_B
-CACAO_KEY_KP_C
-CACAO_KEY_KP_D
-CACAO_KEY_KP_E
-CACAO_KEY_KP_F
-CACAO_KEY_KP_XOR
-CACAO_KEY_KP_POWER
-CACAO_KEY_KP_PERCENT
-CACAO_KEY_KP_LESS
-CACAO_KEY_KP_GREATER
-CACAO_KEY_KP_AMPERSAND
-CACAO_KEY_KP_DOUBLE_AMPERSAND
-CACAO_KEY_KP_VERTICAL_BAR
-CACAO_KEY_KP_DOUBLE_VERTICAL_BAR
-CACAO_KEY_KP_COLON
-CACAO_KEY_KP_HASH
-CACAO_KEY_KP_SPACE
-CACAO_KEY_KP_AT
-CACAO_KEY_KP_EXCLAM
-CACAO_KEY_KP_MEM_STORE
-CACAO_KEY_KP_MEM_RECALL
-CACAO_KEY_KP_MEM_CLEAR
-CACAO_KEY_KP_MEM_ADD
-CACAO_KEY_KP_MEM_SUBTRACT
-CACAO_KEY_KP_MEM_MULTIPLY
-CACAO_KEY_KP_MEM_DIVIDE
-CACAO_KEY_KP_PLUS_MINUS
-CACAO_KEY_KP_CLEAR
-CACAO_KEY_KP_CLEAR_ENTRY
-CACAO_KEY_KP_BINARY
-CACAO_KEY_KP_OCTAL
-CACAO_KEY_KP_DECIMAL
-CACAO_KEY_KP_HEXADECIMAL
-CACAO_KEY_LEFT_CONTROL
-CACAO_KEY_LEFT_SHIFT
-CACAO_KEY_LEFT_ALT
-CACAO_KEY_LEFT_SUPER
-CACAO_KEY_RIGHT_CONTROL
-CACAO_KEY_RIGHT_SHIFT
-CACAO_KEY_RIGHT_ALT
-CACAO_KEY_RIGHT_SUPER
-</pre></div>
-</div>
-<p>This is a list of all valid mouse button mappings in Cacao Engine:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CACAO_MOUSE_BUTTON_LEFT
-CACAO_MOUSE_BUTTON_RIGHT
-CACAO_MOUSE_BUTTON_MIDDLE
-</pre></div>
-</div>
+  <section id="directory-include">
+<span id="dir-subprojects-thread-pool-include"></span><h1>Directory include<a class="headerlink" href="#directory-include" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="dir_subprojects_thread-pool.html#dir-subprojects-thread-pool"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">subprojects/thread-pool</span></code>)</p>
+<p><em>Directory path:</em> <code class="docutils literal notranslate"><span class="pre">subprojects/thread-pool/include</span></code></p>
+<section id="subdirectories">
+<h2>Subdirectories<a class="headerlink" href="#subdirectories" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="dir_subprojects_thread-pool_include_thread_pool.html#dir-subprojects-thread-pool-include-thread-pool"><span class="std std-ref">Directory thread_pool</span></a></p></li>
+</ul>
+</section>
 </section>
 
 
@@ -630,30 +388,30 @@ CACAO_MOUSE_BUTTON_MIDDLE
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="excodes.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Exception Codes</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="deffiles.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Definition Files</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subdirectories">Subdirectories</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
