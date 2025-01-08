@@ -5,25 +5,29 @@ if get_option('backend') != 'ninja'
 	error('Only the Ninja backend is supported. If you\'re trying to use Visual Studio, see the Visual Studio page in the documentation for instructions.')
 endif
 
+# Get some options
+bt = get_option('buildtype')
+comps = get_option('components')
+backend = get_option('graphics_backend')
+ignore_bad_compiler = get_option('ignore_bad_compiler')
+
+# Create extra argument lists
+tgt_compiler_args = []
+dep_compiler_args = []
+
 # Find Python and GLSLC
 python = find_program('python3', required: true)
 glslc = find_program('glslc', required: true)
 
 # Warn the user if they are trying to use an unsupported setup
 compiler = meson.get_compiler('cpp')
-if compiler.get_id() != 'clang' or not compiler.get_linker_id().contains('lld')
-	fs = import('fs')
-	okfile = meson.project_build_root() / 'badconfig_ok'
-	if not fs.exists(okfile)
-		res = run_command([python, meson.project_source_root() / 'scripts' / 'badsetup_confirm', okfile], check: false).returncode()
-		assert(res == 0, 'User opted to not proceed with unsupported configuration')
+if not ignore_bad_compiler
+	if compiler.get_id() != 'clang' or not compiler.get_linker_id().contains('lld')
+		error('You are using a compiler configuration that is UNSUPPORTED by Cacao Engine. This build may not compile, link, or function correctly, and no support will be offered for it. If you wish to use this setup, append "-Dignore_bad_compiler=true to your command line.')
 	endif
+else
+	warning('You are ignoring that your compiler is unsupported. Things can and will likely break!')
 endif
-
-# Get some options
-bt = get_option('buildtype')
-comps = get_option('components')
-backend = get_option('graphics_backend')
 
 # Process components to deal with dependencies
 processed_comps = comps
@@ -77,10 +81,11 @@ if host_machine.system() == 'windows'
 		add_project_link_arguments(['-lmsvcrt', '-lucrt', '-lvcruntime'], language: ['c', 'cpp'])
 		add_project_link_arguments(['-lmsvcprt'], language: ['cpp'])
 	endif
+	dep_compiler_args += '-DCACAO_API=__declspec(dllimport)'
+	tgt_compiler_args += '-DCACAO_API=__declspec(dllexport)'
 endif
 
 # Set some macOS-specific options
-dep_compiler_args = []
 if host_machine.system() == 'darwin'
 	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio', 'CoreVideo', 'Carbon'], required: true), language: ['c', 'cpp'])
 	add_project_arguments('-fexperimental-library', language: 'cpp')

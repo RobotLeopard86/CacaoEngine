@@ -24,6 +24,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Fetch thread pool project for docs
+        run: |
+          git clone https://github.com/DeveloperPaul123/thread-pool subprojects/thread-pool
+          git -C subprojects/thread-pool checkout 0.6.2
       - name: Build documentation
         uses: sphinx-notes/pages@v2
         with:

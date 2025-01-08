@@ -2,3 +2,4 @@ option('components', type: 'array', value: ['core'], choices: ['core', 'crt-form
 option('graphics_backend', type: 'combo', value: 'opengl', description: 'The backend to use. Must be specified.', choices: ['opengl', 'vulkan'])
 option('windows_noconsole', type: 'boolean', value: false, description: '(Windows only) Whether to hide the console window created by default.')
 option('crt_exe_name', type: 'string', value: 'cacaocrt', description: 'The name of the common runtime executable. Useful for games that want to customize the executable.')
+option('ignore_bad_compiler', type: 'boolean', value: false, description: 'Whether to ignore the fact that the chosen compiler/linker is unsupported and continue anyways.')
