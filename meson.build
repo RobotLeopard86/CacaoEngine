@@ -5,14 +5,38 @@ if get_option('backend') != 'ninja'
 	error('Only the Ninja backend is supported. If you\'re trying to use Visual Studio, see the Visual Studio page in the documentation for instructions.')
 endif
 
+# Find Python and GLSLC
+python = find_program('python3', required: true)
+glslc = find_program('glslc', required: true)
+
+# Warn the user if they are trying to use an unsupported setup
+compiler = meson.get_compiler('cpp')
+if compiler.get_id() != 'clang' or not compiler.get_linker_id().contains('lld')
+	fs = import('fs')
+	okfile = meson.project_build_root() / 'badconfig_ok'
+	if not fs.exists(okfile)
+		res = run_command([python, meson.project_source_root() / 'scripts' / 'badsetup_confirm', okfile], check: false).returncode()
+		assert(res == 0, 'User opted to not proceed with unsupported configuration')
+	endif
+endif
+
 # Get some options
 bt = get_option('buildtype')
-do_playground = get_option('build_playground')
-backend = get_option('use_backend')
+comps = get_option('components')
+backend = get_option('graphics_backend')
 
-# Make the user select a backend
-if backend == '__DEFAULT__'
-	error('A backend must be specified!')
+# Process components to deal with dependencies
+processed_comps = comps
+if processed_comps.contains('demo') and not processed_comps.contains('crt')
+	processed_comps += 'crt'
+endif
+if processed_comps.contains('crt')
+	if not processed_comps.contains('core')
+		processed_comps += 'core'
+	endif
+	if not processed_comps.contains('crt-formats')
+		processed_comps += 'crt-formats'
+	endif
 endif
 
 # Generate some variables necessary for CMake to work correctly
@@ -43,8 +67,15 @@ if host_machine.system() == 'windows'
 	if get_option('windows_noconsole')
 		subsystem = 'windows'
 	endif
+	add_project_arguments(['-D_MT', '-D_DLL'], language: ['c', 'cpp'])
+	add_project_link_arguments(['-Xlinker', '/NODEFAULTLIB'], language: ['c', 'cpp'])
 	if bt == 'debug'
 		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2'], language: ['c', 'cpp'])
+		add_project_link_arguments(['-lmsvcrtd', '-lucrtd', '-lvcruntimed'], language: ['c', 'cpp'])
+		add_project_link_arguments(['-lmsvcprtd'], language: ['cpp'])
+	else
+		add_project_link_arguments(['-lmsvcrt', '-lucrt', '-lvcruntime'], language: ['c', 'cpp'])
+		add_project_link_arguments(['-lmsvcprt'], language: ['cpp'])
 	endif
 endif
 
@@ -57,13 +88,9 @@ if host_machine.system() == 'darwin'
 	dep_compiler_args += '-fexperimental-library'
 endif
 
-# Find Python and GLSLC
-python = import('python').find_installation('python3', required: true)
-glslc = find_program('glslc', required: true)
-
-# Define DEBUG macro
+# Define debug macro
 if bt.contains('debug')
-	add_project_arguments(['-DDEBUG'], language: 'cpp')
+	add_project_arguments(['-D_DEBUG'], language: 'cpp')
 endif
 
 # Get some shared dependencies
@@ -165,12 +192,33 @@ spv_cross_opts.add_cmake_defines({
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 spv_cross_sp = cmake.subproject('spirv-cross', options: spv_cross_opts, required: true)
-spv_core = spv_sp.dependency('spirv-cross-core')
-spv_c = spv_sp.dependency('spirv-cross-c')
-spv_cpp = spv_sp.dependency('spirv-cross-cpp')
-spv_rfl = spv_sp.dependency('spirv-cross-reflect')
-spv_util = spv_sp.dependency('spirv-cross-util')
-spv_glsl = spv_sp.dependency('spirv-cross-glsl')
-spv_hlsl = spv_sp.dependency('spirv-cross-hlsl')
-spv_msl = spv_sp.dependency('spirv-cross-msl')
+spv_core = spv_cross_sp.dependency('spirv-cross-core')
+spv_c = spv_cross_sp.dependency('spirv-cross-c')
+spv_cpp = spv_cross_sp.dependency('spirv-cross-cpp')
+spv_rfl = spv_cross_sp.dependency('spirv-cross-reflect')
+spv_util = spv_cross_sp.dependency('spirv-cross-util')
+spv_glsl = spv_cross_sp.dependency('spirv-cross-glsl')
+spv_hlsl = spv_cross_sp.dependency('spirv-cross-hlsl')
+spv_msl = spv_cross_sp.dependency('spirv-cross-msl')
 spirv_cross = declare_dependency(dependencies: [spv_core, spv_c, spv_cpp, spv_rfl, spv_util, spv_glsl, spv_hlsl, spv_msl]) # This is just a utility
+
+# Components
+if processed_comps.contains('core') 
+	subdir('core')
+	subdir('backends' / backend)
+endif
+if processed_comps.contains('crt-formats')
+        subdir('crt-formats')
+endif
+if processed_comps.contains('crt-unpacked-formats')
+        subdir('crt-unpacked-formats')
+endif
+if processed_comps.contains('core')
+        subdir('core')
+endif
+if processed_comps.contains('crt')
+        subdir('crt')
+endif
+if processed_comps.contains('demo')
+        subdir('demo')
+endif

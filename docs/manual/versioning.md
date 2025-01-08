@@ -13,7 +13,7 @@ Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of `
 
 ## Number Incrementing
 * Generation - Remains 0 during active development. When the first full release and subsequent versions are released, this number becomes the year when work on the release began.
-* Major - Incremented for large new feature additions or large behavioral changes.
+* Major - Incremented for large new feature additions or large behavioral changes. This does not reset when the Generation number changes, except for the first full release.
 * Minor - Incremented for smaller breaking changes.
 * Mini - Incremented for non-breaking small feature additions.
 * Build - Takes different formats depending on the Stage:
