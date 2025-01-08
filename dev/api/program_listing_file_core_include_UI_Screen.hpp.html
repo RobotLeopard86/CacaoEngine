@@ -372,9 +372,10 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;UIElement.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Exception.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/DllHelper.hpp&quot;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Screen</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Screen</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">AddElement</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UIElement</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">CheckException</span><span class="p">(</span><span class="o">!</span><span class="n">HasElement</span><span class="p">(</span><span class="n">elem</span><span class="p">),</span><span class="w"> </span><span class="n">Exception</span><span class="o">::</span><span class="n">GetExceptionCodeFromMeaning</span><span class="p">(</span><span class="s">&quot;ContainerValue&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Cannot add a duplicate element to UI screen!&quot;</span><span class="p">);</span>
