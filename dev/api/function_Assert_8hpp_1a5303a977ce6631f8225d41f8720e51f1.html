@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string) &#8212; Cacao Engine Docs</title>
+    <title>Function Cacao::RuntimeAssert &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/function_Exception_8hpp_1a57be1cbc39b44a600c6c880e32a8cd40';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/function_Assert_8hpp_1a5303a977ce6631f8225d41f8720e51f1';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Function Cacao::ClientAssert" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html" />
-    <link rel="prev" title="Function Cacao::CheckException(bool, unsigned int, std::string)" href="function_Exception_8hpp_1a1cca20bcfea3fba6bfee5a5a5088da23.html" />
+    <link rel="next" title="Variable BottomCenter" href="variable_UIElement_8hpp_1ac4d3b8f858c8568f7c8f857da044f9d5.html" />
+    <link rel="prev" title="Function Cacao::EngineAssert" href="function_Assert_8hpp_1ae4b9af7e40ca1afad98d6cc153e97032.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -495,19 +495,19 @@
 <li class="toctree-l1"><a class="reference internal" href="function_MiscUtils_8hpp_1a4c539cf86abe9e6ac5e6f2fe22a324ff.html">Function Cacao::Calculate3DVectors</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a1cca20bcfea3fba6bfee5a5a5088da23.html">Function Cacao::CheckException(bool, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1ac1feea62e64d32c75ebc94df2ee21406.html">Function Cacao::CheckException(bool, unsigned int, std::string)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a2fb6e50c5b7b79bf0084a2893e280ed0.html">Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1af2a3a67ba0e0f610f76f0cbee9c81d53.html">Function Cacao::ClientAssert</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1ae4b9af7e40ca1afad98d6cc153e97032.html">Function Cacao::EngineAssert</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1a9f8ef80803b908b4016778d189e25175.html">Function Cacao::RuntimeAssert</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Function Cacao::RuntimeAssert</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variable_UIElement_8hpp_1ac4d3b8f858c8568f7c8f857da044f9d5.html">Variable BottomCenter</a></li>
@@ -609,7 +609,7 @@
     
     <li class="breadcrumb-item"><a href="library_root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Function Cacao::RuntimeAssert</span></li>
   </ul>
 </nav>
 </div>
@@ -626,35 +626,35 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="template-function-cacao-checkexception-std-shared-ptr-t-unsigned-int-std-string">
-<span id="exhale-function-exception-8hpp-1a57be1cbc39b44a600c6c880e32a8cd40"></span><h1>Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)<a class="headerlink" href="#template-function-cacao-checkexception-std-shared-ptr-t-unsigned-int-std-string" title="Link to this heading"><span/></a></h1>
+  <section id="function-cacao-runtimeassert">
+<span id="exhale-function-assert-8hpp-1a5303a977ce6631f8225d41f8720e51f1"></span><h1>Function Cacao::RuntimeAssert<a class="headerlink" href="#function-cacao-runtimeassert" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_core_include_Core_Exception.hpp.html#file-core-include-core-exception-hpp"><span class="std std-ref">File Exception.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_core_include_Core_Assert.hpp.html#file-core-include-core-assert-hpp"><span class="std std-ref">File Assert.hpp</span></a></p></li>
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao14CheckExceptionEvNSt10shared_ptrI1TEEjNSt6stringE">
-<span id="_CPPv3I0EN5Cacao14CheckExceptionENSt10shared_ptrI1TEEjNSt6stringE"></span><span id="_CPPv2I0EN5Cacao14CheckExceptionENSt10shared_ptrI1TEEjNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="Exception_8hpp_1a57be1cbc39b44a600c6c880e32a8cd40"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CheckException</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao14CheckExceptionEvNSt10shared_ptrI1TEEjNSt6stringE" title="Cacao::CheckException::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exceptionCode</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exceptionDescription</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao14CheckExceptionEvNSt10shared_ptrI1TEEjNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Checks if the shared_ptr contains a value, and throws an exception if not. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>See the page “Exception Codes” in the manual for a list of codes. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Unable to resolve function “Cacao::RuntimeAssert” with arguments “(bool, std::string)”.
+Candidate function could not be parsed. Parsing error is
+Error when parsing function declaration.
+If the function has no return type:
+  Error in declarator or parameters-and-qualifiers
+  Invalid C++ declaration: Expecting “(” in parameters-and-qualifiers. [error at 10]
+    CACAO_API void RuntimeAssert (bool condition, std::string errorMsg)
+    ———-^
+If the function has a return type:
+  Error in declarator or parameters-and-qualifiers
+  If pointer to member declarator:
+    Invalid C++ declaration: Expected identifier in nested name, got keyword: void [error at 14]
+      CACAO_API void RuntimeAssert (bool condition, std::string errorMsg)
+      ————–^
+  If declarator-id:
+    Invalid C++ declaration: Expected identifier in nested name, got keyword: void [error at 14]
+      CACAO_API void RuntimeAssert (bool condition, std::string errorMsg)
+      ————–^
+</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ptr</strong> – The shared_ptr to check for a value. </p></li>
-<li><p><strong>exceptionCode</strong> – The exception code to use. Must have been registered prior to use. </p></li>
-<li><p><strong>exceptionDescription</strong> – The human-readable message to print if the condition is false</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">Cacao</span><span class="p">::</span><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – Thrown if the condition is false </p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 </section>
 
@@ -669,20 +669,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="function_Exception_8hpp_1a1cca20bcfea3fba6bfee5a5a5088da23.html"
+       href="function_Assert_8hpp_1ae4b9af7e40ca1afad98d6cc153e97032.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Function Cacao::CheckException(bool, unsigned int, std::string)</p>
+        <p class="prev-next-title">Function Cacao::EngineAssert</p>
       </div>
     </a>
     <a class="right-next"
-       href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html"
+       href="variable_UIElement_8hpp_1ac4d3b8f858c8568f7c8f857da044f9d5.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Function Cacao::ClientAssert</p>
+        <p class="prev-next-title">Variable BottomCenter</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -705,10 +705,7 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao14CheckExceptionEvNSt10shared_ptrI1TEEjNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CheckException()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a></li>
 </ul>
   </nav></div>
 
