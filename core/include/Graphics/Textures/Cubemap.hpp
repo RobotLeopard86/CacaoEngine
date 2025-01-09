@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Texture.hpp"
+#include "RawImage.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Core/DllHelper.hpp"
 
@@ -18,13 +19,17 @@ namespace Cacao {
 		/**
 		 * @brief Create a new cubemap from a file list
 		 *
-		 * @param filePaths The paths to image files for each face. Must be in the order +X, -X, +Y, -Y, +Z, -Z
+		 * @param posX The image data for the positive X face (copied on creation)
+		 * @param negX The image data for the negative X face (copied on creation)
+		 * @param posY The image data for the positive Y face (copied on creation)
+		 * @param negY The image data for the negative Y face (copied on creation)
+		 * @param posZ The image data for the positive Z face (copied on creation)
+		 * @param negZ The image data for the negative Z face (copied on creation)
 		 *
 		 * @note Prefer to use AssetManager::LoadCubemap over direct construction
 		 *
-		 * @throws Exception If any of the specified files does not exist
 		 */
-		Cubemap(std::vector<std::string> filePaths);
+		Cubemap(RawImage posX, RawImage negX, RawImage posY, RawImage negY, RawImage posZ, RawImage negZ);
 
 		/**
 		 * @brief Destroy the cubemap and its compiled data if applicable
@@ -88,7 +93,7 @@ namespace Cacao {
 		//Backend-implemented data type
 		struct CubemapData;
 
-		std::vector<std::string> textures;
+		RawImage px, nx, py, ny, pz, nz;
 
 		std::shared_ptr<CubemapData> nativeData;
 	};

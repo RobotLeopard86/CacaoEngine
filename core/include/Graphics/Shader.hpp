@@ -47,24 +47,10 @@ namespace Cacao {
 		 *
 		 * @param vertex SPIR-V code for the vertex shader
 		 * @param fragment SPIR-V code for the vertex shader
-		 * @param spec The shader specification
-		 *
-		 * @note Not recommended for use by games, but if it's necessary to embed SPIR-V in code, go ahead...
-		 */
-		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment, ShaderSpec spec);
-
-		/**
-		 * @brief Create a shader from files
-		 *
-		 * @param vertex Path to SPIR-V code for the vertex shader
-		 * @param fragment Path to SPIR-V code for the fragment shader
-		 * @param spec The shader specification
 		 *
 		 * @note Prefer to use AssetManager::LoadShader over direct construction
-		 *
-		 * @throws Exception If the files don't exist or could not be opened
 		 */
-		Shader(std::string vertex, std::string fragment, ShaderSpec spec);
+		Shader(std::vector<uint32_t>& vertex, std::vector<uint32_t>& fragment);
 
 		/**
 		 * @brief Delete the shader and its compiled data

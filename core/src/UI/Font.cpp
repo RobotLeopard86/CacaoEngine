@@ -2,7 +2,7 @@
 
 #include "Core/Exception.hpp"
 #include "Core/Engine.hpp"
-#include "UI/FreetypeOwner.hpp"
+#include "Private/FreetypeOwner.hpp"
 
 #include "hb.h"
 
@@ -10,10 +10,12 @@
 
 namespace Cacao {
 
-	Font::Font(std::string path)
+	Font::Font(unsigned char* fontData, long dataSize)
 	  : Asset(false) {
-		CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load font from nonexistent file!");
-		filePath = path;
+		CheckException(fontData, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot load font from null data!");
+		CheckException(dataSize > 0, Exception::GetExceptionCodeFromMeaning("BadValue"), "Cannot load font with bad data size!");
+		raw = fontData;
+		rawDataSize = dataSize;
 	}
 
 	std::shared_future<void> Font::CompileAsync() {
@@ -25,7 +27,7 @@ namespace Cacao {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled font!");
 
 		//Load FreeType font face
-		CheckException(!FT_New_Face(ftLib, filePath.c_str(), 0, &face), Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load font face!");
+		CheckException(!FT_New_Memory_Face(ftLib, raw, rawDataSize, 0, &face), Exception::GetExceptionCodeFromMeaning("External"), "Failed to create font face!");
 
 		compiled = true;
 	}

@@ -16,13 +16,14 @@ namespace Cacao {
 	class CACAO_API Font final : public Asset {
 	  public:
 		/**
-		 * @brief Create a font from a file path
+		 * @brief Create a font face from data
 		 *
-		 * @param path The path to a font file to load
+		 * @param fontData The raw font data
+		 * @param dataSize The size of the font data
 		 *
 		 * @note Prefer to use AssetManager::LoadFont over direct construction
 		 */
-		Font(std::string path);
+		Font(unsigned char* fontData, long dataSize);
 
 		/**
 		 * @brief Destroy the font face and its compiled data if applicable
@@ -60,8 +61,9 @@ namespace Cacao {
 		}
 
 	  private:
-		//Path to font file
-		std::string filePath;
+		//Raw font data
+		unsigned char* raw;
+		long rawDataSize;
 
 		//FreeType font face
 		FT_Face face;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Texture.hpp"
+#include "RawImage.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Core/DllHelper.hpp"
 
@@ -17,13 +18,13 @@ namespace Cacao {
 		/**
 		 * @brief Create a new texture from a file
 		 *
-		 * @param filePath The path to an image file
+		 * @param raw The image data, copied when imported into texture
 		 *
 		 * @note Prefer to use AssetManager::LoadTexture2D over direct construction
 		 *
 		 * @throws Exception If the file does not exist or could not be opened
 		 */
-		Texture2D(std::string filePath);
+		Texture2D(const RawImage& raw);
 
 		/**
 		 * @brief Destroy the texture and its compiled data if applicable
@@ -89,8 +90,8 @@ namespace Cacao {
 		struct Tex2DData;
 
 		unsigned char* dataBuffer;
-		glm::ivec2 imgSize;
-		int numImgChannels;
+		glm::uvec2 imgSize;
+		uint8_t numImgChannels;
 
 		std::shared_ptr<Tex2DData> nativeData;
 	};

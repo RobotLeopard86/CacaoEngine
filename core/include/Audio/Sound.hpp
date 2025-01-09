@@ -16,14 +16,16 @@ namespace Cacao {
 	  public:
 		/**
 		 * @brief Load a sound from a path
-		 * @details Supports MP3, WAV, Ogg Vorbis, and Ogg Opus
 		 * @note Prefer to use AssetManager::LoadSound over direct construction
 		 *
-		 * @param filePath The path to load from
+		 * @param pcmData The PCM audio data
+		 * @param samples The number of audio samples in the data
+		 * @param samplesRate Audio sampling rate
+		 * @param channels Audio channel count
 		 *
 		 * @throws Exception If the file does not exist, could not be opened, is of an unsupported format, or its data could not be read
 		 */
-		Sound(std::string filePath);
+		Sound(std::vector<short> pcmData, unsigned long long samples, unsigned int sampleRate, unsigned int channels);
 		~Sound() final {
 			if(compiled) Release();
 		}
@@ -62,7 +64,6 @@ namespace Cacao {
 
 	  private:
 		//Sound data
-		std::string filePath;
 		unsigned int sampleRate;
 		unsigned long long sampleCount;
 		std::vector<short> audioData;
@@ -72,16 +73,6 @@ namespace Cacao {
 		unsigned int buf;
 
 		SignalEventConsumer* sec;
-
-		//Sound data initialization methods
-		void _InitFlac();
-		void _InitMP3();
-		void _InitWAV();
-		void _InitVorbis();
-		void _InitOpus();
-
-		//Need to let the FLAC decoder (which has to be a class per the API) access our methods
-		friend class FLACDecoder;
 
 		//Need the audio player to be able to see our stuff
 		friend class AudioPlayer;
