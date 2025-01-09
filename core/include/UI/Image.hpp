@@ -2,7 +2,7 @@
 
 #include "UIElement.hpp"
 #include "Graphics/Textures/Texture2D.hpp"
-#include "Utilities/Asset.hpp"
+#include "Assets/Asset.hpp"
 #include "UIRenderable.hpp"
 #include "Core/DllHelper.hpp"
 

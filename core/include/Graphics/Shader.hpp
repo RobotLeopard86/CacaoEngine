@@ -9,13 +9,13 @@
 #include "Core/Assert.hpp"
 #include "Core/DllHelper.hpp"
 #include "Utilities/MiscUtils.hpp"
-#include "Utilities/Asset.hpp"
+#include "Assets/Asset.hpp"
 
 #include "glm/glm.hpp"
 
 namespace Cacao {
 	///@brief Shorthand type for shader data types
-	enum class CACAO_API ShaderDataType {
+	enum class ShaderDataType {
 		Unknown = 0,
 		Int = 7,
 		UInt = 8,

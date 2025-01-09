@@ -56,7 +56,7 @@ namespace Cacao {
 	  private:
 		std::map<std::string, Mesh*> meshes;
 
-		enum ModelOrientation {
+		enum class ModelOrientation {
 			PosX,
 			NegX,
 			PosY,

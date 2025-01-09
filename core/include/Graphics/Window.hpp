@@ -19,7 +19,7 @@ namespace Cacao {
 	/**
 	 * @brief The different window display modes
 	 */
-	enum class CACAO_API WindowMode {
+	enum class WindowMode {
 		Window,	   ///<Normal window
 		Fullscreen,///<Exclusive fullscreen (only on primary monitor)
 		Borderless ///<Borderless fullscreen window (only on primary monitor)

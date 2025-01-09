@@ -13,7 +13,7 @@ namespace Cacao {
 	/**
 	 * @brief A point on the screen to anchor a UIElement to
 	 */
-	enum class CACAO_API AnchorPoint {
+	enum class AnchorPoint {
 		Center,
 		TopLeft,
 		TopRight,

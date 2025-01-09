@@ -3,7 +3,7 @@
 #include "Vertex.hpp"
 #include "Transform.hpp"
 #include "Utilities/MiscUtils.hpp"
-#include "Utilities/Asset.hpp"
+#include "Assets/Asset.hpp"
 #include "Core/DllHelper.hpp"
 
 #include <vector>

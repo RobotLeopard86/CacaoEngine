@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities/Asset.hpp"
+#include "Assets/Asset.hpp"
 #include "Utilities/MiscUtils.hpp"
 #include "Events/EventSystem.hpp"
 #include "Core/DllHelper.hpp"

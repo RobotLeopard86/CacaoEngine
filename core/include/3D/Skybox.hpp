@@ -4,7 +4,7 @@
 #include "Graphics/Textures/Cubemap.hpp"
 #include "Mesh.hpp"
 #include "Graphics/Material.hpp"
-#include "Utilities/Asset.hpp"
+#include "Assets/Asset.hpp"
 #include "Core/DllHelper.hpp"
 
 #include "glm/vec2.hpp"

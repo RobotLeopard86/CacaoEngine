@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities/Asset.hpp"
+#include "Assets/Asset.hpp"
 #include "Core/DllHelper.hpp"
 
 //FreeType face forward declaration

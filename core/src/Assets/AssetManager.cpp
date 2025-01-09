@@ -1,4 +1,4 @@
-#include "Utilities/AssetManager.hpp"
+#include "Assets/AssetManager.hpp"
 
 #include "Core/Engine.hpp"
 #include "Core/Exception.hpp"
@@ -37,14 +37,17 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("SHADER") == 0) return AssetHandle<Shader>(assetID, std::dynamic_pointer_cast<Shader>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct shader
-			std::shared_ptr<Shader> asset = RTLoadShader(assetID);
+			std::shared_ptr<Shader> asset = loader->GetShader(assetID);
 			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Shader> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Shader>(assetID, asset);
 		});
 	}
@@ -54,14 +57,17 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("MESH") == 0) return AssetHandle<Mesh>(assetID, std::dynamic_pointer_cast<Mesh>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct mesh
-			std::shared_ptr<Mesh> asset = RTLoadMesh(assetID);
+			std::shared_ptr<Mesh> asset = loader->GetMesh(assetID);
 			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Mesh> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Mesh>(assetID, asset);
 		});
 	}
@@ -71,14 +77,17 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("SOUND") == 0) return AssetHandle<Sound>(assetID, std::dynamic_pointer_cast<Sound>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct sound
-			std::shared_ptr<Sound> asset = RTLoadSound(assetID);
+			std::shared_ptr<Sound> asset = loader->GetSound(assetID);
 			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Sound> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Sound>(assetID, asset);
 		});
 	}
@@ -88,14 +97,17 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("FONT") == 0) return AssetHandle<Font>(assetID, std::dynamic_pointer_cast<Font>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct font
-			std::shared_ptr<Font> asset = RTLoadFont(assetID);
+			std::shared_ptr<Font> asset = loader->GetFont(assetID);
 			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Font> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Font>(assetID, asset);
 		});
 	}
@@ -105,14 +117,17 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("TEX2D") == 0) return AssetHandle<Texture2D>(assetID, std::dynamic_pointer_cast<Texture2D>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct texture
-			std::shared_ptr<Texture2D> asset = RTLoadTex2D(assetID);
+			std::shared_ptr<Texture2D> asset = loader->GetTex2D(assetID);
 			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Texture2D> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Texture2D>(assetID, asset);
 		});
 	}
@@ -122,14 +137,17 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("CUBEMAP") == 0) return AssetHandle<Cubemap>(assetID, std::dynamic_pointer_cast<Cubemap>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct cubemap
-			std::shared_ptr<Cubemap> asset = RTLoadCubemap(assetID);
+			std::shared_ptr<Cubemap> asset = loader->GetCubemap(assetID);
 			asset->CompileSync();
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Cubemap> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Cubemap>(assetID, asset);
 		});
 	}
@@ -139,15 +157,18 @@ namespace Cacao {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(assetID) && this->assetCache[assetID].lock()->GetType().compare("SKYBOX") == 0) return AssetHandle<Skybox>(assetID, std::dynamic_pointer_cast<Skybox>(this->assetCache[assetID].lock()));
 
+			//Confirm asset loader
+			CheckException(loader, Exception::GetExceptionCodeFromMeaning("NonexistentValue"), "Cannot load assets before asset loader configuration!");
+
 			//Construct cubemap and skybox
-			AssetHandle<Cubemap> cube("CUBEMAP4SKYBOX", RTLoadCubemap(assetID));
+			AssetHandle<Cubemap> cube("CUBEMAP4SKYBOX", loader->GetCubemap(assetID));
 			cube->CompileSync();
 			std::shared_ptr<Skybox> asset = std::make_shared<Skybox>(cube);
 
 			//Add asset to cache
 			this->assetCache.insert_or_assign(assetID, std::weak_ptr<Skybox> {asset});
 
-			//Construct and return asset handle
+			//Create and return asset handle
 			return AssetHandle<Skybox>(assetID, asset);
 		});
 	}

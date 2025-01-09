@@ -39,7 +39,7 @@ exhale_args = {
 									INPUT = ../core/include,../crt/include,../crt-formats/include,../crt-formats-unpacked/include,../subprojects/thread-pool/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,ftLib,Cacao::_AH*,Cacao::*::Renderable*,Cacao::FakeDeleter,std*,dp::details*,dp::thread_safe_queue
+									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,CACAO_API,GLM*,ftLib,Cacao::_AH*,Cacao::*::Renderable*,Cacao::FakeDeleter,std*,dp::details*,dp::thread_safe_queue,dp::is_lockable
 									EXCLUDE = ../core/include/Private,../core/include/Core/RuntimeHooks.hpp
 									''')
 }

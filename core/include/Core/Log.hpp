@@ -14,7 +14,7 @@ namespace Cacao {
 	/**
 	 * @brief Level of severity for log messages
 	 */
-	enum LogLevel {
+	enum class LogLevel {
 		Trace = 0,///<Debug information, usually unneeded
 		Info = 1, ///<Information
 		Warn = 2, ///<Warnings
