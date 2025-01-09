@@ -371,6 +371,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Texture.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;RawImage.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Utilities/MiscUtils.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/DllHelper.hpp&quot;</span>
 
@@ -381,7 +382,7 @@
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Texture2D</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Texture</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Texture2D</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Texture2D</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RawImage</span><span class="o">&amp;</span><span class="w"> </span><span class="n">raw</span><span class="p">);</span>
 
 <span class="w">        </span><span class="o">~</span><span class="n">Texture2D</span><span class="p">()</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span><span class="w"> </span><span class="n">Unbind</span><span class="p">();</span>
@@ -408,8 +409,8 @@
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Tex2DData</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">dataBuffer</span><span class="p">;</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">ivec2</span><span class="w"> </span><span class="n">imgSize</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">numImgChannels</span><span class="p">;</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">imgSize</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">numImgChannels</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Tex2DData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>

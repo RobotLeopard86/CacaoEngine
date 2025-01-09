@@ -380,7 +380,7 @@
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Font</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Font</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Font</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">fontData</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">dataSize</span><span class="p">);</span>
 
 <span class="w">        </span><span class="o">~</span><span class="n">Font</span><span class="p">()</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">compiled</span><span class="p">)</span><span class="w"> </span><span class="n">Release</span><span class="p">();</span>
@@ -397,8 +397,9 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">//Path to font file</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">//Raw font data</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">raw</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">rawDataSize</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//FreeType font face</span>
 <span class="w">        </span><span class="n">FT_Face</span><span class="w"> </span><span class="n">face</span><span class="p">;</span>

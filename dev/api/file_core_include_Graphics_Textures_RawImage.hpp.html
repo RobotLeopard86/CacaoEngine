@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Program Listing for File Shader.hpp &#8212; Cacao Engine Docs</title>
+    <title>File RawImage.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_core_include_Graphics_Shader.hpp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_core_include_Graphics_Textures_RawImage.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -229,6 +229,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -311,8 +315,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Program Listing for File Shader.hpp</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_core_include_Graphics_Textures_RawImage.hpp.html">Program Listing for File RawImage.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -348,7 +352,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Program Listing for File Shader.hpp</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File RawImage.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -365,95 +369,52 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="program-listing-for-file-shader-hpp">
-<span id="program-listing-file-core-include-graphics-shader-hpp"></span><h1>Program Listing for File Shader.hpp<a class="headerlink" href="#program-listing-for-file-shader-hpp" title="Link to this heading"><span/></a></h1>
-<p>↰ <a class="reference internal" href="file_core_include_Graphics_Shader.hpp.html#file-core-include-graphics-shader-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Shader.hpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;filesystem&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Log.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/Assert.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Core/DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Utilities/MiscUtils.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Utilities/Asset.hpp&quot;</span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/glm.hpp&quot;</span>
-
-<span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ShaderDataType</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Unknown</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
-<span class="w">        </span><span class="n">UInt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span>
-<span class="w">        </span><span class="n">SampledImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ShaderItemInfo</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">ShaderDataType</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ShaderItemInfo</span><span class="o">&gt;</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Material</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Shader</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Shader</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">vertex</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">fragment</span><span class="p">);</span>
-
-<span class="w">        </span><span class="o">~</span><span class="n">Shader</span><span class="p">()</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">compiled</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">bound</span><span class="p">)</span><span class="w"> </span><span class="n">Unbind</span><span class="p">();</span>
-<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">compiled</span><span class="p">)</span><span class="w"> </span><span class="n">Release</span><span class="p">();</span>
-<span class="w">            </span><span class="n">_BackendDestruct</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Bind</span><span class="p">();</span>
-
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Unbind</span><span class="p">();</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CompileAsync</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CompileSync</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Release</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsBound</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">bound</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetSpec</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">UploadCacaoGlobals</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">projection</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">view</span><span class="p">);</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;SHADER&quot;</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CreateMaterial</span><span class="p">();</span>
-
-<span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">//Backend-implemented data type</span>
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">ShaderData</span><span class="p">;</span>
-
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">bound</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ShaderData</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nativeData</span><span class="p">;</span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">ShaderSpec</span><span class="w"> </span><span class="n">specification</span><span class="p">;</span>
-
-<span class="w">        </span><span class="c1">//Backend-implemented destruction hook</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_BackendDestruct</span><span class="p">();</span>
-
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Material</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="p">}</span>
-</pre></div>
+  <section id="file-rawimage-hpp">
+<span id="file-core-include-graphics-textures-rawimage-hpp"></span><h1>File RawImage.hpp<a class="headerlink" href="#file-rawimage-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="dir_core_include_Graphics_Textures.html#dir-core-include-graphics-textures"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures</span></code>)</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-core-include-graphics-textures-rawimage-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures/RawImage.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
+</ul>
+</nav>
+<section id="definition-core-include-graphics-textures-rawimage-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures/RawImage.hpp</span></code>)<a class="headerlink" href="#definition-core-include-graphics-textures-rawimage-hpp" title="Link to this heading"><span/></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_core_include_Graphics_Textures_RawImage.hpp.html">Program Listing for File RawImage.hpp</a></li>
+</ul>
 </div>
+</section>
+<section id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">glm/vec2.hpp</span></code></p></li>
+</ul>
+</section>
+<section id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file_core_include_Graphics_Textures_Cubemap.hpp.html#file-core-include-graphics-textures-cubemap-hpp"><span class="std std-ref">File Cubemap.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file_core_include_Graphics_Textures_Texture2D.hpp.html#file-core-include-graphics-textures-texture2d-hpp"><span class="std std-ref">File Texture2D.hpp</span></a></p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_Cacao.html#namespace-cacao"><span class="std std-ref">Namespace Cacao</span></a></p></li>
+</ul>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="structCacao_1_1RawImage.html#exhale-struct-structcacao-1-1rawimage"><span class="std std-ref">Struct RawImage</span></a></p></li>
+</ul>
+</section>
 </section>
 
 
@@ -472,6 +433,28 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-core-include-graphics-textures-rawimage-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">core/include/Graphics/Textures/RawImage.hpp</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#includes">Includes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#included-by">Included By</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

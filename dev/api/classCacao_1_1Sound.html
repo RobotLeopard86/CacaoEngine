@@ -333,6 +333,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawImage.html">Struct RawImage</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -649,17 +652,21 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound5SoundENSt6stringE">
-<span id="_CPPv3N5Cacao5Sound5SoundENSt6stringE"></span><span id="_CPPv2N5Cacao5Sound5SoundENSt6stringE"></span><span id="Cacao::Sound::Sound__ss"></span><span class="target" id="classCacao_1_1Sound_1a5311a5fc08cee1a82d9f6265e33dea4b"></span><span class="sig-name descname"><span class="n"><span class="pre">Sound</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">filePath</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Sound5SoundENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound5SoundENSt6vectorIsEEyjj">
+<span id="_CPPv3N5Cacao5Sound5SoundENSt6vectorIsEEyjj"></span><span id="_CPPv2N5Cacao5Sound5SoundENSt6vectorIsEEyjj"></span><span id="Cacao::Sound::Sound__std::vector:short:.unsigned-l-l.unsigned-i.unsigned-i"></span><span class="target" id="classCacao_1_1Sound_1ae953a3839568e783f22752abf86dce6e"></span><span class="sig-name descname"><span class="n"><span class="pre">Sound</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">short</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pcmData</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">samples</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sampleRate</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">channels</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Sound5SoundENSt6vectorIsEEyjj" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Load a sound from a path. </p>
-<p>Supports MP3, WAV, Ogg Vorbis, and Ogg Opus </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1a675f72c5b8389b9354839b3b4fc6ff1c"><span class="std std-ref">AssetManager::LoadSound</span></a> over direct construction</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>filePath</strong> – The path to load from</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pcmData</strong> – The PCM audio data </p></li>
+<li><p><strong>samples</strong> – The number of audio samples in the data </p></li>
+<li><p><strong>samplesRate</strong> – Audio sampling rate </p></li>
+<li><p><strong>channels</strong> – Audio channel count</p></li>
+</ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the file does not exist, could not be opened, is of an unsupported format, or its data could not be read </p>
@@ -781,7 +788,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5SoundE"><code class="docutils literal notranslate"><span class="pre">Sound</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound5SoundENSt6stringE"><code class="docutils literal notranslate"><span class="pre">Sound::Sound()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound5SoundENSt6vectorIsEEyjj"><code class="docutils literal notranslate"><span class="pre">Sound::Sound()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5SoundD0Ev"><code class="docutils literal notranslate"><span class="pre">Sound::~Sound()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Sound::CompileAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Sound::CompileSync()</span></code></a></li>

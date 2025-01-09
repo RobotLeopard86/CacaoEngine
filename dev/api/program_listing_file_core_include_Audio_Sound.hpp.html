@@ -381,7 +381,7 @@
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Sound</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Asset</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Sound</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Sound</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">short</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pcmData</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">samples</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">sampleRate</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">channels</span><span class="p">);</span>
 <span class="w">        </span><span class="o">~</span><span class="n">Sound</span><span class="p">()</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">compiled</span><span class="p">)</span><span class="w"> </span><span class="n">Release</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
@@ -398,7 +398,6 @@
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">//Sound data</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">sampleRate</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">short</span><span class="o">&gt;</span><span class="w"> </span><span class="n">audioData</span><span class="p">;</span>
@@ -408,16 +407,6 @@
 <span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">buf</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">SignalEventConsumer</span><span class="o">*</span><span class="w"> </span><span class="n">sec</span><span class="p">;</span>
-
-<span class="w">        </span><span class="c1">//Sound data initialization methods</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitFlac</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitMP3</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitWAV</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitVorbis</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">_InitOpus</span><span class="p">();</span>
-
-<span class="w">        </span><span class="c1">//Need to let the FLAC decoder (which has to be a class per the API) access our methods</span>
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FLACDecoder</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Need the audio player to be able to see our stuff</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AudioPlayer</span><span class="p">;</span>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Define BIND_MEMBER_FUNC &#8212; Cacao Engine Docs</title>
+    <title>Struct RawImage &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/structCacao_1_1RawImage';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Define CACAO_API" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html" />
-    <link rel="prev" title="Variable Window" href="variable_Window_8hpp_1a6f567238a0aaa00ab1b336d0cf0faf4b.html" />
+    <link rel="next" title="Struct RawTexture" href="structCacao_1_1RawTexture.html" />
+    <link rel="prev" title="Struct Material::ShaderWrapper" href="structCacao_1_1Material_1_1ShaderWrapper.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -332,8 +332,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawImage.html">Struct RawImage</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct RawImage</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
@@ -566,8 +566,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="variable_Window_8hpp_1a6f567238a0aaa00ab1b336d0cf0faf4b.html">Variable Window</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Define BIND_MEMBER_FUNC</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html">Define CACAO_API</a></li>
@@ -612,7 +612,7 @@
     
     <li class="breadcrumb-item"><a href="library_root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Define BIND_MEMBER_FUNC</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct RawImage</span></li>
   </ul>
 </nav>
 </div>
@@ -629,20 +629,37 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="define-bind-member-func">
-<span id="exhale-define-miscutils-8hpp-1ace4fa65b562acff27fa7da6abb1c8832"></span><h1>Define BIND_MEMBER_FUNC<a class="headerlink" href="#define-bind-member-func" title="Link to this heading"><span/></a></h1>
+  <section id="struct-rawimage">
+<span id="exhale-struct-structcacao-1-1rawimage"></span><h1>Struct RawImage<a class="headerlink" href="#struct-rawimage" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_core_include_Utilities_MiscUtils.hpp.html#file-core-include-utilities-miscutils-hpp"><span class="std std-ref">File MiscUtils.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_core_include_Graphics_Textures_RawImage.hpp.html#file-core-include-graphics-textures-rawimage-hpp"><span class="std std-ref">File RawImage.hpp</span></a></p></li>
 </ul>
-<section id="define-documentation">
-<h2>Define Documentation<a class="headerlink" href="#define-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp macro">
-<dt class="sig sig-object cpp" id="c.BIND_MEMBER_FUNC">
-<span class="target" id="MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832"></span><span class="sig-name descname"><span class="n"><span class="pre">BIND_MEMBER_FUNC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">func</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.BIND_MEMBER_FUNC" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Convert a member function of this object into a form that can be called statically. </p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The function must take no arguments, otherwise you will receive weird template instantiation errors that don’t help </p>
+<section id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8RawImageE">
+<span id="_CPPv3N5Cacao8RawImageE"></span><span id="_CPPv2N5Cacao8RawImageE"></span><span id="Cacao::RawImage"></span><span class="target" id="structCacao_1_1RawImage"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RawImage</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8RawImageE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>An encapsulation of image data and the values needed to interpret it. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8RawImage10dataBufferE">
+<span id="_CPPv3N5Cacao8RawImage10dataBufferE"></span><span id="_CPPv2N5Cacao8RawImage10dataBufferE"></span><span id="Cacao::RawImage::dataBuffer__unsigned-cP"></span><span class="target" id="structCacao_1_1RawImage_1ab55f643981b3a3579c7ec2288dfe5505"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">dataBuffer</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8RawImage10dataBufferE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The actual buffer for the image data. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8RawImage7imgSizeE">
+<span id="_CPPv3N5Cacao8RawImage7imgSizeE"></span><span id="_CPPv2N5Cacao8RawImage7imgSizeE"></span><span id="Cacao::RawImage::imgSize__glm::uvec2"></span><span class="target" id="structCacao_1_1RawImage_1adf1d043de984a98d2fce3783108a5724"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">imgSize</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8RawImage7imgSizeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The size of the image in pixels. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8RawImage14numImgChannelsE">
+<span id="_CPPv3N5Cacao8RawImage14numImgChannelsE"></span><span id="_CPPv2N5Cacao8RawImage14numImgChannelsE"></span><span id="Cacao::RawImage::numImgChannels__uint8_t"></span><span class="target" id="structCacao_1_1RawImage_1a977d946dad1db8414b0a5b60e94557ea"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numImgChannels</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8RawImage14numImgChannelsE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The number of channels in the image (1=Grayscale, 3=RGB, 4=RGBA) </p>
+</dd></dl>
+
 </div>
 </dd></dl>
 
@@ -660,20 +677,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="variable_Window_8hpp_1a6f567238a0aaa00ab1b336d0cf0faf4b.html"
+       href="structCacao_1_1Material_1_1ShaderWrapper.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Variable Window</p>
+        <p class="prev-next-title">Struct Material::ShaderWrapper</p>
       </div>
     </a>
     <a class="right-next"
-       href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html"
+       href="structCacao_1_1RawTexture.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Define CACAO_API</p>
+        <p class="prev-next-title">Struct RawTexture</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -696,7 +713,15 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-documentation">Define Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8RawImageE"><code class="docutils literal notranslate"><span class="pre">RawImage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8RawImage10dataBufferE"><code class="docutils literal notranslate"><span class="pre">RawImage::dataBuffer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8RawImage7imgSizeE"><code class="docutils literal notranslate"><span class="pre">RawImage::imgSize</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8RawImage14numImgChannelsE"><code class="docutils literal notranslate"><span class="pre">RawImage::numImgChannels</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

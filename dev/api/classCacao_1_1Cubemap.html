@@ -333,6 +333,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawImage.html">Struct RawImage</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -649,19 +652,23 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE">
-<span id="_CPPv3N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"></span><span id="_CPPv2N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"></span><span id="Cacao::Cubemap::Cubemap__std::vector:ss:"></span><span class="target" id="classCacao_1_1Cubemap_1abade47339e27381fc8f41a310518dbcb"></span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">filePaths</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7CubemapE8RawImage8RawImage8RawImage8RawImage8RawImage8RawImage">
+<span id="_CPPv3N5Cacao7Cubemap7CubemapE8RawImage8RawImage8RawImage8RawImage8RawImage8RawImage"></span><span id="_CPPv2N5Cacao7Cubemap7CubemapE8RawImage8RawImage8RawImage8RawImage8RawImage8RawImage"></span><span id="Cacao::Cubemap::Cubemap__RawImage.RawImage.RawImage.RawImage.RawImage.RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1af34c4542f4a6bf76727d5b222f701eb6"></span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">posX</span></span>, <a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">negX</span></span>, <a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">posY</span></span>, <a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">negY</span></span>, <a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">posZ</span></span>, <a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">negZ</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap7CubemapE8RawImage8RawImage8RawImage8RawImage8RawImage8RawImage" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a new cubemap from a file list. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1afe302af16c5a669ea29f5de6c2c67edf"><span class="std std-ref">AssetManager::LoadCubemap</span></a> over direct construction</p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1afe302af16c5a669ea29f5de6c2c67edf"><span class="std std-ref">AssetManager::LoadCubemap</span></a> over direct construction </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>filePaths</strong> – The paths to image files for each face. Must be in the order +X, -X, +Y, -Y, +Z, -Z</p>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If any of the specified files does not exist </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>posX</strong> – The image data for the positive X face (copied on creation) </p></li>
+<li><p><strong>negX</strong> – The image data for the negative X face (copied on creation) </p></li>
+<li><p><strong>posY</strong> – The image data for the positive Y face (copied on creation) </p></li>
+<li><p><strong>negY</strong> – The image data for the negative Y face (copied on creation) </p></li>
+<li><p><strong>posZ</strong> – The image data for the positive Z face (copied on creation) </p></li>
+<li><p><strong>negZ</strong> – The image data for the negative Z face (copied on creation)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -754,8 +761,33 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap8texturesE">
-<span id="_CPPv3N5Cacao7Cubemap8texturesE"></span><span id="_CPPv2N5Cacao7Cubemap8texturesE"></span><span id="Cacao::Cubemap::textures__std::vector:ss:"></span><span class="target" id="classCacao_1_1Cubemap_1a593101bbcbaca8e12a4d0113557bec82"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">textures</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap8texturesE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap2pxE">
+<span id="_CPPv3N5Cacao7Cubemap2pxE"></span><span id="_CPPv2N5Cacao7Cubemap2pxE"></span><span id="Cacao::Cubemap::px__RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1a2f74ba9ee540aa46a442a2823ccba30e"></span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">px</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap2pxE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap2nxE">
+<span id="_CPPv3N5Cacao7Cubemap2nxE"></span><span id="_CPPv2N5Cacao7Cubemap2nxE"></span><span id="Cacao::Cubemap::nx__RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1aaf52bfa0f3cf7959bc661e85c8ced65a"></span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nx</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap2nxE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap2pyE">
+<span id="_CPPv3N5Cacao7Cubemap2pyE"></span><span id="_CPPv2N5Cacao7Cubemap2pyE"></span><span id="Cacao::Cubemap::py__RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1ab5e723697cc51cc63e994ce83c066707"></span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">py</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap2pyE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap2nyE">
+<span id="_CPPv3N5Cacao7Cubemap2nyE"></span><span id="_CPPv2N5Cacao7Cubemap2nyE"></span><span id="Cacao::Cubemap::ny__RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1ae0e9735c002544379689ced5fcf58b96"></span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ny</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap2nyE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap2pzE">
+<span id="_CPPv3N5Cacao7Cubemap2pzE"></span><span id="_CPPv2N5Cacao7Cubemap2pzE"></span><span id="Cacao::Cubemap::pz__RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1a1800d7e94e1df47b32fc6f848af8663a"></span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pz</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap2pzE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap2nzE">
+<span id="_CPPv3N5Cacao7Cubemap2nzE"></span><span id="_CPPv2N5Cacao7Cubemap2nzE"></span><span id="Cacao::Cubemap::nz__RawImage"></span><span class="target" id="classCacao_1_1Cubemap_1a2f1e3514ef91e5058fbd424983ce618c"></span><a class="reference internal" href="structCacao_1_1RawImage.html#_CPPv4N5Cacao8RawImageE" title="Cacao::RawImage"><span class="n"><span class="pre">RawImage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nz</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap2nzE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -822,7 +854,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7CubemapE"><code class="docutils literal notranslate"><span class="pre">Cubemap</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap7CubemapENSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Cubemap::Cubemap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap7CubemapE8RawImage8RawImage8RawImage8RawImage8RawImage8RawImage"><code class="docutils literal notranslate"><span class="pre">Cubemap::Cubemap()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7CubemapD0Ev"><code class="docutils literal notranslate"><span class="pre">Cubemap::~Cubemap()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap4BindEi"><code class="docutils literal notranslate"><span class="pre">Cubemap::Bind()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap6UnbindEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Unbind()</span></code></a></li>
@@ -830,7 +862,12 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::CompileSync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Release()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao7Cubemap7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::GetType()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap8texturesE"><code class="docutils literal notranslate"><span class="pre">Cubemap::textures</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap2pxE"><code class="docutils literal notranslate"><span class="pre">Cubemap::px</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap2nxE"><code class="docutils literal notranslate"><span class="pre">Cubemap::nx</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap2pyE"><code class="docutils literal notranslate"><span class="pre">Cubemap::py</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap2nyE"><code class="docutils literal notranslate"><span class="pre">Cubemap::ny</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap2pzE"><code class="docutils literal notranslate"><span class="pre">Cubemap::pz</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap2nzE"><code class="docutils literal notranslate"><span class="pre">Cubemap::nz</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap10nativeDataE"><code class="docutils literal notranslate"><span class="pre">Cubemap::nativeData</span></code></a></li>
 </ul>
 </li>

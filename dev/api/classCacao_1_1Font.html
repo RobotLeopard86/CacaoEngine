@@ -333,6 +333,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawImage.html">Struct RawImage</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -649,16 +652,19 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Font4FontENSt6stringE">
-<span id="_CPPv3N5Cacao4Font4FontENSt6stringE"></span><span id="_CPPv2N5Cacao4Font4FontENSt6stringE"></span><span id="Cacao::Font::Font__ss"></span><span class="target" id="classCacao_1_1Font_1a3c5c9a10c190cd4592460fef1484ca3f"></span><span class="sig-name descname"><span class="n"><span class="pre">Font</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Font4FontENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a font from a file path. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Font4FontEPhl">
+<span id="_CPPv3N5Cacao4Font4FontEPhl"></span><span id="_CPPv2N5Cacao4Font4FontEPhl"></span><span id="Cacao::Font::Font__unsigned-cP.l"></span><span class="target" id="classCacao_1_1Font_1adcb9dec98bb18b9602cc24b4a083108c"></span><span class="sig-name descname"><span class="n"><span class="pre">Font</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">fontData</span></span>, <span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dataSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Font4FontEPhl" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a font face from data. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1aabe1b54c7b9ec5ad9001501d8c029f84"><span class="std std-ref">AssetManager::LoadFont</span></a> over direct construction </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> – The path to a font file to load</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fontData</strong> – The raw font data </p></li>
+<li><p><strong>dataSize</strong> – The size of the font data</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -770,7 +776,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4FontE"><code class="docutils literal notranslate"><span class="pre">Font</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Font4FontENSt6stringE"><code class="docutils literal notranslate"><span class="pre">Font::Font()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Font4FontEPhl"><code class="docutils literal notranslate"><span class="pre">Font::Font()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4FontD0Ev"><code class="docutils literal notranslate"><span class="pre">Font::~Font()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Font12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Font::CompileAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Font11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Font::CompileSync()</span></code></a></li>

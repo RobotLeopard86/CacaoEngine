@@ -333,6 +333,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawImage.html">Struct RawImage</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -649,42 +652,19 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec">
-<span id="_CPPv3N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="Cacao::Shader::Shader__std::vector:uint32_t:R.std::vector:uint32_t:R.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1afb3b3f58133dd846e105905dcc8be964"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE">
+<span id="_CPPv3N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE"></span><span id="_CPPv2N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE"></span><span id="Cacao::Shader::Shader__std::vector:uint32_t:R.std::vector:uint32_t:R"></span><span class="target" id="classCacao_1_1Shader_1a2c0e49169f598542efd78220c09466d7"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fragment</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a shader from SPIR-V code. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Not recommended for use by games, but if it’s necessary to embed SPIR-V in code, go ahead… </p>
+<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1a5b112e8fb8567b0e35c82432b9fbeab7"><span class="std std-ref">AssetManager::LoadShader</span></a> over direct construction </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vertex</strong> – SPIR-V code for the vertex shader </p></li>
-<li><p><strong>fragment</strong> – SPIR-V code for the vertex shader </p></li>
-<li><p><strong>spec</strong> – The shader specification</p></li>
+<li><p><strong>fragment</strong> – SPIR-V code for the vertex shader</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec">
-<span id="_CPPv3N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="Cacao::Shader::Shader__ss.ss.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1aeccce1eef2b41dfc5637c4d2370f340e"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a shader from files. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1a5b112e8fb8567b0e35c82432b9fbeab7"><span class="std std-ref">AssetManager::LoadShader</span></a> over direct construction</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vertex</strong> – Path to SPIR-V code for the vertex shader </p></li>
-<li><p><strong>fragment</strong> – Path to SPIR-V code for the fragment shader </p></li>
-<li><p><strong>spec</strong> – The shader specification</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the files don’t exist or could not be opened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -880,8 +860,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6ShaderE"><code class="docutils literal notranslate"><span class="pre">Shader</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"><code class="docutils literal notranslate"><span class="pre">Shader::Shader()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"><code class="docutils literal notranslate"><span class="pre">Shader::Shader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE"><code class="docutils literal notranslate"><span class="pre">Shader::Shader()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6ShaderD0Ev"><code class="docutils literal notranslate"><span class="pre">Shader::~Shader()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader4BindEv"><code class="docutils literal notranslate"><span class="pre">Shader::Bind()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6UnbindEv"><code class="docutils literal notranslate"><span class="pre">Shader::Unbind()</span></code></a></li>
