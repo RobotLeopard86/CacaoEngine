@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <cstdlib>
 
+#include "SDL3/SDL_main.h"
+
 int main(int argc, char* argv[]) {
 	//Change to executable directory
 	if(argc < 1) {
