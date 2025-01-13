@@ -12,9 +12,8 @@ ignore_bad_compiler = get_option('ignore_bad_compiler')
 # Create extra argument list
 dep_compiler_args = []
 
-# Find Python and GLSLC
+# Find Python
 python = find_program('python3', required: true)
-glslc = find_program('glslc', required: true)
 
 # Warn the user if they are trying to use an unsupported setup
 compiler = meson.get_compiler('cpp')
@@ -68,10 +67,6 @@ cmake = import('cmake')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'
-	subsystem = 'console'
-	if get_option('windows_noconsole')
-		subsystem = 'windows'
-	endif
 	add_project_arguments(['-D_MT', '-D_DLL', '-DCACAO_BUILD'], language: ['c', 'cpp'])
 	add_project_link_arguments(['-Xlinker', '/NODEFAULTLIB'], language: ['c', 'cpp'])
 	if bt == 'debug'
@@ -86,7 +81,6 @@ endif
 
 # Set some macOS-specific options
 if host_machine.system() == 'darwin'
-	add_project_dependencies(dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio', 'CoreVideo', 'Carbon'], required: true), language: ['c', 'cpp'])
 	add_project_arguments('-fexperimental-library', language: 'cpp')
 	add_project_link_arguments('-fexperimental-library', language: 'cpp')
 	dep_compiler_args += '-fexperimental-library'
@@ -97,23 +91,10 @@ if bt.contains('debug')
 	add_project_arguments(['-D_DEBUG'], language: 'cpp')
 endif
 
-# Get some shared dependencies
-icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
-icu = icu_sp.get_variable('icuuc_dep')
-
-freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
-freetype = freetype_sp.get_variable('freetype_dep')
-
-harfbuzz_sp = subproject('harfbuzz', required: true, default_options: ['default_library=static', 'freetype=enabled', 'cairo=disabled', 'graphite2=disabled', 'glib=disabled', 'gobject=disabled', 'chafa=disabled', 'icu=enabled', 'gdi=disabled', 'directwrite=disabled', 'coretext=disabled', 'wasm=disabled', 'tests=disabled', 'introspection=disabled', 'docs=disabled', 'utilities=disabled'])
-harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
-harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
-harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
-
+# Configure GLM
 glm = subproject('glm', required: true).get_variable('glm_dep')
-spdlog = subproject('spdlog', required: true).get_variable('spdlog_dep')
-thread_pool = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
-dr_libs = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
 
+# Configure yaml-cpp
 yaml_opts = cmake.subproject_options()
 yaml_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',
@@ -126,7 +107,7 @@ yaml_opts.add_cmake_defines({
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 yaml_opts.set_install(true)
-yaml = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
+yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 
 # Build components
 if build_libs
