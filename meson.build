@@ -7,7 +7,6 @@ endif
 
 # Get some options
 bt = get_option('buildtype')
-comps = get_option('components')
 ignore_bad_compiler = get_option('ignore_bad_compiler')
 
 # Create extra argument list
@@ -27,18 +26,22 @@ else
 	warning('You are ignoring that your compiler is unsupported. Things can and will likely break!')
 endif
 
-# Process components to deal with dependencies
-processed_comps = comps
-if processed_comps.contains('demo') and not processed_comps.contains('crt')
-	processed_comps += 'crt'
+# Resolve component dependencies
+build_libs = get_option('build_libs')
+build_engine = get_option('build_engine')
+build_playground = get_option('build_playground')
+build_tools = get_option('build_tools')
+if build_engine and not build_libs
+	warning('You have selected to build the engine but not supporting libraries. Supporting libraries will be automatically built as they are required.')
+	build_libs = true
 endif
-if processed_comps.contains('crt')
-	if not processed_comps.contains('core')
-		processed_comps += 'core'
-	endif
-	if not processed_comps.contains('crt-formats')
-		processed_comps += 'crt-formats'
-	endif
+if build_tools and not build_libs
+	warning('You have selected to build tools but not supporting libraries. Supporting libraries will be automatically built as they are required.')
+	build_libs = true
+endif
+if build_playground and not build_engine
+	warning('You have selected to build the playground demo but not the engine. The engine will be automatically built as it is required.')
+	build_engine = true
 endif
 
 # Generate some variables necessary for CMake to work correctly
@@ -125,13 +128,16 @@ yaml_opts.add_cmake_defines({
 yaml_opts.set_install(true)
 yaml = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 
-# Components
-if processed_comps.contains('core') 
-	subdir('core')
+# Build components
+if build_libs
+	subdir('libs')
 endif
-if processed_comps.contains('crt') or processed_comps.contains('crt-formats') or processed_comps.contains('crt-unpacked-formats')
-	subdir('crt')
+if build_engine
+	subdir('src')
 endif
-if processed_comps.contains('demo')
-    subdir('demo')
+if build_playground
+	subdir('playground')
+endif
+if build_tools
+	subdir('tools')
 endif
