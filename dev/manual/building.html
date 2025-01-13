@@ -407,6 +407,7 @@
 <li><p>CMake</p></li>
 <li><p>GLSLC</p></li>
 <li><p><strong>(Windows/macOS only)</strong> Platform-specific SDKs</p></li>
+<li><p><strong>Your backend of choice may have additional requirements!</strong> See its page for details on what else you may need to install.</p></li>
 </ul>
 </section>
 <section id="linux-package-dependencies">
@@ -436,10 +437,14 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">alsa-lib</span> <span class="pre">alsa-lib-devel</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">alsa-lib</span></code></p></td>
 </tr>
+<tr class="row-odd"><td><p>Cacao Engine also requires additional system packages. By base distro, these are:</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
-<p>Cacao Engine also requires additional system packages. By base distro, these are:</p>
 <ul class="simple">
 <li><p>Fedora-based (e.g. RHEL): <code class="docutils literal notranslate"><span class="pre">wayland-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXcursor-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXfixes-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXi-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXinerama-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libXrandr-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libdecor-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libdrm-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">ibus-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">fcitx-devel</span></code>, <code class="docutils literal notranslate"><span class="pre">libuuid-devel</span></code></p></li>
 <li><p>Debian-based (e.g. Ubuntu): <code class="docutils literal notranslate"><span class="pre">libwayland-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libxkbcommon-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libxfixes-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">xorg-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">wayland-protocols</span></code>, <code class="docutils literal notranslate"><span class="pre">libdecor0-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libdrm-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">libibus-1.0-dev</span></code>, <code class="docutils literal notranslate"><span class="pre">fcitx</span></code>, <code class="docutils literal notranslate"><span class="pre">uuid-dev</span></code></p></li>
@@ -448,7 +453,7 @@
 </section>
 <section id="compilers">
 <h2>Compilers<a class="headerlink" href="#compilers" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine is designed to build using Clang with LLD on Linux and macOS and using MSVC on Windows. If problems are encountered when using alternative compilers (e.g. GCC or Clang with Gold linker), they are officially unsupported. Clang (including Apple’s modified Clang) with LLD and MSVC are the ONLY supported compilers. Regarding installation of these compilers, MSVC is available through Visual Studio, which can be downloaded <a class="reference external" href="https://visualstudio.microsoft.com">here</a>. In the Visual Studio Installer, select the <code class="docutils literal notranslate"><span class="pre">Desktop</span> <span class="pre">development</span> <span class="pre">with</span> <span class="pre">C++</span></code> workload before installing, or in the <code class="docutils literal notranslate"><span class="pre">Modify</span></code> UI after. As for Linux, they should be available in your package manager. On macOS, you’ll need the Xcode command line tools (install with <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code>), and then install the <code class="docutils literal notranslate"><span class="pre">llvm</span></code> and <code class="docutils literal notranslate"><span class="pre">lld</span></code> <a class="reference external" href="https://brew.sh">Homebrew</a> packages. That will install Clang and LLD to your system. While other compilers may work, they are officially not supported.</p>
+<p>Cacao Engine is designed to build <strong>ONLY</strong> with Clang (including Apple’s modified Clang) and LLD. If problems are encountered when using alternative compilers or linkers, they will not be officially supported. While other compilers may work, they are officially not supported.</p>
 </section>
 <section id="known-building-platforms">
 <h2>Known Building Platforms<a class="headerlink" href="#known-building-platforms" title="Link to this heading"><span/></a></h2>
@@ -459,27 +464,13 @@
 <li><p>aarch64 macOS with Clang and LLD</p></li>
 </ul>
 </section>
-<section id="prerequisite-installation">
-<h2>1. Prerequisite Installation<a class="headerlink" href="#prerequisite-installation" title="Link to this heading"><span/></a></h2>
-<p>To build Cacao Engine, you need the prerequisites listed above.<br />
-To install Git, either find it in your package manager if on Linux, with <a class="reference external" href="https://brew.sh">Homebrew</a> on macOS, or from the <a class="reference external" href="https://gitforwindows.org">Git for Windows project</a> on Windows.<br />
-You can install Meson as listed on their website <a class="reference external" href="https://mesonbuild.com/SimpleStart.html#installing-meson">here</a>. Instructions for installing Python 3 and ninja can also be found there.<br />
-CMake is also simple. On Linux, it should be available in your package manager. For Windows and macOS users, you can get CMake on their website’s <a class="reference external" href="https://cmake.org/download/#latest">download page</a>.<br />
-Finally, GLSLC is available as part of the Vulkan SDK (download that <a class="reference external" href="https://vulkan.lunarg.com/sdk/home">here</a>), or can be downloaded standalone from the <a class="reference external" href="https://github.com/google/shaderc/blob/main/downloads.md">project GitHub</a>.
-<strong>Your backend of choice may have additional requirements!</strong> See its page for details on what else you may need to install.</p>
-</section>
 <section id="configuring-the-build">
-<h2>2. Configuring the Build<a class="headerlink" href="#configuring-the-build" title="Link to this heading"><span/></a></h2>
-<p><strong>IMPORTANT</strong>: MSVC likely will only be detected properly if run in the Visual Studio Developer Command Prompt/PowerShell.<br />
-Select a backend from <a class="reference internal" href="backends.html"><span class="doc std std-doc">the backends list</span></a>. Enter the source tree root directory in your terminal, then run the following command <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">-Dbuild_playground=true|false</span> <span class="pre">-Duse_backend=&lt;chosen</span> <span class="pre">backend&gt;</span></code>. <strong>IMPORTANT</strong>: Add <code class="docutils literal notranslate"><span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> to your command line if on Linux or macOS. Set the <code class="docutils literal notranslate"><span class="pre">build_playground</span></code> option to <code class="docutils literal notranslate"><span class="pre">true</span></code> if you want to optionally build the playground, or <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. If on Windows, you may add <code class="docutils literal notranslate"><span class="pre">-Dwindows_noconsole=true</span></code> to the command to configure a build without a console. You can also customize the name of the Cacao Engine executable by adding <code class="docutils literal notranslate"><span class="pre">-Dexe_name=(your</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">choice)</span></code> to the command. Meson runs debug builds by default. See <a class="reference external" href="https://mesonbuild.com/Builtin-options.html#core-options">this page</a> on Meson’s website for the list of types. This command may take some time to complete.</p>
+<h2>1. Configuring the Build<a class="headerlink" href="#configuring-the-build" title="Link to this heading"><span/></a></h2>
+<p>Select a backend from <a class="reference internal" href="backends.html"><span class="doc std std-doc">the backends list</span></a>. Enter the source tree root directory in your terminal, then run the following command <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">-Dbuild_playground=true|false</span> <span class="pre">-Duse_backend=&lt;chosen</span> <span class="pre">backend&gt;</span></code>. <strong>IMPORTANT</strong>: Add <code class="docutils literal notranslate"><span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> to your command line if on Linux or macOS. Set the <code class="docutils literal notranslate"><span class="pre">build_playground</span></code> option to <code class="docutils literal notranslate"><span class="pre">true</span></code> if you want to optionally build the playground, or <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. If on Windows, you may add <code class="docutils literal notranslate"><span class="pre">-Dwindows_noconsole=true</span></code> to the command to configure a build without a console. You can also customize the name of the Cacao Engine executable by adding <code class="docutils literal notranslate"><span class="pre">-Dexe_name=(your</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">choice)</span></code> to the command. Meson runs debug builds by default. See <a class="reference external" href="https://mesonbuild.com/Builtin-options.html#core-options">this page</a> on Meson’s website for the list of types. This command may take some time to complete, especially if this is a first-time build of the engine.</p>
 </section>
 <section id="build">
-<h2>3. Build<a class="headerlink" href="#build" title="Link to this heading"><span/></a></h2>
-<p>Congratulations, you’re ready to build. Simply enter the build directory in your terminal and run <code class="docutils literal notranslate"><span class="pre">ninja</span></code>. Wait for it to complete, and then you’re basically good to go. The <code class="docutils literal notranslate"><span class="pre">cacaoengine</span></code> executable on its own won’t display anything if the proper files for starting a game aren’t found, so see the the following section in which the playground is set up as an example.</p>
-</section>
-<section id="playground-setup">
-<h2>4. Playground Setup<a class="headerlink" href="#playground-setup" title="Link to this heading"><span/></a></h2>
-<p>If you chose to build the playground, you will find an additional <code class="docutils literal notranslate"><span class="pre">playground</span></code> directory in your build folder. This directory contains the built files produced by the playground. This won’t run on its own though, so to set that up, run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">bundle</span></code> in your terminal. This will merge the playground, its assets, and the engine binaries into one directory so that the engine will run properly.</p>
+<h2>2. Build<a class="headerlink" href="#build" title="Link to this heading"><span/></a></h2>
+<p>Congratulations, you’re ready to build. Simply enter the build directory in your terminal and run <code class="docutils literal notranslate"><span class="pre">ninja</span></code>. Wait for it to complete, and then you’re basically good to go. The <code class="docutils literal notranslate"><span class="pre">cacaoengine</span></code> executable on its own won’t workif the proper files for starting a game aren’t found. See the rest of the documentation for how to set things up.</p>
 </section>
 </section>
 
@@ -534,10 +525,8 @@ Select a backend from <a class="reference internal" href="backends.html"><span c
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-package-dependencies">Linux Package Dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilers">Compilers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-building-platforms">Known Building Platforms</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisite-installation">1. Prerequisite Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-build">2. Configuring the Build</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build">3. Build</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#playground-setup">4. Playground Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-build">1. Configuring the Build</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build">2. Build</a></li>
 </ul>
   </nav></div>
 
