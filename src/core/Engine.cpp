@@ -1,14 +1,15 @@
 #include "Core/Engine.hpp"
 #include "Core/Log.hpp"
 #include "Core/Exception.hpp"
+#include "Core/RuntimeHooks.hpp"
+#include "Core/DynTickController.hpp"
 #include "Events/EventSystem.hpp"
 #include "Graphics/Window.hpp"
-#include "Core/DynTickController.hpp"
 #include "Audio/AudioSystem.hpp"
 #include "Audio/AudioPlayer.hpp"
 #include "Graphics/Rendering/RenderController.hpp"
-#include "Private/FreetypeOwner.hpp"
-#include "Core/RuntimeHooks.hpp"
+#include "FreetypeOwner.hpp"
+#include "Assets/AssetManager.hpp"
 
 #include "yaml-cpp/yaml.h"
 
@@ -35,6 +36,9 @@ namespace Cacao {
 		//Initialize FreeType
 		FreetypeOwner::GetInstance()->Init();
 
+		//Initialize the asset loader
+		AssetManager::GetInstance()->SetLoader(std::make_shared<CommonAssetLoader>());
+
 		//Register the window close consumer
 		Logging::EngineLog("Setting up event manager...");
 		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
@@ -60,10 +64,6 @@ namespace Cacao {
 		{
 			AudioPlayer ap;
 		}
-
-		//Call runtime startup hook
-		Logging::EngineLog("Starting runtime...");
-		RTStartup();
 
 		//Start dynamic tick controller
 		Logging::EngineLog("Starting dynamic tick controller...");
@@ -106,7 +106,7 @@ namespace Cacao {
 
 		//Start the thread pool (subtract one thread for the dedicated dynamic tick controller)
 		Logging::EngineLog("Starting thread pool...");
-		threadPool.reset(new thread_pool(std::thread::hardware_concurrency() - 1));
+		threadPool.reset(new dp::thread_pool<dp::details::default_function_type, std::jthread>(std::thread::hardware_concurrency() - 1));
 
 		//Initialize windowing system
 		Logging::EngineLog("Intializing windowing system...");
@@ -157,10 +157,6 @@ namespace Cacao {
 
 		//Clean up common skybox resources
 		Skybox::CommonCleanup();
-
-		//Call runtime shutdown hook
-		Logging::EngineLog("Shutting down runtime...");
-		RTShutdown();
 
 		//Shut down the audio system
 		Logging::EngineLog("Shutting down audio system...");

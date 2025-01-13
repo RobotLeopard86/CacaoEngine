@@ -1,3 +1,6 @@
+# Get backend
+backend = get_option('graphics_backend')
+
 # Configure OpenAL-Soft
 alsoft_opts = cmake.subproject_options()
 alsoft_opts.add_cmake_defines({
@@ -160,9 +163,6 @@ dynalo = subproject('dynalo', required: true).get_variable('dynalo_dep')
 dr_libs = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
 stb = subproject('stb', required: true).get_variable('stb_dep')
 
-# Get backend
-backend = get_option('graphics_backend')
-
 # Find GLSLC
 glslc = find_program('glslc', required: true)
 
@@ -263,6 +263,7 @@ executable(get_option('exe_name'), include_directories: [
 	'core/AssetManager.cpp',
 	'core/AudioPlayer.cpp',
 	'core/AudioSystem.cpp',
+	'core/CommonAssetLoader.cpp',
 	'core/DynTickController.cpp',
 	'core/Engine.cpp',
 	'core/EventManager.cpp',

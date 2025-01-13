@@ -1,7 +1,7 @@
 #include "UI/UIRenderable.hpp"
 #include "UI/Text.hpp"
 #include "UI/Image.hpp"
-#include "Private/Renderables.hpp"
+#include "Renderables.hpp"
 
 #include <vector>
 #include <sstream>

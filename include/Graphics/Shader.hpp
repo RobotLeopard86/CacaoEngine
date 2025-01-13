@@ -16,11 +16,12 @@
 namespace Cacao {
 	///@brief Shorthand type for shader data types
 	enum class ShaderDataType {
-		Unknown = 0,
-		Int = 7,
-		UInt = 8,
-		Float = 13,
-		SampledImage = 17,
+		Unknown,
+		Int,
+		UInt,
+		Float,
+		SampledImage,
+		SampledCube
 	};
 
 	///@brief Item in a ShaderSpec

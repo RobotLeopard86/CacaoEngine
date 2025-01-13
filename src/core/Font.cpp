@@ -2,7 +2,7 @@
 
 #include "Core/Exception.hpp"
 #include "Core/Engine.hpp"
-#include "Private/FreetypeOwner.hpp"
+#include "FreetypeOwner.hpp"
 
 #include "hb.h"
 

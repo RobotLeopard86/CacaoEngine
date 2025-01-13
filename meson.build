@@ -42,6 +42,9 @@ if build_playground and not build_engine
 	warning('You have selected to build the playground demo but not the engine. The engine will be automatically built as it is required.')
 	build_engine = true
 endif
+if not build_libs and not build_engine and not build_playground and not build_tools
+	error('You have not selected anything to build.')
+endif
 
 # Generate some variables necessary for CMake to work correctly
 cmake_build_type = ''

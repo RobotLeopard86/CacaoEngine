@@ -34,7 +34,7 @@ namespace Cacao {
 		 *
 		 * @param loader The asset loader
 		 */
-		void ConfigureLoader(std::shared_ptr<AssetLoader> loader);
+		void SetLoader(std::shared_ptr<AssetLoader> loader);
 
 		/**
 		 * @brief Load a shader by its asset ID
