@@ -62,20 +62,17 @@ else
 endif
 cmake_msvc_lib += 'DLL'
 
+# This came from VMA but might be useful for other C libraries
+add_project_arguments(['-Wno-nullability-completeness'], language: ['c', 'cpp'])
+
 # Import CMake
 cmake = import('cmake')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'
-	add_project_arguments(['-D_MT', '-D_DLL', '-DCACAO_BUILD'], language: ['c', 'cpp'])
-	add_project_link_arguments(['-Xlinker', '/NODEFAULTLIB'], language: ['c', 'cpp'])
+	add_project_arguments(['-DCACAO_BUILD'], language: ['c', 'cpp'])
 	if bt == 'debug'
 		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2'], language: ['c', 'cpp'])
-		add_project_link_arguments(['-lmsvcrtd', '-lucrtd', '-lvcruntimed'], language: ['c', 'cpp'])
-		add_project_link_arguments(['-lmsvcprtd'], language: ['cpp'])
-	else
-		add_project_link_arguments(['-lmsvcrt', '-lucrt', '-lvcruntime'], language: ['c', 'cpp'])
-		add_project_link_arguments(['-lmsvcprt'], language: ['cpp'])
 	endif
 endif
 

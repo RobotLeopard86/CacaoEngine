@@ -1,5 +1,3 @@
-stb_dep = subproject('stb', required: true).get_variable('stb_dep')
-
 vkheaders = subproject('vulkan-headers', required: true).get_variable('vulkan_headers_dep')
 vma = subproject('vma', required: true).get_variable('vma_dep')
 vkhpp = subproject('vulkan-hpp', required: true).get_variable('vulkan_hpp_dep')

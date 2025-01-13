@@ -153,11 +153,12 @@ harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
 harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
 harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 
-# Configure spdlog, thread-pool, dynalo, and dr_libs
+# Configure spdlog, thread-pool, dynalo, dr_libs, and stb
 spdlog = subproject('spdlog', required: true).get_variable('spdlog_dep')
 thread_pool = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
 dynalo = subproject('dynalo', required: true).get_variable('dynalo_dep')
 dr_libs = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
+stb = subproject('stb', required: true).get_variable('stb_dep')
 
 # Get backend
 backend = get_option('graphics_backend')
@@ -185,8 +186,8 @@ endif
 # Check if we need to link with Pipewire
 need_pipewire = run_command([ python, meson.project_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode()
 if need_pipewire == 0
+	# We have to make sure that pkg-config is available to find Pipewire
 	find_program('pkg-config', required: true)
-	exe_deps += 
 endif
 
 # Define variables for backends to fill in
@@ -199,6 +200,26 @@ subdir('backends' / backend)
 # Grab C++ compiler for library search
 cxx = meson.get_compiler('cpp')
 
+# Set Windows-specific compiler args
+args = []
+link_args = []
+extra_libs = []
+if host_machine.system() == 'windows'
+	if subsystem == 'windows'
+		link_args += '/ENTRY:mainCRTStartup'
+	endif
+	link_args += '/NODEFAULTLIB'
+	libs = [
+		'msvcrt',
+		'ucrt',
+		'msvcprt',
+		'vcruntime'
+	]
+	foreach lib : libs
+		extra_libs += cxx.find_library(bt == 'debug' ? lib + 'd' : lib, required: true)
+	endforeach
+endif
+
 # Make executable
 executable(get_option('exe_name'), include_directories: [
 	'../include',
@@ -207,6 +228,7 @@ executable(get_option('exe_name'), include_directories: [
 	'backends' / backend
 ], dependencies: [
 	backend_deps,
+	extra_libs,
 	glm,
 	yaml_cpp,
 	alsoft,
@@ -225,6 +247,7 @@ executable(get_option('exe_name'), include_directories: [
 	thread_pool,
 	dynalo,
 	dr_libs,
+	stb,
 	coreshaders,
 	cxx.find_library('imm32', required: host_machine.system() == 'windows'),
 	cxx.find_library('winmm', required: host_machine.system() == 'windows'),
@@ -235,5 +258,27 @@ executable(get_option('exe_name'), include_directories: [
 	dependency('libpipewire-0.3', method: 'pkg-config', required: host_machine.system() == 'linux' and need_pipewire == 0),
 	dependency('appleframeworks', modules: ['IOKit', 'AudioToolbox', 'CoreFoundation', 'Cocoa', 'CoreAudio', 'CoreVideo', 'Carbon'], required: host_machine.system() == 'darwin')
 ], sources: [
-	backend_sources
-], export_dynamic: true, pie: true, win_subsystem: subsystem)
+	backend_sources,
+	'core/Assert.cpp',
+	'core/AssetManager.cpp',
+	'core/AudioPlayer.cpp',
+	'core/AudioSystem.cpp',
+	'core/DynTickController.cpp',
+	'core/Engine.cpp',
+	'core/EventManager.cpp',
+	'core/Font.cpp',
+	'core/FreetypeOwner.cpp',
+	'core/Input.cpp',
+	'core/Log.cpp',
+	'core/Model.cpp',
+	'core/PerspectiveCamera.cpp',
+	'core/Renderables.cpp',
+	'core/RenderController.cpp',
+	'core/Screen.cpp',
+	'core/Sound.cpp',
+	'core/Startup.cpp',
+	'core/Transform.cpp',
+	'core/UIView.cpp',
+	'core/Window.cpp',
+	'core/WorldManager.cpp'
+], export_dynamic: true, pie: true, win_subsystem: subsystem, cpp_args: args, link_args: link_args)
