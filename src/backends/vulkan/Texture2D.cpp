@@ -9,25 +9,13 @@
 #include "VkUtils.hpp"
 #include "ActiveItems.hpp"
 
-#include "stb_image.h"
-
 #include <future>
 #include <filesystem>
 
 namespace Cacao {
-	Texture2D::Texture2D(std::string filePath)
-	  : Texture(false) {
+	void Texture2D::_BackendInit() {
 		//Create native data
 		nativeData.reset(new Tex2DData());
-
-		//Load image
-		stbi_set_flip_vertically_on_load(true);
-		dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 0);
-
-		CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
-
-		bound = false;
-		currentSlot = -1;
 
 		//Determine image format
 		if(numImgChannels == 1) {
@@ -35,12 +23,17 @@ namespace Cacao {
 		} else if(auto has3 = numImgChannels == 3; has3 || numImgChannels == 4) {
 			nativeData->format = vk::Format::eR8G8B8A8Srgb;
 
-			//We have to reload the data buffer to have 4 channels now
+			//We have to remake the data buffer to have 4 channels now
 			if(has3) {
-				stbi_image_free(dataBuffer);
-				dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 4);
+				free(dataBuffer);
 				numImgChannels = 4;
-				CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
+				dataSize = imgSize.x * imgSize.y * 4;
+				dataBuffer = (unsigned char*)malloc(dataSize);
+				for(unsigned int y = 0; y < imgSize.y; y++) {
+					for(unsigned int x = 0; x < imgSize.x; x++) {
+						std::memcpy(dataBuffer + (imgSize.x * y * 4) + (x * 4), raw.dataBuffer + (imgSize.x * y * 3) + (x * 3), 3);
+					}
+				}
 			}
 		}
 	}

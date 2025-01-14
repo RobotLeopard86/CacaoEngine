@@ -32,7 +32,7 @@ namespace Cacao {
 		~Texture2D() final {
 			if(bound) Unbind();
 			if(compiled) Release();
-			delete dataBuffer;
+			free(dataBuffer);
 		}
 
 		/**
@@ -92,6 +92,8 @@ namespace Cacao {
 		unsigned char* dataBuffer;
 		glm::uvec2 imgSize;
 		uint8_t numImgChannels;
+
+		void _BackendInit();
 
 		std::shared_ptr<Tex2DData> nativeData;
 	};

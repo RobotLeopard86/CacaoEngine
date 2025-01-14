@@ -8,5 +8,6 @@ namespace Cacao {
 	//Struct for data required for an OpenGL cubemap
 	struct Cubemap::CubemapData {
 		GLuint gpuID;
+		GLenum pxForm, nxForm, pyForm, nyForm, pzForm, nzForm;
 	};
 }

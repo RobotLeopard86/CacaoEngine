@@ -6,29 +6,15 @@
 #include "GLTexture2DData.hpp"
 #include "GLUtils.hpp"
 
-#include "stb_image.h"
-
 #include "glad/gl.h"
 
 #include <future>
 #include <filesystem>
 
 namespace Cacao {
-	Texture2D::Texture2D(std::string filePath)
-	  : Texture(false) {
+	void Texture2D::_BackendInit() {
 		//Create native data
 		nativeData.reset(new Tex2DData());
-
-		//Ensure stb_image flips image Y (because OpenGL)
-		stbi_set_flip_vertically_on_load(true);
-
-		//Load image
-		dataBuffer = stbi_load(filePath.c_str(), &imgSize.x, &imgSize.y, &numImgChannels, 0);
-
-		CheckException(dataBuffer, Exception::GetExceptionCodeFromMeaning("IO"), "Failed to load 2D texture image file!");
-
-		bound = false;
-		currentSlot = -1;
 
 		//Determine image format
 		if(numImgChannels == 1) {

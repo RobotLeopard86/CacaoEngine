@@ -278,6 +278,7 @@ executable(get_option('exe_name'), include_directories: [
 	'core/Screen.cpp',
 	'core/Sound.cpp',
 	'core/Startup.cpp',
+	'core/Texture2D.cpp',
 	'core/Transform.cpp',
 	'core/UIView.cpp',
 	'core/Window.cpp',
