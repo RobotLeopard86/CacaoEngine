@@ -12,4 +12,4 @@ The documentation is split into two parts:
     :hidden:
 
     manual
-    api/library_root
+    api-engine/root

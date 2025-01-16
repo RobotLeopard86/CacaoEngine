@@ -1,4 +1,5 @@
 from textwrap import dedent
+import exhale_multiproject_monkeypatch
 import os
 
 project = 'Cacao Engine'
@@ -24,24 +25,41 @@ html_domain_indices = False
 html_copy_source = False
 
 breathe_projects = {
-    "Cacao Engine": "./_doxygen/xml"
+    "Cacao Engine": "./_doxy/cacao/xml",
+    "libcacaoformats": "./_doxy/formats/xml"
 }
 breathe_default_project = "Cacao Engine"
 
 exhale_args = {
-    "containmentFolder":     "./api",
-    "rootFileName":          "library_root.rst",
-    "doxygenStripFromPath":  "..",
-    "rootFileTitle":         "API Reference",
+    "containmentFolder":     "unknown",
+    "rootFileName":          "root.rst",
+    "doxygenStripFromPath":  "../",
+    "rootFileTitle":         "Unknown",
     "createTreeView":        True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    dedent('''
-									INPUT = ../core/include,../crt/include,../crt-formats/include,../crt-formats-unpacked/include,../subprojects/thread-pool/include
+    "exhaleDoxygenStdin":    ""
+}
+
+exhale_projects_args = {
+    "Cacao Engine": {
+        "exhaleDoxygenStdin": dedent('''
+									INPUT = ../include,../subprojects/thread-pool/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,CACAO_API,GLM*,ftLib,Cacao::_AH*,Cacao::*::Renderable*,Cacao::FakeDeleter,std*,dp::details*,dp::thread_safe_queue,dp::is_lockable
-									EXCLUDE = ../core/include/Private,../core/include/Core/RuntimeHooks.hpp
-									''')
+									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,ftLib,Cacao::_AH*,Cacao::*::Renderable*,Cacao::FakeDeleter,std*,dp::details*,dp::thread_safe_queue
+									'''),
+        "containmentFolder": "api-engine",
+        "rootFileTitle": "Engine API Reference"
+    },
+    "libcacaoformats": {
+        "exhaleDoxygenStdin": dedent('''
+									INPUT = ../libs/libcacaoformats/include
+									HIDE_UNDOC_MEMBERS = YES
+									MAX_INITIALIZER_LINES = 0
+									'''),
+        "containmentFolder": "api-formatslib",
+        "rootFileTitle": "libcacaoformats API"
+    }
 }
 
 primary_domain = 'cpp'

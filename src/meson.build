@@ -82,49 +82,6 @@ spv_hlsl = spv_cross_sp.dependency('spirv-cross-hlsl')
 spv_msl = spv_cross_sp.dependency('spirv-cross-msl')
 spirv_cross = declare_dependency(dependencies: [spv_core, spv_c, spv_cpp, spv_rfl, spv_util, spv_glsl, spv_hlsl, spv_msl])
 
-# Configure Assimp
-assimp_opts = cmake.subproject_options()
-assimp_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
-	'ASSIMP_BUILD_ZLIB': 'ON',
-	'ASSIMP_NO_EXPORT': 'ON',
-	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'ON',
-	'ASSIMP_BUILD_SAMPLES': 'OFF',
-	'ASSIMP_BUILD_TESTS': 'OFF',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-assimp_sp = cmake.subproject('assimp', options: assimp_opts, required: true)
-assimp = assimp_sp.dependency('assimp')
-zlib = assimp_sp.dependency('zlibstatic')
-
-# Configure audio libraries
-audio_opts = cmake.subproject_options()
-audio_opts.add_cmake_defines({
-    'BUILD_SHARED_LIBS': 'OFF',
-    'OP_DISABLE_HTTP': 'ON',
-   	'OP_DISABLE_EXAMPLES': 'ON',
-    'OP_DISABLE_DOCS': 'ON',
-    'OPUS_BUILD_SHARED_LIBRARY': 'OFF',
-    'OPUS_BUILD_TESTING': 'OFF',
-    'OPUS_CUSTOM_MODES': 'ON',
-    'OPUS_BUILD_PROGRAMS': 'OFF',
-	'OPUS_STATIC_RUNTIME': 'OFF',
-    'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-audio_sp = cmake.subproject('audiolibs', options: audio_opts, required: true)
-ogg = audio_sp.dependency('ogg')
-vorbis = audio_sp.dependency('vorbis')
-vorbisfile = audio_sp.dependency('vorbisfile')
-opus = audio_sp.dependency('opus')
-opusfile = audio_sp.dependency('opusfile')
-audio_libs = declare_dependency(dependencies: [ogg, vorbis, vorbisfile, opus, opusfile])
-
 # Configure crossguid
 guid_opts = cmake.subproject_options()
 guid_opts.add_cmake_defines({
@@ -156,12 +113,10 @@ harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
 harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
 harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 
-# Configure spdlog, thread-pool, dynalo, dr_libs, and stb
+# Configure spdlog, thread-pool, and dynalo
 spdlog = subproject('spdlog', required: true).get_variable('spdlog_dep')
 thread_pool = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
 dynalo = subproject('dynalo', required: true).get_variable('dynalo_dep')
-dr_libs = subproject('dr_libs', required: true).get_variable('dr_libs_dep')
-stb = subproject('stb', required: true).get_variable('stb_dep')
 
 # Find GLSLC
 glslc = find_program('glslc', required: true)
@@ -234,9 +189,6 @@ executable(get_option('exe_name'), include_directories: [
 	alsoft,
 	sdl3,
 	spirv_cross,
-	assimp,
-	zlib,
-	audio_libs,
 	guid,
 	icu,
 	freetype,
@@ -246,8 +198,6 @@ executable(get_option('exe_name'), include_directories: [
 	spdlog,
 	thread_pool,
 	dynalo,
-	dr_libs,
-	stb,
 	coreshaders,
 	cxx.find_library('imm32', required: host_machine.system() == 'windows'),
 	cxx.find_library('winmm', required: host_machine.system() == 'windows'),
