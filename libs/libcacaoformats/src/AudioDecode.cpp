@@ -17,13 +17,13 @@
 #define OPUSFILE_SAMPLE_RATE 48000
 
 namespace libcacaoformats {
-	AudioBuffer MP3Decode(::std::string filePath) {
+	AudioBuffer MP3Decode(std::vector<unsigned char> encoded) {
 		//Create return object
 		AudioBuffer abuf;
 
 		//Open the MP3
 		drmp3 mp3;
-		CheckException(drmp3_init_file(&mp3, filePath.c_str(), nullptr), "Failed to load MP3 sound file!");
+		CheckException(drmp3_init_memory(&mp3, encoded.data(), encoded.size(), nullptr), "Failed to load MP3 sound data!");
 
 		//Get file info
 		abuf.sampleRate = mp3.sampleRate;
@@ -42,13 +42,13 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer WAVDecode(::std::string filePath) {
+	AudioBuffer WAVDecode(std::vector<unsigned char> encoded) {
 		//Create return object
 		AudioBuffer abuf;
 
 		//Open the WAV
 		drwav wave;
-		CheckException(drwav_init_file(&wave, filePath.c_str(), nullptr), "Failed to load WAV sound file!");
+		CheckException(drwav_init_memory(&wave, encoded.data(), encoded.size(), nullptr), "Failed to load WAV sound data!");
 
 		//Get file info
 		abuf.sampleRate = wave.sampleRate;
@@ -67,17 +67,41 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer VorbisDecode(::std::string filePath) {
+	AudioBuffer VorbisDecode(std::vector<unsigned char> encoded) {
 		//Create return object
 		AudioBuffer abuf;
 
-		//Define some variables for reading the file
+		//Define some variables for decoding
 		OggVorbis_File vf;
 		int currentSection;
 
-		//Open the file
-		FILE* f = fopen(filePath.c_str(), "rb");
-		CheckException(ov_open(f, &vf, nullptr, 0) >= 0, "Failed to open Ogg Vorbis sound file!");
+		//Create a tracker for the Vorbis data (fake file so we can use libvorbisfile instead of the low-level Vorbis API)
+		struct VorbisTracker {
+			const unsigned char* data;
+			std::size_t size;
+			std::size_t offset;
+		} tracker {.data = encoded.data(), .size = encoded.size(), .offset = 0};
+
+		//Define Vorbis IO read callback
+		const auto read_callback = [](void* out, size_t size, size_t elems, void* src) {
+			VorbisTracker* tracker = static_cast<VorbisTracker*>(src);
+
+			//Calculate byte read count
+			size_t readBytes = size * elems;
+			if(tracker->offset + readBytes > tracker->size) readBytes = tracker->size - tracker->offset;
+
+			//Copy memory
+			std::memcpy(out, tracker->data + tracker->offset, readBytes);
+
+			//Advance offset and return
+			tracker->offset += readBytes;
+			return (tracker->offset == tracker->size ? 0 : readBytes / size);
+		};
+
+		//Open the Vorbis data
+		ov_callbacks cb = OV_CALLBACKS_STREAMONLY_NOCLOSE;
+		cb.read_func = read_callback;
+		ov_open_callbacks(&tracker, &vf, nullptr, 0, cb);
 
 		//Get file info
 		vorbis_info* info = ov_info(&vf, -1);
@@ -109,13 +133,13 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer OpusDecode(::std::string filePath) {
+	AudioBuffer OpusDecode(std::vector<unsigned char> encoded) {
 		//Create return object
 		AudioBuffer abuf;
 
 		//Open the file
 		int openError;
-		OggOpusFile* opus = op_open_file(filePath.c_str(), &openError);
+		OggOpusFile* opus = op_open_memory(encoded.data(), encoded.size(), &openError);
 
 		//Get file info
 		abuf.sampleRate = OPUSFILE_SAMPLE_RATE;
@@ -148,59 +172,50 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer AnyDecode(::std::string filePath) {
-		//Determine audio file format by reading header
+	AudioBuffer AnyDecode(std::vector<unsigned char> encoded) {
+		//Determine audio format by reading header
 
-		//Read the first four bytes of the file
-		::std::string header(4, '\0');
-		::std::ifstream file(filePath, ::std::ios::binary);
-		CheckException(file.is_open(), "Failed to open the sound file!");
-		file.read(header.data(), header.size());
+		//Grab the first four header bytes
+		std::string header(4, '\0');
+		std::memcpy(header.data(), encoded.data(), 4);
 
 		//Check for MP3
 		//These can either just start with a frame or have ID3 data, so we check both
 		{
-			::std::string mp3 = header.substr(0, 3);
+			std::string mp3 = header.substr(0, 3);
 
 			//The weird binary bit is checking for the sync instruction that all MP3 frames start with
 			if(mp3.compare("ID3") == 0 || (static_cast<unsigned char>(header[0]) == 0xFF && (static_cast<unsigned char>(header[1]) & 0xE0) == 0xE0)) {
-				file.close();
-				return MP3Decode(filePath);
+				return MP3Decode(encoded);
 			}
 		}
 
 		//Check for WAV
 		if(header.compare("RIFF") == 0) {
 			//Read a bit more to confirm WAV
-			::std::string waveHeader(4, '\0');
-			file.seekg(8, ::std::ios::beg);
-			file.read(&waveHeader[0], waveHeader.size());
+			std::string waveHeader(4, '\0');
+			std::memcpy(waveHeader.data(), encoded.data() + 4, 4);
 			if(waveHeader == "WAVE") {
-				file.close();
-				return WAVDecode(filePath);
+				return WAVDecode(encoded);
 			}
 		}
 
 		//Check for Ogg stream (Vorbis/Opus)
 		if(header.compare("OggS") == 0) {
 			//Read the Ogg Header
-			::std::string oggHeader(64, '\0');
-			file.seekg(0, ::std::ios::beg);
-			file.read(&oggHeader[0], oggHeader.size());
-			file.close();
+			std::string oggHeader(64, '\0');
+			std::memcpy(oggHeader.data(), encoded.data(), 64);
 
-			if(oggHeader.find("vorbis") != ::std::string::npos) {
-				file.close();
-				return VorbisDecode(filePath);
-			} else if(oggHeader.find("OpusHead") != ::std::string::npos) {
-				file.close();
-				return OpusDecode(filePath);
+			if(oggHeader.find("vorbis") != std::string::npos) {
+				return VorbisDecode(encoded);
+			} else if(oggHeader.find("OpusHead") != std::string::npos) {
+				return OpusDecode(encoded);
 			}
 		}
-		//Close the file if to be safe
-		file.close();
 
 		//Now we throw the exception
-		CheckException(false, "The provided sound file is of an unsupported format!");
+		CheckException(false, "The provided sound data is of an unsupported format!");
+
+		return {};
 	}
 }

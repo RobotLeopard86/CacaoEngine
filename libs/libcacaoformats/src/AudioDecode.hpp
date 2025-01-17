@@ -2,12 +2,12 @@
 
 #include "libcacaoformats/libcacaoformats.hpp"
 
-#include <string>
+#include <vector>
 
 namespace libcacaoformats {
-    AudioBuffer MP3Decode(std::string filePath);
-    AudioBuffer WAVDecode(std::string filePath);
-    AudioBuffer VorbisDecode(std::string filePath);
-    AudioBuffer OpusDecode(std::string filePath);
-    AudioBuffer AnyDecode(std::string filePath)
+	AudioBuffer MP3Decode(std::vector<unsigned char> encoded);
+	AudioBuffer WAVDecode(std::vector<unsigned char> encoded);
+	AudioBuffer VorbisDecode(std::vector<unsigned char> encoded);
+	AudioBuffer OpusDecode(std::vector<unsigned char> encoded);
+	AudioBuffer AnyDecode(std::vector<unsigned char> encoded);
 }
