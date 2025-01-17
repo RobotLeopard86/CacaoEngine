@@ -17,7 +17,7 @@ namespace Cacao {
 	class CACAO_API Cubemap final : public Texture {
 	  public:
 		/**
-		 * @brief Create a new cubemap from a file list
+		 * @brief Create a new cubemap from image data
 		 *
 		 * @param posX The image data for the positive X face (copied on creation)
 		 * @param negX The image data for the negative X face (copied on creation)

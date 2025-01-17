@@ -16,7 +16,7 @@ namespace Cacao {
 	class CACAO_API Texture2D final : public Texture {
 	  public:
 		/**
-		 * @brief Create a new texture from a file
+		 * @brief Create a new texture from image data
 		 *
 		 * @param raw The image data, copied when imported into texture
 		 *

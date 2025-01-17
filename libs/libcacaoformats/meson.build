@@ -86,6 +86,6 @@ if formats_mode == 'unpacked' or formats_mode == 'both'
 	deps += yaml_cpp
 endif
 
-formats_lib = static_library('cacaoformats', sources: final_formats_src, include_directories: ['include', 'src'], pic: true, dependencies: deps)
+formats_lib = static_library('cacaoformats', sources: final_formats_src, include_directories: ['include', 'src'], pic: true, dependencies: deps, cpp_args: ['-DMODE=' + formats_mode])
 
 formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib)
