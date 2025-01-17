@@ -18,7 +18,7 @@ namespace Cacao {
 		/**
 		 * @brief Create a font face from data
 		 *
-		 * @param fontData The raw font data
+		 * @param fontData The raw font data, copied on construction
 		 * @param dataSize The size of the font data
 		 *
 		 * @note Prefer to use AssetManager::LoadFont over direct construction

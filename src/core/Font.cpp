@@ -14,7 +14,8 @@ namespace Cacao {
 	  : Asset(false) {
 		CheckException(fontData, Exception::GetExceptionCodeFromMeaning("NullValue"), "Cannot load font from null data!");
 		CheckException(dataSize > 0, Exception::GetExceptionCodeFromMeaning("BadValue"), "Cannot load font with bad data size!");
-		raw = fontData;
+		raw = new unsigned char[dataSize];
+		std::memcpy(raw, fontData, dataSize);
 		rawDataSize = dataSize;
 	}
 

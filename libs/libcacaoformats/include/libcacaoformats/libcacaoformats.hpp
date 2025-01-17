@@ -13,35 +13,65 @@ namespace libcacaoformats {
 
 	///@brief Loaded image data and properties necessary to use it
 	struct ImageBuffer {
-		unsigned char* data;///<Decoded data
+		std::vector<unsigned char> data;///<Decoded data
 		struct Size {
 			uint32_t x, y;
 		} size;				 ///<Image dimensions
 		uint8_t channelCount;///<Image channel count (1=Grayscale,3=RGB,4=RGBA)
 	};
 
-	///@brief Interface to the library
-	class Instance {
+	///@brief Loaded shader data
+	struct Shader {
+		std::vector<uint32_t> vertexSPV;  ///<Vertex shader code in SPIR-V
+		std::vector<uint32_t> fragmentSPV;///<Fragment shader code in SPIR-V
+	};
+
+	///@brief Asset loader base class
+	class Loader {
+	  public:
 		/**
-		 * @brief Create a library instance that loads unpacked formats
+		 * @brief Load a shader
 		 *
-		 * @note Available by compile-time selection
+		 * @param location The location to load the shader from. @see Loader implementation for formatting instructions.
 		 *
-		 * @return Unpacked format loader
-		 *
-		 * @throw std::runtime_error If the library is not configured for unpacked format loading
+		 * @return Shader object
 		 */
-		static Instance CreateUnpackedLoader();
+		virtual Shader LoadShader(std::string location) = 0;
 
 		/**
-		 * @brief Create a library instance that loads packed formats
+		 * @brief Load a texture
 		 *
-		 * @note Available by compile-time selection
+		 * @param location The location to load the texture from. @see Loader implementation for formatting instructions.
 		 *
-		 * @return Packed format loader
-		 *
-		 * @throw std::runtime_error If the library is not configured for packed format loading
+		 * @return ImageBuffer object
 		 */
-		static Instance CreatePackedLoader();
+		virtual ImageBuffer LoadTex(std::string location) = 0;
+
+		/**
+		 * @brief Load a cubemap
+		 *
+		 * @param location The location to load the texture from. @see Loader implementation for formatting instructions.
+		 *
+		 * @return Array of ImageBuffer objects for each face (order: +X, -X, +Y, -Y, +Z, -Z)
+		 */
+		virtual std::array<ImageBuffer, 6> LoadCubemap(std::string location) = 0;
+
+		/**
+		 * @brief Load audio
+		 *
+		 * @param location The location to load the audio from. @see Loader implementation for formatting instructions.
+		 *
+		 * @return AudioBuffer object
+		 */
+		virtual AudioBuffer LoadAudio(std::string location) = 0;
+
+		/**
+		 * @brief Load a font face
+		 *
+		 * @param location The location to load the face from. @see Loader implementation for formatting instructions.
+		 *
+		 * @return Font data
+		 */
+		virtual std::vector<unsigned char> LoadFont(std::string location) = 0;
 	};
 }
