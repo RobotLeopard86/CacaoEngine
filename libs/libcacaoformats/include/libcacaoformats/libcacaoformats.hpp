@@ -73,5 +73,7 @@ namespace libcacaoformats {
 		 * @return Font data
 		 */
 		virtual std::vector<unsigned char> LoadFont(std::string location) = 0;
+
+		virtual ~Loader() {}
 	};
 }

@@ -1,13 +1,3 @@
-# Get mode
-formats_mode = get_option('formats_mode')
-
-# Define source lists
-packed_src = []
-unpacked_src = []
-common_src = [
-	'src/AudioDecode.cpp'
-]
-
 # Get simple dependencies
 deps = [glm]
 deps += subproject('dr_libs', required: true).get_variable('dr_libs_dep')
@@ -71,9 +61,20 @@ assimp_mini_opts.add_cmake_defines({
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 
+# Configure Assimp
 assimp_sp = cmake.subproject('assimp', options: formats_mode == 'packed' ? assimp_mini_opts : assimp_full_opts, required: true)
 deps += assimp_sp.dependency('assimp')
 deps += assimp_sp.dependency('zlibstatic')
+
+# Get mode
+formats_mode = get_option('formats_mode')
+
+# Define source lists
+packed_src = []
+unpacked_src = []
+common_src = [
+	'src/AudioDecode.cpp'
+]
 
 # Calculate final sources list
 final_formats_src = []
