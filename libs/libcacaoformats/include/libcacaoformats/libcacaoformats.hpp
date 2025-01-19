@@ -1,6 +1,9 @@
 #pragma once
 
 #include <vector>
+#include <map>
+#include <string>
+#include <cstdint>
 
 namespace libcacaoformats {
 	///@brief Loaded audio data and properties necessary to use it
@@ -25,6 +28,17 @@ namespace libcacaoformats {
 		std::vector<uint32_t> vertexSPV;  ///<Vertex shader code in SPIR-V
 		std::vector<uint32_t> fragmentSPV;///<Fragment shader code in SPIR-V
 	};
+
+	/**
+	 * @brief Process a model buffer into the separate buffers per mesh in the glTF2 format that Cacao Engine requires
+	 *
+	 * @param buffer Model file buffer to process
+	 *
+	 * @return A mapping of mesh names (in camelCase) to data buffers of binary glTF2
+	 *
+	 * @throws std::runtime_error If the buffer is not of a valid model format supported by Assimp
+	 */
+	std::map<std::string, std::vector<unsigned char>> ProcessModel(std::vector<unsigned char> buffer);
 
 	///@brief Asset loader base class
 	class Loader {

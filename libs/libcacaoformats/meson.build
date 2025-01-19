@@ -37,7 +37,7 @@ assimp_full_opts.add_cmake_defines({
 	'ASSIMP_NO_EXPORT': 'OFF',
 	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'ON',
 	'ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT': 'OFF',
-	'ASSIMP_BUILD_DAE_EXPORTER': 'ON',
+	'ASSIMP_BUILD_GLTF_EXPORTER': 'ON',
 	'ASSIMP_BUILD_SAMPLES': 'OFF',
 	'ASSIMP_BUILD_TESTS': 'OFF',
 	'CMAKE_BUILD_TYPE': cmake_build_type,
@@ -61,13 +61,13 @@ assimp_mini_opts.add_cmake_defines({
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 
+# Get supported formats mode
+formats_mode = get_option('formats_mode')
+
 # Configure Assimp
 assimp_sp = cmake.subproject('assimp', options: formats_mode == 'packed' ? assimp_mini_opts : assimp_full_opts, required: true)
 deps += assimp_sp.dependency('assimp')
 deps += assimp_sp.dependency('zlibstatic')
-
-# Get mode
-formats_mode = get_option('formats_mode')
 
 # Define source lists
 packed_src = []
