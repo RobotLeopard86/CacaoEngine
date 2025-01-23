@@ -13,3 +13,4 @@ The documentation is split into two parts:
 
     manual
     api-engine/root
+    api-formatslib/root
