@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Class AssetManager &#8212; Cacao Engine Docs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api-engine/classCacao_1_1AssetManager';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/cacaologo.png"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class AudioPlayer" href="classCacao_1_1AudioPlayer.html" />
+    <link rel="prev" title="Class AssetLoader" href="classCacao_1_1AssetLoader.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
+    <img src="../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Cacao Engine Documentation</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="root.html">
+    Engine API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api-formatslib/root.html">
+    libcacaoformats API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="root.html">
+    Engine API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api-formatslib/root.html">
+    libcacaoformats API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="namespace_dp.html">Namespace dp</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawImage.html">Struct RawImage</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1UIRenderable.html">Struct UIRenderable</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vectors.html">Struct Vectors</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structdp_1_1thread__pool_1_1task__item.html">Struct thread_pool::task_item</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AssetHandle.html">Template Class AssetHandle</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AssetLoader.html">Class AssetLoader</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class AssetManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioSystem.html">Class AudioSystem</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CommonAssetLoader.html">Class CommonAssetLoader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DynTickController.html">Class DynTickController</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Entity.html">Class Entity</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventConsumer.html">Class EventConsumer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Exception.html">Class Exception</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Flushable.html">Template Class Flushable</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Font.html">Class Font</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1RenderController.html">Class RenderController</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Screen.html">Class Screen</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SignalEventConsumer.html">Class SignalEventConsumer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Skybox.html">Class Skybox</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Text.html">Class Text</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Texture.html">Class Texture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Texture2D.html">Class Texture2D</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1UIElement.html">Class UIElement</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1UIView.html">Class UIView</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classdp_1_1thread__pool.html">Template Class thread_pool</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1ac1cbf3ec8234894b12f8b061e2907045.html">Enum ShaderDataType</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a1cca20bcfea3fba6bfee5a5a5088da23.html">Function Cacao::CheckException(bool, unsigned int, std::string)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a57be1cbc39b44a600c6c880e32a8cd40.html">Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1a9f8ef80803b908b4016778d189e25175.html">Function Cacao::RuntimeAssert</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html">Define CACAO_API</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="root.html" class="nav-link">Engine API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class AssetManager</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="class-assetmanager">
+<span id="exhale-class-classcacao-1-1assetmanager"></span><h1>Class AssetManager<a class="headerlink" href="#class-assetmanager" title="Link to this heading"><span/></a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_Assets_AssetManager.hpp.html#file-include-assets-assetmanager-hpp"><span class="std std-ref">File AssetManager.hpp</span></a></p></li>
+</ul>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManagerE">
+<span id="_CPPv3N5Cacao12AssetManagerE"></span><span id="_CPPv2N5Cacao12AssetManagerE"></span><span id="Cacao::AssetManager"></span><span class="target" id="classCacao_1_1AssetManager"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AssetManager</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManagerE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Manages the loading of assets and the asset cache. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager9SetLoaderENSt10shared_ptrI11AssetLoaderEE">
+<span id="_CPPv3N5Cacao12AssetManager9SetLoaderENSt10shared_ptrI11AssetLoaderEE"></span><span id="_CPPv2N5Cacao12AssetManager9SetLoaderENSt10shared_ptrI11AssetLoaderEE"></span><span id="Cacao::AssetManager::SetLoader__std::shared_ptr:AssetLoader:"></span><span class="target" id="classCacao_1_1AssetManager_1aacc0573c743f3503e9a63a312a983e28"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetLoader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetLoader.html#_CPPv4N5Cacao11AssetLoaderE" title="Cacao::AssetLoader"><span class="n"><span class="pre">AssetLoader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">loader</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager9SetLoaderENSt10shared_ptrI11AssetLoaderEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the asset loader to use. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>loader</strong> – The asset loader </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager10LoadShaderENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager10LoadShaderENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager10LoadShaderENSt6stringE"></span><span id="Cacao::AssetManager::LoadShader__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a67d6c7fff43f2012e80235dc6c1a6ce0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Shader.html#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadShader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager10LoadShaderENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a shader by its asset ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Shader::Compile </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the shader to load</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the shader fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager13LoadTexture2DENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager13LoadTexture2DENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager13LoadTexture2DENSt6stringE"></span><span id="Cacao::AssetManager::LoadTexture2D__ss"></span><span class="target" id="classCacao_1_1AssetManager_1aa2d565cde1775c813791c43d47bc71ae"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Texture2D.html#_CPPv4N5Cacao9Texture2DE" title="Cacao::Texture2D"><span class="n"><span class="pre">Texture2D</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadTexture2D</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager13LoadTexture2DENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a 2D texture by its asset ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Texture2D::Compile </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the texture to load</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the texture fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager11LoadCubemapENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager11LoadCubemapENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager11LoadCubemapENSt6stringE"></span><span id="Cacao::AssetManager::LoadCubemap__ss"></span><span class="target" id="classCacao_1_1AssetManager_1ac7d24b0c938db3b75ab079b1cb549914"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Cubemap.html#_CPPv4N5Cacao7CubemapE" title="Cacao::Cubemap"><span class="n"><span class="pre">Cubemap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadCubemap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager11LoadCubemapENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a cubemap by its asset ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Cubemap::Compile </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the cubemap to load</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the cubemap fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager10LoadSkyboxENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager10LoadSkyboxENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager10LoadSkyboxENSt6stringE"></span><span id="Cacao::AssetManager::LoadSkybox__ss"></span><span class="target" id="classCacao_1_1AssetManager_1ab6f5c2a401d18ea7835554113121a4f1"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Skybox.html#_CPPv4N5Cacao6SkyboxE" title="Cacao::Skybox"><span class="n"><span class="pre">Skybox</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadSkybox</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager10LoadSkyboxENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a skybox from a cubemap by its asset ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Cubemap::Compile,<a class="reference internal" href="#classCacao_1_1AssetManager_1ac7d24b0c938db3b75ab079b1cb549914"><span class="std std-ref">LoadCubemap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the cubemap to load and use</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the cubemap fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager8LoadMeshENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager8LoadMeshENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager8LoadMeshENSt6stringE"></span><span id="Cacao::AssetManager::LoadMesh__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a11fd1f27e5d129f6ac0c5ac5cf54d6e4"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadMesh</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager8LoadMeshENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a mesh by its asset ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="classCacao_1_1Model.html#classCacao_1_1Model_1aa9f8fc3d9d81d517fa67c7894c5e8876"><span class="std std-ref">Model::Model</span></a>,Mesh::Compile </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the mesh to load</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the mesh fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager9LoadSoundENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager9LoadSoundENSt6stringE"></span><span id="Cacao::AssetManager::LoadSound__ss"></span><span class="target" id="classCacao_1_1AssetManager_1ae59d9c91045b511052004d4bdd19bc0c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Sound.html#_CPPv4N5Cacao5SoundE" title="Cacao::Sound"><span class="n"><span class="pre">Sound</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadSound</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a sound by its asset ID. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Sound::Compile </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the sound to load</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the sound fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager8LoadFontENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager8LoadFontENSt6stringE"></span><span id="Cacao::AssetManager::LoadFont__ss"></span><span class="target" id="classCacao_1_1AssetManager_1a48c9cd91485dcaa35d9a86a3eebbd3fe"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Font.html#_CPPv4N5Cacao4FontE" title="Cacao::Font"><span class="n"><span class="pre">Font</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LoadFont</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Load a font face by its asset ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the shader to load</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the asset loader has not been configured, the asset ID is invalid or the font fails to compile </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE">
+<span id="_CPPv3N5Cacao12AssetManager12UncacheAssetENSt6stringE"></span><span id="_CPPv2N5Cacao12AssetManager12UncacheAssetENSt6stringE"></span><span id="Cacao::AssetManager::UncacheAsset__ss"></span><span class="target" id="classCacao_1_1AssetManager_1ac1ebc73e06c0903b12cec9adbd04016e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UncacheAsset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Remove an asset from the cache. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine and runtimes only</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the specified asset ID does not exist in the cache, this call is ignored </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>assetID</strong> – The ID of the asset to remove from the cache</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager10CacheAssetENSt6stringENSt8weak_ptrI5AssetEE">
+<span id="_CPPv3N5Cacao12AssetManager10CacheAssetENSt6stringENSt8weak_ptrI5AssetEE"></span><span id="_CPPv2N5Cacao12AssetManager10CacheAssetENSt6stringENSt8weak_ptrI5AssetEE"></span><span id="Cacao::AssetManager::CacheAsset__ss.std::weak_ptr:Asset:"></span><span class="target" id="classCacao_1_1AssetManager_1aad651400428b43890ebaf70ca9fba83c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CacheAsset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">assetID</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">weak_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Asset.html#_CPPv4N5Cacao5AssetE" title="Cacao::Asset"><span class="n"><span class="pre">Asset</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager10CacheAssetENSt6stringENSt8weak_ptrI5AssetEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Put an asset into the cache. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine and runtimes only</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the specified asset ID does not exist in the cache, this call is ignored </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> ID to put in the cache </p></li>
+<li><p><strong>handle</strong> – <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> pointer to associate with the ID</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T">
+<span id="_CPPv3I0EN5Cacao12AssetManager20GetHandleFromPointerEP1T"></span><span id="_CPPv2I0EN5Cacao12AssetManager20GetHandleFromPointerEP1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1AssetManager_1a65c700dd762499fc56a5073cf32fe367"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1AssetHandle.html#_CPPv4I0EN5Cacao11AssetHandleE" title="Cacao::AssetHandle"><span class="n"><span class="pre">AssetHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T" title="Cacao::AssetManager::GetHandleFromPointer::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetHandleFromPointer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T" title="Cacao::AssetManager::GetHandleFromPointer::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get an <a class="reference internal" href="classCacao_1_1AssetHandle.html#classCacao_1_1AssetHandle"><span class="std std-ref">AssetHandle</span></a> from the asset’s stored pointer. </p>
+<p>This is used for assets to be able to retrieve their own handle, typically for passing to another object</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by the engine only</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ptr</strong> – A raw pointer to the asset (typically obtained from this)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An asset handle, which will be a null handle if the asset was not found in the cache </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12AssetManager11GetInstanceEv">
+<span id="_CPPv3N5Cacao12AssetManager11GetInstanceEv"></span><span id="_CPPv2N5Cacao12AssetManager11GetInstanceEv"></span><span id="Cacao::AssetManager::GetInstance"></span><span class="target" id="classCacao_1_1AssetManager_1a6f0d78cbe51898b5dfaa9d2001469044"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao12AssetManagerE" title="Cacao::AssetManager"><span class="n"><span class="pre">AssetManager</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetInstance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12AssetManager11GetInstanceEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="classCacao_1_1AssetLoader.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Class AssetLoader</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="classCacao_1_1AudioPlayer.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Class AudioPlayer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManagerE"><code class="docutils literal notranslate"><span class="pre">AssetManager</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager9SetLoaderENSt10shared_ptrI11AssetLoaderEE"><code class="docutils literal notranslate"><span class="pre">AssetManager::SetLoader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager10LoadShaderENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadShader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager13LoadTexture2DENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadTexture2D()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager11LoadCubemapENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadCubemap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager10LoadSkyboxENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadSkybox()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager8LoadMeshENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadMesh()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager9LoadSoundENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadSound()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager8LoadFontENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::LoadFont()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager12UncacheAssetENSt6stringE"><code class="docutils literal notranslate"><span class="pre">AssetManager::UncacheAsset()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager10CacheAssetENSt6stringENSt8weak_ptrI5AssetEE"><code class="docutils literal notranslate"><span class="pre">AssetManager::CacheAsset()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao12AssetManager20GetHandleFromPointerE11AssetHandleI1TEP1T"><code class="docutils literal notranslate"><span class="pre">AssetManager::GetHandleFromPointer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12AssetManager11GetInstanceEv"><code class="docutils literal notranslate"><span class="pre">AssetManager::GetInstance()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025 RobotLeopard86.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
