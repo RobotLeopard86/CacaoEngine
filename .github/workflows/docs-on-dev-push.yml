@@ -30,7 +30,9 @@ jobs:
           git -C subprojects/thread-pool checkout 0.6.2
       - name: Create temporary directory for build
         run: |
-          git clone ${{ github.server_url }}/${{ github.repository }} /tmp/PAGESBUILD -b gh-pages
+          git clone ${{ github.server_url }}/${{ github.repository }} /tmp/PAGESBUILD
+          git -C /tmp/PAGESBUILD checkout gh-pages
+          git pull
       - name: Install Python dependencies
         run: |
           pip install -r docs/requirements.txt
@@ -51,3 +53,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
+      - name: Cleanup temp directory
+        run: |
+          rm -rvf /tmp/PAGESBUILD
