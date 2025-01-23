@@ -35,8 +35,9 @@ jobs:
           target_path: dev
           target_branch: gh-pages
           sphinx_version: "7.3.7"
-          requirements_path: "docs/requirements.txt"
-          documentation_path: "docs"
+          repository_path: "docs"
+          requirements_path: "./requirements.txt"
+          documentation_path: "."
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
