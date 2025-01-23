@@ -44,16 +44,17 @@ jobs:
         run: |
           cd /tmp/PAGESBUILD
           rm -rf .doctrees
-          git pull
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
           git commit --allow-empty -m "Add changes for ${{ github.sha }}"
+          git pull
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
+          directory: /tmp/PAGESBUILD
       - name: Cleanup temp directory
         run: |
           rm -rvf /tmp/PAGESBUILD
