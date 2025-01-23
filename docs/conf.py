@@ -96,7 +96,7 @@ exhale_projects_args = {
 									EXPAND_ONLY_PREDEF     = YES
 									PREDEFINED             += CACAO_API=
 									'''),
-        "containmentFolder": "api-engine",
+        "containmentFolder": "./api-engine",
         "rootFileTitle": "Engine API Reference"
     },
     "libcacaoformats": {
@@ -105,7 +105,7 @@ exhale_projects_args = {
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
 									'''),
-        "containmentFolder": "api-formatslib",
+        "containmentFolder": "./api-formatslib",
         "rootFileTitle": "libcacaoformats API"
     }
 }
