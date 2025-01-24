@@ -1,5 +1,5 @@
 # Get simple dependencies
-deps = [glm, yaml_cpp]
+deps = [yaml_cpp]
 deps += subproject('dr_libs', required: true).get_variable('dr_libs_dep')
 deps += subproject('stb', required: true).get_variable('stb_dep')
 

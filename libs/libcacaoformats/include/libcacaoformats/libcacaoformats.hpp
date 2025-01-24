@@ -7,7 +7,19 @@
 #include <array>
 
 namespace libcacaoformats {
-	///@brief Loaded audio data and properties necessary to use it
+	///@brief Two-component vector
+	template<typename T>
+	struct Vec2 {
+		T x, y;
+	};
+
+	///@brief Three-component vector
+	template<typename T>
+	struct Vec3 {
+		T x, y, z;
+	};
+
+	///@brief Decoded audio data and properties necessary to use it
 	struct AudioBuffer {
 		std::vector<short> data;///<Audio data
 		uint64_t sampleCount;	///<Number of audio samples
@@ -26,14 +38,11 @@ namespace libcacaoformats {
 	 */
 	AudioBuffer DecodeAudio(std::vector<unsigned char> encoded);
 
-	///@brief Loaded image data and properties necessary to use it
+	///@brief Decoded image data and properties necessary to use it
 	struct ImageBuffer {
 		std::vector<unsigned char> data;///<Decoded data
-		///@brief Mini-encapsulation of size data
-		struct Size {
-			uint32_t x, y;
-		} size;				 ///<Image dimensions
-		uint8_t channelCount;///<Image channel count (1=Grayscale,3=RGB,4=RGBA)
+		Vec2<uint32_t> size;			///<Image dimensions
+		uint8_t channelCount;			///<Image channel count (1=Grayscale,3=RGB,4=RGBA)
 	};
 
 	/**
@@ -47,7 +56,7 @@ namespace libcacaoformats {
 	 */
 	ImageBuffer DecodeImage(std::vector<unsigned char> encoded);
 
-	///@brief Loaded shader data
+	///@brief Decoded shader data
 	struct Shader {
 		std::vector<uint32_t> vertexSPV;  ///<Vertex shader code in SPIR-V
 		std::vector<uint32_t> fragmentSPV;///<Fragment shader code in SPIR-V
@@ -109,5 +118,36 @@ namespace libcacaoformats {
 
 	  private:
 		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);
+	};
+
+	///@brief Decoder for uncompressed packed format buffers
+	class PackedDecoder {
+	  public:
+		/**
+		 * @brief Extract and decode the images in a cubemap
+		 *
+		 * @param container The PackedContainer with the cubemap information
+		 *
+		 * @return Decoded cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
+		 */
+		std::array<ImageBuffer, 6> DecodeCubemap(const PackedContainer& container);
+
+		/**
+		 * @brief Extract the SPIR-V code from a shader
+		 *
+		 * @param container The PackedContainer with the shader information
+		 *
+		 * @return Shader SPIR-V
+		 */
+		Shader DecodeShader(const PackedContainer& container);
+
+		/**
+		 * @brief Extract the files from an asset pack
+		 *
+		 * @param container The PackedContainer with the asset pack information
+		 *
+		 * @return Map of filenames to data buffers from the asset pack
+		 */
+		std::map<std::string, std::vector<unsigned char>> DecodeAssetPack(const PackedContainer& container);
 	};
 }

@@ -15,6 +15,6 @@ If you want to build it yourself, everything is located in the `docs` folder. Se
 Cacao Engine uses two branches, `main` and `dev`. `main` should be considered stable and should **NEVER** be pushed to on its own. `dev` is where main work can happen and is allowed to be unstable and break. Only once `dev` is in a stable state can it be merged into `main` via a pull request.
 
 ## Licensing
-Cacao Engine is licensed under the Apache License 2.0, which can be found in the root directory. All third-party licenses are present in the `licenses` folder.
+Cacao Engine and its auxiliary libraries and tools are licensed under the Apache License 2.0, which can be found in the root directory. All third-party licenses are present in the `licenses` folder.
 Any third-party code used by these libraries should have their licenses located within the appropriate project directory (these may not be downloaded until build-time by Meson).
 Additionally, the file `expf.c`, located in the `src` directory, is instead licensed under the [Zero-Clause BSD license](https://opensource.org/license/0bsd). This is because it's a tiny patch that only exists because of an issue with the static Linux math library that sometimes crops up, and this is the closest thing you can get to public domain worldwide.
