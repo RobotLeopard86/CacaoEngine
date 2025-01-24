@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>libcacaoformats API &#8212; Cacao Engine Docs</title>
+    <title>libcacaoformats API Reference &#8212; Cacao Engine Docs</title>
   
   
   
@@ -175,7 +175,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    libcacaoformats API
+    libcacaoformats API Reference
   </a>
 </li>
 
@@ -284,7 +284,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    libcacaoformats API
+    libcacaoformats API Reference
   </a>
 </li>
 
@@ -353,7 +353,10 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html">Enum FormatCode</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1ad080aa345be973860c097bdd8fc7623c.html">Function libcacaoformats::MakePackedContainerFromBuffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a960a470dfcbb7f6e8b1018ada71d3117.html">Function libcacaoformats::DecodeAudio</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a1ca24fe8dd7f94cc1dd54cee25d5f20c.html">Function libcacaoformats::DecodeImage</a></li>
 </ul>
 </div>
 </nav></div>
@@ -389,7 +392,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">libcacaoformats API</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">libcacaoformats API Reference</span></li>
   </ul>
 </nav>
 </div>
@@ -406,8 +409,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="libcacaoformats-api">
-<h1>libcacaoformats API<a class="headerlink" href="#libcacaoformats-api" title="Link to this heading"><span/></a></h1>
+  <section id="libcacaoformats-api-reference">
+<h1>libcacaoformats API Reference<a class="headerlink" href="#libcacaoformats-api-reference" title="Link to this heading"><span/></a></h1>
 <section id="class-hierarchy">
 <h2>Class Hierarchy<a class="headerlink" href="#class-hierarchy" title="Link to this heading"><span/></a></h2>
 <ul class="treeView" id="class-treeView">
@@ -506,10 +509,13 @@
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html">Struct PackedContainer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#struct-documentation">Struct Documentation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE"><code class="docutils literal notranslate"><span class="pre">PackedContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer14ExportToBufferEv"><code class="docutils literal notranslate"><span class="pre">PackedContainer::ExportToBuffer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer6formatE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::format</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer4hashE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::hash</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer7versionE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer4hashE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::hash</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer7payloadE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::payload</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer10FromBufferENSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::FromBuffer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainer8FromDataE10FormatCode8uint16_tNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::FromData()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -559,9 +565,20 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"><span/></a></h3>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1ad080aa345be973860c097bdd8fc7623c.html">Function libcacaoformats::MakePackedContainerFromBuffer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="function_libcacaoformats_8hpp_1ad080aa345be973860c097bdd8fc7623c.html#function-documentation">Function Documentation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="function_libcacaoformats_8hpp_1ad080aa345be973860c097bdd8fc7623c.html#_CPPv4N15libcacaoformats29MakePackedContainerFromBufferENSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">MakePackedContainerFromBuffer()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a960a470dfcbb7f6e8b1018ada71d3117.html">Function libcacaoformats::DecodeAudio</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_libcacaoformats_8hpp_1a960a470dfcbb7f6e8b1018ada71d3117.html#function-documentation">Function Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function_libcacaoformats_8hpp_1a960a470dfcbb7f6e8b1018ada71d3117.html#_CPPv4N15libcacaoformats11DecodeAudioENSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">DecodeAudio()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a1ca24fe8dd7f94cc1dd54cee25d5f20c.html">Function libcacaoformats::DecodeImage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_libcacaoformats_8hpp_1a1ca24fe8dd7f94cc1dd54cee25d5f20c.html#function-documentation">Function Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function_libcacaoformats_8hpp_1a1ca24fe8dd7f94cc1dd54cee25d5f20c.html#_CPPv4N15libcacaoformats11DecodeImageENSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">DecodeImage()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -627,7 +644,9 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enums">Enums</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
 </ul>
 </li>
 </ul>

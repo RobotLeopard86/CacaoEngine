@@ -175,7 +175,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="root.html">
-    libcacaoformats API
+    libcacaoformats API Reference
   </a>
 </li>
 
@@ -284,7 +284,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="root.html">
-    libcacaoformats API
+    libcacaoformats API Reference
   </a>
 </li>
 
@@ -353,7 +353,10 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html">Enum FormatCode</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1ad080aa345be973860c097bdd8fc7623c.html">Function libcacaoformats::MakePackedContainerFromBuffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a960a470dfcbb7f6e8b1018ada71d3117.html">Function libcacaoformats::DecodeAudio</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a1ca24fe8dd7f94cc1dd54cee25d5f20c.html">Function libcacaoformats::DecodeImage</a></li>
 </ul>
 </div>
 </nav></div>
@@ -390,7 +393,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="root.html" class="nav-link">libcacaoformats API</a></li>
+    <li class="breadcrumb-item"><a href="root.html" class="nav-link">libcacaoformats API Reference</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct PackedContainer</span></li>
   </ul>
@@ -420,6 +423,27 @@
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainerE">
 <span id="_CPPv3N15libcacaoformats15PackedContainerE"></span><span id="_CPPv2N15libcacaoformats15PackedContainerE"></span><span id="libcacaoformats::PackedContainer"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Loaded structure of a generic packed file format. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When loading a container, use FromBuffer. When creating a container for exporting, use FromData. </p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer14ExportToBufferEv">
+<span id="_CPPv3N15libcacaoformats15PackedContainer14ExportToBufferEv"></span><span id="_CPPv2N15libcacaoformats15PackedContainer14ExportToBufferEv"></span><span id="libcacaoformats::PackedContainer::ExportToBuffer"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a638ba8517d0933fcb9bd9cec6d5e959c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExportToBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer14ExportToBufferEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Export a <a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> to a buffer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container has no data or data compression fails </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A buffer representing the container, which can be written to a file whole</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -429,21 +453,62 @@
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer4hashE">
-<span id="_CPPv3N15libcacaoformats15PackedContainer4hashE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer4hashE"></span><span id="libcacaoformats::PackedContainer::hash__std::array:uint8_t.64:C"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a5e1c2f3157eb1fc64ffb54c565c005cb"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint8_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">64</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer4hashE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>SHA-512 payload hash. </p>
-</dd></dl>
-
-<dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer7versionE">
 <span id="_CPPv3N15libcacaoformats15PackedContainer7versionE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer7versionE"></span><span id="libcacaoformats::PackedContainer::version__uint16_tC"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a6cfbff6a81c3423013d4266a2c2eccc4"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer7versionE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>File type version. </p>
 </dd></dl>
 
 <dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer4hashE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer4hashE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer4hashE"></span><span id="libcacaoformats::PackedContainer::hash__std::array:uint8_t.64:C"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a5e1c2f3157eb1fc64ffb54c565c005cb"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint8_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">64</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer4hashE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>SHA-512 uncompressed payload hash. </p>
+</dd></dl>
+
+<dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer7payloadE">
 <span id="_CPPv3N15libcacaoformats15PackedContainer7payloadE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer7payloadE"></span><span id="libcacaoformats::PackedContainer::payload__std::vector:unsigned-c:C"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a104a95cdcc425581c6bba81ab4800b04"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">payload</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer7payloadE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Decompressed payload data. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer10FromBufferENSt6vectorIhEE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer10FromBufferENSt6vectorIhEE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer10FromBufferENSt6vectorIhEE"></span><span id="libcacaoformats::PackedContainer::FromBuffer__std::vector:unsigned-c:"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a248ab720805653a26409d39ca1f9e020"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromBuffer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer10FromBufferENSt6vectorIhEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> from a loaded buffer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buffer</strong> – A buffer containing the entire file contents of a packed file format</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the buffer is not a valid packed file or the hash in the buffer does not match the payload </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer8FromDataE10FormatCode8uint16_tNSt6vectorIhEE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer8FromDataE10FormatCode8uint16_tNSt6vectorIhEE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer8FromDataE10FormatCode8uint16_tNSt6vectorIhEE"></span><span id="libcacaoformats::PackedContainer::FromData__FormatCode.uint16_t.std::vector:unsigned-c:"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1abf6625dc1d9d5d6e19f0582764c45f84"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html#_CPPv4N15libcacaoformats10FormatCodeE" title="libcacaoformats::FormatCode"><span class="n"><span class="pre">FormatCode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">format</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ver</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer8FromDataE10FormatCode8uint16_tNSt6vectorIhEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> from its contents. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> – The format code of the container </p></li>
+<li><p><strong>ver</strong> – The version of the format </p></li>
+<li><p><strong>data</strong> – The uncompressed data to be stored</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If there is no data </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> object</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -501,10 +566,13 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainerE"><code class="docutils literal notranslate"><span class="pre">PackedContainer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer14ExportToBufferEv"><code class="docutils literal notranslate"><span class="pre">PackedContainer::ExportToBuffer()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer6formatE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::format</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer4hashE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::hash</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer7versionE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::version</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer4hashE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::hash</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer7payloadE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::payload</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer10FromBufferENSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::FromBuffer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer8FromDataE10FormatCode8uint16_tNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::FromData()</span></code></a></li>
 </ul>
 </li>
 </ul>

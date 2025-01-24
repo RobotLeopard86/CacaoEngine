@@ -173,7 +173,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="root.html">
-    libcacaoformats API
+    libcacaoformats API Reference
   </a>
 </li>
 
@@ -278,7 +278,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="root.html">
-    libcacaoformats API
+    libcacaoformats API Reference
   </a>
 </li>
 
@@ -398,6 +398,8 @@
 <span class="w">        </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">channelCount</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
+<span class="w">    </span><span class="n">AudioBuffer</span><span class="w"> </span><span class="nf">DecodeAudio</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">encoded</span><span class="p">);</span>
+
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ImageBuffer</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Size</span><span class="w"> </span><span class="p">{</span>
@@ -405,6 +407,8 @@
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">channelCount</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">ImageBuffer</span><span class="w"> </span><span class="nf">DecodeImage</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">encoded</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Shader</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertexSPV</span><span class="p">;</span>
@@ -420,13 +424,21 @@
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">PackedContainer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">;</span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">hash</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">version</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">hash</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
 
-<span class="w">    </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">MakePackedContainerFromBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="p">);</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">FromBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">FromData</span><span class="p">(</span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ver</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExportToBuffer</span><span class="p">();</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">FormatCode</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
 </div>
