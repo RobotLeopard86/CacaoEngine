@@ -172,7 +172,7 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer AnyDecode(std::vector<unsigned char> encoded) {
+	AudioBuffer DecodeAudio(std::vector<unsigned char> encoded) {
 		//Determine audio format by reading header
 
 		//Grab the first four header bytes

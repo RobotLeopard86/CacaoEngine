@@ -18,14 +18,14 @@ namespace Cacao {
 		 * @brief Load a sound from a path
 		 * @note Prefer to use AssetManager::LoadSound over direct construction
 		 *
-		 * @param pcmData The PCM audio data
+		 * @param data The audio data
 		 * @param samples The number of audio samples in the data
 		 * @param samplesRate Audio sampling rate
 		 * @param channels Audio channel count
 		 *
 		 * @throws Exception If the file does not exist, could not be opened, is of an unsupported format, or its data could not be read
 		 */
-		Sound(std::vector<short> pcmData, unsigned long long samples, unsigned int sampleRate, unsigned int channels);
+		Sound(std::vector<short> data, unsigned long long samples, unsigned int sampleRate, unsigned int channels);
 		~Sound() final {
 			if(compiled) Release();
 		}

@@ -106,7 +106,7 @@ exhale_projects_args = {
 									MAX_INITIALIZER_LINES = 0
 									'''),
         "containmentFolder": "./api-formatslib",
-        "rootFileTitle": "libcacaoformats API"
+        "rootFileTitle": "libcacaoformats API Reference"
     }
 }
 
