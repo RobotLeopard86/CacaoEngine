@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Struct ImageBuffer &#8212; Cacao Engine Docs</title>
+    <title>Class PackedDecoder &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api-formatslib/structlibcacaoformats_1_1ImageBuffer';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api-formatslib/classlibcacaoformats_1_1PackedDecoder';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct Material" href="structlibcacaoformats_1_1Material.html" />
-    <link rel="prev" title="Struct AudioBuffer" href="structlibcacaoformats_1_1AudioBuffer.html" />
+    <link rel="next" title="Enum FormatCode" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html" />
+    <link rel="prev" title="Template Struct Vec4" href="structlibcacaoformats_1_1Vec4.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -337,8 +337,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1AudioBuffer.html">Struct AudioBuffer</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct ImageBuffer</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1ImageBuffer.html">Struct ImageBuffer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Material.html">Struct Material</a></li>
@@ -364,8 +364,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Vec4.html">Template Struct Vec4</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1PackedDecoder.html">Class PackedDecoder</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class PackedDecoder</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html">Enum FormatCode</a></li>
@@ -413,7 +413,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">libcacaoformats API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct ImageBuffer</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class PackedDecoder</span></li>
   </ul>
 </nav>
 </div>
@@ -430,35 +430,85 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="struct-imagebuffer">
-<span id="exhale-struct-structlibcacaoformats-1-1imagebuffer"></span><h1>Struct ImageBuffer<a class="headerlink" href="#struct-imagebuffer" title="Link to this heading"><span/></a></h1>
+  <section id="class-packeddecoder">
+<span id="exhale-class-classlibcacaoformats-1-1packeddecoder"></span><h1>Class PackedDecoder<a class="headerlink" href="#class-packeddecoder" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_libs_libcacaoformats_include_libcacaoformats_libcacaoformats.hpp.html#file-libs-libcacaoformats-include-libcacaoformats-libcacaoformats-hpp"><span class="std std-ref">File libcacaoformats.hpp</span></a></p></li>
 </ul>
-<section id="struct-documentation">
-<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBufferE">
-<span id="_CPPv3N15libcacaoformats11ImageBufferE"></span><span id="_CPPv2N15libcacaoformats11ImageBufferE"></span><span id="libcacaoformats::ImageBuffer"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ImageBuffer</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBufferE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Decoded image data and properties necessary to use it. </p>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedDecoderE">
+<span id="_CPPv3N15libcacaoformats13PackedDecoderE"></span><span id="_CPPv2N15libcacaoformats13PackedDecoderE"></span><span id="libcacaoformats::PackedDecoder"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedDecoder</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoderE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Decoder for uncompressed packed format buffers. </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBuffer4dataE">
-<span id="_CPPv3N15libcacaoformats11ImageBuffer4dataE"></span><span id="_CPPv2N15libcacaoformats11ImageBuffer4dataE"></span><span id="libcacaoformats::ImageBuffer::data__std::vector:unsigned-c:"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer_1a64dd3c6c1fafb7e7957fecc51a876834"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBuffer4dataE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Decoded data. </p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedDecoder13DecodeCubemapERK15PackedContainer">
+<span id="_CPPv3N15libcacaoformats13PackedDecoder13DecodeCubemapERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats13PackedDecoder13DecodeCubemapERK15PackedContainer"></span><span id="libcacaoformats::PackedDecoder::DecodeCubemap__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder_1a1f87ece7f8af85eb61b8a1dbd6aa1d8c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="structlibcacaoformats_1_1ImageBuffer.html#_CPPv4N15libcacaoformats11ImageBufferE" title="libcacaoformats::ImageBuffer"><span class="n"><span class="pre">ImageBuffer</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">6</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeCubemap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">container</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoder13DecodeCubemapERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Extract and decode the images in a cubemap. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>container</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> with the cubemap information</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container does not hold a valid cubemap </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decoded cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBuffer4sizeE">
-<span id="_CPPv3N15libcacaoformats11ImageBuffer4sizeE"></span><span id="_CPPv2N15libcacaoformats11ImageBuffer4sizeE"></span><span id="libcacaoformats::ImageBuffer::size__Vec2:uint32_t:"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer_1a0b5b26028856ef7ef5d6069dfb1a2bbd"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec2.html#_CPPv4I0EN15libcacaoformats4Vec2E" title="libcacaoformats::Vec2"><span class="n"><span class="pre">Vec2</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBuffer4sizeE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Image dimensions. </p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer">
+<span id="_CPPv3N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"></span><span id="libcacaoformats::PackedDecoder::DecodeShader__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder_1a683770a36ed3c318d929e48d06e72c30"></span><a class="reference internal" href="structlibcacaoformats_1_1Shader.html#_CPPv4N15libcacaoformats6ShaderE" title="libcacaoformats::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeShader</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">container</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Extract the SPIR-V code from a shader. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>container</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> with the shader information</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container does not hold a valid shader </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="structlibcacaoformats_1_1Shader.html#structlibcacaoformats_1_1Shader"><span class="std std-ref">Shader</span></a> SPIR-V</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBuffer12channelCountE">
-<span id="_CPPv3N15libcacaoformats11ImageBuffer12channelCountE"></span><span id="_CPPv2N15libcacaoformats11ImageBuffer12channelCountE"></span><span id="libcacaoformats::ImageBuffer::channelCount__uint8_t"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer_1a8b2c923e59ee04fa5ca111ca924b0eba"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">channelCount</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBuffer12channelCountE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Image channel count (1=Grayscale,3=RGB,4=RGBA) </p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedDecoder14DecodeMaterialERK15PackedContainer">
+<span id="_CPPv3N15libcacaoformats13PackedDecoder14DecodeMaterialERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats13PackedDecoder14DecodeMaterialERK15PackedContainer"></span><span id="libcacaoformats::PackedDecoder::DecodeMaterial__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder_1afff9ece578aa5fe7f03248f64f664f3b"></span><a class="reference internal" href="structlibcacaoformats_1_1Material.html#_CPPv4N15libcacaoformats8MaterialE" title="libcacaoformats::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeMaterial</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">container</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoder14DecodeMaterialERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Extract the data from a packed material. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>container</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> with the material information</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container does not hold a valid material </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="structlibcacaoformats_1_1Material.html#structlibcacaoformats_1_1Material"><span class="std std-ref">Material</span></a> object with shader reference string and data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedDecoder15DecodeAssetPackERK15PackedContainer">
+<span id="_CPPv3N15libcacaoformats13PackedDecoder15DecodeAssetPackERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats13PackedDecoder15DecodeAssetPackERK15PackedContainer"></span><span id="libcacaoformats::PackedDecoder::DecodeAssetPack__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder_1ad795e0ac64d905ad7d075bb7e66b5f87"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html#_CPPv4N15libcacaoformats11PackedAssetE" title="libcacaoformats::PackedAsset"><span class="n"><span class="pre">PackedAsset</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeAssetPack</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">container</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoder15DecodeAssetPackERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Extract the files from an asset pack. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>container</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> with the asset pack information</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container does not hold a valid asset pack </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Map of filenames to <a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html#structlibcacaoformats_1_1PackedAsset"><span class="std std-ref">PackedAsset</span></a> objects from the asset pack</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -478,20 +528,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="structlibcacaoformats_1_1AudioBuffer.html"
+       href="structlibcacaoformats_1_1Vec4.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Struct AudioBuffer</p>
+        <p class="prev-next-title">Template Struct Vec4</p>
       </div>
     </a>
     <a class="right-next"
-       href="structlibcacaoformats_1_1Material.html"
+       href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct Material</p>
+        <p class="prev-next-title">Enum FormatCode</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -514,11 +564,12 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBufferE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBuffer4dataE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer::data</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBuffer4sizeE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer::size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBuffer12channelCountE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer::channelCount</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedDecoderE"><code class="docutils literal notranslate"><span class="pre">PackedDecoder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedDecoder13DecodeCubemapERK15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedDecoder::DecodeCubemap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedDecoder::DecodeShader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedDecoder14DecodeMaterialERK15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedDecoder::DecodeMaterial()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedDecoder15DecodeAssetPackERK15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedDecoder::DecodeAssetPack()</span></code></a></li>
 </ul>
 </li>
 </ul>

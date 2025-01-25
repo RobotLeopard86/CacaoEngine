@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Struct ImageBuffer &#8212; Cacao Engine Docs</title>
+    <title>Struct PackedAsset &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api-formatslib/structlibcacaoformats_1_1ImageBuffer';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api-formatslib/structlibcacaoformats_1_1PackedAsset';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct Material" href="structlibcacaoformats_1_1Material.html" />
-    <link rel="prev" title="Struct AudioBuffer" href="structlibcacaoformats_1_1AudioBuffer.html" />
+    <link rel="next" title="Struct PackedContainer" href="structlibcacaoformats_1_1PackedContainer.html" />
+    <link rel="prev" title="Template Struct Matrix" href="structlibcacaoformats_1_1Matrix.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -337,8 +337,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1AudioBuffer.html">Struct AudioBuffer</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct ImageBuffer</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1ImageBuffer.html">Struct ImageBuffer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Material.html">Struct Material</a></li>
@@ -346,8 +346,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Matrix.html">Template Struct Matrix</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html">Struct PackedAsset</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct PackedAsset</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1PackedContainer.html">Struct PackedContainer</a></li>
@@ -413,7 +413,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">libcacaoformats API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct ImageBuffer</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct PackedAsset</span></li>
   </ul>
 </nav>
 </div>
@@ -430,35 +430,69 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="struct-imagebuffer">
-<span id="exhale-struct-structlibcacaoformats-1-1imagebuffer"></span><h1>Struct ImageBuffer<a class="headerlink" href="#struct-imagebuffer" title="Link to this heading"><span/></a></h1>
+  <section id="struct-packedasset">
+<span id="exhale-struct-structlibcacaoformats-1-1packedasset"></span><h1>Struct PackedAsset<a class="headerlink" href="#struct-packedasset" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_libs_libcacaoformats_include_libcacaoformats_libcacaoformats.hpp.html#file-libs-libcacaoformats-include-libcacaoformats-libcacaoformats-hpp"><span class="std std-ref">File libcacaoformats.hpp</span></a></p></li>
 </ul>
 <section id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBufferE">
-<span id="_CPPv3N15libcacaoformats11ImageBufferE"></span><span id="_CPPv2N15libcacaoformats11ImageBufferE"></span><span id="libcacaoformats::ImageBuffer"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ImageBuffer</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBufferE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Decoded image data and properties necessary to use it. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAssetE">
+<span id="_CPPv3N15libcacaoformats11PackedAssetE"></span><span id="_CPPv2N15libcacaoformats11PackedAssetE"></span><span id="libcacaoformats::PackedAsset"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedAsset</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAssetE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Encapsulation of data associated with an asset in an asset pack. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4KindE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4KindE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4KindE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Kind</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4KindE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of asset. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4Kind6ShaderE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4Kind6ShaderE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4Kind6ShaderE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872aaa88a92f4a0e793589f2341851a15c660"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind6ShaderE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4Kind5Tex2DE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4Kind5Tex2DE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4Kind5Tex2DE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872aafc2321331d63bfe17f44c7b06ff47a17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Tex2D</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind5Tex2DE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4Kind7CubemapE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4Kind7CubemapE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4Kind7CubemapE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872aa29b142520cd0349c9f7375be4aa848c0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Cubemap</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind7CubemapE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4Kind8MaterialE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4Kind8MaterialE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4Kind8MaterialE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872aad92a8333dd3ccb895cc65f7455b71206"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Material</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind8MaterialE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4Kind5SoundE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4Kind5SoundE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4Kind5SoundE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872aa9d07e0e08af7f96cf45be0112b9ccfbe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Sound</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind5SoundE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4Kind4FontE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4Kind4FontE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4Kind4FontE"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1aea5a13946649e5714ff7680a737e872aa194f5394ae2e9c74dc3c441b92862d1d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Font</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind4FontE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBuffer4dataE">
-<span id="_CPPv3N15libcacaoformats11ImageBuffer4dataE"></span><span id="_CPPv2N15libcacaoformats11ImageBuffer4dataE"></span><span id="libcacaoformats::ImageBuffer::data__std::vector:unsigned-c:"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer_1a64dd3c6c1fafb7e7957fecc51a876834"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBuffer4dataE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Decoded data. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset4kindE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset4kindE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset4kindE"></span><span id="libcacaoformats::PackedAsset::kind__KindC"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1af1e7615390b97e653f896e8b1900439d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats11PackedAsset4KindE" title="libcacaoformats::PackedAsset::Kind"><span class="n"><span class="pre">Kind</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kind</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset4kindE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of asset contained. </p>
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBuffer4sizeE">
-<span id="_CPPv3N15libcacaoformats11ImageBuffer4sizeE"></span><span id="_CPPv2N15libcacaoformats11ImageBuffer4sizeE"></span><span id="libcacaoformats::ImageBuffer::size__Vec2:uint32_t:"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer_1a0b5b26028856ef7ef5d6069dfb1a2bbd"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec2.html#_CPPv4I0EN15libcacaoformats4Vec2E" title="libcacaoformats::Vec2"><span class="n"><span class="pre">Vec2</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBuffer4sizeE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Image dimensions. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11ImageBuffer12channelCountE">
-<span id="_CPPv3N15libcacaoformats11ImageBuffer12channelCountE"></span><span id="_CPPv2N15libcacaoformats11ImageBuffer12channelCountE"></span><span id="libcacaoformats::ImageBuffer::channelCount__uint8_t"></span><span class="target" id="structlibcacaoformats_1_1ImageBuffer_1a8b2c923e59ee04fa5ca111ca924b0eba"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">channelCount</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11ImageBuffer12channelCountE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Image channel count (1=Grayscale,3=RGB,4=RGBA) </p>
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats11PackedAsset6bufferE">
+<span id="_CPPv3N15libcacaoformats11PackedAsset6bufferE"></span><span id="_CPPv2N15libcacaoformats11PackedAsset6bufferE"></span><span id="libcacaoformats::PackedAsset::buffer__std::vector:unsigned-c:C"></span><span class="target" id="structlibcacaoformats_1_1PackedAsset_1a400db6c89a2604ca2c3a792cfa3e3031"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buffer</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats11PackedAsset6bufferE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Asset file contents buffer. </p>
 </dd></dl>
 
 </div>
@@ -478,20 +512,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="structlibcacaoformats_1_1AudioBuffer.html"
+       href="structlibcacaoformats_1_1Matrix.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Struct AudioBuffer</p>
+        <p class="prev-next-title">Template Struct Matrix</p>
       </div>
     </a>
     <a class="right-next"
-       href="structlibcacaoformats_1_1Material.html"
+       href="structlibcacaoformats_1_1PackedContainer.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct Material</p>
+        <p class="prev-next-title">Struct PackedContainer</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -515,10 +549,18 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBufferE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBuffer4dataE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer::data</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBuffer4sizeE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer::size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11ImageBuffer12channelCountE"><code class="docutils literal notranslate"><span class="pre">ImageBuffer::channelCount</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAssetE"><code class="docutils literal notranslate"><span class="pre">PackedAsset</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4KindE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind6ShaderE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind::Shader</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind5Tex2DE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind::Tex2D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind7CubemapE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind::Cubemap</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind8MaterialE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind::Material</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind5SoundE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind::Sound</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4Kind4FontE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::Kind::Font</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset4kindE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::kind</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats11PackedAsset6bufferE"><code class="docutils literal notranslate"><span class="pre">PackedAsset::buffer</span></code></a></li>
 </ul>
 </li>
 </ul>
