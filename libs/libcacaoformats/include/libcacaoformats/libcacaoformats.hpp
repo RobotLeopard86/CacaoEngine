@@ -19,6 +19,18 @@ namespace libcacaoformats {
 		T x, y, z;
 	};
 
+	///@brief Four-component vector
+	template<typename T>
+	struct Vec4 {
+		T x, y, z, w;
+	};
+
+	///@brief Matrix
+	template<typename T, int M, int N>
+	struct Matrix {
+		std::array<std::array<T, M>, N> data;
+	};
+
 	///@brief Decoded audio data and properties necessary to use it
 	struct AudioBuffer {
 		std::vector<short> data;///<Audio data
@@ -120,6 +132,35 @@ namespace libcacaoformats {
 		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);
 	};
 
+	///@brief Encapsulation of data associated with an asset in an asset pack
+	struct PackedAsset {
+		///@brief Type of asset
+		enum class Kind {
+			Shader,
+			Tex2D,
+			Cubemap,
+			Material,
+			Sound,
+			Font
+		};
+		const Kind kind;						///<Type of asset contained
+		const std::vector<unsigned char> buffer;///<Asset file contents buffer
+	};
+
+	///@brief Reference path for shader and associated data
+	struct Material {
+		std::string shader;///<Path to reference shader by
+
+		///@brief Shorthand for container of possible data types
+		using ValueContainer = std::variant<int, unsigned int, float,
+			Vec2<float>, Vec3<float>, Vec4<float>,
+			Matrix<float, 2, 2>, Matrix<float, 2, 3>, Matrix<float, 2, 4>,
+			Matrix<float, 3, 2>, Matrix<float, 3, 3>, Matrix<float, 3, 4>,
+			Matrix<float, 4, 2>, Matrix<float, 4, 3>, Matrix<float, 4, 4>,
+			std::string>;
+		std::map<std::string, ValueContainer> values;///<Data associated with shader
+	};
+
 	///@brief Decoder for uncompressed packed format buffers
 	class PackedDecoder {
 	  public:
@@ -142,12 +183,21 @@ namespace libcacaoformats {
 		Shader DecodeShader(const PackedContainer& container);
 
 		/**
+		 * @brief Extract the data from a packed material
+		 *
+		 * @param container The PackedContainer with the material information
+		 *
+		 * @return Shader SPIR-V
+		 */
+		Material DecodeMaterial(const PackedContainer& container);
+
+		/**
 		 * @brief Extract the files from an asset pack
 		 *
 		 * @param container The PackedContainer with the asset pack information
 		 *
-		 * @return Map of filenames to data buffers from the asset pack
+		 * @return Map of filenames to PackedAsset objects from the asset pack
 		 */
-		std::map<std::string, std::vector<unsigned char>> DecodeAssetPack(const PackedContainer& container);
+		std::map<std::string, PackedAsset> DecodeAssetPack(const PackedContainer& container);
 	};
 }
