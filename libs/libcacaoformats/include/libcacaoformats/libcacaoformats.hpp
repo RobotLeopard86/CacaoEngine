@@ -170,6 +170,8 @@ namespace libcacaoformats {
 		 * @param container The PackedContainer with the cubemap information
 		 *
 		 * @return Decoded cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
+		 *
+		 * @throws std::runtime_error If the container does not hold a valid cubemap
 		 */
 		std::array<ImageBuffer, 6> DecodeCubemap(const PackedContainer& container);
 
@@ -179,6 +181,8 @@ namespace libcacaoformats {
 		 * @param container The PackedContainer with the shader information
 		 *
 		 * @return Shader SPIR-V
+		 *
+		 * @throws std::runtime_error If the container does not hold a valid shader
 		 */
 		Shader DecodeShader(const PackedContainer& container);
 
@@ -187,7 +191,9 @@ namespace libcacaoformats {
 		 *
 		 * @param container The PackedContainer with the material information
 		 *
-		 * @return Shader SPIR-V
+		 * @return Material object with shader reference string and data
+		 *
+		 * @throws std::runtime_error If the container does not hold a valid material
 		 */
 		Material DecodeMaterial(const PackedContainer& container);
 
@@ -197,6 +203,8 @@ namespace libcacaoformats {
 		 * @param container The PackedContainer with the asset pack information
 		 *
 		 * @return Map of filenames to PackedAsset objects from the asset pack
+		 *
+		 * @throws std::runtime_error If the container does not hold a valid asset pack
 		 */
 		std::map<std::string, PackedAsset> DecodeAssetPack(const PackedContainer& container);
 	};

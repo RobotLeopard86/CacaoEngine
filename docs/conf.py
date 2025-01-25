@@ -69,10 +69,10 @@ html_domain_indices = False
 html_copy_source = False
 
 breathe_projects = {
-    "engine": "./_doxy/cacao/xml",
+    "Cacao Engine": "./_doxy/cacao/xml",
     "libcacaoformats": "./_doxy/formats/xml"
 }
-breathe_default_project = "engine"
+breathe_default_project = "Cacao Engine"
 
 exhale_args = {
     "containmentFolder":     "unknown",
@@ -85,7 +85,7 @@ exhale_args = {
 }
 
 exhale_projects_args = {
-    "engine": {
+    "Cacao Engine": {
         "exhaleDoxygenStdin": dedent('''
 									INPUT = ../include,../subprojects/thread-pool/include
 									HIDE_UNDOC_MEMBERS = YES
