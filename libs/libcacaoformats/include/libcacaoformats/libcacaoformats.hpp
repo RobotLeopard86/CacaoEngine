@@ -5,6 +5,8 @@
 #include <string>
 #include <cstdint>
 #include <array>
+#include <variant>
+#include <functional>
 
 namespace libcacaoformats {
 	///@brief Two-component vector
@@ -161,6 +163,32 @@ namespace libcacaoformats {
 		std::map<std::string, ValueContainer> values;///<Data associated with shader
 	};
 
+	///@brief World data, encapsulating list of assets and components used as well as initial world state
+	struct World {
+		std::vector<std::string> imports;///<List of assets and components used in the world. Having something not present in this list used will make the world not load correctly in-engine.
+		std::string skyboxRef;			 ///<Skybox reference path
+		Vec3<float> initialCamPos;		 ///<Initial camera position
+		Vec3<float> initialCamRot;		 ///<Initial camera rotation
+
+		///@brief Type for components on entities
+		struct Component {
+			std::string typeID;		  ///<ID of component type to instantiate
+			std::vector<uint8_t> data;///<Binary-encoded component reflection data (for use with https://github.com/chocolacula/easy_reflection_cpp)
+		};
+
+		///@brief Type for entities in the world
+		struct Entity {
+			std::array<uint8_t, 16> guid;	   ///<Entity GUID
+			std::array<uint8_t, 16> parentGUID;///<GUID of parent entity or all zeroes if this is a top-level entity
+			std::string name;				   ///<Human-friendly entity name
+			Vec3<float> initialPos;			   ///<Initial position
+			Vec3<float> initialRot;			   ///<Initial rotation
+			Vec3<float> initialScale;		   ///<Initial scale
+			std::vector<Component> components; ///<Components mounted on this entity initially
+		};
+		std::vector<Entity> entities;///<Entities in the world
+	};
+
 	///@brief Decoder for uncompressed packed format buffers
 	class PackedDecoder {
 	  public:
@@ -198,6 +226,17 @@ namespace libcacaoformats {
 		Material DecodeMaterial(const PackedContainer& container);
 
 		/**
+		 * @brief Extract the data from a packed world
+		 *
+		 * @param container The PackedContainer with the world information
+		 *
+		 * @return World object containing the initial state of the world
+		 *
+		 * @throws std::runtime_error If the container does not hold a valid world
+		 */
+		World DecodeWorld(const PackedContainer& container);
+
+		/**
 		 * @brief Extract the files from an asset pack
 		 *
 		 * @param container The PackedContainer with the asset pack information
@@ -207,5 +246,50 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If the container does not hold a valid asset pack
 		 */
 		std::map<std::string, PackedAsset> DecodeAssetPack(const PackedContainer& container);
+	};
+
+	///@brief Decoder for unpacked file formats
+	class UnpackedDecoder {
+	  public:
+		/**
+		 * @brief A shorthand type for a decoder IO callback
+		 *
+		 * @details This exists because libcacaoformats is a no-IO library. So, this exists to outsource IO to the consumer. The parameter is the file path needed.
+		 */
+		using IOCallback = std::function<std::vector<unsigned char>(const std::string&)>;
+
+		/**
+		 * @brief Extract and decode the images in a cubemap
+		 *
+		 * @param data A string containg YAML encoding the cubemap information
+		 * @param callback The IO callback to load encoded image data
+		 *
+		 * @return Decoded cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
+		 *
+		 * @throws std::runtime_error If the data does not represent a valid cubemap or the provided IO callback fails to load faces
+		 */
+		std::array<ImageBuffer, 6> DecodeCubemap(const std::string& data, IOCallback callback);
+
+		/**
+		 * @brief Extract the data from a packed material
+		 *
+		 * @param data A string containg YAML encoding the material information
+		 *
+		 * @return Material object with shader reference string and data
+		 *
+		 * @throws std::runtime_error If the data does not represent a valid material
+		 */
+		Material DecodeMaterial(const std::string& data);
+
+		/**
+		 * @brief Extract the data from a packed world
+		 *
+		 * @param data A string containg YAML encoding the world information
+		 *
+		 * @return World object containing the initial state of the world
+		 *
+		 * @throws std::runtime_error If the data does not represent a valid world
+		 */
+		World DecodeWorld(const std::string& data);
 	};
 }
