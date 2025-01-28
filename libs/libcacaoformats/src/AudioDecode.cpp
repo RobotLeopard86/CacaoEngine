@@ -11,7 +11,7 @@
 #include "vorbis/vorbisfile.h"
 #include "opusfile.h"
 
-#include <fstream>
+#include <cstring>
 
 //This is constant for now across all Opus files when using libopusfile but this could potentially change in the future
 #define OPUSFILE_SAMPLE_RATE 48000
@@ -172,7 +172,9 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer DecodeAudio(std::vector<unsigned char> encoded) {
+	AudioBuffer DecodeAudio(const std::vector<unsigned char>& encoded) {
+		CheckException(encoded.size() >= 4, "Encoded data is too small!");
+
 		//Determine audio format by reading header
 
 		//Grab the first four header bytes
@@ -204,6 +206,7 @@ namespace libcacaoformats {
 		if(header.compare("OggS") == 0) {
 			//Read the Ogg Header
 			std::string oggHeader(64, '\0');
+			CheckException(encoded.size() >= 64, "Encoded data is too small to read Ogg header!");
 			std::memcpy(oggHeader.data(), encoded.data(), 64);
 
 			if(oggHeader.find("vorbis") != std::string::npos) {

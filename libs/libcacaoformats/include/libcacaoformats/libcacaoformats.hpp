@@ -7,6 +7,8 @@
 #include <array>
 #include <variant>
 #include <functional>
+#include <istream>
+#include <ostream>
 
 namespace libcacaoformats {
 	///@brief Two-component vector
@@ -33,6 +35,65 @@ namespace libcacaoformats {
 		std::array<std::array<T, M>, N> data;
 	};
 
+	///@brief Utility type shortcuts for working with binary streams
+	using ustreambuf = std::basic_streambuf<unsigned char>;
+	using uistream = std::basic_istream<unsigned char>;
+	using uostream = std::basic_ostream<unsigned char>;
+	using uifstream = std::basic_ifstream<unsigned char>;
+	using uofstream = std::basic_ofstream<unsigned char>;
+
+	/**
+	 * @brief Byte stream buffer
+	 *
+	 * @note Only valid as long as the backing vector is
+	 */
+	class bytestreambuf : public ustreambuf {
+	  public:
+		/**
+		 * @brief Create a bytestreambuf from a vector of data
+		 *
+		 * @param data The vector to map operations to
+		 */
+		bytestreambuf(std::vector<unsigned char>& data) {
+			//Map the vector data range to the stream buffer
+			setg(data.data(), data.data(), data.data() + (data.size() * sizeof(unsigned char)));
+		}
+	};
+
+	/**
+	 * @brief Byte input stream utility
+	 *
+	 * @note Only valid as long as the backing vector is
+	 */
+	class ibytestream : public uistream {
+	  public:
+		ibytestream(std::vector<unsigned char>& data)
+		  : uistream(&buf), buf(data) {
+			//Set the backing buffer for the stream
+			rdbuf(&buf);
+		}
+
+	  private:
+		bytestreambuf buf;
+	};
+
+	/**
+	 * @brief Byte output stream utility
+	 *
+	 * @note Only valid as long as the backing vector is
+	 */
+	class obytestream : public uostream {
+	  public:
+		obytestream(std::vector<unsigned char>& data)
+		  : uostream(&buf), buf(data) {
+			//Set the backing buffer for the stream
+			rdbuf(&buf);
+		}
+
+	  private:
+		bytestreambuf buf;
+	};
+
 	///@brief Decoded audio data and properties necessary to use it
 	struct AudioBuffer {
 		std::vector<short> data;///<Audio data
@@ -46,11 +107,13 @@ namespace libcacaoformats {
 	 *
 	 * @details Supports MP3, WAV, Ogg Vorbis, and Ogg Opus
 	 *
-	 * @param encoded The encoded audio data to decode
+	 * @param encoded The encoded audio data to decode, provided via byte stream
 	 *
 	 * @return An AudioBuffer containing the decoded information
+	 *
+	 * @throws std::runtime_error If the provided data is not of the correct size, is of an unsupported format, or the audio decoding fails
 	 */
-	AudioBuffer DecodeAudio(const std::vector<unsigned char>& encoded);
+	AudioBuffer DecodeAudio(uistream encoded);
 
 	///@brief Decoded image data and properties necessary to use it
 	struct ImageBuffer {
@@ -64,20 +127,23 @@ namespace libcacaoformats {
 	 *
 	 * @details Supports JPEG, PNG, TGA, BMP, GIF (non-animated), and HDR
 	 *
-	 * @param encoded The encoded image data to decode
+	 * @param encoded The encoded image data to decode, provided via byte stream
 	 *
 	 * @return An ImageBuffer containing the decoded information
+	 *
+	 * @throws std::runtime_error If no data is provided, data is of an unsupported format, or the image decoding fails
 	 */
-	ImageBuffer DecodeImage(const std::vector<unsigned char>& encoded);
+	ImageBuffer DecodeImage(uistream encoded);
 
 	/**
 	 * @brief Convenience function for encoding ImageBuffer data to PNG format
 	 *
 	 * @param img The ImageBuffer to encode
+	 * @param out A byte stream to output the resulting PNG-encoded data to
 	 *
-	 * @return A buffer containing the PNG-encoded data
+	 * @throws std::runtime_error If the image has zero dimensions or holds invalid data
 	 */
-	std::vector<unsigned char> EncodeImage(const ImageBuffer& img);
+	void EncodeImage(const ImageBuffer& img, uostream out);
 
 	///@brief Decoded shader data
 	struct Shader {
@@ -107,37 +173,39 @@ namespace libcacaoformats {
 		const std::vector<unsigned char> payload;///<Decompressed payload data
 
 		/**
-		 * @brief Create a PackedContainer from a loaded buffer
+		 * @brief Create a PackedContainer from a byte stream
 		 *
-		 * @param buffer A buffer containing the entire file contents of a packed file format
+		 * @param stream A byte stream referencing the contents of a packed file format
 		 *
 		 * @return PackedContainer object
 		 *
 		 * @throws std::runtime_error If the buffer is not a valid packed file or the hash in the buffer does not match the payload
 		 */
-		static PackedContainer FromBuffer(const std::vector<unsigned char>& buffer);
+		PackedContainer(uistream stream);
 
 		/**
-		 * @brief Create a PackedContainer from its contents
+		 * @brief Create a PackedContainer by manually specifying attributes
 		 *
 		 * @param format The format code of the container
 		 * @param ver The version of the format
 		 * @param data The uncompressed data to be stored
 		 *
+		 * @details The hash field will be calculated based on the data
+		 *
 		 * @return PackedContainer object
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
-		static PackedContainer FromData(FormatCode format, uint16_t ver, const std::vector<unsigned char>& data);
+		PackedContainer(FormatCode format, uint16_t ver, const std::vector<unsigned char>& data);
 
 		/**
 		 * @brief Export a PackedContainer to a buffer
 		 *
-		 * @return A buffer representing the container, which can be written to a file whole
+		 * @param stream A byte stream to output data to
 		 *
 		 * @throws std::runtime_error If the container has no data or data compression fails
 		 */
-		std::vector<unsigned char> ExportToBuffer();
+		void Export(uostream stream);
 
 	  private:
 		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);
@@ -261,45 +329,38 @@ namespace libcacaoformats {
 	class UnpackedDecoder {
 	  public:
 		/**
-		 * @brief A shorthand type for a decoder IO callback
-		 *
-		 * @details This exists because libcacaoformats is a no-IO library. So, this exists to outsource IO to the consumer. The parameter is the file path needed.
-		 */
-		using IOCallback = std::function<std::vector<unsigned char>(const std::string&)>;
-
-		/**
 		 * @brief Extract and decode the images in a cubemap
 		 *
-		 * @param data A string containg YAML encoding the cubemap information
-		 * @param callback The IO callback to load encoded image data
+		 * @param data A stream to load cubemap YAML data from
+		 * @param loader A function to get streams from names referenced in the main cubemap file
 		 *
 		 * @return Decoded cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid cubemap or the provided IO callback fails to load faces
 		 */
-		std::array<ImageBuffer, 6> DecodeCubemap(const std::string& data, IOCallback callback);
+		std::array<ImageBuffer, 6> DecodeCubemap(std::istream data, std::function<std::istream(const std::string&)> loader);
 
 		/**
 		 * @brief Extract the data from a packed material
 		 *
-		 * @param data A string containg YAML encoding the material information
+		 * @param data A stream to load material YAML data from
 		 *
 		 * @return Material object with shader reference string and data
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid material
 		 */
-		Material DecodeMaterial(const std::string& data);
+		Material DecodeMaterial(std::istream data);
 
 		/**
 		 * @brief Extract the data from a packed world
 		 *
-		 * @param data A string containg YAML encoding the world information
+		 * @param data A stream to load world YAML data from
 		 *
 		 * @return World object containing the initial state of the world
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid world
 		 */
-		World DecodeWorld(const std::string& data);
+		World DecodeWorld(std::istream data);
 	};
 
 	///@brief Encoder for uncompressed packed format buffers
@@ -359,25 +420,19 @@ namespace libcacaoformats {
 	class UnpackedEncoder {
 	  public:
 		/**
-		 * @brief Extract the data from a packed material
+		 * @brief Encode a Material object to its unpacked format
 		 *
-		 * @param data A string containg YAML encoding the material information
-		 *
-		 * @return Material object with shader reference string and data
-		 *
-		 * @throws std::runtime_error If the data does not represent a valid material
+		 * @param mat The Material object to encode
+		 * @param out A stream to output material YAML data to
 		 */
-		std::string EncodeMaterial(const Material& mat);
+		void EncodeMaterial(const Material& mat, std::ostream out);
 
 		/**
-		 * @brief Extract the data from a packed world
+		 * @brief Encode a World object to its unpacked format
 		 *
-		 * @param data A string containg YAML encoding the world information
-		 *
-		 * @return World object containing the initial state of the world
-		 *
-		 * @throws std::runtime_error If the data does not represent a valid world
+		 * @param world The World object to encode
+		 * @param out A stream to output material YAML data to
 		 */
-		std::string EncodeWorld(const World& world);
+		void EncodeWorld(const World& world, std::ostream out);
 	};
 }
