@@ -50,7 +50,7 @@ namespace libcacaoformats {
 	 *
 	 * @return An AudioBuffer containing the decoded information
 	 */
-	AudioBuffer DecodeAudio(std::vector<unsigned char> encoded);
+	AudioBuffer DecodeAudio(const std::vector<unsigned char>& encoded);
 
 	///@brief Decoded image data and properties necessary to use it
 	struct ImageBuffer {
@@ -68,7 +68,16 @@ namespace libcacaoformats {
 	 *
 	 * @return An ImageBuffer containing the decoded information
 	 */
-	ImageBuffer DecodeImage(std::vector<unsigned char> encoded);
+	ImageBuffer DecodeImage(const std::vector<unsigned char>& encoded);
+
+	/**
+	 * @brief Convenience function for encoding ImageBuffer data to PNG format
+	 *
+	 * @param img The ImageBuffer to encode
+	 *
+	 * @return A buffer containing the PNG-encoded data
+	 */
+	std::vector<unsigned char> EncodeImage(const ImageBuffer& img);
 
 	///@brief Decoded shader data
 	struct Shader {
@@ -106,7 +115,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the buffer is not a valid packed file or the hash in the buffer does not match the payload
 		 */
-		static PackedContainer FromBuffer(std::vector<unsigned char> buffer);
+		static PackedContainer FromBuffer(const std::vector<unsigned char>& buffer);
 
 		/**
 		 * @brief Create a PackedContainer from its contents
@@ -119,7 +128,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
-		static PackedContainer FromData(FormatCode format, uint16_t ver, std::vector<unsigned char> data);
+		static PackedContainer FromData(FormatCode format, uint16_t ver, const std::vector<unsigned char>& data);
 
 		/**
 		 * @brief Export a PackedContainer to a buffer
@@ -243,7 +252,7 @@ namespace libcacaoformats {
 		 *
 		 * @return Map of filenames to PackedAsset objects from the asset pack
 		 *
-		 * @throws std::runtime_error If the container does not hold a valid asset pack
+		 * @throws std::runtime_error If the container does not hold a valid asset pack or the pack has no files
 		 */
 		std::map<std::string, PackedAsset> DecodeAssetPack(const PackedContainer& container);
 	};
@@ -291,5 +300,84 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If the data does not represent a valid world
 		 */
 		World DecodeWorld(const std::string& data);
+	};
+
+	///@brief Encoder for uncompressed packed format buffers
+	class PackedEncoder {
+	  public:
+		/**
+		 * @brief Encode a set of cubemap images faces into a packed cubemap
+		 *
+		 * @param cubemap A list of cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
+		 *
+		 * @return A PackedContainer encapsulating the encoded cubemap data, with all faces encoded in PNG format
+		 *
+		 * @throws std::runtime_error If one of the faces holds invalid data or has zero dimensions
+		 */
+		PackedContainer EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap);
+
+		/**
+		 * @brief Merge shader SPIR-V into a packed shader
+		 *
+		 * @param shader The vertex and fragment shader SPIR-V code
+		 *
+		 * @return A PackedContainer encapsulating the shader code
+		 */
+		PackedContainer EncodeShader(const Shader& shader);
+
+		/**
+		 * @brief Encode material data and a shader reference into a packed material
+		 *
+		 * @param mat The Material object with the data to encode
+		 *
+		 * @return A PackedContainer encapsulating the shader reference and material data
+		 */
+		PackedContainer EncodeMaterial(const Material& mat);
+
+		/**
+		 * @brief Encode world data into a packed format
+		 *
+		 * @param world The decoded World object
+		 *
+		 * @return A PackedContainer encapsulating the world data and initial state
+		 */
+		PackedContainer EncodeWorld(const World& world);
+
+		/**
+		 * @brief Combine asset pack files into a merged pack
+		 *
+		 * @param pack A map of filenames to PackedAsset objects from the asset pack
+		 *
+		 * @return A PackedContainer encapsulating the asset info and asset files
+		 *
+		 * @throws std::runtime_error If the provided pack data has no assets
+		 */
+		PackedContainer EncodeAssetPack(const std::map<std::string, PackedAsset>& pack);
+	};
+
+	///@brief Encoder for unpacked file formats
+	class UnpackedEncoder {
+	  public:
+		/**
+		 * @brief Extract the data from a packed material
+		 *
+		 * @param data A string containg YAML encoding the material information
+		 *
+		 * @return Material object with shader reference string and data
+		 *
+		 * @throws std::runtime_error If the data does not represent a valid material
+		 */
+		std::string EncodeMaterial(const Material& mat);
+
+		/**
+		 * @brief Extract the data from a packed world
+		 *
+		 * @param data A string containg YAML encoding the world information
+		 *
+		 * @return World object containing the initial state of the world
+		 *
+		 * @throws std::runtime_error If the data does not represent a valid world
+		 */
+		std::string EncodeWorld(const World& world);
 	};
 }

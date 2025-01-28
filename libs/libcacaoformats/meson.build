@@ -30,6 +30,6 @@ deps += declare_dependency(dependencies: [ogg, vorbis, vorbisfile, opus, opusfil
 
 formats_lib = static_library('cacaoformats', sources: [
 	'src/AudioDecode.cpp'
-], include_directories: ['include', 'src'], pic: true, dependencies: deps, cpp_args: ['-DMODE=' + formats_mode])
+], include_directories: ['include', 'src'], pic: true, dependencies: deps)
 
 formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib)
