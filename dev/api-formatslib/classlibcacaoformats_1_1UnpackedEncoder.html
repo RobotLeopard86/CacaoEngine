@@ -374,6 +374,15 @@
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Entity.html">Struct World::Entity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1bytestreambuf.html">Class bytestreambuf</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1ibytestream.html">Class ibytestream</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1obytestream.html">Class obytestream</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1PackedDecoder.html">Class PackedDecoder</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -389,13 +398,28 @@
 <li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html">Enum FormatCode</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a22932423cd06889c43858a17a04501a0.html">Function libcacaoformats::DecodeAudio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a6dbc091179a24aea80fc9c7a212cbc65.html">Function libcacaoformats::DecodeAudio</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a6b0bb1b7e1f5d8abcc27711e040198f4.html">Function libcacaoformats::DecodeImage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a666eef4f2ade02936a3447bbfc54e809.html">Function libcacaoformats::DecodeImage</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a37d0d810d0f68299266927d0c3b72d93.html">Function libcacaoformats::EncodeImage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1af46a88801c3f00c29add81f5304f347a.html">Function libcacaoformats::EncodeImage</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_libcacaoformats_8hpp_1a50a14b2d91ed6b9359d7c4dc1371f840.html">Typedef libcacaoformats::uifstream</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_libcacaoformats_8hpp_1a07913f305defdbffda738949bacf2056.html">Typedef libcacaoformats::uistream</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_libcacaoformats_8hpp_1ae3ebbee6cc5c4c90233cdcad524cee96.html">Typedef libcacaoformats::uofstream</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_libcacaoformats_8hpp_1a791cd64c904a3ae5e5d1730ff79f2b87.html">Typedef libcacaoformats::uostream</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_libcacaoformats_8hpp_1aaf13ffeee84b4667e67aacf3990b5603.html">Typedef libcacaoformats::ustreambuf</a></li>
 </ul>
 </div>
 </nav></div>
@@ -465,35 +489,29 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8Material">
-<span id="_CPPv3N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8Material"></span><span id="_CPPv2N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8Material"></span><span id="libcacaoformats::UnpackedEncoder::EncodeMaterial__MaterialCR"></span><span class="target" id="classlibcacaoformats_1_1UnpackedEncoder_1a537f696b62d5a14f255527b3da5e6fd4"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeMaterial</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1Material.html#_CPPv4N15libcacaoformats8MaterialE" title="libcacaoformats::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8Material" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Extract the data from a packed material. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8MaterialNSt7ostreamE">
+<span id="_CPPv3N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8MaterialNSt7ostreamE"></span><span id="_CPPv2N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8MaterialNSt7ostreamE"></span><span id="libcacaoformats::UnpackedEncoder::EncodeMaterial__MaterialCR.os"></span><span class="target" id="classlibcacaoformats_1_1UnpackedEncoder_1a65c6c9ac13915bb9bb2d95dbddc9affb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeMaterial</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1Material.html#_CPPv4N15libcacaoformats8MaterialE" title="libcacaoformats::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mat</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8MaterialNSt7ostreamE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Encode a <a class="reference internal" href="structlibcacaoformats_1_1Material.html#structlibcacaoformats_1_1Material"><span class="std std-ref">Material</span></a> object to its unpacked format. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> – A string containg YAML encoding the material information</p>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the data does not represent a valid material </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="structlibcacaoformats_1_1Material.html#structlibcacaoformats_1_1Material"><span class="std std-ref">Material</span></a> object with shader reference string and data</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mat</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1Material.html#structlibcacaoformats_1_1Material"><span class="std std-ref">Material</span></a> object to encode </p></li>
+<li><p><strong>out</strong> – A stream to output material YAML data to </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5World">
-<span id="_CPPv3N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5World"></span><span id="_CPPv2N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5World"></span><span id="libcacaoformats::UnpackedEncoder::EncodeWorld__WorldCR"></span><span class="target" id="classlibcacaoformats_1_1UnpackedEncoder_1a15864463f8b8fc1c2e9a4f5d19d47817"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeWorld</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1World.html#_CPPv4N15libcacaoformats5WorldE" title="libcacaoformats::World"><span class="n"><span class="pre">World</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">world</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5World" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Extract the data from a packed world. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5WorldNSt7ostreamE">
+<span id="_CPPv3N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5WorldNSt7ostreamE"></span><span id="_CPPv2N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5WorldNSt7ostreamE"></span><span id="libcacaoformats::UnpackedEncoder::EncodeWorld__WorldCR.os"></span><span class="target" id="classlibcacaoformats_1_1UnpackedEncoder_1a617b4020a47040bef61c21c91ebea609"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeWorld</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1World.html#_CPPv4N15libcacaoformats5WorldE" title="libcacaoformats::World"><span class="n"><span class="pre">World</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">world</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5WorldNSt7ostreamE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Encode a <a class="reference internal" href="structlibcacaoformats_1_1World.html#structlibcacaoformats_1_1World"><span class="std std-ref">World</span></a> object to its unpacked format. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> – A string containg YAML encoding the world information</p>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the data does not represent a valid world </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="structlibcacaoformats_1_1World.html#structlibcacaoformats_1_1World"><span class="std std-ref">World</span></a> object containing the initial state of the world</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1World.html#structlibcacaoformats_1_1World"><span class="std std-ref">World</span></a> object to encode </p></li>
+<li><p><strong>out</strong> – A stream to output material YAML data to </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -553,8 +571,8 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedEncoderE"><code class="docutils literal notranslate"><span class="pre">UnpackedEncoder</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8Material"><code class="docutils literal notranslate"><span class="pre">UnpackedEncoder::EncodeMaterial()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5World"><code class="docutils literal notranslate"><span class="pre">UnpackedEncoder::EncodeWorld()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedEncoder14EncodeMaterialERK8MaterialNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">UnpackedEncoder::EncodeMaterial()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedEncoder11EncodeWorldERK5WorldNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">UnpackedEncoder::EncodeWorld()</span></code></a></li>
 </ul>
 </li>
 </ul>
