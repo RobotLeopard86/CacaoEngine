@@ -172,14 +172,34 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer DecodeAudio(const std::vector<unsigned char>& encoded) {
-		CheckException(encoded.size() >= 4, "Encoded data is too small!");
+	AudioBuffer DecodeAudio(std::istream encoded) {
+		CheckException(encoded.good(), "Encoded data stream for audio is invalid!");
 
 		//Determine audio format by reading header
 
 		//Grab the first four header bytes
 		std::string header(4, '\0');
-		std::memcpy(header.data(), encoded.data(), 4);
+		encoded.read(header.data(), header.size());
+
+		//Dump file to buffer
+		std::vector<unsigned char> buffer = [&encoded]() {
+			try {
+				//Grab size
+				encoded.exceptions(std::ios::failbit | std::ios::badbit);
+				encoded.seekg(0, std::ios::end);
+				auto size = encoded.tellg();
+				encoded.seekg(0, std::ios::beg);
+
+				//Read data
+				std::vector<unsigned char> contents(size);
+				encoded.read(reinterpret_cast<char*>(contents.data()), size);
+
+				return contents;
+			} catch(std::ios_base::failure& ios_failure) {
+				if(errno == 0) { throw ios_failure; }
+				CheckException(false, "Failed to read encoded audio data stream!");
+			}
+		}();
 
 		//Check for MP3
 		//These can either just start with a frame or have ID3 data, so we check both
@@ -188,7 +208,7 @@ namespace libcacaoformats {
 
 			//The weird binary bit is checking for the sync instruction that all MP3 frames start with
 			if(mp3.compare("ID3") == 0 || (static_cast<unsigned char>(header[0]) == 0xFF && (static_cast<unsigned char>(header[1]) & 0xE0) == 0xE0)) {
-				return MP3Decode(encoded);
+				return MP3Decode(buffer);
 			}
 		}
 
@@ -196,9 +216,10 @@ namespace libcacaoformats {
 		if(header.compare("RIFF") == 0) {
 			//Read a bit more to confirm WAV
 			std::string waveHeader(4, '\0');
-			std::memcpy(waveHeader.data(), encoded.data() + 4, 4);
+			encoded.seekg(8, std::ios::beg);
+			encoded.read(&waveHeader[0], waveHeader.size());
 			if(waveHeader == "WAVE") {
-				return WAVDecode(encoded);
+				return WAVDecode(buffer);
 			}
 		}
 
@@ -206,13 +227,13 @@ namespace libcacaoformats {
 		if(header.compare("OggS") == 0) {
 			//Read the Ogg Header
 			std::string oggHeader(64, '\0');
-			CheckException(encoded.size() >= 64, "Encoded data is too small to read Ogg header!");
-			std::memcpy(oggHeader.data(), encoded.data(), 64);
+			encoded.seekg(0, std::ios::beg);
+			encoded.read(&oggHeader[0], oggHeader.size());
 
 			if(oggHeader.find("vorbis") != std::string::npos) {
-				return VorbisDecode(encoded);
+				return VorbisDecode(buffer);
 			} else if(oggHeader.find("OpusHead") != std::string::npos) {
-				return OpusDecode(encoded);
+				return OpusDecode(buffer);
 			}
 		}
 

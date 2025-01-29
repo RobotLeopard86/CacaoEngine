@@ -35,26 +35,19 @@ namespace libcacaoformats {
 		std::array<std::array<T, M>, N> data;
 	};
 
-	///@brief Utility type shortcuts for working with binary streams
-	using ustreambuf = std::basic_streambuf<unsigned char>;
-	using uistream = std::basic_istream<unsigned char>;
-	using uostream = std::basic_ostream<unsigned char>;
-	using uifstream = std::basic_ifstream<unsigned char>;
-	using uofstream = std::basic_ofstream<unsigned char>;
-
 	/**
 	 * @brief Byte stream buffer
 	 *
 	 * @note Only valid as long as the backing vector is
 	 */
-	class bytestreambuf : public ustreambuf {
+	class bytestreambuf : public std::streambuf {
 	  public:
 		/**
 		 * @brief Create a bytestreambuf from a vector of data
 		 *
 		 * @param data The vector to map operations to
 		 */
-		bytestreambuf(std::vector<unsigned char>& data) {
+		bytestreambuf(std::vector<char>& data) {
 			//Map the vector data range to the stream buffer
 			setg(data.data(), data.data(), data.data() + (data.size() * sizeof(unsigned char)));
 		}
@@ -65,10 +58,10 @@ namespace libcacaoformats {
 	 *
 	 * @note Only valid as long as the backing vector is
 	 */
-	class ibytestream : public uistream {
+	class ibytestream : public std::istream {
 	  public:
-		ibytestream(std::vector<unsigned char>& data)
-		  : uistream(&buf), buf(data) {
+		ibytestream(std::vector<char>& data)
+		  : std::istream(&buf), buf(data) {
 			//Set the backing buffer for the stream
 			rdbuf(&buf);
 		}
@@ -82,10 +75,10 @@ namespace libcacaoformats {
 	 *
 	 * @note Only valid as long as the backing vector is
 	 */
-	class obytestream : public uostream {
+	class obytestream : public std::ostream {
 	  public:
-		obytestream(std::vector<unsigned char>& data)
-		  : uostream(&buf), buf(data) {
+		obytestream(std::vector<char>& data)
+		  : std::ostream(&buf), buf(data) {
 			//Set the backing buffer for the stream
 			rdbuf(&buf);
 		}
@@ -107,13 +100,13 @@ namespace libcacaoformats {
 	 *
 	 * @details Supports MP3, WAV, Ogg Vorbis, and Ogg Opus
 	 *
-	 * @param encoded The encoded audio data to decode, provided via byte stream
+	 * @param encoded The encoded audio data to decode, provided via stream
 	 *
 	 * @return An AudioBuffer containing the decoded information
 	 *
 	 * @throws std::runtime_error If the provided data is not of the correct size, is of an unsupported format, or the audio decoding fails
 	 */
-	AudioBuffer DecodeAudio(uistream encoded);
+	AudioBuffer DecodeAudio(std::istream encoded);
 
 	///@brief Decoded image data and properties necessary to use it
 	struct ImageBuffer {
@@ -125,25 +118,25 @@ namespace libcacaoformats {
 	/**
 	 * @brief Convenience function for decoding image data
 	 *
-	 * @details Supports JPEG, PNG, TGA, BMP, GIF (non-animated), and HDR
+	 * @details Supports JPEG, PNG, TGA, BMP, and HDR
 	 *
-	 * @param encoded The encoded image data to decode, provided via byte stream
+	 * @param encoded The encoded image data to decode, provided via stream
 	 *
 	 * @return An ImageBuffer containing the decoded information
 	 *
 	 * @throws std::runtime_error If no data is provided, data is of an unsupported format, or the image decoding fails
 	 */
-	ImageBuffer DecodeImage(uistream encoded);
+	ImageBuffer DecodeImage(std::istream encoded);
 
 	/**
 	 * @brief Convenience function for encoding ImageBuffer data to PNG format
 	 *
 	 * @param img The ImageBuffer to encode
-	 * @param out A byte stream to output the resulting PNG-encoded data to
+	 * @param out A stream to output the resulting PNG-encoded data to
 	 *
 	 * @throws std::runtime_error If the image has zero dimensions or holds invalid data
 	 */
-	void EncodeImage(const ImageBuffer& img, uostream out);
+	void EncodeImage(const ImageBuffer& img, std::ostream out);
 
 	///@brief Decoded shader data
 	struct Shader {
@@ -173,15 +166,15 @@ namespace libcacaoformats {
 		const std::vector<unsigned char> payload;///<Decompressed payload data
 
 		/**
-		 * @brief Create a PackedContainer from a byte stream
+		 * @brief Create a PackedContainer from a stream
 		 *
-		 * @param stream A byte stream referencing the contents of a packed file format
+		 * @param stream A stream referencing the contents of a packed file format
 		 *
 		 * @return PackedContainer object
 		 *
 		 * @throws std::runtime_error If the buffer is not a valid packed file or the hash in the buffer does not match the payload
 		 */
-		PackedContainer(uistream stream);
+		PackedContainer(std::istream stream);
 
 		/**
 		 * @brief Create a PackedContainer by manually specifying attributes
@@ -201,11 +194,11 @@ namespace libcacaoformats {
 		/**
 		 * @brief Export a PackedContainer to a buffer
 		 *
-		 * @param stream A byte stream to output data to
+		 * @param stream A stream to output data to
 		 *
 		 * @throws std::runtime_error If the container has no data or data compression fails
 		 */
-		void Export(uostream stream);
+		void Export(std::ostream stream);
 
 	  private:
 		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);
