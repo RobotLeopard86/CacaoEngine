@@ -8,7 +8,7 @@
 #include <cstring>
 
 namespace libcacaoformats {
-	ImageBuffer DecodeImage(std::istream encoded) {
+	ImageBuffer DecodeImage(std::istream& encoded) {
 		CheckException(encoded.good(), "Encoded data stream for image is invalid!");
 
 		//Read input stream into buffer

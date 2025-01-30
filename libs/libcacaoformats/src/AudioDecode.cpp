@@ -172,7 +172,7 @@ namespace libcacaoformats {
 		return abuf;
 	}
 
-	AudioBuffer DecodeAudio(std::istream encoded) {
+	AudioBuffer DecodeAudio(std::istream& encoded) {
 		CheckException(encoded.good(), "Encoded data stream for audio is invalid!");
 
 		//Determine audio format by reading header

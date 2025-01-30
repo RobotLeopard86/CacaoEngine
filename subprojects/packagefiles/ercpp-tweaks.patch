@@ -1,0 +1,48 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 01fe7f0..02a89fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,16 +1,15 @@
+ cmake_minimum_required(VERSION 3.19)
+ 
+-include(cmake/tools.cmake)
+-update_submodule(vcpkg)
+-set_policies()
++project(easy_reflection VERSION 0.1.0)
+ 
+-set(CMAKE_TOOLCHAIN_FILE vcpkg/scripts/buildsystems/vcpkg.cmake)
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+ 
+ # Enable vcpkg features
+-option(ENABLE_TESTS      "Enable tests"      ON)
++option(ENABLE_TESTS      "Enable tests"      OFF)
+ option(ENABLE_GENERATOR  "Enable generator"  OFF)
+ option(ENABLE_BENCHMARKS "Enable benchmarks" OFF)
+-
+ if(ENABLE_TESTS)
+     list(APPEND VCPKG_MANIFEST_FEATURES "tests")
+ endif()
+@@ -21,17 +20,13 @@ if(ENABLE_BENCHMARKS)
+     list(APPEND VCPKG_MANIFEST_FEATURES "benchmarks")
+ endif()
+ 
+-# Setup project
+-project(easy_reflection VERSION 0.1.0)
+-
+-set(CMAKE_CXX_STANDARD 17)
+-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+-set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
++include(cmake/tools.cmake)
++update_submodule(vcpkg)
++set_policies()
+ 
+-enable_testing()
++include(vcpkg/scripts/buildsystems/vcpkg.cmake)
+ 
+ add_subdirectory(library)
+-add_subdirectory(example)
+ 
+ if(ENABLE_TESTS)
+     add_subdirectory(tests)

@@ -106,7 +106,7 @@ namespace libcacaoformats {
 	 *
 	 * @throws std::runtime_error If the provided data is not of the correct size, is of an unsupported format, or the audio decoding fails
 	 */
-	AudioBuffer DecodeAudio(std::istream encoded);
+	AudioBuffer DecodeAudio(std::istream& encoded);
 
 	///@brief Decoded image data and properties necessary to use it
 	struct ImageBuffer {
@@ -126,7 +126,7 @@ namespace libcacaoformats {
 	 *
 	 * @throws std::runtime_error If no data is provided, data is of an unsupported format, or the image decoding fails
 	 */
-	ImageBuffer DecodeImage(std::istream encoded);
+	ImageBuffer DecodeImage(std::istream& encoded);
 
 	/**
 	 * @brief Convenience function for encoding ImageBuffer data to PNG format
@@ -174,7 +174,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the buffer is not a valid packed file or the hash in the buffer does not match the payload
 		 */
-		PackedContainer(std::istream stream);
+		PackedContainer(std::istream& stream);
 
 		/**
 		 * @brief Create a PackedContainer by manually specifying attributes
@@ -325,16 +325,28 @@ namespace libcacaoformats {
 		 * @brief Extract and decode the images in a cubemap
 		 *
 		 * @param data A stream to load cubemap YAML data from
-		 * @param loader A function to get streams from names referenced in the main cubemap file
+		 * @param loader A function to get streams from names referenced in the main cubemap file. Set the "badbit" flag on the stream before returning to indicate a failed load.
 		 *
 		 * @return Decoded cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid cubemap or the provided IO callback fails to load faces
 		 */
-		std::array<ImageBuffer, 6> DecodeCubemap(std::istream data, std::function<std::istream(const std::string&)> loader);
+		std::array<ImageBuffer, 6> DecodeCubemap(std::istream& data, std::function<std::istream(const std::string&)> loader);
 
 		/**
-		 * @brief Extract the data from a packed material
+		 * @brief Extract the SPIR-V from an unpacked shader
+		 *
+		 * @param data A stream to load shader YAML data from
+		 * @param loader A function to get streams from names referenced in the main shader file. Set the "badbit" flag on the stream before returning to indicate a failed load.
+		 *
+		 * @return Shader object containing vertex and fragment shader stages in SPIR-V format
+		 *
+		 * @throws std::runtime_error If the data does not represent a valid shader or the provided IO callback fails to load shader code
+		 */
+		Shader DecodeShader(std::istream& data, std::function<std::istream(const std::string&)> loader);
+
+		/**
+		 * @brief Extract the data from an unpacked material
 		 *
 		 * @param data A stream to load material YAML data from
 		 *
@@ -342,10 +354,10 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid material
 		 */
-		Material DecodeMaterial(std::istream data);
+		Material DecodeMaterial(std::istream& data);
 
 		/**
-		 * @brief Extract the data from a packed world
+		 * @brief Extract the data from an unpacked world
 		 *
 		 * @param data A stream to load world YAML data from
 		 *
@@ -353,7 +365,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid world
 		 */
-		World DecodeWorld(std::istream data);
+		World DecodeWorld(std::istream& data);
 	};
 
 	///@brief Encoder for uncompressed packed format buffers

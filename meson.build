@@ -98,7 +98,6 @@ glm = subproject('glm', required: true).get_variable('glm_dep')
 yaml_opts = cmake.subproject_options()
 yaml_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
 	'YAML_CPP_BUILD_TOOLS': 'OFF',
 	'YAML_CPP_BUILD_TESTS': 'OFF',
 	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
@@ -108,6 +107,17 @@ yaml_opts.add_cmake_defines({
 })
 yaml_opts.set_install(true)
 yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
+
+# Configure er-cpp
+er_opts = cmake.subproject_options()
+er_opts.add_cmake_defines({
+	'BUILD_SHARED_LIBS': 'OFF',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+})
+er_opts.set_install(true)
+er_cpp = cmake.subproject('er-cpp', options: er_opts, required: true).dependency('reflection')
 
 # Build components
 if build_libs
