@@ -411,58 +411,30 @@
                   
   <section id="platform-support">
 <h1>Platform Support<a class="headerlink" href="#platform-support" title="Link to this heading"><span/></a></h1>
-<section id="officially-supported">
-<h2>Officially Supported<a class="headerlink" href="#officially-supported" title="Link to this heading"><span/></a></h2>
+<section id="supported-oses-and-architectures">
+<h2>Supported OSes and Architectures<a class="headerlink" href="#supported-oses-and-architectures" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Windows</p></li>
-<li><p>macOS</p></li>
-<li><p>GNU/Linux (most distros)</p></li>
-</ul>
-<p>Note that Cacao Engine <strong>only supports 64-bit operating systems</strong>. x86_64 is the only supported architecture on Windows and GNU/Linux, whereas only aarch64/arm64 is supported on macOS.</p>
-<p>More operating systems/platforms may be supported in the future, though this is not guaranteed.</p>
-</section>
-<section id="support-policy">
-<h2>Support Policy<a class="headerlink" href="#support-policy" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p>All minor versions will be supported as long as their respective major version is</p></li>
-<li><p>Windows platforms will have the current OS release supported for the <strong>latest two versions</strong> (e.g. Windows 11 23H2 and 24H2)</p></li>
-<li><p>macOS will be supported through the <strong>last two major OS releases</strong> for all patch versions (e.g. Sonoma and Sequoia)</p>
-<ul>
-<li><p>macOS is supported for more releases than Windows because macOS receives yearly releases compared to Windows, which sticks on one “release” (e.g. Windows 11) with multiple yearly updates over its lifespan</p></li>
-</ul>
-</li>
-<li><p>GNU/Linux distros will generally be supported for their <strong>last two releases in addition to the latest LTS version</strong> that is not one of the last two</p>
-<ul>
-<li><p>Example: Ubuntu 22.04, 24.04, and 24.10</p></li>
-<li><p>Distros that do not make LTS releases will have their last <strong>three</strong> releases supported instead of two.</p></li>
-<li><p>Rolling release distros will be supported generally, but support may not be offered if the system is too out-of-date</p></li>
-<li><p>For distros that do not release major versions often (e.g. Debian, RHEL), support will only be offered for the latest version</p></li>
-<li><p>For now, X11 and Wayland are both officially supported, but X11 support may be dropped in the future</p></li>
-</ul>
-</li>
-<li><p>Any version set to go out of support with new releases will have a transitional period of 3 months offered, after which new support requests for those versions will no longer be accepted (existing requests will be fulfilled)</p></li>
+<li><p>x86_64 Windows</p></li>
+<li><p>aarch64 macOS (Apple Silicon)</p></li>
+<li><p>x86_64/aarch64 GNU/Linux (most distros)</p></li>
 </ul>
 </section>
 <section id="currently-supported-gnu-linux-distros">
 <h2>Currently Supported GNU/Linux Distros<a class="headerlink" href="#currently-supported-gnu-linux-distros" title="Link to this heading"><span/></a></h2>
-<p>Not every GNU/LINUX distro is supported, but most popular ones are:</p>
+<p>Not every GNU/LINUX distro is supported, but most are:</p>
 <ul class="simple">
 <li><p>Debian and derivatives (e.g. Ubuntu, Linux Mint, Pop!_OS)</p></li>
 <li><p>Fedora and derivatives (e.g. Nobara)</p></li>
 <li><p>Arch and derivatives (e.g. EndeavourOS, Garuda, Manjaro)</p></li>
 </ul>
-<p>As of now, SteamOS is in a bit of limbo with support, as the only way to run it off of the Steam Deck is with unofficial ISOs. It will generally be supported like most Arch derivatives, but SteamOS quirks may be difficult to resolve. If SteamOS is ever released onto desktop, it will be fully supported</p>
+<p>SteamOS will be supported for playing games, but developing on SteamOS is not likely to be ever supported.</p>
+<p>Support for openSUSE is planned and will come in the future.</p>
+<p>More operating systems/platforms may be supported in the future, though this is not guaranteed.</p>
 </section>
-<section id="currently-supported-os-versions">
-<h2>Currently Supported OS Versions<a class="headerlink" href="#currently-supported-os-versions" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p>Windows 11 23/24H2</p></li>
-<li><p>macOS 14.x (Sonoma) and 15.x (Sequoia)</p></li>
-<li><p>Ubuntu 22.04 (Jammy), 24.04 (Noble), and 24.10 (Oracular) and derivatives (look online for how to check what Ubuntu release your distro is based on)</p></li>
-<li><p>Fedora 40 and 41</p></li>
-<li><p>Arch and derivatives</p></li>
-<li><p>Debian 12 (Bookworm)</p></li>
-</ul>
+<section id="system-versioning-notes">
+<h2>System Versioning Notes<a class="headerlink" href="#system-versioning-notes" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 15.1 should be supported as long any 15.x release is), but this is not guaranteed.<br />
+<strong>In general, nost up-to-date systems should be supported.</strong></p>
 </section>
 </section>
 
@@ -513,10 +485,9 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#officially-supported">Officially Supported</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#support-policy">Support Policy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-oses-and-architectures">Supported OSes and Architectures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#currently-supported-gnu-linux-distros">Currently Supported GNU/Linux Distros</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#currently-supported-os-versions">Currently Supported OS Versions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-versioning-notes">System Versioning Notes</a></li>
 </ul>
   </nav></div>
 
