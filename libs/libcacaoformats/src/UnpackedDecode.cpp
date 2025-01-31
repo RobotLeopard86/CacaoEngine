@@ -162,4 +162,18 @@ namespace libcacaoformats {
 		//Return result
 		return out;
 	}
+
+	Material UnpackedDecoder::DecodeMaterial(std::istream& data) {
+		CheckException(data.good(), "Data stream for unpacked material is invalid!");
+
+		//Load YAML
+		YAML::Node root;
+		try {
+			root = YAML::Load(data);
+		} catch(...) {
+			CheckException(false, "Failed to parse unpacked material data stream!");
+		}
+
+		//Validate structure
+	}
 }
