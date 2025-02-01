@@ -554,6 +554,32 @@ namespace libcacaoformats {
 			YAML::Node name = e["name"];
 			ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "unpacked world entity", "Name is not a string");
 			entity.name = name.Scalar();
+
+			YAML::Node guid = e["guid"];
+			ValidateYAMLNode(guid, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
+				for(char c : node.Scalar()) {
+					if(c == '-') continue;
+					if(c < 48 || c > 102 || (c > 57 && c < 97)) {
+						std::stringstream ss;
+						ss << "Invalid GUID character \"" << c << "\"" << std::endl;
+						return ss.str();
+					}
+				}
+				return ""; }, "unpacked world entity", "GUID is not a string");
+			entity.guid = guid.Scalar();
+
+			YAML::Node parentGUID = e["parent"];
+			ValidateYAMLNode(parentGUID, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
+				for(char c : node.Scalar()) {
+					if(c == '-') continue;
+					if(c < 48 || c > 102 || (c > 57 && c < 97)) {
+						std::stringstream ss;
+						ss << "Invalid GUID character \"" << c << "\"" << std::endl;
+						return ss.str();
+					}
+				}
+				return ""; }, "unpacked world entity", "GUID is not a string");
+			entity.parentGUID = guid.Scalar();
 		}
 
 		//Return result

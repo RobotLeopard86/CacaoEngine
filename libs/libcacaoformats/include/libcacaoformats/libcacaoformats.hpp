@@ -250,13 +250,13 @@ namespace libcacaoformats {
 
 		///@brief Type for entities in the world
 		struct Entity {
-			std::array<uint8_t, 16> guid;	   ///<Entity GUID
-			std::array<uint8_t, 16> parentGUID;///<GUID of parent entity or all zeroes if this is a top-level entity
-			std::string name;				   ///<Human-friendly entity name
-			Vec3<float> initialPos;			   ///<Initial position
-			Vec3<float> initialRot;			   ///<Initial rotation
-			Vec3<float> initialScale;		   ///<Initial scale
-			std::vector<Component> components; ///<Components mounted on this entity initially
+			std::string guid;				  ///<Entity GUID
+			std::string parentGUID;			  ///<GUID of parent entity or all zeroes if this is a top-level entity
+			std::string name;				  ///<Human-friendly entity name
+			Vec3<float> initialPos;			  ///<Initial position
+			Vec3<float> initialRot;			  ///<Initial rotation
+			Vec3<float> initialScale;		  ///<Initial scale
+			std::vector<Component> components;///<Components mounted on this entity initially
 		};
 		std::vector<Entity> entities;///<Entities in the world
 	};
