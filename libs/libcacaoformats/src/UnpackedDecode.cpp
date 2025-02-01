@@ -6,7 +6,12 @@
 #include "er/serialization/yaml.h"
 
 namespace libcacaoformats {
-	//Normally I wouldn't use a Doxygen comment here, but it's formatted nicely, so
+	unsigned int stou(std::string value) {
+		int i = std::stoi(value);
+		if(i < 0) throw std::invalid_argument("Value is signed");
+		return (unsigned int)i;
+	}
+
 	/**
 	 * @brief Validates a YAML node
 	 *
@@ -21,8 +26,6 @@ namespace libcacaoformats {
 		//Set up error message stream
 		std::stringstream stream;
 		stream << "While parsing " << context << ", " << what << " node is invalid: ";
-
-		//You will see a lot of the comma operator. Look it up if you don't know what it does.
 
 		//Check that the node exists and is the right type
 		CheckException(node.IsDefined(), ((stream << "Node does not exist"), stream.str()));
@@ -174,6 +177,339 @@ namespace libcacaoformats {
 			CheckException(false, "Failed to parse unpacked material data stream!");
 		}
 
-		//Validate structure
+		Material out;
+
+		//Validate and parse structure
+		YAML::Node shader = root["shader"];
+		ValidateYAMLNode(shader, YAML::NodeType::value::Scalar, "unpacked material data", "shader reference");
+		out.shader = shader.Scalar();
+		YAML::Node keysRoot = root["keys"];
+		ValidateYAMLNode(keysRoot, YAML::NodeType::Sequence, "unpacked material data", "key list");
+		for(const YAML::Node& node : keysRoot) {
+			constexpr std::array<const char*, 5> okTypes = {{"int", "uint", "float", "tex2d", "cubemap"}};
+			ValidateYAMLNode(node["name"], YAML::NodeType::value::Scalar, "unpacked material data key", "key name");
+			ValidateYAMLNode(node["baseType"], YAML::NodeType::value::Scalar, [](const YAML::Node& node2) {
+				auto it = std::find(okTypes.begin(), okTypes.end(), node2.Scalar().c_str());
+				return (it != okTypes.end() ? "" : "Invalid base type"); }, "unpacked material data key", "key base type");
+			ValidateYAMLNode(node["x"], YAML::NodeType::value::Scalar, [](const YAML::Node& node2) {
+				try {
+					int val = std::stoi(node2.Scalar().c_str(), nullptr);
+					return (val > 0 && val < 5) ? "" : "Invalid size value";
+				} catch(...) {
+					return "Unable to convert value to integer";
+				} }, "unpacked material data key", "key x size");
+			ValidateYAMLNode(node["y"], YAML::NodeType::value::Scalar, [](const YAML::Node& node2) {
+				try {
+					int val = std::stoi(node2.Scalar().c_str(), nullptr);
+					return (val > 0 && val < 5) ? "" : "Invalid size value";
+				} catch(...) {
+					return "Unable to convert value to integer";
+				} }, "unpacked material data key", "key y size");
+			Material::ValueContainer value;
+			ValidateYAMLNode(node["value"], [&node, &value](const YAML::Node& node2) {
+				int idx = 0;
+				for(; idx < okTypes.size(); idx++) {
+					if(node["baseType"].Scalar().compare(okTypes[idx]) == 0) break;
+				}
+				if(idx > 4) return "Invalid base type";
+				Vec2<int> size;
+				try {
+					size.x = std::stoi(node["x"].Scalar().c_str(), nullptr);
+					return (size.x > 0 && size.x < 5) ? "" : "Invalid x size value";
+				} catch(...) {
+					return "Unable to convert x size value to integer";
+				}
+				if(idx >= 3 && size.x != 1) return "Invalid x size value for texture";
+				try {
+					size.y = std::stoi(node["y"].Scalar().c_str(), nullptr);
+					return (size.y > 0 && size.y < 5) ? "" : "Invalid y size value";
+				} catch(...) {
+					return "Unable to convert y size value to integer";
+				}
+				if(idx >= 3 && size.y != 1) return "Invalid y size value for texture";
+				if(idx >= 3) {
+					value = node2.Scalar();
+					return "";
+				}
+				if(size.x == 1 && size.y != 1) return "Invalid y size for an x size 1";
+				if(idx != 2 && size.y > 1) return "Invalid y size for non-float value";
+				int dims = (4 * size.y) - (4 - size.x);
+				try {
+					switch(idx) {
+						case 0:
+							switch(dims) {
+								case 1:
+									if(!node2.IsScalar()) return "Non-integer value supplied for integer key";
+									value = std::stoi(node2.Scalar().c_str(), nullptr);
+									return "";
+								case 2: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar())) return "Expected 'x' and 'y' scalar values for two-component integer vector";
+									Vec2<int> v;
+									v.x = std::stoi(node2["x"].Scalar().c_str());
+									v.y = std::stoi(node2["y"].Scalar().c_str());
+									value = v;
+									return "";
+								}
+								case 3: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar() && node2["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for three-component integer vector";
+									Vec3<int> v;
+									v.x = std::stoi(node2["x"].Scalar().c_str());
+									v.y = std::stoi(node2["y"].Scalar().c_str());
+									v.z = std::stoi(node2["z"].Scalar().c_str());
+									value = v;
+									return "";
+								}
+								case 4: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar() && node2["z"].IsScalar() && node2["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for four-component integer vector";
+									Vec4<int> v;
+									v.x = std::stoi(node2["x"].Scalar().c_str());
+									v.y = std::stoi(node2["y"].Scalar().c_str());
+									v.z = std::stoi(node2["z"].Scalar().c_str());
+									v.w = std::stoi(node2["w"].Scalar().c_str());
+									value = v;
+									return "";
+								}
+							}
+						case 1:
+							switch(dims) {
+								case 1:
+									if(!node2.IsScalar()) return "Non-integer value supplied for unsigned integer key";
+									value = stou(node2.Scalar().c_str());
+									return "";
+								case 2: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar())) return "Expected 'x' and 'y' scalar values for two-component unsigned integer vector";
+									Vec2<unsigned int> v;
+									v.x = stou(node2["x"].Scalar().c_str());
+									v.y = stou(node2["y"].Scalar().c_str());
+									value = v;
+									return "";
+								}
+								case 3: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar() && node2["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for three-component unsigned integer vector";
+									Vec3<unsigned int> v;
+									v.x = stou(node2["x"].Scalar().c_str());
+									v.y = stou(node2["y"].Scalar().c_str());
+									v.z = stou(node2["z"].Scalar().c_str());
+									value = v;
+									return "";
+								}
+								case 4: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar() && node2["z"].IsScalar() && node2["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for four-component unsigned integer vector";
+									Vec4<unsigned int> v;
+									v.x = stou(node2["x"].Scalar().c_str());
+									v.y = stou(node2["y"].Scalar().c_str());
+									v.z = stou(node2["z"].Scalar().c_str());
+									v.w = stou(node2["w"].Scalar().c_str());
+									value = v;
+									return "";
+								}
+							}
+						case 2:
+							switch(dims) {
+								case 1:
+									if(!node2.IsScalar()) return "Non-float value supplied for float key";
+									value = std::strtof(node2.Scalar().c_str(), nullptr);
+									return "";
+								case 2: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar())) return "Expected 'x' and 'y' scalar values for two-component float vector";
+									Vec2<float> v;
+									v.x = std::strtof(node2["x"].Scalar().c_str(), nullptr);
+									v.y = std::strtof(node2["y"].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 3: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar() && node2["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for three-component float vector";
+									Vec3<float> v;
+									v.x = std::strtof(node2["x"].Scalar().c_str(), nullptr);
+									v.y = std::strtof(node2["y"].Scalar().c_str(), nullptr);
+									v.z = std::strtof(node2["z"].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 4: {
+									if(!(node2.IsMap() && node2["x"].IsScalar() && node2["y"].IsScalar() && node2["z"].IsScalar() && node2["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for four-component float vector";
+									Vec4<float> v;
+									v.x = std::strtof(node2["x"].Scalar().c_str(), nullptr);
+									v.y = std::strtof(node2["y"].Scalar().c_str(), nullptr);
+									v.z = std::strtof(node2["z"].Scalar().c_str(), nullptr);
+									v.w = std::strtof(node2["w"].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 6: {
+									if(!(node2.IsSequence() && node2.size() != 2)) return "Non-2-row matrix supplied for 2x2 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x2 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x2 matrix";
+									Matrix<float, 2, 2> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 7: {
+									if(!(node2.IsSequence() && node2.size() != 3)) return "Non-3-row matrix supplied for 2x3 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x3 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x3 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() != 2 && node2[2][0].IsScalar() && node2[2][1].IsScalar())) return "Non-2 float sequence supplied at row 3 of 2x3 matrix";
+									Matrix<float, 2, 3> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[2][0] = std::strtof(node2[2][0].Scalar().c_str(), nullptr);
+									v.data[2][1] = std::strtof(node2[2][1].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 8: {
+									if(!(node2.IsSequence() && node2.size() != 4)) return "Non-4-row matrix supplied for 2x4 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x4 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x4 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() != 2 && node2[2][0].IsScalar() && node2[2][1].IsScalar())) return "Non-2 float sequence supplied at row 3 of 2x4 matrix";
+									if(!(node2[3].IsSequence() && node2[3].size() != 2 && node2[3][0].IsScalar() && node2[3][1].IsScalar())) return "Non-2 float sequence supplied at row 4 of 2x4 matrix";
+									Matrix<float, 2, 4> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[2][0] = std::strtof(node2[2][0].Scalar().c_str(), nullptr);
+									v.data[2][1] = std::strtof(node2[2][1].Scalar().c_str(), nullptr);
+									v.data[3][0] = std::strtof(node2[3][0].Scalar().c_str(), nullptr);
+									v.data[3][1] = std::strtof(node2[3][1].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 10: {
+									if(!(node2.IsSequence() && node2.size() != 2)) return "Non-2-row matrix supplied for 3x2 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x2 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x2 matrix";
+									Matrix<float, 3, 2> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[0][2] = std::strtof(node2[0][2].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[1][2] = std::strtof(node2[1][2].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 11: {
+									if(!(node2.IsSequence() && node2.size() != 3)) return "Non-3-row matrix supplied for 3x3 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x3 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x3 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() != 3 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node2[2][2].IsScalar())) return "Non-3 float sequence supplied at row 3 of 3x3 matrix";
+									Matrix<float, 3, 3> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[0][2] = std::strtof(node2[0][2].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[1][2] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[2][0] = std::strtof(node2[2][0].Scalar().c_str(), nullptr);
+									v.data[2][1] = std::strtof(node2[2][1].Scalar().c_str(), nullptr);
+									v.data[2][2] = std::strtof(node2[2][2].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 12: {
+									if(!(node2.IsSequence() && node2.size() != 4)) return "Non-4-row matrix supplied for 3x4 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x4 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x4 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() != 3 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node2[2][2].IsScalar())) return "Non-3 float sequence supplied at row 3 of 3x4 matrix";
+									if(!(node2[3].IsSequence() && node2[3].size() != 3 && node2[3][0].IsScalar() && node2[3][1].IsScalar() && node2[3][2].IsScalar())) return "Non-3 float sequence supplied at row 4 of 3x4 matrix";
+									Matrix<float, 3, 4> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[0][2] = std::strtof(node2[0][2].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[1][2] = std::strtof(node2[1][2].Scalar().c_str(), nullptr);
+									v.data[2][0] = std::strtof(node2[2][0].Scalar().c_str(), nullptr);
+									v.data[2][1] = std::strtof(node2[2][1].Scalar().c_str(), nullptr);
+									v.data[2][2] = std::strtof(node2[2][2].Scalar().c_str(), nullptr);
+									v.data[3][0] = std::strtof(node2[3][0].Scalar().c_str(), nullptr);
+									v.data[3][1] = std::strtof(node2[3][1].Scalar().c_str(), nullptr);
+									v.data[3][2] = std::strtof(node2[3][2].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 14: {
+									if(!(node2.IsSequence() && node2.size() != 2)) return "Non-2-row matrix supplied for 4x2 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x2 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x2 matrix";
+									Matrix<float, 4, 2> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[0][2] = std::strtof(node2[0][2].Scalar().c_str(), nullptr);
+									v.data[0][3] = std::strtof(node2[0][3].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[1][2] = std::strtof(node2[1][2].Scalar().c_str(), nullptr);
+									v.data[1][3] = std::strtof(node2[1][3].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 15: {
+									if(!(node2.IsSequence() && node2.size() != 3)) return "Non-3-row matrix supplied for 4x3 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x3 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x3 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() != 4 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node[2][2].IsScalar() && node[2][3].IsScalar())) return "Non-4 float sequence supplied at row 3 of 4x3 matrix";
+									Matrix<float, 4, 3> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[0][2] = std::strtof(node2[0][2].Scalar().c_str(), nullptr);
+									v.data[0][3] = std::strtof(node2[0][3].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[1][2] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][3] = std::strtof(node2[1][3].Scalar().c_str(), nullptr);
+									v.data[2][0] = std::strtof(node2[2][0].Scalar().c_str(), nullptr);
+									v.data[2][1] = std::strtof(node2[2][1].Scalar().c_str(), nullptr);
+									v.data[2][2] = std::strtof(node2[2][2].Scalar().c_str(), nullptr);
+									v.data[2][3] = std::strtof(node2[2][3].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+								case 16: {
+									if(!(node2.IsSequence() && node2.size() != 4)) return "Non-4-row matrix supplied for 4x4 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() != 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x4 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() != 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x4 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() != 4 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node[2][2].IsScalar() && node[2][3].IsScalar())) return "Non-4 float sequence supplied at row 3 of 4x4 matrix";
+									if(!(node2[3].IsSequence() && node2[3].size() != 4 && node2[3][0].IsScalar() && node2[3][1].IsScalar() && node[3][2].IsScalar() && node[3][3].IsScalar())) return "Non-4 float sequence supplied at row 4 of 4x4 matrix";
+									Matrix<float, 4, 4> v;
+									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
+									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
+									v.data[0][2] = std::strtof(node2[0][2].Scalar().c_str(), nullptr);
+									v.data[0][3] = std::strtof(node2[0][3].Scalar().c_str(), nullptr);
+									v.data[1][0] = std::strtof(node2[1][0].Scalar().c_str(), nullptr);
+									v.data[1][1] = std::strtof(node2[1][1].Scalar().c_str(), nullptr);
+									v.data[1][2] = std::strtof(node2[1][2].Scalar().c_str(), nullptr);
+									v.data[1][3] = std::strtof(node2[1][3].Scalar().c_str(), nullptr);
+									v.data[2][0] = std::strtof(node2[2][0].Scalar().c_str(), nullptr);
+									v.data[2][1] = std::strtof(node2[2][1].Scalar().c_str(), nullptr);
+									v.data[2][2] = std::strtof(node2[2][2].Scalar().c_str(), nullptr);
+									v.data[2][3] = std::strtof(node2[2][3].Scalar().c_str(), nullptr);
+									v.data[3][0] = std::strtof(node2[3][0].Scalar().c_str(), nullptr);
+									v.data[3][1] = std::strtof(node2[3][1].Scalar().c_str(), nullptr);
+									v.data[3][2] = std::strtof(node2[3][2].Scalar().c_str(), nullptr);
+									v.data[3][3] = std::strtof(node2[3][3].Scalar().c_str(), nullptr);
+									value = v;
+									return "";
+								}
+							}
+						default:
+							return "Invalid base type";
+					}
+				} catch(const std::exception& e) {
+					return e.what();
+				} }, "unpacked material data key", "key value");
+			out.values.insert_or_assign(node["name"].Scalar(), value);
+		}
+
+		//Return result
+		return out;
 	}
 }

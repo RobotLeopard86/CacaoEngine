@@ -225,6 +225,8 @@ namespace libcacaoformats {
 
 		///@brief Shorthand for container of possible data types
 		using ValueContainer = std::variant<int, unsigned int, float,
+			Vec2<int>, Vec3<int>, Vec4<int>,
+			Vec2<unsigned int>, Vec3<unsigned int>, Vec4<unsigned int>,
 			Vec2<float>, Vec3<float>, Vec4<float>,
 			Matrix<float, 2, 2>, Matrix<float, 2, 3>, Matrix<float, 2, 4>,
 			Matrix<float, 3, 2>, Matrix<float, 3, 3>, Matrix<float, 3, 4>,
