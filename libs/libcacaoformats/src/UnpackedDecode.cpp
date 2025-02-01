@@ -4,6 +4,7 @@
 
 #include "yaml-cpp/yaml.h"
 #include "er/serialization/yaml.h"
+#include "er/serialization/binary.h"
 
 namespace libcacaoformats {
 	unsigned int stou(std::string value) {
@@ -511,5 +512,50 @@ namespace libcacaoformats {
 
 		//Return result
 		return out;
+	}
+
+	World UnpackedDecoder::DecodeWorld(std::istream& data) {
+		CheckException(data.good(), "Data stream for unpacked material is invalid!");
+
+		//Load YAML
+		YAML::Node root;
+		try {
+			root = YAML::Load(data);
+		} catch(...) {
+			CheckException(false, "Failed to parse unpacked material data stream!");
+		}
+
+		//Validate and parse structure
+		World out;
+		YAML::Node sky = root["skybox"];
+		if(sky) ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, "unpacked world data", "Skybox asset path is not a string");
+		out.skyboxRef = sky.Scalar();
+		out.imports.push_back(out.skyboxRef);
+		YAML::Node cam = root["cam"];
+		ValidateYAMLNode(cam, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
+			YAML::Node p = node["position"], r = node["rotation"];
+			try {
+				if(!(p.IsMap() && p["x"].IsScalar() && p["y"].IsScalar() && p["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for camera initial position";
+				out.initialCamPos.x = std::strtof(p["x"].Scalar().c_str(), nullptr);
+				out.initialCamPos.y = std::strtof(p["y"].Scalar().c_str(), nullptr);
+				out.initialCamPos.z = std::strtof(p["z"].Scalar().c_str(), nullptr);
+				if(!(p.IsMap() && r["x"].IsScalar() && r["y"].IsScalar() && r["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for camera initial rotation";
+				out.initialCamRot.x = std::strtof(r["x"].Scalar().c_str(), nullptr);
+				out.initialCamRot.y = std::strtof(r["y"].Scalar().c_str(), nullptr);
+				out.initialCamRot.z = std::strtof(r["z"].Scalar().c_str(), nullptr);
+			} catch(...) {
+				return "Non-float value found in camera initial state";
+			}
+			return ""; }, "unpacked world data", "initial camera state");
+		ValidateYAMLNode(root["entities"], YAML::NodeType::value::Sequence, "unpacked world data", "Entities list is not a list");
+		for(const YAML::Node& e : root["entities"]) {
+			World::Entity entity;
+
+			YAML::Node name = e["name"];
+			ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "unpacked world entity", "Name is not a string");
+			entity.name = name.Scalar();
+		}
+
+		//Return result
 	}
 }
