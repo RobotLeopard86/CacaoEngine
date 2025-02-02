@@ -237,10 +237,9 @@ namespace libcacaoformats {
 
 	///@brief World data, encapsulating list of assets and components used as well as initial world state
 	struct World {
-		std::vector<std::string> imports;///<List of assets and components used in the world. Having something not present in this list used will make the world not load correctly in-engine.
-		std::string skyboxRef;			 ///<Skybox reference path
-		Vec3<float> initialCamPos;		 ///<Initial camera position
-		Vec3<float> initialCamRot;		 ///<Initial camera rotation
+		std::string skyboxRef;	  ///<Skybox reference path
+		Vec3<float> initialCamPos;///<Initial camera position
+		Vec3<float> initialCamRot;///<Initial camera rotation
 
 		///@brief Type for components on entities
 		struct Component {

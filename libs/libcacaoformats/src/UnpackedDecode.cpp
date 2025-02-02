@@ -528,7 +528,7 @@ namespace libcacaoformats {
 		//Validate and parse structure
 		World out;
 		YAML::Node sky = root["skybox"];
-		if(sky) ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, "unpacked world data", "Skybox asset path is not a string");
+		if(sky) ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, "unpacked world data", "skybox asset path");
 		out.skyboxRef = sky.Scalar();
 		out.imports.push_back(out.skyboxRef);
 		YAML::Node cam = root["cam"];
@@ -547,12 +547,12 @@ namespace libcacaoformats {
 				return "Non-float value found in camera initial state";
 			}
 			return ""; }, "unpacked world data", "initial camera state");
-		ValidateYAMLNode(root["entities"], YAML::NodeType::value::Sequence, "unpacked world data", "Entities list is not a list");
+		ValidateYAMLNode(root["entities"], YAML::NodeType::value::Sequence, "unpacked world data", "entities list");
 		for(const YAML::Node& e : root["entities"]) {
 			World::Entity entity;
 
 			YAML::Node name = e["name"];
-			ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "unpacked world entity", "Name is not a string");
+			ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "unpacked world entity", "entity name");
 			entity.name = name.Scalar();
 
 			YAML::Node guid = e["guid"];
@@ -565,7 +565,7 @@ namespace libcacaoformats {
 						return ss.str();
 					}
 				}
-				return ""; }, "unpacked world entity", "GUID is not a string");
+				return ""; }, "unpacked world entity", "GUID");
 			entity.guid = guid.Scalar();
 
 			YAML::Node parentGUID = e["parent"];
@@ -578,10 +578,72 @@ namespace libcacaoformats {
 						return ss.str();
 					}
 				}
-				return ""; }, "unpacked world entity", "GUID is not a string");
+				return ""; }, "unpacked world entity", "parent GUID");
 			entity.parentGUID = guid.Scalar();
+
+			YAML::Node transform = e["transform"];
+			ValidateYAMLNode(transform, YAML::NodeType::value::Map, "unpacked world entity", "initial transform");
+
+			YAML::Node pos = transform["position"];
+			ValidateYAMLNode(pos, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["x"].IsScalar()) return "X value is not a scalar";
+				if(!node["y"].IsScalar()) return "Y value is not a scalar";
+				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				return ""; }, "unpacked world entity transform", "position property");
+			entity.initialPos.x = std::strtof(pos["x"].Scalar().c_str(), nullptr);
+			entity.initialPos.y = std::strtof(pos["y"].Scalar().c_str(), nullptr);
+			entity.initialPos.z = std::strtof(pos["z"].Scalar().c_str(), nullptr);
+
+			YAML::Node rot = transform["rotation"];
+			ValidateYAMLNode(rot, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["x"].IsScalar()) return "X value is not a scalar";
+				if(!node["y"].IsScalar()) return "Y value is not a scalar";
+				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				return ""; }, "unpacked world entity transform", "rotation property");
+			entity.initialRot.x = std::strtof(rot["x"].Scalar().c_str(), nullptr);
+			entity.initialRot.y = std::strtof(rot["y"].Scalar().c_str(), nullptr);
+			entity.initialRot.z = std::strtof(rot["z"].Scalar().c_str(), nullptr);
+
+			YAML::Node scl = transform["scale"];
+			ValidateYAMLNode(scl, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["x"].IsScalar()) return "X value is not a scalar";
+				if(!node["y"].IsScalar()) return "Y value is not a scalar";
+				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				return ""; }, "unpacked world entity transform", "scale property");
+			entity.initialScale.x = std::strtof(scl["x"].Scalar().c_str(), nullptr);
+			entity.initialScale.y = std::strtof(scl["y"].Scalar().c_str(), nullptr);
+			entity.initialScale.z = std::strtof(scl["z"].Scalar().c_str(), nullptr);
+
+			YAML::Node components = e["components"];
+			ValidateYAMLNode(components, YAML::NodeType::value::Sequence, "unpacked world entity", "component list");
+			for(const YAML::Node& c : components) {
+				World::Component component;
+
+				YAML::Node id = c["id"];
+				ValidateYAMLNode(id, YAML::NodeType::value::Scalar, "unpacked world entity component", "component ID");
+				component.typeID = id.Scalar();
+
+				YAML::Node rfl = c["rfl"];
+				ValidateYAMLNode(rfl, [](const YAML::Node& node) { return (node.IsDefined() ? "" : "Reflection data doesn't exist"); }, "unpacked world entity component", "component reflection data");
+
+				//We use this to get the reflection data node back out for parsing with er-cpp
+				YAML::Emitter emitter;
+				emitter << rfl;
+
+				//Yes this is a mess. Don't question it.
+				try {
+					component.data = er::serialization::binary::to_vector<er::None>(&er::serialization::yaml::from_string<er::None>(std::string_view(emitter.c_str())).unwrap()).unwrap();
+				} catch(...) {
+					throw std::runtime_error("Component reflection data conversion failed");
+				}
+
+				entity.components.push_back(component);
+			}
+
+			out.entities.push_back(entity);
 		}
 
 		//Return result
+		return out;
 	}
 }
