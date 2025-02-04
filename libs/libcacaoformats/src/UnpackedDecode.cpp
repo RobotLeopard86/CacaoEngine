@@ -142,6 +142,7 @@ namespace libcacaoformats {
 			} catch(std::ios_base::failure& ios_failure) {
 				if(errno == 0) { throw ios_failure; }
 				CheckException(false, "Failed to read vertex shader stage data stream!");
+				return std::vector<uint32_t>();//This will never be reached because of the exception, but the compiler would throw a warning if this wasn't here
 			}
 		}();
 		out.fragmentSPV = [&fragstream]() {
@@ -160,6 +161,7 @@ namespace libcacaoformats {
 			} catch(std::ios_base::failure& ios_failure) {
 				if(errno == 0) { throw ios_failure; }
 				CheckException(false, "Failed to read vfragmentshader stage data stream!");
+				return std::vector<uint32_t>();//This will never be reached because of the exception, but the compiler would throw a warning if this wasn't here
 			}
 		}();
 
@@ -184,12 +186,12 @@ namespace libcacaoformats {
 		YAML::Node shader = root["shader"];
 		ValidateYAMLNode(shader, YAML::NodeType::value::Scalar, "unpacked material data", "shader reference");
 		out.shader = shader.Scalar();
-		YAML::Node keysRoot = root["keys"];
-		ValidateYAMLNode(keysRoot, YAML::NodeType::Sequence, "unpacked material data", "key list");
-		for(const YAML::Node& node : keysRoot) {
+		YAML::Node dataRoot = root["data"];
+		ValidateYAMLNode(dataRoot, YAML::NodeType::Sequence, "unpacked material data", "key list");
+		for(const YAML::Node& node : dataRoot) {
 			constexpr std::array<const char*, 5> okTypes = {{"int", "uint", "float", "tex2d", "cubemap"}};
 			ValidateYAMLNode(node["name"], YAML::NodeType::value::Scalar, "unpacked material data key", "key name");
-			ValidateYAMLNode(node["baseType"], YAML::NodeType::value::Scalar, [](const YAML::Node& node2) {
+			ValidateYAMLNode(node["baseType"], YAML::NodeType::value::Scalar, [&okTypes](const YAML::Node& node2) {
 				auto it = std::find(okTypes.begin(), okTypes.end(), node2.Scalar().c_str());
 				return (it != okTypes.end() ? "" : "Invalid base type"); }, "unpacked material data key", "key base type");
 			ValidateYAMLNode(node["x"], YAML::NodeType::value::Scalar, [](const YAML::Node& node2) {
@@ -207,7 +209,7 @@ namespace libcacaoformats {
 					return "Unable to convert value to integer";
 				} }, "unpacked material data key", "key y size");
 			Material::ValueContainer value;
-			ValidateYAMLNode(node["value"], [&node, &value](const YAML::Node& node2) {
+			ValidateYAMLNode(node["value"], [&node, &value, &okTypes](const YAML::Node& node2) {
 				int idx = 0;
 				for(; idx < okTypes.size(); idx++) {
 					if(node["baseType"].Scalar().compare(okTypes[idx]) == 0) break;
@@ -229,7 +231,7 @@ namespace libcacaoformats {
 				}
 				if(idx >= 3 && size.y != 1) return "Invalid y size value for texture";
 				if(idx >= 3) {
-					value = node2.Scalar();
+					value = Material::TextureRef{.path = node2.Scalar(), .isCubemap = idx == 5};
 					return "";
 				}
 				if(size.x == 1 && size.y != 1) return "Invalid y size for an x size 1";
@@ -530,7 +532,6 @@ namespace libcacaoformats {
 		YAML::Node sky = root["skybox"];
 		if(sky) ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, "unpacked world data", "skybox asset path");
 		out.skyboxRef = sky.Scalar();
-		out.imports.push_back(out.skyboxRef);
 		YAML::Node cam = root["cam"];
 		ValidateYAMLNode(cam, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
 			YAML::Node p = node["position"], r = node["rotation"];
@@ -565,7 +566,7 @@ namespace libcacaoformats {
 						return ss.str();
 					}
 				}
-				return ""; }, "unpacked world entity", "GUID");
+				return std::string(""); }, "unpacked world entity", "GUID");
 			entity.guid = guid.Scalar();
 
 			YAML::Node parentGUID = e["parent"];
@@ -578,7 +579,7 @@ namespace libcacaoformats {
 						return ss.str();
 					}
 				}
-				return ""; }, "unpacked world entity", "parent GUID");
+				return std::string(""); }, "unpacked world entity", "parent GUID");
 			entity.parentGUID = guid.Scalar();
 
 			YAML::Node transform = e["transform"];
@@ -630,9 +631,10 @@ namespace libcacaoformats {
 				YAML::Emitter emitter;
 				emitter << rfl;
 
-				//Yes this is a mess. Don't question it.
+				//Yes this is a bit weird. It's just a reflection data format converter. Don't question it.
 				try {
-					component.data = er::serialization::binary::to_vector<er::None>(&er::serialization::yaml::from_string<er::None>(std::string_view(emitter.c_str())).unwrap()).unwrap();
+					er::None parsed = er::serialization::yaml::from_string<er::None>(std::string_view(emitter.c_str())).unwrap();
+					component.data = er::serialization::binary::to_vector<er::None>(&parsed).unwrap();
 				} catch(...) {
 					throw std::runtime_error("Component reflection data conversion failed");
 				}

@@ -136,7 +136,7 @@ namespace libcacaoformats {
 	 *
 	 * @throws std::runtime_error If the image has zero dimensions or holds invalid data
 	 */
-	void EncodeImage(const ImageBuffer& img, std::ostream out);
+	void EncodeImage(const ImageBuffer& img, std::ostream& out);
 
 	///@brief Decoded shader data
 	struct Shader {
@@ -198,7 +198,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the container has no data or data compression fails
 		 */
-		void Export(std::ostream stream);
+		void Export(std::ostream& stream);
 
 	  private:
 		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);
@@ -223,6 +223,12 @@ namespace libcacaoformats {
 	struct Material {
 		std::string shader;///<Path to reference shader by
 
+		///@brief Simple struct to represent a texture asset path and indicate if it's a cubemap
+		struct TextureRef {
+			std::string path;///<Asset path
+			bool isCubemap;	 ///<Is this a cubemap (true) or a 2D texture (false)?
+		};
+
 		///@brief Shorthand for container of possible data types
 		using ValueContainer = std::variant<int, unsigned int, float,
 			Vec2<int>, Vec3<int>, Vec4<int>,
@@ -231,7 +237,7 @@ namespace libcacaoformats {
 			Matrix<float, 2, 2>, Matrix<float, 2, 3>, Matrix<float, 2, 4>,
 			Matrix<float, 3, 2>, Matrix<float, 3, 3>, Matrix<float, 3, 4>,
 			Matrix<float, 4, 2>, Matrix<float, 4, 3>, Matrix<float, 4, 4>,
-			std::string>;
+			TextureRef>;
 		std::map<std::string, ValueContainer> values;///<Data associated with shader
 	};
 
@@ -431,7 +437,7 @@ namespace libcacaoformats {
 		 * @param mat The Material object to encode
 		 * @param out A stream to output material YAML data to
 		 */
-		void EncodeMaterial(const Material& mat, std::ostream out);
+		void EncodeMaterial(const Material& mat, std::ostream& out);
 
 		/**
 		 * @brief Encode a World object to its unpacked format
@@ -439,6 +445,6 @@ namespace libcacaoformats {
 		 * @param world The World object to encode
 		 * @param out A stream to output material YAML data to
 		 */
-		void EncodeWorld(const World& world, std::ostream out);
+		void EncodeWorld(const World& world, std::ostream& out);
 	};
 }

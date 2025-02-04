@@ -28,6 +28,7 @@ namespace libcacaoformats {
 			} catch(std::ios_base::failure& ios_failure) {
 				if(errno == 0) { throw ios_failure; }
 				CheckException(false, "Failed to read encoded image data stream!");
+				return std::vector<unsigned char>();//This will never be reached because of the exception, but the compiler would throw a warning if this wasn't here
 			}
 		}();
 
