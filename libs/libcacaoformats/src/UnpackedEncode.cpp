@@ -17,6 +17,14 @@ namespace libcacaoformats {
 		for(const auto& item : mat.values) {
 			yml << YAML::BeginMap;
 			yml << YAML::Key << "name" << YAML::Value << item.first;
+
+			/*
+			Yes there are no comments in all of this. I figured that it's simplistic enough, but here's a breakdown just in case:
+			The number we use is based on the order in the ValueContainer template.
+			For each type, we write a "base type" that represents what data is being stored
+			Then we write size values with the "x" and "y" values.
+			Lastly, we write the actual data.
+			*/
 			switch(item.second.index()) {
 				case 0:
 					yml << YAML::Key << "baseType" << YAML::Value << "int";
@@ -299,5 +307,82 @@ namespace libcacaoformats {
 
 		//Write output data
 		out << yml.c_str();
+	}
+
+	void UnpackedEncoder::EncodeWorld(const World& world, std::ostream& out) {
+		//Create YAML emitter
+		YAML::Emitter yml;
+
+		//Write skybox if present
+		if(!world.skyboxRef.empty()) yml << YAML::Key << "skybox" << YAML::Value << world.skyboxRef;
+
+		//Write camera data
+		yml << YAML::Key << "cam" << YAML::BeginMap;
+		yml << YAML::Key << "position" << YAML::BeginMap;
+		yml << YAML::Key << "x" << YAML::Value << world.initialCamPos.x;
+		yml << YAML::Key << "y" << YAML::Value << world.initialCamPos.y;
+		yml << YAML::Key << "z" << YAML::Value << world.initialCamPos.z;
+		yml << YAML::EndMap;
+		yml << YAML::Key << "rotation" << YAML::BeginMap;
+		yml << YAML::Key << "x" << YAML::Value << world.initialCamRot.x;
+		yml << YAML::Key << "y" << YAML::Value << world.initialCamRot.y;
+		yml << YAML::Key << "z" << YAML::Value << world.initialCamRot.z;
+		yml << YAML::EndMap;
+		yml << YAML::EndMap;
+
+		//Write entity data
+		yml << YAML::Key << "entities" << YAML::BeginSeq;
+		for(const World::Entity& e : world.entities) {
+			yml << YAML::BeginMap;
+
+			//Write GUIDs
+			yml << YAML::Key << "guid" << YAML::Value << e.guid;
+			yml << YAML::Key << "parent" << YAML::Value << e.guid;
+
+			//Write transform data
+			yml << YAML::Key << "transform" << YAML::BeginMap;
+			yml << YAML::Key << "position" << YAML::BeginMap;
+			yml << YAML::Key << "x" << YAML::Value << e.initialPos.x;
+			yml << YAML::Key << "y" << YAML::Value << e.initialPos.y;
+			yml << YAML::Key << "z" << YAML::Value << e.initialPos.z;
+			yml << YAML::EndMap;
+			yml << YAML::Key << "rotation" << YAML::BeginMap;
+			yml << YAML::Key << "x" << YAML::Value << e.initialRot.x;
+			yml << YAML::Key << "y" << YAML::Value << e.initialRot.y;
+			yml << YAML::Key << "z" << YAML::Value << e.initialRot.z;
+			yml << YAML::EndMap;
+			yml << YAML::Key << "scale" << YAML::BeginMap;
+			yml << YAML::Key << "x" << YAML::Value << e.initialScale.x;
+			yml << YAML::Key << "y" << YAML::Value << e.initialScale.y;
+			yml << YAML::Key << "z" << YAML::Value << e.initialScale.z;
+			yml << YAML::EndMap;
+			yml << YAML::EndMap;
+
+			//Write component data
+			yml << YAML::Key << "components" << YAML::BeginSeq;
+			for(const World::Component& c : e.components) {
+				yml << YAML::BeginMap;
+
+				yml << YAML::Key << "id" << YAML::Value;
+
+				//This is kinda ugly, but this is how we have to deal with reflection data
+				{
+					try {
+						er::None converted = er::serialization::binary::from_vector<er::None>(c.data).unwrap();
+						std::string asYaml = er::serialization::yaml::to_string<er::None>(&converted).unwrap();
+						YAML::Node node = YAML::Load(asYaml);
+						yml << YAML::Key << "rfl" << node;
+					} catch(...) {
+						throw std::runtime_error("Component reflection data conversion failed");
+					}
+				}
+
+				yml << YAML::EndMap;
+			}
+			yml << YAML::EndSeq;
+
+			yml << YAML::EndMap;
+		}
+		yml << YAML::EndSeq;
 	}
 }

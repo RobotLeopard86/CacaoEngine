@@ -530,8 +530,12 @@ namespace libcacaoformats {
 		//Validate and parse structure
 		World out;
 		YAML::Node sky = root["skybox"];
-		if(sky) ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, "unpacked world data", "skybox asset path");
-		out.skyboxRef = sky.Scalar();
+		if(sky) {
+			ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, "unpacked world data", "skybox asset path");
+			out.skyboxRef = sky.Scalar();
+		} else {
+			out.skyboxRef = "";
+		}
 		YAML::Node cam = root["cam"];
 		ValidateYAMLNode(cam, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
 			YAML::Node p = node["position"], r = node["rotation"];
