@@ -146,11 +146,11 @@ namespace libcacaoformats {
 
 	///@brief List of codes identifying different packed formats
 	enum class FormatCode {
-		Cubemap = 0xC4,
-		Shader = 0x1B,
-		Material = 0x3E,
-		AssetPack = 0xAA,
-		World = 0x7A
+		Cubemap,
+		Shader,
+		Material,
+		AssetPack,
+		World
 	};
 
 	/**
@@ -162,8 +162,8 @@ namespace libcacaoformats {
 	  public:
 		const FormatCode format;				 ///<Type of contents
 		const uint16_t version;					 ///<File type version
-		const std::array<uint8_t, 64> hash;		 ///<SHA-512 uncompressed payload hash
 		const std::vector<unsigned char> payload;///<Decompressed payload data
+		const std::string hash;					 ///<SHA-512 uncompressed payload hash
 
 		/**
 		 * @brief Create a PackedContainer from a stream
@@ -172,9 +172,9 @@ namespace libcacaoformats {
 		 *
 		 * @return PackedContainer object
 		 *
-		 * @throws std::runtime_error If the buffer is not a valid packed file or the hash in the buffer does not match the payload
+		 * @throws std::runtime_error If the stream is not valid, does not represent a valid packed file or the hash value does not match the payload
 		 */
-		PackedContainer(std::istream& stream);
+		static PackedContainer FromStream(std::istream& stream);
 
 		/**
 		 * @brief Create a PackedContainer by manually specifying attributes
@@ -189,7 +189,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
-		PackedContainer(FormatCode format, uint16_t ver, const std::vector<unsigned char>& data);
+		PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data);
 
 		/**
 		 * @brief Export a PackedContainer to a buffer
@@ -198,7 +198,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the container has no data or data compression fails
 		 */
-		void Export(std::ostream& stream);
+		void ExportToStream(std::ostream& stream);
 
 	  private:
 		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);

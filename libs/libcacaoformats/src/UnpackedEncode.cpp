@@ -306,7 +306,7 @@ namespace libcacaoformats {
 		yml << YAML::EndSeq;
 
 		//Write output data
-		out << yml.c_str();
+		out << yml.c_str() << std::flush;
 	}
 
 	void UnpackedEncoder::EncodeWorld(const World& world, std::ostream& out) {
@@ -384,5 +384,8 @@ namespace libcacaoformats {
 			yml << YAML::EndMap;
 		}
 		yml << YAML::EndSeq;
+
+		//Write output data
+		out << yml.c_str() << std::flush;
 	}
 }

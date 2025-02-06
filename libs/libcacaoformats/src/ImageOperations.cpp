@@ -55,7 +55,7 @@ namespace libcacaoformats {
 		return out;
 	}
 
-	void EncodeImage(const ImageBuffer& img, std::ostream out) {
+	void EncodeImage(const ImageBuffer& img, std::ostream& out) {
 		CheckException(img.channelCount > 0 && img.size.x > 0 && img.size.y > 0, "Image buffer to encode has invalid dimensions or channel count!");
 		CheckException(!img.data.empty(), "Image buffer to encode has empty data buffer!");
 
@@ -65,5 +65,8 @@ namespace libcacaoformats {
 			*(reinterpret_cast<std::ostream*>(ctx)) << data;
 		},
 			&out, img.size.x, img.size.y, img.channelCount, img.data.data(), 0);
+
+		//Flush output
+		out << std::flush;
 	}
 }
