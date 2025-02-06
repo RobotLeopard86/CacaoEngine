@@ -472,25 +472,25 @@
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FormatCode</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Cubemap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xC4</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Shader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x1B</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Material</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x3E</span><span class="p">,</span>
-<span class="w">        </span><span class="n">AssetPack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xAA</span><span class="p">,</span>
-<span class="w">        </span><span class="n">World</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x7A</span>
+<span class="w">        </span><span class="n">Cubemap</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Shader</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Material</span><span class="p">,</span>
+<span class="w">        </span><span class="n">AssetPack</span><span class="p">,</span>
+<span class="w">        </span><span class="n">World</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">PackedContainer</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">version</span><span class="p">;</span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">hash</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">hash</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">FromStream</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ver</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+<span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ver</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Export</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ExportToStream</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">FormatCode</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="p">);</span>
