@@ -51,7 +51,8 @@ formats_lib = static_library('cacaoformats', sources: [
 	'src/ImageOperations.cpp',
     'src/UnpackedDecode.cpp',
 	'src/UnpackedEncode.cpp',
-    'src/PackedContainer.cpp'
+    'src/PackedContainer.cpp',
+    'src/PackedDecode.cpp'
 ], include_directories: ['include', 'src'], pic: true, dependencies: deps)
 
 formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib)

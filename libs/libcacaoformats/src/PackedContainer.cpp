@@ -48,11 +48,8 @@ namespace libcacaoformats {
 		}
 
 		//Get format version
-		std::string ver(2, '\0');
-		stream.read(ver.data(), ver.size());
 		uint16_t version = 0;
-		version |= static_cast<unsigned char>(ver[0]);
-		version |= ((uint16_t)static_cast<unsigned char>(ver[1]) << 8);
+		stream.read(reinterpret_cast<char*>(&version), 2);
 
 		//Get hash
 		std::string hash(128, '\0');
@@ -60,16 +57,7 @@ namespace libcacaoformats {
 
 		//Get buffer size
 		uint64_t uncompressedSize = 0;
-		std::string ucsz(8, '\0');
-		stream.read(ucsz.data(), ucsz.size());
-		uncompressedSize |= static_cast<unsigned char>(ver[0]);
-		uncompressedSize |= ((uint16_t)static_cast<unsigned char>(ver[1]) << 8);
-		uncompressedSize |= ((uint32_t)static_cast<unsigned char>(ver[2]) << 16);
-		uncompressedSize |= ((uint32_t)static_cast<unsigned char>(ver[3]) << 24);
-		uncompressedSize |= ((uint64_t)static_cast<unsigned char>(ver[4]) << 32);
-		uncompressedSize |= ((uint64_t)static_cast<unsigned char>(ver[5]) << 40);
-		uncompressedSize |= ((uint64_t)static_cast<unsigned char>(ver[6]) << 48);
-		uncompressedSize |= ((uint64_t)static_cast<unsigned char>(ver[7]) << 56);
+		stream.read(reinterpret_cast<char*>(&uncompressedSize), 8);
 		std::vector<unsigned char> uncompressed(uncompressedSize);
 
 		{
