@@ -43,7 +43,7 @@ jobs:
       - name: Add changes
         run: |
           cd /tmp/PAGESBUILD
-          find . -type d -path "*doctrees*" -exec rm -rf "{}" +
+          find . -path "*doctrees*" -exec rm -rf "{}" +
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
