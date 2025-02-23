@@ -46,6 +46,41 @@ bz2_opts.add_cmake_defines({
 bz2_sp = cmake.subproject('bzip2', options: bz2_opts, required: true)
 deps += bz2_sp.dependency('bz2_static')
 
+# libarchive
+archive_opts = cmake.subproject_options()
+archive_opts.add_cmake_defines({
+    'BUILD_SHARED_LIBS': 'OFF',
+    'BUILD_TESTING': 'OFF',
+    'ENABLE_OPENSSL': 'OFF',
+    'ENABLE_LIBB2': 'OFF',
+    'ENABLE_LZ4': 'OFF',
+    'ENABLE_LZMA': 'OFF',
+    'ENABLE_ZSTD': 'OFF',
+    'ENABLE_BZip2': 'OFF',
+    'ENABLE_LIBXML2': 'OFF',
+    'ENABLE_EXPAT': 'OFF',
+    'ENABLE_PCREPOSIX': 'OFF',
+    'ENABLE_PCRE2POSIX': 'OFF',
+    'ENABLE_LIBGCC': 'OFF',
+    'ENABLE_CNG': 'OFF',
+    'ENABLE_TAR': 'OFF',
+    'ENABLE_CPIO': 'OFF',
+    'ENABLE_CAT': 'OFF',
+    'ENABLE_UNZIP': 'OFF',
+    'ENABLE_ACL': 'OFF',
+    'ENABLE_ICONV': 'OFF',
+    'ENABLE_TEST': 'OFF',
+    'ENABLE_ZLIB': 'OFF',
+    'ENABLE_COVERAGE': 'OFF',
+    'ENABLE_INSTALL': 'OFF',
+    'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
+})
+libarchive_sp = cmake.subproject('libarchive', options: archive_opts, required: true)
+deps += libarchive_sp.dependency('archive_static')
+
 formats_lib = static_library('cacaoformats', sources: [
 	'src/AudioDecode.cpp',
 	'src/ImageOperations.cpp',
