@@ -273,6 +273,7 @@ namespace libcacaoformats {
 									return "";
 								}
 							}
+							break;
 						case 1:
 							switch(dims) {
 								case 1:
@@ -307,6 +308,7 @@ namespace libcacaoformats {
 									return "";
 								}
 							}
+							break;
 						case 2:
 							switch(dims) {
 								case 1:
@@ -502,6 +504,7 @@ namespace libcacaoformats {
 									value = v;
 									return "";
 								}
+								break;
 							}
 						default:
 							return "Invalid base type";

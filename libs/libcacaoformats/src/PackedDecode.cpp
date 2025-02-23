@@ -86,7 +86,7 @@ namespace libcacaoformats {
 		std::memcpy(&saLen, container.payload.data(), 2);
 		CheckException(saLen > 0, "Material packed container has zero-length shader address string");
 		CheckException(container.payload.size() > 3 + saLen, "Material packed container is too small to contain shader address string!");
-		out.shader = std::string('\0', saLen);
+		out.shader = std::string("\0", saLen);
 		std::memcpy(out.shader.data(), container.payload.data() + 2, saLen);
 
 		//Get material keys count
@@ -104,6 +104,15 @@ namespace libcacaoformats {
 			uint8_t typeInfo = 0;
 			std::memcpy(&typeInfo, container.payload.data() + offsetCounter++, 1);
 
+			//Get key name
+			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain key name length!");
+			uint32_t keyNameLen = 0;
+			std::memcpy(&keyNameLen, container.payload.data() + offsetCounter++, 1);
+			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain key name string of provided length!");
+			std::string keyName("\0", keyNameLen);
+			std::memcpy(keyName.data(), container.payload.data() + offsetCounter, keyNameLen);
+			offsetCounter += keyNameLen;
+
 			//Extract info and check size constraints
 			Vec2<uint8_t> size;
 			size.x = (typeInfo & 0b00001100);
@@ -113,6 +122,372 @@ namespace libcacaoformats {
 			CheckException(baseType != 2 && size.y > 1, "Material packed container key has invalid size for non-float type (y must be 1)!");
 			CheckException(size.x == 1 && size.y != 1, "Material packed container key has invalid size (if x is 1, must be 1x1)");
 			uint8_t dims = (4 * size.y) - (4 - size.x);
+
+			//Load data
+			if(baseType != 3) CheckException(container.payload.size() > offsetCounter + (size.x * size.y * 4), "Material packed container key is too small to contain value of provided type!");
+			switch(baseType) {
+				case 0:
+					switch(dims) {
+						case 1: {
+							int32_t val = 0;
+							std::memcpy(&val, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, val);
+							break;
+						}
+						case 2: {
+							int32_t x = 0, y = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec2<int> {.x = x, .y = y});
+							break;
+						}
+						case 3: {
+							int32_t x = 0, y = 0, z = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec3<int> {.x = x, .y = y, .z = z});
+							break;
+						}
+						case 4: {
+							int32_t x = 0, y = 0, z = 0, w = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&w, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec4<int> {.x = x, .y = y, .z = z, .w = w});
+							break;
+						}
+						default:
+							break;
+					}
+					break;
+				case 1:
+					switch(dims) {
+						case 1: {
+							uint32_t val = 0;
+							std::memcpy(&val, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, val);
+							break;
+						}
+						case 2: {
+							uint32_t x = 0, y = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec2<unsigned int> {.x = x, .y = y});
+							break;
+						}
+						case 3: {
+							uint32_t x = 0, y = 0, z = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec3<unsigned int> {.x = x, .y = y, .z = z});
+							break;
+						}
+						case 4: {
+							uint32_t x = 0, y = 0, z = 0, w = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&w, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec4<unsigned int> {.x = x, .y = y, .z = z, .w = w});
+							break;
+						}
+						default:
+							break;
+					}
+					break;
+				case 2:
+					switch(dims) {
+						case 1: {
+							float val = 0;
+							std::memcpy(&val, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, val);
+							break;
+						}
+						case 2: {
+							float x = 0, y = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec2<float> {.x = x, .y = y});
+							break;
+						}
+						case 3: {
+							float x = 0, y = 0, z = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec3<float> {.x = x, .y = y, .z = z});
+							break;
+						}
+						case 4: {
+							float x = 0, y = 0, z = 0, w = 0;
+							std::memcpy(&x, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&w, container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, Vec4<float> {.x = x, .y = y, .z = z, .w = w});
+							break;
+						}
+						case 6: {
+							Matrix<float, 2, 2> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 7: {
+							Matrix<float, 2, 3> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 8: {
+							Matrix<float, 2, 4> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 10: {
+							Matrix<float, 3, 2> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 11: {
+							Matrix<float, 3, 3> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 12: {
+							Matrix<float, 3, 4> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 14: {
+							Matrix<float, 4, 2> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 15: {
+							Matrix<float, 4, 3> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						case 16: {
+							Matrix<float, 4, 4> m;
+							std::memcpy(&m.data[0][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][0], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][1], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][2], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[0][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[1][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[2][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							std::memcpy(&m.data[3][3], container.payload.data() + offsetCounter, 4);
+							offsetCounter += 4;
+							out.values.insert_or_assign(keyName, m);
+							break;
+						}
+						default:
+							break;
+					}
+					break;
+				case 3: {
+					Material::TextureRef ref {};
+					CheckException(container.payload.size() > offsetCounter + 1, "Material packed container key is too small to contain texture reference string length!");
+					uint32_t texLen = 0;
+					std::memcpy(&texLen, container.payload.data() + offsetCounter++, 1);
+					CheckException(container.payload.size() > offsetCounter + 1, "Material packed container key is too small to contain texture reference string of provided length!");
+					ref.path = std::string("\0", texLen);
+					std::memcpy(ref.path.data(), container.payload.data() + offsetCounter, texLen);
+					offsetCounter += texLen;
+					ref.isCubemap = (typeInfo & 0b01000000) > 0;
+					out.values.insert_or_assign(keyName, ref);
+					break;
+				}
+			}
+
+			//Advance by two extra bytes since we put two null bytes as a separator between keys
+			offsetCounter += 2;
 		}
 	}
 }
