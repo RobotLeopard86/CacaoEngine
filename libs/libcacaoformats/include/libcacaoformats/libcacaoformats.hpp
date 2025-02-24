@@ -35,34 +35,74 @@ namespace libcacaoformats {
 		std::array<std::array<T, M>, N> data;
 	};
 
+#include <vector>
+#include <streambuf>
+#include <istream>
+#include <ostream>
+#include <cstring>// For memcpy
+
 	/**
-	 * @brief Byte stream buffer
-	 *
-	 * @note Only valid as long as the backing vector is
+	 * @brief Byte stream buffer supporting both input and output, with auto-resizing
 	 */
 	class bytestreambuf : public std::streambuf {
 	  public:
 		/**
 		 * @brief Create a bytestreambuf from a vector of data
 		 *
-		 * @param data The vector to map operations to
+		 * @param data The vector to use as a buffer
 		 */
-		bytestreambuf(std::vector<char>& data) {
-			//Map the vector data range to the stream buffer
-			setg(data.data(), data.data(), data.data() + (data.size() * sizeof(unsigned char)));
+		bytestreambuf(std::vector<char>& data)
+		  : buffer(data) {
+			setg(buffer.data(), buffer.data(), buffer.data() + buffer.size());
+			setp(buffer.data(), buffer.data() + buffer.size());
 		}
+
+	  protected:
+		int overflow(int ch) override {
+			if(ch == EOF) {
+				return EOF;
+			}
+
+			//Expand buffer and ensure proper size
+			std::ptrdiff_t offset = pptr() - pbase();
+			buffer.push_back(static_cast<char>(ch));
+			buffer.resize(buffer.capacity());
+
+			//Reset stream buffer pointers
+			setp(buffer.data(), buffer.data() + buffer.size());
+			pbump(static_cast<int>(offset + 1));
+
+			return ch;
+		}
+
+		std::streamsize xsputn(const char* s, std::streamsize n) override {
+			std::ptrdiff_t remaining = epptr() - pptr();
+			if(n > remaining) {
+				std::ptrdiff_t offset = pptr() - pbase();
+				buffer.insert(buffer.end(), s, s + n);
+				buffer.resize(buffer.capacity());
+
+				//Reset buffer pointers
+				setp(buffer.data(), buffer.data() + buffer.size());
+				pbump(static_cast<int>(offset + n));
+			} else {
+				std::memcpy(pptr(), s, n);
+				pbump(static_cast<int>(n));
+			}
+			return n;
+		}
+
+	  private:
+		std::vector<char>& buffer;
 	};
 
 	/**
 	 * @brief Byte input stream utility
-	 *
-	 * @note Only valid as long as the backing vector is
 	 */
 	class ibytestream : public std::istream {
 	  public:
 		ibytestream(std::vector<char>& data)
 		  : std::istream(&buf), buf(data) {
-			//Set the backing buffer for the stream
 			rdbuf(&buf);
 		}
 
@@ -72,20 +112,18 @@ namespace libcacaoformats {
 
 	/**
 	 * @brief Byte output stream utility
-	 *
-	 * @note Only valid as long as the backing vector is
 	 */
 	class obytestream : public std::ostream {
 	  public:
 		obytestream(std::vector<char>& data)
 		  : std::ostream(&buf), buf(data) {
-			//Set the backing buffer for the stream
 			rdbuf(&buf);
 		}
 
 	  private:
 		bytestreambuf buf;
 	};
+
 
 	///@brief Decoded audio data and properties necessary to use it
 	struct AudioBuffer {

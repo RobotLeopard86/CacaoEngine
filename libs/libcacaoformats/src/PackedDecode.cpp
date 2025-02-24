@@ -85,7 +85,7 @@ namespace libcacaoformats {
 		uint16_t saLen = 0;
 		std::memcpy(&saLen, container.payload.data(), 2);
 		CheckException(saLen > 0, "Material packed container has zero-length shader address string");
-		CheckException(container.payload.size() > 3 + saLen, "Material packed container is too small to contain shader address string!");
+		CheckException(container.payload.size() > 2 + saLen, "Material packed container is too small to contain shader address string!");
 		out.shader = std::string("\0", saLen);
 		std::memcpy(out.shader.data(), container.payload.data() + 2, saLen);
 
@@ -489,5 +489,53 @@ namespace libcacaoformats {
 			//Advance by two extra bytes since we put two null bytes as a separator between keys
 			offsetCounter += 2;
 		}
+	}
+
+	World PackedDecoder::DecodeWorld(const PackedContainer& container) {
+		CheckException(container.format == FormatCode::World, "Packed container provided for world decoding is not a world!");
+		CheckException(container.payload.size() > 2, "World packed container is too small to contain skybox address string size data!");
+
+		World out {};
+		std::size_t advance = 0;
+
+		//Get skybox address string
+		uint16_t saLen = 0;
+		std::memcpy(&saLen, container.payload.data(), 2);
+		advance += 2;
+		CheckException(saLen >= 0, "World packed container has negative-length skybox address string");
+		if(saLen == 0) {
+			out.skyboxRef = "";
+		} else {
+			CheckException(container.payload.size() > 2 + saLen, "World packed container is too small to contain skybox address string!");
+			out.skyboxRef = std::string("\0", saLen);
+			std::memcpy(out.skyboxRef.data(), container.payload.data() + 2, saLen);
+			advance += saLen;
+		}
+
+		//Get initial camera data
+		CheckException(container.payload.size() > advance + 24, "World packed container is too small to contain initial camera data!");
+		std::memcpy(&out.initialCamPos.x, container.payload.data() + advance, 4);
+		advance += 4;
+		std::memcpy(&out.initialCamPos.y, container.payload.data() + advance, 4);
+		advance += 4;
+		std::memcpy(&out.initialCamPos.z, container.payload.data() + advance, 4);
+		advance += 4;
+		std::memcpy(&out.initialCamRot.x, container.payload.data() + advance, 4);
+		advance += 4;
+		std::memcpy(&out.initialCamRot.y, container.payload.data() + advance, 4);
+		advance += 4;
+		std::memcpy(&out.initialCamRot.z, container.payload.data() + advance, 4);
+		advance += 4;
+
+		//Get entity count
+		CheckException(container.payload.size() > advance + 8, "World packed container is too small to contain entity data!");
+		uint64_t entityCount = 0;
+		std::memcpy(&entityCount, container.payload.data() + advance, 8);
+		advance += 8;
+
+		//If we don't need to process entities, return value now
+		if(entityCount == 0) return out;
+
+		//TODO: Add entity decoding
 	}
 }
