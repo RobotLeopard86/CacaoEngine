@@ -6,6 +6,10 @@
 #include <sstream>
 #include <cstring>
 
+#include "archive.h"
+#include "archive_entry.h"
+#include "yaml-cpp/yaml.h"
+
 namespace libcacaoformats {
 	std::array<ImageBuffer, 6> PackedDecoder::DecodeCubemap(const PackedContainer& container) {
 		CheckException(container.format == FormatCode::Cubemap, "Packed container provided for cubemap decoding is not a cubemap!");
@@ -490,6 +494,8 @@ namespace libcacaoformats {
 			//Advance by two extra bytes since we put two null bytes as a separator between keys
 			offsetCounter += 2;
 		}
+
+		return out;
 	}
 
 	World PackedDecoder::DecodeWorld(const PackedContainer& container) {
@@ -654,5 +660,57 @@ namespace libcacaoformats {
 			//Add entity to world
 			out.entities.push_back(ent);
 		}
+
+		return out;
+	}
+
+	std::map<std::string, PackedAsset> PackedDecoder::DecodeAssetPack(const PackedContainer& container) {
+		CheckException(container.format == FormatCode::AssetPack, "Packed container provided for asset pack decoding is not an asset pack!");
+
+		//Configure archive object
+		archive* pak = archive_read_new();
+		CheckException(pak, "Unable to create asset pack archive object!");
+		archive_read_support_format_tar(pak);
+		CheckException(archive_read_open_memory(pak, container.payload.data(), container.payload.size() * sizeof(uint8_t)) == ARCHIVE_OK, "Failed to open asset pack archive data!");
+
+		//Create output
+		std::map<std::string, PackedAsset> out;
+
+		//Extract data
+		archive_entry* entry;
+		YAML::Node metaRoot;
+		while(archive_read_next_header(pak, &entry) == ARCHIVE_OK) {
+			std::string filename(archive_entry_pathname_utf8(entry));
+
+			//Check if this is the reserved metadata file (the name is weird to reduce the possibility of conflicts)
+			if(filename.compare("__$CacaoMeta0") == 0) {
+				//Get file size
+				la_int64_t size = archive_entry_size(entry);
+
+				//Read data from entry into buffer
+				std::vector<char> metaBuf(size);
+				archive_read_data(pak, metaBuf.data(), size);
+
+				//Load metadata (using byte stream to do easy feed-in from vector)
+				ibytestream input(metaBuf);
+				metaRoot = YAML::Load(input);
+			} else {
+				//Get file size
+				la_int64_t size = archive_entry_size(entry);
+
+				//Create PackedAsset. We set everything to a Tex2D by default because we need something. This gets corrected in the second pass with info from the metadata file.
+				PackedAsset asset {.kind = PackedAsset::Kind::Tex2D, .buffer = std::vector<unsigned char>(size)};
+
+				//Read data from entry into buffer
+				archive_read_data(pak, asset.buffer.data(), size);
+
+				//Add entry to output
+				out.insert_or_assign(filename, asset);
+			}
+		}
+
+		//TODO: Metadata second pass
+
+		return out;
 	}
 }

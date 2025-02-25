@@ -201,7 +201,7 @@ namespace libcacaoformats {
 		const FormatCode format;				 ///<Type of contents
 		const uint16_t version;					 ///<File type version
 		const std::vector<unsigned char> payload;///<Decompressed payload data
-		const std::string hash;					 ///<SHA-512 uncompressed payload hash
+		const std::string hash;					 ///<SHA-512 hash of decompressed payload
 
 		/**
 		 * @brief Create a PackedContainer from a stream
@@ -253,8 +253,8 @@ namespace libcacaoformats {
 			Sound,
 			Font
 		};
-		const Kind kind;						///<Type of asset contained
-		const std::vector<unsigned char> buffer;///<Asset file contents buffer
+		Kind kind;						  ///<Type of asset contained
+		std::vector<unsigned char> buffer;///<Asset file contents buffer
 	};
 
 	///@brief Reference path for shader and associated data
