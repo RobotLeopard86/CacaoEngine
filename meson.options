@@ -5,4 +5,3 @@ option('build_playground', type: 'boolean', value: false, description: 'Whether 
 option('build_tools', type: 'boolean', value: false, description: 'Whether to build the auxiliary tools for engine game development.')
 option('windows_noconsole', type: 'boolean', value: false, description: '(Windows only) Whether to hide the console window created by default.')
 option('exe_name', type: 'string', value: 'cacaoengine', description: 'The name of the engine executable. Useful for games that want to have their name be the executable name.')
-option('ignore_bad_compiler', type: 'boolean', value: false, description: 'Whether to ignore the fact that the chosen compiler/linker is unsupported and continue anyways.')

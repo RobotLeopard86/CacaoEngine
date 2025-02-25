@@ -35,12 +35,6 @@ namespace libcacaoformats {
 		std::array<std::array<T, M>, N> data;
 	};
 
-#include <vector>
-#include <streambuf>
-#include <istream>
-#include <ostream>
-#include <cstring>// For memcpy
-
 	/**
 	 * @brief Byte stream buffer supporting both input and output, with auto-resizing
 	 */

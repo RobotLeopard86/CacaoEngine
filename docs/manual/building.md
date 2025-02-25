@@ -23,7 +23,7 @@ Cacao Engine also requires additional system packages. By base distro, these are
 * Arch-based (e.g. Manjaro): `libglvnd`, `libxkbcommon`, `extra-cmake-modules`, `libxcursor`, `libxi`, `libxfixes`, `libxinerama`, `libxrandr`, `mesa`, `wayland-protocols`, `libibus`, `libdrm`, `fcitx`, `util-linux-libs`
 
 ## Compilers
-Cacao Engine is designed to build **ONLY** with Clang (including Apple's modified Clang) and LLD. If problems are encountered when using alternative compilers or linkers, they will not be officially supported. While other compilers may work, they are officially not supported.
+Cacao Engine is primarily built with Clang (including Apple's modified Clang), however it should work when using MSVC as well, and possibly GCC. Typically LLD is also used, but standard `ld` or MSVC `link.exe` should work as well.
 
 ## Known Building Platforms
 * x86_64 GNU/Linux with Clang and LLD

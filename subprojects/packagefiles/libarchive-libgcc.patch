@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bfe68ac..f86d673 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1327,7 +1327,7 @@ IF(NOT FOUND_POSIX_REGEX_LIB AND POSIX_REGEX_LIB MATCHES "^(AUTO|LIBPCREPOSIX)$"
+   IF(ENABLE_LIBGCC)
+     FIND_PACKAGE(LIBGCC)
+   ELSE()
+-    MESSAGE(FATAL_ERROR "libgcc not found.")
++    #MESSAGE(FATAL_ERROR "libgcc not found.")
+     SET(LIBGCC_FOUND FALSE) # Override cached value
+   ENDIF()
+   IF(ENABLE_PCREPOSIX)
+@@ -1389,7 +1389,7 @@ IF(NOT FOUND_POSIX_REGEX_LIB AND POSIX_REGEX_LIB MATCHES "^(AUTO|LIBPCRE2POSIX)$
+   IF(ENABLE_LIBGCC)
+     FIND_PACKAGE(LIBGCC)
+   ELSE()
+-    MESSAGE(FATAL_ERROR "libgcc not found.")
++    #MESSAGE(FATAL_ERROR "libgcc not found.")
+     SET(LIBGCC_FOUND FALSE) # Override cached value
+   ENDIF()
+   IF(ENABLE_PCRE2POSIX)

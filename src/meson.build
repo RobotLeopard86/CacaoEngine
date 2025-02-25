@@ -113,10 +113,11 @@ harfbuzz = harfbuzz_sp.get_variable('libharfbuzz_dep')
 harfbuzz_icu = harfbuzz_sp.get_variable('libharfbuzz_icu_dep')
 harfbuzz_sub = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 
-# Configure spdlog, thread-pool, and dynalo
+# Configure spdlog, thread-pool, dynalo, and GLM
 spdlog = subproject('spdlog', required: true).get_variable('spdlog_dep')
 thread_pool = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
 dynalo = subproject('dynalo', required: true).get_variable('dynalo_dep')
+glm = subproject('glm', required: true).get_variable('glm_dep')
 
 # Find GLSLC
 glslc = find_program('glslc', required: true)
@@ -174,6 +175,7 @@ if host_machine.system() == 'windows'
 		extra_libs += cxx.find_library(bt == 'debug' ? lib + 'd' : lib, required: true)
 	endforeach
 endif
+
 
 # Make executable
 executable(get_option('exe_name'), include_directories: [

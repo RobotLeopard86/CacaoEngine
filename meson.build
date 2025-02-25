@@ -7,23 +7,12 @@ endif
 
 # Get some options
 bt = get_option('buildtype')
-ignore_bad_compiler = get_option('ignore_bad_compiler')
 
 # Create extra argument list
 dep_compiler_args = []
 
 # Find Python
 python = find_program('python3', required: true)
-
-# Warn the user if they are trying to use an unsupported setup
-compiler = meson.get_compiler('cpp')
-if not ignore_bad_compiler
-	if compiler.get_id() != 'clang' or not compiler.get_linker_id().contains('lld')
-		error('You are using a compiler configuration that is UNSUPPORTED by Cacao Engine. This build may not compile, link, or function correctly, and no support will be offered for it. If you wish to use this setup, append "-Dignore_bad_compiler=true to your command line.')
-	endif
-else
-	warning('You are ignoring that your compiler is unsupported. Things can and will likely break!')
-endif
 
 # Resolve component dependencies
 build_libs = get_option('build_libs')
@@ -65,9 +54,6 @@ else
 endif
 cmake_msvc_lib += 'DLL'
 
-# This came from VMA but might be useful for other C libraries
-add_project_arguments(['-Wno-nullability-completeness'], language: ['c', 'cpp'])
-
 # Import CMake
 cmake = import('cmake')
 
@@ -90,9 +76,6 @@ endif
 if bt.contains('debug')
 	add_project_arguments(['-D_DEBUG'], language: 'cpp')
 endif
-
-# Configure GLM
-glm = subproject('glm', required: true).get_variable('glm_dep')
 
 # Configure yaml-cpp
 yaml_opts = cmake.subproject_options()
