@@ -3,6 +3,7 @@
 #include "CheckException.hpp"
 
 #include <cstdint>
+#include <sstream>
 #include <cstring>
 
 namespace libcacaoformats {
@@ -536,6 +537,122 @@ namespace libcacaoformats {
 		//If we don't need to process entities, return value now
 		if(entityCount == 0) return out;
 
-		//TODO: Add entity decoding
+		for(uint64_t i = 0; i < entityCount; i++) {
+			World::Entity ent {};
+
+			//Read GUID bytes
+			CheckException(container.payload.size() > advance + 16, "World packed container entity data is too small to contain GUID!");
+			uint64_t upper, lower = 0;
+			std::memcpy(&upper, container.payload.data() + advance, 8);
+			std::memcpy(&lower, container.payload.data() + advance + 8, 8);
+			advance += 16;
+
+			//Format GUID string
+			{
+				std::stringstream ss;
+				ss << std::hex << upper << lower << std::dec;
+				std::string hex = ss.str();
+				std::stringstream out;
+				out << hex.substr(0, 8) << "-" << hex.substr(8, 4) << "-" << hex.substr(12, 4) << "-" << hex.substr(16, 4) << "-" << hex.substr(20, 12);
+				ent.guid = out.str();
+			}
+
+			//Read parent GUID bytes
+			CheckException(container.payload.size() > advance + 16, "World packed container entity data is too small to contain parent GUID!");
+			upper = 0;
+			lower = 0;
+			std::memcpy(&upper, container.payload.data() + advance, 8);
+			std::memcpy(&lower, container.payload.data() + advance + 8, 8);
+			advance += 16;
+
+			//Format parent GUID string
+			{
+				std::stringstream ss;
+				ss << std::hex << upper << lower << std::dec;
+				std::string hex = ss.str();
+				std::stringstream out;
+				out << hex.substr(0, 8) << "-" << hex.substr(8, 4) << "-" << hex.substr(12, 4) << "-" << hex.substr(16, 4) << "-" << hex.substr(20, 12);
+				ent.parentGUID = out.str();
+			}
+
+			//Get entity name
+			CheckException(container.payload.size() > advance + 2, "World packed container entity data is too small to contain name string length data!");
+			uint16_t nameLen = 0;
+			std::memcpy(&nameLen, container.payload.data() + advance, 2);
+			advance += 2;
+			CheckException(nameLen > 0, "World packed container entity data has zero-length name string");
+			CheckException(container.payload.size() > advance + nameLen, "World packed container entity data is too small to contain name string!");
+			ent.name = std::string("\0", nameLen);
+			std::memcpy(ent.name.data(), container.payload.data() + advance, nameLen);
+			advance += nameLen;
+
+			//Get initial position, rotation, and scale vectors
+			CheckException(container.payload.size() > advance + 36, "World packed container entity data is too small to contain initial transform!");
+			std::memcpy(&ent.initialPos.x, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialPos.y, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialPos.z, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialRot.x, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialRot.y, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialRot.z, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialScale.x, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialScale.y, container.payload.data() + advance, 4);
+			advance += 4;
+			std::memcpy(&ent.initialScale.z, container.payload.data() + advance, 4);
+			advance += 4;
+
+			//Get component count
+			CheckException(container.payload.size() > advance++, "World packed container entity data is too small to contain component data!");
+			uint8_t componentCount = 0;
+			std::memcpy(&componentCount, container.payload.data() + advance, 1);
+
+			//If we don't need to process components, skip that part
+			if(componentCount == 0) goto add_entity;
+
+			for(uint8_t j = 0; j < componentCount; j++) {
+				World::Component comp {};
+
+				//Get component type ID
+				CheckException(container.payload.size() > advance + 2, "World packed container component data is too small to contain type ID string length data!");
+				uint16_t typeIdLen = 0;
+				std::memcpy(&typeIdLen, container.payload.data() + advance, 2);
+				advance += 2;
+				CheckException(typeIdLen > 0, "World packed container component data has zero-length type ID string");
+				CheckException(container.payload.size() > advance + typeIdLen, "World packed container component data is too small to contain type ID string!");
+				comp.typeID = std::string("\0", typeIdLen);
+				std::memcpy(ent.name.data(), container.payload.data() + advance, typeIdLen);
+				advance += typeIdLen;
+
+				//Get reflection data
+				CheckException(container.payload.size() > advance + 4, "World packed container component data is too small to contain reflection size data!");
+				uint32_t rflLen = 0;
+				std::memcpy(&rflLen, container.payload.data() + advance, 2);
+				advance += 2;
+				CheckException(rflLen > 0, "World packed container component data has zero-length reflection data");
+				CheckException(container.payload.size() > advance + rflLen, "World packed container component data is too small to contain reflection data of provided size!");
+				comp.data.reserve(rflLen);
+				std::memcpy(comp.data.data(), container.payload.data() + advance, rflLen);
+				advance += rflLen;
+
+				//We put 2 null bytes as a separator between components for padding purposes, so skip over that
+				advance += 2;
+
+				//Add component to entity
+				ent.components.push_back(comp);
+			}
+
+		add_entity:
+			//We put "%e" as a separator between entities for padding purposes, so skip over that
+			advance += 2;
+
+			//Add entity to world
+			out.entities.push_back(ent);
+		}
 	}
 }
