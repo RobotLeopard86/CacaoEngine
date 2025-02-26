@@ -9,6 +9,7 @@
 #include <functional>
 #include <istream>
 #include <ostream>
+#include <cstring>
 
 namespace libcacaoformats {
 	///@brief Two-component vector

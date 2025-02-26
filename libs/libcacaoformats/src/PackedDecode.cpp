@@ -1,6 +1,7 @@
 #include "libcacaoformats/libcacaoformats.hpp"
 
 #include "CheckException.hpp"
+#include "YAMLValidate.hpp"
 
 #include <cstdint>
 #include <sstream>
@@ -676,9 +677,12 @@ namespace libcacaoformats {
 		//Create output
 		std::map<std::string, PackedAsset> out;
 
+		//Create check map
+		std::map<std::string, bool> check;
+
 		//Extract data
 		archive_entry* entry;
-		YAML::Node metaRoot;
+		YAML::Node metaRoot(YAML::NodeType::Undefined);
 		while(archive_read_next_header(pak, &entry) == ARCHIVE_OK) {
 			std::string filename(archive_entry_pathname_utf8(entry));
 
@@ -706,10 +710,61 @@ namespace libcacaoformats {
 
 				//Add entry to output
 				out.insert_or_assign(filename, asset);
+				check.insert_or_assign(filename, false);
 			}
 		}
 
-		//TODO: Metadata second pass
+		//Check that we actually got a metadata file
+		ValidateYAMLNode(metaRoot, YAML::NodeType::value::Sequence, "asset pack", "Metadata file does not exist in pack or is improperly formatted!");
+
+		//Get asset types from metadata file
+		for(const YAML::Node& meta : metaRoot) {
+			//Validate metadata entry structure
+			ValidateYAMLNode(meta, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["asset"].IsDefined() || !node["asset"].IsScalar()) return "asset parameter is of invalid type or does not exist";
+				if(!node["type"].IsDefined() || !node["type"].IsScalar()) return "type parameter is of invalid type or does not exist";
+				try {
+					if(int asInt = std::stoi(node["type"].Scalar()); asInt < 0 || asInt > 5) return "type parameter is out of range";
+				} catch(...) {
+					return "type parameter is not an integer";
+				} }, "asset pack metadata file node", "Metadata entry is not a map!");
+
+			//Extract info
+			std::string asset = meta["asset"].Scalar();
+			int type = std::stoi(meta["type"].Scalar());
+
+			CheckException(out.contains(asset), "Metadata file references non-existent asset!");
+
+			//Set asset type
+			switch(type) {
+				case 0:
+					out.at(asset).kind = PackedAsset::Kind::Shader;
+					break;
+				case 1:
+					out.at(asset).kind = PackedAsset::Kind::Tex2D;
+					break;
+				case 2:
+					out.at(asset).kind = PackedAsset::Kind::Cubemap;
+					break;
+				case 3:
+					out.at(asset).kind = PackedAsset::Kind::Sound;
+					break;
+				case 4:
+					out.at(asset).kind = PackedAsset::Kind::Material;
+					break;
+				case 5:
+					out.at(asset).kind = PackedAsset::Kind::Font;
+					break;
+			}
+
+			//Mark as checked
+			check.insert_or_assign(asset, true);
+		}
+
+		//Confirm all assets checked
+		for(const auto& pair : check) {
+			CheckException(pair.second, "Asset pack contains file with no metadata!");
+		}
 
 		return out;
 	}
