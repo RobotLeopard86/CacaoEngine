@@ -507,6 +507,29 @@ The hash field will be calculated based on the data</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE10FormatCode8uint16_tRRNSt6vectorIcEE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer15PackedContainerE10FormatCode8uint16_tRRNSt6vectorIcEE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer15PackedContainerE10FormatCode8uint16_tRRNSt6vectorIcEE"></span><span id="libcacaoformats::PackedContainer::PackedContainer__FormatCode.uint16_t.std::vector:c:RR"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1a9e230c668bdf4a99ac8da917af55d84f"></span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html#_CPPv4N15libcacaoformats10FormatCodeE" title="libcacaoformats::FormatCode"><span class="n"><span class="pre">FormatCode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">format</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ver</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE10FormatCode8uint16_tRRNSt6vectorIcEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> by manually specifying attributes, allowing a signed char. </p>
+<p>
+The hash field will be calculated based on the data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> – The format code of the container </p></li>
+<li><p><strong>ver</strong> – The version of the format </p></li>
+<li><p><strong>data</strong> – The uncompressed data to be stored, autoconverted to unsigned char</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If there is no data </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE">
 <span id="_CPPv3N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE"></span><span id="libcacaoformats::PackedContainer::ExportToStream__osR"></span><span class="target" id="structlibcacaoformats_1_1PackedContainer_1abc2bae04401a6ccd0571ab828f1791f0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExportToStream</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Export a <a class="reference internal" href="#structlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> to a buffer. </p>
@@ -623,6 +646,7 @@ The hash field will be calculated based on the data</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainerE"><code class="docutils literal notranslate"><span class="pre">PackedContainer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE10FormatCode8uint16_tRRNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE10FormatCode8uint16_tRRNSt6vectorIcEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::ExportToStream()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer6formatE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::format</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer7versionE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::version</span></code></a></li>

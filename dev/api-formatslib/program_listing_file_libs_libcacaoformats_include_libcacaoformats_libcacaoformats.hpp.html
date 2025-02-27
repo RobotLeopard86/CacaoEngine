@@ -485,7 +485,6 @@
 <span class="w">        </span><span class="n">bytestreambuf</span><span class="w"> </span><span class="n">buf</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
-
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">AudioBuffer</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">short</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sampleCount</span><span class="p">;</span>
@@ -528,6 +527,8 @@
 <span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">FromStream</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
 
 <span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ver</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">PackedContainer</span><span class="p">(</span><span class="n">FormatCode</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ver</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ExportToStream</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
 
