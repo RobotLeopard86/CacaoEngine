@@ -8,8 +8,19 @@
 #include "CheckException.hpp"
 
 namespace libcacaoformats {
+	std::vector<unsigned char> Unsign(const std::vector<char>& vec) {
+		std::vector<unsigned char> out(vec.size());
+		std::memcpy(out.data(), vec.data(), vec.size() * sizeof(unsigned char));
+		return out;
+	}
+
 	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data)
 	  : format(format), version(ver), payload(data), hash(sw::sha512::calculate(payload.data(), payload.size() * sizeof(unsigned char))) {
+		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
+	}
+
+	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<char>&& data)
+	  : format(format), version(ver), payload(Unsign(data)), hash(sw::sha512::calculate(payload.data(), payload.size() * sizeof(unsigned char))) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
 	}
 

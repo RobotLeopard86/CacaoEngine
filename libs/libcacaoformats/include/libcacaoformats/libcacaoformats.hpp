@@ -119,7 +119,6 @@ namespace libcacaoformats {
 		bytestreambuf buf;
 	};
 
-
 	///@brief Decoded audio data and properties necessary to use it
 	struct AudioBuffer {
 		std::vector<short> data;///<Audio data
@@ -223,6 +222,21 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If there is no data
 		 */
 		PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data);
+
+		/**
+		 * @brief Create a PackedContainer by manually specifying attributes, allowing a signed char
+		 *
+		 * @param format The format code of the container
+		 * @param ver The version of the format
+		 * @param data The uncompressed data to be stored, autoconverted to unsigned char
+		 *
+		 * @details The hash field will be calculated based on the data
+		 *
+		 * @return PackedContainer object
+		 *
+		 * @throws std::runtime_error If there is no data
+		 */
+		PackedContainer(FormatCode format, uint16_t ver, std::vector<char>&& data);
 
 		/**
 		 * @brief Export a PackedContainer to a buffer

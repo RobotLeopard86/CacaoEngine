@@ -18,17 +18,17 @@ namespace libcacaoformats {
 
 		//Get buffer sizes
 		uint32_t pxs, nxs, pys, nys, pzs, nzs;
-		std::memcpy(&pxs, container.payload.data(), 4);
-		std::memcpy(&nxs, container.payload.data() + 4, 4);
-		std::memcpy(&pys, container.payload.data() + 8, 4);
-		std::memcpy(&nys, container.payload.data() + 12, 4);
-		std::memcpy(&pzs, container.payload.data() + 16, 4);
-		std::memcpy(&nzs, container.payload.data() + 24, 4);
+		std::memcpy(&pxs, container.payload.data(), 8);
+		std::memcpy(&nxs, container.payload.data() + 8, 8);
+		std::memcpy(&pys, container.payload.data() + 16, 8);
+		std::memcpy(&nys, container.payload.data() + 24, 8);
+		std::memcpy(&pzs, container.payload.data() + 32, 8);
+		std::memcpy(&nzs, container.payload.data() + 40, 8);
 
 		//Extract encoded face buffers
 		std::vector<char> pxFB(pxs), nxFB(nxs), pyFB(pys), nyFB(nys), pzFB(pzs), nzFB(nzs);
-		std::size_t offsetCounter = 28;
-		CheckException(container.payload.size() > (28 + pxs + nxs + pys + nys + pzs + nzs), "Cubemap packed container is too small to contain face data of given sizes!");
+		std::size_t offsetCounter = 48;
+		CheckException(container.payload.size() > (48 + pxs + nxs + pys + nys + pzs + nzs), "Cubemap packed container is too small to contain face data of given sizes!");
 		std::memcpy(pxFB.data(), container.payload.data() + offsetCounter, pxs);
 		offsetCounter += pxs;
 		std::memcpy(nxFB.data(), container.payload.data() + offsetCounter, nxs);
