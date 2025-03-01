@@ -285,7 +285,7 @@ namespace libcacaoformats {
 			Matrix<float, 3, 2>, Matrix<float, 3, 3>, Matrix<float, 3, 4>,
 			Matrix<float, 4, 2>, Matrix<float, 4, 3>, Matrix<float, 4, 4>,
 			TextureRef>;
-		std::map<std::string, ValueContainer> values;///<Data associated with shader
+		std::map<std::string, ValueContainer> keys;///<Data associated with shader
 	};
 
 	///@brief World data, encapsulating list of assets and components used as well as initial world state

@@ -138,7 +138,7 @@ namespace libcacaoformats {
 							int32_t val = 0;
 							std::memcpy(&val, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, val);
+							out.keys.insert_or_assign(keyName, val);
 							break;
 						}
 						case 2: {
@@ -147,7 +147,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec2<int> {.x = x, .y = y});
+							out.keys.insert_or_assign(keyName, Vec2<int> {.x = x, .y = y});
 							break;
 						}
 						case 3: {
@@ -158,7 +158,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec3<int> {.x = x, .y = y, .z = z});
+							out.keys.insert_or_assign(keyName, Vec3<int> {.x = x, .y = y, .z = z});
 							break;
 						}
 						case 4: {
@@ -171,7 +171,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&w, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec4<int> {.x = x, .y = y, .z = z, .w = w});
+							out.keys.insert_or_assign(keyName, Vec4<int> {.x = x, .y = y, .z = z, .w = w});
 							break;
 						}
 						default:
@@ -184,7 +184,7 @@ namespace libcacaoformats {
 							uint32_t val = 0;
 							std::memcpy(&val, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, val);
+							out.keys.insert_or_assign(keyName, val);
 							break;
 						}
 						case 2: {
@@ -193,7 +193,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec2<unsigned int> {.x = x, .y = y});
+							out.keys.insert_or_assign(keyName, Vec2<unsigned int> {.x = x, .y = y});
 							break;
 						}
 						case 3: {
@@ -204,7 +204,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec3<unsigned int> {.x = x, .y = y, .z = z});
+							out.keys.insert_or_assign(keyName, Vec3<unsigned int> {.x = x, .y = y, .z = z});
 							break;
 						}
 						case 4: {
@@ -217,7 +217,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&w, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec4<unsigned int> {.x = x, .y = y, .z = z, .w = w});
+							out.keys.insert_or_assign(keyName, Vec4<unsigned int> {.x = x, .y = y, .z = z, .w = w});
 							break;
 						}
 						default:
@@ -230,7 +230,7 @@ namespace libcacaoformats {
 							float val = 0;
 							std::memcpy(&val, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, val);
+							out.keys.insert_or_assign(keyName, val);
 							break;
 						}
 						case 2: {
@@ -239,7 +239,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&y, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec2<float> {.x = x, .y = y});
+							out.keys.insert_or_assign(keyName, Vec2<float> {.x = x, .y = y});
 							break;
 						}
 						case 3: {
@@ -250,7 +250,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&z, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec3<float> {.x = x, .y = y, .z = z});
+							out.keys.insert_or_assign(keyName, Vec3<float> {.x = x, .y = y, .z = z});
 							break;
 						}
 						case 4: {
@@ -263,7 +263,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&w, container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, Vec4<float> {.x = x, .y = y, .z = z, .w = w});
+							out.keys.insert_or_assign(keyName, Vec4<float> {.x = x, .y = y, .z = z, .w = w});
 							break;
 						}
 						case 6: {
@@ -276,7 +276,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[1][1], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 7: {
@@ -293,7 +293,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[2][1], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 8: {
@@ -314,7 +314,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[3][1], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 10: {
@@ -331,7 +331,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[1][2], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 11: {
@@ -354,7 +354,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[2][2], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 12: {
@@ -383,7 +383,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[3][2], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 14: {
@@ -404,7 +404,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[1][3], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 15: {
@@ -433,7 +433,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[2][3], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						case 16: {
@@ -470,7 +470,7 @@ namespace libcacaoformats {
 							offsetCounter += 4;
 							std::memcpy(&m.data[3][3], container.payload.data() + offsetCounter, 4);
 							offsetCounter += 4;
-							out.values.insert_or_assign(keyName, m);
+							out.keys.insert_or_assign(keyName, m);
 							break;
 						}
 						default:
@@ -487,7 +487,7 @@ namespace libcacaoformats {
 					std::memcpy(ref.path.data(), container.payload.data() + offsetCounter, texLen);
 					offsetCounter += texLen;
 					ref.isCubemap = (typeInfo & 0b01000000) > 0;
-					out.values.insert_or_assign(keyName, ref);
+					out.keys.insert_or_assign(keyName, ref);
 					break;
 				}
 			}

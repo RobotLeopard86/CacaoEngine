@@ -477,7 +477,7 @@ namespace libcacaoformats {
 				} catch(const std::exception& e) {
 					return e.what();
 				} }, "unpacked material data key", "key value");
-			out.values.insert_or_assign(node["name"].Scalar(), value);
+			out.keys.insert_or_assign(node["name"].Scalar(), value);
 		}
 
 		//Return result
