@@ -84,6 +84,7 @@ namespace libcacaoformats {
 
 		for(const auto& key : mat.keys) {
 			//Write key name string
+			CheckException(key.first.size() > 0 && key.first.size() <= UINT8_MAX, "Material key for packed encoding has out-of-range name string length!");
 			uint8_t knLen = (uint8_t)key.first.size();
 			out.write(reinterpret_cast<char*>(&knLen), 1);
 			out << key.first;
@@ -323,6 +324,7 @@ namespace libcacaoformats {
 						typeInfo = 0b00000011;
 						Material::TextureRef value = std::get<21>(key.second);
 						if(value.isCubemap) typeInfo |= 0b01000000;
+						CheckException(value.path.size() > 0 && value.path.size() <= UINT16_MAX, "Material key for packed encoding has out-of-range texture reference string length!");
 						uint16_t taLen = (uint16_t)value.path.size();
 						data.write(reinterpret_cast<char*>(&taLen), 2);
 						data << value.path;
@@ -406,6 +408,42 @@ namespace libcacaoformats {
 			auto [parentUpper, parentLower] = parseGUID(entity.guid);
 			uint64_t parentGUID[] = {parentUpper, parentLower};
 			out.write(reinterpret_cast<char*>(&parentGUID), sizeof(parentGUID));
+
+			//Write entity name string
+			CheckException(entity.name.size() > 0 && entity.name.size() <= UINT16_MAX, "World entity for packed encoding has out-of-range name string length!");
+			uint16_t enLen = (uint8_t)entity.name.size();
+			out.write(reinterpret_cast<char*>(&enLen), 2);
+			out << entity.name;
+
+			//Write initial transform data
+			float transformData[] = {entity.initialPos.x, entity.initialPos.y, entity.initialPos.z, entity.initialRot.x, entity.initialRot.y, entity.initialRot.z, entity.initialScale.x, entity.initialScale.y, entity.initialScale.z};
+			out.write(reinterpret_cast<char*>(transformData), sizeof(transformData));
+
+			//Write component count
+			CheckException(entity.components.size() > 0 && entity.components.size() <= UINT8_MAX, "World entity for packed encoding has invalid component count!");
+			uint8_t compCount = (uint8_t)entity.components.size();
+			out.write(reinterpret_cast<char*>(&compCount), 1);
+
+			//Write components
+			for(const World::Component& component : entity.components) {
+				//Write type ID string
+				CheckException(component.typeID.size() > 0 && component.typeID.size() <= UINT16_MAX, "World entity component for packed encoding has out-of-range type ID string length!");
+				uint16_t tiLen = (uint16_t)component.typeID.size();
+				out.write(reinterpret_cast<char*>(&tiLen), 2);
+				out << component.typeID;
+
+				//Write reflection data
+				CheckException(component.data.size() > 0 && component.data.size() <= UINT16_MAX, "World entity component for packed encoding has out-of-range reflection data size!");
+				uint32_t rdLen = (uint32_t)component.data.size();
+				out.write(reinterpret_cast<char*>(&rdLen), 2);
+				out.write(reinterpret_cast<const char*>(component.data.data()), component.data.size() * sizeof(unsigned char));
+
+				//Write component separator
+				out << "\0\0";
+			}
+
+			//Write entity separator
+			out << "%e";
 		}
 
 		//Create and return packed container
