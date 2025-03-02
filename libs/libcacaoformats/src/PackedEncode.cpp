@@ -5,6 +5,10 @@
 #include <sstream>
 #include <utility>
 
+#include "yaml-cpp/yaml.h"
+#include "archive.h"
+#include "archive_entry.h"
+
 namespace libcacaoformats {
 	PackedContainer PackedEncoder::EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap) {
 		//Validate input
@@ -448,5 +452,118 @@ namespace libcacaoformats {
 
 		//Create and return packed container
 		return PackedContainer(FormatCode::World, 1, std::move(outBuffer));
+	}
+
+	PackedContainer PackedEncoder::EncodeAssetPack(const std::map<std::string, PackedAsset>& pack) {
+		//Validate inputs
+		CheckException(pack.size() > 0, "Cannot encode asset pack with no assets!");
+
+		//Create output container with a default size (we might change this later)
+		std::vector<char> outBuffer(1042 ^ 2);
+		std::size_t used;
+
+		//Create metadata file emitter
+		YAML::Emitter yml;
+		yml << YAML::BeginSeq;
+
+		//Configure archive object
+		archive* pak = archive_write_new();
+		CheckException(pak, "Unable to create asset pack archive object!");
+		archive_write_set_format_pax_restricted(pak);
+		CheckException(archive_write_open_memory(pak, outBuffer.data(), outBuffer.capacity() * sizeof(char), &used) == ARCHIVE_OK, "Failed to open archive object for asset pack encoding!");
+
+		//Write files
+		archive_entry* entry = archive_entry_new();
+		CheckException(entry, "Unable to create asset pack entry object");
+		for(const auto& asset : pack) {
+			//Reset entry object
+			entry = archive_entry_clear(entry);
+
+			//Fill out entry data
+			archive_entry_set_pathname_utf8(entry, asset.first.c_str());
+			archive_entry_set_size(entry, asset.second.buffer.size() * sizeof(unsigned char));
+			archive_entry_set_filetype(entry, AE_IFREG);
+			archive_entry_set_perm(entry, 0644);
+
+			//Write entry header
+			int stat = archive_write_header(pak, entry);
+			if(stat != ARCHIVE_OK) {
+				if(used > outBuffer.capacity() * sizeof(char)) {
+					//Resize the buffer and try again
+					outBuffer.reserve(outBuffer.size() * 1.5);
+					CheckException(archive_write_header(pak, entry) == ARCHIVE_OK, "Failed to write archive entry header for asset pack encoding!");
+				} else {
+					CheckException(false, "Failed to write archive entry header for asset pack encoding!");
+				}
+			}
+
+			//Write file data
+			archive_write_data(pak, asset.second.buffer.data(), asset.second.buffer.size() * sizeof(unsigned char));
+
+			//Output metadata entry
+			yml << YAML::BeginMap << YAML::Key << "asset" << YAML::Value << asset.first << YAML::Key << "type" << YAML::Value;
+			switch(asset.second.kind) {
+				case PackedAsset::Kind::Shader:
+					yml << 0;
+					break;
+				case PackedAsset::Kind::Tex2D:
+					yml << 1;
+					break;
+				case PackedAsset::Kind::Cubemap:
+					yml << 2;
+					break;
+				case PackedAsset::Kind::Sound:
+					yml << 3;
+					break;
+				case PackedAsset::Kind::Material:
+					yml << 4;
+					break;
+				case PackedAsset::Kind::Font:
+					yml << 5;
+					break;
+				default:
+					yml << -1;
+					break;
+			}
+			yml << YAML::EndMap;
+		}
+		yml << YAML::EndSeq;
+
+		//Now we do the whole writing stuff again for the metadata file
+		{
+			//Get data
+			std::string meta(yml.c_str());
+
+			//Reset entry object
+			entry = archive_entry_clear(entry);
+
+			//Fill out entry data
+			archive_entry_set_pathname_utf8(entry, "__$CacaoMeta0");
+			archive_entry_set_size(entry, meta.size() * sizeof(char));
+			archive_entry_set_filetype(entry, AE_IFREG);
+			archive_entry_set_perm(entry, 0644);
+
+			//Write entry header
+			int stat = archive_write_header(pak, entry);
+			if(stat != ARCHIVE_OK) {
+				if(used > outBuffer.capacity() * sizeof(char)) {
+					//Resize the buffer and try again
+					outBuffer.reserve(outBuffer.size() * 1.5);
+					CheckException(archive_write_header(pak, entry) == ARCHIVE_OK, "Failed to write metadata file entry header for asset pack encoding!");
+				} else {
+					CheckException(false, "Failed to write metadata file entry header for asset pack encoding!");
+				}
+			}
+
+			//Write file data
+			archive_write_data(pak, meta.c_str(), meta.size() * sizeof(unsigned char));
+		}
+
+		//Close and free archive object
+		CheckException(archive_write_close(pak) == ARCHIVE_OK, "Failed to close asset pack archive object!");
+		CheckException(archive_write_free(pak) == ARCHIVE_OK, "Failed to free asset pack archive object!");
+
+		//Create and return packed container
+		return PackedContainer(FormatCode::AssetPack, 1, std::move(outBuffer));
 	}
 }
