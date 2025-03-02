@@ -17,7 +17,7 @@ namespace libcacaoformats {
 	 *
 	 * @throws std::runtime_error If a check fails
 	 */
-	void ValidateYAMLNode(const YAML::Node& node, std::function<std::string(const YAML::Node&)> predicate, const std::string& context, const std::string& what) {
+	inline void ValidateYAMLNode(const YAML::Node& node, std::function<std::string(const YAML::Node&)> predicate, const std::string& context, const std::string& what) {
 		//Set up error message stream
 		std::stringstream stream;
 		stream << "While parsing " << context << ", " << what << " node is invalid: ";
@@ -32,12 +32,12 @@ namespace libcacaoformats {
 	}
 
 	//Convenience wrapper for checking the type of the node
-	void ValidateYAMLNode(const YAML::Node& node, YAML::NodeType::value type, const std::string& context, const std::string& what) {
+	inline void ValidateYAMLNode(const YAML::Node& node, YAML::NodeType::value type, const std::string& context, const std::string& what) {
 		ValidateYAMLNode(node, [&type](const YAML::Node& node) { return (node.Type() == type ? "" : "Node is of improper type!"); }, context, what);
 	}
 
 	//Convenience wrapper for checking the type of the node AND doing a user predicate
-	void ValidateYAMLNode(const YAML::Node& node, YAML::NodeType::value type, std::function<std::string(const YAML::Node&)> predicate, const std::string& context, const std::string& what) {
+	inline void ValidateYAMLNode(const YAML::Node& node, YAML::NodeType::value type, std::function<std::string(const YAML::Node&)> predicate, const std::string& context, const std::string& what) {
 		ValidateYAMLNode(node, [&type, &predicate](const YAML::Node& node) { 
             if(std::string result = predicate(node); !result.empty()) CheckException(false, result);
             return (node.Type() == type ? "" : "Node is of improper type!"); }, context, what);

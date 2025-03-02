@@ -534,7 +534,7 @@ namespace libcacaoformats {
 					if(c == '-') continue;
 					if(c < 48 || c > 102 || (c > 57 && c < 97)) {
 						std::stringstream ss;
-						ss << "Invalid GUID character \"" << c << "\"" << std::endl;
+						ss << "Invalid GUID character \"" << c << "\"";
 						return ss.str();
 					}
 				}
@@ -547,7 +547,7 @@ namespace libcacaoformats {
 					if(c == '-') continue;
 					if(c < 48 || c > 102 || (c > 57 && c < 97)) {
 						std::stringstream ss;
-						ss << "Invalid GUID character \"" << c << "\"" << std::endl;
+						ss << "Invalid GUID character \"" << c << "\"";
 						return ss.str();
 					}
 				}

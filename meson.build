@@ -100,7 +100,10 @@ er_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 })
 er_opts.set_install(true)
-er_cpp = cmake.subproject('er-cpp', options: er_opts, required: true).dependency('reflection')
+ersp = cmake.subproject('er-cpp', options: er_opts, required: true)
+er_rfl = ersp.dependency('reflection')
+reflex = ersp.dependency('ReflexLibStatic')
+er_cpp = declare_dependency(dependencies: [er_rfl, reflex])
 
 # Build components
 if build_libs

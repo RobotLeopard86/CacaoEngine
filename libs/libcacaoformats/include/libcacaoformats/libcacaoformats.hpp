@@ -246,9 +246,6 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If the container has no data or data compression fails
 		 */
 		void ExportToStream(std::ostream& stream);
-
-	  private:
-		PackedContainer(FormatCode, uint16_t, std::vector<unsigned char>);
 	};
 
 	///@brief Encapsulation of data associated with an asset in an asset pack

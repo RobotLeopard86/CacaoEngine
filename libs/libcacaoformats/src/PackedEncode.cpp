@@ -2,6 +2,9 @@
 
 #include "CheckException.hpp"
 
+#include <sstream>
+#include <utility>
+
 namespace libcacaoformats {
 	PackedContainer PackedEncoder::EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap) {
 		//Validate input
@@ -343,5 +346,69 @@ namespace libcacaoformats {
 
 		//Create and return packed container
 		return PackedContainer(FormatCode::Material, 1, std::move(outBuffer));
+	}
+
+	PackedContainer PackedEncoder::EncodeWorld(const World& world) {
+		//Create output container
+		std::vector<char> outBuffer;
+		obytestream out(outBuffer);
+
+		//Write skybox address string
+		uint16_t skyboxLen = (uint16_t)world.skyboxRef.size();
+		out.write(reinterpret_cast<char*>(&skyboxLen), 2);
+		if(skyboxLen > 0) out << world.skyboxRef;
+
+		//Write initial camera data
+		float initialCamData[] = {world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z, world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z};
+		out.write(reinterpret_cast<char*>(&initialCamData), sizeof(initialCamData));
+
+		//Write entity count
+		uint64_t entityCount = world.entities.size();
+		out.write(reinterpret_cast<char*>(&entityCount), 8);
+
+		const auto parseGUID = [](const std::string& input) {
+			std::string hexNum;
+			for(char c : input) {
+				if(c == '-') continue;
+				if(c < 48 || c > 102 || (c > 57 && c < 97)) {
+					std::stringstream ss;
+					ss << "Invalid GUID character \"" << c << "\" found during packed encoding in world entity!";
+					CheckException(false, ss.str());
+				}
+				hexNum += c;
+			}
+			CheckException(hexNum.size() == 32, "GUID string for world entity contains too many or two few digits!");
+			std::string upperStr = hexNum.substr(0, 16);
+			std::string lowerStr = hexNum.substr(16, 16);
+
+			//Hex conversion trickery
+			std::stringstream converter;
+			uint64_t upper;
+			converter << upperStr;
+			converter >> upper;
+			converter.str("");
+			uint64_t lower;
+			converter << lowerStr;
+			converter >> lower;
+
+			//Output the numbers
+			return std::make_pair<uint64_t, uint64_t>(std::move(upper), std::move(lower));
+		};
+
+		//Write entities
+		for(const World::Entity& entity : world.entities) {
+			//Write entity GUID
+			auto [guidUpper, guidLower] = parseGUID(entity.guid);
+			uint64_t guid[] = {guidUpper, guidLower};
+			out.write(reinterpret_cast<char*>(&guid), sizeof(guid));
+
+			//Write entity parent GUID
+			auto [parentUpper, parentLower] = parseGUID(entity.guid);
+			uint64_t parentGUID[] = {parentUpper, parentLower};
+			out.write(reinterpret_cast<char*>(&parentGUID), sizeof(parentGUID));
+		}
+
+		//Create and return packed container
+		return PackedContainer(FormatCode::World, 1, std::move(outBuffer));
 	}
 }

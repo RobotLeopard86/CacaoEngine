@@ -90,7 +90,7 @@ namespace libcacaoformats {
 		}
 
 		//Create output
-		PackedContainer out(format, version, uncompressed);
+		PackedContainer out(format, version, std::move(uncompressed));
 
 		//Check hash
 		CheckException(out.hash.compare(hash) == 0, "Packed container payload actual hash and provided hash differ!");

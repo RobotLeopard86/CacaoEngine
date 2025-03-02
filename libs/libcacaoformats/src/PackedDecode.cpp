@@ -17,7 +17,7 @@ namespace libcacaoformats {
 		CheckException(container.payload.size() > 28, "Cubemap packed container is too small to contain face size data!");
 
 		//Get buffer sizes
-		uint32_t pxs, nxs, pys, nys, pzs, nzs;
+		uint64_t pxs, nxs, pys, nys, pzs, nzs;
 		std::memcpy(&pxs, container.payload.data(), 8);
 		std::memcpy(&nxs, container.payload.data() + 8, 8);
 		std::memcpy(&pys, container.payload.data() + 16, 8);
@@ -727,7 +727,8 @@ namespace libcacaoformats {
 					if(int asInt = std::stoi(node["type"].Scalar()); asInt < 0 || asInt > 5) return "type parameter is out of range";
 				} catch(...) {
 					return "type parameter is not an integer";
-				} }, "asset pack metadata file node", "Metadata entry is not a map!");
+				}
+				return ""; }, "asset pack metadata file node", "Metadata entry is not a map!");
 
 			//Extract info
 			std::string asset = meta["asset"].Scalar();

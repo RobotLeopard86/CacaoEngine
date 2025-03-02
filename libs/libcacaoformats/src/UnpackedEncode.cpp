@@ -14,7 +14,7 @@ namespace libcacaoformats {
 
 		//Write out each value
 		yml << YAML::Key << "data" << YAML::BeginSeq;
-		for(const auto& item : mat.values) {
+		for(const auto& item : mat.keys) {
 			yml << YAML::BeginMap;
 			yml << YAML::Key << "name" << YAML::Value << item.first;
 
