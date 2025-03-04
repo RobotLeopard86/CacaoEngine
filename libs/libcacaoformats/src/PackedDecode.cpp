@@ -105,32 +105,33 @@ namespace libcacaoformats {
 		//Process keys
 		std::size_t offsetCounter = saLen + 3;
 		for(uint8_t i = 0; i < numKeys; i++) {
-			//Get type info
-			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain provided key count!");
-			uint8_t typeInfo = 0;
-			std::memcpy(&typeInfo, container.payload.data() + offsetCounter++, 1);
-
 			//Get key name
 			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain key name length!");
-			uint32_t keyNameLen = 0;
+			uint8_t keyNameLen = 0;
 			std::memcpy(&keyNameLen, container.payload.data() + offsetCounter++, 1);
 			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain key name string of provided length!");
 			std::string keyName("\0", keyNameLen);
 			std::memcpy(keyName.data(), container.payload.data() + offsetCounter, keyNameLen);
 			offsetCounter += keyNameLen;
 
+			//Get type info
+			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain provided key count!");
+			uint8_t typeInfo = 0;
+			std::memcpy(&typeInfo, container.payload.data() + offsetCounter++, 1);
+
 			//Extract info and check size constraints
 			Vec2<uint8_t> size;
-			size.x = (typeInfo & 0b00001100);
-			size.y = (typeInfo & 0b00110000);
+			size.x = ((typeInfo & 0b00001100) >> 2) + 1;
+			size.y = ((typeInfo & 0b00110000) >> 4) + 1;
 			uint8_t baseType = (typeInfo & 0b00000011);
-			CheckException(baseType == 3 && (size.x > 1 || size.y > 1), "Material packed container key has invalid size for texture type (must be 1x1)!");
-			CheckException(baseType != 2 && size.y > 1, "Material packed container key has invalid size for non-float type (y must be 1)!");
-			CheckException(size.x == 1 && size.y != 1, "Material packed container key has invalid size (if x is 1, must be 1x1)");
-			uint8_t dims = (4 * size.y) - (4 - size.x);
+			CheckException(baseType != 3 || (baseType == 3 && size.x == 1 && size.y == 1), "Material packed container key has invalid size for texture type (must be 1x1)!");
+			CheckException(baseType == 2 || (baseType != 2 && size.x == 1), "Material packed container key has invalid size for non-float type (y must be 1)!");
+			CheckException(size.x != 1 || (size.x == 1 && size.y == 1), "Material packed container key has invalid size (if x is 1, must be 1x1)");
+			uint8_t dims = (4 * size.x) - (4 - size.y);
 
 			//Load data
 			if(baseType != 3) CheckException(container.payload.size() > offsetCounter + (size.x * size.y * 4), "Material packed container key is too small to contain value of provided type!");
+			offsetCounter += 4;
 			switch(baseType) {
 				case 0:
 					switch(dims) {

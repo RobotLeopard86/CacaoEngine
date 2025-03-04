@@ -93,3 +93,7 @@ formats_lib = both_libraries('cacaoformats', sources: [
 
 formats_dep_shared = declare_dependency(include_directories: 'include', link_with: formats_lib.get_shared_lib())
 formats_dep_static = declare_dependency(include_directories: 'include', link_with: formats_lib.get_static_lib())
+
+if testing
+    test('simple', executable('simple_test', sources: 'test/simple.cpp', dependencies: formats_dep_shared), env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
+endif

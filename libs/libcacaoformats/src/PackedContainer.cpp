@@ -14,6 +14,12 @@ namespace libcacaoformats {
 		return out;
 	}
 
+	std::vector<char> Sign(const std::vector<unsigned char>& vec) {
+		std::vector<char> out(vec.size());
+		std::memcpy(out.data(), vec.data(), vec.size() * sizeof(char));
+		return out;
+	}
+
 	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data)
 	  : format(format), version(ver), payload(data), hash(sw::sha512::calculate(payload.data(), payload.size() * sizeof(unsigned char))) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
@@ -22,6 +28,15 @@ namespace libcacaoformats {
 	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<char>&& data)
 	  : format(format), version(ver), payload(Unsign(data)), hash(sw::sha512::calculate(payload.data(), payload.size() * sizeof(unsigned char))) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
+	}
+
+	PackedContainer PackedContainer::FromAsset(const PackedAsset& asset) {
+		CheckException(asset.kind == PackedAsset::Kind::Cubemap || asset.kind == PackedAsset::Kind::Material || asset.kind == PackedAsset::Kind::Shader, "Cannot make PackedContainer from asset that is not a cubemap, material, or shader!");
+
+		//Create buffer and stream
+		std::vector<char> buffer = Sign(asset.buffer);
+		ibytestream stream(buffer);
+		return FromStream(stream);
 	}
 
 	PackedContainer PackedContainer::FromStream(std::istream& stream) {
@@ -83,8 +98,7 @@ namespace libcacaoformats {
 			stream.read(reinterpret_cast<char*>(compressed.data()), compressedSize);
 
 			//Decompress payload
-			unsigned int bzOutSizeSink = 0;
-
+			unsigned int bzOutSizeSink = uncompressedSize;
 			int status = BZ2_bzBuffToBuffDecompress(reinterpret_cast<char*>(uncompressed.data()), &bzOutSizeSink, reinterpret_cast<char*>(compressed.data()), compressedSize, 0, 0);
 			CheckException(status == BZ_OK, "Failed to decompress packed container payload!");
 		}
@@ -102,48 +116,52 @@ namespace libcacaoformats {
 	void PackedContainer::ExportToStream(std::ostream& stream) {
 		CheckException(stream.good(), "Output stream for packed container export is invalid!");
 
-		//Write Cacao Engine magic number
-		stream << 0xCACA00;
+		//Write Cacao Engine magic number (written backwards for endianness)
+		constexpr unsigned int magic = 0x00CACA;
+		stream.write(reinterpret_cast<const char*>(&magic), 3);
 
 		//Write format code
+		unsigned char code = 0;
 		switch(format) {
 			case FormatCode::AssetPack:
-				stream << 0xAA;
+				code = 0xAA;
 				break;
 			case FormatCode::Cubemap:
-				stream << 0xC4;
+				code = 0xC4;
 				break;
 			case FormatCode::Material:
-				stream << 0x3E;
+				code = 0x3E;
 				break;
 			case FormatCode::Shader:
-				stream << 0x1B;
+				code = 0x1B;
 				break;
 			case FormatCode::World:
-				stream << 0x7A;
+				code = 0x7A;
 				break;
 		}
+		stream.write(reinterpret_cast<char*>(&code), 1);
+
+		//Write version
+		stream.write(reinterpret_cast<const char*>(&version), 2);
 
 		//Write hash
 		stream << hash;
 
 		//Write buffer size
 		std::size_t bufSize = payload.size() * sizeof(unsigned char);
-		stream << bufSize;
+		stream.write(reinterpret_cast<char*>(&bufSize), sizeof(std::size_t));
 
 		//Compress payload
-		unsigned int bzOutSizeSink = 0;
-		std::vector<unsigned char> compressed(bufSize * 1.01 + 600);																														   //This size ratio comes from the bzip2 docs
-		int status = BZ2_bzBuffToBuffCompress(reinterpret_cast<char*>(compressed.data()), &bzOutSizeSink, const_cast<char*>(reinterpret_cast<const char*>(payload.data())), bufSize, 9, 0, 30);//9 is the compression level, which is the default from the bzip2 command-line tool. 30 is the recommended work factor by the bzip2 docs.
+		std::vector<unsigned char> compressed(bufSize * 1.01 + 600);
+		unsigned int destSize = compressed.size();																																		  //This size ratio comes from the bzip2 docs
+		int status = BZ2_bzBuffToBuffCompress(reinterpret_cast<char*>(compressed.data()), &destSize, const_cast<char*>(reinterpret_cast<const char*>(payload.data())), bufSize, 9, 0, 30);//9 is the compression level, which is the default from the bzip2 command-line tool. 30 is the recommended work factor by the bzip2 docs.
 		CheckException(status == BZ_OK, "Failed to compress payload for packed container export!");
 
 		//Trim compressed data to free any memory not used
 		compressed.shrink_to_fit();
 
 		//Write compressed data
-		for(unsigned char byte : compressed) {
-			stream << byte;
-		}
+		stream.write(reinterpret_cast<char*>(compressed.data()), compressed.size());
 
 		//Flush output
 		stream << std::flush;

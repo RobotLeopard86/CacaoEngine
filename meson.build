@@ -105,6 +105,8 @@ er_rfl = ersp.dependency('reflection')
 reflex = ersp.dependency('ReflexLibStatic')
 er_cpp = declare_dependency(dependencies: [er_rfl, reflex])
 
+testing = get_option('testing')
+
 # Build components
 if build_libs
 	subdir('libs')

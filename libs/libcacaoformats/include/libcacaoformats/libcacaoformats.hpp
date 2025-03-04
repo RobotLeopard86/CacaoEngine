@@ -34,6 +34,9 @@ namespace libcacaoformats {
 	template<typename T, int M, int N>
 	struct Matrix {
 		std::array<std::array<T, M>, N> data;
+		std::array<T, M>& operator[](int idx) {
+			return data[idx];
+		}
 	};
 
 	/**
@@ -185,12 +188,27 @@ namespace libcacaoformats {
 		World
 	};
 
+	///@brief Encapsulation of data associated with an asset in an asset pack
+	struct PackedAsset {
+		///@brief Type of asset
+		enum class Kind {
+			Shader,
+			Tex2D,
+			Cubemap,
+			Material,
+			Sound,
+			Font
+		};
+		Kind kind;						  ///<Type of asset contained
+		std::vector<unsigned char> buffer;///<Asset file contents buffer
+	};
+
 	/**
 	 * @brief Loaded structure of a generic packed file format
 	 *
-	 * @note When loading a container, use FromBuffer. When creating a container for exporting, use FromData.
+	 * @note You generally shouldn't use the direct constructor. For most use cases, a PackedEncoder should work instead.
 	 */
-	struct PackedContainer {
+	class PackedContainer {
 	  public:
 		const FormatCode format;				 ///<Type of contents
 		const uint16_t version;					 ///<File type version
@@ -207,6 +225,17 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If the stream is not valid, does not represent a valid packed file or the hash value does not match the payload
 		 */
 		static PackedContainer FromStream(std::istream& stream);
+
+		/**
+		 * @brief Create a PackedContainer from a PackedAsset
+		 *
+		 * @param asset A packed asset from an asset pack
+		 *
+		 * @return PackedContainer object
+		 *
+		 * @throws std::runtime_error If the asset is of an unsupported type or the buffer is an invalid
+		 */
+		static PackedContainer FromAsset(const PackedAsset& asset);
 
 		/**
 		 * @brief Create a PackedContainer by manually specifying attributes
@@ -246,21 +275,6 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If the container has no data or data compression fails
 		 */
 		void ExportToStream(std::ostream& stream);
-	};
-
-	///@brief Encapsulation of data associated with an asset in an asset pack
-	struct PackedAsset {
-		///@brief Type of asset
-		enum class Kind {
-			Shader,
-			Tex2D,
-			Cubemap,
-			Material,
-			Sound,
-			Font
-		};
-		Kind kind;						  ///<Type of asset contained
-		std::vector<unsigned char> buffer;///<Asset file contents buffer
 	};
 
 	///@brief Reference path for shader and associated data
