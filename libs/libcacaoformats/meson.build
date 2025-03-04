@@ -81,7 +81,7 @@ bz2_opts.add_cmake_defines({
 bz2_sp = cmake.subproject('bzip2', options: bz2_opts, required: true)
 deps += bz2_sp.dependency('bz2_static')
 
-formats_lib = both_libraries('cacaoformats', sources: [
+formats_lib = static_library('cacaoformats', sources: [
 	'src/AudioDecode.cpp',
 	'src/ImageOperations.cpp',
     'src/UnpackedDecode.cpp',
@@ -91,9 +91,8 @@ formats_lib = both_libraries('cacaoformats', sources: [
 	'src/PackedEncode.cpp'
 ], include_directories: ['include', 'src'], pic: true, dependencies: deps)
 
-formats_dep_shared = declare_dependency(include_directories: 'include', link_with: formats_lib.get_shared_lib())
-formats_dep_static = declare_dependency(include_directories: 'include', link_with: formats_lib.get_static_lib())
+formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib)
 
 if testing
-    test('simple', executable('simple_test', sources: 'test/simple.cpp', dependencies: formats_dep_shared), env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
+    test('simple', executable('simple_test', sources: 'test/simple.cpp', dependencies: formats_dep), env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
 endif

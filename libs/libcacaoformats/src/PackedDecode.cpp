@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstring>
 
+#define LIBARCHIVE_STATIC
 #include "archive.h"
 #include "archive_entry.h"
 #include "yaml-cpp/yaml.h"

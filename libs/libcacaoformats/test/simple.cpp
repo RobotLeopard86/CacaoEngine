@@ -28,22 +28,13 @@ int main() {
 			libcacaoformats::PackedContainer container = libcacaoformats::PackedContainer::FromStream(str);
 			libcacaoformats::Material mat = dec.DecodeMaterial(container);
 			str.close();
-			std::cout << mat.shader << std::endl;
+			if(mat.shader.compare("yappucino") != 0) throw std::runtime_error("Wrong shader reference!");
 			if(mat.keys.size() != 2) throw std::runtime_error("Wrong amount of keys!");
-			for(const auto& k : mat.keys) {
-				std::cout << k.first << ":\n"
-						  << k.second.index() << "\n";
-				if(k.second.index() != 4 && k.second.index() != 13) throw std::runtime_error("Loaded key is not the correct index");
-				if(k.second.index() == 4) {
-					libcacaoformats::Vec3<int> val = std::get<4>(k.second);
-					std::cout << "{" << val.x << ", " << val.y << ", " << val.z << "}" << std::endl;
-				} else {
-					libcacaoformats::Matrix<float, 2, 3> val = std::get<13>(k.second);
-					for(const auto& row : val.data) {
-						std::cout << "[" << row[0] << ", " << row[1] << "]" << std::endl;
-					}
-				}
-			}
+			if(!mat.keys.contains("goose") || !mat.keys.contains("test")) throw std::runtime_error("Wrong keys decoded!");
+			libcacaoformats::Vec3<int> test = std::get<4>(mat.keys.at("test"));
+			libcacaoformats::Matrix<float, 2, 3> goose = std::get<13>(mat.keys.at("test"));
+			if(test.x != 7 || test.y != -4 || test.z != 3) throw std::runtime_error("\"test\" key contains wrong values!");
+			if(goose[0][0] != 2.4f || goose[0][1] != 3.1f || goose[1][0] != 66.1f || goose[1][1] != 9.143f || goose[2][0] != 100.0f || goose[2][1] != 31.4f) throw std::runtime_error("\"goose\" key contains wrong values!");
 		}
 
 		return 0;
