@@ -94,5 +94,5 @@ formats_lib = static_library('cacaoformats', sources: [
 formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib)
 
 if testing
-    test('simple', executable('simple_test', sources: 'test/simple.cpp', dependencies: formats_dep), env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
+    test('readwrite_material_packed', executable('readwrite_material_packed', sources: 'test/readwrite_material_packed.cpp', dependencies: formats_dep), env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
 endif
