@@ -64,7 +64,6 @@ namespace libcacaoformats {
 			//Expand buffer and ensure proper size
 			std::ptrdiff_t offset = pptr() - pbase();
 			buffer.push_back(static_cast<char>(ch));
-			buffer.resize(buffer.capacity());
 
 			//Reset stream buffer pointers
 			setp(buffer.data(), buffer.data() + buffer.size());
@@ -78,7 +77,6 @@ namespace libcacaoformats {
 			if(n > remaining) {
 				std::ptrdiff_t offset = pptr() - pbase();
 				buffer.insert(buffer.end(), s, s + n);
-				buffer.resize(buffer.capacity());
 
 				//Reset buffer pointers
 				setp(buffer.data(), buffer.data() + buffer.size());

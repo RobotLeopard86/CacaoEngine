@@ -32,7 +32,7 @@ int main() {
 			if(mat.keys.size() != 2) throw std::runtime_error("Wrong amount of keys!");
 			if(!mat.keys.contains("goose") || !mat.keys.contains("test")) throw std::runtime_error("Wrong keys decoded!");
 			libcacaoformats::Vec3<int> test = std::get<4>(mat.keys.at("test"));
-			libcacaoformats::Matrix<float, 2, 3> goose = std::get<13>(mat.keys.at("test"));
+			libcacaoformats::Matrix<float, 2, 3> goose = std::get<13>(mat.keys.at("goose"));
 			if(test.x != 7 || test.y != -4 || test.z != 3) throw std::runtime_error("\"test\" key contains wrong values!");
 			if(goose[0][0] != 2.4f || goose[0][1] != 3.1f || goose[1][0] != 66.1f || goose[1][1] != 9.143f || goose[2][0] != 100.0f || goose[2][1] != 31.4f) throw std::runtime_error("\"goose\" key contains wrong values!");
 		}

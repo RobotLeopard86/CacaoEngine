@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <utility>
+#include <iostream>
 
 #define LIBARCHIVE_STATIC
 #include "yaml-cpp/yaml.h"
@@ -348,7 +349,7 @@ namespace libcacaoformats {
 			out.write(dataBuffer.data(), dataBuffer.size() * sizeof(char));
 
 			//Write separator
-			if(--keyCount == 0) out << "\0\0";
+			out.write("\0\0", 2);
 		}
 
 		//Create and return packed container
@@ -444,7 +445,7 @@ namespace libcacaoformats {
 				out.write(reinterpret_cast<const char*>(component.data.data()), component.data.size() * sizeof(unsigned char));
 
 				//Write component separator
-				out << "\0\0";
+				out.write("\0\0", 2);
 			}
 
 			//Write entity separator

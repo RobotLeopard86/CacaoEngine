@@ -127,12 +127,11 @@ namespace libcacaoformats {
 			uint8_t baseType = (typeInfo & 0b00000011);
 			CheckException(baseType != 3 || (baseType == 3 && size.x == 1 && size.y == 1), "Material packed container key has invalid size for texture type (must be 1x1)!");
 			CheckException(baseType == 2 || (baseType != 2 && size.x == 1), "Material packed container key has invalid size for non-float type (y must be 1)!");
-			CheckException(size.x != 1 || (size.x == 1 && size.y == 1), "Material packed container key has invalid size (if x is 1, must be 1x1)");
+			CheckException(size.y != 1 || (size.x == 1 && size.y == 1), "Material packed container key has invalid size (if x is 1, must be 1x1)");
 			uint8_t dims = (4 * size.x) - (4 - size.y);
 
 			//Load data
 			if(baseType != 3) CheckException(container.payload.size() > offsetCounter + (size.x * size.y * 4), "Material packed container key is too small to contain value of provided type!");
-			offsetCounter += 4;
 			switch(baseType) {
 				case 0:
 					switch(dims) {
