@@ -157,7 +157,7 @@ namespace libcacaoformats {
 			constexpr std::array<const char*, 5> okTypes = {{"int", "uint", "float", "tex2d", "cubemap"}};
 			ValidateYAMLNode(node["name"], YAML::NodeType::value::Scalar, "unpacked material data key", "key name");
 			ValidateYAMLNode(node["baseType"], YAML::NodeType::value::Scalar, [&okTypes](const YAML::Node& node2) {
-				auto it = std::find(okTypes.begin(), okTypes.end(), node2.Scalar().c_str());
+				auto it = std::find(okTypes.begin(), okTypes.end(), std::string(node2.Scalar().c_str()));
 				return (it != okTypes.end() ? "" : "Invalid base type"); }, "unpacked material data key", "key base type");
 			ValidateYAMLNode(node["x"], YAML::NodeType::value::Scalar, [](const YAML::Node& node2) {
 				try {
@@ -469,7 +469,7 @@ namespace libcacaoformats {
 									value = v;
 									return "";
 								}
-								break;
+								default: break;
 							}
 						default:
 							return "Invalid base type";
