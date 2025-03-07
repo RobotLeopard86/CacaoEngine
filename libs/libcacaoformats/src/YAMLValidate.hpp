@@ -23,7 +23,7 @@ namespace libcacaoformats {
 		stream << "While parsing " << context << ", " << what << " node is invalid: ";
 
 		//Check that the node exists and is the right type
-		CheckException(node.IsDefined(), ((stream << "Node does not exist"), stream.str()));
+		if(!node.IsDefined()) CheckException(false, ((stream << "Node does not exist"), stream.str()));
 
 		//Run the user predicate
 		std::string out = predicate(node);

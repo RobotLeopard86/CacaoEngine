@@ -7,6 +7,8 @@
 #include "er/serialization/yaml.h"
 #include "er/serialization/binary.h"
 
+#include <iostream>
+
 namespace libcacaoformats {
 	unsigned int stou(std::string value) {
 		int i = std::stoi(value);
@@ -154,6 +156,7 @@ namespace libcacaoformats {
 		YAML::Node dataRoot = root["data"];
 		ValidateYAMLNode(dataRoot, YAML::NodeType::Sequence, "unpacked material data", "key list");
 		for(const YAML::Node& node : dataRoot) {
+			std::cout << "Begin NODE" << std::endl;
 			constexpr std::array<const char*, 5> okTypes = {{"int", "uint", "float", "tex2d", "cubemap"}};
 			ValidateYAMLNode(node["name"], YAML::NodeType::value::Scalar, "unpacked material data key", "key name");
 			ValidateYAMLNode(node["baseType"], YAML::NodeType::value::Scalar, [&okTypes](const YAML::Node& node2) {
@@ -174,34 +177,38 @@ namespace libcacaoformats {
 					return "Unable to convert value to integer";
 				} }, "unpacked material data key", "key y size");
 			Material::ValueContainer value;
-			ValidateYAMLNode(node["value"], [&node, &value, &okTypes](const YAML::Node& node2) {
+			const auto valFunc = [&node, &value, &okTypes, &out](const YAML::Node& node2) {
 				int idx = 0;
 				for(; idx < okTypes.size(); idx++) {
+					std::cout << "Checking " << node["baseType"].Scalar() << " against " << okTypes[idx] << std::endl;
 					if(node["baseType"].Scalar().compare(okTypes[idx]) == 0) break;
 				}
+				std::cout << "idx=" << idx << std::endl;
 				if(idx > 4) return "Invalid base type";
 				Vec2<int> size;
 				try {
 					size.x = std::stoi(node["x"].Scalar().c_str(), nullptr);
-					return (size.x > 0 && size.x < 5) ? "" : "Invalid x size value";
+					if(size.x <= 0 && size.x >= 5) return "Invalid x size value";
 				} catch(...) {
 					return "Unable to convert x size value to integer";
 				}
 				if(idx >= 3 && size.x != 1) return "Invalid x size value for texture";
 				try {
 					size.y = std::stoi(node["y"].Scalar().c_str(), nullptr);
-					return (size.y > 0 && size.y < 5) ? "" : "Invalid y size value";
+					if(size.y <= 0 && size.y >= 5) return "Invalid y size value";
 				} catch(...) {
 					return "Unable to convert y size value to integer";
 				}
 				if(idx >= 3 && size.y != 1) return "Invalid y size value for texture";
 				if(idx >= 3) {
-					value = Material::TextureRef{.path = node2.Scalar(), .isCubemap = idx == 5};
+					value = Material::TextureRef {.path = node2.Scalar(), .isCubemap = idx == 5};
 					return "";
 				}
-				if(size.x == 1 && size.y != 1) return "Invalid y size for an x size 1";
-				if(idx != 2 && size.y > 1) return "Invalid y size for non-float value";
-				int dims = (4 * size.y) - (4 - size.x);
+				if(!(size.y != 1 || (size.x == 1 && size.y == 1))) return "Invalid y size for an x size 1";
+				if(idx != 2 && size.x > 1) return "Invalid y size for non-float value";
+				std::cout << "Dims calc: (4 * " << size.x << ") - (4 - " << size.y << ")";
+				int dims = (4 * size.x) - (4 - size.y);
+				std::cout << " = " << dims << std::endl;
 				try {
 					switch(idx) {
 						case 0:
@@ -308,9 +315,9 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 6: {
-									if(!(node2.IsSequence() && node2.size() != 2)) return "Non-2-row matrix supplied for 2x2 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x2 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x2 matrix";
+									if(!(node2.IsSequence() && node2.size() == 2)) return "Non-2-row matrix supplied for 2x2 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x2 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x2 matrix";
 									Matrix<float, 2, 2> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -320,10 +327,10 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 7: {
-									if(!(node2.IsSequence() && node2.size() != 3)) return "Non-3-row matrix supplied for 2x3 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x3 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x3 matrix";
-									if(!(node2[2].IsSequence() && node2[2].size() != 2 && node2[2][0].IsScalar() && node2[2][1].IsScalar())) return "Non-2 float sequence supplied at row 3 of 2x3 matrix";
+									if(!(node2.IsSequence() && node2.size() == 3)) return "Non-3-row matrix supplied for 2x3 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x3 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x3 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() == 2 && node2[2][0].IsScalar() && node2[2][1].IsScalar())) return "Non-2 float sequence supplied at row 3 of 2x3 matrix";
 									Matrix<float, 2, 3> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -335,11 +342,11 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 8: {
-									if(!(node2.IsSequence() && node2.size() != 4)) return "Non-4-row matrix supplied for 2x4 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x4 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x4 matrix";
-									if(!(node2[2].IsSequence() && node2[2].size() != 2 && node2[2][0].IsScalar() && node2[2][1].IsScalar())) return "Non-2 float sequence supplied at row 3 of 2x4 matrix";
-									if(!(node2[3].IsSequence() && node2[3].size() != 2 && node2[3][0].IsScalar() && node2[3][1].IsScalar())) return "Non-2 float sequence supplied at row 4 of 2x4 matrix";
+									if(!(node2.IsSequence() && node2.size() == 4)) return "Non-4-row matrix supplied for 2x4 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 2 && node2[0][0].IsScalar() && node2[0][1].IsScalar())) return "Non-2 float sequence supplied at row 1 of 2x4 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 2 && node2[1][0].IsScalar() && node2[1][1].IsScalar())) return "Non-2 float sequence supplied at row 2 of 2x4 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() == 2 && node2[2][0].IsScalar() && node2[2][1].IsScalar())) return "Non-2 float sequence supplied at row 3 of 2x4 matrix";
+									if(!(node2[3].IsSequence() && node2[3].size() == 2 && node2[3][0].IsScalar() && node2[3][1].IsScalar())) return "Non-2 float sequence supplied at row 4 of 2x4 matrix";
 									Matrix<float, 2, 4> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -353,9 +360,9 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 10: {
-									if(!(node2.IsSequence() && node2.size() != 2)) return "Non-2-row matrix supplied for 3x2 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x2 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x2 matrix";
+									if(!(node2.IsSequence() && node2.size() == 2)) return "Non-2-row matrix supplied for 3x2 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x2 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x2 matrix";
 									Matrix<float, 3, 2> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -367,10 +374,10 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 11: {
-									if(!(node2.IsSequence() && node2.size() != 3)) return "Non-3-row matrix supplied for 3x3 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x3 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x3 matrix";
-									if(!(node2[2].IsSequence() && node2[2].size() != 3 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node2[2][2].IsScalar())) return "Non-3 float sequence supplied at row 3 of 3x3 matrix";
+									if(!(node2.IsSequence() && node2.size() == 3)) return "Non-3-row matrix supplied for 3x3 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x3 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x3 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() == 3 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node2[2][2].IsScalar())) return "Non-3 float sequence supplied at row 3 of 3x3 matrix";
 									Matrix<float, 3, 3> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -385,11 +392,11 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 12: {
-									if(!(node2.IsSequence() && node2.size() != 4)) return "Non-4-row matrix supplied for 3x4 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x4 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x4 matrix";
-									if(!(node2[2].IsSequence() && node2[2].size() != 3 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node2[2][2].IsScalar())) return "Non-3 float sequence supplied at row 3 of 3x4 matrix";
-									if(!(node2[3].IsSequence() && node2[3].size() != 3 && node2[3][0].IsScalar() && node2[3][1].IsScalar() && node2[3][2].IsScalar())) return "Non-3 float sequence supplied at row 4 of 3x4 matrix";
+									if(!(node2.IsSequence() && node2.size() == 4)) return "Non-4-row matrix supplied for 3x4 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 3 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node2[0][2].IsScalar())) return "Non-3 float sequence supplied at row 1 of 3x4 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 3 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node2[1][2].IsScalar())) return "Non-3 float sequence supplied at row 2 of 3x4 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() == 3 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node2[2][2].IsScalar())) return "Non-3 float sequence supplied at row 3 of 3x4 matrix";
+									if(!(node2[3].IsSequence() && node2[3].size() == 3 && node2[3][0].IsScalar() && node2[3][1].IsScalar() && node2[3][2].IsScalar())) return "Non-3 float sequence supplied at row 4 of 3x4 matrix";
 									Matrix<float, 3, 4> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -407,9 +414,9 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 14: {
-									if(!(node2.IsSequence() && node2.size() != 2)) return "Non-2-row matrix supplied for 4x2 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x2 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x2 matrix";
+									if(!(node2.IsSequence() && node2.size() == 2)) return "Non-2-row matrix supplied for 4x2 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x2 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x2 matrix";
 									Matrix<float, 4, 2> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -423,10 +430,10 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 15: {
-									if(!(node2.IsSequence() && node2.size() != 3)) return "Non-3-row matrix supplied for 4x3 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x3 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x3 matrix";
-									if(!(node2[2].IsSequence() && node2[2].size() != 4 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node[2][2].IsScalar() && node[2][3].IsScalar())) return "Non-4 float sequence supplied at row 3 of 4x3 matrix";
+									if(!(node2.IsSequence() && node2.size() == 3)) return "Non-3-row matrix supplied for 4x3 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x3 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x3 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() == 4 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node[2][2].IsScalar() && node[2][3].IsScalar())) return "Non-4 float sequence supplied at row 3 of 4x3 matrix";
 									Matrix<float, 4, 3> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -444,11 +451,11 @@ namespace libcacaoformats {
 									return "";
 								}
 								case 16: {
-									if(!(node2.IsSequence() && node2.size() != 4)) return "Non-4-row matrix supplied for 4x4 matrix key";
-									if(!(node2[0].IsSequence() && node2[0].size() != 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x4 matrix";
-									if(!(node2[1].IsSequence() && node2[1].size() != 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x4 matrix";
-									if(!(node2[2].IsSequence() && node2[2].size() != 4 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node[2][2].IsScalar() && node[2][3].IsScalar())) return "Non-4 float sequence supplied at row 3 of 4x4 matrix";
-									if(!(node2[3].IsSequence() && node2[3].size() != 4 && node2[3][0].IsScalar() && node2[3][1].IsScalar() && node[3][2].IsScalar() && node[3][3].IsScalar())) return "Non-4 float sequence supplied at row 4 of 4x4 matrix";
+									if(!(node2.IsSequence() && node2.size() == 4)) return "Non-4-row matrix supplied for 4x4 matrix key";
+									if(!(node2[0].IsSequence() && node2[0].size() == 4 && node2[0][0].IsScalar() && node2[0][1].IsScalar() && node[0][2].IsScalar() && node[0][3].IsScalar())) return "Non-4 float sequence supplied at row 1 of 4x4 matrix";
+									if(!(node2[1].IsSequence() && node2[1].size() == 4 && node2[1][0].IsScalar() && node2[1][1].IsScalar() && node[1][2].IsScalar() && node[1][3].IsScalar())) return "Non-4 float sequence supplied at row 2 of 4x4 matrix";
+									if(!(node2[2].IsSequence() && node2[2].size() == 4 && node2[2][0].IsScalar() && node2[2][1].IsScalar() && node[2][2].IsScalar() && node[2][3].IsScalar())) return "Non-4 float sequence supplied at row 3 of 4x4 matrix";
+									if(!(node2[3].IsSequence() && node2[3].size() == 4 && node2[3][0].IsScalar() && node2[3][1].IsScalar() && node[3][2].IsScalar() && node[3][3].IsScalar())) return "Non-4 float sequence supplied at row 4 of 4x4 matrix";
 									Matrix<float, 4, 4> v;
 									v.data[0][0] = std::strtof(node2[0][0].Scalar().c_str(), nullptr);
 									v.data[0][1] = std::strtof(node2[0][1].Scalar().c_str(), nullptr);
@@ -476,8 +483,14 @@ namespace libcacaoformats {
 					}
 				} catch(const std::exception& e) {
 					return e.what();
-				} }, "unpacked material data key", "key value");
-			out.keys.insert_or_assign(node["name"].Scalar(), value);
+				}
+			};
+			try {
+				ValidateYAMLNode(node["value"], valFunc, "unpacked material data key", "key value");
+				out.keys.insert_or_assign(node["name"].Scalar(), value);
+			} catch(...) {
+				std::rethrow_exception(std::current_exception());
+			}
 		}
 
 		//Return result

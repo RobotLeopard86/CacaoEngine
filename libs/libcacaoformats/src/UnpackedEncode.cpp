@@ -47,8 +47,8 @@ namespace libcacaoformats {
 					break;
 				case 3:
 					yml << YAML::Key << "baseType" << YAML::Value << "int";
-					yml << YAML::Key << "x" << YAML::Value << 2;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 2;
 					{
 						Vec2<int> val = std::get<Vec2<int>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -59,8 +59,8 @@ namespace libcacaoformats {
 					break;
 				case 4:
 					yml << YAML::Key << "baseType" << YAML::Value << "int";
-					yml << YAML::Key << "x" << YAML::Value << 3;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 3;
 					{
 						Vec3<int> val = std::get<Vec3<int>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -72,8 +72,8 @@ namespace libcacaoformats {
 					break;
 				case 5:
 					yml << YAML::Key << "baseType" << YAML::Value << "int";
-					yml << YAML::Key << "x" << YAML::Value << 4;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 4;
 					{
 						Vec4<int> val = std::get<Vec4<int>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -86,8 +86,8 @@ namespace libcacaoformats {
 					break;
 				case 6:
 					yml << YAML::Key << "baseType" << YAML::Value << "uint";
-					yml << YAML::Key << "x" << YAML::Value << 2;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 2;
 					{
 						Vec2<unsigned int> val = std::get<Vec2<unsigned int>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -98,8 +98,8 @@ namespace libcacaoformats {
 					break;
 				case 7:
 					yml << YAML::Key << "baseType" << YAML::Value << "uint";
-					yml << YAML::Key << "x" << YAML::Value << 3;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 3;
 					{
 						Vec3<unsigned int> val = std::get<Vec3<unsigned int>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -111,8 +111,8 @@ namespace libcacaoformats {
 					break;
 				case 8:
 					yml << YAML::Key << "baseType" << YAML::Value << "uint";
-					yml << YAML::Key << "x" << YAML::Value << 4;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 4;
 					{
 						Vec4<unsigned int> val = std::get<Vec4<unsigned int>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -125,8 +125,8 @@ namespace libcacaoformats {
 					break;
 				case 9:
 					yml << YAML::Key << "baseType" << YAML::Value << "float";
-					yml << YAML::Key << "x" << YAML::Value << 2;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 2;
 					{
 						Vec2<float> val = std::get<Vec2<float>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -137,8 +137,8 @@ namespace libcacaoformats {
 					break;
 				case 10:
 					yml << YAML::Key << "baseType" << YAML::Value << "float";
-					yml << YAML::Key << "x" << YAML::Value << 3;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 3;
 					{
 						Vec3<float> val = std::get<Vec3<float>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -150,8 +150,8 @@ namespace libcacaoformats {
 					break;
 				case 11:
 					yml << YAML::Key << "baseType" << YAML::Value << "float";
-					yml << YAML::Key << "x" << YAML::Value << 4;
-					yml << YAML::Key << "y" << YAML::Value << 1;
+					yml << YAML::Key << "x" << YAML::Value << 1;
+					yml << YAML::Key << "y" << YAML::Value << 4;
 					{
 						Vec4<float> val = std::get<Vec4<float>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginMap;
@@ -249,10 +249,10 @@ namespace libcacaoformats {
 					break;
 				case 17:
 					yml << YAML::Key << "baseType" << YAML::Value << "float";
-					yml << YAML::Key << "x" << YAML::Value << 4;
+					yml << YAML::Key << "x" << YAML::Value << 3;
 					yml << YAML::Key << "y" << YAML::Value << 4;
 					{
-						Matrix<float, 4, 4> val = std::get<Matrix<float, 4, 4>>(item.second);
+						Matrix<float, 3, 4> val = std::get<Matrix<float, 3, 4>>(item.second);
 						yml << YAML::Key << "value" << YAML::BeginSeq;
 						for(const auto& row : val.data) {
 							yml << YAML::BeginSeq;
