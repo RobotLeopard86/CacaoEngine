@@ -211,7 +211,6 @@ namespace libcacaoformats {
 		const FormatCode format;				 ///<Type of contents
 		const uint16_t version;					 ///<File type version
 		const std::vector<unsigned char> payload;///<Decompressed payload data
-		const std::string hash;					 ///<SHA-512 hash of decompressed payload
 
 		/**
 		 * @brief Create a PackedContainer from a stream
@@ -220,7 +219,7 @@ namespace libcacaoformats {
 		 *
 		 * @return PackedContainer object
 		 *
-		 * @throws std::runtime_error If the stream is not valid, does not represent a valid packed file or the hash value does not match the payload
+		 * @throws std::runtime_error If the stream is not valid, does not represent a valid packed file
 		 */
 		static PackedContainer FromStream(std::istream& stream);
 
@@ -242,8 +241,6 @@ namespace libcacaoformats {
 		 * @param ver The version of the format
 		 * @param data The uncompressed data to be stored
 		 *
-		 * @details The hash field will be calculated based on the data
-		 *
 		 * @return PackedContainer object
 		 *
 		 * @throws std::runtime_error If there is no data
@@ -256,8 +253,6 @@ namespace libcacaoformats {
 		 * @param format The format code of the container
 		 * @param ver The version of the format
 		 * @param data The uncompressed data to be stored, autoconverted to unsigned char
-		 *
-		 * @details The hash field will be calculated based on the data
 		 *
 		 * @return PackedContainer object
 		 *

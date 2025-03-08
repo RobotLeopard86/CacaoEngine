@@ -16,14 +16,14 @@ int main() {
 			trix[2] = {100.0f, 31.4f};
 			mat.keys.insert_or_assign("test_mat", trix);
 			libcacaoformats::PackedEncoder enc;
-			std::ofstream str("./out.cacao", std::ios::binary);
+			std::ofstream str("./out.xcm", std::ios::binary);
 			enc.EncodeMaterial(mat).ExportToStream(str);
 			str.close();
 		}
 
 		//Read it
 		{
-			std::ifstream str("./out.cacao", std::ios::binary);
+			std::ifstream str("./out.xcm", std::ios::binary);
 			libcacaoformats::PackedDecoder dec;
 			libcacaoformats::PackedContainer container = libcacaoformats::PackedContainer::FromStream(str);
 			libcacaoformats::Material mat = dec.DecodeMaterial(container);

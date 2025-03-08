@@ -1,7 +1,6 @@
 #include "libcacaoformats/libcacaoformats.hpp"
 
 #include "bzlib.h"
-#include "sha512.hh"
 
 #include <cstdint>
 
@@ -21,12 +20,12 @@ namespace libcacaoformats {
 	}
 
 	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data)
-	  : format(format), version(ver), payload(data), hash(sw::sha512::calculate(payload.data(), payload.size() * sizeof(unsigned char))) {
+	  : format(format), version(ver), payload(data) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
 	}
 
 	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<char>&& data)
-	  : format(format), version(ver), payload(Unsign(data)), hash(sw::sha512::calculate(payload.data(), payload.size() * sizeof(unsigned char))) {
+	  : format(format), version(ver), payload(Unsign(data)) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
 	}
 
@@ -77,10 +76,6 @@ namespace libcacaoformats {
 		uint16_t version = 0;
 		stream.read(reinterpret_cast<char*>(&version), 2);
 
-		//Get hash
-		std::string hash(128, '\0');
-		stream.read(hash.data(), hash.size());
-
 		//Get buffer size
 		uint64_t uncompressedSize = 0;
 		stream.read(reinterpret_cast<char*>(&uncompressedSize), 8);
@@ -105,9 +100,6 @@ namespace libcacaoformats {
 
 		//Create output
 		PackedContainer out(format, version, std::move(uncompressed));
-
-		//Check hash
-		CheckException(out.hash.compare(hash) == 0, "Packed container payload actual hash and provided hash differ!");
 
 		//Return output
 		return out;
@@ -144,9 +136,6 @@ namespace libcacaoformats {
 		//Write version
 		stream.write(reinterpret_cast<const char*>(&version), 2);
 
-		//Write hash
-		stream << hash;
-
 		//Write buffer size
 		std::size_t bufSize = payload.size() * sizeof(unsigned char);
 		stream.write(reinterpret_cast<char*>(&bufSize), sizeof(std::size_t));
@@ -158,7 +147,7 @@ namespace libcacaoformats {
 		CheckException(status == BZ_OK, "Failed to compress payload for packed container export!");
 
 		//Trim compressed data to free any memory not used
-		compressed.shrink_to_fit();
+		compressed.resize(destSize);
 
 		//Write compressed data
 		stream.write(reinterpret_cast<char*>(compressed.data()), compressed.size());

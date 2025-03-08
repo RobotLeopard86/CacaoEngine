@@ -16,14 +16,14 @@ int main() {
 			trix[2] = {100.0f, 31.4f};
 			mat.keys.insert_or_assign("test_mat", trix);
 			libcacaoformats::UnpackedEncoder enc;
-			std::ofstream str("./out.camat");
+			std::ofstream str("./out.xum");
 			enc.EncodeMaterial(mat, str);
 			str.close();
 		}
 
 		//Read it
 		{
-			std::ifstream str("./out.camat");
+			std::ifstream str("./out.xum");
 			libcacaoformats::UnpackedDecoder dec;
 			libcacaoformats::Material mat = dec.DecodeMaterial(str);
 			str.close();
