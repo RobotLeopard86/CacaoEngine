@@ -415,13 +415,13 @@
 <h2>Supported OSes and Architectures<a class="headerlink" href="#supported-oses-and-architectures" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
 <li><p>x86_64 Windows</p></li>
-<li><p>aarch64 macOS (Apple Silicon)</p></li>
+<li><p>aarch64 macOS</p></li>
 <li><p>x86_64/aarch64 GNU/Linux (most distros)</p></li>
 </ul>
 </section>
 <section id="currently-supported-gnu-linux-distros">
 <h2>Currently Supported GNU/Linux Distros<a class="headerlink" href="#currently-supported-gnu-linux-distros" title="Link to this heading"><span/></a></h2>
-<p>Not every GNU/LINUX distro is supported, but most are:</p>
+<p>Not every GNU/Linux distro is supported, but most are:</p>
 <ul class="simple">
 <li><p>Debian and derivatives (e.g. Ubuntu, Linux Mint, Pop!_OS)</p></li>
 <li><p>Fedora and derivatives (e.g. Nobara)</p></li>
@@ -431,10 +431,26 @@
 <p>Support for openSUSE is planned and will come in the future.</p>
 <p>More operating systems/platforms may be supported in the future, though this is not guaranteed.</p>
 </section>
-<section id="system-versioning-notes">
-<h2>System Versioning Notes<a class="headerlink" href="#system-versioning-notes" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 15.1 should be supported as long any 15.x release is), but this is not guaranteed.<br />
-<strong>In general, nost up-to-date systems should be supported.</strong></p>
+<section id="versions">
+<h2>Versions<a class="headerlink" href="#versions" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine aims to support computers running any OS version listed below or a later version, but older systems may be dropped over time.</p>
+<ul class="simple">
+<li><p>Windows 11 (all versions)</p></li>
+<li><p>macOS Ventura (13.x) and later</p></li>
+<li><p>Debian 12 and later, plus derivatives</p>
+<ul>
+<li><p>Ubuntu 22.04 and later, plus derivatives, while based on Debian 11, have supplementary packages that work</p></li>
+</ul>
+</li>
+<li><p>Fedora 39 and later, plus derivatives</p></li>
+<li><p>As Arch is a rolling release, there are no defined versions, so Cacao Engine targets more recent package sets</p></li>
+</ul>
+<p>If any issues are encountered in these versions, they should be supported to the extent that it is possible. Any issues in versions before these are <strong>not supported</strong>.</p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 15.1 should be supported as long any 15.x release is), but this is not guaranteed, especially if said minor release introduces major changes.
+<strong>In general, most up-to-date systems should be supported.</strong></p>
 </section>
 </section>
 
@@ -487,7 +503,8 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-oses-and-architectures">Supported OSes and Architectures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#currently-supported-gnu-linux-distros">Currently Supported GNU/Linux Distros</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-versioning-notes">System Versioning Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versions">Versions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
 </ul>
   </nav></div>
 
