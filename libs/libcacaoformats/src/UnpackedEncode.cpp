@@ -360,6 +360,9 @@ namespace libcacaoformats {
 			yml << YAML::Key << "guid" << YAML::Value << e.guid;
 			yml << YAML::Key << "parent" << YAML::Value << e.guid;
 
+			//Write name
+			yml << YAML::Key << "name" << YAML::Value << e.name;
+
 			//Write transform data
 			yml << YAML::Key << "transform" << YAML::BeginMap;
 			yml << YAML::Key << "position" << YAML::BeginMap;
@@ -384,9 +387,11 @@ namespace libcacaoformats {
 			for(const World::Component& c : e.components) {
 				yml << YAML::BeginMap;
 
-				yml << YAML::Key << "id" << YAML::Value;
+				yml << YAML::Key << "id" << YAML::Value << c.typeID;
 
-				//Note: need to handle reflection data format conversion
+				//Remake YAML node to embed
+				YAML::Node rflNode = YAML::Load(c.reflection);
+				yml << YAML::Key << "rfl" << rflNode;
 
 				yml << YAML::EndMap;
 			}

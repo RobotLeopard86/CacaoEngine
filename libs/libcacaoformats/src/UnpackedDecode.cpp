@@ -610,11 +610,10 @@ namespace libcacaoformats {
 				YAML::Node rfl = c["rfl"];
 				ValidateYAMLNode(rfl, [](const YAML::Node& node) { return (node.IsDefined() ? "" : "Reflection data doesn't exist"); }, "unpacked world entity component", "component reflection data");
 
-				//We use this to get the reflection data node back out for parsing with er-cpp
+				//We use this to get the reflection data node back out as a string
 				YAML::Emitter emitter;
 				emitter << rfl;
-
-				//Note: need to handle reflection data format conversion
+				component.reflection = emitter.c_str();
 
 				entity.components.push_back(component);
 			}

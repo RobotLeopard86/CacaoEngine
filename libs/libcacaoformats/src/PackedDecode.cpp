@@ -11,6 +11,7 @@
 #include "archive.h"
 #include "archive_entry.h"
 #include "yaml-cpp/yaml.h"
+#include "bzlib.h"
 
 namespace libcacaoformats {
 	std::array<ImageBuffer, 6> PackedDecoder::DecodeCubemap(const PackedContainer& container) {
@@ -638,15 +639,22 @@ namespace libcacaoformats {
 				advance += typeIdLen;
 
 				//Get reflection data
-				CheckException(container.payload.size() > advance + 4, "World packed container component data is too small to contain reflection size data!");
+				CheckException(container.payload.size() > advance + 8, "World packed container component data is too small to contain reflection size data!");
 				uint32_t rflLen = 0;
-				std::memcpy(&rflLen, container.payload.data() + advance, 2);
-				advance += 2;
-				CheckException(rflLen > 0, "World packed container component data has zero-length reflection data");
+				std::memcpy(&rflLen, container.payload.data() + advance, 4);
+				advance += 4;
+				uint32_t rflLenDecompressed = 0;
+				std::memcpy(&rflLenDecompressed, container.payload.data() + advance, 4);
+				advance += 4;
+				CheckException(rflLen > 0 && rflLenDecompressed > 0, "World packed container component data has zero-length reflection data");
 				CheckException(container.payload.size() > advance + rflLen, "World packed container component data is too small to contain reflection data of provided size!");
-				comp.data.reserve(rflLen);
-				std::memcpy(comp.data.data(), container.payload.data() + advance, rflLen);
+				comp.reflection.reserve(rflLenDecompressed);
+				std::vector<unsigned char> compressedRfl(rflLen);
+				std::memcpy(compressedRfl.data(), container.payload.data() + advance, rflLen);
 				advance += rflLen;
+				unsigned bzOutSizeSink = rflLenDecompressed;
+				int status = BZ2_bzBuffToBuffDecompress(comp.reflection.data(), &bzOutSizeSink, reinterpret_cast<char*>(compressedRfl.data()), rflLen, 0, 0);
+				CheckException(status == BZ_OK, "Failed to decompress world packed container component reflection data!");
 
 				//We put 2 null bytes as a separator between components for padding purposes, so skip over that
 				advance += 2;

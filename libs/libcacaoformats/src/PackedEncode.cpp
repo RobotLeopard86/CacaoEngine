@@ -10,6 +10,7 @@
 #include "yaml-cpp/yaml.h"
 #include "archive.h"
 #include "archive_entry.h"
+#include "bzlib.h"
 
 namespace libcacaoformats {
 	PackedContainer PackedEncoder::EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap) {
@@ -438,11 +439,19 @@ namespace libcacaoformats {
 				out.write(reinterpret_cast<char*>(&tiLen), 2);
 				out << component.typeID;
 
+				//Compress reflection data
+				CheckException(component.reflection.size() > 0 && component.reflection.size() <= UINT32_MAX, "World entity component for packed encoding has out-of-range reflection data size!");
+				uint32_t rdLen = (uint32_t)component.reflection.size();
+				unsigned int compressedSize = rdLen * 1.01 + 600;
+				std::vector<unsigned char> compressed(compressedSize);
+				int status = BZ2_bzBuffToBuffCompress(reinterpret_cast<char*>(compressed.data()), &compressedSize, const_cast<World::Component&>(component).reflection.data(), rdLen, 9, 0, 30);
+				CheckException(status == BZ_OK, "Failed to compress reflection data for world entity component for packed encoding!");
+				compressed.resize(compressedSize);
+
 				//Write reflection data
-				CheckException(component.data.size() > 0 && component.data.size() <= UINT16_MAX, "World entity component for packed encoding has out-of-range reflection data size!");
-				uint32_t rdLen = (uint32_t)component.data.size();
-				out.write(reinterpret_cast<char*>(&rdLen), 2);
-				out.write(reinterpret_cast<const char*>(component.data.data()), component.data.size() * sizeof(unsigned char));
+				out.write(reinterpret_cast<char*>(&rdLen), 4);
+				out.write(reinterpret_cast<char*>(&compressedSize), 4);
+				out.write(reinterpret_cast<char*>(compressed.data()), compressedSize);
 
 				//Write component separator
 				out.write("\0\0", 2);
