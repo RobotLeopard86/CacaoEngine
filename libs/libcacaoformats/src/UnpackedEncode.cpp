@@ -3,8 +3,6 @@
 #include "CheckException.hpp"
 
 #include "yaml-cpp/yaml.h"
-#include "er/serialization/yaml.h"
-#include "er/serialization/binary.h"
 
 namespace libcacaoformats {
 	void UnpackedEncoder::EncodeMaterial(const Material& mat, std::ostream& out) {
@@ -388,17 +386,7 @@ namespace libcacaoformats {
 
 				yml << YAML::Key << "id" << YAML::Value;
 
-				//This is kinda ugly, but this is how we have to deal with reflection data
-				{
-					try {
-						er::None converted = er::serialization::binary::from_vector<er::None>(c.data).unwrap();
-						std::string asYaml = er::serialization::yaml::to_string<er::None>(&converted).unwrap();
-						YAML::Node node = YAML::Load(asYaml);
-						yml << YAML::Key << "rfl" << node;
-					} catch(...) {
-						throw std::runtime_error("Component reflection data conversion failed");
-					}
-				}
+				//Note: need to handle reflection data format conversion
 
 				yml << YAML::EndMap;
 			}

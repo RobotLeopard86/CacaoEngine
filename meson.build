@@ -91,19 +91,9 @@ yaml_opts.add_cmake_defines({
 yaml_opts.set_install(true)
 yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 
-# Configure er-cpp
-er_opts = cmake.subproject_options()
-er_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-})
-er_opts.set_install(true)
-ersp = cmake.subproject('er-cpp', options: er_opts, required: true)
-er_rfl = ersp.dependency('reflection')
-reflex = ersp.dependency('ReflexLibStatic')
-er_cpp = declare_dependency(dependencies: [er_rfl, reflex])
+# Configure Silica
+silica = subproject('silica', required: true)
+silica_dep = silica.get_variable('silica_dep')
 
 testing = get_option('testing')
 

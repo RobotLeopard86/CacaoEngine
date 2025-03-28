@@ -4,8 +4,6 @@
 #include "YAMLValidate.hpp"
 
 #include "yaml-cpp/yaml.h"
-#include "er/serialization/yaml.h"
-#include "er/serialization/binary.h"
 
 #include <iostream>
 
@@ -616,13 +614,7 @@ namespace libcacaoformats {
 				YAML::Emitter emitter;
 				emitter << rfl;
 
-				//Yes this is a bit weird. It's just a reflection data format converter. Don't question it.
-				try {
-					er::None parsed = er::serialization::yaml::from_string<er::None>(std::string_view(emitter.c_str())).unwrap();
-					component.data = er::serialization::binary::to_vector<er::None>(&parsed).unwrap();
-				} catch(...) {
-					throw std::runtime_error("Component reflection data conversion failed");
-				}
+				//Note: need to handle reflection data format conversion
 
 				entity.components.push_back(component);
 			}

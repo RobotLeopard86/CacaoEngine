@@ -301,7 +301,7 @@ namespace libcacaoformats {
 		///@brief Type for components on entities
 		struct Component {
 			std::string typeID;		  ///<ID of component type to instantiate
-			std::vector<uint8_t> data;///<Binary-encoded component reflection data (for use with https://github.com/chocolacula/easy_reflection_cpp)
+			std::vector<uint8_t> data;///<Binary-encoded component reflection data (for use with Silica)
 		};
 
 		///@brief Type for entities in the world
