@@ -12,6 +12,8 @@ subprojects/*
 !subprojects/glad
 !subprojects/stb
 !subprojects/dr_libs
+subprojects/nlohmannjson.wrap
+subprojects/reflex.wrap
 
 # Don't send Python crap from utility scripts
 scripts/__pycache__

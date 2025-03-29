@@ -154,7 +154,6 @@ namespace libcacaoformats {
 		YAML::Node dataRoot = root["data"];
 		ValidateYAMLNode(dataRoot, YAML::NodeType::Sequence, "unpacked material data", "key list");
 		for(const YAML::Node& node : dataRoot) {
-			std::cout << "Begin NODE" << std::endl;
 			constexpr std::array<const char*, 5> okTypes = {{"int", "uint", "float", "tex2d", "cubemap"}};
 			ValidateYAMLNode(node["name"], YAML::NodeType::value::Scalar, "unpacked material data key", "key name");
 			ValidateYAMLNode(node["baseType"], YAML::NodeType::value::Scalar, [&okTypes](const YAML::Node& node2) {
@@ -178,10 +177,8 @@ namespace libcacaoformats {
 			const auto valFunc = [&node, &value, &okTypes, &out](const YAML::Node& node2) {
 				int idx = 0;
 				for(; idx < okTypes.size(); idx++) {
-					std::cout << "Checking " << node["baseType"].Scalar() << " against " << okTypes[idx] << std::endl;
 					if(node["baseType"].Scalar().compare(okTypes[idx]) == 0) break;
 				}
-				std::cout << "idx=" << idx << std::endl;
 				if(idx > 4) return "Invalid base type";
 				Vec2<int> size;
 				try {
@@ -204,9 +201,7 @@ namespace libcacaoformats {
 				}
 				if(!(size.y != 1 || (size.x == 1 && size.y == 1))) return "Invalid y size for an x size 1";
 				if(idx != 2 && size.x > 1) return "Invalid y size for non-float value";
-				std::cout << "Dims calc: (4 * " << size.x << ") - (4 - " << size.y << ")";
 				int dims = (4 * size.x) - (4 - size.y);
-				std::cout << " = " << dims << std::endl;
 				try {
 					switch(idx) {
 						case 0:

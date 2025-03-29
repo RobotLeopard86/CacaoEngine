@@ -74,4 +74,12 @@ if testing
         sources: 'test/readwrite_material_unpacked.cpp',
         dependencies: formats_dep),
         env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
+    test('readwrite_world_packed', executable('readwrite_world_packed',
+        sources: 'test/readwrite_world_packed.cpp',
+        dependencies: formats_dep),
+        env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
+    test('readwrite_world_unpacked', executable('readwrite_world_unpacked',
+        sources: 'test/readwrite_world_unpacked.cpp',
+        dependencies: formats_dep),
+        env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
 endif
