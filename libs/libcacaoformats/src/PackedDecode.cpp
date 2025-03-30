@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <sstream>
 #include <cstring>
+#include <iomanip>
 
 #define LIBARCHIVE_STATIC
 #include "archive.h"
@@ -551,38 +552,17 @@ namespace libcacaoformats {
 
 			//Read GUID bytes
 			CheckException(container.payload.size() > advance + 16, "World packed container entity data is too small to contain GUID!");
-			uint64_t upper, lower = 0;
-			std::memcpy(&upper, container.payload.data() + advance, 8);
-			std::memcpy(&lower, container.payload.data() + advance + 8, 8);
+			std::array<uint8_t, 16> guidBytes;
+			std::memcpy(guidBytes.data(), container.payload.data() + advance, 16);
 			advance += 16;
-
-			//Format GUID string
-			{
-				std::stringstream ss;
-				ss << std::hex << upper << lower << std::dec;
-				std::string hex = ss.str();
-				std::stringstream out;
-				out << hex.substr(0, 8) << "-" << hex.substr(8, 4) << "-" << hex.substr(12, 4) << "-" << hex.substr(16, 4) << "-" << hex.substr(20, 12);
-				ent.guid = out.str();
-			}
+			ent.guid = xg::Guid(guidBytes);
 
 			//Read parent GUID bytes
 			CheckException(container.payload.size() > advance + 16, "World packed container entity data is too small to contain parent GUID!");
-			upper = 0;
-			lower = 0;
-			std::memcpy(&upper, container.payload.data() + advance, 8);
-			std::memcpy(&lower, container.payload.data() + advance + 8, 8);
+			std::array<uint8_t, 16> parentGuidBytes;
+			std::memcpy(parentGuidBytes.data(), container.payload.data() + advance, 16);
 			advance += 16;
-
-			//Format parent GUID string
-			{
-				std::stringstream ss;
-				ss << std::hex << upper << lower << std::dec;
-				std::string hex = ss.str();
-				std::stringstream out;
-				out << hex.substr(0, 8) << "-" << hex.substr(8, 4) << "-" << hex.substr(12, 4) << "-" << hex.substr(16, 4) << "-" << hex.substr(20, 12);
-				ent.parentGUID = out.str();
-			}
+			ent.parentGUID = xg::Guid(parentGuidBytes);
 
 			//Get entity name
 			CheckException(container.payload.size() > advance + 2, "World packed container entity data is too small to contain name string length data!");
@@ -617,9 +597,9 @@ namespace libcacaoformats {
 			advance += 4;
 
 			//Get component count
-			CheckException(container.payload.size() > advance++, "World packed container entity data is too small to contain component data!");
+			CheckException(container.payload.size() > advance, "World packed container entity data is too small to contain component data!");
 			uint8_t componentCount = 0;
-			std::memcpy(&componentCount, container.payload.data() + advance, 1);
+			std::memcpy(&componentCount, container.payload.data() + advance++, 1);
 
 			//If we don't need to process components, skip that part
 			if(componentCount == 0) goto add_entity;
@@ -635,7 +615,7 @@ namespace libcacaoformats {
 				CheckException(typeIdLen > 0, "World packed container component data has zero-length type ID string");
 				CheckException(container.payload.size() > advance + typeIdLen, "World packed container component data is too small to contain type ID string!");
 				comp.typeID = std::string("\0", typeIdLen);
-				std::memcpy(ent.name.data(), container.payload.data() + advance, typeIdLen);
+				std::memcpy(comp.typeID.data(), container.payload.data() + advance, typeIdLen);
 				advance += typeIdLen;
 
 				//Get reflection data
@@ -643,18 +623,11 @@ namespace libcacaoformats {
 				uint32_t rflLen = 0;
 				std::memcpy(&rflLen, container.payload.data() + advance, 4);
 				advance += 4;
-				uint32_t rflLenDecompressed = 0;
-				std::memcpy(&rflLenDecompressed, container.payload.data() + advance, 4);
-				advance += 4;
-				CheckException(rflLen > 0 && rflLenDecompressed > 0, "World packed container component data has zero-length reflection data");
+				CheckException(rflLen > 0, "World packed container component data has zero-length reflection data");
 				CheckException(container.payload.size() > advance + rflLen, "World packed container component data is too small to contain reflection data of provided size!");
-				comp.reflection.reserve(rflLenDecompressed);
-				std::vector<unsigned char> compressedRfl(rflLen);
-				std::memcpy(compressedRfl.data(), container.payload.data() + advance, rflLen);
+				comp.reflection.reserve(rflLen);
+				std::memcpy(comp.reflection.data(), container.payload.data() + advance, rflLen);
 				advance += rflLen;
-				unsigned bzOutSizeSink = rflLenDecompressed;
-				int status = BZ2_bzBuffToBuffDecompress(comp.reflection.data(), &bzOutSizeSink, reinterpret_cast<char*>(compressedRfl.data()), rflLen, 0, 0);
-				CheckException(status == BZ_OK, "Failed to decompress world packed container component reflection data!");
 
 				//We put 2 null bytes as a separator between components for padding purposes, so skip over that
 				advance += 2;

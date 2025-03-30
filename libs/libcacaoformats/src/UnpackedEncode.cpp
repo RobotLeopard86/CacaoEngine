@@ -333,6 +333,7 @@ namespace libcacaoformats {
 	void UnpackedEncoder::EncodeWorld(const World& world, std::ostream& out) {
 		//Create YAML emitter
 		YAML::Emitter yml;
+		yml << YAML::BeginMap;
 
 		//Write skybox if present
 		if(!world.skyboxRef.empty()) yml << YAML::Key << "skybox" << YAML::Value << world.skyboxRef;
@@ -358,7 +359,7 @@ namespace libcacaoformats {
 
 			//Write GUIDs
 			yml << YAML::Key << "guid" << YAML::Value << e.guid;
-			yml << YAML::Key << "parent" << YAML::Value << e.guid;
+			yml << YAML::Key << "parent" << YAML::Value << e.parentGUID;
 
 			//Write name
 			yml << YAML::Key << "name" << YAML::Value << e.name;
@@ -399,7 +400,7 @@ namespace libcacaoformats {
 
 			yml << YAML::EndMap;
 		}
-		yml << YAML::EndSeq;
+		yml << YAML::EndSeq << YAML::EndMap;
 
 		//Write output data
 		out << yml.c_str() << std::flush;

@@ -174,7 +174,7 @@ namespace libcacaoformats {
 					return "Unable to convert value to integer";
 				} }, "unpacked material data key", "key y size");
 			Material::ValueContainer value;
-			const auto valFunc = [&node, &value, &okTypes, &out](const YAML::Node& node2) {
+			const auto valFunc = [&node, &value, &okTypes](const YAML::Node& node2) {
 				int idx = 0;
 				for(; idx < okTypes.size(); idx++) {
 					if(node["baseType"].Scalar().compare(okTypes[idx]) == 0) break;
@@ -183,14 +183,14 @@ namespace libcacaoformats {
 				Vec2<int> size;
 				try {
 					size.x = std::stoi(node["x"].Scalar().c_str(), nullptr);
-					if(size.x <= 0 && size.x >= 5) return "Invalid x size value";
+					if(size.x <= 0 || size.x >= 5) return "Invalid x size value";
 				} catch(...) {
 					return "Unable to convert x size value to integer";
 				}
 				if(idx >= 3 && size.x != 1) return "Invalid x size value for texture";
 				try {
 					size.y = std::stoi(node["y"].Scalar().c_str(), nullptr);
-					if(size.y <= 0 && size.y >= 5) return "Invalid y size value";
+					if(size.y <= 0 || size.y >= 5) return "Invalid y size value";
 				} catch(...) {
 					return "Unable to convert y size value to integer";
 				}
@@ -477,6 +477,7 @@ namespace libcacaoformats {
 				} catch(const std::exception& e) {
 					return e.what();
 				}
+				return "";
 			};
 			try {
 				ValidateYAMLNode(node["value"], valFunc, "unpacked material data key", "key value");
@@ -545,7 +546,7 @@ namespace libcacaoformats {
 					}
 				}
 				return std::string(""); }, "unpacked world entity", "GUID");
-			entity.guid = guid.Scalar();
+			entity.guid = xg::Guid(guid.Scalar());
 
 			YAML::Node parentGUID = e["parent"];
 			ValidateYAMLNode(parentGUID, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
@@ -558,7 +559,7 @@ namespace libcacaoformats {
 					}
 				}
 				return std::string(""); }, "unpacked world entity", "parent GUID");
-			entity.parentGUID = guid.Scalar();
+			entity.parentGUID = xg::Guid(parentGUID.Scalar());
 
 			YAML::Node transform = e["transform"];
 			ValidateYAMLNode(transform, YAML::NodeType::value::Map, "unpacked world entity", "initial transform");

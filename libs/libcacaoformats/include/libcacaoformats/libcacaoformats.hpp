@@ -11,6 +11,8 @@
 #include <ostream>
 #include <cstring>
 
+#include "crossguid/guid.hpp"
+
 namespace libcacaoformats {
 	///@brief Two-component vector
 	template<typename T>
@@ -306,8 +308,8 @@ namespace libcacaoformats {
 
 		///@brief Type for entities in the world
 		struct Entity {
-			std::string guid;				  ///<Entity GUID
-			std::string parentGUID;			  ///<GUID of parent entity or all zeroes if this is a top-level entity
+			xg::Guid guid;					  ///<Entity GUID
+			xg::Guid parentGUID;			  ///<GUID of parent entity or all zeroes if this is a top-level entity
 			std::string name;				  ///<Human-friendly entity name
 			Vec3<float> initialPos;			  ///<Initial position
 			Vec3<float> initialRot;			  ///<Initial rotation

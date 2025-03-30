@@ -375,46 +375,11 @@ namespace libcacaoformats {
 		uint64_t entityCount = world.entities.size();
 		out.write(reinterpret_cast<char*>(&entityCount), 8);
 
-		const auto parseGUID = [](const std::string& input) {
-			std::string hexNum;
-			for(char c : input) {
-				if(c == '-') continue;
-				if(c < 48 || c > 102 || (c > 57 && c < 97)) {
-					std::stringstream ss;
-					ss << "Invalid GUID character \"" << c << "\" found during packed encoding in world entity!";
-					CheckException(false, ss.str());
-				}
-				hexNum += c;
-			}
-			CheckException(hexNum.size() == 32, "GUID string for world entity contains too many or two few digits!");
-			std::string upperStr = hexNum.substr(0, 16);
-			std::string lowerStr = hexNum.substr(16, 16);
-
-			//Hex conversion trickery
-			std::stringstream converter;
-			uint64_t upper;
-			converter << upperStr;
-			converter >> upper;
-			converter.str("");
-			uint64_t lower;
-			converter << lowerStr;
-			converter >> lower;
-
-			//Output the numbers
-			return std::make_pair<uint64_t, uint64_t>(std::move(upper), std::move(lower));
-		};
-
 		//Write entities
 		for(const World::Entity& entity : world.entities) {
-			//Write entity GUID
-			auto [guidUpper, guidLower] = parseGUID(entity.guid);
-			uint64_t guid[] = {guidUpper, guidLower};
-			out.write(reinterpret_cast<char*>(&guid), sizeof(guid));
-
-			//Write entity parent GUID
-			auto [parentUpper, parentLower] = parseGUID(entity.guid);
-			uint64_t parentGUID[] = {parentUpper, parentLower};
-			out.write(reinterpret_cast<char*>(&parentGUID), sizeof(parentGUID));
+			//Write entity and parent GUIDs
+			out.write(reinterpret_cast<const char*>(entity.guid.bytes().data()), 16);
+			out.write(reinterpret_cast<const char*>(entity.parentGUID.bytes().data()), 16);
 
 			//Write entity name string
 			CheckException(entity.name.size() > 0 && entity.name.size() <= UINT16_MAX, "World entity for packed encoding has out-of-range name string length!");
@@ -439,19 +404,11 @@ namespace libcacaoformats {
 				out.write(reinterpret_cast<char*>(&tiLen), 2);
 				out << component.typeID;
 
-				//Compress reflection data
+				//Write reflection data
 				CheckException(component.reflection.size() > 0 && component.reflection.size() <= UINT32_MAX, "World entity component for packed encoding has out-of-range reflection data size!");
 				uint32_t rdLen = (uint32_t)component.reflection.size();
-				unsigned int compressedSize = rdLen * 1.01 + 600;
-				std::vector<unsigned char> compressed(compressedSize);
-				int status = BZ2_bzBuffToBuffCompress(reinterpret_cast<char*>(compressed.data()), &compressedSize, const_cast<World::Component&>(component).reflection.data(), rdLen, 9, 0, 30);
-				CheckException(status == BZ_OK, "Failed to compress reflection data for world entity component for packed encoding!");
-				compressed.resize(compressedSize);
-
-				//Write reflection data
 				out.write(reinterpret_cast<char*>(&rdLen), 4);
-				out.write(reinterpret_cast<char*>(&compressedSize), 4);
-				out.write(reinterpret_cast<char*>(compressed.data()), compressedSize);
+				out.write(const_cast<char*>(component.reflection.data()), rdLen);
 
 				//Write component separator
 				out.write("\0\0", 2);

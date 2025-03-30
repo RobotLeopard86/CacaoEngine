@@ -1,5 +1,5 @@
 # Get simple dependencies
-deps = [yaml_cpp]
+deps = [yaml_cpp, crossguid]
 deps += subproject('dr_libs', required: true).get_variable('dr_libs_dep')
 deps += subproject('stb', required: true).get_variable('stb_dep')
 
@@ -63,7 +63,7 @@ formats_lib = static_library('cacaoformats', sources: [
 	'src/PackedEncode.cpp'
 ], include_directories: ['include', 'src'], pic: true, dependencies: deps)
 
-formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib)
+formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib, dependencies: crossguid)
 
 if testing
     test('readwrite_material_packed', executable('readwrite_material_packed',

@@ -88,12 +88,22 @@ yaml_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
-yaml_opts.set_install(true)
 yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 
 # Configure Silica
 silica = subproject('silica', required: true)
 silica_dep = silica.get_variable('silica_dep')
+
+# Configure crossguid
+xg_opts = cmake.subproject_options()
+xg_opts.add_cmake_defines({
+	'BUILD_SHARED_LIBS': 'OFF',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
+})
+crossguid = cmake.subproject('crossguid', options: xg_opts, required: true).dependency('crossguid')
 
 testing = get_option('testing')
 
