@@ -395,6 +395,8 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;crossguid/guid.hpp&quot;</span>
+
 <span class="k">namespace</span><span class="w"> </span><span class="nn">libcacaoformats</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Vec2</span><span class="w"> </span><span class="p">{</span>
@@ -578,8 +580,8 @@
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Entity</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">guid</span><span class="p">;</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">parentGUID</span><span class="p">;</span>
+<span class="w">            </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">;</span>
+<span class="w">            </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">parentGUID</span><span class="p">;</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
 <span class="w">            </span><span class="n">Vec3</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="n">initialPos</span><span class="p">;</span>
 <span class="w">            </span><span class="n">Vec3</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="n">initialRot</span><span class="p">;</span>
