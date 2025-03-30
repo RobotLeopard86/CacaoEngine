@@ -619,13 +619,13 @@ namespace libcacaoformats {
 				advance += typeIdLen;
 
 				//Get reflection data
-				CheckException(container.payload.size() > advance + 8, "World packed container component data is too small to contain reflection size data!");
+				CheckException(container.payload.size() > advance + 4, "World packed container component data is too small to contain reflection size data!");
 				uint32_t rflLen = 0;
 				std::memcpy(&rflLen, container.payload.data() + advance, 4);
 				advance += 4;
 				CheckException(rflLen > 0, "World packed container component data has zero-length reflection data");
 				CheckException(container.payload.size() > advance + rflLen, "World packed container component data is too small to contain reflection data of provided size!");
-				comp.reflection.reserve(rflLen);
+				comp.reflection = std::string("\0", rflLen);
 				std::memcpy(comp.reflection.data(), container.payload.data() + advance, rflLen);
 				advance += rflLen;
 
