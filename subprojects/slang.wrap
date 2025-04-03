@@ -1,0 +1,4 @@
+[wrap-git]
+url = https://github.com/shader-slang/slang
+depth = 1
+revision = v2025.6.3

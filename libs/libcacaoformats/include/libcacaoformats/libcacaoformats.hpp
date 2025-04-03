@@ -175,12 +175,27 @@ namespace libcacaoformats {
 
 	///@brief Decoded shader data
 	struct Shader {
-		std::vector<uint32_t> vertexSPV;  ///<Vertex shader code in SPIR-V
-		std::vector<uint32_t> fragmentSPV;///<Fragment shader code in SPIR-V
+		///@brief Type of shader code stored
+		enum class CodeType {
+			SPIRV,
+			GLSL
+		};
+
+		///@brief SPIR-V code storage format
+		using SPIRVCode = std::vector<uint32_t>;
+
+		///@brief GLSL code storage format
+		struct GLSLCode {
+			std::string vertex;	 ///<Vertex shader code
+			std::string fragment;///<Fragment shader code
+		};
+
+		CodeType type;						   ///<Format of stored shader code
+		std::variant<SPIRVCode, GLSLCode> code;///<Stored code
 	};
 
 	///@brief List of codes identifying different packed formats
-	enum class FormatCode {
+	enum class PackedFormat {
 		Cubemap,
 		Shader,
 		Material,
@@ -210,7 +225,7 @@ namespace libcacaoformats {
 	 */
 	class PackedContainer {
 	  public:
-		const FormatCode format;				 ///<Type of contents
+		const PackedFormat format;				 ///<Type of contents
 		const uint16_t version;					 ///<File type version
 		const std::vector<unsigned char> payload;///<Decompressed payload data
 
@@ -247,7 +262,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
-		PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data);
+		PackedContainer(PackedFormat format, uint16_t ver, std::vector<unsigned char>&& data);
 
 		/**
 		 * @brief Create a PackedContainer by manually specifying attributes, allowing a signed char
@@ -260,7 +275,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
-		PackedContainer(FormatCode format, uint16_t ver, std::vector<char>&& data);
+		PackedContainer(PackedFormat format, uint16_t ver, std::vector<char>&& data);
 
 		/**
 		 * @brief Export a PackedContainer to a buffer
@@ -392,18 +407,6 @@ namespace libcacaoformats {
 		 * @throws std::runtime_error If the data does not represent a valid cubemap or the provided IO callback fails to load faces
 		 */
 		std::array<ImageBuffer, 6> DecodeCubemap(std::istream& data, std::function<std::istream(const std::string&)> loader);
-
-		/**
-		 * @brief Extract the SPIR-V from an unpacked shader
-		 *
-		 * @param data A stream to load shader YAML data from
-		 * @param loader A function to get streams from names referenced in the main shader file. Set the "badbit" flag on the stream before returning to indicate a failed load.
-		 *
-		 * @return Shader object containing vertex and fragment shader stages in SPIR-V format
-		 *
-		 * @throws std::runtime_error If the data does not represent a valid shader or the provided IO callback fails to load shader code
-		 */
-		Shader DecodeShader(std::istream& data, std::function<std::istream(const std::string&)> loader);
 
 		/**
 		 * @brief Extract the data from an unpacked material

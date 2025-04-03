@@ -44,7 +44,7 @@ namespace libcacaoformats {
 		EncodeImage(cubemap[5], out);
 
 		//Create and return packed container
-		return PackedContainer(FormatCode::Cubemap, 1, std::move(outBuffer));
+		return PackedContainer(PackedFormat::Cubemap, 1, std::move(outBuffer));
 	}
 
 	PackedContainer PackedEncoder::EncodeShader(const Shader& shader) {
@@ -67,7 +67,7 @@ namespace libcacaoformats {
 		out.write(reinterpret_cast<const char*>(shader.fragmentSPV.data()), fragmentSize);
 
 		//Create and return packed container
-		return PackedContainer(FormatCode::Shader, 1, std::move(outBuffer));
+		return PackedContainer(PackedFormat::Shader, 1, std::move(outBuffer));
 	}
 
 	PackedContainer PackedEncoder::EncodeMaterial(const Material& mat) {
@@ -354,7 +354,7 @@ namespace libcacaoformats {
 		}
 
 		//Create and return packed container
-		return PackedContainer(FormatCode::Material, 1, std::move(outBuffer));
+		return PackedContainer(PackedFormat::Material, 1, std::move(outBuffer));
 	}
 
 	PackedContainer PackedEncoder::EncodeWorld(const World& world) {
@@ -419,7 +419,7 @@ namespace libcacaoformats {
 		}
 
 		//Create and return packed container
-		return PackedContainer(FormatCode::World, 1, std::move(outBuffer));
+		return PackedContainer(PackedFormat::World, 1, std::move(outBuffer));
 	}
 
 	PackedContainer PackedEncoder::EncodeAssetPack(const std::map<std::string, PackedAsset>& pack) {
@@ -532,6 +532,6 @@ namespace libcacaoformats {
 		CheckException(archive_write_free(pak) == ARCHIVE_OK, "Failed to free asset pack archive object!");
 
 		//Create and return packed container
-		return PackedContainer(FormatCode::AssetPack, 1, std::move(outBuffer));
+		return PackedContainer(PackedFormat::AssetPack, 1, std::move(outBuffer));
 	}
 }

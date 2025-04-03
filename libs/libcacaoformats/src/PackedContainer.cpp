@@ -19,12 +19,12 @@ namespace libcacaoformats {
 		return out;
 	}
 
-	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<unsigned char>&& data)
+	PackedContainer::PackedContainer(PackedFormat format, uint16_t ver, std::vector<unsigned char>&& data)
 	  : format(format), version(ver), payload(data) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
 	}
 
-	PackedContainer::PackedContainer(FormatCode format, uint16_t ver, std::vector<char>&& data)
+	PackedContainer::PackedContainer(PackedFormat format, uint16_t ver, std::vector<char>&& data)
 	  : format(format), version(ver), payload(Unsign(data)) {
 		CheckException(payload.size() > 0, "Cannot make empty PackedContainer!");
 	}
@@ -49,25 +49,25 @@ namespace libcacaoformats {
 		//Read next byte to check file type
 		unsigned char type;
 		stream.read(reinterpret_cast<char*>(&type), 1);
-		FormatCode format;
+		PackedFormat format;
 		switch(type) {
 			case 0xC4:
-				format = FormatCode::Cubemap;
+				format = PackedFormat::Cubemap;
 				break;
 			case 0x1B:
-				format = FormatCode::Shader;
+				format = PackedFormat::Shader;
 				break;
 			case 0x3E:
-				format = FormatCode::Material;
+				format = PackedFormat::Material;
 				break;
 			case 0xAA:
-				format = FormatCode::AssetPack;
+				format = PackedFormat::AssetPack;
 				break;
 			case 0x7A:
-				format = FormatCode::World;
+				format = PackedFormat::World;
 				break;
 			default:
-				format = FormatCode::Material;//I have to set something here to avoid a compiler warning
+				format = PackedFormat::Material;//I have to set something here to avoid a compiler warning
 				CheckException(false, "Stream is not a valid Cacao Engine format!");
 				break;
 		}
@@ -115,19 +115,19 @@ namespace libcacaoformats {
 		//Write format code
 		unsigned char code = 0;
 		switch(format) {
-			case FormatCode::AssetPack:
+			case PackedFormat::AssetPack:
 				code = 0xAA;
 				break;
-			case FormatCode::Cubemap:
+			case PackedFormat::Cubemap:
 				code = 0xC4;
 				break;
-			case FormatCode::Material:
+			case PackedFormat::Material:
 				code = 0x3E;
 				break;
-			case FormatCode::Shader:
+			case PackedFormat::Shader:
 				code = 0x1B;
 				break;
-			case FormatCode::World:
+			case PackedFormat::World:
 				code = 0x7A;
 				break;
 		}

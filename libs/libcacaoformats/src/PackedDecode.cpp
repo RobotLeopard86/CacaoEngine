@@ -16,7 +16,7 @@
 
 namespace libcacaoformats {
 	std::array<ImageBuffer, 6> PackedDecoder::DecodeCubemap(const PackedContainer& container) {
-		CheckException(container.format == FormatCode::Cubemap, "Packed container provided for cubemap decoding is not a cubemap!");
+		CheckException(container.format == PackedFormat::Cubemap, "Packed container provided for cubemap decoding is not a cubemap!");
 		CheckException(container.payload.size() > 28, "Cubemap packed container is too small to contain face size data!");
 
 		//Get buffer sizes
@@ -65,27 +65,44 @@ namespace libcacaoformats {
 	}
 
 	Shader PackedDecoder::DecodeShader(const PackedContainer& container) {
-		CheckException(container.format == FormatCode::Shader, "Packed container provided for shader decoding is not a shader!");
-		CheckException(container.payload.size() > 8, "Shader packed container is too small to contain code size data!");
+		CheckException(container.format == PackedFormat::Shader, "Packed container provided for shader decoding is not a shader!");
+		CheckException(container.payload.size() > 1, "Shader packed container is too small to contain code format data!");
 
-		//Get buffer sizes
-		uint32_t vscsz, pscsz;
-		std::memcpy(&vscsz, container.payload.data(), 4);
-		std::memcpy(&pscsz, container.payload.data() + 4, 4);
+		//Define magic numbers for code formats
+		const std::map<uint8_t, Shader::CodeType> typeLookupTable = {
+			{0x59, Shader::CodeType::SPIRV},
+			{0x4A, Shader::CodeType::GLSL}};
 
-		//Extract code buffers
-		Shader shader {};
-		shader.vertexSPV.reserve(vscsz);
-		shader.fragmentSPV.reserve(pscsz);
-		std::memcpy(shader.vertexSPV.data(), container.payload.data() + 8, vscsz);
-		std::memcpy(shader.fragmentSPV.data(), container.payload.data() + 8 + vscsz, pscsz);
+		//Get format
+		uint8_t type = 0;
+		std::memcpy(&type, container.payload.data(), 1);
+		CheckException(typeLookupTable.contains(type), "Shader packed container has unknown code format identifier!");
+
+		//Create result
+		Shader shader;
+		shader.type = typeLookupTable.at(type);
+
+		//Read data
+		switch(shader.type) {
+			case Shader::CodeType::SPIRV: {
+				CheckException(container.payload.size() > 5, "Shader packed container is too small to contain SPIR-V blob size data!");
+				uint32_t blobSize = 0;
+				std::memcpy(&blobSize, container.payload.data() + 1, 4);
+				CheckException(container.payload.size() == (5 + blobSize), "Shader packed container is not the right size to contain SPIR-V blob of specified size!");
+				Shader::SPIRVCode code(blobSize / 4);
+				std::memcpy(code.data(), container.payload.data() + 5, blobSize);
+				shader.code = code;
+				break;
+			}
+			default: break;
+		};
 
 		//Return result
 		return shader;
 	}
 
 	Material PackedDecoder::DecodeMaterial(const PackedContainer& container) {
-		CheckException(container.format == FormatCode::Material, "Packed container provided for material decoding is not a material!");
+		CheckException(container.format == PackedFormat::Material, "Packed container provided for material decoding is not a material!");
 		CheckException(container.payload.size() > 2, "Material packed container is too small to contain shader address string size data!");
 
 		Material out {};
@@ -503,7 +520,7 @@ namespace libcacaoformats {
 	}
 
 	World PackedDecoder::DecodeWorld(const PackedContainer& container) {
-		CheckException(container.format == FormatCode::World, "Packed container provided for world decoding is not a world!");
+		CheckException(container.format == PackedFormat::World, "Packed container provided for world decoding is not a world!");
 		CheckException(container.payload.size() > 2, "World packed container is too small to contain skybox address string size data!");
 
 		World out {};
@@ -648,7 +665,7 @@ namespace libcacaoformats {
 	}
 
 	std::map<std::string, PackedAsset> PackedDecoder::DecodeAssetPack(const PackedContainer& container) {
-		CheckException(container.format == FormatCode::AssetPack, "Packed container provided for asset pack decoding is not an asset pack!");
+		CheckException(container.format == PackedFormat::AssetPack, "Packed container provided for asset pack decoding is not an asset pack!");
 
 		//Configure archive object
 		archive* pak = archive_read_new();
