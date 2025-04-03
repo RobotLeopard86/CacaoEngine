@@ -359,6 +359,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Shader.html">Struct Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Shader_1_1GLSLCode.html">Struct Shader::GLSLCode</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Vec2.html">Template Struct Vec2</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -401,7 +404,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1UnpackedEncoder.html">Class UnpackedEncoder</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html">Enum FormatCode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html">Enum PackedFormat</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a35a61add0d47051ce99c6774043c3878.html">Function libcacaoformats::DecodeAudio</a></li>
@@ -500,26 +503,6 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15UnpackedDecoder12DecodeShaderERNSt7istreamENSt8functionIFNSt7istreamERKNSt6stringEEEE">
-<span id="_CPPv3N15libcacaoformats15UnpackedDecoder12DecodeShaderERNSt7istreamENSt8functionIFNSt7istreamERKNSt6stringEEEE"></span><span id="_CPPv2N15libcacaoformats15UnpackedDecoder12DecodeShaderERNSt7istreamENSt8functionIFNSt7istreamERKNSt6stringEEEE"></span><span class="target" id="classlibcacaoformats_1_1UnpackedDecoder_1aecf2d5310523fd6b8946ba62bdeaea22"></span><a class="reference internal" href="structlibcacaoformats_1_1Shader.html#_CPPv4N15libcacaoformats6ShaderE" title="libcacaoformats::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeShader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">loader</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15UnpackedDecoder12DecodeShaderERNSt7istreamENSt8functionIFNSt7istreamERKNSt6stringEEEE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Extract the SPIR-V from an unpacked shader. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – A stream to load shader YAML data from </p></li>
-<li><p><strong>loader</strong> – A function to get streams from names referenced in the main shader file. Set the “badbit” flag on the stream before returning to indicate a failed load.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the data does not represent a valid shader or the provided IO callback fails to load shader code </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="structlibcacaoformats_1_1Shader.html#structlibcacaoformats_1_1Shader"><span class="std std-ref">Shader</span></a> object containing vertex and fragment shader stages in SPIR-V format</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15UnpackedDecoder14DecodeMaterialERNSt7istreamE">
 <span id="_CPPv3N15libcacaoformats15UnpackedDecoder14DecodeMaterialERNSt7istreamE"></span><span id="_CPPv2N15libcacaoformats15UnpackedDecoder14DecodeMaterialERNSt7istreamE"></span><span id="libcacaoformats::UnpackedDecoder::DecodeMaterial__isR"></span><span class="target" id="classlibcacaoformats_1_1UnpackedDecoder_1ac31324b5c4b45186d941a38fd551c34e"></span><a class="reference internal" href="structlibcacaoformats_1_1Material.html#_CPPv4N15libcacaoformats8MaterialE" title="libcacaoformats::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeMaterial</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15UnpackedDecoder14DecodeMaterialERNSt7istreamE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Extract the data from an unpacked material. </p>
@@ -609,7 +592,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedDecoderE"><code class="docutils literal notranslate"><span class="pre">UnpackedDecoder</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedDecoder13DecodeCubemapERNSt7istreamENSt8functionIFNSt7istreamERKNSt6stringEEEE"><code class="docutils literal notranslate"><span class="pre">UnpackedDecoder::DecodeCubemap()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedDecoder12DecodeShaderERNSt7istreamENSt8functionIFNSt7istreamERKNSt6stringEEEE"><code class="docutils literal notranslate"><span class="pre">UnpackedDecoder::DecodeShader()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedDecoder14DecodeMaterialERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">UnpackedDecoder::DecodeMaterial()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15UnpackedDecoder11DecodeWorldERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">UnpackedDecoder::DecodeWorld()</span></code></a></li>
 </ul>

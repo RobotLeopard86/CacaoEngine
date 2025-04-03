@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Struct Vec2" href="structlibcacaoformats_1_1Vec2.html" />
+    <link rel="next" title="Struct Shader::GLSLCode" href="structlibcacaoformats_1_1Shader_1_1GLSLCode.html" />
     <link rel="prev" title="Struct PackedAsset" href="structlibcacaoformats_1_1PackedAsset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -359,6 +359,9 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Shader_1_1GLSLCode.html">Struct Shader::GLSLCode</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structlibcacaoformats_1_1Vec2.html">Template Struct Vec2</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -401,7 +404,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classlibcacaoformats_1_1UnpackedEncoder.html">Class UnpackedEncoder</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1a75c7256f2e556da483d20b432132d6f8.html">Enum FormatCode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html">Enum PackedFormat</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_libcacaoformats_8hpp_1a35a61add0d47051ce99c6774043c3878.html">Function libcacaoformats::DecodeAudio</a></li>
@@ -471,6 +474,15 @@
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_libs_libcacaoformats_include_libcacaoformats_libcacaoformats.hpp.html#file-libs-libcacaoformats-include-libcacaoformats-libcacaoformats-hpp"><span class="std std-ref">File libcacaoformats.hpp</span></a></p></li>
 </ul>
+<section id="nested-relationships">
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Link to this heading"><span/></a></h2>
+<section id="nested-types">
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="structlibcacaoformats_1_1Shader_1_1GLSLCode.html#exhale-struct-structlibcacaoformats-1-1shader-1-1glslcode"><span class="std std-ref">Struct Shader::GLSLCode</span></a></p></li>
+</ul>
+</section>
+</section>
 <section id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp struct">
@@ -478,20 +490,67 @@
 <span id="_CPPv3N15libcacaoformats6ShaderE"></span><span id="_CPPv2N15libcacaoformats6ShaderE"></span><span id="libcacaoformats::Shader"></span><span class="target" id="structlibcacaoformats_1_1Shader"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6ShaderE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Decoded shader data. </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader9vertexSPVE">
-<span id="_CPPv3N15libcacaoformats6Shader9vertexSPVE"></span><span id="_CPPv2N15libcacaoformats6Shader9vertexSPVE"></span><span id="libcacaoformats::Shader::vertexSPV__std::vector:uint32_t:"></span><span class="target" id="structlibcacaoformats_1_1Shader_1aafb788abe2d9a5e5c57616d0f218c692"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertexSPV</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader9vertexSPVE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Vertex shader code in SPIR-V. </p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader8CodeTypeE">
+<span id="_CPPv3N15libcacaoformats6Shader8CodeTypeE"></span><span id="_CPPv2N15libcacaoformats6Shader8CodeTypeE"></span><span class="target" id="structlibcacaoformats_1_1Shader_1aca704b1d6f9534979d45ae667f586f38"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CodeType</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader8CodeTypeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of shader code stored. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader8CodeType5SPIRVE">
+<span id="_CPPv3N15libcacaoformats6Shader8CodeType5SPIRVE"></span><span id="_CPPv2N15libcacaoformats6Shader8CodeType5SPIRVE"></span><span class="target" id="structlibcacaoformats_1_1Shader_1aca704b1d6f9534979d45ae667f586f38a649dd317597e959fb32149ac40206199"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SPIRV</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader8CodeType5SPIRVE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader8CodeType4GLSLE">
+<span id="_CPPv3N15libcacaoformats6Shader8CodeType4GLSLE"></span><span id="_CPPv2N15libcacaoformats6Shader8CodeType4GLSLE"></span><span class="target" id="structlibcacaoformats_1_1Shader_1aca704b1d6f9534979d45ae667f586f38a2a2c1392bcbaececf702b611e7d7df25"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GLSL</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader8CodeType4GLSLE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader11fragmentSPVE">
-<span id="_CPPv3N15libcacaoformats6Shader11fragmentSPVE"></span><span id="_CPPv2N15libcacaoformats6Shader11fragmentSPVE"></span><span id="libcacaoformats::Shader::fragmentSPV__std::vector:uint32_t:"></span><span class="target" id="structlibcacaoformats_1_1Shader_1a88050aae65c8d452c29b816487e0ba0d"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fragmentSPV</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader11fragmentSPVE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Fragment shader code in SPIR-V. </p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader9SPIRVCodeE">
+<span id="_CPPv3N15libcacaoformats6Shader9SPIRVCodeE"></span><span id="_CPPv2N15libcacaoformats6Shader9SPIRVCodeE"></span><span class="target" id="structlibcacaoformats_1_1Shader_1a439cf6747b3cc3f9b0de96f5eb2f943a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SPIRVCode</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader9SPIRVCodeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>SPIR-V code storage format. </p>
 </dd></dl>
 
 </div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader4typeE">
+<span id="_CPPv3N15libcacaoformats6Shader4typeE"></span><span id="_CPPv2N15libcacaoformats6Shader4typeE"></span><span id="libcacaoformats::Shader::type__CodeType"></span><span class="target" id="structlibcacaoformats_1_1Shader_1a51dc13af0796433fd007d5bba24a7f91"></span><a class="reference internal" href="#_CPPv4N15libcacaoformats6Shader8CodeTypeE" title="libcacaoformats::Shader::CodeType"><span class="n"><span class="pre">CodeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader4typeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Format of stored shader code. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader4codeE">
+<span id="_CPPv3N15libcacaoformats6Shader4codeE"></span><span id="_CPPv2N15libcacaoformats6Shader4codeE"></span><span id="libcacaoformats::Shader::code__std::variant:SPIRVCode.GLSLCode:"></span><span class="target" id="structlibcacaoformats_1_1Shader_1ae5ca1581c10a49fcc654cd3e2cd83df7"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N15libcacaoformats6Shader9SPIRVCodeE" title="libcacaoformats::Shader::SPIRVCode"><span class="n"><span class="pre">SPIRVCode</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats6Shader8GLSLCodeE" title="libcacaoformats::Shader::GLSLCode"><span class="n"><span class="pre">GLSLCode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">code</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader4codeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Stored code. </p>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader8GLSLCodeE">
+<span id="_CPPv3N15libcacaoformats6Shader8GLSLCodeE"></span><span id="_CPPv2N15libcacaoformats6Shader8GLSLCodeE"></span><span id="libcacaoformats::Shader::GLSLCode"></span><span class="target" id="structlibcacaoformats_1_1Shader_1_1GLSLCode"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GLSLCode</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader8GLSLCodeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>GLSL code storage format. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader8GLSLCode6vertexE">
+<span id="_CPPv3N15libcacaoformats6Shader8GLSLCode6vertexE"></span><span id="_CPPv2N15libcacaoformats6Shader8GLSLCode6vertexE"></span><span id="libcacaoformats::Shader::GLSLCode::vertex__ss"></span><span class="target" id="structlibcacaoformats_1_1Shader_1_1GLSLCode_1ad7505fd0843944f5af56ff74b20d441a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertex</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader8GLSLCode6vertexE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Vertex shader code. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats6Shader8GLSLCode8fragmentE">
+<span id="_CPPv3N15libcacaoformats6Shader8GLSLCode8fragmentE"></span><span id="_CPPv2N15libcacaoformats6Shader8GLSLCode8fragmentE"></span><span id="libcacaoformats::Shader::GLSLCode::fragment__ss"></span><span class="target" id="structlibcacaoformats_1_1Shader_1_1GLSLCode_1a3490477c2ac95fc6a375e073f90cbef3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fragment</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats6Shader8GLSLCode8fragmentE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Fragment shader code. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -517,11 +576,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="structlibcacaoformats_1_1Vec2.html"
+       href="structlibcacaoformats_1_1Shader_1_1GLSLCode.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Template Struct Vec2</p>
+        <p class="prev-next-title">Struct Shader::GLSLCode</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -544,10 +603,25 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-relationships">Nested Relationships</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-types">Nested Types</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6ShaderE"><code class="docutils literal notranslate"><span class="pre">Shader</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader9vertexSPVE"><code class="docutils literal notranslate"><span class="pre">Shader::vertexSPV</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader11fragmentSPVE"><code class="docutils literal notranslate"><span class="pre">Shader::fragmentSPV</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader8CodeTypeE"><code class="docutils literal notranslate"><span class="pre">Shader::CodeType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader8CodeType5SPIRVE"><code class="docutils literal notranslate"><span class="pre">Shader::CodeType::SPIRV</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader8CodeType4GLSLE"><code class="docutils literal notranslate"><span class="pre">Shader::CodeType::GLSL</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader9SPIRVCodeE"><code class="docutils literal notranslate"><span class="pre">Shader::SPIRVCode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader4typeE"><code class="docutils literal notranslate"><span class="pre">Shader::type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader4codeE"><code class="docutils literal notranslate"><span class="pre">Shader::code</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader8GLSLCodeE"><code class="docutils literal notranslate"><span class="pre">Shader::GLSLCode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader8GLSLCode6vertexE"><code class="docutils literal notranslate"><span class="pre">Shader::GLSLCode::vertex</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats6Shader8GLSLCode8fragmentE"><code class="docutils literal notranslate"><span class="pre">Shader::GLSLCode::fragment</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
