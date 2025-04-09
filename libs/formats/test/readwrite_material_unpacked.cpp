@@ -1,4 +1,4 @@
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaoformats.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -16,14 +16,14 @@ int main() {
 			trix[2] = {100.0f, 31.4f};
 			mat.keys.insert_or_assign("test_mat", trix);
 			libcacaoformats::UnpackedEncoder enc;
-			std::ofstream str("./out.xum");
+			std::ofstream str("./out.ajm");
 			enc.EncodeMaterial(mat, str);
 			str.close();
 		}
 
 		//Read it
 		{
-			std::ifstream str("./out.xum");
+			std::ifstream str("./out.ajm");
 			libcacaoformats::UnpackedDecoder dec;
 			libcacaoformats::Material mat = dec.DecodeMaterial(str);
 			str.close();

@@ -70,7 +70,9 @@ html_copy_source = False
 
 breathe_projects = {
     "Cacao Engine": "./_doxy/cacao/xml",
-    "libcacaoformats": "./_doxy/formats/xml"
+    "libcacaoformats": "./_doxy/formats/xml",
+    "libcacaocommon": "./_doxy/commonlib/xml",
+    "libcacaoaudiodecoder": "./_doxy/audiodecoder/xml"
 }
 breathe_default_project = "Cacao Engine"
 
@@ -96,17 +98,36 @@ exhale_projects_args = {
 									EXPAND_ONLY_PREDEF     = YES
 									PREDEFINED             += CACAO_API=
 									'''),
-        "containmentFolder": "./api-engine",
-        "rootFileTitle": "Engine API Reference"
+        "containmentFolder": "./api",
+        "rootFileTitle": "API Reference"
     },
     "libcacaoformats": {
         "exhaleDoxygenStdin": dedent('''
-									INPUT = ../libs/libcacaoformats/include
+									INPUT = ../libs/formats/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
 									'''),
-        "containmentFolder": "./api-formatslib",
-        "rootFileTitle": "libcacaoformats API Reference"
+        "containmentFolder": "./libapis/formats",
+        "rootFileTitle": "Cacao Formats Library API"
+    },
+     "libcacaoaudiodecoder": {
+        "exhaleDoxygenStdin": dedent('''
+									INPUT = ../libs/audiodecoder/include
+									HIDE_UNDOC_MEMBERS = YES
+									MAX_INITIALIZER_LINES = 0
+									'''),
+        "containmentFolder": "./libapis/audiodecoder",
+        "rootFileTitle": "Cacao Audio Decoder Library API"
+    },
+     "libcacaocommon": {
+        "exhaleDoxygenStdin": dedent('''
+									INPUT = ../libs/common/include
+									HIDE_UNDOC_MEMBERS = YES
+									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std
+									'''),
+        "containmentFolder": "./libapis/common",
+        "rootFileTitle": "Cacao Common Utilities API"
     }
 }
 

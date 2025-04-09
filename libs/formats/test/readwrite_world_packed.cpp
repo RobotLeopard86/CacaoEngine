@@ -1,4 +1,4 @@
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaoformats.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -25,14 +25,14 @@ int main() {
 			c2.typeID = "aDifferentType";
 			c2.reflection = "theVec:\n  x: 2.1\n  y: -8.47";
 			libcacaoformats::PackedEncoder enc;
-			std::ofstream str("./out.xcw", std::ios::binary);
+			std::ofstream str("./out.xjw", std::ios::binary);
 			enc.EncodeWorld(w).ExportToStream(str);
 			str.close();
 		}
 
 		//Read it
 		{
-			std::ifstream str("./out.xcw", std::ios::binary);
+			std::ifstream str("./out.xjw", std::ios::binary);
 			libcacaoformats::PackedDecoder dec;
 			libcacaoformats::PackedContainer container = libcacaoformats::PackedContainer::FromStream(str);
 			libcacaoformats::World w = dec.DecodeWorld(container);

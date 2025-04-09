@@ -23,3 +23,4 @@ slang_opts.add_cmake_defines({
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 slang_sp = cmake.subproject('slang', options: slang_opts, required: true)
+

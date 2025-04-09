@@ -1,6 +1,6 @@
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaoformats.hpp"
 
-#include "CheckException.hpp"
+#include "libcacaocommon.hpp"
 #include "YAMLValidate.hpp"
 
 #include <cstdint>
@@ -91,6 +91,20 @@ namespace libcacaoformats {
 				CheckException(container.payload.size() == (5 + blobSize), "Shader packed container is not the right size to contain SPIR-V blob of specified size!");
 				Shader::SPIRVCode code(blobSize / 4);
 				std::memcpy(code.data(), container.payload.data() + 5, blobSize);
+				shader.code = code;
+				break;
+			}
+			case Shader::CodeType::GLSL: {
+				CheckException(container.payload.size() > 9, "Shader packed container is too small to contain GLSL size data!");
+				uint32_t vsSize = 0, fsSize = 0;
+				std::memcpy(&vsSize, container.payload.data() + 1, 4);
+				std::memcpy(&fsSize, container.payload.data() + 5, 4);
+				CheckException(container.payload.size() == (10 + vsSize + fsSize), "Shader packed container is not the right size to contain GLSL text of specified sizes!");
+				Shader::GLSLCode code;
+				code.vertex = std::string("\0", vsSize);
+				code.fragment = std::string("\0", fsSize);
+				std::memcpy(code.vertex.data(), container.payload.data() + 9, vsSize);
+				std::memcpy(code.vertex.data(), container.payload.data() + 10 + vsSize, fsSize);
 				shader.code = code;
 				break;
 			}

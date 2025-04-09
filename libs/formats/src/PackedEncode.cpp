@@ -1,6 +1,6 @@
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaoformats.hpp"
 
-#include "CheckException.hpp"
+#include "libcacaocommon.hpp"
 
 #include <sstream>
 #include <utility>
@@ -48,23 +48,35 @@ namespace libcacaoformats {
 	}
 
 	PackedContainer PackedEncoder::EncodeShader(const Shader& shader) {
-		//Validate input
-		CheckException(shader.vertexSPV.size() > 0, "Shader for packed encoding has zero-size vertex SPIR-V!");
-		CheckException(shader.fragmentSPV.size() > 0, "Shader for packed encoding has zero-size fragment SPIR-V!");
-
 		//Create output container
 		std::vector<char> outBuffer;
 		obytestream out(outBuffer);
 
-		//Write face sizes
-		uint32_t vertexSize = shader.vertexSPV.size() * sizeof(uint32_t);
-		uint32_t fragmentSize = shader.vertexSPV.size() * sizeof(uint32_t);
-		out.write(reinterpret_cast<char*>(&vertexSize), sizeof(uint32_t));
-		out.write(reinterpret_cast<char*>(&fragmentSize), sizeof(uint32_t));
+		//Define magic numbers for code formats
+		const std::map<Shader::CodeType, uint8_t> typeLookupTable = {
+			{Shader::CodeType::SPIRV, 0x59},
+			{Shader::CodeType::GLSL, 0x4A}};
 
-		//Write SPIR-V
-		out.write(reinterpret_cast<const char*>(shader.vertexSPV.data()), vertexSize);
-		out.write(reinterpret_cast<const char*>(shader.fragmentSPV.data()), fragmentSize);
+		//Validate and write info
+		uint8_t typeCode = typeLookupTable.at(shader.type);
+		out.write(reinterpret_cast<char*>(&typeCode), 4);
+		switch(shader.type) {
+			case Shader::CodeType::SPIRV: {
+				Shader::SPIRVCode code = std::get<Shader::SPIRVCode>(shader.code);
+				uint32_t codeSize = uint32_t(code.size() * 4);
+				out.write(reinterpret_cast<char*>(&codeSize), 4);
+				out.write(reinterpret_cast<char*>(code.data()), codeSize);
+			}
+			case Shader::CodeType::GLSL: {
+				Shader::GLSLCode code = std::get<Shader::GLSLCode>(shader.code);
+				uint32_t sizes[] = {(uint32_t)code.vertex.size(), (uint32_t)code.fragment.size()};
+				out.write(reinterpret_cast<char*>(sizes), sizeof(sizes));
+				out.write(code.vertex.data(), code.vertex.size());
+				out.write("\0", 1);
+				out.write(code.fragment.data(), code.fragment.size());
+			}
+			default: break;
+		}
 
 		//Create and return packed container
 		return PackedContainer(PackedFormat::Shader, 1, std::move(outBuffer));

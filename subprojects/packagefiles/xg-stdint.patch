@@ -1,0 +1,12 @@
+diff --git a/include/crossguid/guid.hpp b/include/crossguid/guid.hpp
+index 61e0f17..a429761 100644
+--- a/include/crossguid/guid.hpp
++++ b/include/crossguid/guid.hpp
+@@ -36,6 +36,7 @@ THE SOFTWARE.
+ #include <string_view>
+ #include <utility>
+ #include <iomanip>
++#include <cstdint>
+ 
+ #define BEGIN_XG_NAMESPACE namespace xg {
+ #define END_XG_NAMESPACE }

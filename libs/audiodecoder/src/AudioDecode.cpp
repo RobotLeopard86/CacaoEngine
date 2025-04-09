@@ -1,7 +1,7 @@
 #include "AudioDecode.hpp"
 
-#include "CheckException.hpp"
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaocommon.hpp"
+#include "libcacaoaudiodecode.hpp"
 
 #define DR_MP3_IMPLEMENTATION
 #define DR_WAV_IMPLEMENTATION
@@ -16,60 +16,60 @@
 //This is constant for now across all Opus files when using libopusfile but this could potentially change in the future
 #define OPUSFILE_SAMPLE_RATE 48000
 
-namespace libcacaoformats {
-	AudioBuffer MP3Decode(std::vector<unsigned char> encoded) {
+namespace libcacaoaudiodecode {
+	Result MP3Decode(std::vector<unsigned char> encoded) {
 		//Create return object
-		AudioBuffer abuf;
+		Result result;
 
 		//Open the MP3
 		drmp3 mp3;
 		CheckException(drmp3_init_memory(&mp3, encoded.data(), encoded.size(), nullptr), "Failed to load MP3 sound data!");
 
 		//Get file info
-		abuf.sampleRate = mp3.sampleRate;
-		abuf.channelCount = mp3.channels;
+		result.sampleRate = mp3.sampleRate;
+		result.channelCount = mp3.channels;
 		drmp3_uint64 totalPCMFrameCount = drmp3_get_pcm_frame_count(&mp3);
-		abuf.sampleCount = totalPCMFrameCount * abuf.channelCount;
+		result.sampleCount = totalPCMFrameCount * result.channelCount;
 
 		//Read PCM frames
-		abuf.data.resize(abuf.sampleCount);
-		drmp3_uint64 framesRead = drmp3_read_pcm_frames_s16(&mp3, totalPCMFrameCount, abuf.data.data());
+		result.data.resize(result.sampleCount);
+		drmp3_uint64 framesRead = drmp3_read_pcm_frames_s16(&mp3, totalPCMFrameCount, result.data.data());
 		CheckException(framesRead == totalPCMFrameCount, "Failed to read MP3 PCM frames!");
 
 		//Close the MP3
 		drmp3_uninit(&mp3);
 
-		return abuf;
+		return result;
 	}
 
-	AudioBuffer WAVDecode(std::vector<unsigned char> encoded) {
+	Result WAVDecode(std::vector<unsigned char> encoded) {
 		//Create return object
-		AudioBuffer abuf;
+		Result result;
 
 		//Open the WAV
 		drwav wave;
 		CheckException(drwav_init_memory(&wave, encoded.data(), encoded.size(), nullptr), "Failed to load WAV sound data!");
 
 		//Get file info
-		abuf.sampleRate = wave.sampleRate;
-		abuf.channelCount = wave.channels;
+		result.sampleRate = wave.sampleRate;
+		result.channelCount = wave.channels;
 		drwav_uint64 totalPCMFrameCount = wave.totalPCMFrameCount;
-		abuf.sampleCount = totalPCMFrameCount * abuf.channelCount;
+		result.sampleCount = totalPCMFrameCount * result.channelCount;
 
 		//Read PCM frames
-		abuf.data.resize(abuf.sampleCount);
-		drwav_uint64 framesRead = drwav_read_pcm_frames_s16(&wave, totalPCMFrameCount, abuf.data.data());
+		result.data.resize(result.sampleCount);
+		drwav_uint64 framesRead = drwav_read_pcm_frames_s16(&wave, totalPCMFrameCount, result.data.data());
 		CheckException(framesRead == totalPCMFrameCount, "Failed to read WAV frames!");
 
 		//Close the WAV
 		drwav_uninit(&wave);
 
-		return abuf;
+		return result;
 	}
 
-	AudioBuffer VorbisDecode(std::vector<unsigned char> encoded) {
+	Result VorbisDecode(std::vector<unsigned char> encoded) {
 		//Create return object
-		AudioBuffer abuf;
+		Result result;
 
 		//Define some variables for decoding
 		OggVorbis_File vf;
@@ -105,9 +105,9 @@ namespace libcacaoformats {
 
 		//Get file info
 		vorbis_info* info = ov_info(&vf, -1);
-		abuf.sampleRate = info->rate;
-		abuf.channelCount = info->channels;
-		abuf.sampleCount = ov_pcm_total(&vf, -1);
+		result.sampleRate = info->rate;
+		result.channelCount = info->channels;
+		result.sampleCount = ov_pcm_total(&vf, -1);
 
 		//Read the audio data
 		while(true) {
@@ -123,32 +123,32 @@ namespace libcacaoformats {
 				CheckException(false, "Failed to read Ogg Vorbis file!");
 			} else {
 				//Add the PCM data to the end
-				abuf.data.insert(abuf.data.end(), pcm, pcm + (samplesRead / abuf.channelCount));
+				result.data.insert(result.data.end(), pcm, pcm + (samplesRead / result.channelCount));
 			}
 		}
 
 		//Clean up Ogg Vorbis
 		ov_clear(&vf);
 
-		return abuf;
+		return result;
 	}
 
-	AudioBuffer OpusDecode(std::vector<unsigned char> encoded) {
+	Result OpusDecode(std::vector<unsigned char> encoded) {
 		//Create return object
-		AudioBuffer abuf;
+		Result result;
 
 		//Open the file
 		int openError;
 		OggOpusFile* opus = op_open_memory(encoded.data(), encoded.size(), &openError);
 
 		//Get file info
-		abuf.sampleRate = OPUSFILE_SAMPLE_RATE;
+		result.sampleRate = OPUSFILE_SAMPLE_RATE;
 		const OpusHead* head = op_head(opus, 0);
-		abuf.channelCount = head->channel_count;
-		abuf.sampleCount = op_pcm_total(opus, -1);
+		result.channelCount = head->channel_count;
+		result.sampleCount = op_pcm_total(opus, -1);
 
 		//Read the audio data
-		abuf.data.reserve(abuf.sampleCount * abuf.channelCount);
+		result.data.reserve(result.sampleCount * result.channelCount);
 		while(true) {
 			short pcm[4096];
 			long samplesRead = op_read_stereo(opus, pcm, sizeof(pcm));
@@ -162,17 +162,17 @@ namespace libcacaoformats {
 				CheckException(false, "Failed to read Opus file!");
 			} else {
 				//Add the PCM data to the end
-				abuf.data.insert(abuf.data.end(), pcm, pcm + (samplesRead * abuf.channelCount));
+				result.data.insert(result.data.end(), pcm, pcm + (samplesRead * result.channelCount));
 			}
 		}
 
 		//Clean up opusfile
 		op_free(opus);
 
-		return abuf;
+		return result;
 	}
 
-	AudioBuffer DecodeAudio(std::istream& encoded) {
+	Result DecodeAudio(std::istream& encoded) {
 		CheckException(encoded.good(), "Encoded data stream for audio is invalid!");
 
 		//Determine audio format by reading header

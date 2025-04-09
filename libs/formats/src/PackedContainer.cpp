@@ -1,10 +1,9 @@
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaoformats.hpp"
 
 #include "bzlib.h"
+#include "libcacaocommon.hpp"
 
 #include <cstdint>
-
-#include "CheckException.hpp"
 
 namespace libcacaoformats {
 	std::vector<unsigned char> Unsign(const std::vector<char>& vec) {

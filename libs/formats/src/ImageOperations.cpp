@@ -1,9 +1,9 @@
-#include "libcacaoformats/libcacaoformats.hpp"
+#include "libcacaoformats.hpp"
 
 #include "stb_image.h"
 #include "stb_image_write.h"
 
-#include "CheckException.hpp"
+#include "libcacaocommon.hpp"
 
 #include <cstring>
 
