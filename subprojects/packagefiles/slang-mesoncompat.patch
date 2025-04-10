@@ -1,0 +1,188 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 224bd3c..43d420b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -393,6 +393,35 @@ add_subdirectory(source/slang-wasm)
+ add_subdirectory(source/slang-glslang)
+ add_subdirectory(tools)
+ add_subdirectory(prelude)
++
++#
++# generate capability files
++#
++glob_append(SLANG_CAPABILITY_SOURCE "source/slang/*.capdef")
++
++set(SLANG_CAPABILITY_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/source/slang/capability")
++
++# Generate the output file list
++set(SLANG_CAPABILITY_GENERATED_HEADERS
++    "${SLANG_CAPABILITY_OUTPUT_DIR}/slang-generated-capability-defs.h"
++    "${SLANG_CAPABILITY_OUTPUT_DIR}/slang-generated-capability-defs-impl.h"
++)
++set(SLANG_CAPABILITY_GENERATED_SOURCE
++    ${SLANG_CAPABILITY_GENERATED_HEADERS}
++    "${SLANG_CAPABILITY_OUTPUT_DIR}/slang-lookup-capability-defs.cpp"
++)
++add_custom_command(
++    OUTPUT ${SLANG_CAPABILITY_GENERATED_SOURCE}
++    COMMAND ${CMAKE_COMMAND} -E make_directory ${SLANG_CAPABILITY_OUTPUT_DIR}
++    COMMAND
++        slang-capability-generator ${SLANG_CAPABILITY_SOURCE} --target-directory
++        ${SLANG_CAPABILITY_OUTPUT_DIR} --doc
++        "${slang_SOURCE_DIR}/docs/user-guide/a3-02-reference-capability-atoms.md"
++    DEPENDS ${SLANG_CAPABILITY_SOURCE} slang-capability-generator
++    WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/source/slang"
++    VERBATIM
++)
++
+ add_subdirectory(source/slang-core-module)
+ add_subdirectory(source/slang-glsl-module)
+ add_subdirectory(source/slang)
+diff --git a/prelude/CMakeLists.txt b/prelude/CMakeLists.txt
+index 913809f..7347204 100644
+--- a/prelude/CMakeLists.txt
++++ b/prelude/CMakeLists.txt
+@@ -22,7 +22,7 @@ endforeach()
+ 
+ slang_add_target(
+     .
+-    OBJECT
++    STATIC
+     EXPORT_MACRO_PREFIX SLANG
+     EXPLICIT_SOURCE ${prelude_source}
+     EXCLUDE_FROM_ALL
+diff --git a/source/slang-core-module/CMakeLists.txt b/source/slang-core-module/CMakeLists.txt
+index 50b45c9..a53235f 100644
+--- a/source/slang-core-module/CMakeLists.txt
++++ b/source/slang-core-module/CMakeLists.txt
+@@ -54,7 +54,7 @@ add_custom_command(
+ 
+ set(core_module_source_common_args
+     .
+-    OBJECT
++    STATIC
+     EXCLUDE_FROM_ALL
+     USE_EXTRA_WARNINGS
+     LINK_WITH_PRIVATE
+@@ -69,6 +69,7 @@ set(core_module_source_common_args
+     generated
+     EXPLICIT_SOURCE
+     ./slang-embedded-core-module-source.cpp
++    ${SLANG_CAPABILITY_GENERATED_SOURCE}
+     EXTRA_COMPILE_DEFINITIONS_PRIVATE
+     SLANG_EMBED_CORE_MODULE_SOURCE
+     EXPORT_MACRO_PREFIX
+@@ -134,7 +135,7 @@ set_target_properties(generate_core_module_headers PROPERTIES FOLDER generated)
+ 
+ set(core_module_common_args
+     .
+-    OBJECT
++    STATIC
+     EXCLUDE_FROM_ALL
+     EXPORT_MACRO_PREFIX
+     SLANG
+@@ -155,9 +156,12 @@ slang_add_target(
+     REQUIRES generate_core_module_headers
+     EXTRA_COMPILE_DEFINITIONS_PRIVATE SLANG_EMBED_CORE_MODULE
+     INCLUDE_DIRECTORIES_PRIVATE ${core_module_generated_header_dir}
++    EXPLICIT_SOURCE
++    ${core_module_generated_header}
++    ${glsl_module_generated_header}
+ )
+ 
+ slang_add_target(
+     ${core_module_common_args}
+     TARGET_NAME slang-no-embedded-core-module
+-)
++)
+\ No newline at end of file
+diff --git a/source/slang/CMakeLists.txt b/source/slang/CMakeLists.txt
+index 9c51ed7..bfa86ca 100644
+--- a/source/slang/CMakeLists.txt
++++ b/source/slang/CMakeLists.txt
+@@ -1,30 +1,3 @@
+-#
+-# generate capability files
+-#
+-glob_append(SLANG_CAPABILITY_SOURCE "*.capdef")
+-
+-set(SLANG_CAPABILITY_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/capability")
+-
+-# Generate the output file list
+-set(SLANG_CAPABILITY_GENERATED_HEADERS
+-    "${SLANG_CAPABILITY_OUTPUT_DIR}/slang-generated-capability-defs.h"
+-    "${SLANG_CAPABILITY_OUTPUT_DIR}/slang-generated-capability-defs-impl.h"
+-)
+-set(SLANG_CAPABILITY_GENERATED_SOURCE
+-    ${SLANG_CAPABILITY_GENERATED_HEADERS}
+-    "${SLANG_CAPABILITY_OUTPUT_DIR}/slang-lookup-capability-defs.cpp"
+-)
+-add_custom_command(
+-    OUTPUT ${SLANG_CAPABILITY_GENERATED_SOURCE}
+-    COMMAND ${CMAKE_COMMAND} -E make_directory ${SLANG_CAPABILITY_OUTPUT_DIR}
+-    COMMAND
+-        slang-capability-generator ${SLANG_CAPABILITY_SOURCE} --target-directory
+-        ${SLANG_CAPABILITY_OUTPUT_DIR} --doc
+-        "${slang_SOURCE_DIR}/docs/user-guide/a3-02-reference-capability-atoms.md"
+-    DEPENDS ${SLANG_CAPABILITY_SOURCE} slang-capability-generator
+-    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+-    VERBATIM
+-)
+ slang_add_target(
+     slang-capability-defs
+     OBJECT
+@@ -166,7 +139,7 @@ add_custom_command(
+ 
+ slang_add_target(
+     slang-lookup-tables
+-    OBJECT
++    STATIC
+     EXPORT_MACRO_PREFIX SLANG
+     USE_EXTRA_WARNINGS
+     EXPLICIT_SOURCE
+@@ -278,19 +251,21 @@ else()
+     # the shared objects as one target so we don't build them twice.
+     slang_add_target(
+         .
+-        OBJECT
++        STATIC
+         ${slang_build_args}
+         ${slang_link_args}
+         TARGET_NAME slang-common-objects
+         EXCLUDE_FROM_ALL
+     )
++    target_sources(slang-common-objects PUBLIC ${SLANG_REFLECT_GENERATED_HEADERS} ${SLANG_CAPABILITY_GENERATED_HEADERS})
+     slang_add_target(
+         .
+         ${SLANG_LIB_TYPE}
+         EXPORT_MACRO_PREFIX SLANG
+         ${slang_link_args}
+         ${slang_interface_args}
+-        NO_SOURCE
++        EXPLICIT_SOURCE dummy-src.cpp
++        EXTRA_COMPILE_DEFINITIONS_PRIVATE DUMMY_A
+         TARGET_NAME slang-without-embedded-core-module
+         EXCLUDE_FROM_ALL
+         LINK_WITH_PRIVATE
+@@ -310,6 +285,7 @@ else()
+         ${slang_interface_args}
+         ${slang_public_lib_args}
+         LINK_WITH_PRIVATE slang-common-objects
+-        NO_SOURCE
++        EXPLICIT_SOURCE dummy-src.cpp
++        EXTRA_COMPILE_DEFINITIONS_PRIVATE DUMMY_B
+     )
+ endif()
+diff --git a/source/slang/dummy-src.cpp b/source/slang/dummy-src.cpp
+new file mode 100644
+index 0000000..792aebe
+--- /dev/null
++++ b/source/slang/dummy-src.cpp
+@@ -0,0 +1,6 @@
++#ifdef DUMMY_A
++void nothing() {}
++#endif
++#ifdef DUMMY_B
++void notImportant() {}
++#endif
+\ No newline at end of file

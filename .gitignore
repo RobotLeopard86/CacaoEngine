@@ -12,6 +12,8 @@ subprojects/*
 !subprojects/glad
 !subprojects/stb
 !subprojects/dr_libs
+!subprojects/cli11
+!subprojects/spinners-plus-plus
 subprojects/nlohmannjson.wrap
 subprojects/reflex.wrap
 

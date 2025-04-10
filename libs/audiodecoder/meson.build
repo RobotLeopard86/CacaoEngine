@@ -1,4 +1,4 @@
-# Audio libraries
+# CMake-based audio libraries
 audio_opts = cmake.subproject_options()
 audio_opts.add_cmake_defines({
     'BUILD_SHARED_LIBS': 'OFF',
@@ -23,6 +23,12 @@ vorbisfile = audio_sp.dependency('vorbisfile')
 opus = audio_sp.dependency('opus')
 opusfile = audio_sp.dependency('opusfile')
 
-audiodecode_lib = static_library('cacaoaudiodecode', 'src/AudioDecode.cpp', include_directories: ['include', 'src'], pic: true, dependencies: [ogg, vorbis, vorbisfile, opus, opusfile])
+# dr_libs
+dr_libs_sp = subproject('dr_libs', required: true)
+dr_libs_dep = dr_libs_sp.get_variable('dr_libs_dep')
 
-audiodecode_dep = declare_dependency(include_directories: 'include', link_with: audiodecode_lib)
+audiodecode_deps = [ogg, vorbis, vorbisfile, opus, opusfile, dr_libs_dep, commonlib_dep]
+
+audiodecode_lib = static_library('cacaoaudiodecode', 'src/AudioDecode.cpp', include_directories: ['include', 'src'], pic: true, dependencies: audiodecode_deps)
+
+audiodecode_dep = declare_dependency(include_directories: 'include', link_with: audiodecode_lib, dependencies: audiodecode_deps)

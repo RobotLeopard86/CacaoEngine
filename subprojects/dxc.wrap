@@ -3,4 +3,4 @@ url = https://github.com/Microsoft/DirectXShaderCompiler
 depth = 1
 clone-recursive = true
 revision = v1.8.2502
-diff-files = dxc-mesoncompat-static.patch
+diff_files = dxc-mesoncompat-static.patch
