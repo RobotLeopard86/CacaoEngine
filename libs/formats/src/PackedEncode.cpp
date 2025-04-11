@@ -59,7 +59,7 @@ namespace libcacaoformats {
 
 		//Validate and write info
 		uint8_t typeCode = typeLookupTable.at(shader.type);
-		out.write(reinterpret_cast<char*>(&typeCode), 4);
+		out.write(reinterpret_cast<char*>(&typeCode), 1);
 		switch(shader.type) {
 			case Shader::CodeType::SPIRV: {
 				Shader::SPIRVCode code = std::get<Shader::SPIRVCode>(shader.code);
@@ -70,8 +70,9 @@ namespace libcacaoformats {
 			}
 			case Shader::CodeType::GLSL: {
 				Shader::GLSLCode code = std::get<Shader::GLSLCode>(shader.code);
-				uint32_t sizes[] = {(uint32_t)code.vertex.size(), (uint32_t)code.fragment.size()};
-				out.write(reinterpret_cast<char*>(sizes), sizeof(sizes));
+				uint32_t vcSize = (uint32_t)code.vertex.size(), fcSize = (uint32_t)code.fragment.size();
+				out.write(reinterpret_cast<char*>(&vcSize), 4);
+				out.write(reinterpret_cast<char*>(&fcSize), 4);
 				out.write(code.vertex.data(), code.vertex.size());
 				out.write("\0", 1);
 				out.write(code.fragment.data(), code.fragment.size());

@@ -37,6 +37,10 @@ int main(int argc, char* argv[]) {
 		if(CLI::ExistingFile(outfile).compare("") == 0) return "";
 		return "Output files must either be files to overwrite or nonexistent files!";
 	});
+	outOpt->transform([](const std::string& p) {
+		std::filesystem::path path(p);
+		return std::filesystem::absolute(path).string();
+	});
 	std::filesystem::path autoOut;
 	CLI::Option* autoOutOpt = app.add_option("-A,--auto-output", autoOut, "Automatically generate output files and place them in the specified directory")->excludes(outOpt)->check([](const std::string& outfile) {
 		if(CLI::NonexistentPath(outfile).compare("") == 0) return "";
@@ -80,7 +84,7 @@ int main(int argc, char* argv[]) {
 				cut = inStr.substr(0, period);
 			}
 			std::filesystem::path out = autoOut / (cut + SHADER_FILE_EXTENSION);
-			VLOG("Transforming " << in << " -> " << out)
+			VLOG("Will compile " << in << " -> " << out)
 			output.push_back(out);
 		}
 		if(!std::filesystem::exists(autoOut)) {
@@ -95,10 +99,10 @@ int main(int argc, char* argv[]) {
 	VLOG_NONL("Preparing tasks list... ")
 	std::map<std::filesystem::path, std::filesystem::path> tasks;
 	for(unsigned int i = 0; i < input.size(); i++) {
-		tasks[input[i]] = output[i];
 		if(!std::filesystem::exists(output[i].parent_path())) {
 			std::filesystem::create_directories(output[i].parent_path());
 		}
+		tasks[input[i]] = output[i];
 	}
 	VLOG("Done.")
 

@@ -1,0 +1,2 @@
+# Compiled shader extractor utility
+xjs_extractor = executable('xjsx', 'main.cpp', dependencies: [formats_dep, cli11_dep], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DXJSX_VER="1.0.0"'])

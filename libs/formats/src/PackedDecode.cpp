@@ -104,7 +104,7 @@ namespace libcacaoformats {
 				code.vertex = std::string("\0", vsSize);
 				code.fragment = std::string("\0", fsSize);
 				std::memcpy(code.vertex.data(), container.payload.data() + 9, vsSize);
-				std::memcpy(code.vertex.data(), container.payload.data() + 10 + vsSize, fsSize);
+				std::memcpy(code.fragment.data(), container.payload.data() + 10 + vsSize, fsSize);
 				shader.code = code;
 				break;
 			}

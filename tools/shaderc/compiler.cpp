@@ -205,8 +205,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 					CompileCheck(false, err.str());
 				}
 			}
-			std::size_t codeSize = spirv->getBufferSize() / 4;
-			libcacaoformats::Shader::SPIRVCode code(codeSize);
+			libcacaoformats::Shader::SPIRVCode code(spirv->getBufferSize() / 4);
 			std::memcpy(code.data(), spirv->getBufferPointer(), spirv->getBufferSize());
 			shader.code = code;
 			CVLOG("Done.")
