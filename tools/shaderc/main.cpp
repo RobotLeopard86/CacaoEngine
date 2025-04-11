@@ -1,13 +1,11 @@
 #include "CLI11.hpp"
-#include "slang.h"
-#include "slang-com-ptr.h"
-#include "slang-com-helper.h"
 #include "spinners.hpp"
 
 #include <vector>
 #include <filesystem>
 #include <iostream>
 #include <map>
+#include <string>
 
 #define SHADER_FILE_EXTENSION ".xjs"
 
@@ -18,16 +16,11 @@
 #define COMPILER_VER "unknown"
 #endif
 
-#define VLOG(...) \
-	if(outputLvl == OutputLevel::Verbose) std::cout << __VA_ARGS__ << std::endl;
-#define VLOG_NONL(...) \
-	if(outputLvl == OutputLevel::Verbose) std::cout << __VA_ARGS__ << std::flush;
+#include "compiler.hpp"
+#include "logutil.hpp"
+
 #define ERROR(...) \
 	std::cerr << "\x1b[0m\x1b[1;91mERROR: \x1b[0m" << __VA_ARGS__ << std::endl;
-
-std::pair<bool, std::string> compile(const std::filesystem::path& in, const std::filesystem::path& out) {
-	return std::make_pair(true, "");
-}
 
 int main(int argc, char* argv[]) {
 	//Configure CLI
@@ -53,13 +46,15 @@ int main(int argc, char* argv[]) {
 	outOpt->excludes(autoOutOpt);
 
 	//Output control
-	enum class OutputLevel {
-		Silent,
-		Normal,
-		Verbose
-	} outputLvl = OutputLevel::Normal;
-	app.add_flag_callback("-q,--quiet", [&outputLvl]() { outputLvl = OutputLevel::Silent; }, "Suppress all output from the compiler");
-	app.add_flag_callback("-V,--verbose", [&outputLvl]() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the compiler");
+	outputLvl = OutputLevel::Normal;
+	app.add_flag_callback("-q,--quiet", []() { outputLvl = OutputLevel::Silent; }, "Suppress all output from the compiler");
+	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the compiler");
+
+	//Format control
+	format = OutputFormat::Undefined;
+	CLI::Option* spirvOpt = app.add_flag_callback("-S,--spirv", [] { format = OutputFormat::SPIRV; }, "Output in SPIR-V");
+	CLI::Option* glslOpt = app.add_flag_callback("-G,--glsl", [] { format = OutputFormat::GLSL; }, "Output in GLSL")->excludes(spirvOpt);
+	spirvOpt->excludes(glslOpt);
 
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
@@ -70,10 +65,16 @@ int main(int argc, char* argv[]) {
 	//Parse the CLI
 	CLI11_PARSE(app, argc, argv);
 
+	//Check format
+	if(format == OutputFormat::Undefined) {
+		ERROR("A format must be specified! See --help for details.")
+		return 1;
+	}
+
 	//Calculate auto-output paths if requested
 	if(app.count("-A") > 0) {
 		for(auto& in : input) {
-			std::string inStr = in.string();
+			std::string inStr = in.filename().string();
 			std::string cut = inStr;
 			if(auto period = inStr.find("."); period != std::string::npos) {
 				cut = inStr.substr(0, period);
@@ -81,6 +82,9 @@ int main(int argc, char* argv[]) {
 			std::filesystem::path out = autoOut / (cut + SHADER_FILE_EXTENSION);
 			VLOG("Transforming " << in << " -> " << out)
 			output.push_back(out);
+		}
+		if(!std::filesystem::exists(autoOut)) {
+			std::filesystem::create_directories(autoOut);
 		}
 	} else if(input.size() != output.size()) {
 		ERROR("Input and output file counts do not match!")
@@ -92,28 +96,42 @@ int main(int argc, char* argv[]) {
 	std::map<std::filesystem::path, std::filesystem::path> tasks;
 	for(unsigned int i = 0; i < input.size(); i++) {
 		tasks[input[i]] = output[i];
+		if(!std::filesystem::exists(output[i].parent_path())) {
+			std::filesystem::create_directories(output[i].parent_path());
+		}
 	}
 	VLOG("Done.")
 
-	//Compile
-	std::unique_ptr<jms::Spinner> s;
-	for(const auto& [in, out] : tasks) {
-		std::stringstream taskDesc;
-		taskDesc << "Compiling " << in;
-		if(outputLvl != OutputLevel::Silent) {
-			s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
-			s->start();
+	//Compilation
+	try {
+		//Create compiler object
+		CacaoShaderCompiler csc;
+
+		//Compile
+		std::unique_ptr<jms::Spinner> s;
+		for(const auto& [in, out] : tasks) {
+			std::stringstream taskDesc;
+			taskDesc << "Compiling " << in << "...";
+			if(outputLvl != OutputLevel::Silent) {
+				s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
+				s->start();
+			}
+			auto [result, log] = csc.compile(in, out);
+			if(outputLvl != OutputLevel::Silent) {
+				taskDesc.str("");
+				taskDesc << "Compiled " << in << ".";
+				s->finish(result ? jms::FinishedState::SUCCESS : jms::FinishedState::FAILURE, taskDesc.str());
+			}
+			if(!result) {
+				ERROR("Failed to compile one or more shaders!")
+				std::cerr << "====== ERROR LOG ======\n"
+						  << log << "\n=======================" << std::endl;
+				return 1;
+			}
 		}
-		auto [result, log] = compile(in, out);
-		if(outputLvl != OutputLevel::Silent) {
-			s->finish(result ? jms::FinishedState::SUCCESS : jms::FinishedState::FAILURE);
-		}
-		if(!result) {
-			ERROR("Failed to compile one or more shaders!")
-			std::cerr << "====== ERROR LOG ======\n"
-					  << log << "\n====== ========= ======" << std::endl;
-			return 1;
-		}
+	} catch(const std::exception& e) {
+		ERROR("Exception caught during compilation: " << e.what())
+		return 1;
 	}
 
 	if(outputLvl != OutputLevel::Silent) {

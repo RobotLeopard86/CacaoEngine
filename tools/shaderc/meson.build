@@ -34,12 +34,22 @@ slang_prelude = slang_sp.dependency('prelude')
 slang_rt = slang_sp.dependency('slang_rt')
 slang_embedded_core_module_source = slang_sp.dependency('slang_embedded_core_module_source')
 slang_embedded_core_module = slang_sp.dependency('slang_embedded_core_module')
-slang_common_objects = slang_sp.dependency('slang_common+objects')
+slang_common_objects = slang_sp.dependency('slang_common_objects')
+slang_capability_lookup = slang_sp.dependency('slang_capability_lookup')
+slang_lookup_tables = slang_sp.dependency('slang_lookup_tables')
 slang = slang_sp.dependency('slang')
+
+# Process shader base file
+run_command([python, meson.current_source_dir() / 'includable.py', meson.current_source_dir() / 'cacaoshaderbase.slang'], check: true)
 
 # Shader compiler executable
 shaderc = executable('ce-shaderc', sources: [
-	'main.cpp'
+	'main.cpp',
+	'compiler.cpp'
 ], dependencies: [
-	cli11_dep, spinners_dep, slang_core, slang_compiler_core, slang_lz4, slang_miniz, slang_prelude, slang_rt, slang_embedded_core_module_source, slang_embedded_core_module, slang_common_objects, slang
+	cli11_dep, spinners_dep, slang_core, slang_compiler_core, slang_lz4, slang_miniz, slang_prelude, slang_rt, slang_embedded_core_module_source, slang_embedded_core_module, slang_common_objects, slang,
+	slang_capability_lookup, slang_lookup_tables, commonlib_dep, formats_dep
 ], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DCOMPILER_VER="1.0.0"'])
+
+# Compiled shader extractor utility
+xjs_extractor = executable('xjsx', 'xjs_extractor.cpp', dependencies: [formats_dep, cli11_dep])

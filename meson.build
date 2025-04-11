@@ -54,8 +54,9 @@ else
 endif
 cmake_msvc_lib += 'DLL'
 
-# Import CMake
+# Import CMake and filesystem modules
 cmake = import('cmake')
+fs = import('fs')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'

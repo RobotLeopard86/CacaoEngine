@@ -66,6 +66,7 @@ namespace libcacaoformats {
 				uint32_t codeSize = uint32_t(code.size() * 4);
 				out.write(reinterpret_cast<char*>(&codeSize), 4);
 				out.write(reinterpret_cast<char*>(code.data()), codeSize);
+				break;
 			}
 			case Shader::CodeType::GLSL: {
 				Shader::GLSLCode code = std::get<Shader::GLSLCode>(shader.code);
@@ -74,6 +75,7 @@ namespace libcacaoformats {
 				out.write(code.vertex.data(), code.vertex.size());
 				out.write("\0", 1);
 				out.write(code.fragment.data(), code.fragment.size());
+				break;
 			}
 			default: break;
 		}
