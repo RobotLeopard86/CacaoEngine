@@ -3,6 +3,12 @@
 ## About
 A tool that compiles [Slang](https://shader-slang.org) shader code into Cacao Engine shader objects (`.xjs` files).
 
+## Example
+A very simple example shader that conforms to the compiler's rules can be found in this directory as `example_shader.slang`.
+
+## Matrix Layout
+The compiler will treat all matrices as being in the column-major layout.
+
 ## Command-Line Usage
 ```
 Cacao Engine Shader Compiler 

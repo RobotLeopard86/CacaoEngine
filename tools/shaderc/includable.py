@@ -2,7 +2,7 @@ import os
 import sys
 import pathlib
 
-outdir = pathlib.Path(os.environ['MESON_BUILD_ROOT']) / os.environ['MESON_SUBDIR']
+outdir = pathlib.Path(sys.argv[2])
 outfn = pathlib.Path(sys.argv[1]).name.removesuffix('.slang') + '.inc'
 outfile = outdir / outfn
 

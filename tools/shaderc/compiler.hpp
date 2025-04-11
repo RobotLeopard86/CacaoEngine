@@ -8,8 +8,12 @@ using Slang::ComPtr;
 
 #include <string>
 #include <filesystem>
+#include <utility>
+#include <optional>
 
 #include "outform.hpp"
+
+#include "libcacaoformats.hpp"
 
 class CacaoShaderCompiler {
   public:
@@ -25,4 +29,7 @@ class CacaoShaderCompiler {
 
   private:
 	ComPtr<slang::IGlobalSession> gSession;
+
+	std::pair<std::optional<decltype(libcacaoformats::Shader::code)>, std::string> genSPV(ComPtr<slang::IComponentType> linked);
+	std::pair<std::optional<decltype(libcacaoformats::Shader::code)>, std::string> genGLSL(ComPtr<slang::IComponentType> linked);
 };

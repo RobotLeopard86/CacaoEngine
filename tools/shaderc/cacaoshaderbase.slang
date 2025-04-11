@@ -11,5 +11,3 @@ struct CacaoGlobalData {
     float4x4 view;
 };
 ConstantBuffer<CacaoGlobalData> cacao;
-
-[vk::push_constant] uniform float4x4 transform;
