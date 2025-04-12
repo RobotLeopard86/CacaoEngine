@@ -1,0 +1,2 @@
+# World compiler (basically just a libcacaoformats wrapper)
+worldc = executable('ce-worldc', 'main.cpp', dependencies: [formats_dep, cli11_dep, spinners_dep], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DCOMPILER_VER="1.0.0"'], include_directories: '..')

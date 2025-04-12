@@ -1,5 +1,5 @@
 #include "compiler.hpp"
-#include "logutil.hpp"
+#include "toolutil.hpp"
 #include "outform.hpp"
 
 #include "libcacaocommon.hpp"
@@ -19,22 +19,6 @@ CacaoShaderCompiler::CacaoShaderCompiler() {
 	CheckException(r == SLANG_OK && gSession, "Failed to create Slang global session!");
 	VLOG("Done.");
 }
-
-#define CompileCheck(condition, ...) \
-	if(!(condition)) {               \
-		std::stringstream s;         \
-		s << __VA_ARGS__;            \
-		return {false, s.str()};     \
-	}
-
-static std::stringstream lastMsg;
-
-#define CVLOG_NONL(...)                    \
-	VLOG_NONL("\x1b[2K\r" << __VA_ARGS__); \
-	lastMsg.str("");                       \
-	lastMsg << __VA_ARGS__;
-#define CVLOG(...) VLOG("\x1b[2K\r" << lastMsg.str() << __VA_ARGS__)
-#define CVLOG_SINGLE(...) VLOG("\x1b[2K\r" << __VA_ARGS__)
 
 std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem::path& in, const std::filesystem::path& out) {
 	CVLOG_SINGLE("Compiling " << in << ": ")

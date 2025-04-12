@@ -4,3 +4,5 @@ spinners_dep = subproject('spinners-plus-plus', required: true).get_variable('sp
 
 subdir('shaderc')
 subdir('xjsx')
+subdir('matc')
+subdir('worldc')

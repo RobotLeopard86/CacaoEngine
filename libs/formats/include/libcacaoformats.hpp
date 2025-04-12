@@ -156,7 +156,6 @@ namespace libcacaoformats {
 		 * @param ver The version of the format
 		 * @param data The uncompressed data to be stored
 		 *
-		 * @return PackedContainer object
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
@@ -169,11 +168,25 @@ namespace libcacaoformats {
 		 * @param ver The version of the format
 		 * @param data The uncompressed data to be stored, autoconverted to unsigned char
 		 *
-		 * @return PackedContainer object
 		 *
 		 * @throws std::runtime_error If there is no data
 		 */
 		PackedContainer(PackedFormat format, uint16_t ver, std::vector<char>&& data);
+
+		/**
+		 * @brief Create an empty PackedContainer, only useful for default constructing if needed
+		 *
+		 * @warning This will produce a PackedContainer with no data, the version set to 0 and the type set to Shader. DO NOT USE THIS CONTAINER!
+		 */
+		PackedContainer()
+		  : format(PackedFormat::Shader), version(0), payload() {}
+
+		PackedContainer(const PackedContainer& o)
+		  : format(o.format), version(o.version), payload(o.payload) {}
+		PackedContainer(PackedContainer&& o)
+		  : format(o.format), version(o.version), payload(o.payload) {}
+		PackedContainer& operator=(const PackedContainer&) = delete;
+		PackedContainer& operator=(PackedContainer&&) = delete;
 
 		/**
 		 * @brief Export a PackedContainer to a buffer
