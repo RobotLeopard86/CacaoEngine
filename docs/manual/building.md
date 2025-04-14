@@ -17,6 +17,7 @@ Cacao Engine uses OpenAL-Soft, a software implementation of the OpenAL API which
 | Pipewire | `libpipewire-0.3-dev` | `pipewire-devel` | `libpipewire` |
 | PulseAudio | `libpulse-dev` | `pulseaudio-libs pulseaudio-libs-devel` | `libpulse` |
 | ALSA | `libasound2-dev` | `alsa-lib alsa-lib-devel` | `alsa-lib` |  
+
 Cacao Engine also requires additional system packages. By base distro, these are:
 * Fedora-based (e.g. RHEL): `wayland-devel`, `wayland-protocols-devel`, `libxkbcommon-devel`, `libXcursor-devel`, `libXfixes-devel`, `libXi-devel`, `libXinerama-devel`, `libXrandr-devel`, `libdecor-devel`, `libdrm-devel`, `ibus-devel`, `fcitx-devel`, `libuuid-devel`
 * Debian-based (e.g. Ubuntu): `libwayland-dev`, `libxkbcommon-dev`, `libxfixes-dev`, `xorg-dev`, `wayland-protocols`, `libdecor0-dev`, `libdrm-dev`, `libibus-1.0-dev`, `fcitx`, `uuid-dev`
