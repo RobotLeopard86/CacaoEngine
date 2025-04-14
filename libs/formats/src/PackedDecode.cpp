@@ -17,7 +17,7 @@
 namespace libcacaoformats {
 	std::array<ImageBuffer, 6> PackedDecoder::DecodeCubemap(const PackedContainer& container) {
 		CheckException(container.format == PackedFormat::Cubemap, "Packed container provided for cubemap decoding is not a cubemap!");
-		CheckException(container.payload.size() > 28, "Cubemap packed container is too small to contain face size data!");
+		CheckException(container.payload.size() > 48, "Cubemap packed container is too small to contain face size data!");
 
 		//Get buffer sizes
 		uint64_t pxs, nxs, pys, nys, pzs, nzs;
@@ -31,7 +31,7 @@ namespace libcacaoformats {
 		//Extract encoded face buffers
 		std::vector<char> pxFB(pxs), nxFB(nxs), pyFB(pys), nyFB(nys), pzFB(pzs), nzFB(nzs);
 		std::size_t offsetCounter = 48;
-		CheckException(container.payload.size() > (48 + pxs + nxs + pys + nys + pzs + nzs), "Cubemap packed container is too small to contain face data of given sizes!");
+		CheckException(container.payload.size() >= (48 + pxs + nxs + pys + nys + pzs + nzs), "Cubemap packed container is too small to contain face data of given sizes!");
 		std::memcpy(pxFB.data(), container.payload.data() + offsetCounter, pxs);
 		offsetCounter += pxs;
 		std::memcpy(nxFB.data(), container.payload.data() + offsetCounter, nxs);

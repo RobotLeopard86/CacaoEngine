@@ -228,7 +228,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 
 	//Write shader
 	CVLOG_NONL("\tWriting output file " << out << "... ");
-	std::ofstream outStream(out);
+	std::ofstream outStream(out, std::ios::binary);
 	CompileCheck(outStream.is_open(), "Failed to open output file!");
 	libcacaoformats::PackedEncoder encoder;
 	encoder.EncodeShader(shader).ExportToStream(outStream);

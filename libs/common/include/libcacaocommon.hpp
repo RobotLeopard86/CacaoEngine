@@ -68,6 +68,81 @@ class bytestreambuf : public std::streambuf {
 		return n;
 	}
 
+	pos_type seekoff(off_type off, std::ios_base::seekdir dir, std::ios_base::openmode which = std::ios_base::in | std::ios_base::out) override {
+		std::streamoff newpos = -1;
+
+		//Input modification
+		if(which & std::ios_base::in) {
+			//Get current pointers
+			char* begin = eback();
+			char* at = gptr();
+			char* end = egptr();
+
+			//Move to the appropriate position based on the direction
+			switch(dir) {
+				case std::ios::beg:
+					newpos = off;//Offset from the beginning needs no modifier
+					break;
+				case std::ios::cur:
+					newpos = at - begin + off;//Get the index we are in and add the offset
+					break;
+				case std::ios::end:
+					newpos = end - begin + off;//Find the end index and add the offset
+					break;
+				default:
+					return -1;
+			}
+
+			//Bounds-check the offset
+			if(newpos < 0 || newpos > (end - begin)) {
+				return -1;
+			}
+
+			//Set the new get area
+			setg(begin, begin + newpos, end);
+		}
+
+		//Output modification
+		if(which & std::ios_base::out) {
+			//Get current pointers
+			char* begin = pbase();
+			char* at = pptr();
+			char* end = epptr();
+
+			//Move to the appropriate position based on the direction
+			switch(dir) {
+				case std::ios::beg:
+					newpos = off;//Offset from the beginning needs no modifier
+					break;
+				case std::ios::cur:
+					newpos = at - begin + off;//Get the index we are in and add the offset
+					break;
+				case std::ios::end:
+					newpos = end - begin + off;//Find the end index and add the offset
+					break;
+				default:
+					return -1;
+			}
+
+			//Bounds-check the offset
+			if(newpos < 0 || newpos > (end - begin)) {
+				return -1;
+			}
+
+			//Reset put area pointers
+			setp(buffer.data(), buffer.data() + buffer.size());
+
+			//Advance put cursor
+			pbump(newpos);
+		}
+
+		return newpos;
+	}
+
+	pos_type seekpos(pos_type pos, std::ios_base::openmode which = std::ios_base::in | std::ios_base::out) override {
+		return seekoff(pos, std::ios::beg, which);
+	}
+
   private:
 	std::vector<char>& buffer;
 };
@@ -78,12 +153,20 @@ class bytestreambuf : public std::streambuf {
 class ibytestream : public std::istream {
   public:
 	ibytestream(std::vector<char>& data)
-	  : std::istream(&buf), buf(data) {
+	  : std::istream(junkBuf(data)), buf(data) {
 		rdbuf(&buf);
+		init(&buf);
+		delete junk;
 	}
 
   private:
 	bytestreambuf buf;
+	bytestreambuf* junk;
+
+	bytestreambuf* junkBuf(std::vector<char>& data) {
+		junk = new bytestreambuf(data);
+		return junk;
+	}
 };
 
 /**

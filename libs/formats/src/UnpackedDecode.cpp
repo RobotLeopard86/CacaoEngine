@@ -14,7 +14,7 @@ namespace libcacaoformats {
 		return (unsigned int)i;
 	}
 
-	std::array<ImageBuffer, 6> UnpackedDecoder::DecodeCubemap(std::istream& data, std::function<std::istream(const std::string&)> loader) {
+	std::array<ImageBuffer, 6> UnpackedDecoder::DecodeCubemap(std::istream& data, std::function<std::unique_ptr<std::istream>(const std::string&)> loader) {
 		CheckException(data.good(), "Data stream for unpacked cubemap is invalid!");
 
 		//Load YAML
@@ -40,27 +40,27 @@ namespace libcacaoformats {
 		ValidateYAMLNode(negZ, YAML::NodeType::value::Scalar, "unpacked cubemap data", "negative Z face");
 
 		//Get data streams for faces
-		std::istream pxs = loader(posX.Scalar());
-		CheckException(pxs.good(), "Positive X face data input stream is invalid!");
-		std::istream nxs = loader(negX.Scalar());
-		CheckException(nxs.good(), "Negative X face data input stream is invalid!");
-		std::istream pys = loader(posY.Scalar());
-		CheckException(pys.good(), "Positive Y face data input stream is invalid!");
-		std::istream nys = loader(negY.Scalar());
-		CheckException(nys.good(), "Negative Y face data input stream is invalid!");
-		std::istream pzs = loader(posZ.Scalar());
-		CheckException(pzs.good(), "Positive Z face data input stream is invalid!");
-		std::istream nzs = loader(negZ.Scalar());
-		CheckException(nzs.good(), "Negative Z face data input stream is invalid!");
+		std::unique_ptr<std::istream> pxs = loader(posX.Scalar());
+		CheckException(pxs->good(), "Positive X face data input stream is invalid!");
+		std::unique_ptr<std::istream> nxs = loader(negX.Scalar());
+		CheckException(nxs->good(), "Negative X face data input stream is invalid!");
+		std::unique_ptr<std::istream> pys = loader(posY.Scalar());
+		CheckException(pys->good(), "Positive Y face data input stream is invalid!");
+		std::unique_ptr<std::istream> nys = loader(negY.Scalar());
+		CheckException(nys->good(), "Negative Y face data input stream is invalid!");
+		std::unique_ptr<std::istream> pzs = loader(posZ.Scalar());
+		CheckException(pzs->good(), "Positive Z face data input stream is invalid!");
+		std::unique_ptr<std::istream> nzs = loader(negZ.Scalar());
+		CheckException(nzs->good(), "Negative Z face data input stream is invalid!");
 
 		//Decode image data
 		std::array<ImageBuffer, 6> out;
-		out[0] = DecodeImage(pxs);
-		out[1] = DecodeImage(nxs);
-		out[2] = DecodeImage(pys);
-		out[3] = DecodeImage(nys);
-		out[4] = DecodeImage(pzs);
-		out[5] = DecodeImage(nzs);
+		out[0] = DecodeImage(*pxs);
+		out[1] = DecodeImage(*nxs);
+		out[2] = DecodeImage(*pys);
+		out[3] = DecodeImage(*nys);
+		out[4] = DecodeImage(*pzs);
+		out[5] = DecodeImage(*nzs);
 
 		//Return result
 		return out;

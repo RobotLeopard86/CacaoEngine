@@ -13,6 +13,13 @@
 
 #define WORLD_FILE_EXTENSION ".xjw"
 
+#ifndef CACAO_VER
+#define CACAO_VER "unknown"
+#endif
+#ifndef COMPILER_VER
+#define COMPILER_VER "unknown"
+#endif
+
 std::pair<bool, std::string> compile(const std::filesystem::path& in, const std::filesystem::path& out) {
 	//Create decoder
 	//Yes, I do know the message says otherwise. I just think this sounds better. Deal with it.
@@ -37,34 +44,25 @@ std::pair<bool, std::string> compile(const std::filesystem::path& in, const std:
 	libcacaoformats::PackedEncoder enc;
 	CVLOG("Done.");
 
-	/*
-	Compile the world. I hate this workaround, but here's it explained for future me:
-	The problem here is the try/catch scoping.
-	PackedContainer is const so we can't modify it, and that means no operator=().
-	To get around this, we make a pointer, do the encoding, copy the object into the pointer,
-	copy it back out, and then free the pointer. I hate this because:
-	a) it's ugly
-	b) two copies of a potentially large data structure
-	c) pointers
-	*/
+	//Compile the world
 	CVLOG_NONL("\tCompiling world... ");
-	libcacaoformats::PackedContainer* pcp = nullptr;
-	try {
-		auto pc1 = enc.EncodeWorld(w);
-		pcp = new libcacaoformats::PackedContainer(pc1);
-	} catch(const std::runtime_error& e) {
-		return {false, e.what()};
+	std::pair<bool, std::string> pcGetErr;
+	libcacaoformats::PackedContainer pc = [&]() {
+		try {
+			return enc.EncodeWorld(w);
+		} catch(const std::runtime_error& e) {
+			pcGetErr = {false, e.what()};
+			return libcacaoformats::PackedContainer();
+		}
+	}();
+	if(!pcGetErr.first) {
+		return pcGetErr;
 	}
-	if(!pcp) {
-		return {false, "Failed to perform packed container pointer re-assignment!"};
-	}
-	libcacaoformats::PackedContainer pc(*pcp);
-	delete pcp;
 	CVLOG("Done.");
 
 	//Write the compiled output
 	CVLOG_NONL("\tWriting output file " << out << "... ");
-	std::ofstream outStream(out);
+	std::ofstream outStream(out, std::ios::binary);
 	CompileCheck(outStream.is_open(), "Failed to open output file!");
 	pc.ExportToStream(outStream);
 	CVLOG("Done.");

@@ -67,9 +67,11 @@ namespace libcacaoformats {
 	 * @param img The ImageBuffer to encode
 	 * @param out A stream to output the resulting PNG-encoded data to
 	 *
+	 * @return The size of the resulting PNG-encoded data
+	 *
 	 * @throws std::runtime_error If the image has zero dimensions or holds invalid data
 	 */
-	void EncodeImage(const ImageBuffer& img, std::ostream& out);
+	std::size_t EncodeImage(const ImageBuffer& img, std::ostream& out);
 
 	///@brief Decoded shader data
 	struct Shader {
@@ -317,7 +319,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid cubemap or the provided IO callback fails to load faces
 		 */
-		std::array<ImageBuffer, 6> DecodeCubemap(std::istream& data, std::function<std::istream(const std::string&)> loader);
+		std::array<ImageBuffer, 6> DecodeCubemap(std::istream& data, std::function<std::unique_ptr<std::istream>(const std::string&)> loader);
 
 		/**
 		 * @brief Extract the data from an unpacked material

@@ -15,6 +15,7 @@ namespace libcacaoformats {
 		std::vector<unsigned char> encodedBuf = [&encoded]() {
 			try {
 				//Grab size
+				encoded.clear();
 				encoded.exceptions(std::ios::failbit | std::ios::badbit);
 				encoded.seekg(0, std::ios::end);
 				auto size = encoded.tellg();
@@ -55,18 +56,33 @@ namespace libcacaoformats {
 		return out;
 	}
 
-	void EncodeImage(const ImageBuffer& img, std::ostream& out) {
+	std::size_t EncodeImage(const ImageBuffer& img, std::ostream& out) {
 		CheckException(img.channelCount > 0 && img.size.x > 0 && img.size.y > 0, "Image buffer to encode has invalid dimensions or channel count!");
 		CheckException(!img.data.empty(), "Image buffer to encode has empty data buffer!");
 
+		//Context struct (because C doesn't allow lambdas)
+		struct WriteContext {
+			std::ostream& stream;
+			std::size_t size;
+		} ctx = {.stream = out, .size = 0};
+
 		//Write the data out
-		stbi_write_png_to_func([](void* ctx, void* data, int) {
-			//For anyone who thinks this is funky: this is just obtaining the out stream via the context pointer and writing the data into it in one line
-			*(reinterpret_cast<std::ostream*>(ctx)) << data;
+		int success = stbi_write_png_to_func([](void* ctx, void* data, int sz) {
+			//Obtain the context struct
+			WriteContext* wc = reinterpret_cast<WriteContext*>(ctx);
+
+			//Write the data
+			wc->stream.write(reinterpret_cast<char*>(data), sz);
+
+			//Increment the size
+			wc->size += sz;
 		},
-			&out, img.size.x, img.size.y, img.channelCount, img.data.data(), 0);
+			&ctx, img.size.x, img.size.y, img.channelCount, img.data.data(), 0);
+		CheckException(success, "Failed to encode image data!");
 
 		//Flush output
 		out << std::flush;
+
+		return ctx.size;
 	}
 }
