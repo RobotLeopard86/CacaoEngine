@@ -436,6 +436,81 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
+<span class="w">    </span><span class="n">pos_type</span><span class="w"> </span><span class="n">seekoff</span><span class="p">(</span><span class="n">off_type</span><span class="w"> </span><span class="n">off</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">seekdir</span><span class="w"> </span><span class="n">dir</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">openmode</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">in</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">streamoff</span><span class="w"> </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">//Input modification</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">which</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">//Get current pointers</span>
+<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eback</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gptr</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">egptr</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">//Move to the appropriate position based on the direction</span>
+<span class="w">            </span><span class="k">switch</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">std</span><span class="o">::</span><span class="no">ios</span><span class="o">::</span><span class="no">beg</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="c1">//Offset from the beginning needs no modifier</span>
+<span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">std</span><span class="o">::</span><span class="no">ios</span><span class="o">::</span><span class="no">cur</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="c1">//Get the index we are in and add the offset</span>
+<span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">std</span><span class="o">::</span><span class="no">ios</span><span class="o">::</span><span class="no">end</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="c1">//Find the end index and add the offset</span>
+<span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="k">default</span><span class="o">:</span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">//Bounds-check the offset</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">newpos</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">newpos</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">begin</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">//Set the new get area</span>
+<span class="w">            </span><span class="n">setg</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">newpos</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">//Output modification</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">which</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">//Get current pointers</span>
+<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pbase</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pptr</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">epptr</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">//Move to the appropriate position based on the direction</span>
+<span class="w">            </span><span class="k">switch</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">std</span><span class="o">::</span><span class="no">ios</span><span class="o">::</span><span class="no">beg</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="c1">//Offset from the beginning needs no modifier</span>
+<span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">std</span><span class="o">::</span><span class="no">ios</span><span class="o">::</span><span class="no">cur</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="c1">//Get the index we are in and add the offset</span>
+<span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">std</span><span class="o">::</span><span class="no">ios</span><span class="o">::</span><span class="no">end</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">newpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">off</span><span class="p">;</span><span class="c1">//Find the end index and add the offset</span>
+<span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="k">default</span><span class="o">:</span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">//Bounds-check the offset</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">newpos</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">newpos</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">begin</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">//Reset put area pointers</span>
+<span class="w">            </span><span class="n">setp</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">buffer</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+<span class="w">            </span><span class="c1">//Advance put cursor</span>
+<span class="w">            </span><span class="n">pbump</span><span class="p">(</span><span class="n">newpos</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">newpos</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">pos_type</span><span class="w"> </span><span class="n">seekpos</span><span class="p">(</span><span class="n">pos_type</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">openmode</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">in</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">seekoff</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">beg</span><span class="p">,</span><span class="w"> </span><span class="n">which</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
 <span class="w">  </span><span class="k">private</span><span class="o">:</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
 <span class="p">};</span>
@@ -443,12 +518,20 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ibytestream</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">public</span><span class="o">:</span>
 <span class="w">    </span><span class="n">ibytestream</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
-<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="p">),</span><span class="w"> </span><span class="n">buf</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="p">(</span><span class="n">junkBuf</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span><span class="w"> </span><span class="n">buf</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">rdbuf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">        </span><span class="n">init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">        </span><span class="k">delete</span><span class="w"> </span><span class="n">junk</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">  </span><span class="k">private</span><span class="o">:</span>
 <span class="w">    </span><span class="n">bytestreambuf</span><span class="w"> </span><span class="n">buf</span><span class="p">;</span>
+<span class="w">    </span><span class="n">bytestreambuf</span><span class="o">*</span><span class="w"> </span><span class="n">junk</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">bytestreambuf</span><span class="o">*</span><span class="w"> </span><span class="nf">junkBuf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">junk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">bytestreambuf</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">junk</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">};</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">obytestream</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="w"> </span><span class="p">{</span>
