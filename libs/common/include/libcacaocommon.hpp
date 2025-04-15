@@ -5,6 +5,7 @@
 #include <ostream>
 #include <exception>
 #include <string>
+#include <cstring>
 #include <stdexcept>
 
 /**

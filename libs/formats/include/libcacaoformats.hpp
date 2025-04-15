@@ -10,6 +10,7 @@
 #include <istream>
 #include <ostream>
 #include <cstring>
+#include <memory>
 
 #include "crossguid/guid.hpp"
 
