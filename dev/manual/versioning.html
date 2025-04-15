@@ -414,7 +414,7 @@
 <p><strong>NOTE: As Cacao Engine is still in very early active development, it has not had any releases and is versioned as <code class="docutils literal notranslate"><span class="pre">INDEV</span></code>.</strong></p>
 <section id="versioning-format">
 <h2>Versioning Format<a class="headerlink" href="#versioning-format" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of <code class="docutils literal notranslate"><span class="pre">[Generation].[Major].[Minor].[Mini](-[Stage][Build])</span></code>. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules.</p>
+<p>Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of <code class="docutils literal notranslate"><span class="pre">[Generation].[Major].[Minor].[Mini][Patch](-[Stage][Build])</span></code>. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules.</p>
 </section>
 <section id="stages">
 <h2>Stages<a class="headerlink" href="#stages" title="Link to this heading"><span/></a></h2>
@@ -422,21 +422,19 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> - Alpha/nightly releases. Likely very unstable.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> - Beta releases. Still possibly unstable.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rc</span></code> - Release candidates. Should be almost entirely stable.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> - Stable releases. Communicates minor bugfix releases when increased past <code class="docutils literal notranslate"><span class="pre">1</span></code> for the first release.</p></li>
 </ul>
 </section>
 <section id="number-incrementing">
 <h2>Number Incrementing<a class="headerlink" href="#number-incrementing" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Generation - Remains 0 during active development. When the first full release and subsequent versions are released, this number becomes the year when work on the release began.</p></li>
-<li><p>Major - Incremented for large new feature additions or large behavioral changes. This does not reset when the Generation number changes, except for the first full release.</p></li>
-<li><p>Minor - Incremented for smaller breaking changes.</p></li>
-<li><p>Mini - Incremented for non-breaking small feature additions.</p></li>
-<li><p>Build - Takes different formats depending on the Stage:</p>
+<li><p>Generation - Year during which work on release began (so ifr the year rolls over during development, nothing changes until the next release)</p></li>
+<li><p>Major - Incremented for large new feature additions or any breaking changes, API or behavioral.</p></li>
+<li><p>Minor - Incremented for non-breaking changes or when the Patch rolls over.</p></li>
+<li><p>Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there’s probabably been enough changed to warrant a new minor release).</p></li>
+<li><p>Build - Stage-dependent:</p>
 <ul>
-<li><p>Stages <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - Monotonic increases with numbers shared so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.)</p></li>
-<li><p>Stage <code class="docutils literal notranslate"><span class="pre">rc</span></code> - Uses format <code class="docutils literal notranslate"><span class="pre">[a].[b]</span></code>, where <code class="docutils literal notranslate"><span class="pre">a</span></code> is the number of the stable release for which this is a candidate and <code class="docutils literal notranslate"><span class="pre">b</span></code> is the monotonically-increasing release candidate number.</p></li>
-<li><p>Stage <code class="docutils literal notranslate"><span class="pre">s</span></code> - Monotonically increases for each release.</p></li>
+<li><p>Stages <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.</p></li>
+<li><p>Stage <code class="docutils literal notranslate"><span class="pre">rc</span></code> - Monotonic increases with numbers not shared between stages or patch versions.</p></li>
 </ul>
 </li>
 </ul>
