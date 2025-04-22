@@ -1,0 +1,2 @@
+# Asset pack tool
+xak = executable('ce-xak', 'main.cpp', dependencies: [formats_dep, cli11_dep, spinners_dep], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DXAK_VER="1.0.0"'], include_directories: '..')
