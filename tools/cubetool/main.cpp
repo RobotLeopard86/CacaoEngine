@@ -24,8 +24,8 @@ int main(int argc, char* argv[]) {
 
 	//Output control
 	outputLvl = OutputLevel::Normal;
-	app.add_flag_callback("-q,--quiet", []() { outputLvl = OutputLevel::Silent; }, "Suppress all output from the compiler");
-	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the compiler");
+	app.add_flag_callback("-q,--quiet", []() { outputLvl = OutputLevel::Silent; }, "Suppress all output from the tool");
+	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the tool");
 
 	//Configure commands
 	CreateCmd c(app);
