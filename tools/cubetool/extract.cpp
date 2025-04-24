@@ -76,7 +76,7 @@ void ExtractCmd::Callback() {
 	VLOG("Done.")
 
 	//Extract the requested faces
-	std::string original = inPath.filename().stem();
+	std::string original = inPath.filename().stem().string();
 	for(uint8_t i : faces) {
 		//Open stream
 		std::stringstream fname;

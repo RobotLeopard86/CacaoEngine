@@ -14,6 +14,7 @@ audio_opts.add_cmake_defines({
 	'CMAKE_BUILD_TYPE': cmake_build_type,
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW',
+    'CMAKE_POLICY_DEFAULT_CMP0126': 'NEW',
     'CMAKE_POLICY_VERSION_MINIMUM': '3.5'
 })
 audio_sp = cmake.subproject('audiolibs', options: audio_opts, required: true)

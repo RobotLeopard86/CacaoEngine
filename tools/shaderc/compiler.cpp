@@ -99,7 +99,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	ComPtr<slang::IModule> mod;
 	{
 		ComPtr<slang::IBlob> diagnosticsBlob;
-		mod = session->loadModuleFromSourceString(in.c_str(), nullptr, src.c_str(), diagnosticsBlob.writeRef());
+		mod = session->loadModuleFromSourceString(in.string().c_str(), nullptr, src.c_str(), diagnosticsBlob.writeRef());
 		if(!mod) {
 			std::stringstream err;
 			err << "Failed to create source module";
