@@ -191,7 +191,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	libcacaoformats::Shader shader;
 	switch(format) {
 		case OutputFormat::SPIRV: {
-			shader.type = libcacaoformats::Shader::CodeType::GLSL;
+			shader.type = libcacaoformats::Shader::CodeType::SPIRV;
 			auto [maybeCode, msg] = genSPV(linked);
 			if(!maybeCode.has_value()) {
 				std::stringstream err;
@@ -205,6 +205,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 				CompileCheck(false, err.str());
 			}
 			shader.code = maybeCode.value();
+			break;
 		}
 		case OutputFormat::GLSL: {
 			shader.type = libcacaoformats::Shader::CodeType::GLSL;

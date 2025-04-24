@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstring>
 #include <iomanip>
+#include <filesystem>
 
 #define LIBARCHIVE_STATIC
 #include "archive.h"
@@ -697,7 +698,8 @@ namespace libcacaoformats {
 		archive_entry* entry;
 		YAML::Node metaRoot(YAML::NodeType::Undefined);
 		while(archive_read_next_header(pak, &entry) == ARCHIVE_OK) {
-			std::string filename(archive_entry_pathname_utf8(entry));
+			std::filesystem::path path(archive_entry_pathname_utf8(entry));
+			std::string filename = path.filename().string();
 
 			//Check if this is the reserved metadata file (the name is weird to reduce the possibility of conflicts)
 			if(filename.compare("__$CacaoMeta0") == 0) {
@@ -715,15 +717,26 @@ namespace libcacaoformats {
 				//Get file size
 				la_int64_t size = archive_entry_size(entry);
 
-				//Create PackedAsset. We set everything to a Tex2D by default because we need something. This gets corrected in the second pass with info from the metadata file.
-				PackedAsset asset {.kind = PackedAsset::Kind::Tex2D, .buffer = std::vector<unsigned char>(size)};
+				//Create PackedAsset. We set everything to a Resource by default because we need something. This gets corrected in the second pass with info from the metadata file if applicable.
+				PackedAsset asset {.kind = PackedAsset::Kind::Resource, .buffer = std::vector<unsigned char>(size)};
+
+				//If this is a resource, we need to remove the resource path prefix
+				std::string genericPathStr = path.generic_string();
+				bool shouldStayRes = false;
+				if(genericPathStr.starts_with("__$CacaoRes/")) {
+					shouldStayRes = true;
+					path = std::filesystem::path(genericPathStr.substr(11, genericPathStr.size()));
+				}
 
 				//Read data from entry into buffer
 				archive_read_data(pak, asset.buffer.data(), size);
 
+				//Create reference name
+				std::string reference = shouldStayRes ? path.string() : filename;
+
 				//Add entry to output
-				out.insert_or_assign(filename, asset);
-				check.insert_or_assign(filename, false);
+				out.insert_or_assign(reference, asset);
+				check.insert_or_assign(reference, shouldStayRes);
 			}
 		}
 

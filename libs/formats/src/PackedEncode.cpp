@@ -467,7 +467,14 @@ namespace libcacaoformats {
 			entry = archive_entry_clear(entry);
 
 			//Fill out entry data
-			archive_entry_set_pathname_utf8(entry, asset.first.c_str());
+			std::stringstream pathStream;
+			if(auto hasSlash = asset.first.find_first_of("/") != std::string::npos; asset.second.kind == PackedAsset::Kind::Resource || hasSlash) {
+				CheckException(asset.second.kind == PackedAsset::Kind::Resource, "Asset pack entry contains nested files not marked as resources!");
+				pathStream << "__$CacaoRes/";
+			}
+			pathStream << asset.first;
+			std::string pathname = pathStream.str();
+			archive_entry_set_pathname_utf8(entry, pathname.c_str());
 			archive_entry_set_size(entry, asset.second.buffer.size() * sizeof(unsigned char));
 			archive_entry_set_filetype(entry, AE_IFREG);
 			archive_entry_set_perm(entry, 0644);
@@ -486,6 +493,9 @@ namespace libcacaoformats {
 
 			//Write file data
 			archive_write_data(pak, asset.second.buffer.data(), asset.second.buffer.size() * sizeof(unsigned char));
+
+			//Skip metadata if resource
+			if(asset.second.kind == PackedAsset::Kind::Resource) continue;
 
 			//Output metadata entry
 			yml << YAML::BeginMap << YAML::Key << "asset" << YAML::Value << asset.first << YAML::Key << "type" << YAML::Value;

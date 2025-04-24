@@ -22,11 +22,14 @@
 
 int main(int argc, char* argv[]) {
 	//Configure CLI
-	CLI::App app("Cacao Engine World Compiler", std::filesystem::path(argv[0]).filename().string());
+	CLI::App app("Cacao Engine Asset Pack Tool", std::filesystem::path(argv[0]).filename().string());
 
 	//Output control
 	outputLvl = OutputLevel::Normal;
-	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the compiler");
+	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output");
+
+	//Mode control
+
 
 	//Version arg
 	app.set_version_flag("-v,--version", []() {

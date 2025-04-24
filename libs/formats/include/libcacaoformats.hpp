@@ -113,7 +113,8 @@ namespace libcacaoformats {
 			Cubemap,
 			Material,
 			Sound,
-			Font
+			Font,
+			Resource///<Type used for arbitrary resource files that aren't Cacao Engine formats
 		};
 		Kind kind;						  ///<Type of asset contained
 		std::vector<unsigned char> buffer;///<Asset file contents buffer

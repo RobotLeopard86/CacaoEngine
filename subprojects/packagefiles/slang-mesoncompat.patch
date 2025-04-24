@@ -51,6 +51,19 @@ index 913809f..7347204 100644
      EXPORT_MACRO_PREFIX SLANG
      EXPLICIT_SOURCE ${prelude_source}
      EXCLUDE_FROM_ALL
+diff --git a/source/core/slang-io.cpp b/source/core/slang-io.cpp
+index 3c0c9a1..f252569 100644
+--- a/source/core/slang-io.cpp
++++ b/source/core/slang-io.cpp
+@@ -752,7 +752,7 @@ String Path::getRelativePath(String base, String path)
+     auto result = std::filesystem::relative(p2, p1, ec);
+     if (ec)
+         return path;
+-    return String(UnownedStringSlice(result.generic_u8string().c_str()));
++    return String(UnownedStringSlice(result.generic_string().c_str()));
+ }
+ 
+ SlangResult Path::remove(const String& path)
 diff --git a/source/slang-core-module/CMakeLists.txt b/source/slang-core-module/CMakeLists.txt
 index 50b45c9..a53235f 100644
 --- a/source/slang-core-module/CMakeLists.txt
