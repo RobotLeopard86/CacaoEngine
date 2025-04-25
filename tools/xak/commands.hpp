@@ -19,4 +19,50 @@ class CreateCmd {
 
   private:
 	CLI::App* cmd;
+	std::filesystem::path assetRoot;
+	std::filesystem::path resRoot;
+	std::filesystem::path outPath;
+};
+
+class ListCmd {
+  public:
+	ListCmd(CLI::App&);
+	void Callback();
+
+  private:
+	CLI::App* cmd;
+	std::filesystem::path inPath;
+};
+
+class ExtractCmd {
+  public:
+	ExtractCmd(CLI::App&);
+	void Callback();
+
+  private:
+	CLI::App* cmd;
+	std::filesystem::path inPath;
+	std::vector<std::string> toExtract;
+};
+
+class MergeCmd {
+  public:
+	MergeCmd(CLI::App&);
+	void Callback();
+
+  private:
+	CLI::App* cmd;
+	std::vector<std::filesystem::path> inPaks;
+	std : filesystem::path outPath;
+};
+
+class DelCmd {
+  public:
+	DelCmd(CLI::App&);
+	void Callback();
+
+  private:
+	CLI::App* cmd;
+	std::filesystem::path inPath;
+	std::vector<std::string> toDelete;
 };

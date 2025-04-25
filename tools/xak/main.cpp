@@ -27,6 +27,11 @@ int main(int argc, char* argv[]) {
         return ss.str(); }, "Show version info and exit");
 
 	//Configure commands
+	CreateCmd c(app);
+	ListCmd l(app);
+	ExtractCmd e(app);
+	MergeCmd m(app);
+	DelCmd d(app);
 	app.require_subcommand(1);
 
 	//Parse the CLI (this will trigger execution of the commands)

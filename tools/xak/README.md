@@ -6,11 +6,11 @@ A tool to work with the Cacao Engine asset pack format (.xak files).
 ## Capabilities
 * Pack creation
 * Asset listing with metadata
-* Pack extraction
+* Asset extraction
 	* Whole pack
-	* Individual files
+	* Individual assets
 * Pack merging
-* Pack splitting
+* Asset deletion
 
 ## Command-Line Usage
 TBD
