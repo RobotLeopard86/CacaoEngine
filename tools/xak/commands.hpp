@@ -53,7 +53,7 @@ class MergeCmd {
   private:
 	CLI::App* cmd;
 	std::vector<std::filesystem::path> inPaks;
-	std : filesystem::path outPath;
+	std::filesystem::path outPath;
 };
 
 class DelCmd {
