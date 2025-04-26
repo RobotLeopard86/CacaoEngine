@@ -12,6 +12,10 @@
 	std::cerr << "\x1b[0m\x1b[1;91mERROR: \x1b[0m" << __VA_ARGS__ << std::endl; \
 	exit(1);
 
+#define XAK_OP_ERROR(...)                                                         \
+	std::cerr << "\n\x1b[0m\x1b[1;91mERROR: \x1b[0m" << __VA_ARGS__ << std::endl; \
+	exit(1);
+
 class CreateCmd {
   public:
 	CreateCmd(CLI::App&);
@@ -22,6 +26,7 @@ class CreateCmd {
 	std::filesystem::path assetRoot;
 	std::filesystem::path resRoot;
 	std::filesystem::path outPath;
+	std::filesystem::path addrMapPath;
 };
 
 class ListCmd {
