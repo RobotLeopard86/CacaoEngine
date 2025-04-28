@@ -142,7 +142,7 @@ void CreateCmd::Callback() {
 		std::filesystem::path rel2Root = std::filesystem::relative(res, resRoot);
 
 		//Insert into table
-		assetTable.insert_or_assign(rel2Root, pa);
+		assetTable.insert_or_assign(rel2Root.string(), pa);
 		VLOG("Done.")
 	}
 
