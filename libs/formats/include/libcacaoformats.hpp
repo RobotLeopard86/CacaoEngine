@@ -114,6 +114,7 @@ namespace libcacaoformats {
 			Material,
 			Sound,
 			Font,
+			Model,
 			Resource///<Type used for arbitrary resource files that aren't Cacao Engine formats
 		};
 		Kind kind;						  ///<Type of asset contained

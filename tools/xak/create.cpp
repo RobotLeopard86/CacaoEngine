@@ -28,6 +28,7 @@ CreateCmd::CreateCmd(CLI::App& app) {
 				  << "\t* A Cacao Engine packed cubemap\n"
 				  << "\t* A Cacao Engine packed material\n"
 				  << "\t* A 2D texture file (.png, .jpg/.jpeg, .bmp, .tga, or .hdr)\n"
+				  << "\t* A model file (.fbx, .glb, .dae, or .obj)\n"
 				  << "\t* A font file (.ttf or .otf)\n"
 				  << "\t* A sound file (.mp3, .wav, .ogg (Ogg Vorbis), or .opus (Ogg Opus))\n\n"
 				  << "Any file not in of these categories will not be placed into the asset pack.\n"
@@ -205,6 +206,30 @@ void CreateCmd::Callback() {
 				//MP3 audio
 				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
 				goto asset_ok;
+			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 'o' && pa.buffer[1] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 'g' && pa.buffer[1] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 's' && pa.buffer[1] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 'f' && pa.buffer[1] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 'l' && pa.buffer[1] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
 			}
 		}
 		if(pabSz >= 3) {
@@ -216,12 +241,29 @@ void CreateCmd::Callback() {
 				//JPEG image
 				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
 				goto asset_ok;
+			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == 't' && pa.buffer[2] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == 'n' && pa.buffer[2] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == 'p' && pa.buffer[2] == ' ') {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
 			}
 		}
 		if(pabSz >= 4) {
-			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3]}; str.compare("OTTO") == 0) {
+			std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3]};
+			if(str.compare("OTTO") == 0) {
 				//OpenType font
 				pa.kind = libcacaoformats::PackedAsset::Kind::Font;
+				goto asset_ok;
+			} else if(str.compare("glTF") == 0) {
+				//glTF binary model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
 				goto asset_ok;
 			} else if(pa.buffer[0] == 0xCA && pa.buffer[1] == 0xCA && pa.buffer[2] == 0x00) {
 				//Cacao packed container (still need to check type)
@@ -244,6 +286,18 @@ void CreateCmd::Callback() {
 			//TrueType font
 			pa.kind = libcacaoformats::PackedAsset::Kind::Font;
 			goto asset_ok;
+		}
+		if(pabSz >= 6) {
+			std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5]};
+			if(str.compare("mtllib") == 0) {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			} else if(str.compare("usemtl") == 0) {
+				//OBJ model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			}
 		}
 		if(pabSz >= 7) {
 			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5], (char)pa.buffer[6]};
@@ -278,6 +332,16 @@ void CreateCmd::Callback() {
 
 				//WAV audio
 				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+				goto asset_ok;
+			}
+		}
+		if(pabSz >= 18) {
+			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
+				   (char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10], (char)pa.buffer[11],
+				   (char)pa.buffer[12], (char)pa.buffer[13], (char)pa.buffer[14], (char)pa.buffer[15], (char)pa.buffer[16], (char)pa.buffer[17]};
+				str.compare("Kaydara FBX Binary") == 0) {
+				//FBX model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
 				goto asset_ok;
 			}
 		}
@@ -322,6 +386,21 @@ void CreateCmd::Callback() {
 			pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
 			goto asset_ok;
 		}
+		if(pabSz >= 62) {
+			//Get past (maybe) the XML header to find the COLLADA tag
+			auto xmlIt = std::find(pa.buffer.cbegin(), pa.buffer.cend(), '>');
+			if(xmlIt == pa.buffer.cend()) goto asset_skip;
+			unsigned int xml = std::distance(pa.buffer.cbegin(), xmlIt);
+			std::string str {(char)pa.buffer[xml + 1], (char)pa.buffer[xml + 2], (char)pa.buffer[xml + 3], (char)pa.buffer[xml + 4],
+				(char)pa.buffer[xml + 5], (char)pa.buffer[xml + 6], (char)pa.buffer[xml + 7], (char)pa.buffer[xml + 8]};
+
+			if(str.find("<COLLADA") != std::string::npos) {
+				//Collada model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			}
+		}
+
 		//Non-asset
 	asset_skip:
 		VLOG("Skipped (not an asset).")
