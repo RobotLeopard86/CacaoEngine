@@ -445,9 +445,16 @@ namespace libcacaoformats {
 		//Validate inputs
 		CheckException(pack.size() > 0, "Cannot encode asset pack with no assets!");
 
-		//Create output container with a default size (we might change this later)
-		std::vector<char> outBuffer(1042 ^ 2);
-		std::size_t used;
+		//Calculate initial output buffer capacity
+		std::size_t outInitialCapacity = 0;
+		for(const auto& [_, a] : pack) {
+			outInitialCapacity += a.buffer.size();
+		}
+		outInitialCapacity *= 1.5;
+
+		//Create output container
+		std::vector<char> outBuffer(outInitialCapacity);
+		std::size_t used = 0;
 
 		//Create metadata file emitter
 		YAML::Emitter yml;
@@ -543,6 +550,7 @@ namespace libcacaoformats {
 			//Write entry header
 			int stat = archive_write_header(pak, entry);
 			if(stat != ARCHIVE_OK) {
+				std::cout << archive_error_string(pak) << std::endl;
 				if(used > outBuffer.capacity() * sizeof(char)) {
 					//Resize the buffer and try again
 					outBuffer.reserve(outBuffer.size() * 1.5);
@@ -559,6 +567,9 @@ namespace libcacaoformats {
 		//Close and free archive object
 		CheckException(archive_write_close(pak) == ARCHIVE_OK, "Failed to close asset pack archive object!");
 		CheckException(archive_write_free(pak) == ARCHIVE_OK, "Failed to free asset pack archive object!");
+
+		//Trim output buffer to free any memory not used
+		outBuffer.resize(used);
 
 		//Create and return packed container
 		return PackedContainer(PackedFormat::AssetPack, 1, std::move(outBuffer));

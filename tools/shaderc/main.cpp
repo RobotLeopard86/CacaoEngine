@@ -120,8 +120,13 @@ int main(int argc, char* argv[]) {
 			auto [result, log] = csc.compile(in, out);
 			if(outputLvl != OutputLevel::Silent) {
 				taskDesc.str("");
-				taskDesc << "Compiled " << in << ".";
-				s->finish(result ? jms::FinishedState::SUCCESS : jms::FinishedState::FAILURE, taskDesc.str());
+				if(result) {
+					taskDesc << "Compiled " << in << ".";
+					s->finish(jms::FinishedState::SUCCESS, taskDesc.str());
+				} else {
+					taskDesc << "Failed to compile " << in << ".";
+					s->finish(jms::FinishedState::FAILURE, taskDesc.str());
+				}
 			}
 			if(!result) {
 				ERROR("Failed to compile one or more shaders!")

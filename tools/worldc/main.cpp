@@ -49,6 +49,7 @@ std::pair<bool, std::string> compile(const std::filesystem::path& in, const std:
 	std::pair<bool, std::string> pcGetErr;
 	libcacaoformats::PackedContainer pc = [&]() {
 		try {
+			pcGetErr = {true, ""};
 			return enc.EncodeWorld(w);
 		} catch(const std::runtime_error& e) {
 			pcGetErr = {false, e.what()};
@@ -154,8 +155,13 @@ int main(int argc, char* argv[]) {
 		auto [result, log] = compile(in, out);
 		if(outputLvl != OutputLevel::Silent) {
 			taskDesc.str("");
-			taskDesc << "Compiled " << in << ".";
-			s->finish(result ? jms::FinishedState::SUCCESS : jms::FinishedState::FAILURE, taskDesc.str());
+			if(result) {
+				taskDesc << "Compiled " << in << ".";
+				s->finish(jms::FinishedState::SUCCESS, taskDesc.str());
+			} else {
+				taskDesc << "Failed to compile " << in << ".";
+				s->finish(jms::FinishedState::FAILURE, taskDesc.str());
+			}
 		}
 		if(!result) {
 			ERROR("Failed to compile one or more materials: " << log)
