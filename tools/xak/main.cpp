@@ -15,9 +15,11 @@
 int main(int argc, char* argv[]) {
 	//Configure CLI
 	CLI::App app("Cacao Engine Asset Pack Tool", std::filesystem::path(argv[0]).filename().string());
+	app.fallthrough();
 
 	//Output control
 	outputLvl = OutputLevel::Normal;
+	app.add_flag_callback("-q,--quiet", []() { outputLvl = OutputLevel::Silent; }, "Suppress all output");
 	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output");
 
 	//Version arg

@@ -8,13 +8,17 @@
 
 #include <filesystem>
 
-#define XAK_ERROR(...)                                                          \
-	std::cerr << "\x1b[0m\x1b[1;91mERROR: \x1b[0m" << __VA_ARGS__ << std::endl; \
-	exit(1);
+inline bool fail = false;
 
-#define XAK_OP_ERROR(...)                                                         \
-	std::cerr << "\n\x1b[0m\x1b[1;91mERROR: \x1b[0m" << __VA_ARGS__ << std::endl; \
-	exit(1);
+#define XAK_ERROR(...) \
+	ERROR(__VA_ARGS__) \
+	fail = true;       \
+	return;
+
+#define XAK_ERROR_NONVOID(r, ...) \
+	ERROR(__VA_ARGS__)            \
+	fail = true;                  \
+	return r;
 
 class CreateCmd {
   public:

@@ -15,6 +15,7 @@
 int main(int argc, char* argv[]) {
 	//Configure CLI
 	CLI::App app("Cacao Engine Cubemap Tool", std::filesystem::path(argv[0]).filename().string());
+	app.fallthrough();
 
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
@@ -23,8 +24,7 @@ int main(int argc, char* argv[]) {
         return ss.str(); }, "Show version info and exit");
 
 	//Output control
-	outputLvl = OutputLevel::Normal;
-	app.add_flag_callback("-q,--quiet", []() { outputLvl = OutputLevel::Silent; }, "Suppress all output from the tool");
+	outputLvl = OutputLevel::Silent;
 	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the tool");
 
 	//Configure commands

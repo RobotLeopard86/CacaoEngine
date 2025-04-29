@@ -5,6 +5,7 @@
 
 #include "libcacaoformats.hpp"
 #include "yaml-cpp/yaml.h"
+#include "spinners.hpp"
 
 CreateCmd::CreateCmd(CLI::App& app) {
 	//Create the command CLI
@@ -57,55 +58,74 @@ CreateCmd::CreateCmd(CLI::App& app) {
 	//Register command callback function
 	cmd->callback([this, assets, assetsDirHelp]() {
 		if(assets->count() <= 0 && assetsDirHelp->count() <= 0) {
-			XAK_ERROR("Either --help-assets-dir or standard command options must be passed!")
+			std::cerr << "Either --help-assets-dir or standard command options must be passed!" << std::endl;
+			exit(1);
+		}
+		std::unique_ptr<jms::Spinner> s;
+		std::stringstream taskDesc;
+		taskDesc << "Creating pack " << outPath << "...";
+		if(outputLvl != OutputLevel::Silent) {
+			s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
+			s->start();
 		}
 		this->Callback();
+		if(outputLvl != OutputLevel::Silent) {
+			taskDesc.str("");
+			if(fail) {
+				taskDesc << "Pack creation failed!";
+				s->finish(jms::FinishedState::FAILURE, taskDesc.str());
+				exit(1);
+			} else {
+				taskDesc << "Created pack " << outPath << ".";
+				s->finish(jms::FinishedState::SUCCESS, taskDesc.str());
+			}
+		}
 	});
 }
 
 void CreateCmd::Callback() {
 	//Load address map
-	VLOG_NONL("Loading asset address map... ")
+	CVLOG_NONL("Loading asset address map... ")
 	std::ifstream addrMapStream(addrMapPath);
 	if(!addrMapStream.is_open()) {
-		XAK_OP_ERROR("Failed to open address map file stream!")
+		XAK_ERROR("Failed to open address map file stream!")
 	}
 	YAML::Node addrMap = [&addrMapStream]() {
 		try {
 			return YAML::Load(addrMapStream);
 		} catch(const YAML::ParserException& e) {
-			XAK_OP_ERROR("Failed to parse address map doc: \"" << e.what() << "\"!")
+			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to parse address map doc: \"" << e.what() << "\"!")
 		}
 	}();
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Search for assets
-	VLOG_NONL("Discovering assets... ")
+	CVLOG_NONL("Discovering assets... ")
 	std::map<std::filesystem::path, std::string> assets;
 	for(auto&& asset : std::filesystem::directory_iterator(assetRoot)) {
 		if(!asset.is_regular_file()) continue;
 		std::filesystem::path assetPath = asset.path();
 		if(!addrMap[assetPath.filename().string()].IsScalar()) {
-			XAK_OP_ERROR("Provided address map does not contain a mapping for " << assetPath.filename() << " or an incorrectly formatted one, thus the map is invalid!")
+			XAK_ERROR("Provided address map does not contain a mapping for " << assetPath.filename() << " or an incorrectly formatted one, thus the map is invalid!")
 		}
 		assets.insert_or_assign(assetPath, addrMap[assetPath.filename().string()].Scalar());
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Search for resources
-	VLOG_NONL("Discovering resources... ")
+	CVLOG_NONL("Discovering resources... ")
 	std::vector<std::filesystem::path> resources;
 	for(auto&& res : std::filesystem::recursive_directory_iterator(resRoot)) {
 		if(!res.is_regular_file()) continue;
 		resources.push_back(res.path());
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Add resources to asset table
 	std::map<std::string, libcacaoformats::PackedAsset> assetTable;
 	for(const std::filesystem::path& res : resources) {
 		//Log
-		VLOG_NONL("Adding resource " << res << "... ")
+		CVLOG_NONL("Adding resource " << res << "... ")
 
 		//Create packed asset object
 		libcacaoformats::PackedAsset pa = {};
@@ -115,7 +135,7 @@ void CreateCmd::Callback() {
 		pa.buffer = [res]() {
 			std::ifstream stream(res);
 			if(!stream.is_open()) {
-				XAK_ERROR("Failed to open resource data stream!")
+				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open resource data stream!")
 			}
 			try {
 				//Grab size
@@ -132,9 +152,9 @@ void CreateCmd::Callback() {
 				return contents;
 			} catch(std::ios_base::failure& ios_failure) {
 				if(errno == 0) {
-					XAK_ERROR("Failed to read resource data stream: \"" << ios_failure.what() << "\"!")
+					XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read resource data stream: \"" << ios_failure.what() << "\"!")
 				}
-				XAK_ERROR("Failed to read resource data stream!");
+				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read resource data stream!");
 			}
 		}();
 
@@ -142,19 +162,19 @@ void CreateCmd::Callback() {
 		std::filesystem::path rel2Root = std::filesystem::relative(res, resRoot);
 
 		//Insert into table
-		assetTable.insert_or_assign(rel2Root.string(), pa);
-		VLOG("Done.")
+		assetTable.insert_or_assign(rel2Root, pa);
+		CVLOG("Done.")
 	}
 
 	//Add assets to asset table
 	for(const auto& [asset, addr] : assets) {
 		//Read file buffer
-		VLOG_NONL("Checking validity of asset " << addr << " (file: " << asset << ")... ")
+		CVLOG_NONL("Checking validity of asset " << addr << " (file: " << asset << ")... ")
 		libcacaoformats::PackedAsset pa;
 		pa.buffer = [asset]() {
 			std::ifstream stream(asset);
 			if(!stream.is_open()) {
-				XAK_ERROR("Failed to open asset data stream!")
+				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open asset data stream!")
 			}
 			try {
 				//Grab size
@@ -171,9 +191,9 @@ void CreateCmd::Callback() {
 				return contents;
 			} catch(std::ios_base::failure& ios_failure) {
 				if(errno == 0) {
-					XAK_ERROR("Failed to read asset data stream: \"" << ios_failure.what() << "\"!")
+					XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read asset data stream: \"" << ios_failure.what() << "\"!")
 				}
-				XAK_ERROR("Failed to read asset data stream!");
+				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read asset data stream!");
 			}
 		}();
 
@@ -328,7 +348,7 @@ void CreateCmd::Callback() {
 		if(pabSz >= 12) {
 			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
 				   (char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10], (char)pa.buffer[11]};
-				str.starts_with("RIFF") && str.starts_with("WAVE")) {
+				str.starts_with("RIFF") && str.ends_with("WAVE")) {
 
 				//WAV audio
 				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
@@ -365,6 +385,20 @@ void CreateCmd::Callback() {
 				}
 			}
 		}
+		if(pabSz >= 62) {
+			//Get past (maybe) the XML header to find the COLLADA tag
+			auto xmlIt = std::find(pa.buffer.cbegin(), pa.buffer.cend(), '>');
+			if(xmlIt == pa.buffer.cend()) goto asset_skip;
+			unsigned int xml = std::distance(pa.buffer.cbegin(), xmlIt);
+			std::string str {(char)pa.buffer[xml + 1], (char)pa.buffer[xml + 2], (char)pa.buffer[xml + 3], (char)pa.buffer[xml + 4],
+				(char)pa.buffer[xml + 5], (char)pa.buffer[xml + 6], (char)pa.buffer[xml + 7], (char)pa.buffer[xml + 8], (char)pa.buffer[xml + 9]};
+
+			if(str.find("<COLLADA") != std::string::npos) {
+				//Collada model
+				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				goto asset_ok;
+			}
+		}
 		if(pabSz >= sizeof(TGAHeader)) {
 			//Obtain the TGA header
 			TGAHeader tga = {};
@@ -386,45 +420,31 @@ void CreateCmd::Callback() {
 			pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
 			goto asset_ok;
 		}
-		if(pabSz >= 62) {
-			//Get past (maybe) the XML header to find the COLLADA tag
-			auto xmlIt = std::find(pa.buffer.cbegin(), pa.buffer.cend(), '>');
-			if(xmlIt == pa.buffer.cend()) goto asset_skip;
-			unsigned int xml = std::distance(pa.buffer.cbegin(), xmlIt);
-			std::string str {(char)pa.buffer[xml + 1], (char)pa.buffer[xml + 2], (char)pa.buffer[xml + 3], (char)pa.buffer[xml + 4],
-				(char)pa.buffer[xml + 5], (char)pa.buffer[xml + 6], (char)pa.buffer[xml + 7], (char)pa.buffer[xml + 8]};
-
-			if(str.find("<COLLADA") != std::string::npos) {
-				//Collada model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
-				goto asset_ok;
-			}
-		}
 
 		//Non-asset
 	asset_skip:
-		VLOG("Skipped (not an asset).")
+		CVLOG("Skipped (not an asset).")
 		continue;
 	asset_ok:
-		VLOG("Done.")
+		CVLOG("Done.")
 
 		//Add to table
-		VLOG_NONL("Adding asset \"" << addr << "\"... ")
+		CVLOG_NONL("Adding asset \"" << addr << "\"... ")
 		assetTable.insert_or_assign(addr, pa);
-		VLOG("Done.")
+		CVLOG("Done.")
 	}
 
 	//Encode asset pack
-	VLOG_NONL("Encoding pack... ")
+	CVLOG_NONL("Encoding pack... ")
 	libcacaoformats::PackedContainer pc = [&assetTable]() {
 		try {
 			libcacaoformats::PackedEncoder enc;
 			return enc.EncodeAssetPack(assetTable);
 		} catch(const std::exception& e) {
-			XAK_ERROR("Failed to encode asset pack: \"" << e.what() << "\"!")
+			XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to encode asset pack: \"" << e.what() << "\"!")
 		}
 	}();
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Make output directory if it doesn't exist
 	if(!std::filesystem::exists(outPath.parent_path())) {
@@ -432,11 +452,11 @@ void CreateCmd::Callback() {
 	}
 
 	//Write pack to output file
-	VLOG("Writing output file " << outPath << "... ")
+	CVLOG_NONL("Writing output file " << outPath << "... ")
 	std::ofstream outStream(outPath);
 	if(!outStream.is_open()) {
 		XAK_ERROR("Failed to open output file stream!")
 	}
 	pc.ExportToStream(outStream);
-	VLOG("Done.")
+	CVLOG("Done.")
 }

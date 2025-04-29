@@ -26,32 +26,32 @@ namespace libcacaoformats {
 		}
 
 		//Validate structure
-		YAML::Node posX = root["positiveX"];
-		ValidateYAMLNode(posX, YAML::NodeType::value::Scalar, "unpacked cubemap data", "positive X face");
-		YAML::Node negX = root["negativeX"];
-		ValidateYAMLNode(negX, YAML::NodeType::value::Scalar, "unpacked cubemap data", "negative X face");
-		YAML::Node posY = root["positiveY"];
-		ValidateYAMLNode(posY, YAML::NodeType::value::Scalar, "unpacked cubemap data", "positive Y face");
-		YAML::Node negY = root["negativeY"];
-		ValidateYAMLNode(negY, YAML::NodeType::value::Scalar, "unpacked cubemap data", "negative Y face");
-		YAML::Node posZ = root["positiveZ"];
-		ValidateYAMLNode(posZ, YAML::NodeType::value::Scalar, "unpacked cubemap data", "positive Z face");
-		YAML::Node negZ = root["negativeZ"];
-		ValidateYAMLNode(negZ, YAML::NodeType::value::Scalar, "unpacked cubemap data", "negative Z face");
+		YAML::Node posX = root["right"];
+		ValidateYAMLNode(posX, YAML::NodeType::value::Scalar, "unpacked cubemap data", "right (positive X) face");
+		YAML::Node negX = root["left"];
+		ValidateYAMLNode(negX, YAML::NodeType::value::Scalar, "unpacked cubemap data", "left (negative X) face");
+		YAML::Node posY = root["top"];
+		ValidateYAMLNode(posY, YAML::NodeType::value::Scalar, "unpacked cubemap data", "top (positive Y) face");
+		YAML::Node negY = root["bottom"];
+		ValidateYAMLNode(negY, YAML::NodeType::value::Scalar, "unpacked cubemap data", "bottom (negative Y) face");
+		YAML::Node posZ = root["front"];
+		ValidateYAMLNode(posZ, YAML::NodeType::value::Scalar, "unpacked cubemap data", "front (positive Z) face");
+		YAML::Node negZ = root["back"];
+		ValidateYAMLNode(negZ, YAML::NodeType::value::Scalar, "unpacked cubemap data", "back (negative Z) face");
 
 		//Get data streams for faces
 		std::unique_ptr<std::istream> pxs = loader(posX.Scalar());
-		CheckException(pxs->good(), "Positive X face data input stream is invalid!");
+		CheckException(pxs->good(), "Right face data input stream is invalid!");
 		std::unique_ptr<std::istream> nxs = loader(negX.Scalar());
-		CheckException(nxs->good(), "Negative X face data input stream is invalid!");
+		CheckException(nxs->good(), "Left face data input stream is invalid!");
 		std::unique_ptr<std::istream> pys = loader(posY.Scalar());
-		CheckException(pys->good(), "Positive Y face data input stream is invalid!");
+		CheckException(pys->good(), "Top face data input stream is invalid!");
 		std::unique_ptr<std::istream> nys = loader(negY.Scalar());
-		CheckException(nys->good(), "Negative Y face data input stream is invalid!");
+		CheckException(nys->good(), "Bottom face data input stream is invalid!");
 		std::unique_ptr<std::istream> pzs = loader(posZ.Scalar());
-		CheckException(pzs->good(), "Positive Z face data input stream is invalid!");
+		CheckException(pzs->good(), "Front face data input stream is invalid!");
 		std::unique_ptr<std::istream> nzs = loader(negZ.Scalar());
-		CheckException(nzs->good(), "Negative Z face data input stream is invalid!");
+		CheckException(nzs->good(), "Back face data input stream is invalid!");
 
 		//Decode image data
 		std::array<ImageBuffer, 6> out;

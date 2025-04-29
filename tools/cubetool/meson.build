@@ -5,6 +5,5 @@ cubetool = executable('ce-cubetool', sources: [
     'extract.cpp'
 ], dependencies: [
     formats_dep,
-    cli11_dep,
-    spinners_dep
+    cli11_dep
 ], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DTOOL_VER="1.0.0"'], include_directories: '..')
