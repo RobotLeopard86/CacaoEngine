@@ -8,7 +8,7 @@ A tool to extract the shader code from compiled Cacao Engine shader objects (.xj
 Cacao Engine Shader Extractor 
 
 
-xjsx [OPTIONS] input
+ce-xjsx [OPTIONS] input
 
 
 POSITIONALS:

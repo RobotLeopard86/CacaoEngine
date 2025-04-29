@@ -8,7 +8,7 @@
 
 MergeCmd::MergeCmd(CLI::App& app) {
 	//Merge the command CLI
-	cmd = app.add_subcommand("merge", "Merge two assets packs into a new pack");
+	cmd = app.add_subcommand("merge", "Merge multiple assets packs into a single pack");
 
 	//Inputs
 	cmd->add_option("input", inPaks, "Asset packs to merge")->required()->check(CLI::ExistingFile);
