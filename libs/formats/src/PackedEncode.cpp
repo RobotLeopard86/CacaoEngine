@@ -441,7 +441,7 @@ namespace libcacaoformats {
 		return PackedContainer(PackedFormat::World, 1, std::move(outBuffer));
 	}
 
-	PackedContainer PackedEncoder::EncodeAssetPack(const std::map<std::string, PackedAsset>& pack) {
+	PackedContainer PackedEncoder::EncodeAssetPack(const AssetPack& pack) {
 		//Validate inputs
 		CheckException(pack.size() > 0, "Cannot encode asset pack with no assets!");
 

@@ -250,6 +250,9 @@ namespace libcacaoformats {
 		std::vector<Entity> entities;///<Entities in the world
 	};
 
+	///@brief Decoded asset pack
+	using AssetPack = std::map<std::string, PackedAsset>;
+
 	///@brief Decoder for uncompressed packed format buffers
 	class PackedDecoder {
 	  public:
@@ -306,7 +309,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the container does not hold a valid asset pack or the pack has no files
 		 */
-		std::map<std::string, PackedAsset> DecodeAssetPack(const PackedContainer& container);
+		AssetPack DecodeAssetPack(const PackedContainer& container);
 	};
 
 	///@brief Decoder for unpacked file formats
@@ -397,7 +400,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the provided pack data has no assets
 		 */
-		PackedContainer EncodeAssetPack(const std::map<std::string, PackedAsset>& pack);
+		PackedContainer EncodeAssetPack(const AssetPack& pack);
 	};
 
 	///@brief Encoder for unpacked file formats

@@ -679,7 +679,7 @@ namespace libcacaoformats {
 		return out;
 	}
 
-	std::map<std::string, PackedAsset> PackedDecoder::DecodeAssetPack(const PackedContainer& container) {
+	AssetPack PackedDecoder::DecodeAssetPack(const PackedContainer& container) {
 		CheckException(container.format == PackedFormat::AssetPack, "Packed container provided for asset pack decoding is not an asset pack!");
 
 		//Configure archive object
@@ -689,7 +689,7 @@ namespace libcacaoformats {
 		CheckException(archive_read_open_memory(pak, container.payload.data(), container.payload.size() * sizeof(uint8_t)) == ARCHIVE_OK, "Failed to open asset pack archive data!");
 
 		//Create output
-		std::map<std::string, PackedAsset> out;
+		AssetPack out;
 
 		//Create check map
 		std::map<std::string, bool> check;
@@ -725,7 +725,7 @@ namespace libcacaoformats {
 				bool shouldStayRes = false;
 				if(genericPathStr.starts_with("__$CacaoRes/")) {
 					shouldStayRes = true;
-					path = std::filesystem::path(genericPathStr.substr(11, genericPathStr.size()));
+					path = std::filesystem::path(genericPathStr.substr(12, genericPathStr.size()));
 				}
 
 				//Read data from entry into buffer

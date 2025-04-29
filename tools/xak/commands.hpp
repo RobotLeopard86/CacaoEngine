@@ -52,7 +52,9 @@ class ExtractCmd {
   private:
 	CLI::App* cmd;
 	std::filesystem::path inPath;
+	std::filesystem::path outDir;
 	std::vector<std::string> toExtract;
+	bool all;
 };
 
 class MergeCmd {

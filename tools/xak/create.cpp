@@ -119,7 +119,7 @@ void CreateCmd::Callback() {
 	CVLOG("Done.")
 
 	//Add resources to asset table
-	std::map<std::string, libcacaoformats::PackedAsset> assetTable;
+	libcacaoformats::AssetPack assetTable;
 	for(const std::filesystem::path& res : resources) {
 		//Log
 		CVLOG_NONL("Adding resource " << res << "... ")
@@ -154,6 +154,7 @@ void CreateCmd::Callback() {
 				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read resource data stream!");
 			}
 		}();
+		if(fail) return;
 
 		//Get relative path for identifier
 		std::string rel2Root = std::filesystem::relative(res, resRoot).string();
@@ -196,6 +197,7 @@ void CreateCmd::Callback() {
 				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read asset data stream!");
 			}
 		}();
+		if(fail) return;
 
 #pragma pack(push, 1)
 		//TGA header struct (TGA has no magic number so we have to parse its header)
@@ -444,6 +446,7 @@ void CreateCmd::Callback() {
 			XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to encode asset pack: \"" << e.what() << "\"!")
 		}
 	}();
+	if(fail) return;
 	CVLOG("Done.")
 
 	//Make output directory if it doesn't exist
@@ -453,7 +456,7 @@ void CreateCmd::Callback() {
 
 	//Write pack to output file
 	CVLOG_NONL("Writing output file " << outPath << "... ")
-	std::ofstream outStream(outPath);
+	std::ofstream outStream(outPath, std::ios::binary);
 	if(!outStream.is_open()) {
 		XAK_ERROR("Failed to open output file stream!")
 	}

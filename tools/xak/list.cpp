@@ -42,7 +42,7 @@ void ListCmd::Callback() {
 
 	//Decode the file
 	libcacaoformats::PackedDecoder dec;
-	std::map<std::string, libcacaoformats::PackedAsset> decoded;
+	libcacaoformats::AssetPack decoded;
 	try {
 		libcacaoformats::PackedContainer pc = libcacaoformats::PackedContainer::FromStream(in);
 		decoded = dec.DecodeAssetPack(pc);
