@@ -41,6 +41,7 @@ class ListCmd {
   private:
 	CLI::App* cmd;
 	std::filesystem::path inPath;
+	bool doAssets, doResources, assetMeta;
 };
 
 class ExtractCmd {

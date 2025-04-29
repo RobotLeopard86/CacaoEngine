@@ -750,7 +750,7 @@ namespace libcacaoformats {
 				if(!node["asset"].IsDefined() || !node["asset"].IsScalar()) return "asset parameter is of invalid type or does not exist";
 				if(!node["type"].IsDefined() || !node["type"].IsScalar()) return "type parameter is of invalid type or does not exist";
 				try {
-					if(int asInt = std::stoi(node["type"].Scalar()); asInt < 0 || asInt > 5) return "type parameter is out of range";
+					if(int asInt = std::stoi(node["type"].Scalar()); asInt < 0 || asInt > 6) return "type parameter is out of range";
 				} catch(...) {
 					return "type parameter is not an integer";
 				}
@@ -781,6 +781,9 @@ namespace libcacaoformats {
 					break;
 				case 5:
 					out.at(asset).kind = PackedAsset::Kind::Font;
+					break;
+				case 6:
+					out.at(asset).kind = PackedAsset::Kind::Model;
 					break;
 			}
 

@@ -105,10 +105,7 @@ void CreateCmd::Callback() {
 	for(auto&& asset : std::filesystem::directory_iterator(assetRoot)) {
 		if(!asset.is_regular_file()) continue;
 		std::filesystem::path assetPath = asset.path();
-		if(!addrMap[assetPath.filename().string()].IsScalar()) {
-			XAK_ERROR("Provided address map does not contain a mapping for " << assetPath.filename() << " or an incorrectly formatted one, thus the map is invalid!")
-		}
-		assets.insert_or_assign(assetPath, addrMap[assetPath.filename().string()].Scalar());
+		assets.insert_or_assign(assetPath, addrMap[assetPath.filename().string()].IsScalar() ? addrMap[assetPath.filename().string()].Scalar() : "\0");
 	}
 	CVLOG("Done.")
 
@@ -159,7 +156,7 @@ void CreateCmd::Callback() {
 		}();
 
 		//Get relative path for identifier
-		std::filesystem::path rel2Root = std::filesystem::relative(res, resRoot);
+		std::string rel2Root = std::filesystem::relative(res, resRoot).string();
 
 		//Insert into table
 		assetTable.insert_or_assign(rel2Root, pa);
@@ -168,6 +165,9 @@ void CreateCmd::Callback() {
 
 	//Add assets to asset table
 	for(const auto& [asset, addr] : assets) {
+		//Make sure this is a named asset
+		if(addr.compare("\0") == 0) continue;
+
 		//Read file buffer
 		CVLOG_NONL("Checking validity of asset " << addr << " (file: " << asset << ")... ")
 		libcacaoformats::PackedAsset pa;

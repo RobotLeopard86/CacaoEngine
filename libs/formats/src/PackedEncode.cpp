@@ -450,7 +450,7 @@ namespace libcacaoformats {
 		for(const auto& [_, a] : pack) {
 			outInitialCapacity += a.buffer.size();
 		}
-		outInitialCapacity *= 1.5;
+		outInitialCapacity *= 1.25;
 
 		//Create output container
 		std::vector<char> outBuffer(outInitialCapacity);
@@ -524,6 +524,9 @@ namespace libcacaoformats {
 					break;
 				case PackedAsset::Kind::Font:
 					yml << 5;
+					break;
+				case PackedAsset::Kind::Model:
+					yml << 6;
 					break;
 				default:
 					yml << -1;
