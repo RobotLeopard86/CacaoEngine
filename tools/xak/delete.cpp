@@ -79,7 +79,7 @@ void DelCmd::Callback() {
 	}
 
 	//Find and delete the requested assets
-	for(const std::string asset : toDelete) {
+	for(const std::string& asset : toDelete) {
 		CVLOG_NONL("Deleting asset \"" << asset << "\"... ")
 		if(!work.contains(asset)) {
 			XAK_ERROR("Pack does not contain asset \"" << asset << "\"!")

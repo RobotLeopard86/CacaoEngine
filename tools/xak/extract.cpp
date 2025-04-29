@@ -103,7 +103,7 @@ void ExtractCmd::Callback() {
 	std::map<std::filesystem::path, std::vector<unsigned char>> out;
 
 	//Find the requested assets and assign their paths
-	for(const std::string asset : toExtract) {
+	for(const std::string& asset : toExtract) {
 		CVLOG_NONL("Checking for asset \"" << asset << "\"... ")
 		if(!pak.contains(asset)) {
 			XAK_ERROR("Pack does not contain asset \"" << asset << "\"!")
@@ -169,6 +169,7 @@ void ExtractCmd::Callback() {
 						oasset += ".ogg";
 					}
 					break;
+				default: break;
 			}
 		}
 		out.insert_or_assign(oasset, std::move(pa.buffer));

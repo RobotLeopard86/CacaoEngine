@@ -24,7 +24,7 @@ ListCmd::ListCmd(CLI::App& app) {
 
 	//Metadata
 	assetMeta = true;
-	CLI::Option* noMeta = cmd->add_flag_callback("--no-meta", [this]() { assetMeta = false; }, "Disable printing of asset types")->excludes(resOnly);
+	cmd->add_flag_callback("--no-meta", [this]() { assetMeta = false; }, "Disable printing of asset types")->excludes(resOnly);
 
 	//Register command callback function
 	cmd->callback([this]() {
