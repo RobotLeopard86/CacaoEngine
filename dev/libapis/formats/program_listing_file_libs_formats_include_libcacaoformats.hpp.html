@@ -540,6 +540,8 @@
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;</span><span class="w"> </span><span class="n">entities</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">AssetPack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">PackedAsset</span><span class="o">&gt;</span><span class="p">;</span>
+
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">PackedDecoder</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">ImageBuffer</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DecodeCubemap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">PackedContainer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">container</span><span class="p">);</span>
@@ -550,7 +552,7 @@
 
 <span class="w">        </span><span class="n">World</span><span class="w"> </span><span class="nf">DecodeWorld</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">PackedContainer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">container</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">PackedAsset</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DecodeAssetPack</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">PackedContainer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">container</span><span class="p">);</span>
+<span class="w">        </span><span class="n">AssetPack</span><span class="w"> </span><span class="nf">DecodeAssetPack</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">PackedContainer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">container</span><span class="p">);</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">UnpackedDecoder</span><span class="w"> </span><span class="p">{</span>
@@ -572,7 +574,7 @@
 
 <span class="w">        </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">EncodeWorld</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">World</span><span class="o">&amp;</span><span class="w"> </span><span class="n">world</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">EncodeAssetPack</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">PackedAsset</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">pack</span><span class="p">);</span>
+<span class="w">        </span><span class="n">PackedContainer</span><span class="w"> </span><span class="nf">EncodeAssetPack</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">AssetPack</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pack</span><span class="p">);</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">UnpackedEncoder</span><span class="w"> </span><span class="p">{</span>
