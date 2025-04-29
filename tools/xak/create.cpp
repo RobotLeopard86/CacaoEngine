@@ -14,8 +14,6 @@ CreateCmd::CreateCmd(CLI::App& app) {
 	//Directories
 	CLI::Option* assets = cmd->add_option("-a,--assets-dir", assetRoot, "Path to a directory containing assets to place in this pack. Subdirectories of this path will not be searched. Use --help-assets-dir to see more info.")->check(CLI::ExistingDirectory);
 	CLI::Option* res = cmd->add_option("-r,--res-dir", resRoot, "Path to a directory containing arbitray files to embed as resources in this pack. The folder structure will be copied as-is.")->check(CLI::ExistingDirectory);
-	assets->needs(res);
-	res->needs(assets);
 
 	//Address map
 	CLI::Option* addr = cmd->add_option("-M,--addr-map", addrMapPath, "Path to a file mapping asset filenames to asset addresses for engine reference")->check(CLI::ExistingFile);
@@ -51,8 +49,8 @@ CreateCmd::CreateCmd(CLI::App& app) {
 		std::filesystem::path path(p);
 		return std::filesystem::absolute(path).string();
 	});
-	out->needs(assets);
 	assets->needs(out);
+	res->needs(out);
 	assetsDirHelp->excludes(out);
 
 	//Register command callback function
@@ -84,34 +82,45 @@ CreateCmd::CreateCmd(CLI::App& app) {
 }
 
 void CreateCmd::Callback() {
+	bool noAsset = (assetRoot.compare("") == 0);
+	bool noRes = (resRoot.compare("") == 0);
+
+	//Define asset table
+	libcacaoformats::AssetPack assetTable;
+	std::map<std::filesystem::path, std::string> assets;
+	std::vector<std::filesystem::path> resources;
+	YAML::Node addrMap;
+	if(noAsset) goto res_begin;
+
 	//Load address map
 	CVLOG_NONL("Loading asset address map... ")
-	std::ifstream addrMapStream(addrMapPath);
-	if(!addrMapStream.is_open()) {
-		XAK_ERROR("Failed to open address map file stream!")
-	}
-	YAML::Node addrMap = [&addrMapStream]() {
+	addrMap = [this]() {
+		std::ifstream addrMapStream(addrMapPath);
+		if(!addrMapStream.is_open()) {
+			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to open address map file stream!")
+		}
 		try {
 			return YAML::Load(addrMapStream);
 		} catch(const YAML::ParserException& e) {
 			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to parse address map doc: \"" << e.what() << "\"!")
 		}
 	}();
+	if(fail) return;
 	CVLOG("Done.")
 
 	//Search for assets
 	CVLOG_NONL("Discovering assets... ")
-	std::map<std::filesystem::path, std::string> assets;
 	for(auto&& asset : std::filesystem::directory_iterator(assetRoot)) {
 		if(!asset.is_regular_file()) continue;
-		std::filesystem::path assetPath = asset.path();
-		assets.insert_or_assign(assetPath, addrMap[assetPath.filename().string()].IsScalar() ? addrMap[assetPath.filename().string()].Scalar() : "\0");
+		std::filesystem::path assetPath = asset.path().filename();
+		assets.insert_or_assign(assetPath, addrMap[assetPath.string()].IsScalar() ? addrMap[assetPath.string()].Scalar() : "\0");
 	}
 	CVLOG("Done.")
+	if(noRes) goto asset_process;
 
 	//Search for resources
+res_begin:
 	CVLOG_NONL("Discovering resources... ")
-	std::vector<std::filesystem::path> resources;
 	for(auto&& res : std::filesystem::recursive_directory_iterator(resRoot)) {
 		if(!res.is_regular_file()) continue;
 		resources.push_back(res.path());
@@ -119,7 +128,6 @@ void CreateCmd::Callback() {
 	CVLOG("Done.")
 
 	//Add resources to asset table
-	libcacaoformats::AssetPack assetTable;
 	for(const std::filesystem::path& res : resources) {
 		//Log
 		CVLOG_NONL("Adding resource " << res << "... ")
@@ -163,17 +171,20 @@ void CreateCmd::Callback() {
 		assetTable.insert_or_assign(rel2Root, pa);
 		CVLOG("Done.")
 	}
+	if(noAsset) goto encode;
 
-	//Add assets to asset table
+//Add assets to asset table
+asset_process:
 	for(const auto& [asset, addr] : assets) {
-		//Make sure this is a named asset
-		if(addr.compare("\0") == 0) continue;
-
 		//Read file buffer
-		CVLOG_NONL("Checking validity of asset " << addr << " (file: " << asset << ")... ")
+		std::stringstream logmsg;
+		logmsg << "Checking if file " << asset << " ";
+		if(addr.compare("\0") != 0) logmsg << "(assigned to address \"" << addr << "\") ";
+		logmsg << "is an asset... ";
+		CVLOG_NONL(logmsg.str())
 		libcacaoformats::PackedAsset pa;
 		pa.buffer = [asset]() {
-			std::ifstream stream(asset);
+			std::ifstream stream(asset, std::ios::binary);
 			if(!stream.is_open()) {
 				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open asset data stream!")
 			}
@@ -182,7 +193,7 @@ void CreateCmd::Callback() {
 				stream.clear();
 				stream.exceptions(std::ios::failbit | std::ios::badbit);
 				stream.seekg(0, std::ios::end);
-				auto size = stream.tellg();
+				std::size_t size = stream.tellg();
 				stream.seekg(0, std::ios::beg);
 
 				//Read data
@@ -430,12 +441,55 @@ void CreateCmd::Callback() {
 	asset_ok:
 		CVLOG("Done.")
 
+		//Auto-generate address if not listed
+		std::string trueAddr = addr;
+		if(addr.compare("\0") == 0) {
+			CVLOG_NONL("Generating address... ")
+			std::stringstream gen;
+			gen << asset.filename().stem().string() << "_";
+			switch(pa.kind) {
+				case libcacaoformats::PackedAsset::Kind::Cubemap:
+					gen << "cbm";
+					break;
+				case libcacaoformats::PackedAsset::Kind::Shader:
+					gen << "shd";
+					break;
+				case libcacaoformats::PackedAsset::Kind::Material:
+					gen << "mat";
+					break;
+				case libcacaoformats::PackedAsset::Kind::Font:
+					gen << "fnt";
+					break;
+				case libcacaoformats::PackedAsset::Kind::Sound:
+					gen << "snd";
+					break;
+				case libcacaoformats::PackedAsset::Kind::Model:
+					gen << "mdl";
+					break;
+				case libcacaoformats::PackedAsset::Kind::Tex2D:
+					gen << "tex";
+					break;
+				default: break;
+			}
+			int counter = 1;
+			std::string base = gen.str();
+			std::string work = base;
+			while(assetTable.contains(work)) {
+				work = base;
+				work += counter;
+				counter++;
+			}
+			trueAddr = work;
+			CVLOG("Done.")
+		}
+
 		//Add to table
-		CVLOG_NONL("Adding asset \"" << addr << "\"... ")
-		assetTable.insert_or_assign(addr, pa);
+		CVLOG_NONL("Adding asset \"" << trueAddr << "\"... ")
+		assetTable.insert_or_assign(trueAddr, pa);
 		CVLOG("Done.")
 	}
 
+encode:
 	//Encode asset pack
 	CVLOG_NONL("Encoding pack... ")
 	libcacaoformats::PackedContainer pc = [&assetTable]() {
