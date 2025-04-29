@@ -112,8 +112,8 @@ void CreateCmd::Callback() {
 	CVLOG_NONL("Discovering assets... ")
 	for(auto&& asset : std::filesystem::directory_iterator(assetRoot)) {
 		if(!asset.is_regular_file()) continue;
-		std::filesystem::path assetPath = asset.path().filename();
-		assets.insert_or_assign(assetPath, addrMap[assetPath.string()].IsScalar() ? addrMap[assetPath.string()].Scalar() : "\0");
+		std::filesystem::path assetPath = asset.path();
+		assets.insert_or_assign(assetPath, addrMap[assetPath.filename().string()].IsScalar() ? addrMap[assetPath.filename().string()].Scalar() : "\0");
 	}
 	CVLOG("Done.")
 	if(noRes) goto asset_process;
@@ -446,39 +446,15 @@ asset_process:
 		if(addr.compare("\0") == 0) {
 			CVLOG_NONL("Generating address... ")
 			std::stringstream gen;
-			gen << asset.filename().stem().string() << "_";
-			switch(pa.kind) {
-				case libcacaoformats::PackedAsset::Kind::Cubemap:
-					gen << "cbm";
-					break;
-				case libcacaoformats::PackedAsset::Kind::Shader:
-					gen << "shd";
-					break;
-				case libcacaoformats::PackedAsset::Kind::Material:
-					gen << "mat";
-					break;
-				case libcacaoformats::PackedAsset::Kind::Font:
-					gen << "fnt";
-					break;
-				case libcacaoformats::PackedAsset::Kind::Sound:
-					gen << "snd";
-					break;
-				case libcacaoformats::PackedAsset::Kind::Model:
-					gen << "mdl";
-					break;
-				case libcacaoformats::PackedAsset::Kind::Tex2D:
-					gen << "tex";
-					break;
-				default: break;
-			}
-			int counter = 1;
+			gen << asset.filename().stem().string();
+			int counter = 0;
 			std::string base = gen.str();
 			std::string work = base;
-			while(assetTable.contains(work)) {
+			do {
 				work = base;
-				work += counter;
+				work += std::to_string(counter);
 				counter++;
-			}
+			} while(assetTable.contains(work));
 			trueAddr = work;
 			CVLOG("Done.")
 		}
