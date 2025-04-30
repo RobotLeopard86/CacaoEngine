@@ -51,5 +51,5 @@ shaderc = executable('ce-shaderc', sources: [
 	base
 ], dependencies: [
 	cli11_dep, spinners_dep, slang_core, slang_compiler_core, slang_lz4, slang_miniz, slang_prelude, slang_rt, slang_embedded_core_module_source, slang_embedded_core_module, slang_common_objects, slang,
-	slang_capability_lookup, slang_lookup_tables, spirv_cross, commonlib_dep, formats_dep
+	slang_capability_lookup, slang_lookup_tables, commonlib_dep, formats_dep
 ], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DCOMPILER_VER="1.0.0"'], include_directories: '..')

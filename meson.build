@@ -1,4 +1,4 @@
-project('cacaoengine', 'cpp', 'c', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
+project('cacaoengine', 'c', 'cpp', 'objcpp', 'c', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
 
 # We are Ninja-only
 if get_option('backend') != 'ninja'
@@ -56,7 +56,6 @@ cmake_msvc_lib += 'DLL'
 
 # Import CMake and filesystem modules
 cmake = import('cmake')
-fs = import('fs')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'
@@ -94,7 +93,13 @@ yaml_opts.add_cmake_defines({
 yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 
 # Configure Silica
-silica = subproject('silica', required: true)
+silica = subproject('silica', required: true, default_options: {
+	'example': false,
+	# Warning: THIS WILL BE CHANGING TO TRUE SOON. 
+	# THIS IS FALSE FOR NOW BECAUSE WHILE CORE SYSTEMS STUFF IS GOING ON, I DON'T WANT TO DEAL WITH SILICA'S 
+	# EMBEDDED LLVM AND THE LENGTHY CONFIGURE/BUILD TIMES IT CAUSES
+	'generator': false
+})
 silica_dep = silica.get_variable('silica_dep')
 
 # Configure crossguid
@@ -130,6 +135,9 @@ spv_hlsl = spv_cross_sp.dependency('spirv-cross-hlsl')
 spv_msl = spv_cross_sp.dependency('spirv-cross-msl')
 spirv_cross = declare_dependency(dependencies: [spv_core, spv_c, spv_cpp, spv_rfl, spv_util, spv_glsl, spv_hlsl, spv_msl])
 
+# CLI11
+cli11_dep = subproject('cli11', required: true).get_variable('CLI11_dep')
+
 testing = get_option('testing')
 
 # Build components
@@ -137,7 +145,7 @@ if build_libs
 	subdir('libs')
 endif
 if build_engine
-	subdir('src')
+	subdir('engine')
 endif
 if build_playground
 	subdir('playground')

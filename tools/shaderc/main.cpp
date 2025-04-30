@@ -51,12 +51,6 @@ int main(int argc, char* argv[]) {
 	app.add_flag_callback("-q,--quiet", []() { outputLvl = OutputLevel::Silent; }, "Suppress all output from the compiler");
 	app.add_flag_callback("-V,--verbose", []() { outputLvl = OutputLevel::Verbose; }, "Enable verbose output from the compiler");
 
-	//Format control
-	format = OutputFormat::Undefined;
-	CLI::Option* spirvOpt = app.add_flag_callback("-S,--spirv", [] { format = OutputFormat::SPIRV; }, "Output in SPIR-V");
-	CLI::Option* glslOpt = app.add_flag_callback("-G,--glsl", [] { format = OutputFormat::GLSL; }, "Output in GLSL")->excludes(spirvOpt);
-	spirvOpt->excludes(glslOpt);
-
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
@@ -65,12 +59,6 @@ int main(int argc, char* argv[]) {
 
 	//Parse the CLI
 	CLI11_PARSE(app, argc, argv);
-
-	//Check format
-	if(format == OutputFormat::Undefined) {
-		ERROR("A format must be specified! See --help for details.")
-		return 1;
-	}
 
 	//Calculate auto-output paths if requested
 	if(app.count("-A") > 0) {
