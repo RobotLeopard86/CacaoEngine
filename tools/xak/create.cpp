@@ -97,16 +97,37 @@ void CreateCmd::Callback() {
 	addrMap = [this]() {
 		std::ifstream addrMapStream(addrMapPath);
 		if(!addrMapStream.is_open()) {
-			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to open address map file stream!")
+			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to open asset address map file stream!")
 		}
 		try {
-			return YAML::Load(addrMapStream);
+			YAML::Node node = YAML::Load(addrMapStream);
+			if(!node.IsMap()) {
+				XAK_ERROR_NONVOID(YAML::Node {}, "Asset address map is not a YAML map!")
+			}
+			if(node.size() < 1) {
+				XAK_ERROR_NONVOID(YAML::Node {}, "Asset address map has no entries!")
+			}
+			return node;
 		} catch(const YAML::ParserException& e) {
-			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to parse address map doc: \"" << e.what() << "\"!")
+			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to parse asset address map YAML: \"" << e.what() << "\"!")
 		}
 	}();
 	if(fail) return;
 	CVLOG("Done.")
+
+	//Check for address map conflicts and errors
+	{
+		std::vector<std::string> foundAddrs;
+
+		//Convert to a std::map for simpler iteration
+		const std::map<std::string, std::string> addrMapAsMap = addrMap.as<std::map<std::string, std::string>>();
+		for(const auto& [_, v] : addrMapAsMap) {
+			if(std::find(foundAddrs.cbegin(), foundAddrs.cend(), v) != foundAddrs.cend()) {
+				XAK_ERROR("Asset address map contains duplicate addresses!")
+			}
+			foundAddrs.push_back(v);
+		}
+	}
 
 	//Search for assets
 	CVLOG_NONL("Discovering assets... ")
