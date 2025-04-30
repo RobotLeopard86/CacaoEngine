@@ -95,7 +95,10 @@ yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependen
 # Configure Silica
 silica = subproject('silica', required: true, default_options: {
 	'example': false,
-	'generator': get_option('build_engine')
+	# Warning: THIS WILL BE CHANGING TO TRUE SOON. 
+	# THIS IS FALSE FOR NOW BECAUSE WHILE CORE SYSTEMS STUFF IS GOING ON, I DON'T WANT TO DEAL WITH SILICA'S 
+	# EMBEDDED LLVM AND THE LENGTHY CONFIGURE/BUILD TIMES IT CAUSES
+	'generator': false
 })
 silica_dep = silica.get_variable('silica_dep')
 

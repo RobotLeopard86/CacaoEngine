@@ -16,6 +16,8 @@ subprojects/*
 !subprojects/spinners-plus-plus
 subprojects/nlohmannjson.wrap
 subprojects/reflex.wrap
+subprojects/inja.wrap
+subprojects/llvm.wrap
 
 # Don't send Python crap from utility scripts
 scripts/__pycache__
