@@ -65,55 +65,24 @@ namespace libcacaoformats {
 		return out;
 	}
 
-	Shader PackedDecoder::DecodeShader(const PackedContainer& container) {
+	std::vector<unsigned char> PackedDecoder::DecodeShader(const PackedContainer& container) {
 		CheckException(container.format == PackedFormat::Shader, "Packed container provided for shader decoding is not a shader!");
-		CheckException(container.payload.size() > 1, "Shader packed container is too small to contain code format data!");
+		CheckException(container.payload.size() > 5, "Shader packed container is too small to contain code data!");
 
-		//Define magic numbers for code formats
-		const std::map<uint8_t, Shader::CodeType> typeLookupTable = {
-			{0x59, Shader::CodeType::SPIRV},
-			{0x4A, Shader::CodeType::GLSL}};
-
-		//Get format
-		uint8_t type = 0;
-		std::memcpy(&type, container.payload.data(), 1);
-		CheckException(typeLookupTable.contains(type), "Shader packed container has unknown code format identifier!");
+		//Get blob size
+		uint32_t blobSize = 0;
+		std::memcpy(&blobSize, container.payload.data(), 4);
+		CheckException(blobSize > 0, "Shader packed container has no code!");
+		CheckException(container.payload.size() > (4 + blobSize), "Shader is not large enough to contain code blob of specified size!");
 
 		//Create result
-		Shader shader;
-		shader.type = typeLookupTable.at(type);
+		std::vector<unsigned char> blob(blobSize);
 
 		//Read data
-		switch(shader.type) {
-			case Shader::CodeType::SPIRV: {
-				CheckException(container.payload.size() > 5, "Shader packed container is too small to contain SPIR-V blob size data!");
-				uint32_t blobSize = 0;
-				std::memcpy(&blobSize, container.payload.data() + 1, 4);
-				CheckException(container.payload.size() == (5 + blobSize), "Shader packed container is not the right size to contain SPIR-V blob of specified size!");
-				Shader::SPIRVCode code(blobSize / 4);
-				std::memcpy(code.data(), container.payload.data() + 5, blobSize);
-				shader.code = code;
-				break;
-			}
-			case Shader::CodeType::GLSL: {
-				CheckException(container.payload.size() > 9, "Shader packed container is too small to contain GLSL size data!");
-				uint32_t vsSize = 0, fsSize = 0;
-				std::memcpy(&vsSize, container.payload.data() + 1, 4);
-				std::memcpy(&fsSize, container.payload.data() + 5, 4);
-				CheckException(container.payload.size() == (10 + vsSize + fsSize), "Shader packed container is not the right size to contain GLSL text of specified sizes!");
-				Shader::GLSLCode code;
-				code.vertex = std::string("\0", vsSize);
-				code.fragment = std::string("\0", fsSize);
-				std::memcpy(code.vertex.data(), container.payload.data() + 9, vsSize);
-				std::memcpy(code.fragment.data(), container.payload.data() + 10 + vsSize, fsSize);
-				shader.code = code;
-				break;
-			}
-			default: break;
-		};
+		std::memcpy(blob.data(), container.payload.data() + 4, blobSize);
 
 		//Return result
-		return shader;
+		return blob;
 	}
 
 	Material PackedDecoder::DecodeMaterial(const PackedContainer& container) {

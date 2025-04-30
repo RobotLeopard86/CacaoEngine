@@ -51,39 +51,17 @@ namespace libcacaoformats {
 		return PackedContainer(PackedFormat::Cubemap, 1, std::move(outBuffer));
 	}
 
-	PackedContainer PackedEncoder::EncodeShader(const Shader& shader) {
+	PackedContainer PackedEncoder::EncodeShader(const std::vector<unsigned char>& ir) {
 		//Create output container
 		std::vector<char> outBuffer;
 		obytestream out(outBuffer);
 
-		//Define magic numbers for code formats
-		const std::map<Shader::CodeType, uint8_t> typeLookupTable = {
-			{Shader::CodeType::SPIRV, 0x59},
-			{Shader::CodeType::GLSL, 0x4A}};
+		//Write blob size
+		uint32_t blobSize = (uint32_t)ir.size();
+		out.write(reinterpret_cast<char*>(&blobSize), 4);
 
-		//Validate and write info
-		uint8_t typeCode = typeLookupTable.at(shader.type);
-		out.write(reinterpret_cast<char*>(&typeCode), 1);
-		switch(shader.type) {
-			case Shader::CodeType::SPIRV: {
-				Shader::SPIRVCode code = std::get<Shader::SPIRVCode>(shader.code);
-				uint32_t codeSize = uint32_t(code.size() * 4);
-				out.write(reinterpret_cast<char*>(&codeSize), 4);
-				out.write(reinterpret_cast<char*>(code.data()), codeSize);
-				break;
-			}
-			case Shader::CodeType::GLSL: {
-				Shader::GLSLCode code = std::get<Shader::GLSLCode>(shader.code);
-				uint32_t vcSize = (uint32_t)code.vertex.size(), fcSize = (uint32_t)code.fragment.size();
-				out.write(reinterpret_cast<char*>(&vcSize), 4);
-				out.write(reinterpret_cast<char*>(&fcSize), 4);
-				out.write(code.vertex.data(), code.vertex.size());
-				out.write("\0", 1);
-				out.write(code.fragment.data(), code.fragment.size());
-				break;
-			}
-			default: break;
-		}
+		//Write IR blob
+		out.write(reinterpret_cast<const char*>(ir.data()), blobSize);
 
 		//Create and return packed container
 		return PackedContainer(PackedFormat::Shader, 1, std::move(outBuffer));

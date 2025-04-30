@@ -1,13 +1,8 @@
 #include "compiler.hpp"
 #include "toolutil.hpp"
-#include "outform.hpp"
 
 #include "libcacaocommon.hpp"
 #include "libcacaoformats.hpp"
-
-#include "spirv_cross.hpp"
-#include "spirv_parser.hpp"
-#include "spirv_glsl.hpp"
 
 #include <sstream>
 #include <fstream>
@@ -167,10 +162,10 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	}
 	CVLOG("Done.");
 
-	//Link program
+	//Link program (we don't store this, we just need to ensure it links to avoid errors at runtime)
 	CVLOG_NONL("\tLinking shader program... ");
-	ComPtr<slang::IComponentType> linked;
 	{
+		ComPtr<slang::IComponentType> linked;
 		ComPtr<slang::IBlob> diagnosticsBlob;
 		SlangResult r = composed->link(linked.writeRef(), diagnosticsBlob.writeRef());
 		if(r != SLANG_OK || !linked) {
@@ -188,44 +183,19 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	CVLOG("Done.");
 
 	//Generate shader object for writing
-	libcacaoformats::Shader shader;
-	switch(format) {
-		case OutputFormat::SPIRV: {
-			shader.type = libcacaoformats::Shader::CodeType::SPIRV;
-			auto [maybeCode, msg] = genSPV(linked);
-			if(!maybeCode.has_value()) {
-				std::stringstream err;
-				err << "Failed to generate shader code";
-				if(!msg.empty()) {
-					err << ":\n"
-						<< msg;
-				} else {
-					err << "!";
-				}
-				CompileCheck(false, err.str());
-			}
-			shader.code = maybeCode.value();
-			break;
+	CVLOG_NONL("\tSerializing IR blob... ")
+	ComPtr<ISlangBlob> irBlob;
+	{
+		SlangResult r = mod->serialize(irBlob.writeRef());
+		if(r != SLANG_OK || !irBlob) {
+			std::stringstream err;
+			err << "Failed to serialize IR blob!";
+			CompileCheck(false, err.str());
 		}
-		case OutputFormat::GLSL: {
-			shader.type = libcacaoformats::Shader::CodeType::GLSL;
-			auto [maybeCode, msg] = genGLSL(linked);
-			if(!maybeCode.has_value()) {
-				std::stringstream err;
-				err << "Failed to generate shader code";
-				if(!msg.empty()) {
-					err << ":\n"
-						<< msg;
-				} else {
-					err << "!";
-				}
-				CompileCheck(false, err.str());
-			}
-			shader.code = maybeCode.value();
-			break;
-		}
-		default: break;
 	}
+	std::vector<unsigned char> shader(irBlob->getBufferSize());
+	std::memcpy(shader.data(), irBlob->getBufferPointer(), irBlob->getBufferSize());
+	CVLOG("Done.")
 
 	//Write shader
 	CVLOG_NONL("\tWriting output file " << out << "... ");
@@ -236,103 +206,4 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	CVLOG("Done.");
 
 	return {true, ""};
-}
-
-#define GenerateCheck(condition, ...)   \
-	if(!(condition)) {                  \
-		std::stringstream s;            \
-		s << __VA_ARGS__;               \
-		return {std::nullopt, s.str()}; \
-	}
-
-std::pair<std::optional<decltype(libcacaoformats::Shader::code)>, std::string> CacaoShaderCompiler::genSPV(ComPtr<slang::IComponentType> linked) {
-	CVLOG_NONL("\tGenerating shader SPIR-V... ");
-	ComPtr<slang::IBlob> spirv;
-	{
-		ComPtr<slang::IBlob> diagnosticsBlob;
-		SlangResult r = linked->getTargetCode(0, spirv.writeRef(), diagnosticsBlob.writeRef());
-		if(r != SLANG_OK || !spirv) {
-			std::stringstream err;
-			err << "Failed to generate shader SPIR-V";
-			if(diagnosticsBlob) {
-				err << ":\n"
-					<< (const char*)diagnosticsBlob->getBufferPointer();
-			} else {
-				err << "!";
-			}
-			GenerateCheck(false, err.str());
-		}
-	}
-	libcacaoformats::Shader::SPIRVCode code(spirv->getBufferSize() / 4);
-	std::memcpy(code.data(), spirv->getBufferPointer(), spirv->getBufferSize());
-	CVLOG("Done.");
-	return {code, ""};
-}
-
-std::pair<std::optional<decltype(libcacaoformats::Shader::code)>, std::string> CacaoShaderCompiler::genGLSL(ComPtr<slang::IComponentType> linked) {
-	//Run SPIR-V compile and get code
-	auto [maybeCode, msg] = genSPV(linked);
-	if(!maybeCode.has_value()) {
-		std::stringstream err;
-		err << "Failed to generate SPIR-V for GLSL conversion";
-		if(!msg.empty()) {
-			err << ":\n"
-				<< msg;
-		} else {
-			err << "!";
-		}
-		GenerateCheck(false, err.str());
-	}
-	std::vector<uint32_t> spv;
-	try {
-		spv = std::get<std::vector<uint32_t>>(maybeCode.value());
-	} catch(const std::exception& e) {
-		GenerateCheck(false, "Generated SPIR-V was improperly created!");
-	}
-
-	//Parse the SPIR-V
-	CVLOG_NONL("\tParsing SPIR-V IR... ");
-	spirv_cross::Parser parser(std::move(spv));
-	parser.parse();
-	spirv_cross::ParsedIR& ir = parser.get_parsed_ir();
-	CVLOG("Done.");
-
-	//Set up SPIRV-Cross options
-	CVLOG_NONL("\tConfiguring GLSL transpiler... ");
-	spirv_cross::CompilerGLSL::Options opts;
-	opts.version = 410;
-	opts.es = false;
-	opts.enable_420pack_extension = false;
-	opts.separate_shader_objects = true;
-
-	//Make the compiler
-	spirv_cross::CompilerGLSL glsl(std::move(ir));
-	spirv_cross::ShaderResources res = glsl.get_shader_resources();
-	glsl.set_common_options(opts);
-	CVLOG("Done.");
-
-	//Remove image descriptor decorations
-	CVLOG_NONL("\tPreprocessing decorations... ");
-	for(auto& img : res.sampled_images) {
-		glsl.unset_decoration(img.id, spv::DecorationDescriptorSet);
-	}
-	CVLOG("Done.");
-
-	//Create output object
-	libcacaoformats::Shader::GLSLCode code = {};
-
-	//Get vertex shader code
-	CVLOG_NONL("\tGenerating vertex stage GLSL... ");
-	glsl.set_entry_point("VS_main", spv::ExecutionModel::ExecutionModelVertex);
-	code.vertex = glsl.compile();
-	CVLOG("Done.")
-
-	//Get fragment shader code
-	CVLOG_NONL("\tGenerating fragment stage GLSL... ");
-	glsl.set_entry_point("FS_main", spv::ExecutionModel::ExecutionModelFragment);
-	code.fragment = glsl.compile();
-	CVLOG("Done.")
-
-	//Return the goodies
-	return {code, ""};
 }

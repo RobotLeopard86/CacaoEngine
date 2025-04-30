@@ -74,27 +74,6 @@ namespace libcacaoformats {
 	 */
 	std::size_t EncodeImage(const ImageBuffer& img, std::ostream& out);
 
-	///@brief Decoded shader data
-	struct Shader {
-		///@brief Type of shader code stored
-		enum class CodeType {
-			SPIRV,
-			GLSL
-		};
-
-		///@brief SPIR-V code storage format
-		using SPIRVCode = std::vector<uint32_t>;
-
-		///@brief GLSL code storage format
-		struct GLSLCode {
-			std::string vertex;	 ///<Vertex shader code
-			std::string fragment;///<Fragment shader code
-		};
-
-		CodeType type;						   ///<Format of stored shader code
-		std::variant<SPIRVCode, GLSLCode> code;///<Stored code
-	};
-
 	///@brief List of codes identifying different packed formats
 	enum class PackedFormat {
 		Cubemap,
@@ -268,15 +247,15 @@ namespace libcacaoformats {
 		std::array<ImageBuffer, 6> DecodeCubemap(const PackedContainer& container);
 
 		/**
-		 * @brief Extract the SPIR-V code from a shader
+		 * @brief Extract the code from a shader
 		 *
 		 * @param container The PackedContainer with the shader information
 		 *
-		 * @return Shader SPIR-V
+		 * @return Shader in Slang IR format
 		 *
 		 * @throws std::runtime_error If the container does not hold a valid shader
 		 */
-		Shader DecodeShader(const PackedContainer& container);
+		std::vector<unsigned char> DecodeShader(const PackedContainer& container);
 
 		/**
 		 * @brief Extract the data from a packed material
@@ -365,13 +344,13 @@ namespace libcacaoformats {
 		PackedContainer EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap);
 
 		/**
-		 * @brief Merge shader SPIR-V into a packed shader
+		 * @brief Encode shader IR into a packed shader object
 		 *
-		 * @param shader The vertex and fragment shader SPIR-V code
+		 * @param ir Shader Slang IR
 		 *
 		 * @return A PackedContainer encapsulating the shader code
 		 */
-		PackedContainer EncodeShader(const Shader& shader);
+		PackedContainer EncodeShader(const std::vector<unsigned char>& ir);
 
 		/**
 		 * @brief Encode material data and a shader reference into a packed material

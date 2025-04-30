@@ -1,11 +1,6 @@
 project('cacaoengine', 'cpp', 'c', meson_version: '>=1.1', version: 'INDEV', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
 
 playground = get_option('build_playground')
-backend = get_option('use_backend')
-
-if backend == '__DEFAULT__'
-	error('A backend must be specified!')
-endif
 
 python = find_program('python3')
 
