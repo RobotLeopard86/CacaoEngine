@@ -346,8 +346,6 @@
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Material_1_1TextureRef.html">Struct Material::TextureRef</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Matrix.html">Template Struct Matrix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html">Struct PackedAsset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Shader.html">Struct Shader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Shader_1_1GLSLCode.html">Struct Shader::GLSLCode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Vec2.html">Template Struct Vec2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html">Template Struct Vec3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Vec4.html">Template Struct Vec4</a></li>
@@ -461,8 +459,8 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer">
-<span id="_CPPv3N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"></span><span id="libcacaoformats::PackedDecoder::DecodeShader__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder_1a683770a36ed3c318d929e48d06e72c30"></span><a class="reference internal" href="structlibcacaoformats_1_1Shader.html#_CPPv4N15libcacaoformats6ShaderE" title="libcacaoformats::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeShader</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">container</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Extract the SPIR-V code from a shader. </p>
+<span id="_CPPv3N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer"></span><span id="libcacaoformats::PackedDecoder::DecodeShader__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedDecoder_1a48b004c4b961acf9ed87266e54614b73"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeShader</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">container</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedDecoder12DecodeShaderERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Extract the code from a shader. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>container</strong> – The <a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> with the shader information</p>
@@ -471,7 +469,7 @@
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container does not hold a valid shader </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="structlibcacaoformats_1_1Shader.html#structlibcacaoformats_1_1Shader"><span class="std std-ref">Shader</span></a> SPIR-V</p>
+<dd class="field-odd"><p>Shader in Slang IR format</p>
 </dd>
 </dl>
 </dd></dl>
