@@ -5,7 +5,8 @@ objcpp = meson.get_compiler('objcpp')
 # Engine headers
 engine_headers = include_directories('include')
 
-# Always-included core
+# Always-included modules
+subdir('modules' / 'shader-tgtgen')
 subdir('modules' / 'core')
 
 # Windowing modules
@@ -28,11 +29,5 @@ foreach b : backends
     subdir('modules' / b)
 endforeach
 
-# Windows subsystem
-subsystem = 'console'
-if host_machine.system() == 'windows' and get_option('windows_noconsole')
-	subsystem = 'windows'
-endif
-
-# Final executable
-executable(get_option('exe_name'), 'Startup.cpp', dependencies: [core_dep])
+# Game runtime
+#subdir('modules' / 'runtime')

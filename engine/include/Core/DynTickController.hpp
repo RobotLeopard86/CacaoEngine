@@ -19,7 +19,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static DynTickController* GetInstance();
+		static DynTickController* Get();
 
 		/**
 		 * @brief Start the controller

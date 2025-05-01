@@ -18,12 +18,12 @@ namespace Cacao {
 		Camera()
 		  : clearColor(1) {
 			resizeConsumer = new EventConsumer(BIND_MEMBER_FUNC(Camera::ResizeProjectionMatrix));
-			EventManager::GetInstance()->SubscribeConsumer("WindowResize", resizeConsumer);
+			EventManager::Get()->SubscribeConsumer("WindowResize", resizeConsumer);
 		}
 
 		///@brief Destroy a camera
 		virtual ~Camera() {
-			EventManager::GetInstance()->UnsubscribeConsumer("WindowResize", resizeConsumer);
+			EventManager::Get()->UnsubscribeConsumer("WindowResize", resizeConsumer);
 			delete resizeConsumer;
 		}
 

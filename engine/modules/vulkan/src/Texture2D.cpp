@@ -47,7 +47,7 @@ namespace Cacao {
 
 	std::shared_future<void> Texture2D::CompileAsync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled texture!");
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+		return Engine::Get()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
 	}
 
 	void Texture2D::CompileSync() {

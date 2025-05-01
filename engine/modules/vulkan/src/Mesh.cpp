@@ -17,7 +17,7 @@ namespace Cacao {
 
 	std::shared_future<void> Mesh::CompileAsync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled mesh!");
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+		return Engine::Get()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
 	}
 
 	void Mesh::CompileSync() {

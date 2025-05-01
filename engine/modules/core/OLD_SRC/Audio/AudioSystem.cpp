@@ -11,7 +11,7 @@ namespace Cacao {
 	bool AudioSystem::instanceExists = false;
 
 	//Singleton accessor
-	AudioSystem* AudioSystem::GetInstance() {
+	AudioSystem* AudioSystem::Get() {
 		//Do we have an instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create instance
@@ -44,7 +44,7 @@ namespace Cacao {
 
 		//Alert all audio objects that it is shutdown time
 		Event e("AudioShutdown");
-		EventManager::GetInstance()->DispatchSignaled(e)->WaitAll();
+		EventManager::Get()->DispatchSignaled(e)->WaitAll();
 
 		isInitialized = false;
 
@@ -55,7 +55,7 @@ namespace Cacao {
 	}
 
 	void AudioSystem::SetGlobalGain(float value) {
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to set the global gain!");
+		CheckException(AudioSystem::Get()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to set the global gain!");
 
 		alListenerf(AL_GAIN, value);
 	}

@@ -226,7 +226,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static Window* GetInstance();
+		static Window* Get();
 
 	  private:
 		Window()

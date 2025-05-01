@@ -19,12 +19,12 @@ namespace Cacao {
 		friend Window;
 
 		void Resize(glm::uvec2 size) {
-			ChangeSize(Window::GetInstance(), size);
+			ChangeSize(Window::Get(), size);
 		}
 	};
 
 	//Singleton accessor
-	Window* Window::GetInstance() {
+	Window* Window::Get() {
 		//Do we have an instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create instance
@@ -104,8 +104,8 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't close the window, it's not open!");
 
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this]() {
 				Close();
 			});
 			func.get();
@@ -126,9 +126,9 @@ namespace Cacao {
 		int x, y;
 
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
 			glm::uvec2* ret = new glm::uvec2(0);
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this, ret]() {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this, ret]() {
 				*ret = GetContentAreaSize();
 			});
 			func.get();
@@ -143,8 +143,8 @@ namespace Cacao {
 
 	void Window::UpdateWindowSize() {
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this]() {
 				UpdateWindowSize();
 			});
 			func.get();
@@ -160,8 +160,8 @@ namespace Cacao {
 
 	void Window::UpdateVisibilityState() {
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this]() {
 				UpdateVisibilityState();
 			});
 			func.get();
@@ -177,8 +177,8 @@ namespace Cacao {
 
 	void Window::UpdateModeState(WindowMode lastMode) {
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this, &lastMode]() {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this, &lastMode]() {
 				UpdateModeState(lastMode);
 			});
 			func.get();
@@ -225,8 +225,8 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't update closed window!");
 
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this]() {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this]() {
 				Update();
 			});
 			func.get();
@@ -239,68 +239,68 @@ namespace Cacao {
 			switch(event.type) {
 				case SDL_EVENT_QUIT: {
 					Event e("WindowClose");
-					EventManager::GetInstance()->Dispatch(e);
+					EventManager::Get()->Dispatch(e);
 					break;
 				}
 				case SDL_EVENT_WINDOW_FOCUS_GAINED: {
 					Event e("WindowFocus");
-					EventManager::GetInstance()->Dispatch(e);
+					EventManager::Get()->Dispatch(e);
 					break;
 				}
 				case SDL_EVENT_WINDOW_FOCUS_LOST: {
 					Event e("WindowUnfocus");
-					EventManager::GetInstance()->Dispatch(e);
+					EventManager::Get()->Dispatch(e);
 					break;
 				}
 				case SDL_EVENT_WINDOW_RESIZED: {
-					if(Window::GetInstance()->GetMode() == WindowMode::Window) {
+					if(Window::Get()->GetMode() == WindowMode::Window) {
 						WindowResizer().Resize({event.window.data1, event.window.data2});
 					}
-					Engine::GetInstance()->GetGlobalUIView()->SetSize(GetContentAreaSize());
+					Engine::Get()->GetGlobalUIView()->SetSize(GetContentAreaSize());
 					ResizeViewport(nativeWin);
 					DataEvent<glm::uvec2> wre("WindowResize", {event.window.data1, event.window.data2});
-					EventManager::GetInstance()->Dispatch(wre);
+					EventManager::Get()->Dispatch(wre);
 					break;
 				}
 				case SDL_EVENT_MOUSE_MOTION: {
 					DataEvent<glm::vec2> mme("MouseMove", {event.motion.x, event.motion.y});
-					EventManager::GetInstance()->Dispatch(mme);
+					EventManager::Get()->Dispatch(mme);
 					break;
 				}
 				case SDL_EVENT_MOUSE_WHEEL: {
 					DataEvent<glm::vec2> mse("MouseScroll", {event.wheel.x, event.wheel.y});
-					EventManager::GetInstance()->Dispatch(mse);
+					EventManager::Get()->Dispatch(mse);
 					break;
 				}
 				case SDL_EVENT_KEY_UP: {
 					DataEvent<int> kue("KeyUp", event.key.key);
-					EventManager::GetInstance()->Dispatch(kue);
+					EventManager::Get()->Dispatch(kue);
 					break;
 				}
 				case SDL_EVENT_KEY_DOWN: {
 					DataEvent<int> kde("KeyDown", event.key.key);
-					EventManager::GetInstance()->Dispatch(kde);
+					EventManager::Get()->Dispatch(kde);
 					break;
 				}
 				case SDL_EVENT_MOUSE_BUTTON_UP: {
 					DataEvent<int> mre("MouseRelease", event.button.button);
-					EventManager::GetInstance()->Dispatch(mre);
+					EventManager::Get()->Dispatch(mre);
 					break;
 				}
 				case SDL_EVENT_MOUSE_BUTTON_DOWN: {
 					DataEvent<int> mpe("MousePress", event.button.button);
-					EventManager::GetInstance()->Dispatch(mpe);
+					EventManager::Get()->Dispatch(mpe);
 					break;
 				}
 				case SDL_EVENT_WINDOW_MINIMIZED: {
 					Event e("WindowMinimize");
-					EventManager::GetInstance()->Dispatch(e);
+					EventManager::Get()->Dispatch(e);
 					minimized = true;
 					break;
 				}
 				case SDL_EVENT_WINDOW_RESTORED: {
 					Event e("WindowRestore");
-					EventManager::GetInstance()->Dispatch(e);
+					EventManager::Get()->Dispatch(e);
 					minimized = false;
 					break;
 				}
@@ -312,8 +312,8 @@ namespace Cacao {
 		CheckException(isOpen, Exception::GetExceptionCodeFromMeaning("BadState"), "Can't set the title of a closed window!");
 
 		//Run on the engine thread if we aren't on it
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
-			std::shared_future<void> func = Engine::GetInstance()->RunOnMainThread([this, &title]() {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
+			std::shared_future<void> func = Engine::Get()->RunOnMainThread([this, &title]() {
 				SetTitle(title);
 			});
 			func.get();

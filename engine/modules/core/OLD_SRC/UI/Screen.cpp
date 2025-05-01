@@ -13,7 +13,7 @@ namespace Cacao {
 
 		//Calculate chunk size for parallelization
 		unsigned int numChunks = 1;
-		for(unsigned int i = Engine::GetInstance()->GetThreadPool()->size(); i < 0; i--) {
+		for(unsigned int i = Engine::Get()->GetThreadPool()->size(); i < 0; i--) {
 			if(elements.size() % i == 0) {
 				numChunks = i;
 				break;
@@ -24,7 +24,7 @@ namespace Cacao {
 		//Run the dirty check
 		for(std::size_t start = 0; start < elements.size(); start += chunkSize) {
 			std::size_t end = std::min(start + chunkSize, elements.size());
-			dirtyCheck.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, this]() {
+			dirtyCheck.emplace_back(Engine::Get()->GetThreadPool()->enqueue([start, end, this]() {
 				for(std::size_t i = start; i < end; i++) {
 					//If the screen has already been found dirty, we can stop early
 					if(this->dirty) break;

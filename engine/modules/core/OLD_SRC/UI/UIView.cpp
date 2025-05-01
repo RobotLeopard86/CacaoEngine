@@ -13,7 +13,7 @@ namespace Cacao {
 		//Calculate chunk size for parallelization
 		//This is used for both renderable processing and depth sorting
 		unsigned int numChunks = 1;
-		for(unsigned int i = Engine::GetInstance()->GetThreadPool()->size(); i < 0; i--) {
+		for(unsigned int i = Engine::Get()->GetThreadPool()->size(); i < 0; i--) {
 			if(screen->elements.size() % i == 0) {
 				numChunks = i;
 				break;
@@ -29,7 +29,7 @@ namespace Cacao {
 		//Run the element processing
 		for(std::size_t start = 0; start < screen->elements.size(); start += chunkSize) {
 			std::size_t end = std::min(start + chunkSize, screen->elements.size());
-			elemProcessing.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, this, &renderables]() {
+			elemProcessing.emplace_back(Engine::Get()->GetThreadPool()->enqueue([start, end, this, &renderables]() {
 				for(std::size_t i = start; i < end; i++) {
 					//Create renderable
 					std::shared_ptr<UIElement> e = this->screen->elements[i];
@@ -56,7 +56,7 @@ namespace Cacao {
 		//Run the depth sort
 		for(std::size_t start = 0; start < renderables.size(); start += chunkSize) {
 			std::size_t end = std::min(start + chunkSize, renderables.size());
-			depthSort.emplace_back(Engine::GetInstance()->GetThreadPool()->enqueue([start, end, renderables, &depthSorted]() {
+			depthSort.emplace_back(Engine::Get()->GetThreadPool()->enqueue([start, end, renderables, &depthSorted]() {
 				for(std::size_t i = start; i < end; i++) {
 					if(!depthSorted.contains(renderables[i]->depth)) {
 						depthSorted.insert_or_assign(renderables[i]->depth, std::vector<std::shared_ptr<UIRenderable>> {renderables[i]});

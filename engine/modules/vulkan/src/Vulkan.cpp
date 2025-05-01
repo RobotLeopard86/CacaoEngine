@@ -90,7 +90,7 @@ namespace Cacao {
 
 		//Get required extensions
 		uint32_t extcount;
-		const char* const* exts = SDL_Vulkan_GetInstanceExtensions(&extcount);
+		const char* const* exts = SDL_Vulkan_GetExtensions(&extcount);
 		EngineAssert(exts, "Could not load instance extension list!");
 		std::vector<const char*> requiredInstanceExts(extcount);
 		std::memcpy(requiredInstanceExts.data(), exts, extcount * sizeof(const char*));
@@ -181,7 +181,7 @@ namespace Cacao {
 		queue = dev.getQueue(0, 0);
 
 		//Create memory allocator
-		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);
+		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);
 		vma::AllocatorCreateInfo allocatorCI({}, physDev, dev, 0UL, 0, 0, 0, &vkFuncs, vk_instance, VK_API_VERSION_1_3);
 		try {
 			allocator = vma::createAllocator(allocatorCI);
@@ -562,7 +562,7 @@ namespace Cacao {
 
 	void RenderController::ProcessFrame(std::shared_ptr<Frame> frame) {
 		//Skip if window is minimized; can cause Vulkan issues
-		if(Window::GetInstance()->IsMinimized()) {
+		if(Window::Get()->IsMinimized()) {
 			frameCycle = (frameCycle + 1) % frames.size();
 			return;
 		}
@@ -641,7 +641,7 @@ namespace Cacao {
 		//Calculate extent
 		vk::Extent2D extent;
 		{
-			glm::ivec2 winSize = Window::GetInstance()->GetContentAreaSize();
+			glm::ivec2 winSize = Window::Get()->GetContentAreaSize();
 			extent = {.width = (unsigned int)winSize.x, .height = (unsigned int)winSize.y};
 			auto surfc = physDev.getSurfaceCapabilitiesKHR(surface);
 			extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
@@ -683,14 +683,14 @@ namespace Cacao {
 		if(!frame->skybox.IsNull()) frame->skybox->Draw(frame->projection, frame->view);
 
 		//Draw UI if it's been rendered
-		if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
+		if(Engine::Get()->GetGlobalUIView()->HasBeenRendered()) {
 			//Create projection matrix
 			glm::mat4 project = projectionCorrection * glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
 			project[1][1] *= -1;//Flip
 			project[3][1] -= 2; //Move into viewable area
 
 			//Activate UI quad material
-			uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
+			uiQuadMat->WriteValue("uiTex", Engine::Get()->GetGlobalUIView());
 			uiQuadMat->Activate();
 
 			//Push identity transform matrix

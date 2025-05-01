@@ -25,7 +25,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static AssetManager* GetInstance();
+		static AssetManager* Get();
 
 		/**
 		 * @brief Set the asset loader to use

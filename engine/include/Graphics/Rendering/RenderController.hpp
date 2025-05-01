@@ -22,7 +22,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static RenderController* GetInstance();
+		static RenderController* Get();
 
 		/**
 		 * @brief Run the controller on the calling thread
@@ -37,7 +37,7 @@ namespace Cacao {
 		 * @param frame The frame to enqueue
 		 */
 		void EnqueueFrame(std::shared_ptr<Frame>& frame) {
-			if(!Engine::GetInstance()->IsShuttingDown()) {
+			if(!Engine::Get()->IsShuttingDown()) {
 				//Add a frame to the queue
 				std::lock_guard guard(fqMutex);
 				frameQueue.push(frame);

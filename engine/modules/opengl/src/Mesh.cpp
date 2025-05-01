@@ -22,7 +22,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Mesh::CompileAsync() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
 			//Invoke OpenGL on the engine thread
 			return InvokeGL([this]() {
 				this->CompileAsync();
@@ -80,7 +80,7 @@ namespace Cacao {
 	}
 
 	void Mesh::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
@@ -101,7 +101,7 @@ namespace Cacao {
 	}
 
 	void Mesh::Draw() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot draw mesh in non-rendering thread!");
+		CheckException(std::this_thread::get_id() == Engine::Get()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot draw mesh in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot draw uncompiled mesh!");
 
 		//Bind vertex array

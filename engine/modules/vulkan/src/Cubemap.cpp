@@ -30,7 +30,7 @@ namespace Cacao {
 
 	std::shared_future<void> Cubemap::CompileAsync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled cubemap!");
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+		return Engine::Get()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
 	}
 
 	void Cubemap::CompileSync() {

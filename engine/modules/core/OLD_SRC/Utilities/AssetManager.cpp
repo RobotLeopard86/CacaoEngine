@@ -16,7 +16,7 @@ namespace Cacao {
 	bool AssetManager::instanceExists = false;
 
 	//Singleton accessor
-	AssetManager* AssetManager::GetInstance() {
+	AssetManager* AssetManager::Get() {
 		//Do we have an instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create instance
@@ -28,11 +28,11 @@ namespace Cacao {
 	}
 
 	void _AH::_AM_Uncache_AHID(std::string id) {
-		AssetManager::GetInstance()->UncacheAsset(id);
+		AssetManager::Get()->UncacheAsset(id);
 	}
 
 	std::future<AssetHandle<Shader>> AssetManager::LoadShader(std::string definitionPath) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, definitionPath]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, definitionPath]() {
 			CheckException(std::filesystem::exists(definitionPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load shader from nonexistent definition file!");
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(definitionPath) && this->assetCache[definitionPath].lock()->GetType().compare("SHADER") == 0) return AssetHandle<Shader>(definitionPath, std::dynamic_pointer_cast<Shader>(this->assetCache[definitionPath].lock()));
@@ -117,7 +117,7 @@ namespace Cacao {
 	}
 
 	std::future<AssetHandle<Texture2D>> AssetManager::LoadTexture2D(std::string path) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, path]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, path]() {
 			CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load 2D texture from nonexistent file!");
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("2DTEX") == 0) return AssetHandle<Texture2D>(path, std::dynamic_pointer_cast<Texture2D>(this->assetCache[path].lock()));
@@ -131,7 +131,7 @@ namespace Cacao {
 	}
 
 	std::future<AssetHandle<Cubemap>> AssetManager::LoadCubemap(std::string definitionPath) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, definitionPath]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, definitionPath]() {
 			CheckException(std::filesystem::exists(definitionPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load cubemap from nonexistent definition file!");
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(definitionPath) && this->assetCache[definitionPath].lock()->GetType().compare("CUBEMAP") == 0) return AssetHandle<Cubemap>(definitionPath, std::dynamic_pointer_cast<Cubemap>(this->assetCache[definitionPath].lock()));
@@ -163,7 +163,7 @@ namespace Cacao {
 	}
 
 	std::future<AssetHandle<Skybox>> AssetManager::LoadSkybox(std::string definitionPath) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, definitionPath]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, definitionPath]() {
 			CheckException(std::filesystem::exists(definitionPath), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load skybox from nonexistent definition file!");
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(definitionPath) && this->assetCache[definitionPath].lock()->GetType().compare("SKYBOX") == 0) return AssetHandle<Skybox>(definitionPath, std::dynamic_pointer_cast<Skybox>(this->assetCache[definitionPath].lock()));
@@ -198,7 +198,7 @@ namespace Cacao {
 	}
 
 	std::future<AssetHandle<Mesh>> AssetManager::LoadMesh(std::string location) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, location]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, location]() {
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(location) && this->assetCache[location].lock()->GetType().compare("MESH") == 0) return AssetHandle<Mesh>(location, std::dynamic_pointer_cast<Mesh>(this->assetCache[location].lock()));
 
@@ -229,7 +229,7 @@ namespace Cacao {
 	}
 
 	std::future<AssetHandle<Sound>> AssetManager::LoadSound(std::string path) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, path]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, path]() {
 			CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load sound from nonexistent file!");
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("SOUND") == 0) return AssetHandle<Sound>(path, std::dynamic_pointer_cast<Sound>(this->assetCache[path].lock()));
@@ -244,7 +244,7 @@ namespace Cacao {
 	}
 
 	std::future<AssetHandle<Font>> AssetManager::LoadFont(std::string path) {
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this, path]() {
+		return Engine::Get()->GetThreadPool()->enqueue([this, path]() {
 			CheckException(std::filesystem::exists(path), Exception::GetExceptionCodeFromMeaning("FileNotFound"), "Cannot load font from nonexistent file!");
 			//First check if asset is already cached and return the cached one if so
 			if(this->assetCache.contains(path) && this->assetCache[path].lock()->GetType().compare("FONT") == 0) return AssetHandle<Font>(path, std::dynamic_pointer_cast<Font>(this->assetCache[path].lock()));

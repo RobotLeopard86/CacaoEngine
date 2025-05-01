@@ -8,7 +8,7 @@ namespace Cacao {
 	//We don't have an instance by default
 	bool Input::instanceExists = false;
 
-	Input* Input::GetInstance() {
+	Input* Input::Get() {
 		//Do we have a input instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create input instance
@@ -27,11 +27,11 @@ namespace Cacao {
 		mouseButtonUpConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonUpHandler));
 		keyDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::KeyDownHandler));
 		mouseButtonDownConsumer = new EventConsumer(BIND_MEMBER_FUNC(Input::MouseButtonDownHandler));
-		EventManager::GetInstance()->SubscribeConsumer("MouseMove", cursorPosConsumer);
-		EventManager::GetInstance()->SubscribeConsumer("KeyUp", keyUpConsumer);
-		EventManager::GetInstance()->SubscribeConsumer("MouseRelease", mouseButtonUpConsumer);
-		EventManager::GetInstance()->SubscribeConsumer("KeyDown", keyDownConsumer);
-		EventManager::GetInstance()->SubscribeConsumer("MousePress", mouseButtonDownConsumer);
+		EventManager::Get()->SubscribeConsumer("MouseMove", cursorPosConsumer);
+		EventManager::Get()->SubscribeConsumer("KeyUp", keyUpConsumer);
+		EventManager::Get()->SubscribeConsumer("MouseRelease", mouseButtonUpConsumer);
+		EventManager::Get()->SubscribeConsumer("KeyDown", keyDownConsumer);
+		EventManager::Get()->SubscribeConsumer("MousePress", mouseButtonDownConsumer);
 
 		//Initialize cursor pos vector
 		_cursorPos = glm::dvec2(0.0);

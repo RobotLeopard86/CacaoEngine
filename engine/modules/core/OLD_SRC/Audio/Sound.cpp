@@ -93,12 +93,12 @@ namespace Cacao {
 
 	std::shared_future<void> Sound::CompileAsync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+		return Engine::Get()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
 	}
 
 	void Sound::CompileSync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled sound!");
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
+		CheckException(AudioSystem::Get()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
 
 		//Create buffer object
 		alGenBuffers(1, &buf);
@@ -111,24 +111,24 @@ namespace Cacao {
 			this->Release();
 			p.set_value();
 		});
-		EventManager::GetInstance()->SubscribeConsumer("AudioShutdown", sec);
+		EventManager::Get()->SubscribeConsumer("AudioShutdown", sec);
 
 		compiled = true;
 	}
 
 	void Sound::Release() {
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot release uncompiled sound!");
-		CheckException(AudioSystem::GetInstance()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
+		CheckException(AudioSystem::Get()->IsInitialized(), Exception::GetExceptionCodeFromMeaning("BadInitState"), "Audio system must be initialized to compile a sound!");
 
 		//Send out an event to let all players using this sound stop
 		DataEvent<ALuint> iAmBeingReleased("SoundRelease", buf);
-		EventManager::GetInstance()->DispatchSignaled(iAmBeingReleased)->WaitAll();
+		EventManager::Get()->DispatchSignaled(iAmBeingReleased)->WaitAll();
 
 		//Delete buffer object
 		alDeleteBuffers(1, &buf);
 
 		//Unregister release event
-		EventManager::GetInstance()->UnsubscribeConsumer("AudioShutdown", sec);
+		EventManager::Get()->UnsubscribeConsumer("AudioShutdown", sec);
 		delete sec;
 
 		compiled = false;

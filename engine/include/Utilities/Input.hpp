@@ -53,7 +53,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static Input* GetInstance();
+		static Input* Get();
 
 	  private:
 		//Singleton data

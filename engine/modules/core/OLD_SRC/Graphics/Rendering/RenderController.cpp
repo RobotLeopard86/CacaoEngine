@@ -10,7 +10,7 @@ namespace Cacao {
 	bool RenderController::instanceExists = false;
 
 	//Singleton accessor
-	RenderController* RenderController::GetInstance() {
+	RenderController* RenderController::Get() {
 		//Do we have an instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create instance
@@ -23,31 +23,31 @@ namespace Cacao {
 
 	void RenderController::Run() {
 		CheckException(isInitialized, Exception::GetExceptionCodeFromMeaning("BadInitState"), "Uninitialized render controller cannot be run!");
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the engine thread!");
+		CheckException(std::this_thread::get_id() == Engine::Get()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Render controller must be run on the engine thread!");
 
 		auto uiRerenderVar = std::getenv("CACAO_ALWAYS_UI_RERENDER");
 		bool alwaysRerenderUI = (uiRerenderVar != nullptr && std::string(uiRerenderVar).compare("YES") == 0);
 
 		//Run while the engine does
-		while(Engine::GetInstance()->IsRunning()) {
+		while(Engine::Get()->IsRunning()) {
 			//Update window
-			Window::GetInstance()->Update();
+			Window::Get()->Update();
 
 			//Update graphics state (mostly for immediate-mode backends)
 			UpdateGraphicsState();
 
 			//Run main thread tasks
 			{
-				std::lock_guard lk(Engine::GetInstance()->mainThreadTaskMutex);
-				while(!Engine::GetInstance()->mainThreadTasks.empty()) {
-					auto task = Engine::GetInstance()->mainThreadTasks.front();
+				std::lock_guard lk(Engine::Get()->mainThreadTaskMutex);
+				while(!Engine::Get()->mainThreadTasks.empty()) {
+					auto task = Engine::Get()->mainThreadTasks.front();
 					try {
 						task.func();
 					} catch(...) {
 						task.status->set_exception(std::current_exception());
 					}
 					task.status->set_value();
-					Engine::GetInstance()->mainThreadTasks.pop();
+					Engine::Get()->mainThreadTasks.pop();
 				}
 			}
 
@@ -55,7 +55,7 @@ namespace Cacao {
 			std::unique_lock<std::mutex> lock(fqMutex);
 
 			//Discard frames if we're too far behind
-			int maxFrameLag = Engine::GetInstance()->cfg.maxFrameLag;
+			int maxFrameLag = Engine::Get()->cfg.maxFrameLag;
 			if(frameQueue.size() > maxFrameLag) {
 				while(frameQueue.size() > 1) {
 					frameQueue.pop();
@@ -72,15 +72,15 @@ namespace Cacao {
 				lock.unlock();
 
 				//If the global UI is dirty, re-render
-				if(Engine::GetInstance()->GetGlobalUIView()->GetScreen() && (Engine::GetInstance()->GetGlobalUIView()->GetScreen()->IsDirty() || alwaysRerenderUI)) {
-					Engine::GetInstance()->GetGlobalUIView()->Render();
+				if(Engine::Get()->GetGlobalUIView()->GetScreen() && (Engine::Get()->GetGlobalUIView()->GetScreen()->IsDirty() || alwaysRerenderUI)) {
+					Engine::Get()->GetGlobalUIView()->Render();
 				}
 
 				//Render the frame
 				ProcessFrame(next);
 
 				//Present rendered frame to window
-				Window::GetInstance()->Present();
+				Window::Get()->Present();
 			} else {
 				//Release lock and wait for a bit to avoid wasting CPU cycles
 				lock.unlock();

@@ -19,7 +19,7 @@ namespace Cacao {
 	bool Engine::instanceExists = false;
 
 	//Singleton accessor
-	Engine* Engine::GetInstance() {
+	Engine* Engine::Get() {
 		//Do we have an instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create instance
@@ -61,18 +61,18 @@ namespace Cacao {
 		cfg.fixedTickRate = (launchRoot["fixedTickRate"].IsScalar() ? std::stoi(launchRoot["fixedTickRate"].Scalar()) : cfg.fixedTickRate);
 		cfg.targetDynTPS = (launchRoot["dynamicTPS"].IsScalar() ? std::stoi(launchRoot["dynamicTPS"].Scalar()) : cfg.targetDynTPS);
 		cfg.maxFrameLag = (launchRoot["maxFrameLag"].IsScalar() ? std::stoi(launchRoot["maxFrameLag"].Scalar()) : cfg.maxFrameLag);
-		if(launchRoot["title"].IsScalar()) Window::GetInstance()->SetTitle(launchRoot["title"].Scalar());
+		if(launchRoot["title"].IsScalar()) Window::Get()->SetTitle(launchRoot["title"].Scalar());
 		if(launchRoot["dimensions"].IsMap() && launchRoot["dimensions"]["x"].IsScalar() && launchRoot["dimensions"]["y"].IsScalar()) {
-			Window::GetInstance()->SetSize({std::stoi(launchRoot["dimensions"]["x"].Scalar()), std::stoi(launchRoot["dimensions"]["y"].Scalar())});
+			Window::Get()->SetSize({std::stoi(launchRoot["dimensions"]["x"].Scalar()), std::stoi(launchRoot["dimensions"]["y"].Scalar())});
 		}
 		if(launchRoot["workingDir"].IsScalar() && std::filesystem::exists(launchRoot["workingDir"].Scalar())) std::filesystem::current_path(launchRoot["workingDir"].Scalar());
 
 		//Initialize FreeType
-		FreetypeOwner::GetInstance()->Init();
+		FreetypeOwner::Get()->Init();
 
 		//Register the window close consumer
 		Logging::EngineLog("Setting up event manager...");
-		EventManager::GetInstance()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
+		EventManager::Get()->SubscribeConsumer("WindowClose", new EventConsumer([this](Event& e) {
 			this->Stop();
 			return;
 		}));
@@ -85,11 +85,11 @@ namespace Cacao {
 
 		//Create global UI view
 		uiView.reset(new UIView());
-		uiView->SetSize(Window::GetInstance()->GetSize());
+		uiView->SetSize(Window::Get()->GetSize());
 
 		//Initialize audio system
 		Logging::EngineLog("Initializing audio system...");
-		AudioSystem::GetInstance()->Init();
+		AudioSystem::Get()->Init();
 
 		//Create a short-lived dummy audio player (for whatever reason this is required to get normal players working)
 		{
@@ -103,10 +103,10 @@ namespace Cacao {
 
 		//Start dynamic tick controller
 		Logging::EngineLog("Starting dynamic tick controller...");
-		DynTickController::GetInstance()->Start();
+		DynTickController::Get()->Start();
 
 		//Make the window visible
-		Window::GetInstance()->SetWindowVisibility(true);
+		Window::Get()->SetWindowVisibility(true);
 
 		Logging::EngineLog("Engine startup complete!");
 	}
@@ -130,22 +130,22 @@ namespace Cacao {
 
 		//Initialize windowing system
 		Logging::EngineLog("Intializing windowing system...");
-		Window::GetInstance()->SysInit();
+		Window::Get()->SysInit();
 
 		if(backendInWindowScope) {
 			//Open the window
-			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+			Window::Get()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
 
 			//Initialize rendering backend
 			Logging::EngineLog("Initializing rendering backend...");
-			RenderController::GetInstance()->Init();
+			RenderController::Get()->Init();
 		} else {
 			//Initialize rendering backend
 			Logging::EngineLog("Initializing rendering backend...");
-			RenderController::GetInstance()->Init();
+			RenderController::Get()->Init();
 
 			//Open the window
-			Window::GetInstance()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
+			Window::Get()->Open("Cacao Engine", {1280, 720}, false, WindowMode::Window);
 		}
 
 		//Asynchronously run core startup
@@ -154,7 +154,7 @@ namespace Cacao {
 		});
 
 		//Run the rendering controller on the engine thread
-		RenderController::GetInstance()->Run();
+		RenderController::Get()->Run();
 
 		//Run the shutdown functions
 		CoreShutdown();
@@ -169,11 +169,11 @@ namespace Cacao {
 		shuttingDown.store(true);
 
 		//Clear the render queue
-		RenderController::GetInstance()->ClearRenderQueue();
+		RenderController::Get()->ClearRenderQueue();
 
 		//Stop the dynamic tick controller
 		Logging::EngineLog("Stopping dynamic tick controller...");
-		DynTickController::GetInstance()->Stop();
+		DynTickController::Get()->Stop();
 
 		//Clean up common skybox resources
 		Skybox::CommonCleanup();
@@ -185,7 +185,7 @@ namespace Cacao {
 
 		//Shut down the audio system
 		Logging::EngineLog("Shutting down audio system...");
-		AudioSystem::GetInstance()->Shutdown();
+		AudioSystem::Get()->Shutdown();
 
 		//Destroy global UI view
 		uiView.reset();
@@ -193,33 +193,33 @@ namespace Cacao {
 		if(backendInWindowScope) {
 			//Shut down rendering backend
 			Logging::EngineLog("Shutting down rendering backend...");
-			RenderController::GetInstance()->Shutdown();
+			RenderController::Get()->Shutdown();
 
 			//Close the window
-			Window::GetInstance()->Close();
+			Window::Get()->Close();
 		} else {
 			//Close the window
-			Window::GetInstance()->Close();
+			Window::Get()->Close();
 
 			//Shutdown rendering backend
 			Logging::EngineLog("Shutting down rendering backend...");
-			RenderController::GetInstance()->Shutdown();
+			RenderController::Get()->Shutdown();
 		}
 
 		//Shut down windowing system
 		Logging::EngineLog("Shutting down windowing system...");
-		Window::GetInstance()->SysTerminate();
+		Window::Get()->SysTerminate();
 
 		//Stop thread pool
 		Logging::EngineLog("Stopping thread pool...");
 		threadPool.reset();
 
 		//Shutdown the FreeType library
-		delete FreetypeOwner::GetInstance();
+		delete FreetypeOwner::Get();
 
 		//Shutdown event manager
 		Logging::EngineLog("Shutting down event manager...");
-		EventManager::GetInstance()->Shutdown();
+		EventManager::Get()->Shutdown();
 	}
 
 	std::shared_future<void> Engine::RunOnMainThread(std::function<void()> func) {

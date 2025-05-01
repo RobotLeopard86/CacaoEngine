@@ -155,7 +155,7 @@ namespace Cacao {
 
 	std::shared_future<void> Shader::CompileAsync() {
 		CheckException(!compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot compile compiled shader!");
-		return Engine::GetInstance()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
+		return Engine::Get()->GetThreadPool()->enqueue([this]() { this->CompileSync(); }).share();
 	}
 
 	void Shader::CompileSync() {
@@ -352,7 +352,7 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<Material> Shader::CreateMaterial() {
-		AssetHandle<Shader> selfHandle = AssetManager::GetInstance()->GetHandleFromPointer(this);
+		AssetHandle<Shader> selfHandle = AssetManager::Get()->GetHandleFromPointer(this);
 
 		//Unfortunately, we have to do it this way because make_shared doesn't work well with friend classes
 		Material* m;

@@ -16,7 +16,7 @@ namespace Cacao {
 	bool DynTickController::instanceExists = false;
 
 	//Singleton accessor
-	DynTickController* DynTickController::GetInstance() {
+	DynTickController* DynTickController::Get() {
 		//Do we have an instance yet?
 		if(!instanceExists || instance == nullptr) {
 			//Create instance
@@ -72,14 +72,14 @@ namespace Cacao {
 		while(!stopTkn.stop_requested()) {
 			//Get time at tick start and calculate ideal run time
 			std::chrono::steady_clock::time_point tickStart = std::chrono::steady_clock::now();
-			std::chrono::steady_clock::time_point idealStopTime = tickStart + (std::chrono::milliseconds(1000) / Engine::GetInstance()->cfg.targetDynTPS);
+			std::chrono::steady_clock::time_point idealStopTime = tickStart + (std::chrono::milliseconds(1000) / Engine::Get()->cfg.targetDynTPS);
 
 			//Freeze input state
-			Input::GetInstance()->FreezeFrameInputState();
+			Input::Get()->FreezeFrameInputState();
 
 			//Find all scripts that need to be run
 			tickScriptList.clear();
-			World& activeWorld = WorldManager::GetInstance()->GetActiveWorld();
+			World& activeWorld = WorldManager::Get()->GetActiveWorld();
 			for(std::shared_ptr<Entity> ent : activeWorld.rootEntity->GetChildrenAsList()) {
 				//Execute the script locator
 				LocateComponents(ent, [this](std::shared_ptr<Component> c) {
@@ -115,7 +115,7 @@ namespace Cacao {
 			}
 
 			//Send frame to render controller
-			RenderController::GetInstance()->EnqueueFrame(f);
+			RenderController::Get()->EnqueueFrame(f);
 
 			//Check elapsed time and set timestep
 			std::chrono::steady_clock::time_point tickEnd = std::chrono::steady_clock::now();

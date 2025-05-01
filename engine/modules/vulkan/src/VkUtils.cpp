@@ -87,7 +87,7 @@ namespace Cacao {
 		auto surfc = physDev.getSurfaceCapabilitiesKHR(surface);
 
 		//Calculate extent
-		auto caSize = Window::GetInstance()->GetContentAreaSize();
+		auto caSize = Window::Get()->GetContentAreaSize();
 		vk::Extent2D extent(caSize.x, caSize.y);
 		extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 		extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);

@@ -60,7 +60,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static EventManager* GetInstance();
+		static EventManager* Get();
 
 	  private:
 		//Map of event types to list of consumers

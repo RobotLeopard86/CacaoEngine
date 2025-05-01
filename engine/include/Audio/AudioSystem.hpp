@@ -18,7 +18,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static AudioSystem* GetInstance();
+		static AudioSystem* Get();
 
 		/**
 		 * @brief Initialize the audio system

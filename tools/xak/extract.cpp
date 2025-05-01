@@ -187,7 +187,7 @@ void ExtractCmd::Callback() {
 	for(const auto& [path, buf] : out) {
 		CVLOG_NONL("Writing asset " << path << "... ")
 		bool binary = (path.extension().compare(".obj") == 0 || path.extension().compare(".dae") == 0);
-		std::ofstream outStream(path, binary ? std::ios::binary : 0);
+		std::ofstream outStream(path, binary ? std::ios::binary : (std::ios_base::openmode)0);
 		if(!outStream.is_open()) {
 			if(outputLvl == OutputLevel::Verbose) {
 				XAK_ERROR("Failed to open output stream!")

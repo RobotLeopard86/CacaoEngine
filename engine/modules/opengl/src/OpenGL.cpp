@@ -93,12 +93,12 @@ namespace Cacao {
 			if(!frame->skybox.IsNull()) frame->skybox->Draw(frame->projection, frame->view);
 
 			//Draw UI
-			if(Engine::GetInstance()->GetGlobalUIView()->HasBeenRendered()) {
+			if(Engine::Get()->GetGlobalUIView()->HasBeenRendered()) {
 				//Create projection matrix
 				glm::mat4 project = glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
 
 				//Activate UI quad material
-				uiQuadMat->WriteValue("uiTex", Engine::GetInstance()->GetGlobalUIView());
+				uiQuadMat->WriteValue("uiTex", Engine::Get()->GetGlobalUIView());
 				uiQuadMat->Activate();
 
 				//Upload Cacao Engine globals for UI quad

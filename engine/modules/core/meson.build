@@ -5,7 +5,11 @@ assimp_opts.add_cmake_defines({
 	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
 	'ASSIMP_BUILD_ZLIB': 'ON',
 	'ASSIMP_NO_EXPORT': 'ON',
-	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'ON',
+	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'OFF',
+	'ASSIMP_BUILD_FBX_IMPORTER': 'ON',
+	'ASSIMP_BUILD_GLTF_IMPORTER': 'ON',
+	'ASSIMP_BUILD_COLLADA_IMPORTER': 'ON',
+	'ASSIMP_BUILD_OBJ_IMPORTER': 'ON',
 	'ASSIMP_BUILD_SAMPLES': 'OFF',
 	'ASSIMP_BUILD_TESTS': 'OFF',
     'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
@@ -62,10 +66,10 @@ harfbuzz_sub_dep = harfbuzz_sp.get_variable('libharfbuzz_subset_dep')
 libdl = cpp.find_library('dl', required: host_machine.system() != 'windows', static: true)
 libatomic = cpp.find_library('atomic', required: host_machine.system() == 'linux')
 libpipewire = dependency('libpipewire-0.3', method: 'pkg-config', required: run_command([ python, meson.project_source_root() / 'scripts' / 'openal_checkpipewire.py'], check: false).returncode() == 0)
-imm32 += cpp.find_library('imm32', required: host_machine.system() == 'windows')
-winmm += cpp.find_library('winmm', required: host_machine.system() == 'windows')
-versionlib += cpp.find_library('version', required: host_machine.system() == 'windows')
-setupapi += cpp.find_library('setupapi', required: host_machine.system() == 'windows')
+imm32 = cpp.find_library('imm32', required: host_machine.system() == 'windows')
+winmm = cpp.find_library('winmm', required: host_machine.system() == 'windows')
+versionlib = cpp.find_library('version', required: host_machine.system() == 'windows')
+setupapi = cpp.find_library('setupapi', required: host_machine.system() == 'windows')
 
 # Dependencies list
 core_deps = [
@@ -80,7 +84,6 @@ core_deps = [
 	spv_msl,
 	spv_rfl,
 	spv_util,
-	cli11_dep,
 	audiodecode_dep,
 	formats_dep,
 	commonlib_dep,
@@ -108,26 +111,5 @@ core_deps = [
 # Core library
 libcore = static_library('cacao_core', sources: [
 	'src' / 'expf.c',
-	'src' / '3D' / 'Model.cpp',
-	'src' / '3D' / 'Transform.cpp',
-	'src' / 'Audio' / 'AudioPlayer.cpp',
-	'src' / 'Audio' / 'AudioSystem.cpp',
-	'src' / 'Audio' / 'Sound.cpp',
-	'src' / 'Core' / 'Assert.cpp',
-	'src' / 'Core' / 'DynTickController.cpp',
-	'src' / 'Core' / 'Engine.cpp',
-	'src' / 'Core' / 'Log.cpp',
-	'src' / 'Events' / 'EventManager.cpp',
-	'src' / 'Graphics' / 'Window.cpp',
-	'src' / 'Graphics' / 'Cameras' / 'PerspectiveCamera.cpp',
-	'src' / 'Graphics' / 'Rendering' / 'RenderController.cpp',
-	'src' / 'UI' / 'Font.cpp',
-	'src' / 'UI' / 'FreetypeOwner.cpp',
-	'src' / 'UI' / 'Renderables.cpp',
-	'src' / 'UI' / 'Screen.cpp',
-	'src' / 'UI' / 'UIView.cpp',
-	'src' / 'Utilities' / 'AssetManager.cpp',
-	'src' / 'Utilities' / 'Input.cpp',
-	'src' / 'World' / 'WorldManager.cpp',
 ], dependencies: core_deps, include_directories: engine_headers, pic: true)
 core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)

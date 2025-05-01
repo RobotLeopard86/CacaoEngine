@@ -18,7 +18,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static WorldManager* GetInstance();
+		static WorldManager* Get();
 
 		/**
 		 * @brief Create a new world

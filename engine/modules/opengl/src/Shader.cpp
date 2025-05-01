@@ -222,7 +222,7 @@ namespace Cacao {
 	}
 
 	std::shared_future<void> Shader::CompileAsync() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
 			//Invoke OpenGL on the engine thread
 			return InvokeGL([this]() {
 				this->CompileAsync();
@@ -348,7 +348,7 @@ namespace Cacao {
 	}
 
 	void Shader::Release() {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
 			//Try to invoke OpenGL and throw any exceptions back to the initial caller
 			try {
 				InvokeGL([this]() {
@@ -367,7 +367,7 @@ namespace Cacao {
 	}
 
 	void Shader::Bind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind shader in non-rendering thread!");
+		CheckException(std::this_thread::get_id() == Engine::Get()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot bind shader in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot bind uncompiled shader!");
 		CheckException(!bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot bind bound shader!");
 
@@ -377,7 +377,7 @@ namespace Cacao {
 	}
 
 	void Shader::Unbind() {
-		CheckException(std::this_thread::get_id() == Engine::GetInstance()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind shader in non-rendering thread!");
+		CheckException(std::this_thread::get_id() == Engine::Get()->GetMainThreadID(), Exception::GetExceptionCodeFromMeaning("BadThread"), "Cannot unbind shader in non-rendering thread!");
 		CheckException(compiled, Exception::GetExceptionCodeFromMeaning("BadCompileState"), "Cannot unbind uncompiled shader!");
 		CheckException(bound, Exception::GetExceptionCodeFromMeaning("BadBindState"), "Cannot unbind unbound shader!");
 
@@ -389,7 +389,7 @@ namespace Cacao {
 	}
 
 	void Shader::UploadCacaoGlobals(glm::mat4 projection, glm::mat4 view) {
-		if(std::this_thread::get_id() != Engine::GetInstance()->GetMainThreadID()) {
+		if(std::this_thread::get_id() != Engine::Get()->GetMainThreadID()) {
 			//Invoke OpenGL on the engine thread
 			InvokeGL([projection, view]() {
 				UploadCacaoGlobals(projection, view);
@@ -411,7 +411,7 @@ namespace Cacao {
 	void Shader::_BackendDestruct() {}
 
 	std::shared_ptr<Material> Shader::CreateMaterial() {
-		AssetHandle<Shader> selfHandle = AssetManager::GetInstance()->GetHandleFromPointer(this);
+		AssetHandle<Shader> selfHandle = AssetManager::Get()->GetHandleFromPointer(this);
 
 		//Unfortunately, we have to do it this way because make_shared doesn't work well with friend classes
 		Material* m;
