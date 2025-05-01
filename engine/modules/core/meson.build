@@ -111,5 +111,7 @@ core_deps = [
 # Core library
 libcore = static_library('cacao_core', sources: [
 	'src' / 'expf.c',
+	'src' / 'Engine.cpp',
+	'src' / 'Log.cpp'
 ], dependencies: core_deps, include_directories: engine_headers, pic: true)
 core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)

@@ -1,5 +1,5 @@
 # Don't send auto-created logs
-cacao-engine.log
+cacao.log
 .ninja_log
 
 # Don't send VS Code files

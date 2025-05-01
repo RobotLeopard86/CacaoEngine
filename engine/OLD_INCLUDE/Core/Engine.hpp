@@ -26,7 +26,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static Engine* Get();
+		static Engine* GetInstance();
 
 		/**
 		 * @brief Start the engine
