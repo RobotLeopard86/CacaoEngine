@@ -89,10 +89,10 @@ exhale_args = {
 exhale_projects_args = {
     "Cacao Engine": {
         "exhaleDoxygenStdin": dedent('''
-									INPUT = ../engine/include,../subprojects/thread-pool/include
+									INPUT = ../engine/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,std*,dp::details*,dp::thread_safe_queue,CACAO_API
+									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,std*
                                     ENABLE_PREPROCESSING   = YES
 									MACRO_EXPANSION        = YES
 									EXPAND_ONLY_PREDEF     = YES

@@ -2,10 +2,6 @@
 
 #include <atomic>
 #include <string>
-#include <map>
-#include <queue>
-
-#include "thread_pool/thread_pool.h"
 
 #include "DllHelper.hpp"
 
@@ -25,11 +21,14 @@ namespace Cacao {
 			return _instance;
 		}
 
-		/**
-		 * @name Configuration
-		 * Structs and methods related to engine configuration
-		 */
-		///@{
+		///@cond
+		Engine(const Engine&) = delete;
+		Engine(Engine&&) = delete;
+		Engine& operator=(const Engine&) = delete;
+		Engine& operator=(Engine&&) = delete;
+		///@endcond
+
+		//======================= CONFIGURATION =======================
 
 		/**
 		 * @brief Configuration values for the engine
@@ -65,7 +64,7 @@ namespace Cacao {
 			 * This will also disable all systems related to the default asset loader and bundle systems.
 			 * Assets, worlds, and game modules will need to be manually loaded and configured in this mode.
 			 */
-			bool standalone;
+			bool standalone = false;
 
 			/**
 			 * @brief The requested backend to try to initialize first, overriding the default setting.
@@ -73,11 +72,11 @@ namespace Cacao {
 			std::string initialRequestedBackend;
 
 			/**
-			 * @brief (Linux only) Whether to disable attempting to use Wayland and force the usage of X11 instead
+			 * @brief Whether to disable attempting to use Wayland and force the usage of X11 instead
 			 *
 			 * @note This flag is ignored if not on Linux
 			 */
-			bool forceX11;
+			bool forceX11 = false;
 		};
 
 		/**
@@ -89,18 +88,12 @@ namespace Cacao {
 			return cfg;
 		}
 
-		///@}
-
-		/**
-		 * @name Lifecycle
-		 * Methods and data related to the engine lifecycle
-		 */
-		///@{
+		//======================= LIFECYCLE =======================
 
 		/**
 		 * @brief The current state of the engine
 		 */
-		enum class CACAO_API State {
+		enum class State {
 			Dead,
 			Alive,
 			Stopped,
@@ -170,10 +163,16 @@ namespace Cacao {
 			return state;
 		}
 
-		///@}
-
 	  private:
 		InitConfig cfg;
-		State state;
+		std::atomic<State> state;
+
+		Engine()
+		  : state(State::Dead) {}
+		~Engine() {
+			if(state == State::Running) Quit();
+			if(state == State::Stopped) GfxShutdown();
+			if(state == State::Alive) CoreShutdown();
+		}
 	};
 }

@@ -22,10 +22,17 @@ namespace Cacao {
 			return _instance;
 		}
 
+		///@cond
+		LogMgr(const LogMgr&) = delete;
+		LogMgr(LogMgr&&) = delete;
+		LogMgr& operator=(const LogMgr&) = delete;
+		LogMgr& operator=(LogMgr&&) = delete;
+		///@endcond
+
 		/**
 		 * @brief Level of severity for log messages
 		 */
-		enum class CACAO_API Level {
+		enum class Level {
 			Trace = 0,///<Debug information, usually unneeded
 			Info = 1, ///<Information
 			Warn = 2, ///<Warnings

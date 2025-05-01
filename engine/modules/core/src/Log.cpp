@@ -26,7 +26,7 @@ namespace Cacao {
 		impl->stdoutSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::always);
 		std::array<spdlog::sink_ptr, 2> sinks {{impl->logfileSink, impl->stdoutSink}};
 
-		//Create implementation object
+		//Create implementation pointer
 		impl = std::make_unique<Impl>();
 
 		//Create and register loggers
@@ -42,6 +42,8 @@ namespace Cacao {
 		//Force log file flushing
 		spdlog::flush_on(spdlog::level::trace);
 	}
+
+	LogMgr::~LogMgr() {}
 
 	void LogMgr::EngineLog(std::string message, Level level) {
 		impl->Log(message, level, false);

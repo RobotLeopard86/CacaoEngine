@@ -38,7 +38,8 @@ alsoft_opts.add_cmake_defines({
 	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
 	'CMAKE_BUILD_TYPE': cmake_build_type,
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW',
+	'CMAKE_POLICY_VERSION_MINIMUM': '3.5'
 })
 alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
 
@@ -109,9 +110,10 @@ core_deps = [
 ]
 
 # Core library
-libcore = static_library('cacao_core', sources: [
+libcore = static_library('cacaocore', sources: [
 	'src' / 'expf.c',
 	'src' / 'Engine.cpp',
-	'src' / 'Log.cpp'
+	'src' / 'Log.cpp',
+	'src' / 'ThreadPool.cpp'
 ], dependencies: core_deps, include_directories: engine_headers, pic: true)
 core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)
