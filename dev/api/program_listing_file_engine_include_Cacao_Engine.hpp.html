@@ -386,10 +386,6 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;thread_pool/thread_pool.h&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 
@@ -401,6 +397,12 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">_instance</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
+<span class="w">        </span><span class="n">Engine</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Engine</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Engine</span><span class="p">(</span><span class="n">Engine</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Engine</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Engine</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Engine</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Engine</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">//======================= CONFIGURATION =======================</span>
 
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Config</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">targetDynTPS</span><span class="p">;</span>
@@ -411,20 +413,20 @@
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
 
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">InitConfig</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">standalone</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">standalone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">initialRequestedBackend</span><span class="p">;</span>
 
-<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">forceX11</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">forceX11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">InitConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetInitConfig</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">cfg</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
+<span class="w">        </span><span class="c1">//======================= LIFECYCLE =======================</span>
 
-
-<span class="w">        </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">State</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">Dead</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Alive</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Stopped</span><span class="p">,</span>
@@ -447,10 +449,17 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">InitConfig</span><span class="w"> </span><span class="n">cfg</span><span class="p">;</span>
-<span class="w">        </span><span class="n">State</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">State</span><span class="o">&gt;</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Engine</span><span class="p">()</span>
+<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">state</span><span class="p">(</span><span class="n">State</span><span class="o">::</span><span class="n">Dead</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="o">~</span><span class="n">Engine</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">State</span><span class="o">::</span><span class="n">Running</span><span class="p">)</span><span class="w"> </span><span class="n">Quit</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">State</span><span class="o">::</span><span class="n">Stopped</span><span class="p">)</span><span class="w"> </span><span class="n">GfxShutdown</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">State</span><span class="o">::</span><span class="n">Alive</span><span class="p">)</span><span class="w"> </span><span class="n">CoreShutdown</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
