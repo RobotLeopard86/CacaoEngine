@@ -29,7 +29,7 @@ namespace Cacao {
 		}
 
 		Exception(const std::string& m) : msg(makeMsg(m)) {}
-		virtual ~Exception();
+		virtual ~Exception() {}
 	};
 
 #define DEF_EXCEPTION(cls, tp)                          \
