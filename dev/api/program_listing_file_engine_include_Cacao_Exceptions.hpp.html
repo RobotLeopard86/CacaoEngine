@@ -412,7 +412,7 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="n">Exception</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="n">makeMsg</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Exception</span><span class="p">();</span>
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="cp">#define DEF_EXCEPTION(cls, tp)                          \</span>
