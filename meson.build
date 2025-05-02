@@ -88,8 +88,7 @@ yaml_opts.add_cmake_defines({
 	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
 	'CMAKE_BUILD_TYPE': cmake_build_type,
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW',
-	'CMAKE_POLICY_VERSION_MINIMUM': '3.5'
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 

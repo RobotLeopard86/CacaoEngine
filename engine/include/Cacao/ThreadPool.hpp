@@ -1,10 +1,14 @@
 #pragma once
 
 #include "DllHelper.hpp"
+#include "Exceptions.hpp"
 
 #include <memory>
 #include <future>
 #include <concepts>
+#include <vector>
+#include <functional>
+#include <algorithm>
 
 namespace Cacao {
 	/**
@@ -35,10 +39,14 @@ namespace Cacao {
 		 * @param task The task to execute
 		 *
 		 * @return A future that will be fulfilled when the task completes
+		 *
+		 * @throws BadInitStateException If the pool is not running
 		 */
 		template<typename F, typename... Args, typename R = std::invoke_result_t<F&&, Args&&...>>
 			requires std::invocable<F&&, Args&&...>
 		std::shared_future<R> Exec(F func, Args... args) {
+			Check<BadInitStateException>(IsRunning(), "The thread pool must be running to execute a task!");
+
 			//Wrap the function so it doesn't need any arguments
 			auto wrapper = std::bind(std::forward<F>(func), std::forward<Args...>(args...));
 
@@ -59,10 +67,14 @@ namespace Cacao {
 		 * @param task The function to execute
 		 *
 		 * @return An object by which the function can be requested to stop
+		 *
+		 * @throws BadInitStateException If the pool is not running
 		 */
 		template<typename F, typename... Args>
 			requires std::invocable<F&&, std::stop_token, Args&&...> && std::is_same_v<std::invoke_result_t<F&&, std::stop_token, Args&&...>, void>
 		std::stop_source ExecContinuous(F func, Args... args) {
+			Check<BadInitStateException>(IsRunning(), "The thread pool must be running to execute a continuous function!");
+
 			//Create stop source
 			std::stop_source& stop = stops.emplace_back();
 
@@ -83,12 +95,14 @@ namespace Cacao {
 		/**
 		 * @brief Start the thread pool
 		 *
-		 * @return Whether starting the pool succeeded
+		 * @throws BadInitStateException If the pool is running
 		 */
-		bool Start();
+		void Start();
 
 		/**
 		 * @brief Signal all continuous functions to stop and stop the pool
+		 *
+		 * @throws BadInitStateException If the pool is not running
 		 */
 		void Stop();
 
@@ -103,6 +117,8 @@ namespace Cacao {
 		 * @brief Check how many threads are in the pool
 		 *
 		 * @return Number of threads in pool
+		 *
+		 * @throws BadInitStateException If the pool is not running
 		 */
 		std::size_t GetThreadCount();
 

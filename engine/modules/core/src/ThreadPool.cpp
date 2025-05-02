@@ -6,7 +6,8 @@
 
 namespace Cacao {
 	struct ThreadPool::Impl {
-		std::unique_ptr<dp::thread_pool<dp::details::default_function_type, std::jthread>> pool;
+		using threadpool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
+		std::unique_ptr<threadpool> pool;
 	};
 
 	ThreadPool::ThreadPool() {
@@ -18,11 +19,26 @@ namespace Cacao {
 		if(IsRunning()) Stop();
 	}
 
-	void ThreadPool::ImplSubmit(std::function<void()> job) {
-		impl->pool->enqueue_detach(job);
+	bool ThreadPool::IsRunning() {
+		return (bool)impl->pool;
 	}
 
 	std::size_t ThreadPool::GetThreadCount() {
+		Check<BadInitStateException>(IsRunning(), "The thread pool must be running to check the thread count!");
 		return impl->pool->size();
+	}
+
+	void ThreadPool::Start() {
+		Check<BadInitStateException>(!IsRunning(), "The thread pool must be not running when Start is called!");
+		impl->pool.reset(new Impl::threadpool());
+	}
+
+	void ThreadPool::Stop() {
+		Check<BadInitStateException>(IsRunning(), "The thread pool must be running when Stop is called!");
+		impl->pool.reset(nullptr);
+	}
+
+	void ThreadPool::ImplSubmit(std::function<void()> job) {
+		impl->pool->enqueue_detach(job);
 	}
 }

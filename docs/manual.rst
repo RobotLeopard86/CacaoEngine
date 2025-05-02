@@ -19,7 +19,7 @@ Table of Contents:
 	manual/bundles
 	manual/env
 	manual/events
-	manual/excodes
+	manual/exceptions
 	manual/inputmappings
 	manual/deffiles
 	manual/shaders
