@@ -90,6 +90,7 @@ yaml_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
+yaml_opts.set_install(false)
 yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
 
 # Configure Silica
@@ -111,6 +112,7 @@ xg_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
+xg_opts.set_install(false)
 crossguid = cmake.subproject('crossguid', options: xg_opts, required: true).dependency('crossguid')
 
 # Configure SPIRV-Cross
@@ -124,6 +126,7 @@ spv_cross_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
+spv_cross_opts.set_install(false)
 spv_cross_sp = cmake.subproject('spirv-cross', options: spv_cross_opts, required: true)
 spv_core = spv_cross_sp.dependency('spirv-cross-core')
 spv_c = spv_cross_sp.dependency('spirv-cross-c')

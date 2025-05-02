@@ -1,2 +1,2 @@
 # Material compiler (basically just a libcacaoformats wrapper)
-matc = executable('ce-matc', 'main.cpp', dependencies: [formats_dep, cli11_dep, spinners_dep], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DCOMPILER_VER="1.0.0"'], include_directories: '..')
+matc = executable('ce-matc', 'main.cpp', dependencies: [formats_dep, cli11_dep, spinners_dep], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DCOMPILER_VER="1.0.0"'], include_directories: '..', install: true, install_tag: 'cacao')

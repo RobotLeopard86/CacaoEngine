@@ -4,6 +4,7 @@ objcpp = meson.get_compiler('objcpp')
 
 # Engine headers
 engine_headers = include_directories('include')
+install_subdir('include' / 'Cacao', install_dir: 'include', install_tag: 'cacao')
 
 # Always-included modules
 subdir('modules' / 'shader-tgtgen')
@@ -30,4 +31,4 @@ foreach b : backends
 endforeach
 
 # Game runtime
-#subdir('modules' / 'runtime')
+#subdir('exe')

@@ -6,4 +6,4 @@ cubetool = executable('ce-cubetool', sources: [
 ], dependencies: [
     formats_dep,
     cli11_dep
-], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DTOOL_VER="1.0.0"'], include_directories: '..')
+], cpp_args: ['-DCACAO_VER="' + meson.project_version() + '"', '-DTOOL_VER="1.0.0"'], include_directories: '..', install: true, install_tag: 'cacao')

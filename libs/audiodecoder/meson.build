@@ -17,6 +17,7 @@ audio_opts.add_cmake_defines({
     'CMAKE_POLICY_DEFAULT_CMP0126': 'NEW',
     'CMAKE_POLICY_VERSION_MINIMUM': '3.5'
 })
+audio_opts.set_install(false)
 audio_sp = cmake.subproject('audiolibs', options: audio_opts, required: true)
 ogg = audio_sp.dependency('ogg')
 vorbis = audio_sp.dependency('vorbis')
@@ -30,6 +31,6 @@ dr_libs_dep = dr_libs_sp.get_variable('dr_libs_dep')
 
 audiodecode_deps = [ogg, vorbis, vorbisfile, opus, opusfile, dr_libs_dep, commonlib_dep]
 
-audiodecode_lib = static_library('cacaoaudiodecode', 'src/AudioDecode.cpp', include_directories: ['include', 'src'], pic: true, dependencies: audiodecode_deps)
+audiodecode_lib = static_library('cacaoaudiodecode', 'src/AudioDecode.cpp', include_directories: ['include', 'src'], pic: true, dependencies: audiodecode_deps, install: true, install_tag: 'cacao')
 
 audiodecode_dep = declare_dependency(include_directories: 'include', link_with: audiodecode_lib, dependencies: audiodecode_deps)

@@ -17,6 +17,7 @@ assimp_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
+assimp_opts.set_install(false)
 assimp_sp = cmake.subproject('assimp', options: assimp_opts, required: true)
 assimp_dep = assimp_sp.dependency('assimp')
 zlib_dep = assimp_sp.dependency('zlibstatic')
@@ -40,6 +41,7 @@ alsoft_opts.add_cmake_defines({
 	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
+alsoft_opts.set_install(false)
 alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
 
 # glm, spdlog, dynalo, and thread-pool
@@ -114,5 +116,5 @@ libcore = static_library('cacaocore', sources: [
 	'src' / 'Engine.cpp',
 	'src' / 'Log.cpp',
 	'src' / 'ThreadPool.cpp'
-], dependencies: core_deps, include_directories: engine_headers, pic: true)
+], dependencies: core_deps, include_directories: engine_headers, pic: true, install: true, install_tag: 'cacao')
 core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)
