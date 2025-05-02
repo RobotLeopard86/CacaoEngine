@@ -385,10 +385,14 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Exceptions.hpp&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;concepts&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ThreadPool</span><span class="w"> </span><span class="p">{</span>
@@ -406,6 +410,8 @@
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">F</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invoke_result_t</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&amp;&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invocable</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&amp;&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Exec</span><span class="p">(</span><span class="n">F</span><span class="w"> </span><span class="n">func</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">BadInitStateException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">IsRunning</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;The thread pool must be running to execute a task!&quot;</span><span class="p">);</span>
+
 <span class="w">            </span><span class="c1">//Wrap the function so it doesn&#39;t need any arguments</span>
 <span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">wrapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">...));</span>
 
@@ -421,6 +427,8 @@
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">F</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invocable</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&amp;&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">stop_token</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">invoke_result_t</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&amp;&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">stop_token</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">stop_source</span><span class="w"> </span><span class="n">ExecContinuous</span><span class="p">(</span><span class="n">F</span><span class="w"> </span><span class="n">func</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">BadInitStateException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">IsRunning</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;The thread pool must be running to execute a continuous function!&quot;</span><span class="p">);</span>
+
 <span class="w">            </span><span class="c1">//Create stop source</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">stop_source</span><span class="o">&amp;</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stops</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span>
 
@@ -438,7 +446,7 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">stop</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">Start</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">Start</span><span class="p">();</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Stop</span><span class="p">();</span>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Built-In Event List &#8212; Cacao Engine Docs</title>
+    <title>Exceptions &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/events';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/exceptions';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Exceptions" href="exceptions.html" />
-    <link rel="prev" title="Environment Variables" href="env.html" />
+    <link rel="next" title="Input Mappings" href="inputmappings.html" />
+    <link rel="prev" title="Built-In Event List" href="events.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -238,6 +238,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -335,8 +339,8 @@
 <li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -388,7 +392,7 @@
     
     <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Built-In Event List</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Exceptions</span></li>
   </ul>
 </nav>
 </div>
@@ -405,23 +409,30 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="built-in-event-list">
-<h1>Built-In Event List<a class="headerlink" href="#built-in-event-list" title="Link to this heading"><span/></a></h1>
-<p>This is a list of all built-in events:</p>
+  <section id="exceptions">
+<h1>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"><span/></a></h1>
+<p>Cacao Engine exceptions come in a variety of different classes (though they are functionally identical) to give further context about what has happened. Each exception also has an associated message.</p>
+<section id="built-in-exceptions">
+<h2>Built-In Exceptions<a class="headerlink" href="#built-in-exceptions" title="Link to this heading"><span/></a></h2>
+<ol class="arabic simple" start="0">
+<li><p><code class="docutils literal notranslate"><span class="pre">External</span></code> - The exception came from an non-Cacao library and is not associated with the engine itself</p></li>
+</ol>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowClose</span></code>: The window is closing</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowFocus</span></code>: The window has gained focus</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowUnfocus</span></code>: The window has lost focus</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowResize</span></code>: The size of the window has changed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowMinimize</span></code>: The window has been minimized</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowRestore</span></code>: The window has been restored</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MouseMove</span></code>: The cursor has moved</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MouseScroll</span></code>: The mouse wheel has been scrolled</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MousePress</span></code>: A mouse button has been pressed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MouseRelease</span></code>: A mouse button has been released</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KeyDown</span></code>: A key has been pressed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KeyUp</span></code>: A key has been released</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FileNotFound</span></code> - A requested file was not found</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IO</span></code> - An I/O error occurred</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FileOpen</span></code> - A file could not be opened</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InvalidYAML</span></code> - YAML input followed a different schema than what was expected</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BadInitState</span></code> - Something was in the wrong initialization state</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BadGPUState</span></code> - A resource’s associated GPU object existed when it should not have or did not exist when it should have</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BadState</span></code> - Something was in the wrong state</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BadType</span></code> - An object of a different type than the expected one was passed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BadThread</span></code> - A function was called on an unsupported thread</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NonexistentValue</span></code> - A value was requested but an error value was returned instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NullValue</span></code> - A null value was given when a non-null value was expected</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Container</span></code> - Something went wrong pertaining to a list or map</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Misc</span></code> - Anything that doesn’t fit the above categories</p></li>
 </ul>
+</section>
 </section>
 
 
@@ -435,20 +446,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="env.html"
+       href="events.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Environment Variables</p>
+        <p class="prev-next-title">Built-In Event List</p>
       </div>
     </a>
     <a class="right-next"
-       href="exceptions.html"
+       href="inputmappings.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Exceptions</p>
+        <p class="prev-next-title">Input Mappings</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -458,6 +469,24 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-exceptions">Built-In Exceptions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

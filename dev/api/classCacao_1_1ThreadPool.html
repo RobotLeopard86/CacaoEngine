@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Define CACAO_API" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html" />
+    <link rel="next" title="Template Function Cacao::Check(bool, std::string)" href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html" />
     <link rel="prev" title="Class LogMgr" href="classCacao_1_1LogMgr.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -350,7 +350,10 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class ThreadPool</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html">Define CACAO_API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html">Template Function Cacao::Check(bool, std::string)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a5a954146f893e313a466f7d1978404df.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string)</a></li>
 </ul>
 </div>
 </nav></div>
@@ -427,8 +430,11 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>task</strong> – The task to execute</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A future that will be fulfilled when the task completes </p>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A future that will be fulfilled when the task completes</p>
 </dd>
 </dl>
 </dd></dl>
@@ -445,19 +451,22 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>task</strong> – The function to execute</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An object by which the function can be requested to stop </p>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An object by which the function can be requested to stop</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool5StartEv">
-<span id="_CPPv3N5Cacao10ThreadPool5StartEv"></span><span id="_CPPv2N5Cacao10ThreadPool5StartEv"></span><span id="Cacao::ThreadPool::Start"></span><span class="target" id="classCacao_1_1ThreadPool_1af8b497d0b0c9785fe50d88db7c8574a6"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Start</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool5StartEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao10ThreadPool5StartEv"></span><span id="_CPPv2N5Cacao10ThreadPool5StartEv"></span><span id="Cacao::ThreadPool::Start"></span><span class="target" id="classCacao_1_1ThreadPool_1aa8e959a6d0dccda6cf53aa651c9bc77a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Start</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool5StartEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Start the thread pool. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether starting the pool succeeded </p>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is running </p>
 </dd>
 </dl>
 </dd></dl>
@@ -466,6 +475,11 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool4StopEv">
 <span id="_CPPv3N5Cacao10ThreadPool4StopEv"></span><span id="_CPPv2N5Cacao10ThreadPool4StopEv"></span><span id="Cacao::ThreadPool::Stop"></span><span class="target" id="classCacao_1_1ThreadPool_1ad760969d156b923660f0dccc804e1224"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Stop</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool4StopEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Signal all continuous functions to stop and stop the pool. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -484,8 +498,11 @@
 <span id="_CPPv3N5Cacao10ThreadPool14GetThreadCountEv"></span><span id="_CPPv2N5Cacao10ThreadPool14GetThreadCountEv"></span><span id="Cacao::ThreadPool::GetThreadCount"></span><span class="target" id="classCacao_1_1ThreadPool_1ab9deeafdbf91235ce4e8caaba177b7b6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetThreadCount</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool14GetThreadCountEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check how many threads are in the pool. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of threads in pool </p>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of threads in pool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -530,11 +547,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html"
+       href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Define CACAO_API</p>
+        <p class="prev-next-title">Template Function Cacao::Check(bool, std::string)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
