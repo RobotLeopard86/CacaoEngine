@@ -10,24 +10,23 @@
 namespace Cacao {
 
 	//Impl struct
-	struct LogMgr::Impl {
+	struct Logger::Impl {
 		std::shared_ptr<spdlog::logger> engine, client;
 		std::shared_ptr<spdlog::sinks::basic_file_sink_mt> logfileSink;
 		std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> stdoutSink;
-		void Log(std::string message, Level level, bool isClient);
 	};
 
-	LogMgr::LogMgr() {
+	Logger::Logger() {
 		//Get logfile path
 		std::filesystem::path logfilePath = std::filesystem::current_path() / "cacao.log";
+
+		//Create implementation pointer
+		impl = std::make_unique<Impl>();
 
 		//Create sinks
 		impl->logfileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfilePath.string(), false);
 		impl->stdoutSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::always);
 		std::array<spdlog::sink_ptr, 2> sinks {{impl->logfileSink, impl->stdoutSink}};
-
-		//Create implementation pointer
-		impl = std::make_unique<Impl>();
 
 		//Create and register loggers
 		impl->engine = std::make_shared<spdlog::logger>("engine", sinks.begin(), sinks.end());
@@ -43,22 +42,25 @@ namespace Cacao {
 		spdlog::flush_on(spdlog::level::trace);
 	}
 
-	LogMgr::~LogMgr() {}
+	Logger::~Logger() {}
 
-	void LogMgr::EngineLog(std::string message, Level level) {
-		impl->Log(message, level, false);
+	Logger::LogToken Logger::Engine(Level level) {
+		LogToken lt;
+		lt.isClient = false;
+		lt.lvl = level;
+		return lt;
 	}
 
-	void LogMgr::ClientLog(std::string message, Level level) {
-		impl->Log(message, level, true);
+	Logger::LogToken Logger::Client(Level level) {
+		LogToken lt;
+		lt.isClient = true;
+		lt.lvl = level;
+		return lt;
 	}
 
-	void LogMgr::Impl::Log(std::string message, Level level, bool isClient) {
+	void Logger::ImplLog(std::string message, Level level, bool isClient) {
 		//Set logger
-		std::shared_ptr<spdlog::logger> logger = (isClient ? client : engine);
-
-		//Make sure the logger is registered
-		spdlog::register_logger(logger);
+		std::shared_ptr<spdlog::logger> logger = (isClient ? impl->client : impl->engine);
 
 		//Send a log message using the level specified
 		switch(level) {
@@ -72,7 +74,7 @@ namespace Cacao {
 				logger->warn(message);
 				break;
 			case Level::Error:
-				engine->error(message);
+				logger->error(message);
 				break;
 			case Level::Fatal:
 				logger->critical(message);

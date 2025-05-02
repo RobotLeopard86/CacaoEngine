@@ -75,7 +75,7 @@ namespace Cacao {
 	CACAO_API void Check(bool condition, std::string message) {
 		if(!condition) {
 			E ex(message);
-			LogMgr::Get().EngineLog(ex.what(), LogMgr::Level::Error);
+			Logger::Engine(Logger::Level::Error) << ex.what();
 			throw ex;
 		}
 	}

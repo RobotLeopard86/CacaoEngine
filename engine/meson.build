@@ -31,4 +31,4 @@ foreach b : backends
 endforeach
 
 # Game runtime
-#subdir('exe')
+subdir('exe')

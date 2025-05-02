@@ -44,9 +44,20 @@ alsoft_opts.add_cmake_defines({
 alsoft_opts.set_install(false)
 alsoft_dep = cmake.subproject('openal-soft', options: alsoft_opts, required: true).dependency('OpenAL')
 
-# glm, spdlog, dynalo, and thread-pool
+# Configure spdlog
+spdlog_opts = cmake.subproject_options()
+spdlog_opts.add_cmake_defines({
+	'SPDLOG_BUILD_PIC': 'ON',
+	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
+	'CMAKE_BUILD_TYPE': cmake_build_type,
+	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
+	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
+})
+spdlog_opts.set_install(false)
+spdlog_dep = cmake.subproject('spdlog', options: spdlog_opts, required: true).dependency('spdlog')
+
+# glm, dynalo, and thread-pool
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
-spdlog_dep = subproject('spdlog', required: true).get_variable('spdlog_dep')
 dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
 thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
 
@@ -116,5 +127,5 @@ libcore = static_library('cacaocore', sources: [
 	'src' / 'Engine.cpp',
 	'src' / 'Log.cpp',
 	'src' / 'ThreadPool.cpp'
-], dependencies: core_deps, include_directories: engine_headers, pic: true, install: true, install_tag: 'cacao')
+], dependencies: core_deps, include_directories: engine_headers, pic: true, install: true, install_tag: 'cacao', cpp_args: '-DCACAO_VER="' + meson.project_version() + '"')
 core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)
