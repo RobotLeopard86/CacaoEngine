@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Template Function Cacao::Check(bool, std::string) &#8212; Cacao Engine Docs</title>
+    <title>Class Logger &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Logger';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string)" href="function_Exceptions_8hpp_1a5a954146f893e313a466f7d1978404df.html" />
-    <link rel="prev" title="Class ThreadPool" href="classCacao_1_1ThreadPool.html" />
+    <link rel="next" title="Class ThreadPool" href="classCacao_1_1ThreadPool.html" />
+    <link rel="prev" title="Class Engine" href="classCacao_1_1Engine.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -343,14 +343,14 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Logger</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Function Cacao::Check(bool, std::string)</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html">Template Function Cacao::Check(bool, std::string)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a5a954146f893e313a466f7d1978404df.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string)</a></li>
@@ -392,7 +392,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Template Function Cacao::Check(bool, std::string)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Logger</span></li>
   </ul>
 </nav>
 </div>
@@ -409,25 +409,107 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="template-function-cacao-check-bool-std-string">
-<span id="exhale-function-exceptions-8hpp-1a9065e72124fbb9e4bf6444df35375e5d"></span><h1>Template Function Cacao::Check(bool, std::string)<a class="headerlink" href="#template-function-cacao-check-bool-std-string" title="Link to this heading"><span/></a></h1>
+  <section id="class-logger">
+<span id="exhale-class-classcacao-1-1logger"></span><h1>Class Logger<a class="headerlink" href="#class-logger" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Exceptions.hpp.html#file-engine-include-cacao-exceptions-hpp"><span class="std std-ref">File Exceptions.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Log.hpp.html#file-engine-include-cacao-log-hpp"><span class="std std-ref">File Log.hpp</span></a></p></li>
 </ul>
-<section id="function-documentation">
-<h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Link to this heading"><span/></a></h2>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6LoggerE">
+<span id="_CPPv3N5Cacao6LoggerE"></span><span id="_CPPv2N5Cacao6LoggerE"></span><span id="Cacao::Logger"></span><span class="target" id="classCacao_1_1Logger"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Logger</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6LoggerE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Logging manager singleton. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5LevelE">
+<span id="_CPPv3N5Cacao6Logger5LevelE"></span><span id="_CPPv2N5Cacao6Logger5LevelE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Level</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5LevelE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Level of severity for log messages. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5Level5TraceE">
+<span id="_CPPv3N5Cacao6Logger5Level5TraceE"></span><span id="_CPPv2N5Cacao6Logger5Level5TraceE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2eadd4ec0ac4e58f7c32a01244ae91150b1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Trace</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5Level5TraceE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Debug information, usually unneeded. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5Level4InfoE">
+<span id="_CPPv3N5Cacao6Logger5Level4InfoE"></span><span id="_CPPv2N5Cacao6Logger5Level4InfoE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2ea4059b0251f66a18cb56f544728796875"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Info</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Information. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5Level4WarnE">
+<span id="_CPPv3N5Cacao6Logger5Level4WarnE"></span><span id="_CPPv2N5Cacao6Logger5Level4WarnE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2ea56525ae64d370c0b448ac0d60710ef17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Warn</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5Level4WarnE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Warnings. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5Level5ErrorE">
+<span id="_CPPv3N5Cacao6Logger5Level5ErrorE"></span><span id="_CPPv2N5Cacao6Logger5Level5ErrorE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2ea902b0d55fddef6f8d651fe1035b7d4bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Error</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5Level5ErrorE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Errors. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5Level5FatalE">
+<span id="_CPPv3N5Cacao6Logger5Level5FatalE"></span><span id="_CPPv2N5Cacao6Logger5Level5FatalE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2ea882384ec38ce8d9582b57e70861730e4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Fatal</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5Level5FatalE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Fatal Errors. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao5CheckEvbNSt6stringE">
-<span id="_CPPv3I0EN5Cacao5CheckEbNSt6stringE"></span><span id="_CPPv2I0EN5Cacao5CheckEbNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Check</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">condition</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">message</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao5CheckEvbNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Checks if the condition is true, and throws an exception if not. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger3GetEv">
+<span id="_CPPv3N5Cacao6Logger3GetEv"></span><span id="_CPPv2N5Cacao6Logger3GetEv"></span><span id="Cacao::Logger::Get"></span><span class="target" id="classCacao_1_1Logger_1a4a094d5f1c74f33283597d6ec16a643a"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6LoggerE" title="Cacao::Logger"><span class="n"><span class="pre">Logger</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger3GetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger6EngineE5Level">
+<span id="_CPPv3N5Cacao6Logger6EngineE5Level"></span><span id="_CPPv2N5Cacao6Logger6EngineE5Level"></span><span id="Cacao::Logger::Engine__Level"></span><span class="target" id="classCacao_1_1Logger_1a787e02ee65327e5c56bf55bcf4df2e96"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">LogToken</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Engine</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Cacao::Logger::Level::Info"><span class="n"><span class="pre">Info</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger6EngineE5Level" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Log a message from the engine. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use only by the engine internally. </p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>condition</strong> – The condition to check. </p></li>
-<li><p><strong>message</strong> – The human-readable message to print if the condition is false </p></li>
+<li><p><strong>message</strong> – The message to log </p></li>
+<li><p><strong>level</strong> – The severity of the message (optional, defaults to Info)</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger6ClientE5Level">
+<span id="_CPPv3N5Cacao6Logger6ClientE5Level"></span><span id="_CPPv2N5Cacao6Logger6ClientE5Level"></span><span id="Cacao::Logger::Client__Level"></span><span class="target" id="classCacao_1_1Logger_1a9043c65728c6357c5e2c4ef52d4f5421"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">LogToken</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Client</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Cacao::Logger::Level::Info"><span class="n"><span class="pre">Info</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger6ClientE5Level" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Log a message from the game. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use by games using the engine. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> – The message to log </p></li>
+<li><p><strong>level</strong> – The severity of the message (optional, defaults to Info)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -444,20 +526,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1ThreadPool.html"
+       href="classCacao_1_1Engine.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class ThreadPool</p>
+        <p class="prev-next-title">Class Engine</p>
       </div>
     </a>
     <a class="right-next"
-       href="function_Exceptions_8hpp_1a5a954146f893e313a466f7d1978404df.html"
+       href="classCacao_1_1ThreadPool.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string)</p>
+        <p class="prev-next-title">Class ThreadPool</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -480,8 +562,21 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao5CheckEvbNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Check()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6LoggerE"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5LevelE"><code class="docutils literal notranslate"><span class="pre">Logger::Level</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5TraceE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Trace</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level4InfoE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Info</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level4WarnE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Warn</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5ErrorE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Error</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5FatalE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Fatal</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger3GetEv"><code class="docutils literal notranslate"><span class="pre">Logger::Get()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6EngineE5Level"><code class="docutils literal notranslate"><span class="pre">Logger::Engine()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6ClientE5Level"><code class="docutils literal notranslate"><span class="pre">Logger::Client()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
