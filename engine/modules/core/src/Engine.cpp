@@ -21,10 +21,6 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Info) << "Starting thread pool...";
 		ThreadPool::Get().Start();
 
-		/* ----------------------------------- *\
-		|*      PLACEHOLDER: EVENT MANAGER     *|
-		\* ----------------------------------- */
-
 		/* ------------------------------------- *\
 		|*      PLACEHOLDER: BUNDLE LOADING      *|
 		\* ------------------------------------- */

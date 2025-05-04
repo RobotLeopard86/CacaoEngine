@@ -24,7 +24,7 @@ namespace Cacao {
 		impl = std::make_unique<Impl>();
 
 		//Create sinks
-		impl->logfileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfilePath.string(), false);
+		impl->logfileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfilePath.string(), true);
 		impl->stdoutSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::always);
 		std::array<spdlog::sink_ptr, 2> sinks {{impl->logfileSink, impl->stdoutSink}};
 

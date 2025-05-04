@@ -2,7 +2,6 @@
 assimp_opts = cmake.subproject_options()
 assimp_opts.add_cmake_defines({
 	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_INSTALL_PREFIX': meson.project_build_root() / '.cmakeinstall',
 	'ASSIMP_BUILD_ZLIB': 'ON',
 	'ASSIMP_NO_EXPORT': 'ON',
 	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'OFF',
@@ -125,6 +124,7 @@ core_deps = [
 libcore = static_library('cacaocore', sources: [
 	'src' / 'expf.c',
 	'src' / 'Engine.cpp',
+	'src' / 'EventManager.cpp',
 	'src' / 'Log.cpp',
 	'src' / 'ThreadPool.cpp'
 ], dependencies: core_deps, include_directories: engine_headers, pic: true, install: true, install_tag: 'cacao', cpp_args: '-DCACAO_VER="' + meson.project_version() + '"')
