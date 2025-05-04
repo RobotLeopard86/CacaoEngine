@@ -2,6 +2,7 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/AudioManager.hpp"
 #include "Freetype.hpp"
 
 #ifndef CACAO_VER
@@ -26,10 +27,11 @@ namespace Cacao {
 		|*      PLACEHOLDER: BUNDLE LOADING      *|
 		\* ------------------------------------- */
 
-		/* ---------------------------------- *\
-		|*      PLACEHOLDER: AUDIO SETUP      *|
-		\* ---------------------------------- */
+		//Initialize audio
+		Logger::Engine(Logger::Level::Info) << "Initializing audio system...";
+		Check<MiscException>(AudioManager::Get().Initialize(), "Failed to initialize audio system!");
 
+		//Initialize FreeType
 		Logger::Engine(Logger::Level::Info) << "Initializing FreeType instance...";
 		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
 
@@ -65,6 +67,10 @@ namespace Cacao {
 		//Shutdown FreeType
 		Logger::Engine(Logger::Level::Info) << "Destroying FreeType instance...";
 		Check<ExternalException>(FT_Done_FreeType(freeType) == FT_Err_Ok, "Failed to destroy FreeType instance!");
+
+		//Terminate audio
+		Logger::Engine(Logger::Level::Info) << "Terminating audio system...";
+		AudioManager::Get().Terminate();
 
 		//Stop thread pool
 		Logger::Engine(Logger::Level::Info) << "Stopping thread pool...";

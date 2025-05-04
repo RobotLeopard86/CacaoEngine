@@ -68,6 +68,8 @@ namespace Cacao {
 		std::map<std::string, std::vector<EventConsumer>> consumers;
 
 		EventManager() {}
-		~EventManager() {}
+		~EventManager() {
+			UnsubscribeAllConsumers();
+		}
 	};
 }

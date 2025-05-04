@@ -123,6 +123,7 @@ core_deps = [
 # Core library
 libcore = static_library('cacaocore', sources: [
 	'src' / 'expf.c',
+	'src' / 'AudioManager.cpp',
 	'src' / 'Engine.cpp',
 	'src' / 'EventManager.cpp',
 	'src' / 'Log.cpp',

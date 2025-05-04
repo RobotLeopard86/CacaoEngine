@@ -54,6 +54,7 @@ namespace Cacao {
 	DEF_EXCEPTION(BadState, "Bad State")
 	DEF_EXCEPTION(BadThread, "Bad Thread")
 	DEF_EXCEPTION(BadType, "Bad Type")
+	DEF_EXCEPTION(BadValue, "Bad Value")
 	DEF_EXCEPTION(NonexistentValue, "Nonexistent Value")
 	DEF_EXCEPTION(NullValue, "Null Value")
 	DEF_EXCEPTION(Container, "Container")
