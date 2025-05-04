@@ -419,7 +419,9 @@
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">EventConsumer</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">consumers</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">EventManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-<span class="w">        </span><span class="o">~</span><span class="n">EventManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="o">~</span><span class="n">EventManager</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">UnsubscribeAllConsumers</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
