@@ -75,6 +75,6 @@ namespace Cacao {
 		std::unique_ptr<Impl> impl;
 
 		AudioManager();
-		~AudioManager() {}
+		~AudioManager();
 	};
 }

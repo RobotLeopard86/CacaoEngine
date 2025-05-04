@@ -38,10 +38,12 @@ namespace Cacao {
 		//Activate context
 		alcMakeContextCurrent(impl->ctx.get());
 
+		//Mark as initialized
+		impl->init = true;
+
 		//Set initial gain
 		SetGlobalGain(1.0f);
 
-		impl->init = true;
 		return true;
 	}
 
