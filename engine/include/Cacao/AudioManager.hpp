@@ -33,10 +33,8 @@ namespace Cacao {
 		 * @note This function is called by the engine during startup
 		 *
 		 * @throws BadInitStateException If the system was already initialized
-		 *
-		 * @return Whether initialization succeeded
 		 */
-		bool Initialize();
+		void Initialize();
 
 		/**
 		 * @brief Terminate the audio system
@@ -76,5 +74,7 @@ namespace Cacao {
 
 		AudioManager();
 		~AudioManager();
+
+		friend class Sound;
 	};
 }

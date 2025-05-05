@@ -1,11 +1,13 @@
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "AudioImpl.hpp"
 
 #include "AL/al.h"
 #include "AL/alc.h"
 #include "AL/alext.h"
 
 #include <functional>
+#include <memory>
 
 namespace Cacao {
 	struct AudioManager::Impl {
@@ -24,16 +26,16 @@ namespace Cacao {
 		if(IsInitialized()) Terminate();
 	}
 
-	bool AudioManager::Initialize() {
+	void AudioManager::Initialize() {
 		Check<BadInitStateException>(!IsInitialized(), "The audio system must not be initialized when Initialize is called!");
 
 		//Create ALC device
 		impl->dev = std::unique_ptr<ALCdevice, std::function<void(ALCdevice*)>>(alcOpenDevice(nullptr), alcCloseDevice);
-		if(!impl->dev) return false;
+		Check<ExternalException>((bool)impl->dev, "Failed to create OpenAL device!");
 
 		//Create ALC context
 		impl->ctx = std::unique_ptr<ALCcontext, std::function<void(ALCcontext*)>>(alcCreateContext(impl->dev.get(), nullptr), alcDestroyContext);
-		if(!impl->ctx) return false;
+		Check<ExternalException>((bool)impl->ctx, "Failed to create OpenAL context!");
 
 		//Activate context
 		alcMakeContextCurrent(impl->ctx.get());
@@ -43,8 +45,6 @@ namespace Cacao {
 
 		//Set initial gain
 		SetGlobalGain(1.0f);
-
-		return true;
 	}
 
 	void AudioManager::Terminate() {

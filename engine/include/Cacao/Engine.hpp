@@ -106,21 +106,15 @@ namespace Cacao {
 		 * @details If the engine is not in standalone mode, this will also trigger bundle loading.
 		 *
 		 * The engine must be in the Dead state when this method is called
-		 *
-		 * @param initCfg The initialization configuration
-		 *
-		 * @return Whether initialization succeeded
 		 */
-		bool CoreInit(const InitConfig& initCfg);
+		void CoreInit(const InitConfig& initCfg);
 
 		/**
 		 * @brief Initialize the graphics backend and windowing system
 		 *
 		 * The engine must be in the Alive state when this method is called
-		 *
-		 * @return Whether initialization succeeded
 		 */
-		bool GfxInit();
+		void GfxInit();
 
 		/**
 		 * @brief Perform any final pre-run tasks and start the game loop

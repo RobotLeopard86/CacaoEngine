@@ -35,9 +35,9 @@ namespace Cacao {
 
 	/**
 	 * @brief An event that stores some data
-	 * @note The data type used must be trivally copy-constructible
 	 */
 	template<typename T>
+		requires std::is_trivially_copy_constructible_v<T>
 	class CACAO_API DataEvent : public Event {
 	  public:
 		/**

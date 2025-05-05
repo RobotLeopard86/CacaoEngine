@@ -10,7 +10,7 @@
 #endif
 
 namespace Cacao {
-	bool Engine::CoreInit(const Engine::InitConfig& initCfg) {
+	void Engine::CoreInit(const Engine::InitConfig& initCfg) {
 		Check<BadStateException>(state == State::Dead, "Engine must be in dead state to run core initialization!");
 
 		//Store config
@@ -29,20 +29,18 @@ namespace Cacao {
 
 		//Initialize audio
 		Logger::Engine(Logger::Level::Info) << "Initializing audio system...";
-		Check<MiscException>(AudioManager::Get().Initialize(), "Failed to initialize audio system!");
+		AudioManager::Get().Initialize();
 
 		//Initialize FreeType
 		Logger::Engine(Logger::Level::Info) << "Initializing FreeType instance...";
 		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
 
 		state.store(State::Alive);
-		return true;
 	}
 
-	bool Engine::GfxInit() {
+	void Engine::GfxInit() {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run graphics initialization!");
 		state.store(State::Stopped);
-		return true;
 	}
 
 	void Engine::Run() {
