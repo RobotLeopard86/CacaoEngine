@@ -341,6 +341,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -366,6 +369,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
@@ -496,30 +502,17 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig">
-<span id="_CPPv3N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="_CPPv2N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="Cacao::Engine::CoreInit__InitConfigCR"></span><span class="target" id="classCacao_1_1Engine_1a642252798abbacbbf7191187a483cff8"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoreInit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initCfg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="_CPPv2N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="Cacao::Engine::CoreInit__InitConfigCR"></span><span class="target" id="classCacao_1_1Engine_1a7273e4fa3dcdeec0c9425ce4966a3c5c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoreInit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initCfg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Initialize all engine systems that don’t require graphics or windowing. </p>
 <p>If the engine is not in standalone mode, this will also trigger bundle loading.</p>
-<p>The engine must be in the Dead state when this method is called</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>initCfg</strong> – The initialization configuration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Whether initialization succeeded </p>
-</dd>
-</dl>
+<p>The engine must be in the Dead state when this method is called </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine7GfxInitEv">
-<span id="_CPPv3N5Cacao6Engine7GfxInitEv"></span><span id="_CPPv2N5Cacao6Engine7GfxInitEv"></span><span id="Cacao::Engine::GfxInit"></span><span class="target" id="classCacao_1_1Engine_1a2473fe372bcb37d103895bb01b1738e8"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GfxInit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine7GfxInitEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine7GfxInitEv"></span><span id="_CPPv2N5Cacao6Engine7GfxInitEv"></span><span id="Cacao::Engine::GfxInit"></span><span class="target" id="classCacao_1_1Engine_1a4e4161c4beaf70bb1e218b8322ededbe"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GfxInit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine7GfxInitEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Initialize the graphics backend and windowing system. </p>
-<p>The engine must be in the Alive state when this method is called</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether initialization succeeded </p>
-</dd>
-</dl>
+<p>The engine must be in the Alive state when this method is called </p>
 </dd></dl>
 
 <dl class="cpp function">
