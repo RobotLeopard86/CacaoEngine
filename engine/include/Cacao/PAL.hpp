@@ -3,6 +3,7 @@
 #include "DllHelper.hpp"
 
 #include <string>
+#include <memory>
 
 namespace Cacao {
 	/**
@@ -56,11 +57,17 @@ namespace Cacao {
 		 * @brief Configure the implementation pointer for a PAL-backed object
 		 *
 		 * Loads the implementation pointer with an interface object from the loaded windowing/graphics module
+		 *
+		 * @throws MiscException If the module necessary to configure the pointer is loaded
 		 */
 		template<typename T>
 		void ConfigureImplPtr(T& obj) = delete;
 
 	  private:
-		PAL() {}
+		struct Impl;
+		std::unique_ptr<Impl> impl;
+
+		PAL();
+		~PAL();
 	};
 }

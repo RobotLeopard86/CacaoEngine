@@ -91,6 +91,6 @@ namespace Cacao {
 	template<typename P, typename E>
 		requires std::is_base_of_v<Exception, E>
 	CACAO_API void Check(std::shared_ptr<P> ptr, std::string message) {
-		CheckException<E>((bool)ptr, message);
+		Check<E>((bool)ptr, message);
 	}
 }

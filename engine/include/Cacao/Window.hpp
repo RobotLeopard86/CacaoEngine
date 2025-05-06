@@ -50,6 +50,9 @@ namespace Cacao {
 		 * @param mode Initial window mode
 		 *
 		 * @throws BadInitStateException If the window is already open
+		 * @throws BadValueException If the title string is empty
+		 * @throws BadValueException If one of the size components is zero
+		 * @throws BadValueException If the window is to be invisible and not in Windowed mode
 		 */
 		void Open(const std::string& title, glm::uvec2 size, bool visible, Mode mode);
 
@@ -84,6 +87,7 @@ namespace Cacao {
 		 * @param newTitle The new window title
 		 *
 		 * @throws BadInitStateException If the window is not open
+		 * @throws BadValueException If the title string is empty
 		 */
 		void SetTitle(const std::string& newTitle);
 
@@ -93,7 +97,7 @@ namespace Cacao {
 		 * @param newSize The new window size
 		 *
 		 * @throws BadInitStateException If the window is not open
-		 * @throws BadValueException If either of the window size coordinates is 0
+		 * @throws BadValueException If one of the size components is zero
 		 */
 		void Resize(const glm::uvec2& newSize);
 
@@ -103,6 +107,7 @@ namespace Cacao {
 		 * @param newMode The new window mode
 		 *
 		 * @throws BadInitStateException If the window is not open
+		 * @throws BadValueException If the window is invisible and to be moved from Windowed mode
 		 */
 		void SetMode(Mode newMode);
 
