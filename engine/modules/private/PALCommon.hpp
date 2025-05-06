@@ -18,7 +18,6 @@ namespace Cacao {
 		const std::string id;
 
 		enum class FactoryType {
-			Window,
 			Shader,
 			Tex2D,
 			Cubemap,

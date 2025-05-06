@@ -32,31 +32,20 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Set the active windowing module
+		 * @brief Set the active module
 		 *
 		 * @param mod The name of the new module to use
 		 *
 		 * @throws NonexistentValueException If the requested module does not exist
 		 * @throws BadValueException If the requested module is incompatible with the platform
-		 * @throws MiscException If there are still PAL-backed objects using a different windowing module
+		 * @throws MiscException If there are still PAL-backed objects using a different module
 		 */
-		void SetWindowMod(const std::string& mod);
-
-		/**
-		 * @brief Set the active graphics module
-		 *
-		 * @param mod The name of the new module to use
-		 *
-		 * @throws NonexistentValueException If the requested module does not exist
-		 * @throws BadValueException If the requested module is incompatible with the platform
-		 * @throws MiscException If there are still PAL-backed objects using a different graphics module
-		 */
-		void SetGfxMod(const std::string& mod);
+		void SetModule(const std::string& mod);
 
 		/**
 		 * @brief Configure the implementation pointer for a PAL-backed object
 		 *
-		 * Loads the implementation pointer with an interface object from the loaded windowing/graphics module
+		 * Loads the implementation pointer with an interface object from the loaded module
 		 *
 		 * @throws MiscException If the module necessary to configure the pointer is loaded
 		 */
