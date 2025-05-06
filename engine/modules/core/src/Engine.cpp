@@ -20,7 +20,7 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << "!";
 
 		//Start thread pool
-		Logger::Engine(Logger::Level::Info) << "Starting thread pool...";
+		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
 		ThreadPool::Get().Start();
 
 		/* ------------------------------------- *\
@@ -28,14 +28,17 @@ namespace Cacao {
 		\* ------------------------------------- */
 
 		//Initialize audio
-		Logger::Engine(Logger::Level::Info) << "Initializing audio system...";
+		Logger::Engine(Logger::Level::Trace) << "Initializing audio system...";
 		AudioManager::Get().Initialize();
 
 		//Initialize FreeType
-		Logger::Engine(Logger::Level::Info) << "Initializing FreeType instance...";
+		Logger::Engine(Logger::Level::Trace) << "Initializing FreeType instance...";
 		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
 
 		state.store(State::Alive);
+
+		//We are here
+		Logger::Engine(Logger::Level::Info) << "Reached target Core Initialization.";
 	}
 
 	void Engine::GfxInit() {
@@ -63,15 +66,15 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Info) << "Shutting down engine core...";
 
 		//Shutdown FreeType
-		Logger::Engine(Logger::Level::Info) << "Destroying FreeType instance...";
+		Logger::Engine(Logger::Level::Trace) << "Destroying FreeType instance...";
 		Check<ExternalException>(FT_Done_FreeType(freeType) == FT_Err_Ok, "Failed to destroy FreeType instance!");
 
 		//Terminate audio
-		Logger::Engine(Logger::Level::Info) << "Terminating audio system...";
+		Logger::Engine(Logger::Level::Trace) << "Terminating audio system...";
 		AudioManager::Get().Terminate();
 
 		//Stop thread pool
-		Logger::Engine(Logger::Level::Info) << "Stopping thread pool...";
+		Logger::Engine(Logger::Level::Trace) << "Stopping thread pool...";
 		ThreadPool::Get().Stop();
 
 		//Final goodbye message

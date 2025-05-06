@@ -121,14 +121,14 @@ core_deps = [
 ]
 
 # Core library
-libcore = shared_library('cacaocore', sources: [
+libcore = static_library('cacaocore', sources: [
 	'src' / 'expf.c',
 	'src' / 'AudioManager.cpp',
 	'src' / 'Engine.cpp',
 	'src' / 'EventManager.cpp',
 	'src' / 'Log.cpp',
 	'src' / 'PAL.cpp',
-	'src' / 'ThreadPool.cpp',
-	'src' / 'Window.cpp'
-], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao', cpp_args: '-DCACAO_VER="' + meson.project_version() + '"')
-core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)
+	'src' / 'ThreadPool.cpp'
+], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao',
+cpp_args: '-DCACAO_VER="' + meson.project_version() + '"', pic: true)
+core_dep = declare_dependency(link_whole: libcore, dependencies: core_deps)

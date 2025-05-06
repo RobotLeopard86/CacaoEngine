@@ -9,7 +9,6 @@ namespace Cacao {
 	}
 
 	PAL::~PAL() {
-		impl->gfx.reset();
-		impl->win.reset();
+		impl->mod.reset();
 	}
 }
