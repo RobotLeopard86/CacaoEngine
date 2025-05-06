@@ -371,6 +371,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -500,6 +503,90 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window5CloseEv">
+<span id="_CPPv3N5Cacao6Window5CloseEv"></span><span id="_CPPv2N5Cacao6Window5CloseEv"></span><span id="Cacao::Window::Close"></span><span class="target" id="classCacao_1_1Window_1aabd4a6d275f865ab0169309faaab32ec"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Close</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window5CloseEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Close the window. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window4ShowEv">
+<span id="_CPPv3N5Cacao6Window4ShowEv"></span><span id="_CPPv2N5Cacao6Window4ShowEv"></span><span id="Cacao::Window::Show"></span><span class="target" id="classCacao_1_1Window_1ada8ef9d7d67637d772c8abf16b800406"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Show</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window4ShowEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Make the window visible. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If the window is already visible </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window4HideEv">
+<span id="_CPPv3N5Cacao6Window4HideEv"></span><span id="_CPPv2N5Cacao6Window4HideEv"></span><span id="Cacao::Window::Hide"></span><span class="target" id="classCacao_1_1Window_1a3020f3a1b81700beeb92842927713ef3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Hide</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window4HideEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Hide the window. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If the window is already hidden </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window8SetTitleERKNSt6stringE">
+<span id="_CPPv3N5Cacao6Window8SetTitleERKNSt6stringE"></span><span id="_CPPv2N5Cacao6Window8SetTitleERKNSt6stringE"></span><span id="Cacao::Window::SetTitle__ssCR"></span><span class="target" id="classCacao_1_1Window_1a036ce62515e90a535a9b98606833072f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetTitle</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">newTitle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window8SetTitleERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Change the window title. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newTitle</strong> – The new window title</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window6ResizeERKN3glm5uvec2E">
+<span id="_CPPv3N5Cacao6Window6ResizeERKN3glm5uvec2E"></span><span id="_CPPv2N5Cacao6Window6ResizeERKN3glm5uvec2E"></span><span id="Cacao::Window::Resize__glm::uvec2CR"></span><span class="target" id="classCacao_1_1Window_1ad727a668bf4017b8c5a31c02dd78901c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Resize</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">newSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window6ResizeERKN3glm5uvec2E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Change the window size. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newSize</strong> – The new window size</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If either of the window size coordinates is 0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window7SetModeE4Mode">
+<span id="_CPPv3N5Cacao6Window7SetModeE4Mode"></span><span id="_CPPv2N5Cacao6Window7SetModeE4Mode"></span><span id="Cacao::Window::SetMode__Mode"></span><span class="target" id="classCacao_1_1Window_1a61898fcf707a9f0efa4860bf12cf2f62"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Window4ModeE" title="Cacao::Window::Mode"><span class="n"><span class="pre">Mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window7SetModeE4Mode" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Change the window mode. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newMode</strong> – The new window mode</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window6IsOpenEv">
 <span id="_CPPv3N5Cacao6Window6IsOpenEv"></span><span id="_CPPv2N5Cacao6Window6IsOpenEv"></span><span id="Cacao::Window::IsOpen"></span><span class="target" id="classCacao_1_1Window_1aa05ecfc6f6c83dbca5c943daa77bb7f0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsOpen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window6IsOpenEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check if the window is open. </p>
@@ -522,30 +609,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window11IsMinimizedEv">
-<span id="_CPPv3N5Cacao6Window11IsMinimizedEv"></span><span id="_CPPv2N5Cacao6Window11IsMinimizedEv"></span><span id="Cacao::Window::IsMinimized"></span><span class="target" id="classCacao_1_1Window_1a1bd4c4ad7165fa910a86aff338675ad2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsMinimized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window11IsMinimizedEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if the window is minimized. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether the window is minimized, or false if the window is not open </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window14IsVSyncEnabledEv">
-<span id="_CPPv3N5Cacao6Window14IsVSyncEnabledEv"></span><span id="_CPPv2N5Cacao6Window14IsVSyncEnabledEv"></span><span id="Cacao::Window::IsVSyncEnabled"></span><span class="target" id="classCacao_1_1Window_1a060be85e8b5b2e0522639b462f42cdb8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsVSyncEnabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window14IsVSyncEnabledEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if V-Sync is enabled. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether V-Sync is enabled, or false if the window is not open </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window8GetTitleEv">
-<span id="_CPPv3N5Cacao6Window8GetTitleEv"></span><span id="_CPPv2N5Cacao6Window8GetTitleEv"></span><span id="Cacao::Window::GetTitle"></span><span class="target" id="classCacao_1_1Window_1a1d13926844856d00cd836675a58a3d19"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetTitle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window8GetTitleEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Window8GetTitleEv"></span><span id="_CPPv2N5Cacao6Window8GetTitleEv"></span><span id="Cacao::Window::GetTitle"></span><span class="target" id="classCacao_1_1Window_1a1e5194e169d12c9bbb42cdcaa1b2f2e4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetTitle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window8GetTitleEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check the window title. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -556,7 +621,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window7GetSizeEv">
-<span id="_CPPv3N5Cacao6Window7GetSizeEv"></span><span id="_CPPv2N5Cacao6Window7GetSizeEv"></span><span id="Cacao::Window::GetSize"></span><span class="target" id="classCacao_1_1Window_1a2e54f286a9a595109b2ae19131967a90"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window7GetSizeEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Window7GetSizeEv"></span><span id="_CPPv2N5Cacao6Window7GetSizeEv"></span><span id="Cacao::Window::GetSize"></span><span class="target" id="classCacao_1_1Window_1a1b37274db26a9f343dc4845fbf859c3f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window7GetSizeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check the window size. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -566,8 +631,19 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window18GetContentAreaSizeEv">
+<span id="_CPPv3N5Cacao6Window18GetContentAreaSizeEv"></span><span id="_CPPv2N5Cacao6Window18GetContentAreaSizeEv"></span><span id="Cacao::Window::GetContentAreaSize"></span><span class="target" id="classCacao_1_1Window_1ae1003112c584c4ad86fb8127cd35389d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetContentAreaSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window18GetContentAreaSizeEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check the pixel size of the content area. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The content area size, or {0, 0} if the window is not open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window7GetModeEv">
-<span id="_CPPv3N5Cacao6Window7GetModeEv"></span><span id="_CPPv2N5Cacao6Window7GetModeEv"></span><span id="Cacao::Window::GetMode"></span><span class="target" id="classCacao_1_1Window_1a8e2bc3d3793a09d28720d0617b845319"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Window4ModeE" title="Cacao::Window::Mode"><span class="n"><span class="pre">Mode</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetMode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window7GetModeEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Window7GetModeEv"></span><span id="_CPPv2N5Cacao6Window7GetModeEv"></span><span id="Cacao::Window::GetMode"></span><span class="target" id="classCacao_1_1Window_1a9705ae1047be407d6ac133e93dded035"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Window4ModeE" title="Cacao::Window::Mode"><span class="n"><span class="pre">Mode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetMode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window7GetModeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check the window mode. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -652,12 +728,17 @@
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4OpenERKNSt6stringEN3glm5uvec2Eb4Mode"><code class="docutils literal notranslate"><span class="pre">Window::Open()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window5CloseEv"><code class="docutils literal notranslate"><span class="pre">Window::Close()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4ShowEv"><code class="docutils literal notranslate"><span class="pre">Window::Show()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4HideEv"><code class="docutils literal notranslate"><span class="pre">Window::Hide()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window8SetTitleERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Window::SetTitle()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window6ResizeERKN3glm5uvec2E"><code class="docutils literal notranslate"><span class="pre">Window::Resize()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7SetModeE4Mode"><code class="docutils literal notranslate"><span class="pre">Window::SetMode()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window6IsOpenEv"><code class="docutils literal notranslate"><span class="pre">Window::IsOpen()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window9IsVisibleEv"><code class="docutils literal notranslate"><span class="pre">Window::IsVisible()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window11IsMinimizedEv"><code class="docutils literal notranslate"><span class="pre">Window::IsMinimized()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window14IsVSyncEnabledEv"><code class="docutils literal notranslate"><span class="pre">Window::IsVSyncEnabled()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window8GetTitleEv"><code class="docutils literal notranslate"><span class="pre">Window::GetTitle()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7GetSizeEv"><code class="docutils literal notranslate"><span class="pre">Window::GetSize()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window18GetContentAreaSizeEv"><code class="docutils literal notranslate"><span class="pre">Window::GetContentAreaSize()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7GetModeEv"><code class="docutils literal notranslate"><span class="pre">Window::GetMode()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window3GetEv"><code class="docutils literal notranslate"><span class="pre">Window::Get()</span></code></a></li>
 </ul>

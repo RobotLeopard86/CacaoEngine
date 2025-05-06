@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Template Class Flushable &#8212; Cacao Engine Docs</title>
+    <title>Class PAL &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Flushable';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1PAL';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Logger" href="classCacao_1_1Logger.html" />
-    <link rel="prev" title="Class EventManager" href="classCacao_1_1EventManager.html" />
+    <link rel="next" title="Class Sound" href="classCacao_1_1Sound.html" />
+    <link rel="prev" title="Template Class MultiFuture" href="classCacao_1_1MultiFuture.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -361,8 +361,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Class Flushable</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Flushable.html">Template Class Flushable</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
@@ -370,8 +370,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class PAL</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
@@ -425,7 +425,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Template Class Flushable</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class PAL</span></li>
   </ul>
 </nav>
 </div>
@@ -442,46 +442,78 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="template-class-flushable">
-<span id="exhale-class-classcacao-1-1flushable"></span><h1>Template Class Flushable<a class="headerlink" href="#template-class-flushable" title="Link to this heading"><span/></a></h1>
+  <section id="class-pal">
+<span id="exhale-class-classcacao-1-1pal"></span><h1>Class PAL<a class="headerlink" href="#class-pal" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Flushable.hpp.html#file-engine-include-cacao-flushable-hpp"><span class="std std-ref">File Flushable.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_PAL.hpp.html#file-engine-include-cacao-pal-hpp"><span class="std std-ref">File PAL.hpp</span></a></p></li>
 </ul>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao9FlushableE">
-<span id="_CPPv3I0EN5Cacao9FlushableE"></span><span id="_CPPv2I0EN5Cacao9FlushableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Flushable"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao9FlushableE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Utility that caches changes to an object and applies them on command. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PALE">
+<span id="_CPPv3N5Cacao3PALE"></span><span id="_CPPv2N5Cacao3PALE"></span><span id="Cacao::PAL"></span><span class="target" id="classCacao_1_1PAL"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PAL</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao3PALE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Platform abstraction layer for managing platform-specific behavior. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This class is only for engine use. While it is documented, <strong>no clients should use this class</strong></p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable9FlushableER1T">
-<span id="_CPPv3N5Cacao9Flushable9FlushableER1T"></span><span id="_CPPv2N5Cacao9Flushable9FlushableER1T"></span><span id="Cacao::Flushable::Flushable__TR"></span><span class="target" id="classCacao_1_1Flushable_1af25c2b87ede2fa05f9f91d96674bcd82"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Flushable9FlushableER1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new flushable. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL12SetWindowModERKNSt6stringE">
+<span id="_CPPv3N5Cacao3PAL12SetWindowModERKNSt6stringE"></span><span id="_CPPv2N5Cacao3PAL12SetWindowModERKNSt6stringE"></span><span id="Cacao::PAL::SetWindowMod__ssCR"></span><span class="target" id="classCacao_1_1PAL_1aac8bd07c8e5ac379dd5b0bc632bc030a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetWindowMod</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mod</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL12SetWindowModERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the active windowing module. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>obj</strong> – The original object </p>
+<dd class="field-odd"><p><strong>mod</strong> – The name of the new module to use</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the requested module does not exist </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the requested module is incompatible with the platform </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If there are still PAL-backed objects using a different windowing module </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableptEv">
-<span id="_CPPv3N5Cacao9FlushableptEv"></span><span id="_CPPv2N5Cacao9FlushableptEv"></span><span id="Cacao::Flushable::pointer-operator"></span><span class="target" id="classCacao_1_1Flushable_1a1f19bc3eaf9d0e6590fbca528dbab29a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9FlushableptEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Access the object copy where changes can be made. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL9SetGfxModERKNSt6stringE">
+<span id="_CPPv3N5Cacao3PAL9SetGfxModERKNSt6stringE"></span><span id="_CPPv2N5Cacao3PAL9SetGfxModERKNSt6stringE"></span><span id="Cacao::PAL::SetGfxMod__ssCR"></span><span class="target" id="classCacao_1_1PAL_1a6e7335c58eace74677c9d948efbc79c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetGfxMod</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mod</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL9SetGfxModERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the active graphics module. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mod</strong> – The name of the new module to use</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the requested module does not exist </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the requested module is incompatible with the platform </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If there are still PAL-backed objects using a different graphics module </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableaSE1T">
-<span id="_CPPv3N5Cacao9FlushableaSE1T"></span><span id="_CPPv2N5Cacao9FlushableaSE1T"></span><span id="Cacao::Flushable::assign-operator__T"></span><span class="target" id="classCacao_1_1Flushable_1aa954a014c290b214baed25539e1692c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newDat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9FlushableaSE1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Overwrite the object copy with new data. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao3PAL16ConfigureImplPtrEvR1T">
+<span id="_CPPv3I0EN5Cacao3PAL16ConfigureImplPtrER1T"></span><span id="_CPPv2I0EN5Cacao3PAL16ConfigureImplPtrER1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1PAL_1a24e82f0948315e9b34a8a20c851eec6b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConfigureImplPtr</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao3PAL16ConfigureImplPtrEvR1T" title="Cacao::PAL::ConfigureImplPtr::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao3PAL16ConfigureImplPtrEvR1T" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Configure the implementation pointer for a PAL-backed object. </p>
+<p>Loads the implementation pointer with an interface object from the loaded windowing/graphics module </p>
 </dd></dl>
 
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable5FlushEv">
-<span id="_CPPv3N5Cacao9Flushable5FlushEv"></span><span id="_CPPv2N5Cacao9Flushable5FlushEv"></span><span id="Cacao::Flushable::Flush"></span><span class="target" id="classCacao_1_1Flushable_1aa576d2339edc75767f5c9fb22e0cc204"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flush</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Flushable5FlushEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Write the changes back to the original object. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL3GetEv">
+<span id="_CPPv3N5Cacao3PAL3GetEv"></span><span id="_CPPv2N5Cacao3PAL3GetEv"></span><span id="Cacao::PAL::Get"></span><span class="target" id="classCacao_1_1PAL_1af5582461a036d41d97c50cff117b0f79"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao3PALE" title="Cacao::PAL"><span class="n"><span class="pre">PAL</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL3GetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -501,20 +533,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1EventManager.html"
+       href="classCacao_1_1MultiFuture.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class EventManager</p>
+        <p class="prev-next-title">Template Class MultiFuture</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Logger.html"
+       href="classCacao_1_1Sound.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Logger</p>
+        <p class="prev-next-title">Class Sound</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -538,11 +570,11 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao9FlushableE"><code class="docutils literal notranslate"><span class="pre">Flushable</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Flushable9FlushableER1T"><code class="docutils literal notranslate"><span class="pre">Flushable::Flushable()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9FlushableptEv"><code class="docutils literal notranslate"><span class="pre">Flushable::operator-&gt;()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9FlushableaSE1T"><code class="docutils literal notranslate"><span class="pre">Flushable::operator=()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Flushable5FlushEv"><code class="docutils literal notranslate"><span class="pre">Flushable::Flush()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PALE"><code class="docutils literal notranslate"><span class="pre">PAL</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL12SetWindowModERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">PAL::SetWindowMod()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL9SetGfxModERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">PAL::SetGfxMod()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao3PAL16ConfigureImplPtrEvR1T"><code class="docutils literal notranslate"><span class="pre">PAL::ConfigureImplPtr()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL3GetEv"><code class="docutils literal notranslate"><span class="pre">PAL::Get()</span></code></a></li>
 </ul>
 </li>
 </ul>
