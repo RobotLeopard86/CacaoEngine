@@ -6,6 +6,9 @@ objcpp = meson.get_compiler('objcpp')
 engine_headers = include_directories('include')
 install_subdir('include' / 'Cacao', install_dir: 'include', install_tag: 'cacao')
 
+# Headers private to modules
+module_private_headers = include_directories('modules' / 'private')
+
 # Always-included modules
 subdir('modules' / 'shader-tgtgen')
 subdir('modules' / 'core')

@@ -53,6 +53,59 @@ namespace Cacao {
 		 */
 		void Open(const std::string& title, glm::uvec2 size, bool visible, Mode mode);
 
+		/**
+		 * @brief Close the window
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 */
+		void Close();
+
+		//======================= PROPERTY SETTERS =======================
+
+		/**
+		 * @brief Make the window visible
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 * @throws BadStateException If the window is already visible
+		 */
+		void Show();
+
+		/**
+		 * @brief Hide the window
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 * @throws BadStateException If the window is already hidden
+		 */
+		void Hide();
+
+		/**
+		 * @brief Change the window title
+		 *
+		 * @param newTitle The new window title
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 */
+		void SetTitle(const std::string& newTitle);
+
+		/**
+		 * @brief Change the window size
+		 *
+		 * @param newSize The new window size
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 * @throws BadValueException If either of the window size coordinates is 0
+		 */
+		void Resize(const glm::uvec2& newSize);
+
+		/**
+		 * @brief Change the window mode
+		 *
+		 * @param newMode The new window mode
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 */
+		void SetMode(Mode newMode);
+
 		//======================= PROPERTY GETTERS =======================
 
 		/**
@@ -74,29 +127,11 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Check if the window is minimized
-		 *
-		 * @return Whether the window is minimized, or false if the window is not open
-		 */
-		bool IsMinimized() {
-			return open && minimized;
-		}
-
-		/**
-		 * @brief Check if V-Sync is enabled
-		 *
-		 * @return Whether V-Sync is enabled, or false if the window is not open
-		 */
-		bool IsVSyncEnabled() {
-			return open && vsync;
-		}
-
-		/**
 		 * @brief Check the window title
 		 *
 		 * @return The window title, or an empty string if the window is not open
 		 */
-		const std::string& GetTitle() {
+		const std::string GetTitle() {
 			return (open ? title : "");
 		}
 
@@ -105,27 +140,36 @@ namespace Cacao {
 		 *
 		 * @return The window size, or {0, 0} if the window is not open
 		 */
-		const glm::uvec2& GetSize() {
+		const glm::uvec2 GetSize() {
 			return (open ? size : glm::uvec2 {0, 0});
 		}
+
+		/**
+		 * @brief Check the pixel size of the content area
+		 *
+		 * @return The content area size, or {0, 0} if the window is not open
+		 */
+		const glm::uvec2 GetContentAreaSize();
 
 		/**
 		 * @brief Check the window mode
 		 *
 		 * @return The window mode, or Mode::Windowed if the window is not open
 		 */
-		const Mode& GetMode() {
+		const Mode GetMode() {
 			return (open ? mode : Mode::Windowed);
 		}
 
 	  private:
 		struct Impl;
 		std::unique_ptr<Impl> impl;
+		friend class PAL;
+		friend class PALWindowInterface;
 
 		Window();
 		~Window();
 
-		bool open, visible, vsync, minimized;
+		bool open, visible;
 		Mode mode;
 		glm::uvec2 size;
 		std::string title;

@@ -127,6 +127,7 @@ libcore = shared_library('cacaocore', sources: [
 	'src' / 'Engine.cpp',
 	'src' / 'EventManager.cpp',
 	'src' / 'Log.cpp',
-	'src' / 'ThreadPool.cpp'
-], dependencies: core_deps, include_directories: engine_headers, install: true, install_tag: 'cacao', cpp_args: '-DCACAO_VER="' + meson.project_version() + '"')
+	'src' / 'ThreadPool.cpp',
+	'src' / 'Window.cpp'
+], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao', cpp_args: '-DCACAO_VER="' + meson.project_version() + '"')
 core_dep = declare_dependency(link_with: libcore, dependencies: core_deps)
