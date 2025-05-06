@@ -497,7 +497,12 @@
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is already open </p>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is already open </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the title string is empty </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If one of the size components is zero </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the window is to be invisible and not in Windowed mode </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -550,7 +555,10 @@
 <dd class="field-odd"><p><strong>newTitle</strong> – The new window title</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the title string is empty </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -566,7 +574,7 @@
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If either of the window size coordinates is 0 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If one of the size components is zero </p></li>
 </ul>
 </dd>
 </dl>
@@ -581,7 +589,10 @@
 <dd class="field-odd"><p><strong>newMode</strong> – The new window mode</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the window is invisible and to be moved from Windowed mode </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
