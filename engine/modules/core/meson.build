@@ -82,6 +82,7 @@ imm32 = cpp.find_library('imm32', required: host_machine.system() == 'windows')
 winmm = cpp.find_library('winmm', required: host_machine.system() == 'windows')
 versionlib = cpp.find_library('version', required: host_machine.system() == 'windows')
 setupapi = cpp.find_library('setupapi', required: host_machine.system() == 'windows')
+apple_audio = dependency('appleframeworks', modules: ['CoreAudio', 'AudioToolbox'], required: host_machine.system() == 'darwin')
 
 # Dependencies list
 core_deps = [
@@ -117,7 +118,8 @@ core_deps = [
 	imm32,
 	winmm,
 	versionlib,
-	setupapi
+	setupapi,
+	apple_audio
 ]
 
 # Core library

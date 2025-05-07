@@ -49,3 +49,6 @@ docs/*
 x64
 *.vcxproj*
 *.sln
+
+# Don't send clangd cache
+.cache

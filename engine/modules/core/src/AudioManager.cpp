@@ -1,10 +1,8 @@
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "AudioImpl.hpp"
 
 #include "AL/al.h"
 #include "AL/alc.h"
-#include "AL/alext.h"
 
 #include <functional>
 #include <memory>

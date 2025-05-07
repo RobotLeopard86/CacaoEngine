@@ -4,7 +4,8 @@ kernel32 = cpp.find_library('kernel32', required: true)
 # Win32 module
 libwin32 = static_library('cacaowin32', sources: [
 	'Win32Window.cpp'
-], include_directories: [engine_headers, module_private_headers], dependencies: [core_dep, kernel32], 
+], include_directories: [engine_headers, module_private_headers], dependencies: [kernel32, glm_dep], 
 pic: true, install: true, install_tag: 'cacao')
 
-win32_dep = declare_dependency(link_whole: libwin32, dependencies: [core_dep, kernel32])
+win32_dep = declare_dependency(link_whole: libwin32, dependencies: [kernel32, glm_dep])
+backend_deps += win32_dep

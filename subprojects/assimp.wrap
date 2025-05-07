@@ -2,3 +2,4 @@
 url = https://github.com/assimp/assimp
 depth = 1
 revision = v5.4.3
+diff_files = assimp-maczlibfix.patch
