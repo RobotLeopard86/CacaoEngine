@@ -1,5 +1,3 @@
-#pragma once
-
 #import "MacOSTypes.hpp"
 
 @implementation CacaoAppDelegate

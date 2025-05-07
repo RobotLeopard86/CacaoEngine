@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Cacao/Window.hpp"
+#include <memory>
 
 #import <Cocoa/Cocoa.h>
-#include <memory>
 
 using namespace Cacao;
 
