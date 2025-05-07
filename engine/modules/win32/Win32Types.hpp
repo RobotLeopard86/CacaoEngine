@@ -11,6 +11,6 @@ namespace Cacao {
 	};
 
 	struct Window::Impl {
-		std::unique_ptr<WindowsCommon> mac;
+		std::unique_ptr<WindowsCommon> win;
 	};
 }
