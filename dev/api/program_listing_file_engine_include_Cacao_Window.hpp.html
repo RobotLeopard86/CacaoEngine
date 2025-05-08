@@ -416,6 +416,8 @@
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Close</span><span class="p">();</span>
 
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">HandleOSEvents</span><span class="p">();</span>
+
 <span class="w">        </span><span class="c1">//======================= PROPERTY SETTERS =======================</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Show</span><span class="p">();</span>
@@ -437,6 +439,8 @@
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsVisible</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">open</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">visible</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsMinimized</span><span class="p">();</span>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetTitle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">open</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
@@ -466,8 +470,9 @@
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">;</span>
 
-<span class="w">        </span><span class="c1">//This is only used for restoring window position when switching modes</span>
+<span class="w">        </span><span class="c1">//This is only used for restoring window position and size when switching modes</span>
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">ivec2</span><span class="w"> </span><span class="n">lastPos</span><span class="p">;</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">ivec2</span><span class="w"> </span><span class="n">lastSize</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

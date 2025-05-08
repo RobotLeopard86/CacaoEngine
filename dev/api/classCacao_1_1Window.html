@@ -519,6 +519,17 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window14HandleOSEventsEv">
+<span id="_CPPv3N5Cacao6Window14HandleOSEventsEv"></span><span id="_CPPv2N5Cacao6Window14HandleOSEventsEv"></span><span id="Cacao::Window::HandleOSEvents"></span><span class="target" id="classCacao_1_1Window_1a2775737e035948420c7f91d61d718fa7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HandleOSEvents</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window14HandleOSEventsEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Handle events from the operating system. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window4ShowEv">
 <span id="_CPPv3N5Cacao6Window4ShowEv"></span><span id="_CPPv2N5Cacao6Window4ShowEv"></span><span id="Cacao::Window::Show"></span><span class="target" id="classCacao_1_1Window_1ada8ef9d7d67637d772c8abf16b800406"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Show</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window4ShowEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Make the window visible. </p>
@@ -591,7 +602,7 @@
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the window is not open </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the window is invisible and to be moved from Windowed mode </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If the window is invisible </p></li>
 </ul>
 </dd>
 </dl>
@@ -615,6 +626,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Whether the window is visible, or false if the window is not open </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window11IsMinimizedEv">
+<span id="_CPPv3N5Cacao6Window11IsMinimizedEv"></span><span id="_CPPv2N5Cacao6Window11IsMinimizedEv"></span><span id="Cacao::Window::IsMinimized"></span><span class="target" id="classCacao_1_1Window_1a1bd4c4ad7165fa910a86aff338675ad2"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsMinimized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window11IsMinimizedEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check if the window is minimized. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the window is minimized, or true if the window is not open </p>
 </dd>
 </dl>
 </dd></dl>
@@ -740,6 +762,7 @@
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4OpenERKNSt6stringEN3glm5uvec2Eb4Mode"><code class="docutils literal notranslate"><span class="pre">Window::Open()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window5CloseEv"><code class="docutils literal notranslate"><span class="pre">Window::Close()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window14HandleOSEventsEv"><code class="docutils literal notranslate"><span class="pre">Window::HandleOSEvents()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4ShowEv"><code class="docutils literal notranslate"><span class="pre">Window::Show()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window4HideEv"><code class="docutils literal notranslate"><span class="pre">Window::Hide()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window8SetTitleERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Window::SetTitle()</span></code></a></li>
@@ -747,6 +770,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7SetModeE4Mode"><code class="docutils literal notranslate"><span class="pre">Window::SetMode()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window6IsOpenEv"><code class="docutils literal notranslate"><span class="pre">Window::IsOpen()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window9IsVisibleEv"><code class="docutils literal notranslate"><span class="pre">Window::IsVisible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window11IsMinimizedEv"><code class="docutils literal notranslate"><span class="pre">Window::IsMinimized()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window8GetTitleEv"><code class="docutils literal notranslate"><span class="pre">Window::GetTitle()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window7GetSizeEv"><code class="docutils literal notranslate"><span class="pre">Window::GetSize()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Window18GetContentAreaSizeEv"><code class="docutils literal notranslate"><span class="pre">Window::GetContentAreaSize()</span></code></a></li>
