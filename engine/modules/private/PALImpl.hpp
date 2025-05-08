@@ -8,5 +8,6 @@
 namespace Cacao {
 	struct PAL::Impl {
 		std::shared_ptr<PALModule> mod;
+		bool modInit;
 	};
 }

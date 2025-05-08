@@ -63,6 +63,13 @@ namespace Cacao {
 		 */
 		void Close();
 
+		/**
+		 * @brief Handle events from the operating system
+		 *
+		 * @throws BadInitStateException If the window is not open
+		 */
+		void HandleOSEvents();
+
 		//======================= PROPERTY SETTERS =======================
 
 		/**
@@ -107,7 +114,7 @@ namespace Cacao {
 		 * @param newMode The new window mode
 		 *
 		 * @throws BadInitStateException If the window is not open
-		 * @throws BadValueException If the window is invisible and to be moved from Windowed mode
+		 * @throws BadStateException If the window is invisible
 		 */
 		void SetMode(Mode newMode);
 
@@ -130,6 +137,13 @@ namespace Cacao {
 		bool IsVisible() {
 			return open && visible;
 		}
+
+		/**
+		 * @brief Check if the window is minimized
+		 *
+		 * @return Whether the window is minimized, or true if the window is not open
+		 */
+		bool IsMinimized();
 
 		/**
 		 * @brief Check the window title
@@ -179,7 +193,8 @@ namespace Cacao {
 		glm::uvec2 size;
 		std::string title;
 
-		//This is only used for restoring window position when switching modes
+		//This is only used for restoring window position and size when switching modes
 		glm::ivec2 lastPos;
+		glm::ivec2 lastSize;
 	};
 }

@@ -3,18 +3,27 @@
 #include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
+#include "Cacao/Window.hpp"
+#include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
 
+#include <array>
+
 namespace Cacao {
+	Engine::Engine()
+	  : state(State::Dead) {
+		Logger::Engine(Logger::Level::Warn) << "engine makey";
+	}
+
 	void Engine::CoreInit(const Engine::InitConfig& initCfg) {
 		Check<BadStateException>(state == State::Dead, "Engine must be in dead state to run core initialization!");
 
 		//Store config
-		cfg = initCfg;
+		icfg = initCfg;
 
 		//Say hello (this will also trigger logging initialization)
 		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << "!";
@@ -35,30 +44,83 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Initializing FreeType instance...";
 		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
 
-		state.store(State::Alive);
-
-		//We are here
+		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Core Initialization.";
+
+		std::lock_guard lkg(stateMtx);
+		state = State::Alive;
 	}
 
 	void Engine::GfxInit() {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run graphics initialization!");
-		state.store(State::Stopped);
+
+		//Open window
+		Logger::Engine(Logger::Level::Trace) << "Creating window...";
+		Window::Get().Open("Cacao Engine", {1280, 720}, true, Window::Mode::Windowed);
+
+		//In descending order of priority
+		const std::array<std::string, 2> backends {{"vulkan", "opengl"}};
+
+		//Try to intialize backend
+		bool found = false;
+		std::string chosen;
+		for(const std::string& backend : backends) {
+			//Set module in PAL
+			Logger::Engine(Logger::Level::Trace) << "Trying backend \"" << backend << "\"...";
+			PAL::Get().SetModule(backend);
+			if(PAL::Get().TryInitActiveModule()) {
+				found = true;
+				chosen = backend;
+				break;
+			}
+		}
+		if(!found) {
+			Logger::Engine(Logger::Level::Fatal) << "No graphics backends are available!";
+			CoreShutdown();
+			return;
+		}
+		Logger::Engine(Logger::Level::Info) << "Selected backend \"" << chosen << "\".";
+
+		//Done with stage
+		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
+		std::lock_guard lkg(stateMtx);
+		state = State::Stopped;
 	}
 
 	void Engine::Run() {
 		Check<BadStateException>(state == State::Stopped, "Engine must be in stopped state to start!");
-		state.store(State::Running);
+		std::lock_guard lkg(stateMtx);
+		state = State::Running;
+
+		/* ------------------------------------------- *\
+		|*      PLACEHOLDER: FINAL INITIALIZATION      *|
+		\* ------------------------------------------- */
+
+		while(state == State::Running) {
+			//Handle OS events
+			Window::Get().HandleOSEvents();
+		}
 	}
 
 	void Engine::Quit() {
 		Check<BadStateException>(state == State::Running, "Engine must be in running state to quit!");
-		state.store(State::Stopped);
+		std::lock_guard lkg(stateMtx);
+		state = State::Stopped;
 	}
 
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Stopped, "Engine must be in stopped state to run graphics shutdown!");
-		state.store(State::Alive);
+
+		//Unload backend
+		Logger::Engine(Logger::Level::Trace) << "Unloading graphics backend...";
+		PAL::Get().Unload();
+
+		//Close window
+		Logger::Engine(Logger::Level::Trace) << "Destroying window...";
+		Window::Get().Close();
+
+		std::lock_guard lkg(stateMtx);
+		state = State::Alive;
 	}
 
 	void Engine::CoreShutdown() {
@@ -78,7 +140,8 @@ namespace Cacao {
 		ThreadPool::Get().Stop();
 
 		//Final goodbye message
-		state.store(State::Dead);
+		std::lock_guard lkg(stateMtx);
+		state = State::Dead;
 		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete.";
 	}
 }

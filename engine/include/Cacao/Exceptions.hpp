@@ -24,7 +24,7 @@ namespace Cacao {
 
 		std::string makeMsg(const std::string& m) {
 			std::stringstream ss;
-			ss << "(Cacao Engine " << type() << " Exception) " << msg;
+			ss << "(Cacao Engine " << type() << " Exception) " << m;
 			return ss.str();
 		}
 

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <atomic>
+#include <mutex>
 #include <string>
 
 #include "DllHelper.hpp"
+#include "Log.hpp"
 
 namespace Cacao {
 	/**
@@ -85,7 +86,7 @@ namespace Cacao {
 		 * @return The initialization config values
 		 */
 		const InitConfig& GetInitConfig() {
-			return cfg;
+			return icfg;
 		}
 
 		//======================= LIFECYCLE =======================
@@ -154,15 +155,16 @@ namespace Cacao {
 		 * @return The engine state
 		 */
 		const State GetState() {
+			std::lock_guard lk(stateMtx);
 			return state;
 		}
 
 	  private:
-		InitConfig cfg;
-		std::atomic<State> state;
+		InitConfig icfg;
+		State state;
+		std::mutex stateMtx;
 
-		Engine()
-		  : state(State::Dead) {}
+		Engine();
 		~Engine() {
 			if(state == State::Running) Quit();
 			if(state == State::Stopped) GfxShutdown();
