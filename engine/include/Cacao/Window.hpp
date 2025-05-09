@@ -182,8 +182,8 @@ namespace Cacao {
 	  private:
 		struct CACAO_API Impl;
 		std::unique_ptr<Impl> impl;
-		friend class PAL;
-		friend class PALWindowInterface;
+		friend class X11Common;
+		friend class WaylandCommon;
 
 		Window();
 		~Window();

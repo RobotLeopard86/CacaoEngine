@@ -20,10 +20,7 @@ if host_machine.system() == 'windows'
 elif host_machine.system() == 'darwin'
     subdir('modules' / 'macos')
 elif host_machine.system() == 'linux'
-    linwin = get_option('linux_windowing')
-    foreach w : linwin
-        subdir('modules' / w)
-    endforeach
+    subdir('modules' / 'linux')
 else
     error('Unsupported platform!')
 endif

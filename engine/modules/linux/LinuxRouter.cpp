@@ -1,0 +1,191 @@
+#include "Cacao/Exceptions.hpp"
+#include "Cacao/Window.hpp"
+#include "Cacao/Engine.hpp"
+#ifdef HAS_WAYLAND
+#include "wayland/WaylandTypes.hpp"
+#endif
+#ifdef HAS_X11
+#include "x11/X11Types.hpp"
+#endif
+#include "LinuxRouter.hpp"
+
+#include <memory>
+#include <cstdlib>
+
+namespace Cacao {
+	Window::Window()
+	  : open(false), visible(false), mode(Mode::Windowed), size(0, 0), title(""), lastPos(0, 0) {
+		//Create implementation pointer
+		impl = std::make_unique<Impl>();
+		impl->useX = Engine::Get().GetInitConfig().forceX11;
+#ifndef HAS_X11
+		Check<MiscException>(false, "X11 has been disabled in this build, but has been forcibly enabled!");
+#endif
+#ifdef HAS_WAYLAND
+		if(!impl->useX) impl->wl = std::make_unique<WaylandCommon>();
+#endif
+#ifdef HAS_X11
+		impl->x = std::make_unique<X11Common>();
+#endif
+
+		//Decide whether to use Wayland or X11 based on environment variables
+#define GETENV(v) []() { const char* p = std::getenv(v); if(p == nullptr) return std::string(""); else return std::string(p); }()
+		std::string sessionType = GETENV("XDG_SESSION_TYPE");
+		std::string xDisplay = GETENV("DISPLAY");
+		std::string wlDisplay = GETENV("WAYLAND_DISPLAY");
+#undef GETENV
+		bool ok = false;
+		if(impl->useX && !xDisplay.empty()) {
+			ok = true;
+		} else if(!sessionType.empty()) {
+			if(sessionType.compare("wayland")) {
+				if(!wlDisplay.empty()) {
+					ok = true;
+					impl->useX = false;
+					goto good;
+				}
+				if(!xDisplay.empty()) {
+					ok = true;
+					impl->useX = true;
+				}
+			} else if(sessionType.compare("x11")) {
+				if(!xDisplay.empty()) {
+					ok = true;
+					impl->useX = true;
+				}
+			}
+		} else {
+			if(!wlDisplay.empty()) {
+				ok = true;
+				impl->useX = false;
+				goto good;
+			}
+			if(!xDisplay.empty()) {
+				ok = true;
+				impl->useX = true;
+			}
+		}
+		Check<MiscException>(ok, "Failed to resolve choice of windowing system!");
+	good:
+		return;
+	}
+
+	Window::~Window() {
+		if(open) Close();
+	}
+
+#define FORWARD(fn, ...)          \
+	if(impl->useX)                \
+		impl->x->fn(__VA_ARGS__); \
+	else                          \
+		impl->wl->fn(__VA_ARGS__);
+
+#define FORWARD_RET(fn, ...)             \
+	if(impl->useX)                       \
+		return impl->x->fn(__VA_ARGS__); \
+	else                                 \
+		return impl->wl->fn(__VA_ARGS__);
+
+	void Window::Open(const std::string& title, glm::uvec2 size, bool visible, Mode mode) {
+		Check<BadInitStateException>(!open, "The window must not be open when Open is called!");
+		Check<BadStateException>(visible || (!visible && mode == Mode::Windowed), "Cannot open the window to a non-windowed mode while invisible!");
+
+		//Set properties
+		this->title = title;
+		this->size = size;
+		this->visible = visible;
+		this->mode = mode;
+
+		//Forward call
+		FORWARD(CreateWindow)
+
+		open = true;
+
+		//Apply initial mode
+		SetMode(mode);
+	}
+
+	void Window::Close() {
+		Check<BadInitStateException>(open, "The window must be open when Close is called!");
+
+		open = false;
+
+		//Forward call
+		FORWARD(DestroyWindow)
+	}
+
+	void Window::HandleOSEvents() {
+		Check<BadInitStateException>(open, "The window must be open to set the mode!");
+
+		//Forward call
+		FORWARD(HandleEvents)
+	}
+
+	bool Window::IsMinimized() {
+		//Forward call
+		FORWARD_RET(Minimized)
+	}
+
+	const glm::uvec2 Window::GetContentAreaSize() {
+		if(!open) return {0, 0};
+
+		//Forward call
+		FORWARD_RET(ContentAreaSize)
+	}
+
+	void Window::Show() {
+		Check<BadInitStateException>(open, "The window must be open to show it!");
+		Check<BadInitStateException>(!visible, "The window must be hidden when Show is called!");
+
+		visible = true;
+		FORWARD(Visibility, true)
+	}
+
+	void Window::Hide() {
+		Check<BadInitStateException>(open, "The window must be open to hide it!");
+		Check<BadInitStateException>(visible, "The window must be shown when Hide is called!");
+
+		visible = false;
+		FORWARD(Visibility, false)
+	}
+
+	void Window::SetTitle(const std::string& newTitle) {
+		Check<BadInitStateException>(open, "The window must be open to set the title!");
+		Check<BadValueException>(newTitle.length() > 0, "Cannot set window title to an empty string!");
+
+		title = newTitle;
+		FORWARD(Title, newTitle)
+	}
+
+	void Window::Resize(const glm::uvec2& newSize) {
+		Check<BadInitStateException>(open, "The window must be open to set the title!");
+		Check<BadValueException>(newSize.x > 0 && newSize.y > 0, "New window size must not have any zero or negative coordinates!");
+
+		size = newSize;
+		FORWARD(Resize, newSize)
+	}
+
+	void Window::SetMode(Mode newMode) {
+		if(mode == newMode) return;
+		Check<BadInitStateException>(open, "The window must be open to set the mode!");
+		Check<BadStateException>(visible, "The window must be visible to set the mode!");
+
+		//Save last position and size if needed
+		if(mode == Mode::Windowed) {
+			FORWARD(SaveWinPos)
+			if(newMode == Mode::Fullscreen) {
+				FORWARD(SaveWinSize)
+			}
+		}
+
+		//Forward call
+		FORWARD(ModeChange, newMode)
+
+		//Apply last window position and size if applicable
+		if(newMode == Mode::Windowed) {
+			FORWARD(RestoreWin)
+		}
+
+		mode = newMode;
+	}
+}

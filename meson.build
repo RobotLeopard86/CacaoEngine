@@ -1,4 +1,4 @@
-project('cacaoengine', 'c', 'cpp', 'objcpp', 'c', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype' ])
+project('cacaoengine', 'c', 'cpp', 'objcpp', 'c', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype', 'default_library=static' ])
 
 # We are Ninja-only
 if get_option('backend') != 'ninja'

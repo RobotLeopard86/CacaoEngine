@@ -8,5 +8,5 @@ libmacos = static_library('cacaomacos', sources: [
 ], include_directories: [engine_headers, module_private_headers], dependencies: [apple, glm_dep], 
 pic: true, install: true, install_tag: 'cacao')
 
-macos_dep = declare_dependency(link_whole: libmacos, dependencies: [apple, glm_dep])
+macos_dep = declare_dependency(link_whole: libmacos, dependencies: [apple])
 backend_deps += macos_dep
