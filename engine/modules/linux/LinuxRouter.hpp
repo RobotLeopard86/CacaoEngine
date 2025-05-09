@@ -2,6 +2,8 @@
 
 #include "Cacao/Window.hpp"
 
+#define win Window::Get()
+
 namespace Cacao {
 	class X11Common;
 	class WaylandCommon;

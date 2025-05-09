@@ -122,6 +122,8 @@ namespace Cacao {
 	}
 
 	bool Window::IsMinimized() {
+		if(!open) return true;
+
 		//Forward call
 		FORWARD_RET(Minimized)
 	}
