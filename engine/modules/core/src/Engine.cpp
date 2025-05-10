@@ -19,6 +19,17 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Warn) << "engine makey";
 	}
 
+	Engine::~Engine() {
+		if(state == State::Running) Quit();
+		if(state == State::Stopped) GfxShutdown();
+		if(state == State::Alive) CoreShutdown();
+	}
+
+	Engine& Engine::Get() {
+		static Engine _instance;
+		return _instance;
+	}
+
 	void Engine::CoreInit(const Engine::InitConfig& initCfg) {
 		Check<BadStateException>(state == State::Dead, "Engine must be in dead state to run core initialization!");
 

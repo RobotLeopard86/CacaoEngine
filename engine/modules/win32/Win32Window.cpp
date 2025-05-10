@@ -8,20 +8,20 @@
 constexpr DWORD windowedStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;
 constexpr DWORD fullscreenStyle = WS_POPUP;
 
-LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
-	switch(msg) {
-		case WM_DESTROY:
-			hWnd = nullptr;
-			PostQuitMessage(0);
-			return 0;
-		case WM_CLOSE:
-			Cacao::Engine::Get().Quit();
-			return 0;
-	}
-	return DefWindowProcA(hWnd, msg, wp, lp);
-}
-
 namespace Cacao {
+	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
+		switch(msg) {
+			case WM_DESTROY:
+				hWnd = nullptr;
+				PostQuitMessage(0);
+				return 0;
+			case WM_CLOSE:
+				Engine::Get().Quit();
+				return 0;
+		}
+		return DefWindowProcA(hWnd, msg, wp, lp);
+	}
+
 	Window::Window()
 	  : open(false), visible(false), mode(Mode::Windowed), size(0, 0), title(""), lastPos(0, 0) {
 		//Create implementation pointer

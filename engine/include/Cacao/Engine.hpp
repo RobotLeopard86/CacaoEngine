@@ -17,10 +17,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static Engine& Get() {
-			static Engine _instance;
-			return _instance;
-		}
+		static Engine& Get();
 
 		///@cond
 		Engine(const Engine&) = delete;
@@ -165,10 +162,6 @@ namespace Cacao {
 		std::mutex stateMtx;
 
 		Engine();
-		~Engine() {
-			if(state == State::Running) Quit();
-			if(state == State::Stopped) GfxShutdown();
-			if(state == State::Alive) CoreShutdown();
-		}
+		~Engine();
 	};
 }
