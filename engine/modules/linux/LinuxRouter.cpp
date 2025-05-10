@@ -13,6 +13,9 @@
 #include <cstdlib>
 
 namespace Cacao {
+	Window::Impl::Impl() {}
+	Window::Impl::~Impl() {}
+
 	Window::Window()
 	  : open(false), visible(false), mode(Mode::Windowed), size(0, 0), title(""), lastPos(0, 0) {
 		//Create implementation pointer
@@ -34,46 +37,56 @@ namespace Cacao {
 		std::string xDisplay = GETENV("DISPLAY");
 		std::string wlDisplay = GETENV("WAYLAND_DISPLAY");
 #undef GETENV
-		bool ok = false;
+#ifdef HAS_X11
 		if(impl->useX && !xDisplay.empty()) {
-			ok = true;
-		} else if(!sessionType.empty()) {
+			return;
+		}
+#endif
+		if(!sessionType.empty()) {
 			if(sessionType.compare("wayland")) {
+#ifdef HAS_WAYLAND
 				if(!wlDisplay.empty()) {
-					ok = true;
 					impl->useX = false;
-					goto good;
+					return;
 				}
+#endif
+#ifdef HAS_X11
 				if(!xDisplay.empty()) {
-					ok = true;
 					impl->useX = true;
+					return;
 				}
-			} else if(sessionType.compare("x11")) {
+#endif
+			}
+#ifdef HAS_X11
+			if(sessionType.compare("x11")) {
 				if(!xDisplay.empty()) {
-					ok = true;
 					impl->useX = true;
+					return;
 				}
 			}
+#endif
 		} else {
+#ifdef HAS_WAYLAND
 			if(!wlDisplay.empty()) {
-				ok = true;
 				impl->useX = false;
-				goto good;
+				return;
 			}
+#endif
+#ifdef HAS_X11
 			if(!xDisplay.empty()) {
-				ok = true;
 				impl->useX = true;
+				return;
 			}
 		}
-		Check<MiscException>(ok, "Failed to resolve choice of windowing system!");
-	good:
-		return;
+#endif
+		Check<MiscException>(false, "Failed to resolve choice of windowing system!");
 	}
 
 	Window::~Window() {
 		if(open) Close();
 	}
 
+#if defined(HAS_X11) && defined(HAS_WAYLAND)
 #define FORWARD(fn, ...)          \
 	if(impl->useX)                \
 		impl->x->fn(__VA_ARGS__); \
@@ -85,6 +98,13 @@ namespace Cacao {
 		return impl->x->fn(__VA_ARGS__); \
 	else                                 \
 		return impl->wl->fn(__VA_ARGS__);
+#elif defined(HAS_X11)
+#define FORWARD(fn, ...) impl->x->fn(__VA_ARGS__);
+#define FORWARD_RET(fn, ...) return impl->x->fn(__VA_ARGS__);
+#elif defined(HAS_WAYLAND)
+#define FORWARD(fn, ...) impl->wl->fn(__VA_ARGS__);
+#define FORWARD_RET(fn, ...) return impl->wl->fn(__VA_ARGS__);
+#endif
 
 	void Window::Open(const std::string& title, glm::uvec2 size, bool visible, Mode mode) {
 		Check<BadInitStateException>(!open, "The window must not be open when Open is called!");

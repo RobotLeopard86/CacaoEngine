@@ -194,7 +194,7 @@ namespace Cacao {
 		std::string title;
 
 		//This is only used for restoring window position and size when switching modes
-		glm::ivec2 lastPos;
-		glm::ivec2 lastSize;
+		glm::uvec2 lastPos;
+		glm::uvec2 lastSize;
 	};
 }

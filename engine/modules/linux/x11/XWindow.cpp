@@ -5,7 +5,11 @@
 #include "../LinuxRouter.hpp"
 
 #include <memory>
+
 #include <xcb/xcb_icccm.h>
+#include "glm/gtc/type_ptr.hpp"
+
+#define win Window::Get()
 
 namespace Cacao {
 	void X11Common::CreateWindow() {
@@ -23,11 +27,27 @@ namespace Cacao {
 
 		//Create window
 		window = xcb_generate_id(connection);
+		uint32_t valueMask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
+		uint32_t valueList[] = {
+			screen->black_pixel,
+			XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_KEY_PRESS};
 		xcb_create_window(connection, XCB_COPY_FROM_PARENT, window, screen->root, centered.x, centered.y, win.size.x,
-			win.size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, 0, nullptr);
+			win.size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, valueMask, valueList);
 
 		//Set initial title
 		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, win.title.size(), win.title.c_str());
+
+		//Allow the window to be closed (because X is stupid and doesn't assume that by default)
+		//The top part is requesting the atoms to use for property setting, the last part is actually setting the property
+		xcb_intern_atom_cookie_t protoCookie = xcb_intern_atom(connection, 0, strlen("WM_PROTOCOLS"), "WM_PROTOCOLS");
+		xcb_intern_atom_reply_t* protoReply = xcb_intern_atom_reply(connection, protoCookie, nullptr);
+		Check<ExternalException>(protoReply != nullptr, "Failed to query protocols atom from X server!");
+		xcb_intern_atom_cookie_t delCookie = xcb_intern_atom(connection, 0, strlen("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW");
+		xcb_intern_atom_reply_t* delReply = xcb_intern_atom_reply(connection, delCookie, nullptr);
+		Check<ExternalException>(delReply != nullptr, "Failed to query deletion atom from X server!");
+		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, protoReply->atom, XCB_ATOM_ATOM, 32, 1, &delReply->atom);
+		free(protoReply);
+		free(delReply);
 
 		//If we should start visible, make the window visible
 		if(win.visible) xcb_map_window(connection, window);
@@ -52,7 +72,8 @@ namespace Cacao {
 		xcb_generic_event_t* event;
 		while((event = xcb_poll_for_event(connection)) != nullptr) {
 			//Handle window close
-			if(event->response_type == XCB_CLIENT_MESSAGE || event->response_type == XCB_DESTROY_NOTIFY) {
+			uint8_t response_type = event->response_type & ~0x80;
+			if(response_type == XCB_CLIENT_MESSAGE || response_type == XCB_DESTROY_NOTIFY) {
 				Engine::Get().Quit();
 			}
 
@@ -83,11 +104,76 @@ namespace Cacao {
 		return iconified;
 	}
 
+	//On X, content area size and window size are the same, and the returning method also has position info
+	//A couple functions need this data, so this is a helper for transacting with the X server for it
+	xcb_get_geometry_reply_t* FetchGeometry(xcb_connection_t* conn, xcb_window_t w) {
+		xcb_get_geometry_cookie_t cookie = xcb_get_geometry(conn, w);
+		xcb_get_geometry_reply_t* reply = xcb_get_geometry_reply(conn, cookie, nullptr);
+		Check<ExternalException>(reply != nullptr, "Failed to get window geometry from X server!");
+		return reply;
+	}
+
 	const glm::uvec2 X11Common::ContentAreaSize() {
 		//Request the window geometry from the X server
-		xcb_get_geometry_cookie_t cookie = xcb_get_geometry(connection, window);
-		xcb_get_geometry_reply_t* reply = xcb_get_geometry_reply(connection, cookie, nullptr);
-		Check<ExternalException>(reply != nullptr, "Failed to get window geometry from X server!");
-		return {reply->width, reply->height};
+		xcb_get_geometry_reply_t* reply = FetchGeometry(connection, window);
+		glm::uvec2 ret = {reply->width, reply->height};
+		free(reply);
+		return ret;
+	}
+
+	void X11Common::Visibility(bool visible) {
+		if(visible) {
+			xcb_map_window(connection, window);
+		} else {
+			xcb_unmap_window(connection, window);
+		}
+		xcb_flush(connection);
+	}
+
+	void X11Common::Title(const std::string& title) {
+		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, title.size(), title.c_str());
+		xcb_flush(connection);
+	}
+
+	void X11Common::Resize(const glm::uvec2& size) {
+		//Convert size to 16-bit for XCB so we can feed the GLM pointer
+		glm::u16vec2 size16 {size.x, size.y};
+
+		//Resize
+		xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, glm::value_ptr(size16));
+		xcb_flush(connection);
+	}
+
+	void X11Common::SaveWinPos() {
+		xcb_get_geometry_reply_t* reply = FetchGeometry(connection, window);
+		win.lastPos = {reply->x, reply->y};
+		free(reply);
+	}
+
+	void X11Common::SaveWinSize() {
+		xcb_get_geometry_reply_t* reply = FetchGeometry(connection, window);
+		win.lastSize = {reply->width, reply->height};
+		free(reply);
+	}
+
+	void X11Common::RestoreWin() {
+		//Create value list
+		const uint16_t valueList[] = {(uint16_t)win.lastPos.x, (uint16_t)win.lastPos.y, (uint16_t)win.lastSize.x, (uint16_t)win.lastSize.y};
+
+		//Set size and position
+		xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
+		xcb_flush(connection);
+	}
+
+	void X11Common::ModeChange(Window::Mode mode) {
+		switch(mode) {
+			case Window::Mode::Windowed:
+
+				break;
+			case Window::Mode::Borderless:
+				break;
+			case Window::Mode::Fullscreen:
+				break;
+		}
 	}
 }

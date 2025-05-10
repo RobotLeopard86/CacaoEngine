@@ -15,9 +15,7 @@
 
 namespace Cacao {
 	Engine::Engine()
-	  : state(State::Dead) {
-		Logger::Engine(Logger::Level::Warn) << "engine makey";
-	}
+	  : state(State::Dead) {}
 
 	Engine::~Engine() {
 		if(state == State::Running) Quit();
@@ -100,8 +98,10 @@ namespace Cacao {
 
 	void Engine::Run() {
 		Check<BadStateException>(state == State::Stopped, "Engine must be in stopped state to start!");
-		std::lock_guard lkg(stateMtx);
-		state = State::Running;
+		{
+			std::lock_guard lkg(stateMtx);
+			state = State::Running;
+		}
 
 		/* ------------------------------------------- *\
 		|*      PLACEHOLDER: FINAL INITIALIZATION      *|

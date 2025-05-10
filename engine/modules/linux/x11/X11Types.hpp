@@ -4,6 +4,8 @@
 
 #include <xcb/xcb.h>
 
+#include <string>
+
 namespace Cacao {
 	class X11Common {
 	  public:

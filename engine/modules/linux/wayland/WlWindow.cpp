@@ -4,3 +4,5 @@
 #include "WaylandTypes.hpp"
 
 #include <memory>
+
+#define win Window::Get()
