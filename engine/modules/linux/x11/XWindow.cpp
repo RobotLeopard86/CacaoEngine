@@ -7,6 +7,7 @@
 #include <memory>
 
 #include <xcb/xcb_icccm.h>
+#include <xcb/randr.h>
 #include "glm/gtc/type_ptr.hpp"
 
 #define win Window::Get()
@@ -65,6 +66,7 @@ namespace Cacao {
 
 		//Reset values so we don't accidentally do some junk
 		connection = nullptr;
+		screen = nullptr;
 		window = 0;
 	}
 
@@ -166,14 +168,66 @@ namespace Cacao {
 	}
 
 	void X11Common::ModeChange(Window::Mode mode) {
+		//Request the window state atom from the X server
+		xcb_intern_atom_cookie_t stateCookie = xcb_intern_atom(connection, 0, 8, "WM_STATE");
+		xcb_intern_atom_reply_t* stateReply = xcb_intern_atom_reply(connection, stateCookie, nullptr);
+		Check<ExternalException>(stateReply != nullptr, "Failed to query state atom from X server!");
+		xcb_atom_t state = stateReply->atom;
+		free(stateReply);
+
+		//Request the Motif hints atom from the X server
+		xcb_intern_atom_cookie_t motifCookie = xcb_intern_atom(connection, 0, 8, "_MOTIF_WM_HINTS");
+		xcb_intern_atom_reply_t* motifReply = xcb_intern_atom_reply(connection, motifCookie, nullptr);
+		Check<ExternalException>(motifReply != nullptr, "Failed to query state atom from X server!");
+		xcb_atom_t motif = motifReply->atom;
+		free(motifReply);
+
+		//Remove fullscreen state if needed
+		if(mode != Window::Mode::Fullscreen) {
+			xcb_delete_property(connection, window, state);
+		}
+
+		//Define Motif hints (for decorations)
+		struct MotifHints {
+			uint32_t flags = 2;
+			uint32_t functions = 0;
+			uint32_t decorations = 0;
+			int32_t input_mode = 0;
+			uint32_t status = 0;
+		} hints;
+
+		//Do X stuff
 		switch(mode) {
 			case Window::Mode::Windowed:
+				//Change decorations hints
+				hints.flags = 1;
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, motif, XCB_ATOM_ATOM, 32, 5, &hints);
+				break;
+			case Window::Mode::Borderless: {
+				//Figure out which output we're on
+
+
+				//Change decorations hints
+				hints.flags = 0;
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, motif, XCB_ATOM_ATOM, 32, 5, &hints);
 
 				break;
-			case Window::Mode::Borderless:
+			}
+			case Window::Mode::Fullscreen: {
+				//Request the fullscreen state atom from the X server
+				xcb_intern_atom_cookie_t fullscreenCookie = xcb_intern_atom(connection, 0, strlen("_NET_WM_STATE_FULLSCREEN"), "_NET_WM_STATE_FULLSCREEN");
+				xcb_intern_atom_reply_t* fullscreenReply = xcb_intern_atom_reply(connection, fullscreenCookie, nullptr);
+				Check<ExternalException>(fullscreenReply != nullptr, "Failed to query fullscreen state atom from X server!");
+				xcb_atom_t fullscreen = fullscreenReply->atom;
+				free(fullscreenReply);
+
+				//Set the fullscreen property
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, state, XCB_ATOM_ATOM, 32, 1, &fullscreen);
 				break;
-			case Window::Mode::Fullscreen:
-				break;
+			}
 		}
+
+		//Send any unprocessed commands to the X server and wait
+		xcb_flush(connection);
 	}
 }
