@@ -1,6 +1,6 @@
 # Wayland and libdecor (decoration manager)
-wayland_client  = dependency('wayland-client', required: true, static: true)
-xkbcommon_dep   = dependency('xkbcommon', required: true, static: true)
+wayland_client  = dependency('wayland-client', required: true)
+xkbcommon_dep   = dependency('xkbcommon', required: true)
 
 # Configure libdecor
 libdecor = subproject('libdecor', required: true, default_options: {
