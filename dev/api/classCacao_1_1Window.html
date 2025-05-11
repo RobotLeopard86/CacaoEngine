@@ -634,6 +634,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Window11IsMinimizedEv">
 <span id="_CPPv3N5Cacao6Window11IsMinimizedEv"></span><span id="_CPPv2N5Cacao6Window11IsMinimizedEv"></span><span id="Cacao::Window::IsMinimized"></span><span class="target" id="classCacao_1_1Window_1a1bd4c4ad7165fa910a86aff338675ad2"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsMinimized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Window11IsMinimizedEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check if the window is minimized. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This will <strong>always</strong> return false on Wayland when the window is open, since Wayland clients can’t know their minimization state</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Whether the window is minimized, or true if the window is not open </p>

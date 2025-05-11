@@ -399,32 +399,24 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">      </span><span class="k">protected</span><span class="o">:</span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">type</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">makeMsg</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">ss</span><span class="p">;</span>
-<span class="w">            </span><span class="n">ss</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;(Cacao Engine &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">type</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; Exception) &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">Exception</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="n">makeMsg</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">};</span>
 
-<span class="cp">#define DEF_EXCEPTION(cls, tp)                          \</span>
-<span class="cp">    class CACAO_API cls##Exception : public Exception { \</span>
-<span class="cp">      public:                                           \</span>
-<span class="cp">        cls##Exception(std::string m) : Exception(m) {} \</span>
-<span class="cp">        ~cls##Exception() {}                            \</span>
-<span class="cp">                                                        \</span>
-<span class="cp">      protected:                                        \</span>
-<span class="cp">        std::string type() const override {             \</span>
-<span class="cp">            return tp;                                  \</span>
-<span class="cp">        }                                               \</span>
+<span class="cp">#define DEF_EXCEPTION(cls, tp)                                   \</span>
+<span class="cp">    class CACAO_API cls##Exception : public Exception {          \</span>
+<span class="cp">      public:                                                    \</span>
+<span class="cp">        cls##Exception(std::string m) : Exception() {            \</span>
+<span class="cp">            msg = makeMsg(m);                                    \</span>
+<span class="cp">        }                                                        \</span>
+<span class="cp">        ~cls##Exception() {}                                     \</span>
+<span class="cp">        std::string makeMsg(const std::string&amp; m) {              \</span>
+<span class="cp">            std::stringstream ss;                                \</span>
+<span class="cp">            ss &lt;&lt; &quot;(Cacao Engine &quot; &lt;&lt; tp &lt;&lt; &quot; Exception) &quot; &lt;&lt; m; \</span>
+<span class="cp">            return ss.str();                                     \</span>
+<span class="cp">        }                                                        \</span>
 <span class="cp">    };</span>
 
 <span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">External</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;External&quot;</span><span class="p">)</span>
