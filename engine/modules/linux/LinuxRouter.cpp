@@ -43,7 +43,7 @@ namespace Cacao {
 		}
 #endif
 		if(!sessionType.empty()) {
-			if(sessionType.compare("wayland")) {
+			if(sessionType.compare("wayland") == 0) {
 #ifdef HAS_WAYLAND
 				if(!wlDisplay.empty()) {
 					impl->useX = false;
@@ -58,7 +58,7 @@ namespace Cacao {
 #endif
 			}
 #ifdef HAS_X11
-			if(sessionType.compare("x11")) {
+			if(sessionType.compare("x11") == 0) {
 				if(!xDisplay.empty()) {
 					impl->useX = true;
 					return;

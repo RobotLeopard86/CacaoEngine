@@ -16,32 +16,24 @@ namespace Cacao {
 		}
 
 	  protected:
-		const std::string msg;
+		std::string msg;
 
-		virtual std::string type() const {
-			return "";
-		}
-
-		std::string makeMsg(const std::string& m) {
-			std::stringstream ss;
-			ss << "(Cacao Engine " << type() << " Exception) " << m;
-			return ss.str();
-		}
-
-		Exception(const std::string& m) : msg(makeMsg(m)) {}
+		Exception() : msg("") {}
 		virtual ~Exception() {}
 	};
 
-#define DEF_EXCEPTION(cls, tp)                          \
-	class CACAO_API cls##Exception : public Exception { \
-	  public:                                           \
-		cls##Exception(std::string m) : Exception(m) {} \
-		~cls##Exception() {}                            \
-                                                        \
-	  protected:                                        \
-		std::string type() const override {             \
-			return tp;                                  \
-		}                                               \
+#define DEF_EXCEPTION(cls, tp)                                   \
+	class CACAO_API cls##Exception : public Exception {          \
+	  public:                                                    \
+		cls##Exception(std::string m) : Exception() {            \
+			msg = makeMsg(m);                                    \
+		}                                                        \
+		~cls##Exception() {}                                     \
+		std::string makeMsg(const std::string& m) {              \
+			std::stringstream ss;                                \
+			ss << "(Cacao Engine " << tp << " Exception) " << m; \
+			return ss.str();                                     \
+		}                                                        \
 	};
 
 	DEF_EXCEPTION(External, "External")

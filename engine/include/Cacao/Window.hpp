@@ -141,6 +141,8 @@ namespace Cacao {
 		/**
 		 * @brief Check if the window is minimized
 		 *
+		 * @warning This will @b always return false on Wayland when the window is open, since Wayland clients can't know their minimization state
+		 *
 		 * @return Whether the window is minimized, or true if the window is not open
 		 */
 		bool IsMinimized();

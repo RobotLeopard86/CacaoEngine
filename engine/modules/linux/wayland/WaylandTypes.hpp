@@ -8,12 +8,12 @@
 namespace Cacao {
 	class WaylandCommon {
 	  public:
-		wl_display* display;
-		wl_compositor* compositor;
-		wl_registry* reg;
-		wl_surface* surf;
-		libdecor* decor;
-		libdecor_frame* frame;
+		wl_display* display = nullptr;
+		wl_compositor* compositor = nullptr;
+		wl_registry* reg = nullptr;
+		wl_surface* surf = nullptr;
+		libdecor* decor = nullptr;
+		libdecor_frame* frame = nullptr;
 
 		void CreateWindow();
 		void DestroyWindow();
