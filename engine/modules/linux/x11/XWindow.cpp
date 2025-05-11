@@ -2,6 +2,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/PAL.hpp"
 #include "X11Types.hpp"
 #include "../LinuxRouter.hpp"
 
@@ -55,9 +56,15 @@ namespace Cacao {
 
 		//Send commands to X server and wait for completion
 		xcb_flush(connection);
+
+		//Connect graphics
+		PAL::Get().GfxConnect();
 	}
 
 	void X11Common::DestroyWindow() {
+		//Disconnect graphics
+		PAL::Get().GfxDisconnect();
+
 		//Destroy window
 		xcb_destroy_window(connection, window);
 

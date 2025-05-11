@@ -186,6 +186,7 @@ namespace Cacao {
 		std::unique_ptr<Impl> impl;
 		friend class X11Common;
 		friend class WaylandCommon;
+		friend class PAL;
 
 		Window();
 		~Window();

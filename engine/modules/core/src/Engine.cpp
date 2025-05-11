@@ -64,10 +64,6 @@ namespace Cacao {
 	void Engine::GfxInit() {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run graphics initialization!");
 
-		//Open window
-		Logger::Engine(Logger::Level::Trace) << "Creating window...";
-		Window::Get().Open("Cacao Engine", {1280, 720}, true, Window::Mode::Windowed);
-
 		//In descending order of priority
 		const std::array<std::string, 2> backends {{"vulkan", "opengl"}};
 
@@ -90,6 +86,10 @@ namespace Cacao {
 			return;
 		}
 		Logger::Engine(Logger::Level::Info) << "Selected backend \"" << chosen << "\".";
+
+		//Open window
+		Logger::Engine(Logger::Level::Trace) << "Creating window...";
+		Window::Get().Open("Cacao Engine", {1280, 720}, true, Window::Mode::Windowed);
 
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
@@ -134,13 +134,13 @@ namespace Cacao {
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Stopped, "Engine must be in stopped state to run graphics shutdown!");
 
-		//Unload backend
-		Logger::Engine(Logger::Level::Trace) << "Unloading graphics backend...";
-		PAL::Get().Unload();
-
 		//Close window
 		Logger::Engine(Logger::Level::Trace) << "Destroying window...";
 		Window::Get().Close();
+
+		//Unload backend
+		Logger::Engine(Logger::Level::Trace) << "Unloading graphics backend...";
+		PAL::Get().Unload();
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;

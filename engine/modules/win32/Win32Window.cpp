@@ -2,6 +2,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
 #include "Win32Types.hpp"
+#include "Cacao/PAL.hpp"
 
 #include <memory>
 
@@ -71,6 +72,9 @@ namespace Cacao {
 
 		open = true;
 
+		//Connect graphics
+		PAL::Get().GfxConnect();
+
 		//Apply initial mode
 		SetMode(mode);
 	}
@@ -79,6 +83,9 @@ namespace Cacao {
 		Check<BadInitStateException>(open, "The window must be open when Close is called!");
 
 		open = false;
+
+		//Disconnect graphics
+		PAL::Get().GfxDisconnect();
 
 		//Destroy the window
 		DestroyWindow(impl->win->hWnd);

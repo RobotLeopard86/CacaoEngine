@@ -54,9 +54,26 @@ namespace Cacao {
 		bool TryInitActiveModule();
 
 		/**
+		 * @brief Connect the window and graphics backend
+		 *
+		 * @throws NonexistentValueException If there is no active module
+		 * @throws BadInitStateException If the module has not been initialized
+		 * @throws BadStateException If the graphics backend and window are already connected
+		 */
+		void GfxConnect();
+
+		/**
+		 * @brief Disonnect the window and graphics backend
+		 *
+		 * @throws BadStateException If the graphics backend and window are not connected
+		 */
+		void GfxDisconnect();
+
+		/**
 		 * @brief Shutdown the active module and unload it
 		 *
 		 * @throws NonexistentValueException If there is no active module
+		 * @throws BadStateException If the graphics backend and window are still connected
 		 */
 		void Unload();
 

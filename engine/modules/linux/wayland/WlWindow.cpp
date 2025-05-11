@@ -2,6 +2,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
 
 #include <memory>
@@ -38,9 +39,11 @@ namespace Cacao {
 		surf = wl_compositor_create_surface(compositor);
 		Check<ExternalException>(surf != nullptr, "Failed to create surface!");
 
-
 		//Let Wayland process surface creation
 		wl_display_roundtrip(display);
+
+		//Connect the graphics system
+		PAL::Get().GfxConnect();
 
 		//Initialize libdecor
 		libdecor_interface decorInterface = {};
@@ -107,6 +110,9 @@ namespace Cacao {
 		//Destroy libdecor objects
 		libdecor_frame_unref(frame);
 		libdecor_unref(decor);
+
+		//Disconnect graphics
+		PAL::Get().GfxDisconnect();
 
 		//Destroy surface
 		wl_surface_destroy(surf);
