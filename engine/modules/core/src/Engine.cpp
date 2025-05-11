@@ -3,6 +3,7 @@
 #include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
@@ -103,9 +104,13 @@ namespace Cacao {
 			state = State::Running;
 		}
 
+		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
+
 		/* ------------------------------------------- *\
 		|*      PLACEHOLDER: FINAL INITIALIZATION      *|
 		\* ------------------------------------------- */
+
+		Logger::Engine(Logger::Level::Info) << "Reached target Game Launch.";
 
 		while(state == State::Running) {
 			//Handle OS events
@@ -115,8 +120,15 @@ namespace Cacao {
 
 	void Engine::Quit() {
 		Check<BadStateException>(state == State::Running, "Engine must be in running state to quit!");
+
+		//Set state
 		std::lock_guard lkg(stateMtx);
 		state = State::Stopped;
+		Logger::Engine(Logger::Level::Info) << "Engine shutdown requested!";
+
+		//Fire shutdown event (this (for now) will block until all consumers have responded)
+		Event e("EngineShutdown");
+		EventManager::Get().Dispatch(e);
 	}
 
 	void Engine::GfxShutdown() {

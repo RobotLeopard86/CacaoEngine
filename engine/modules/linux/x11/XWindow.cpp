@@ -1,13 +1,13 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
+#include "Cacao/EventManager.hpp"
 #include "X11Types.hpp"
 #include "../LinuxRouter.hpp"
 
 #include <memory>
 
 #include <xcb/xcb_icccm.h>
-#include <xcb/randr.h>
 #include "glm/gtc/type_ptr.hpp"
 
 #define win Window::Get()
@@ -31,7 +31,7 @@ namespace Cacao {
 		uint32_t valueMask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
 		uint32_t valueList[] = {
 			screen->black_pixel,
-			XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_KEY_PRESS};
+			XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_FOCUS_CHANGE};
 		xcb_create_window(connection, XCB_COPY_FROM_PARENT, window, screen->root, centered.x, centered.y, win.size.x,
 			win.size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, valueMask, valueList);
 
@@ -66,17 +66,52 @@ namespace Cacao {
 
 		//Reset values so we don't accidentally do some junk
 		connection = nullptr;
-		screen = nullptr;
 		window = 0;
 	}
 
 	void X11Common::HandleEvents() {
 		xcb_generic_event_t* event;
 		while((event = xcb_poll_for_event(connection)) != nullptr) {
-			//Handle window close
-			uint8_t response_type = event->response_type & ~0x80;
-			if(response_type == XCB_CLIENT_MESSAGE || response_type == XCB_DESTROY_NOTIFY) {
-				Engine::Get().Quit();
+			uint8_t responseType = event->response_type & ~0x80;
+			switch(responseType) {
+				//Window is closing
+				case XCB_CLIENT_MESSAGE:
+				case XCB_DESTROY_NOTIFY:
+					Engine::Get().Quit();
+					break;
+
+				//Window has been resized
+				case XCB_CONFIGURE_NOTIFY: {
+					//Ignore updates while in borderless mode
+					if(win.mode == Window::Mode::Borderless) break;
+
+					//Get the configure info
+					xcb_configure_notify_event_t* cfgEvent = reinterpret_cast<xcb_configure_notify_event_t*>(event);
+
+					//Apply the new size value to the window
+					win.size = {cfgEvent->width, cfgEvent->height};
+
+					//Fire an event
+					DataEvent<glm::uvec2> wre("WindowResize", win.size);
+					EventManager::Get().Dispatch(wre);
+					break;
+				}
+
+				//Window has gained focus
+				case XCB_FOCUS_IN: {
+					//Fire an event
+					Event e("WindowFocus");
+					EventManager::Get().Dispatch(e);
+					break;
+				}
+
+				//Window has lost focus
+				case XCB_FOCUS_OUT: {
+					//Fire an event
+					Event e("WindowUnfocus");
+					EventManager::Get().Dispatch(e);
+					break;
+				}
 			}
 
 			//Free the event
@@ -168,6 +203,8 @@ namespace Cacao {
 	}
 
 	void X11Common::ModeChange(Window::Mode mode) {
+		//Fetch atoms
+
 		//Request the window state atom from the X server
 		xcb_intern_atom_cookie_t stateCookie = xcb_intern_atom(connection, 0, 8, "WM_STATE");
 		xcb_intern_atom_reply_t* stateReply = xcb_intern_atom_reply(connection, stateCookie, nullptr);
@@ -175,16 +212,73 @@ namespace Cacao {
 		xcb_atom_t state = stateReply->atom;
 		free(stateReply);
 
+		//Request the fullscreen state atom from the X server
+		xcb_intern_atom_cookie_t fullscreenCookie = xcb_intern_atom(connection, 0, strlen("_NET_WM_STATE_FULLSCREEN"), "_NET_WM_STATE_FULLSCREEN");
+		xcb_intern_atom_reply_t* fullscreenReply = xcb_intern_atom_reply(connection, fullscreenCookie, nullptr);
+		Check<ExternalException>(fullscreenReply != nullptr, "Failed to query fullscreen state atom from X server!");
+		xcb_atom_t fullscreen = fullscreenReply->atom;
+		free(fullscreenReply);
+
 		//Request the Motif hints atom from the X server
-		xcb_intern_atom_cookie_t motifCookie = xcb_intern_atom(connection, 0, 8, "_MOTIF_WM_HINTS");
+		xcb_intern_atom_cookie_t motifCookie = xcb_intern_atom(connection, 0, strlen("_MOTIF_WM_HINTS"), "_MOTIF_WM_HINTS");
 		xcb_intern_atom_reply_t* motifReply = xcb_intern_atom_reply(connection, motifCookie, nullptr);
-		Check<ExternalException>(motifReply != nullptr, "Failed to query state atom from X server!");
+		Check<ExternalException>(motifReply != nullptr, "Failed to query Motif hints atom from X server!");
 		xcb_atom_t motif = motifReply->atom;
 		free(motifReply);
 
-		//Remove fullscreen state if needed
-		if(mode != Window::Mode::Fullscreen) {
+		//Request the compositor bypass atom from the X server
+		xcb_intern_atom_cookie_t bypassCookie = xcb_intern_atom(connection, 0, strlen("_NET_WM_BYPASS_COMPOSITOR"), "_NET_WM_BYPASS_COMPOSITOR");
+		xcb_intern_atom_reply_t* bypassReply = xcb_intern_atom_reply(connection, bypassCookie, nullptr);
+		Check<ExternalException>(bypassReply != nullptr, "Failed to query compositor bypass atom from X server!");
+		xcb_atom_t bypass = bypassReply->atom;
+		free(bypassReply);
+
+		//Get RandR monitor
+
+		//Get root window
+		xcb_window_t rootWindow = 0;
+		{
+			const xcb_setup_t* setup = xcb_get_setup(connection);
+			xcb_screen_iterator_t scrIter = xcb_setup_roots_iterator(setup);
+			xcb_screen_t* screen = scrIter.data;
+			rootWindow = screen->root;
+		}
+
+		//Get window absolute position
+		xcb_translate_coordinates_cookie_t tcCookie = xcb_translate_coordinates(connection, window, rootWindow, 0, 0);
+		xcb_translate_coordinates_reply_t* tcReply = xcb_translate_coordinates_reply(connection, tcCookie, nullptr);
+		Check<ExternalException>(tcReply != nullptr, "Failed to translate window coordinates!");
+		glm::ivec2 winAbsPos = {tcReply->dst_x, tcReply->dst_y};
+		free(tcReply);
+
+		//Find all the monitors
+		xcb_randr_get_monitors_cookie_t monitorGetCookie = xcb_randr_get_monitors(connection, window, true);
+		xcb_randr_get_monitors_reply_t* monitorGetReply = xcb_randr_get_monitors_reply(connection, monitorGetCookie, nullptr);
+		Check<ExternalException>(monitorGetReply != nullptr, "Failed to find monitors!");
+		xcb_randr_monitor_info_iterator_t monInfo = xcb_randr_get_monitors_monitors_iterator(monitorGetReply);
+		int monCount = xcb_randr_get_monitors_monitors_length(monitorGetReply);
+
+		//Find the monitor which the window is likely on
+		xcb_randr_monitor_info_t monitor = {};
+		bool found = false;
+		for(int i = 0; i < monCount; i++) {
+			xcb_randr_monitor_info_t mon = monInfo.data[i];
+			if(winAbsPos.x >= mon.x && winAbsPos.x < (mon.x + mon.width) && winAbsPos.y >= mon.y && winAbsPos.y < (mon.y + mon.height)) {
+				monitor = mon;
+				found = true;
+				free(monitorGetReply);
+				break;
+			}
+		}
+		if(!found) free(monitorGetReply);
+		Check<NonexistentValueException>(found, "Failed to find window monitor!");
+		xcb_randr_output_t output = xcb_randr_monitor_info_outputs(&monitor)[0];
+
+		//Remove fullscreen state and restore CRTC config if needed
+		if(mode != Window::Mode::Fullscreen && win.mode == Window::Mode::Fullscreen) {
 			xcb_delete_property(connection, window, state);
+			if(crtcSet) xcb_randr_set_crtc_config(connection, crtcState.crtc, crtcState.timestamp, crtcState.configTimestamp, crtcState.position.x,
+				crtcState.position.y, crtcState.videoMode, crtcState.rotation, crtcState.outputs.size(), crtcState.outputs.data());
 		}
 
 		//Define Motif hints (for decorations)
@@ -195,34 +289,113 @@ namespace Cacao {
 			int32_t input_mode = 0;
 			uint32_t status = 0;
 		} hints;
+		uint32_t doBypass = 0;
 
-		//Do X stuff
+		//Actually make the change
 		switch(mode) {
 			case Window::Mode::Windowed:
-				//Change decorations hints
+				//Enable decorations
 				hints.flags = 1;
 				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, motif, XCB_ATOM_ATOM, 32, 5, &hints);
+
+				//Disable compositor bypass
+				doBypass = 0;
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, bypass, XCB_ATOM_CARDINAL, 32, 1, &doBypass);
 				break;
 			case Window::Mode::Borderless: {
-				//Figure out which output we're on
-
-
-				//Change decorations hints
+				//Disable decorations
 				hints.flags = 0;
 				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, motif, XCB_ATOM_ATOM, 32, 5, &hints);
 
-				break;
-			}
-			case Window::Mode::Fullscreen: {
-				//Request the fullscreen state atom from the X server
-				xcb_intern_atom_cookie_t fullscreenCookie = xcb_intern_atom(connection, 0, strlen("_NET_WM_STATE_FULLSCREEN"), "_NET_WM_STATE_FULLSCREEN");
-				xcb_intern_atom_reply_t* fullscreenReply = xcb_intern_atom_reply(connection, fullscreenCookie, nullptr);
-				Check<ExternalException>(fullscreenReply != nullptr, "Failed to query fullscreen state atom from X server!");
-				xcb_atom_t fullscreen = fullscreenReply->atom;
-				free(fullscreenReply);
+				//Enable compositor bypass
+				doBypass = 1;
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, bypass, XCB_ATOM_CARDINAL, 32, 1, &doBypass);
+
+				//Set window size to monitor size
+				int16_t valueList[] = {monitor.x, monitor.y, (int16_t)monitor.width, (int16_t)monitor.height};
+				xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
 
 				//Set the fullscreen property
 				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, state, XCB_ATOM_ATOM, 32, 1, &fullscreen);
+				break;
+			}
+			case Window::Mode::Fullscreen: {
+				//Get screen resources and video modes
+				xcb_randr_get_screen_resources_current_cookie_t resCookie = xcb_randr_get_screen_resources_current(connection, window);
+				xcb_randr_get_screen_resources_current_reply_t* resReply = xcb_randr_get_screen_resources_current_reply(connection, resCookie, nullptr);
+				Check<ExternalException>(resReply != nullptr, "Failed to get screen resources!");
+				xcb_randr_mode_info_t* modes = xcb_randr_get_screen_resources_current_modes(resReply);
+				int modeCount = xcb_randr_get_screen_resources_current_modes_length(resReply);
+
+				//Select best video mode (may not be exact)
+				xcb_randr_mode_t bestVideoMode = 0;
+				unsigned int xDistLast = UINT32_MAX, yDistLast = UINT32_MAX;
+				bool foundExact = false;
+				glm::u16vec2 vidModeSize = {0, 0};
+				for(int i = 0; i < modeCount; i++) {
+					xcb_randr_mode_info_t modeInfo = modes[i];
+
+					//If we found it exactly, we're golden
+					if(modeInfo.width == win.size.x && modeInfo.height == win.size.y) {
+						bestVideoMode = modeInfo.id;
+						foundExact = true;
+						break;
+					}
+
+					//Otherwise, keep selecting modes that are closest to the resolution until we find one
+					unsigned int xDistCurrent = abs((int)win.size.x - modeInfo.width);
+					unsigned int yDistCurrent = abs((int)win.size.y - modeInfo.height);
+					if(xDistCurrent < xDistLast || yDistCurrent < yDistLast) {
+						bestVideoMode = modeInfo.id;
+						xDistLast = xDistCurrent;
+						yDistLast = yDistCurrent;
+						vidModeSize = {modeInfo.width, modeInfo.height};
+					}
+				}
+				free(resReply);
+
+				//Set size to best video mode's if not exact
+				if(!foundExact) win.size = vidModeSize;
+
+				//Find ouput CRTC
+				xcb_randr_get_output_info_cookie_t outInfoCookie = xcb_randr_get_output_info(connection, output, XCB_CURRENT_TIME);
+				xcb_randr_get_output_info_reply_t* outInfoReply = xcb_randr_get_output_info_reply(connection, outInfoCookie, nullptr);
+				Check<ExternalException>(outInfoReply != nullptr, "Failed to get output info!");
+				Check<NonexistentValueException>(outInfoReply->crtc != XCB_NONE, "Current output has no CRTC!");
+				xcb_randr_crtc_t crtc = outInfoReply->crtc;
+				free(outInfoReply);
+
+				//Save CRTC config
+				xcb_randr_get_crtc_info_cookie_t crtcCookie = xcb_randr_get_crtc_info(connection, crtc, XCB_CURRENT_TIME);
+				xcb_randr_get_crtc_info_reply_t* crtcReply = xcb_randr_get_crtc_info_reply(connection, crtcCookie, nullptr);
+				Check<ExternalException>(crtcReply != nullptr, "Failed to get output CRTC info!");
+				crtcSet = true;
+				crtcState.crtc = crtc;
+				crtcState.timestamp = crtcReply->timestamp;
+				crtcState.configTimestamp = crtcReply->timestamp;
+				crtcState.videoMode = crtcReply->mode;
+				crtcState.position.x = crtcReply->x;
+				crtcState.position.y = crtcReply->y;
+				crtcState.size.x = crtcReply->width;
+				crtcState.size.y = crtcReply->height;
+				crtcState.rotation = crtcReply->rotation;
+				crtcState.outputs.assign(xcb_randr_get_crtc_info_outputs(crtcReply), xcb_randr_get_crtc_info_outputs(crtcReply) + xcb_randr_get_crtc_info_outputs_length(crtcReply) * sizeof(xcb_randr_output_t));
+
+				//Disable decorations
+				hints.flags = 0;
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, motif, XCB_ATOM_ATOM, 32, 5, &hints);
+
+				//Enable compositor bypass
+				doBypass = 1;
+				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, bypass, XCB_ATOM_CARDINAL, 32, 1, &doBypass);
+
+				//Set window size to video mode size
+				int16_t valueList[] = {monitor.x, monitor.y, (int16_t)win.size.x, (int16_t)win.size.y};
+				xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
+
+				//Set new CRTC config
+				xcb_randr_set_crtc_config(connection, crtc, XCB_CURRENT_TIME, XCB_CURRENT_TIME, (uint32_t)monitor.x, (uint32_t)monitor.y, bestVideoMode, XCB_RANDR_ROTATION_ROTATE_0, 1, &output);
+
 				break;
 			}
 		}
