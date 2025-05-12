@@ -472,15 +472,14 @@
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the requested module does not exist </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the requested module is incompatible with the platform </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If there are still PAL-backed objects using a different module </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If the backend fails to load </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL19TryInitActiveModuleEv">
-<span id="_CPPv3N5Cacao3PAL19TryInitActiveModuleEv"></span><span id="_CPPv2N5Cacao3PAL19TryInitActiveModuleEv"></span><span id="Cacao::PAL::TryInitActiveModule"></span><span class="target" id="classCacao_1_1PAL_1a3bdf15b8ceb52f7fec04dad20cfa7105"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TryInitActiveModule</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL19TryInitActiveModuleEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL16InitializeModuleEv">
+<span id="_CPPv3N5Cacao3PAL16InitializeModuleEv"></span><span id="_CPPv2N5Cacao3PAL16InitializeModuleEv"></span><span id="Cacao::PAL::InitializeModule"></span><span class="target" id="classCacao_1_1PAL_1add728683554047ab21744a34d7e6f2ce"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InitializeModule</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL16InitializeModuleEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Attempt to initialize the active module. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
@@ -522,9 +521,9 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL6UnloadEv">
-<span id="_CPPv3N5Cacao3PAL6UnloadEv"></span><span id="_CPPv2N5Cacao3PAL6UnloadEv"></span><span id="Cacao::PAL::Unload"></span><span class="target" id="classCacao_1_1PAL_1a30dfb8a66d73e4e0fab866fe94c6d42c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unload</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL6UnloadEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Shutdown the active module and unload it. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao3PAL15TerminateModuleEv">
+<span id="_CPPv3N5Cacao3PAL15TerminateModuleEv"></span><span id="_CPPv2N5Cacao3PAL15TerminateModuleEv"></span><span id="Cacao::PAL::TerminateModule"></span><span class="target" id="classCacao_1_1PAL_1a4c7920fd37e15896a1f5007002de7160"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TerminateModule</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao3PAL15TerminateModuleEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Shutdown the active module. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -617,10 +616,10 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PALE"><code class="docutils literal notranslate"><span class="pre">PAL</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL9SetModuleERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">PAL::SetModule()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL19TryInitActiveModuleEv"><code class="docutils literal notranslate"><span class="pre">PAL::TryInitActiveModule()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL16InitializeModuleEv"><code class="docutils literal notranslate"><span class="pre">PAL::InitializeModule()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL10GfxConnectEv"><code class="docutils literal notranslate"><span class="pre">PAL::GfxConnect()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL13GfxDisconnectEv"><code class="docutils literal notranslate"><span class="pre">PAL::GfxDisconnect()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL6UnloadEv"><code class="docutils literal notranslate"><span class="pre">PAL::Unload()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL15TerminateModuleEv"><code class="docutils literal notranslate"><span class="pre">PAL::TerminateModule()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao3PAL16ConfigureImplPtrEvR1T"><code class="docutils literal notranslate"><span class="pre">PAL::ConfigureImplPtr()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao3PAL3GetEv"><code class="docutils literal notranslate"><span class="pre">PAL::Get()</span></code></a></li>
 </ul>

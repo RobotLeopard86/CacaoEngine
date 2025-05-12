@@ -404,13 +404,13 @@
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetModule</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">mod</span><span class="p">);</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryInitActiveModule</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">InitializeModule</span><span class="p">();</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">GfxConnect</span><span class="p">();</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">GfxDisconnect</span><span class="p">();</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Unload</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">TerminateModule</span><span class="p">();</span>
 
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">ConfigureImplPtr</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">obj</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
