@@ -74,7 +74,7 @@ namespace Cacao {
 			//Set module in PAL
 			Logger::Engine(Logger::Level::Trace) << "Trying backend \"" << backend << "\"...";
 			PAL::Get().SetModule(backend);
-			if(PAL::Get().TryInitActiveModule()) {
+			if(PAL::Get().InitializeModule()) {
 				found = true;
 				chosen = backend;
 				break;
@@ -139,8 +139,8 @@ namespace Cacao {
 		Window::Get().Close();
 
 		//Unload backend
-		Logger::Engine(Logger::Level::Trace) << "Unloading graphics backend...";
-		PAL::Get().Unload();
+		Logger::Engine(Logger::Level::Trace) << "Terminating graphics backend...";
+		PAL::Get().TerminateModule();
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;

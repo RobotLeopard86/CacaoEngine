@@ -39,7 +39,6 @@ namespace Cacao {
 		 * @throws NonexistentValueException If the requested module does not exist
 		 * @throws BadValueException If the requested module is incompatible with the platform
 		 * @throws MiscException If there are still PAL-backed objects using a different module
-		 * @throws MiscException If the backend fails to load
 		 */
 		void SetModule(const std::string& mod);
 
@@ -51,7 +50,7 @@ namespace Cacao {
 		 *
 		 * @return Whether initialization succeeds
 		 */
-		bool TryInitActiveModule();
+		bool InitializeModule();
 
 		/**
 		 * @brief Connect the window and graphics backend
@@ -70,12 +69,12 @@ namespace Cacao {
 		void GfxDisconnect();
 
 		/**
-		 * @brief Shutdown the active module and unload it
+		 * @brief Shutdown the active module
 		 *
 		 * @throws NonexistentValueException If there is no active module
 		 * @throws BadStateException If the graphics backend and window are still connected
 		 */
-		void Unload();
+		void TerminateModule();
 
 		/**
 		 * @brief Configure the implementation pointer for a PAL-backed object

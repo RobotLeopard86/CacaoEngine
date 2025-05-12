@@ -9,4 +9,4 @@ libwin32 = static_library('cacaowin32', sources: [
 pic: true, install: true, install_tag: 'cacao')
 
 win32_dep = declare_dependency(link_whole: libwin32)
-backend_deps += win32_dep
+windowing_deps += win32_dep

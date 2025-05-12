@@ -1,44 +1,33 @@
 #pragma once
 
-#include <functional>
+#include <string>
+#include <memory>
 #include <map>
 
 #include "Cacao/DllHelper.hpp"
 
-#include "dynalo/dynalo.hpp"
-
 namespace Cacao {
-	class PALInterface;
-
 	class CACAO_API PALModule {
-	  private:
-		dynalo::library lib;
-
 	  public:
 		const std::string id;
 
-		enum class FactoryType {
-			Shader,
-			Tex2D,
-			Cubemap,
-			Mesh
-		};
+		virtual void Init() = 0;
+		virtual void Term() = 0;
+		virtual void Connect() = 0;
+		virtual void Disconnect() = 0;
 
-		const std::map<FactoryType, std::function<std::shared_ptr<PALInterface>()>> factories;
+		/* ------------------------------------------- *\
+		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
+		\* ------------------------------------------- */
 
-		PALModule(dynalo::library&& l, const std::string& id)
-		  : lib(std::move(l)), id(id), factories(lib.get_function<std::map<FactoryType, std::function<std::shared_ptr<PALInterface>()>>()>("_CacaoPALModule_Factories")()) {}
-	};
-
-	class CACAO_API PALInterface {
-	  public:
-		virtual ~PALInterface() {}
+		virtual ~PALModule() {}
 
 	  protected:
-		PALInterface() {}
+		PALModule(const std::string& id)
+		  : id(id), didInit(false), connected(false) {}
 
-		//We use the module for a reference count so it can't be unloaded while objects are alive
-		std::shared_ptr<PALModule> m;
+		bool didInit;
+		bool connected;
 	};
 }
 

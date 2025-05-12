@@ -14,7 +14,7 @@ subdir('modules' / 'shader-tgtgen')
 subdir('modules' / 'core')
 
 # Windowing modules
-backend_deps = []
+windowing_deps = []
 if host_machine.system() == 'windows'
     subdir('modules' / 'win32')
 elif host_machine.system() == 'darwin'
@@ -25,15 +25,16 @@ else
     error('Unsupported platform!')
 endif
 
-# Engine library
-libcacao = shared_library('cacao', dependencies: [core_dep, backend_deps])
-cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [core_deps, backend_deps])
-
 # Graphics backends
 backends = get_option('backends')
+gfx_deps = []
 foreach b : backends
     subdir('modules' / b)
 endforeach
+
+# Engine library
+libcacao = shared_library('cacao', dependencies: [core_dep, windowing_deps, gfx_deps])
+cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [core_deps, windowing_deps, gfx_deps])
 
 # Game runtime
 subdir('exe')
