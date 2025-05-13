@@ -155,12 +155,12 @@ testing = get_option('testing')
 if build_libs
 	subdir('libs')
 endif
+if build_tools
+	subdir('tools')
+endif
 if build_engine
 	subdir('engine')
 endif
 if build_playground
 	subdir('playground')
-endif
-if build_tools
-	subdir('tools')
 endif

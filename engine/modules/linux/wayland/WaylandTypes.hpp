@@ -15,7 +15,6 @@ namespace Cacao {
 		libdecor* decor = nullptr;
 		libdecor_frame* frame = nullptr;
 		bool configured = false;
-		bool inResize = false;
 
 		void CreateWindow();
 		void DestroyWindow();
@@ -37,5 +36,7 @@ namespace Cacao {
 
 		void SaveWinSize();
 		void RestoreWin();
+
+		glm::uvec2 lastKnownContentSize;
 	};
 }

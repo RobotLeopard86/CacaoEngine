@@ -19,6 +19,7 @@
 #include "glm/glm.hpp"
 
 #include <vector>
+#include <thread>
 
 namespace Cacao {
 	template<typename T>
@@ -30,6 +31,21 @@ namespace Cacao {
 
 	struct ViewImage : public Allocated<vk::Image> {
 		vk::ImageView view;
+	};
+
+	class Immediate {
+	  public:
+		vk::CommandPool pool;
+		vk::CommandBuffer cmd;
+		vk::Fence fence;
+
+		static Immediate Get();
+		static void Cleanup();
+
+		void Submit(bool wait);
+
+	  private:
+		static std::map<std::thread::id, Immediate> immediates;
 	};
 
 	class VulkanModule : public PALModule {
@@ -57,10 +73,19 @@ namespace Cacao {
 		vma::Allocator allocator;
 		ViewImage depth;
 		vk::Format selectedDF;
+		vk::Queue gfxQueue;
+		vk::CommandPool renderPool;
+		Allocated<vk::Buffer> globalsUBO;
+		void* globalsMem;
 
 		VulkanModule()
 		  : PALModule("vulkan") {}
 		~VulkanModule() {}
+
+	  private:
+		vk::Queue immQueue;
+		std::mutex immqLock;
+		friend Immediate;
 	};
 
 	inline std::shared_ptr<VulkanModule> vulkan;

@@ -1,14 +1,13 @@
 #include "LinuxWSI.hpp"
-#include "LinuxRouter.hpp"
+#include "WSI.hpp"
 #include "Cacao/Window.hpp"
 
 namespace Cacao {
-	void VulkanModule::Connect() {
+	void CreateSurface() {
 		if(Window::Get().impl->useX) {
 			XConnect();
 		} else {
 			WaylandConnect();
 		}
-		connected = true;
 	}
 }

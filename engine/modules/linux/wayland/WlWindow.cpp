@@ -41,6 +41,9 @@ namespace Cacao {
 		//Let Wayland process surface creation
 		wl_display_roundtrip(display);
 
+		//Set a fake content size so the graphics system can initialize (this might not be accurate, but the resize event will correct it)
+		lastKnownContentSize = win.size;
+
 		//Connect the graphics system
 		PAL::Get().GfxConnect();
 
@@ -86,7 +89,9 @@ namespace Cacao {
 
 			//Mark us as configured
 			self->configured = true;
-			self->inResize = false;
+
+			//Save size
+			self->lastKnownContentSize = newSize;
 		};
 		frame = libdecor_decorate(decor, surf, &frameInterface, this);
 		Check<ExternalException>(frame != nullptr, "Failed to create libdecor frame!");
@@ -158,7 +163,7 @@ namespace Cacao {
 	}
 
 	const glm::uvec2 WaylandCommon::ContentAreaSize() {
-		return {0, 0};
+		return lastKnownContentSize;
 	}
 
 	void WaylandCommon::Visibility(bool visible) {

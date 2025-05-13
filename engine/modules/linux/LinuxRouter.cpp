@@ -47,13 +47,13 @@ namespace Cacao {
 #ifdef HAS_WAYLAND
 				if(!wlDisplay.empty()) {
 					impl->useX = false;
-					return;
+					goto choice_made;
 				}
 #endif
 #ifdef HAS_X11
 				if(!xDisplay.empty()) {
 					impl->useX = true;
-					return;
+					goto choice_made;
 				}
 #endif
 			}
@@ -61,7 +61,7 @@ namespace Cacao {
 			if(sessionType.compare("x11") == 0) {
 				if(!xDisplay.empty()) {
 					impl->useX = true;
-					return;
+					goto choice_made;
 				}
 			}
 #endif
@@ -69,17 +69,19 @@ namespace Cacao {
 #ifdef HAS_WAYLAND
 			if(!wlDisplay.empty()) {
 				impl->useX = false;
-				return;
+				goto choice_made;
 			}
 #endif
 #ifdef HAS_X11
 			if(!xDisplay.empty()) {
 				impl->useX = true;
-				return;
+				goto choice_made;
 			}
 		}
 #endif
 		Check<MiscException>(false, "Failed to resolve choice of windowing system!");
+	choice_made:
+		Logger::Engine(Logger::Level::Info) << "Running under " << (impl->useX ? "X11" : "Wayland") << ".";
 	}
 
 	Window::~Window() {
