@@ -10,6 +10,7 @@ install_subdir('include' / 'Cacao', install_dir: 'include', install_tag: 'cacao'
 module_private_headers = include_directories('modules' / 'private')
 
 # Always-included modules
+backends = get_option('backends')
 subdir('modules' / 'shader-tgtgen')
 subdir('modules' / 'core')
 
@@ -26,7 +27,6 @@ else
 endif
 
 # Graphics backends
-backends = get_option('backends')
 gfx_deps = []
 foreach b : backends
     subdir('modules' / b)
