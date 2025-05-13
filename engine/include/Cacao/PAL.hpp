@@ -71,7 +71,7 @@ namespace Cacao {
 		/**
 		 * @brief Shutdown the active module
 		 *
-		 * @throws NonexistentValueException If there is no active module
+		 * @throws BadInitStateException If the module has not been initialized
 		 * @throws BadStateException If the graphics backend and window are still connected
 		 */
 		void TerminateModule();
@@ -85,6 +85,15 @@ namespace Cacao {
 		 */
 		template<typename T>
 		void ConfigureImplPtr(T& obj) = delete;
+
+		/**
+		 * @brief Destroys the module pointer
+		 *
+		 * @warning SetModule must be called after this function before any other PAL actions
+		 *
+		 * @throws NonexistentValueException If there is no active module
+		 */
+		void DestroyMP();
 
 	  private:
 		struct Impl;

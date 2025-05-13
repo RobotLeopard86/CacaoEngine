@@ -74,6 +74,14 @@ if host_machine.system() == 'darwin'
 	dep_compiler_args += '-fexperimental-library'
 endif
 
+# Set some Linux-specific options
+if host_machine.system() == 'linux'
+	linux_windowing = get_option('linux_windowing')
+	foreach lw : linux_windowing
+		add_project_arguments('-DHAS_' + lw.to_upper(), language: ['c', 'cpp'])
+	endforeach
+endif
+
 # Define debug macro
 if bt.contains('debug')
 	add_project_arguments(['-D_DEBUG'], language: 'cpp')

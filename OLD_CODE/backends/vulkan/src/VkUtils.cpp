@@ -135,27 +135,6 @@ namespace Cacao {
 		} catch(vk::SystemError& err) {
 			std::rethrow_exception(std::current_exception());
 		}
-
-		if(!didGenShaders) {
-			//Generate UI shaders (they need the surface fornat)
-			//Compile UI view shader
-			uivsm.Compile();
-			while(!uivsm->IsCompiled()) {
-				std::this_thread::sleep_for(std::chrono::microseconds(1));
-			}
-
-			//Generate other UI shaders
-			GenShaders();
-			while(!TextShaders::shader->IsCompiled() || !ImageShaders::shader->IsCompiled()) {
-				std::this_thread::sleep_for(std::chrono::microseconds(1));
-			}
-
-			didGenShaders = true;
-		}
-
-		//Regenerate frame objects
-		GenFrameObjects();
 	}
 
-	std::map<std::thread::id, Immediate> Immediate::immediates = std::map<std::thread::id, Immediate>();
 }

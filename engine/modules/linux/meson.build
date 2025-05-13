@@ -1,12 +1,10 @@
 # Subsystems
-linux_windowing = get_option('linux_windowing')
 linux_deps = []
 if linux_windowing.length() < 1
 	error('At least one Linux windowing system must be selected!')
 endif
 foreach lw : linux_windowing
 	subdir(lw)
-	add_project_arguments('-DHAS_' + lw.to_upper(), language: ['c', 'cpp'])
 endforeach
 
 # Linux common library

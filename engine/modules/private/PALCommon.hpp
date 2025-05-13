@@ -15,12 +15,20 @@ namespace Cacao {
 		virtual void Term() = 0;
 		virtual void Connect() = 0;
 		virtual void Disconnect() = 0;
+		virtual void Destroy() = 0;
 
 		/* ------------------------------------------- *\
 		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
 		\* ------------------------------------------- */
 
 		virtual ~PALModule() {}
+
+		bool Initialized() {
+			return didInit;
+		}
+		bool Connected() {
+			return connected;
+		}
 
 	  protected:
 		PALModule(const std::string& id)

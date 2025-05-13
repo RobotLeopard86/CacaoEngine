@@ -38,10 +38,12 @@ namespace Cacao {
 		 */
 		void DropRealized();
 
-	  private:
+		///@cond
 		struct Impl;
 		std::unique_ptr<Impl> impl;
+		///@endcond
 
+	  private:
 		std::vector<char> encodedAudio;
 
 		Sound(std::vector<char>&& encoded);

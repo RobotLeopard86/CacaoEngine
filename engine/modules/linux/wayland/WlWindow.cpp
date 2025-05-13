@@ -6,7 +6,6 @@
 #include "WaylandTypes.hpp"
 
 #include <memory>
-#include "xdg-shell-client-protocol.h"
 
 #define win Window::Get()
 
@@ -60,7 +59,6 @@ namespace Cacao {
 		frameInterface.close = [](libdecor_frame* frame, void* usr) {
 			Engine::Get().Quit();
 		};
-		bool hasConfigured = false;
 		frameInterface.configure = [](libdecor_frame* frame, libdecor_configuration* cfg, void* usr) {
 			//Get new size
 			glm::ivec2 newSize = {0, 0};
@@ -74,6 +72,9 @@ namespace Cacao {
 				win.size = newSize;
 			}
 
+			//Get this
+			WaylandCommon* self = reinterpret_cast<WaylandCommon*>(usr);
+
 			//Fire a window resize event
 			DataEvent<glm::uvec2> wre("WindowResize", win.size);
 			EventManager::Get().Dispatch(wre);
@@ -84,9 +85,10 @@ namespace Cacao {
 			libdecor_state_free(state);
 
 			//Mark us as configured
-			*(reinterpret_cast<bool*>(usr)) = true;
+			self->configured = true;
+			self->inResize = false;
 		};
-		frame = libdecor_decorate(decor, surf, &frameInterface, &hasConfigured);
+		frame = libdecor_decorate(decor, surf, &frameInterface, this);
 		Check<ExternalException>(frame != nullptr, "Failed to create libdecor frame!");
 
 		//Set attributes (the app ID will be changed to that of the primary bundle when that is implemented)
@@ -101,7 +103,7 @@ namespace Cacao {
 		wl_display_roundtrip(display);
 
 		//Wait until libdecor configuration is done
-		while(!hasConfigured) {
+		while(!configured) {
 			Check<ExternalException>(libdecor_dispatch(decor, 0) >= 0, "Failed to dispatch one or more libdecor events while waiting for configure!");
 		}
 	}
@@ -160,12 +162,22 @@ namespace Cacao {
 	}
 
 	void WaylandCommon::Visibility(bool visible) {
+		libdecor_frame_set_visibility(frame, visible);
 	}
 
 	void WaylandCommon::Title(const std::string& title) {
+		libdecor_frame_set_title(frame, title.c_str());
 	}
 
 	void WaylandCommon::Resize(const glm::uvec2& size) {
+		//Fire a window resize event
+		DataEvent<glm::uvec2> wre("WindowResize", win.size);
+		EventManager::Get().Dispatch(wre);
+
+		//Set new libdecor state
+		libdecor_state* state = libdecor_state_new(win.size.x, win.size.y);
+		libdecor_frame_commit(frame, state, nullptr);
+		libdecor_state_free(state);
 	}
 
 	void WaylandCommon::ModeChange(Window::Mode mode) {

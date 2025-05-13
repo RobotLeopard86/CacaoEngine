@@ -181,12 +181,14 @@ namespace Cacao {
 			return (open ? mode : Mode::Windowed);
 		}
 
-	  private:
-		struct CACAO_API Impl;
+		///@cond
+		struct Impl;
 		std::unique_ptr<Impl> impl;
+		///@endcond
+
+	  private:
 		friend class X11Common;
 		friend class WaylandCommon;
-		friend class PAL;
 
 		Window();
 		~Window();

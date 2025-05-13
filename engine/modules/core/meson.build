@@ -25,8 +25,8 @@ zlib_dep = assimp_sp.dependency('zlibstatic')
 alsoft_opts = cmake.subproject_options()
 alsoft_opts.add_cmake_defines({
 	'BUILD_TESTING': 'OFF',
-	'BUILD_SHARED_LIBS': 'OFF',
-	'LIBTYPE': 'STATIC',
+	'BUILD_SHARED_LIBS': 'ON',
+	'LIBTYPE': 'SHARED',
 	'ALSOFT_DLOPEN': 'OFF',
 	'ALSOFT_EXAMPLES': 'OFF',
 	'ALSOFT_NO_CONFIG_UTIL': 'ON',

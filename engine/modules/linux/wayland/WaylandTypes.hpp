@@ -14,6 +14,8 @@ namespace Cacao {
 		wl_surface* surf = nullptr;
 		libdecor* decor = nullptr;
 		libdecor_frame* frame = nullptr;
+		bool configured = false;
+		bool inResize = false;
 
 		void CreateWindow();
 		void DestroyWindow();
