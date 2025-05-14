@@ -20,9 +20,9 @@ xdg_output_dep = declare_dependency(sources: xdg_output_h)
 # Wayland module
 libwl = static_library('cacaowayland', sources: [
 	'WlWindow.cpp', xdg_output
-], include_directories: [engine_headers, module_private_headers], dependencies: [wayland_client, xkbcommon_dep, libdecor_dep, desktopsettings, glm_dep], 
+], include_directories: [engine_headers, module_private_headers], dependencies: [wayland_client, xkbcommon_dep, libdecor_dep, desktopsettings, glm_dep, xg_headers_dep], 
 pic: true, install: true, install_tag: 'cacao')
 
-wl_dep = declare_dependency(link_whole: libwl, dependencies: [wayland_client, xkbcommon_dep, libdecor_dep, desktopsettings, glm_dep])
+wl_dep = declare_dependency(link_whole: libwl, dependencies: [wayland_client, xkbcommon_dep, libdecor_dep, desktopsettings, glm_dep, xg_headers_dep])
 linux_deps += wl_dep
 linux_deps += xdg_output_dep

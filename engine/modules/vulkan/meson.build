@@ -15,7 +15,7 @@ vk_sources = [
 	'wsi' / 'Common.cpp'
 ]
 vk_inc = [engine_headers, module_private_headers]
-vk_dep = [vkheaders, vkhpp, vma, vmahpp, glm_dep]
+vk_dep = [vkheaders, vkhpp, vma, vmahpp, glm_dep, xg_headers_dep]
 
 # Graphics connection
 if host_machine.system() == 'windows'

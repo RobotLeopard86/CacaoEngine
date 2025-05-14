@@ -24,6 +24,13 @@ namespace Cacao {
 
 		//Create initial swapchain
 		GenSwapchain();
+
+		//Register swapchain regeneration consumer
+		vulkan->resizer = EventConsumer([](Event& e) {
+			GenSwapchain();
+		});
+		EventManager::Get().SubscribeConsumer("WindowResize", vulkan->resizer);
+
 		connected = true;
 	}
 }

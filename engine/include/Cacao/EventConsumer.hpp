@@ -8,6 +8,8 @@
 #include <functional>
 #include <vector>
 
+#include "crossguid/guid.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief Simple wrapper for a function that consumes an event
@@ -17,10 +19,16 @@ namespace Cacao {
 		/**
 		 * @brief Create an event consumer
 		 *
-		 * @param consumer The consuming function
+		 * @param consumer The function to call when an event is received
 		 */
 		EventConsumer(std::function<void(Event&)> consumer)
-		  : consumer(consumer) {}
+		  : consumer(consumer), guid(xg::newGuid()) {}
+
+		/**
+		 * @brief Create an empty event consumer that does nothing
+		 */
+		EventConsumer()
+		  : consumer([](Event&) {}), guid(xg::newGuid()) {}
 
 		/**
 		 * @brief Consume an event
@@ -32,13 +40,14 @@ namespace Cacao {
 
 		/**
 		 * @brief Check if two EventConsumers are equal
-		 * @details Compares memory addresses to perform check
+		 * @details Compares GUIDs (which should basically never overlap)
 		 */
-		bool operator==(EventConsumer rhs) {
-			return (this == &rhs);
+		bool operator==(const EventConsumer& rhs) {
+			return (guid == rhs.guid);
 		}
 
 	  private:
 		std::function<void(Event&)> consumer;
+		xg::Guid guid;
 	};
 }

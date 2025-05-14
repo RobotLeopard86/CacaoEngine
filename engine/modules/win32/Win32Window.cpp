@@ -1,6 +1,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
+#include "Cacao/EventSystem.hpp"
 #include "Win32Types.hpp"
 #include "Cacao/PAL.hpp"
 
@@ -19,6 +20,12 @@ namespace Cacao {
 			case WM_CLOSE:
 				Engine::Get().Quit();
 				return 0;
+			case WM_SIZE: {
+				if(wp != SIZE_MAXIMIZED && wp != SIZE_RESTORED) break;
+				DataEvent<glm::uvec2> wre("Window", {LOWORD(lp), HIWORD(lp)});
+				EventManager::Get().Dispatch(wre);
+				return 0;
+			}
 		}
 		return DefWindowProcA(hWnd, msg, wp, lp);
 	}
@@ -146,6 +153,9 @@ namespace Cacao {
 
 		size = newSize;
 		SetWindowPos(impl->win->hWnd, nullptr, 0, 0, newSize.x, newSize.y, SWP_NOMOVE | SWP_NOZORDER);
+
+		DataEvent<glm::uvec2> wre("Window", newSize);
+		EventManager::Get().Dispatch(wre);
 	}
 
 	void Window::SetMode(Mode newMode) {
@@ -221,5 +231,8 @@ namespace Cacao {
 		}
 
 		mode = newMode;
+
+		DataEvent<glm::uvec2> wre("Window", size);
+		EventManager::Get().Dispatch(wre);
 	}
 }

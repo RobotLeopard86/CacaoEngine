@@ -186,10 +186,6 @@ namespace Cacao {
 		//Resize
 		xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, glm::value_ptr(size16));
 		xcb_flush(connection);
-
-		//Fire an event
-		DataEvent<glm::uvec2> wre("WindowResize", win.size);
-		EventManager::Get().Dispatch(wre);
 	}
 
 	void X11Common::SaveWinPos() {

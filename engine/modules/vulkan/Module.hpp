@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PALCommon.hpp"
+#include "Cacao/EventSystem.hpp"
 
 #ifdef __linux__
 #ifdef HAS_X11
@@ -89,6 +90,8 @@ namespace Cacao {
 		vk::Queue immQueue;
 		std::mutex immqLock;
 		friend Immediate;
+
+		EventConsumer resizer;
 	};
 
 	inline std::shared_ptr<VulkanModule> vulkan;

@@ -228,10 +228,6 @@ namespace Cacao {
 	}
 
 	void WaylandCommon::Resize(const glm::uvec2& size) {
-		//Fire a window resize event
-		DataEvent<glm::uvec2> wre("WindowResize", win.size);
-		EventManager::Get().Dispatch(wre);
-
 		//Set new libdecor state
 		libdecor_state* state = libdecor_state_new(win.size.x, win.size.y);
 		libdecor_frame_commit(frame, state, nullptr);

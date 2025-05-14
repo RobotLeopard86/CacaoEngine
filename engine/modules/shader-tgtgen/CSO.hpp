@@ -15,5 +15,5 @@ namespace Targetgen {
 		ComPtr<slang::IComponentType> linked;
 	};
 
-	CompiledShaderObject SetupCSO(ibytestream& in, const slang::TargetDesc& tgtDesc);
+	CompiledShaderObject SetupCSO(ibytestream& in, SlangCompileTarget tgt, const std::string& profile);
 }

@@ -8,8 +8,9 @@ foreach lw : linux_windowing
 endforeach
 
 # Linux common library
-liblinux = static_library('cacaolinux', sources: 'LinuxRouter.cpp', include_directories: [engine_headers, module_private_headers], dependencies: [linux_deps, glm_dep], 
-pic: true, install: true, install_tag: 'cacao')
+liblinux = static_library('cacaolinux', sources: 'LinuxRouter.cpp', include_directories:
+	[engine_headers, module_private_headers], dependencies: [linux_deps, glm_dep, crossguid], 
+	pic: true, install: true, install_tag: 'cacao')
 
 linux_dep = declare_dependency(link_whole: liblinux)
 windowing_deps += linux_dep

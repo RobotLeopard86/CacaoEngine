@@ -49,9 +49,7 @@ namespace Cacao {
 		 * @param eventData The data to store
 		 */
 		DataEvent(std::string eventType, T eventData)
-		  : Event(eventType), data(eventData) {
-			static_assert(std::is_trivially_copy_constructible_v<T>, "Type used in data event must be trivally copy-contructible!");
-		}
+		  : Event(eventType), data(eventData) {}
 
 		/**
 		 * @brief Get the stored data

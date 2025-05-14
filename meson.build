@@ -171,6 +171,7 @@ xg_opts.add_cmake_defines({
 })
 xg_opts.set_install(false)
 crossguid = cmake.subproject('crossguid', options: xg_opts, required: true).dependency('crossguid')
+xg_headers_dep = declare_dependency(include_directories: 'subprojects' / 'crossguid' / 'include')
 
 # Configure SPIRV-Cross
 spv_cross_opts = cmake.subproject_options()

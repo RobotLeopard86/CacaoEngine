@@ -251,6 +251,9 @@ namespace Cacao {
 	void VulkanModule::Disconnect() {
 		connected = false;
 
+		//Unsubscribe swapchain regeneration consumer
+		EventManager::Get().UnsubscribeConsumer("WindowResize", resizer);
+
 		//Destroy swapchain
 		for(const vk::ImageView& view : swapchain.views) {
 			dev.destroyImageView(view);

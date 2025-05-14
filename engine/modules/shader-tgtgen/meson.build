@@ -1,6 +1,6 @@
 # Sources and dependencies
 tgtgen_src = ['Targetgen.cpp', 'Spv.cpp', shaderbasemod]
-tgtgen_deps = [slang_dep, commonlib_dep]
+tgtgen_deps = [slang_dep, commonlib_dep, formats_dep]
 tgtgen_args = []
 foreach be : backends
 	tgtgen_args += '-DBE_' + be.to_upper()
