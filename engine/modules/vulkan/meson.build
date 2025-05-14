@@ -29,7 +29,7 @@ elif host_machine.system() == 'linux'
 	endif
 	if linux_windowing.contains('wayland')
 		vk_sources += 'wsi' / 'WaylandWSI.cpp'
-		vk_dep += [wayland_client, xkbcommon_dep, libdecor_dep]
+		vk_dep += [wayland_client, xdg_output_dep, xkbcommon_dep, libdecor_dep]
 	endif
 	vk_sources += 'wsi' / 'LinuxWSI.cpp'
 else

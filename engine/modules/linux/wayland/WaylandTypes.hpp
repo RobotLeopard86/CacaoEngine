@@ -4,6 +4,7 @@
 
 #include <wayland-client.h>
 #include "libdecor.h"
+#include "xdg-output-unstable-v1-client-protocol.h"
 
 namespace Cacao {
 	class WaylandCommon {
@@ -12,6 +13,11 @@ namespace Cacao {
 		wl_compositor* compositor = nullptr;
 		wl_registry* reg = nullptr;
 		wl_surface* surf = nullptr;
+		zxdg_output_manager_v1* outMgr = nullptr;
+		zxdg_output_v1* out = nullptr;
+		wl_surface_listener surfListener = {};
+		zxdg_output_v1_listener outListener = {};
+		glm::ivec2 outputSize = {0, 0};
 		libdecor* decor = nullptr;
 		libdecor_frame* frame = nullptr;
 		bool configured = false;

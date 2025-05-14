@@ -1,6 +1,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
+#include "Cacao/EventSystem.hpp"
 #ifdef HAS_WAYLAND
 #include "wayland/WaylandTypes.hpp"
 #endif
@@ -187,6 +188,10 @@ namespace Cacao {
 
 		size = newSize;
 		FORWARD(Resize, newSize)
+
+		//Fire a window resize event
+		DataEvent<glm::uvec2> wre("WindowResize", size);
+		EventManager::Get().Dispatch(wre);
 	}
 
 	void Window::SetMode(Mode newMode) {
@@ -197,9 +202,7 @@ namespace Cacao {
 		//Save last position and size if needed
 		if(mode == Mode::Windowed) {
 			FORWARD(SaveWinPos)
-			if(newMode == Mode::Fullscreen) {
-				FORWARD(SaveWinSize)
-			}
+			FORWARD(SaveWinSize)
 		}
 
 		//Forward call
@@ -209,6 +212,10 @@ namespace Cacao {
 		if(newMode == Mode::Windowed) {
 			FORWARD(RestoreWin)
 		}
+
+		//Fire a window resize event
+		DataEvent<glm::uvec2> wre("WindowResize", size);
+		EventManager::Get().Dispatch(wre);
 
 		mode = newMode;
 	}

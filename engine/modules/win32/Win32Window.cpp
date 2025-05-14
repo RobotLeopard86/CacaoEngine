@@ -158,9 +158,7 @@ namespace Cacao {
 			RECT r = {};
 			GetWindowRect(impl->win->hWnd, &r);
 			lastPos = {r.left, r.top};
-			if(newMode == Mode::Fullscreen) {
-				lastSize = {r.right - r.left, r.bottom - r.top};
-			}
+			lastSize = {r.right - r.left, r.bottom - r.top};
 		}
 
 		//Get monitor info
@@ -195,6 +193,7 @@ namespace Cacao {
 				//Set position and size
 				SetWindowPos(impl->win->hWnd, HWND_TOP, mi.rcMonitor.left, mi.rcMonitor.top,
 					mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top, SWP_FRAMECHANGED);
+				size = {mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top};
 				break;
 
 			case Mode::Fullscreen:

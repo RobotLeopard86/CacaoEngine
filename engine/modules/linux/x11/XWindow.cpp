@@ -325,6 +325,7 @@ namespace Cacao {
 				//Set window size to monitor size
 				int16_t valueList[] = {monitor.x, monitor.y, (int16_t)monitor.width, (int16_t)monitor.height};
 				xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
+				win.size = {monitor.width, monitor.height};
 
 				//Set the fullscreen property
 				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, state, XCB_ATOM_ATOM, 32, 1, &fullscreen);
