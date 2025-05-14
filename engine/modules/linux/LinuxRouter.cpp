@@ -40,7 +40,7 @@ namespace Cacao {
 #undef GETENV
 #ifdef HAS_X11
 		if(impl->useX && !xDisplay.empty()) {
-			return;
+			goto choice_made;
 		}
 #endif
 		if(!sessionType.empty()) {

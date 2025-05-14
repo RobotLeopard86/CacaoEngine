@@ -13,6 +13,7 @@
 #endif
 
 #include <array>
+#include <vector>
 
 namespace Cacao {
 	Engine::Engine()
@@ -71,7 +72,14 @@ namespace Cacao {
 		}
 
 		//In descending order of priority
-		const std::array<std::string, 2> backends {{"vulkan", "opengl"}};
+		std::vector<std::string> backends = {"vulkan", "opengl"};
+		if(!icfg.initialRequestedBackend.empty()) {
+			auto it = std::find(backends.begin(), backends.end(), icfg.initialRequestedBackend);
+			if(it != backends.end()) {
+				backends.erase(it);
+				backends.insert(backends.begin(), icfg.initialRequestedBackend);
+			}
+		}
 
 		//Try to intialize backend
 		bool found = false;
@@ -80,11 +88,13 @@ namespace Cacao {
 			//Set module in PAL
 			Logger::Engine(Logger::Level::Trace) << "Trying backend \"" << backend << "\"...";
 			PAL::Get().SetModule(backend);
-			if(PAL::Get().InitializeModule()) {
-				found = true;
-				chosen = backend;
-				break;
-			}
+			try {
+				if(PAL::Get().InitializeModule()) {
+					found = true;
+					chosen = backend;
+					break;
+				}
+			} catch(...) {}
 		}
 		if(!found) {
 			Logger::Engine(Logger::Level::Fatal) << "No graphics backends are available!";
