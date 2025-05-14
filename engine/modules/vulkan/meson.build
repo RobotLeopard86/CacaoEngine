@@ -8,10 +8,10 @@ vmahpp = subproject('vma-hpp', required: true).get_variable('vma_hpp_dep')
 
 # Sources
 vk_sources = [
-	'VulkanModule.cpp',
-	'Utils.cpp',
-	'VulkanImpl.cpp',
 	'Immediate.cpp',
+	'Swapchain.cpp',
+	'VulkanModule.cpp',
+	'VulkanImpl.cpp',
 	'wsi' / 'Common.cpp'
 ]
 vk_inc = [engine_headers, module_private_headers]

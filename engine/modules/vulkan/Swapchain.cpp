@@ -26,14 +26,25 @@ namespace Cacao {
 		extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 		extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
 
-		//Check for present mode
+		//Decice present mode
 		auto pmodes = vulkan->physDev.getSurfacePresentModesKHR(vulkan->surface);
-		Check<NonexistentValueException>(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), "The requested present mode is not available!");
+		vk::PresentModeKHR presentMode;
+		if(vulkan->vsync) {
+			presentMode = vk::PresentModeKHR::eMailbox;
+			if(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) == pmodes.cend()) {
+				presentMode = vk::PresentModeKHR::eFifo;
+				Check<NonexistentValueException>(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), "The requested present mode is not available!");
+			}
+		} else {
+			presentMode = vk::PresentModeKHR::eImmediate;
+			Check<NonexistentValueException>(std::find(pmodes.cbegin(), pmodes.cend(), presentMode) != pmodes.cend(), "The requested present mode is not available!");
+		}
 
 		//Make new swapchain
 		vk::SwapchainCreateInfoKHR swapchainCI(
 			{}, vulkan->surface, std::clamp((surfc.minImageCount + 1), surfc.minImageCount, (surfc.maxImageCount > 0 ? surfc.maxImageCount : UINT32_MAX)),
-			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment);
+			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0,
+			vk::SurfaceTransformFlagBitsKHR::eInherit, vk::CompositeAlphaFlagBitsKHR::eInherit, presentMode);
 		try {
 			vulkan->swapchain.chain = vulkan->dev.createSwapchainKHR(swapchainCI);
 		} catch(vk::SystemError& err) {

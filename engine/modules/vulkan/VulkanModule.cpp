@@ -17,6 +17,11 @@ namespace Cacao {
 		vulkan.reset();
 	}
 
+	void VulkanModule::SetVSync(bool state) {
+		vsync = state;
+		GenSwapchain();
+	}
+
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
 	void RankPhysicalDevices(std::vector<vk::PhysicalDevice>* devices, const std::vector<std::function<bool(const vk::PhysicalDevice&)>>& tests) {
 		std::vector<int> scores(devices->size(), 0);

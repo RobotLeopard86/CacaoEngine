@@ -56,6 +56,7 @@ namespace Cacao {
 		void Connect() override;
 		void Disconnect() override;
 		void Destroy() override;
+		void SetVSync(bool state) override;
 
 		/* ------------------------------------------- *\
 		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
@@ -78,6 +79,7 @@ namespace Cacao {
 		vk::CommandPool renderPool;
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
+		bool vsync;
 
 		VulkanModule()
 		  : PALModule("vulkan") {}
@@ -92,8 +94,6 @@ namespace Cacao {
 	inline std::shared_ptr<VulkanModule> vulkan;
 
 	void GenSwapchain();
-
-	inline vk::PresentModeKHR presentMode;
 
 	constexpr glm::mat4 projectionCorrection(
 		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change

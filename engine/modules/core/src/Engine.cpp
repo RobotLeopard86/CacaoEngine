@@ -107,6 +107,9 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Creating window...";
 		Window::Get().Open("Cacao Engine", {1280, 720}, true, Window::Mode::Windowed);
 
+		//Enable V-Sync by default
+		PAL::Get().SetVSync(true);
+
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
 		std::lock_guard lkg(stateMtx);

@@ -16,6 +16,7 @@ namespace Cacao {
 		virtual void Connect() = 0;
 		virtual void Disconnect() = 0;
 		virtual void Destroy() = 0;
+		virtual void SetVSync(bool state) = 0;
 
 		/* ------------------------------------------- *\
 		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
