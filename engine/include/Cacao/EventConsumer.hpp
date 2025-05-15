@@ -30,6 +30,28 @@ namespace Cacao {
 		EventConsumer()
 		  : consumer([](Event&) {}), guid(xg::newGuid()) {}
 
+		///@cond
+		EventConsumer(const EventConsumer& other)
+		  : consumer(other.consumer), guid(other.guid) {}
+		EventConsumer(EventConsumer&& other)
+		  : consumer(other.consumer), guid(other.guid) {
+			other.consumer = [](Event&) {};
+			other.guid = xg::Guid {};
+		}
+		EventConsumer& operator=(const EventConsumer& other) {
+			consumer = other.consumer;
+			guid = other.guid;
+			return *this;
+		}
+		EventConsumer& operator=(EventConsumer&& other) {
+			consumer = other.consumer;
+			guid = other.guid;
+			other.consumer = [](Event&) {};
+			other.guid = xg::Guid {};
+			return *this;
+		}
+		///@endcond
+
 		/**
 		 * @brief Consume an event
 		 * @details Forwards the event to the consuming function
