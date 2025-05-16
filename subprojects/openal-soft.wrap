@@ -1,4 +1,11 @@
 [wrap-git]
+directory = openal-soft-1.24.2
 url = https://github.com/kcat/openal-soft
 depth = 1
-revision = 1.24.3
+revision = 1.24.2
+patch_filename = openal-soft_1.24.2-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/openal-soft_1.24.2-1/get_patch
+patch_hash = fc23fdf8760b4e11ca7618dcf00c295fafc114da94c9807511f52f7b853e9de6
+
+[provide]
+openal = openal_dep

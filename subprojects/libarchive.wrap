@@ -1,11 +1,11 @@
 [wrap-git]
-directory = libarchive-3.7.7
+directory = libarchive-3.7.9
 url = https://github.com/libarchive/libarchive
 depth = 1
-revision = v3.7.7
-patch_filename = libarchive_3.7.7-2_patch.zip
-patch_url = https://wrapdb.mesonbuild.com/v2/libarchive_3.7.7-2/get_patch
-patch_hash = 149d06dd796b26fbbfec70ca8f4bcaad694e3bf0840309020e93da8380fc0a1c
+revision = v3.7.9
+patch_filename = libarchive_3.7.9-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/libarchive_3.7.9-1/get_patch
+patch_hash = 4aaf1e483a90354d15ed9be25ec82a1a64d45246fc2c8f862f0cbb66f13eabaa
 
 [provide]
 libarchive = libarchive_dep

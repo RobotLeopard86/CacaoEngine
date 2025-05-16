@@ -12,7 +12,7 @@ namespace Targetgen {
 		std::string vertex, fragment;
 	};
 
-	GLSL GenerateGLSL(ibytestream& in);
+	GLSL GenerateGLSL(ibytestream& in, bool es);
 #endif
 
 	std::vector<uint32_t> GenerateSPV(ibytestream& in);
