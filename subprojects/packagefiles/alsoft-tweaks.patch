@@ -1,0 +1,31 @@
+diff --git a/meson.build b/meson.build
+index 04d0ae9..00943c7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -12,7 +12,7 @@ if meson.version().version_compare('>= 0.62')
+ else
+   dl_dep = cpp.find_library('dl', required: false)
+ endif
+-fmt_dep = dependency('fmt')
++fmt_dep = dependency('fmt', static: true)
+ thread_dep = dependency('threads')
+ alsa_dep = dependency('alsa', required: get_option('alsa'))
+ apple_dep = dependency('appleframeworks', modules: ['AudioToolbox', 'CoreAudio', 'CoreFoundation'], required: host_machine.system() == 'darwin')
+@@ -30,11 +30,16 @@ sndio_dep = dependency('sndio', required: get_option('sndio'))
+ solaris_dep = dependency('audioio', required: get_option('solaris'))
+ 
+ if host_machine.system() == 'windows'
+-  add_project_arguments('-DNOMINMAX', language: 'cpp')
++  add_project_arguments(['-DNOMINMAX', '-D_DLL', '-D_MT'], language: 'cpp')
+   if cpp.get_argument_syntax() == 'msvc'
+     add_project_arguments('-D_CRT_SECURE_NO_WARNINGS', language: 'cpp')
+     add_project_arguments('/wd5051', language: 'cpp')
+   endif
++  if get_option('buildtype') == 'debug'
++    add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2', '-fms-runtime-lib=dll_dbg'], language: 'cpp')
++  else
++    add_project_arguments('-fms-runtime-lib=dll', language: 'cpp')
++  endif
+ endif
+ 
+ add_project_arguments('-DRESTRICT=__restrict', language: 'cpp')

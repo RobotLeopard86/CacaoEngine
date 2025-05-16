@@ -1,11 +1,8 @@
 [wrap-git]
-directory = fmt-11.2.0
 url = https://github.com/fmtlib/fmt
 depth = 1
 revision = 11.2.0
-patch_filename = fmt_11.2.0-1_patch.zip
-patch_url = https://wrapdb.mesonbuild.com/v2/fmt_11.2.0-1/get_patch
-patch_hash = 645bf1c335a24608b4b34f16ed10b9237bbb0131488668fb86454202239e086c
+patch_directory = fmt
 
 [provide]
 fmt = fmt_dep
