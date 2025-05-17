@@ -25,10 +25,14 @@ int main(int argc, char* argv[]) {
 	//Parse
 	CLI11_PARSE(app, argc, argv);
 
-	//Engine lifecycle
+	//Engine initialization
 	Cacao::Engine::Get().CoreInit(icfg);
 	Cacao::Engine::Get().GfxInit();
+
+	//Run
 	Cacao::Engine::Get().Run();
+
+	//Engine shutdown
 	Cacao::Engine::Get().GfxShutdown();
 	Cacao::Engine::Get().CoreShutdown();
 }

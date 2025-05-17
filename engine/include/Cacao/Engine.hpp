@@ -33,22 +33,19 @@ namespace Cacao {
 		 */
 		struct CACAO_API Config {
 			/**
-			 * @brief The number of dynamic ticks that should occur within a second
-			 * @details This is NOT a hard constraint. Attempting to run too many ticks within a second will cause noticeable frame skipping.
+			 * @brief The rate at which fixed ticks should occur, specified as the amount of time between fixed ticks in milliseconds
 			 */
-			int targetDynTPS;
-
-			/**
-			 * @brief The rate at which fixed ticks should occur
-			 *
-			 * @warning Fixed ticks are not yet implemented into the engine!
-			 */
-			int fixedTickRate;
+			int fixedTickRate = 50;
 
 			/**
 			 * @brief The number of frames the renderer can be behind before skipping some to catch up
 			 */
 			int maxFrameLag;
+
+			/**
+			 * @brief Whether or not to always re-render the UI every frame. Useful for inspecting UI graphics calls in RenderDoc or similar
+			 */
+			bool alwaysRerenderUI = false;
 		} config;
 
 		/**

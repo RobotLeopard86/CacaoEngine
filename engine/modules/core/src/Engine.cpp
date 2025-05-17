@@ -4,6 +4,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
@@ -125,9 +126,9 @@ namespace Cacao {
 
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
 
-		/* ------------------------------------------- *\
-		|*      PLACEHOLDER: FINAL INITIALIZATION      *|
-		\* ------------------------------------------- */
+		//Start the tick controller on the thread pool
+		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
+		TickController::Get().Start();
 
 		Logger::Engine(Logger::Level::Info) << "Reached target Game Launch.";
 
@@ -144,6 +145,10 @@ namespace Cacao {
 		std::lock_guard lkg(stateMtx);
 		state = State::Stopped;
 		Logger::Engine(Logger::Level::Info) << "Engine shutdown requested!";
+
+		//Stop the tick controller
+		Logger::Engine(Logger::Level::Trace) << "Stopping tick controller...";
+		TickController::Get().Stop();
 
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");

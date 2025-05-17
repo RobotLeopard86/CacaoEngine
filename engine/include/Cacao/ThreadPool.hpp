@@ -79,16 +79,30 @@ namespace Cacao {
 			std::stop_source& stop = stops.emplace_back();
 
 			//Wrap the function so it doesn't need any arguments
-			auto wrapper = std::bind_front(std::forward<F>(func), stop.get_token(), std::forward<Args...>(args...));
+			if constexpr(sizeof...(args) == 0) {
+				auto wrapper = std::bind_front(std::forward<F>(func), stop.get_token());
 
-			//Submit the function
-			ImplSubmit([this, wrapper, &stop]() {
-				//Invoke function and then remove
-				wrapper();
-				if(auto it = std::find(stops.begin(), stops.end(), stop); it != stops.end()) {
-					stops.erase(it);
-				}
-			});
+				//Submit the function
+				ImplSubmit([this, wrapper, &stop]() {
+					//Invoke function and then remove
+					wrapper();
+					if(auto it = std::find(stops.begin(), stops.end(), stop); it != stops.end()) {
+						stops.erase(it);
+					}
+				});
+			} else {
+				auto wrapper = std::bind_front(std::forward<F>(func), stop.get_token(), std::forward<Args...>(args...));
+
+				//Submit the function
+				ImplSubmit([this, wrapper, &stop]() {
+					//Invoke function and then remove
+					wrapper();
+					if(auto it = std::find(stops.begin(), stops.end(), stop); it != stops.end()) {
+						stops.erase(it);
+					}
+				});
+			}
+
 			return stop;
 		}
 
