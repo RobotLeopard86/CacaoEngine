@@ -1,0 +1,5 @@
+[wrap-git]
+url = https://gitlab.xiph.org/xiph/opusfile.git
+depth = 1
+revision = d2535e62809079c81f9e5139c0daebe43af97be4
+patch_directory = opusfile

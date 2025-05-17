@@ -1,0 +1,13 @@
+diff --git a/src/meson.build b/src/meson.build
+index 5537c67..0619937 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -24,6 +24,8 @@ opus_lib = library('opus',
+ opus_dep = declare_dependency(link_with: opus_lib,
+   include_directories: opus_public_includes)
+ 
++meson.override_dependency('opus', opus_dep)
++
+ # Extra uninstalled Opus programs
+ if not extra_programs.disabled()
+   foreach prog : ['opus_compare', 'opus_demo', 'repacketizer_demo']

@@ -22,22 +22,6 @@ assimp_dep = assimp_sp.dependency('assimp')
 zlib_dep = assimp_sp.dependency('zlibstatic')
 
 # Configure OpenAL-Soft
-#alsoft_opts = cmake.subproject_options()
-#alsoft_opts.add_cmake_defines({
-#	'BUILD_TESTING': 'OFF',
-#	'BUILD_SHARED_LIBS': 'ON',
-#	'LIBTYPE': 'SHARED',
-#	'ALSOFT_DLOPEN': 'OFF',
-#	'ALSOFT_EXAMPLES': 'OFF',
-#	'ALSOFT_UTILS': 'OFF',
-#	'ALSOFT_RTKIT': 'OFF',
-#	'ALSOFT_EMBED_HRTF_DATA': 'OFF',
-#	'ALSOFT_BACKEND_WINMM': 'OFF',
-#	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-#	'CMAKE_BUILD_TYPE': cmake_build_type,
-#	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-#	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-#})
 alsoft_dep = subproject('openal-soft', required: true, default_options: {
 	'default_library': 'shared',
 	'utils': false,
@@ -47,16 +31,12 @@ alsoft_dep = subproject('openal-soft', required: true, default_options: {
 }).get_variable('openal_dep')
 
 # Configure spdlog
-spdlog_opts = cmake.subproject_options()
-spdlog_opts.add_cmake_defines({
-	'SPDLOG_BUILD_PIC': 'ON',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-spdlog_opts.set_install(false)
-spdlog_dep = cmake.subproject('spdlog', options: spdlog_opts, required: true).dependency('spdlog')
+spdlog_dep = subproject('spdlog', required: true, default_options: {
+	'default_library': 'static',
+	'tests': 'disabled',
+	'compile_library': true,
+	'std_format': 'disabled'
+}).get_variable('spdlog_dep')
 
 # glm, dynalo, and thread-pool
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
