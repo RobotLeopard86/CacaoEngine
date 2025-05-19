@@ -6,6 +6,7 @@ revision = v1.3.7
 patch_filename = vorbis_1.3.7-4_patch.zip
 patch_url = https://wrapdb.mesonbuild.com/v2/vorbis_1.3.7-4/get_patch
 patch_hash = 979e22b24b16c927040700dfd8319cd6ba29bf52a14dbc66b1cb4ea60504f14a
+diff_files = vorbis-testdisable.patch
 
 [provide]
 vorbis = vorbis_dep

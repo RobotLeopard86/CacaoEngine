@@ -34,7 +34,7 @@ alsoft_dep = subproject('openal-soft', required: true, default_options: {
 spdlog_dep = subproject('spdlog', required: true, default_options: {
 	'default_library': 'static',
 	'tests': 'disabled',
-	'compile_library': true,
+	'compile_library': false,
 	'std_format': 'disabled'
 }).get_variable('spdlog_dep')
 
