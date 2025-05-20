@@ -83,7 +83,7 @@ namespace Cacao {
 			requires std::is_base_of_v<Component, T> && std::is_constructible_v<T, Args&&...>
 		void MountComponent(Args&&... args) {
 			Check<ContainerException>(!components.contains(std::type_index(typeid(T))), "A component of the type specified already exists on the entity!");
-			components.insert_or_assign(std::type_index(typeid(T)), std::make_shared<T>(std::forward<Args...>(args)));
+			components.insert_or_assign(std::type_index(typeid(T)), std::make_shared<T>(std::forward<Args...>(args...)));
 		}
 
 		/**
@@ -161,9 +161,10 @@ namespace Cacao {
 		 */
 		void SendMessage(Event& msg, MessageSendDirection dir, bool recurse);
 
+		~Entity();
+
 	  private:
 		Entity(const std::string& name, std::optional<std::shared_ptr<Entity>> parent);
-		~Entity();
 
 		std::shared_ptr<Entity> selfPtr, parentPtr;
 		std::map<std::type_index, std::shared_ptr<Component>> components;

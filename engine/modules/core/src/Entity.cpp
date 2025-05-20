@@ -100,7 +100,7 @@ namespace Cacao {
 
 	std::shared_ptr<Entity> Entity::Create(const std::string& name, std::optional<std::shared_ptr<Entity>> parent) {
 		//Make entity
-		std::shared_ptr<Entity> e = std::make_shared<Entity>(name, parent);
+		std::shared_ptr<Entity> e = std::shared_ptr<Entity>(new Entity(name, parent));
 
 		//Give entity its self pointer
 		e->selfPtr = e;

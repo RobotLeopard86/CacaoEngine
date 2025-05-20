@@ -161,17 +161,9 @@ silica = subproject('silica', required: true, default_options: {
 silica_dep = silica.get_variable('silica_dep')
 
 # Configure crossguid
-xg_opts = cmake.subproject_options()
-xg_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-xg_opts.set_install(false)
-crossguid = cmake.subproject('crossguid', options: xg_opts, required: true).dependency('crossguid')
-xg_headers_dep = declare_dependency(include_directories: 'subprojects' / 'crossguid' / 'include')
+crossguid_sp = subproject('crossguid', required: true)
+crossguid = crossguid_sp.get_variable('crossguid_dep')
+xg_headers_dep = crossguid_sp.get_variable('crossguid_headers_dep')
 
 # Configure SPIRV-Cross
 spv_cross_opts = cmake.subproject_options()

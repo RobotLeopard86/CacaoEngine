@@ -15,7 +15,7 @@ namespace Cacao {
 	  public:
 		///@brief Create a camera
 		Camera()
-		  : clearColor(1), resizeConsumer(std::bind(&Camera::ResizeProjectionMatrix, this, std::placeholders::_1)) {
+		  : resizeConsumer(std::bind(&Camera::ResizeProjectionMatrix, this, std::placeholders::_1)), clearColor(1) {
 			EventManager::Get().SubscribeConsumer("WindowResize", resizeConsumer);
 		}
 

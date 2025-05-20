@@ -116,6 +116,7 @@ libcore = static_library('cacaocore', sources: [
 	'src' / 'PAL.cpp',
 	'src' / 'ThreadPool.cpp',
 	'src' / 'TickController.cpp',
+	'src' / 'Transform.cpp',
 	'src' / 'World.cpp'
 ], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao',
 cpp_args: '-DCACAO_VER="' + meson.project_version() + '"', pic: true)
