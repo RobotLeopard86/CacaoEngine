@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Event" href="classCacao_1_1Event.html" />
+    <link rel="next" title="Class Entity" href="classCacao_1_1Entity.html" />
     <link rel="prev" title="Template Class DataEvent" href="classCacao_1_1DataEvent.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -347,10 +347,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Engine</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Entity.html">Class Entity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
@@ -374,6 +380,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -383,7 +392,13 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html">Template Function Cacao::Check(bool, std::string)</a></li>
@@ -500,7 +515,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine13GetInitConfigEv">
-<span id="_CPPv3N5Cacao6Engine13GetInitConfigEv"></span><span id="_CPPv2N5Cacao6Engine13GetInitConfigEv"></span><span id="Cacao::Engine::GetInitConfig"></span><span class="target" id="classCacao_1_1Engine_1abf30c7b02421a04ed6430a8661613eca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetInitConfig</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine13GetInitConfigEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine13GetInitConfigEv"></span><span id="_CPPv2N5Cacao6Engine13GetInitConfigEv"></span><span id="Cacao::Engine::GetInitConfig"></span><span class="target" id="classCacao_1_1Engine_1abf30c7b02421a04ed6430a8661613eca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetInitConfig</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine13GetInitConfigEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get an immutable reference to the initialization config values. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -511,7 +526,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig">
-<span id="_CPPv3N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="_CPPv2N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="Cacao::Engine::CoreInit__InitConfigCR"></span><span class="target" id="classCacao_1_1Engine_1a7273e4fa3dcdeec0c9425ce4966a3c5c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoreInit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initCfg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="_CPPv2N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="Cacao::Engine::CoreInit__InitConfigCR"></span><span class="target" id="classCacao_1_1Engine_1a7273e4fa3dcdeec0c9425ce4966a3c5c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoreInit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initCfg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Initialize all engine systems that don’t require graphics or windowing. </p>
 <p>If the engine is not in standalone mode, this will also trigger bundle loading.</p>
 <p>The engine must be in the Dead state when this method is called </p>
@@ -672,11 +687,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Event.html"
+       href="classCacao_1_1Entity.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Event</p>
+        <p class="prev-next-title">Class Entity</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
