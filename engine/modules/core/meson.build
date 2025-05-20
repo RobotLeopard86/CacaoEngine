@@ -110,11 +110,13 @@ libcore = static_library('cacaocore', sources: [
 	'src' / 'expf.c',
 	'src' / 'AudioManager.cpp',
 	'src' / 'Engine.cpp',
+	'src' / 'Entity.cpp',
 	'src' / 'EventManager.cpp',
 	'src' / 'Log.cpp',
 	'src' / 'PAL.cpp',
 	'src' / 'ThreadPool.cpp',
-	'src' / 'TickController.cpp'
+	'src' / 'TickController.cpp',
+	'src' / 'World.cpp'
 ], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao',
 cpp_args: '-DCACAO_VER="' + meson.project_version() + '"', pic: true)
 core_dep = declare_dependency(link_whole: libcore, dependencies: core_deps)

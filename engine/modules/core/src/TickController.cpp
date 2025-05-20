@@ -112,12 +112,13 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Running a dynamic tick; it's been " << timestep << " since the last one.";
 		std::random_device randDev;
 		std::mt19937_64 rng(randDev());
-		std::uniform_int_distribution<std::mt19937::result_type> dist(0, 12);
+		std::uniform_int_distribution<std::mt19937::result_type> dist(0, 5);
 		std::chrono::milliseconds nap = std::chrono::milliseconds(dist(rng));
 		std::this_thread::sleep_for(nap);
 	}
 
 	void TickController::Impl::FixedTick() {
 		Logger::Engine(Logger::Level::Trace) << "Running a fixed tick.";
+		std::this_thread::sleep_for(2ms);
 	}
 }
