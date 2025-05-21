@@ -62,6 +62,10 @@ namespace Cacao {
 		for(auto child : children) {
 			child.reset();
 		}
+
+		//Reset pointers to avoid destructor issues
+		parentPtr.reset();
+		selfPtr.reset();
 	}
 
 	std::shared_ptr<Actor> Actor::Create(const std::string& name, std::optional<std::shared_ptr<Actor>> parent) {
