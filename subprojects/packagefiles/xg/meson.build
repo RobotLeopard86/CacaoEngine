@@ -23,7 +23,7 @@ elif host_machine.system() == 'android'
 	defs += '-DGUID_ANDROID'
 else
 	defs += '-DGUID_LIBUUID'
-	deps += dependency('libuuid', required: true, static: true)
+	deps += meson.get_compiler('cpp').find_library('libuuid', required: true)
 endif
 
 crossguid = static_library('crossguid', 'src' / 'guid.cpp', include_directories: 'include', cpp_args: defs, dependencies: deps, pic: true)

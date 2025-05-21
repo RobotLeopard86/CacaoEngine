@@ -2,15 +2,15 @@
 
 namespace Cacao {
 	World::World() {
-		//Create root entity
-		root = Entity::Create("__WORLDROOT__", std::nullopt);
+		//Create root actor
+		root = Actor::Create("__WORLDROOT__", std::nullopt);
 	}
 
-	void World::ReparentToRoot(std::shared_ptr<Entity> entity) {
-		entity->Reparent(root);
+	void World::ReparentToRoot(std::shared_ptr<Actor> actor) {
+		actor->Reparent(root);
 	}
 
-	std::vector<std::shared_ptr<Entity>> World::GetRootChildren() {
+	std::vector<std::shared_ptr<Actor>> World::GetRootChildren() {
 		return root->GetAllChildren();
 	}
 }

@@ -217,16 +217,16 @@ namespace libcacaoformats {
 		};
 
 		///@brief Type for entities in the world
-		struct Entity {
-			xg::Guid guid;					  ///<Entity GUID
-			xg::Guid parentGUID;			  ///<GUID of parent entity or all zeroes if this is a top-level entity
-			std::string name;				  ///<Human-friendly entity name
+		struct Actor {
+			xg::Guid guid;					  ///<Actor GUID
+			xg::Guid parentGUID;			  ///<GUID of parent actor or all zeroes if this is a top-level actor
+			std::string name;				  ///<Human-friendly actor name
 			Vec3<float> initialPos;			  ///<Initial position
 			Vec3<float> initialRot;			  ///<Initial rotation
 			Vec3<float> initialScale;		  ///<Initial scale
-			std::vector<Component> components;///<Components mounted on this entity initially
+			std::vector<Component> components;///<Components mounted on this actor initially
 		};
-		std::vector<Entity> entities;///<Entities in the world
+		std::vector<Actor> entities;///<Entities in the world
 	};
 
 	///@brief Decoded asset pack

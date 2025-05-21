@@ -539,45 +539,45 @@ namespace libcacaoformats {
 		std::memcpy(&out.initialCamRot.z, container.payload.data() + advance, 4);
 		advance += 4;
 
-		//Get entity count
-		CheckException(container.payload.size() > advance + 8, "World packed container is too small to contain entity data!");
-		uint64_t entityCount = 0;
-		std::memcpy(&entityCount, container.payload.data() + advance, 8);
+		//Get actor count
+		CheckException(container.payload.size() > advance + 8, "World packed container is too small to contain actor data!");
+		uint64_t actorCount = 0;
+		std::memcpy(&actorCount, container.payload.data() + advance, 8);
 		advance += 8;
 
 		//If we don't need to process entities, return value now
-		if(entityCount == 0) return out;
+		if(actorCount == 0) return out;
 
-		for(uint64_t i = 0; i < entityCount; i++) {
-			World::Entity ent {};
+		for(uint64_t i = 0; i < actorCount; i++) {
+			World::Actor ent {};
 
 			//Read GUID bytes
-			CheckException(container.payload.size() > advance + 16, "World packed container entity data is too small to contain GUID!");
+			CheckException(container.payload.size() > advance + 16, "World packed container actor data is too small to contain GUID!");
 			std::array<uint8_t, 16> guidBytes;
 			std::memcpy(guidBytes.data(), container.payload.data() + advance, 16);
 			advance += 16;
 			ent.guid = xg::Guid(guidBytes);
 
 			//Read parent GUID bytes
-			CheckException(container.payload.size() > advance + 16, "World packed container entity data is too small to contain parent GUID!");
+			CheckException(container.payload.size() > advance + 16, "World packed container actor data is too small to contain parent GUID!");
 			std::array<uint8_t, 16> parentGuidBytes;
 			std::memcpy(parentGuidBytes.data(), container.payload.data() + advance, 16);
 			advance += 16;
 			ent.parentGUID = xg::Guid(parentGuidBytes);
 
-			//Get entity name
-			CheckException(container.payload.size() > advance + 2, "World packed container entity data is too small to contain name string length data!");
+			//Get actor name
+			CheckException(container.payload.size() > advance + 2, "World packed container actor data is too small to contain name string length data!");
 			uint16_t nameLen = 0;
 			std::memcpy(&nameLen, container.payload.data() + advance, 2);
 			advance += 2;
-			CheckException(nameLen > 0, "World packed container entity data has zero-length name string");
-			CheckException(container.payload.size() > advance + nameLen, "World packed container entity data is too small to contain name string!");
+			CheckException(nameLen > 0, "World packed container actor data has zero-length name string");
+			CheckException(container.payload.size() > advance + nameLen, "World packed container actor data is too small to contain name string!");
 			ent.name = std::string("\0", nameLen);
 			std::memcpy(ent.name.data(), container.payload.data() + advance, nameLen);
 			advance += nameLen;
 
 			//Get initial position, rotation, and scale vectors
-			CheckException(container.payload.size() > advance + 36, "World packed container entity data is too small to contain initial transform!");
+			CheckException(container.payload.size() > advance + 36, "World packed container actor data is too small to contain initial transform!");
 			std::memcpy(&ent.initialPos.x, container.payload.data() + advance, 4);
 			advance += 4;
 			std::memcpy(&ent.initialPos.y, container.payload.data() + advance, 4);
@@ -598,12 +598,12 @@ namespace libcacaoformats {
 			advance += 4;
 
 			//Get component count
-			CheckException(container.payload.size() > advance, "World packed container entity data is too small to contain component data!");
+			CheckException(container.payload.size() > advance, "World packed container actor data is too small to contain component data!");
 			uint8_t componentCount = 0;
 			std::memcpy(&componentCount, container.payload.data() + advance++, 1);
 
 			//If we don't need to process components, skip that part
-			if(componentCount == 0) goto add_entity;
+			if(componentCount == 0) goto add_actor;
 
 			for(uint8_t j = 0; j < componentCount; j++) {
 				World::Component comp {};
@@ -633,15 +633,15 @@ namespace libcacaoformats {
 				//We put 2 null bytes as a separator between components for padding purposes, so skip over that
 				advance += 2;
 
-				//Add component to entity
+				//Add component to actor
 				ent.components.push_back(comp);
 			}
 
-		add_entity:
+		add_actor:
 			//We put "%e" as a separator between entities for padding purposes, so skip over that
 			advance += 2;
 
-			//Add entity to world
+			//Add actor to world
 			out.entities.push_back(ent);
 		}
 

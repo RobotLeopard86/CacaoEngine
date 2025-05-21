@@ -368,41 +368,41 @@ namespace libcacaoformats {
 		float initialCamData[] = {world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z, world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z};
 		out.write(reinterpret_cast<char*>(&initialCamData), sizeof(initialCamData));
 
-		//Write entity count
-		uint64_t entityCount = world.entities.size();
-		out.write(reinterpret_cast<char*>(&entityCount), 8);
+		//Write actor count
+		uint64_t actorCount = world.entities.size();
+		out.write(reinterpret_cast<char*>(&actorCount), 8);
 
 		//Write entities
-		for(const World::Entity& entity : world.entities) {
-			//Write entity and parent GUIDs
-			out.write(reinterpret_cast<const char*>(entity.guid.bytes().data()), 16);
-			out.write(reinterpret_cast<const char*>(entity.parentGUID.bytes().data()), 16);
+		for(const World::Actor& actor : world.entities) {
+			//Write actor and parent GUIDs
+			out.write(reinterpret_cast<const char*>(actor.guid.bytes().data()), 16);
+			out.write(reinterpret_cast<const char*>(actor.parentGUID.bytes().data()), 16);
 
-			//Write entity name string
-			CheckException(entity.name.size() > 0 && entity.name.size() <= UINT16_MAX, "World entity for packed encoding has out-of-range name string length!");
-			uint16_t enLen = (uint8_t)entity.name.size();
+			//Write actor name string
+			CheckException(actor.name.size() > 0 && actor.name.size() <= UINT16_MAX, "World actor for packed encoding has out-of-range name string length!");
+			uint16_t enLen = (uint8_t)actor.name.size();
 			out.write(reinterpret_cast<char*>(&enLen), 2);
-			out << entity.name;
+			out << actor.name;
 
 			//Write initial transform data
-			float transformData[] = {entity.initialPos.x, entity.initialPos.y, entity.initialPos.z, entity.initialRot.x, entity.initialRot.y, entity.initialRot.z, entity.initialScale.x, entity.initialScale.y, entity.initialScale.z};
+			float transformData[] = {actor.initialPos.x, actor.initialPos.y, actor.initialPos.z, actor.initialRot.x, actor.initialRot.y, actor.initialRot.z, actor.initialScale.x, actor.initialScale.y, actor.initialScale.z};
 			out.write(reinterpret_cast<char*>(transformData), sizeof(transformData));
 
 			//Write component count
-			CheckException(entity.components.size() > 0 && entity.components.size() <= UINT8_MAX, "World entity for packed encoding has invalid component count!");
-			uint8_t compCount = (uint8_t)entity.components.size();
+			CheckException(actor.components.size() > 0 && actor.components.size() <= UINT8_MAX, "World actor for packed encoding has invalid component count!");
+			uint8_t compCount = (uint8_t)actor.components.size();
 			out.write(reinterpret_cast<char*>(&compCount), 1);
 
 			//Write components
-			for(const World::Component& component : entity.components) {
+			for(const World::Component& component : actor.components) {
 				//Write type ID string
-				CheckException(component.typeID.size() > 0 && component.typeID.size() <= UINT16_MAX, "World entity component for packed encoding has out-of-range type ID string length!");
+				CheckException(component.typeID.size() > 0 && component.typeID.size() <= UINT16_MAX, "World actor component for packed encoding has out-of-range type ID string length!");
 				uint16_t tiLen = (uint16_t)component.typeID.size();
 				out.write(reinterpret_cast<char*>(&tiLen), 2);
 				out << component.typeID;
 
 				//Write reflection data
-				CheckException(component.reflection.size() > 0 && component.reflection.size() <= UINT32_MAX, "World entity component for packed encoding has out-of-range reflection data size!");
+				CheckException(component.reflection.size() > 0 && component.reflection.size() <= UINT32_MAX, "World actor component for packed encoding has out-of-range reflection data size!");
 				uint32_t rdLen = (uint32_t)component.reflection.size();
 				out.write(reinterpret_cast<char*>(&rdLen), 4);
 				out.write(const_cast<char*>(component.reflection.data()), rdLen);
@@ -411,7 +411,7 @@ namespace libcacaoformats {
 				out.write("\0\0", 2);
 			}
 
-			//Write entity separator
+			//Write actor separator
 			out << "%e";
 		}
 
