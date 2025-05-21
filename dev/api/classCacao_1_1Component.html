@@ -386,6 +386,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -468,19 +471,29 @@
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Component.hpp.html#file-engine-include-cacao-component-hpp"><span class="std std-ref">File Component.hpp</span></a></p></li>
 </ul>
+<section id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
+<section id="derived-type">
+<h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Script</span></code> (<a class="reference internal" href="classCacao_1_1Script.html#exhale-class-classcacao-1-1script"><span class="std std-ref">Class Script</span></a>)</p></li>
+</ul>
+</section>
+</section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9ComponentE">
 <span id="_CPPv3N5Cacao9ComponentE"></span><span id="_CPPv2N5Cacao9ComponentE"></span><span id="Cacao::Component"></span><span class="target" id="classCacao_1_1Component"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9ComponentE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>An object attached to an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> that performs tasks on its behalf. </p>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1Script.html#classCacao_1_1Script"><span class="std std-ref">Cacao::Script</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component8IsActiveEv">
-<span id="_CPPv3N5Cacao9Component8IsActiveEv"></span><span id="_CPPv2N5Cacao9Component8IsActiveEv"></span><span id="Cacao::Component::IsActive"></span><span class="target" id="classCacao_1_1Component_1a90301990c2321927f079eb56d6190808"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsActive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component8IsActiveEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if the component is “functionally active”. </p>
-<p>“Functionally active” means taking into account both if the component itself is active and its owning <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is active</p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component9IsEnabledEv">
+<span id="_CPPv3N5Cacao9Component9IsEnabledEv"></span><span id="_CPPv2N5Cacao9Component9IsEnabledEv"></span><span id="Cacao::Component::IsEnabled"></span><span class="target" id="classCacao_1_1Component_1a304e1666e0045da5b8492d2bdd611070"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsEnabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component9IsEnabledEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check if the component is enabled. </p>
+<p>This takes into account both if the component itself is enabled and its owning <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is active</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This will return false if the owning <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is inactive </p>
@@ -488,8 +501,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component9SetActiveEb">
-<span id="_CPPv3N5Cacao9Component9SetActiveEb"></span><span id="_CPPv2N5Cacao9Component9SetActiveEb"></span><span id="Cacao::Component::SetActive__b"></span><span class="target" id="classCacao_1_1Component_1af47d9f451a6d736dfb11fcfb6b7bdba0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetActive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component9SetActiveEb" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component10SetEnabledEb">
+<span id="_CPPv3N5Cacao9Component10SetEnabledEb"></span><span id="_CPPv2N5Cacao9Component10SetEnabledEb"></span><span id="Cacao::Component::SetEnabled__b"></span><span class="target" id="classCacao_1_1Component_1ae6882d64033281699d7ec57435706185"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetEnabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component10SetEnabledEb" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Activate or deactivate the component. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -522,14 +535,14 @@
 <span id="_CPPv3N5Cacao9Component9ComponentEv"></span><span id="_CPPv2N5Cacao9Component9ComponentEv"></span><span id="Cacao::Component::Component"></span><span class="target" id="classCacao_1_1Component_1ad5aef00283ecada1461371e9584f25ac"></span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component9ComponentEv" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component19OnEnableStateChangeEv">
+<span id="_CPPv3N5Cacao9Component19OnEnableStateChangeEv"></span><span id="_CPPv2N5Cacao9Component19OnEnableStateChangeEv"></span><span id="Cacao::Component::OnEnableStateChange"></span><span class="target" id="classCacao_1_1Component_1a5419c228b0ed80e9ad2e57dcdb2b2342"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnEnableStateChange</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component19OnEnableStateChangeEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component6activeE">
-<span id="_CPPv3N5Cacao9Component6activeE"></span><span id="_CPPv2N5Cacao9Component6activeE"></span><span id="Cacao::Component::active__b"></span><span class="target" id="classCacao_1_1Component_1a4dbded636379933757f2ee0f9dc1fa41"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">active</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9Component6activeE" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component5actorE">
 <span id="_CPPv3N5Cacao9Component5actorE"></span><span id="_CPPv2N5Cacao9Component5actorE"></span><span id="Cacao::Component::actor__std::reference_wrapper:Actor:"></span><span class="target" id="classCacao_1_1Component_1a94cc46d4d80ed9237317d612757379de"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">reference_wrapper</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">actor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9Component5actorE" title="Link to this definition"><span/></a><br /></dt>
@@ -596,14 +609,18 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9ComponentE"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component8IsActiveEv"><code class="docutils literal notranslate"><span class="pre">Component::IsActive()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9SetActiveEb"><code class="docutils literal notranslate"><span class="pre">Component::SetActive()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9IsEnabledEv"><code class="docutils literal notranslate"><span class="pre">Component::IsEnabled()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component10SetEnabledEb"><code class="docutils literal notranslate"><span class="pre">Component::SetEnabled()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component8GetOwnerEv"><code class="docutils literal notranslate"><span class="pre">Component::GetOwner()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9ComponentD0Ev"><code class="docutils literal notranslate"><span class="pre">Component::~Component()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9ComponentEv"><code class="docutils literal notranslate"><span class="pre">Component::Component()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component6activeE"><code class="docutils literal notranslate"><span class="pre">Component::active</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component19OnEnableStateChangeEv"><code class="docutils literal notranslate"><span class="pre">Component::OnEnableStateChange()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component5actorE"><code class="docutils literal notranslate"><span class="pre">Component::actor</span></code></a></li>
 </ul>
 </li>
