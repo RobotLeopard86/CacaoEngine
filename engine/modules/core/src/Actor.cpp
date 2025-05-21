@@ -71,6 +71,8 @@ namespace Cacao {
 
 	void Actor::PostMountComponent(std::shared_ptr<Component> c) {
 		c->actor = *selfPtr;
+		c->OnMount();
+		c->SetEnabled(true);
 	}
 
 	void Actor::NotifyFunctionallyActiveStateChanged() {

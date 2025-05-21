@@ -59,7 +59,7 @@ cmake = import('cmake')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'
-	add_project_arguments(['-DCACAO_BUILD', '-D_DLL', '-D_MT'], language: ['c', 'cpp'])
+	add_project_arguments(['-DCACAO_BUILD', '-D_DLL', '-D_MT', '-DHAS_WIN32'], language: ['c', 'cpp'])
 	if bt == 'debug'
 		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2', '-fms-runtime-lib=dll_dbg'], language: ['c', 'cpp'])
 	else
@@ -69,7 +69,7 @@ endif
 
 # Set some macOS-specific options
 if host_machine.system() == 'darwin'
-	add_project_arguments('-fexperimental-library', language: 'cpp')
+	add_project_arguments(['-fexperimental-library', '-DHAS_MACOS'], language: 'cpp')
 	add_project_link_arguments('-fexperimental-library', language: 'cpp')
 	dep_compiler_args += '-fexperimental-library'
 endif
@@ -77,6 +77,7 @@ endif
 # Set some Linux-specific options
 if host_machine.system() == 'linux'
 	linux_windowing = get_option('linux_windowing')
+	add_project_arguments('-DHAS_LINUX', language: 'cpp')
 	foreach lw : linux_windowing
 		add_project_arguments('-DHAS_' + lw.to_upper(), language: ['c', 'cpp'])
 	endforeach

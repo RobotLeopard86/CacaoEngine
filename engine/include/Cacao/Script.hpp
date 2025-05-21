@@ -6,11 +6,6 @@ namespace Cacao {
 	class Script : public Component {
 	  public:
 		/**
-		 * @brief Runs when the World containing the script is activated or the script is first mounted on an Actor
-		 */
-		virtual void OnLoad() {};
-
-		/**
 		 * @brief Runs when the script is enabled or when the owning Actor becomes active if the script was already enabled
 		 */
 		virtual void OnEnable() {};

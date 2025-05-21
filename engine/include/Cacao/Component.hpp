@@ -38,6 +38,13 @@ namespace Cacao {
 			return actor;
 		}
 
+		/**
+		 * @brief Runs when the component is first mounted on an Actor
+		 *
+		 * @note All setup should be performed here, <b>NOT</b> in the constructor. Only when this function is called is the component properly configured.
+		 */
+		virtual void OnMount() {};
+
 		virtual ~Component() {}
 
 	  protected:
