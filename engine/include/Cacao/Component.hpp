@@ -10,13 +10,13 @@ namespace Cacao {
 	class CACAO_API Component {
 	  public:
 		/**
-		 * @brief Check if the component is "functionally active"
-		 * @details "Functionally active" means taking into account both if the component itself is active and its owning Actor is active
+		 * @brief Check if the component is enabled
+		 * @details This takes into account both if the component itself is enabled and its owning Actor is active
 		 *
 		 * @note This will return false if the owning Actor is inactive
 		 */
-		const bool IsActive() {
-			return actor.get().IsActive() && active;
+		const bool IsEnabled() {
+			return actor.get().IsActive() && enabled;
 		}
 
 		/**
@@ -24,8 +24,9 @@ namespace Cacao {
 		 *
 		 * @param state The new activation state
 		 */
-		void SetActive(bool state) {
-			active = state;
+		void SetEnabled(bool state) {
+			enabled = state;
+			OnEnableStateChange();
 		}
 
 		/**
@@ -42,9 +43,13 @@ namespace Cacao {
 	  protected:
 		Component();
 
-		bool active;
+		virtual void OnEnableStateChange() {};
+
 		std::reference_wrapper<Actor> actor [[maybe_unused]];
 
 		friend class Actor;
+
+	  private:
+		bool enabled;
 	};
 }

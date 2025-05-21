@@ -55,7 +55,7 @@ namespace Cacao {
 		 * @return If the actor is active
 		 */
 		bool IsActive() {
-			return (parentPtr != selfPtr ? parentPtr->IsActive() : true) && active;
+			return functionallyActive;
 		}
 
 		/**
@@ -63,9 +63,7 @@ namespace Cacao {
 		 *
 		 * @param state The new activation state
 		 */
-		void SetActive(bool state) {
-			active = state;
-		}
+		void SetActive(bool state);
 
 		/**
 		 * @brief Change the parent of this actor
@@ -86,6 +84,7 @@ namespace Cacao {
 		void MountComponent(Args&&... args) {
 			Check<ContainerException>(!components.contains(std::type_index(typeid(T))), "A component of the type specified already exists on the actor!");
 			components.insert_or_assign(std::type_index(typeid(T)), std::make_shared<T>(std::forward<Args...>(args...)));
+			PostMountComponent(components[std::type_index(typeid(T))]);
 		}
 
 		/**
@@ -154,6 +153,9 @@ namespace Cacao {
 		std::map<std::type_index, std::shared_ptr<Component>> components;
 		std::vector<std::shared_ptr<Actor>> children;
 
-		bool active;
+		void PostMountComponent(std::shared_ptr<Component> c);
+		void NotifyFunctionallyActiveStateChanged();
+
+		bool active, functionallyActive;
 	};
 }

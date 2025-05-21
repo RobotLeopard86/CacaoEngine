@@ -35,7 +35,7 @@ namespace Cacao {
 			/**
 			 * @brief The rate at which fixed ticks should occur, specified as the amount of time between fixed ticks in milliseconds
 			 */
-			int fixedTickRate = 50;
+			int fixedTickRate = 20;
 
 			/**
 			 * @brief The number of frames the renderer can be behind before skipping some to catch up

@@ -1,4 +1,5 @@
 #include "Cacao/Actor.hpp"
+#include "Cacao/Component.hpp"
 
 #include <algorithm>
 
@@ -68,6 +69,25 @@ namespace Cacao {
 		selfPtr.reset();
 	}
 
+	void Actor::PostMountComponent(std::shared_ptr<Component> c) {
+		c->actor = *selfPtr;
+	}
+
+	void Actor::NotifyFunctionallyActiveStateChanged() {
+		functionallyActive = (parentPtr != selfPtr ? parentPtr->IsActive() : true) && active;
+		for(auto child : children) {
+			child->NotifyFunctionallyActiveStateChanged();
+		}
+		for(auto comp : components) {
+			comp.second->OnEnableStateChange();
+		}
+	}
+
+	void Actor::SetActive(bool state) {
+		active = state;
+		NotifyFunctionallyActiveStateChanged();
+	}
+
 	std::shared_ptr<Actor> Actor::Create(const std::string& name, std::optional<std::shared_ptr<Actor>> parent) {
 		//Make actor
 		std::shared_ptr<Actor> e = std::shared_ptr<Actor>(new Actor(name, parent));
@@ -83,7 +103,8 @@ namespace Cacao {
 	}
 
 	Actor::Actor(const std::string& name, std::optional<std::shared_ptr<Actor>> parent)
-	  : name(name), guid(xg::newGuid()), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), active(true) {
+	  : name(name), guid(xg::newGuid()), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), active(true), functionallyActive(true) {
 		if(parent.has_value()) parentPtr = parent.value();
+		NotifyFunctionallyActiveStateChanged();
 	}
 }
