@@ -341,6 +341,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -354,9 +357,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Entity.html">Class Entity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
@@ -474,32 +474,32 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World14ReparentToRootENSt10shared_ptrI6EntityEE">
-<span id="_CPPv3N5Cacao5World14ReparentToRootENSt10shared_ptrI6EntityEE"></span><span id="_CPPv2N5Cacao5World14ReparentToRootENSt10shared_ptrI6EntityEE"></span><span id="Cacao::World::ReparentToRoot__std::shared_ptr:Entity:"></span><span class="target" id="classCacao_1_1World_1ad7c58e2df7530da7d57fafb3da312bbc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ReparentToRoot</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Entity.html#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">entity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World14ReparentToRootENSt10shared_ptrI6EntityEE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Set an entity’s parent to the root entity (adding it to the world if it wasn’t already) </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World14ReparentToRootENSt10shared_ptrI5ActorEE">
+<span id="_CPPv3N5Cacao5World14ReparentToRootENSt10shared_ptrI5ActorEE"></span><span id="_CPPv2N5Cacao5World14ReparentToRootENSt10shared_ptrI5ActorEE"></span><span id="Cacao::World::ReparentToRoot__std::shared_ptr:Actor:"></span><span class="target" id="classCacao_1_1World_1a49fd0350242a1b49fddb996b8e7e006b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ReparentToRoot</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">actor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World14ReparentToRootENSt10shared_ptrI5ActorEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set an actor’s parent to the root actor (adding it to the world if it wasn’t already) </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>entity</strong> – The entity to reparent </p>
+<dd class="field-odd"><p><strong>actor</strong> – The actor to reparent </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World15GetRootChildrenEv">
-<span id="_CPPv3N5Cacao5World15GetRootChildrenEv"></span><span id="_CPPv2N5Cacao5World15GetRootChildrenEv"></span><span id="Cacao::World::GetRootChildren"></span><span class="target" id="classCacao_1_1World_1a1a0bd5349b09ea89bf25b9daf6bc6837"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Entity.html#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRootChildren</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World15GetRootChildrenEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get all entities that are direct children of the root entity. </p>
+<span id="_CPPv3N5Cacao5World15GetRootChildrenEv"></span><span id="_CPPv2N5Cacao5World15GetRootChildrenEv"></span><span id="Cacao::World::GetRootChildren"></span><span class="target" id="classCacao_1_1World_1a0a3f72fc4d1da80be9ac3b8b5f8fcd84"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRootChildren</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World15GetRootChildrenEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get all entities that are direct children of the root actor. </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao5World10FindEntityENSt8optionalINSt10shared_ptrI6EntityEEEE1P">
-<span id="_CPPv3I0EN5Cacao5World10FindEntityE1P"></span><span id="_CPPv2I0EN5Cacao5World10FindEntityE1P"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">P</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1World_1a6224ecd9f292fde852b4d9860531019c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Entity.html#_CPPv4N5Cacao6EntityE" title="Cacao::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindEntity</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao5World10FindEntityENSt8optionalINSt10shared_ptrI6EntityEEEE1P" title="Cacao::World::FindEntity::P"><span class="n"><span class="pre">P</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">predicate</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao5World10FindEntityENSt8optionalINSt10shared_ptrI6EntityEEEE1P" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Find an <a class="reference internal" href="classCacao_1_1Entity.html#classCacao_1_1Entity"><span class="std std-ref">Entity</span></a> by some arbitrary condition. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao5World9FindActorENSt8optionalINSt10shared_ptrI5ActorEEEE1P">
+<span id="_CPPv3I0EN5Cacao5World9FindActorE1P"></span><span id="_CPPv2I0EN5Cacao5World9FindActorE1P"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">P</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1World_1af06debf30a9bcb301a4c976f27a3f414"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindActor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao5World9FindActorENSt8optionalINSt10shared_ptrI5ActorEEEE1P" title="Cacao::World::FindActor::P"><span class="n"><span class="pre">P</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">predicate</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao5World9FindActorENSt8optionalINSt10shared_ptrI5ActorEEEE1P" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Find an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> by some arbitrary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>predicate</strong> – The predicate to check each entity against</p>
+<dd class="field-odd"><p><strong>predicate</strong> – The predicate to check each actor against</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An optional that contains the entity if it was found </p>
+<dd class="field-even"><p>An optional that contains the actor if it was found </p>
 </dd>
 </dl>
 </dd></dl>
@@ -568,9 +568,9 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5WorldE"><code class="docutils literal notranslate"><span class="pre">World</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World14ReparentToRootENSt10shared_ptrI6EntityEE"><code class="docutils literal notranslate"><span class="pre">World::ReparentToRoot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World14ReparentToRootENSt10shared_ptrI5ActorEE"><code class="docutils literal notranslate"><span class="pre">World::ReparentToRoot()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World15GetRootChildrenEv"><code class="docutils literal notranslate"><span class="pre">World::GetRootChildren()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao5World10FindEntityENSt8optionalINSt10shared_ptrI6EntityEEEE1P"><code class="docutils literal notranslate"><span class="pre">World::FindEntity()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao5World9FindActorENSt8optionalINSt10shared_ptrI5ActorEEEE1P"><code class="docutils literal notranslate"><span class="pre">World::FindActor()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World3camE"><code class="docutils literal notranslate"><span class="pre">World::cam</span></code></a></li>
 </ul>
 </li>

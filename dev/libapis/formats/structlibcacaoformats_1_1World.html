@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Struct World::Component" href="structlibcacaoformats_1_1World_1_1Component.html" />
+    <link rel="next" title="Struct World::Actor" href="structlibcacaoformats_1_1World_1_1Actor.html" />
     <link rel="prev" title="Template Struct Vec4" href="structlibcacaoformats_1_1Vec4.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -350,8 +350,8 @@
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html">Template Struct Vec3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1Vec4.html">Template Struct Vec4</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Struct World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Actor.html">Struct World::Actor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Component.html">Struct World::Component</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Entity.html">Struct World::Entity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html">Class PackedContainer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classlibcacaoformats_1_1PackedDecoder.html">Class PackedDecoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classlibcacaoformats_1_1PackedEncoder.html">Class PackedEncoder</a></li>
@@ -437,8 +437,8 @@
 <section id="nested-types">
 <h3>Nested Types<a class="headerlink" href="#nested-types" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
+<li><p><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Actor.html#exhale-struct-structlibcacaoformats-1-1world-1-1actor"><span class="std std-ref">Struct World::Actor</span></a></p></li>
 <li><p><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Component.html#exhale-struct-structlibcacaoformats-1-1world-1-1component"><span class="std std-ref">Struct World::Component</span></a></p></li>
-<li><p><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Entity.html#exhale-struct-structlibcacaoformats-1-1world-1-1entity"><span class="std std-ref">Struct World::Entity</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -470,11 +470,62 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World8entitiesE">
-<span id="_CPPv3N15libcacaoformats5World8entitiesE"></span><span id="_CPPv2N15libcacaoformats5World8entitiesE"></span><span id="libcacaoformats::World::entities__std::vector:Entity:"></span><span class="target" id="structlibcacaoformats_1_1World_1a83c1342657461de182dc8a393d8f3eb4"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N15libcacaoformats5World6EntityE" title="libcacaoformats::World::Entity"><span class="n"><span class="pre">Entity</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">entities</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World8entitiesE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N15libcacaoformats5World8entitiesE"></span><span id="_CPPv2N15libcacaoformats5World8entitiesE"></span><span id="libcacaoformats::World::entities__std::vector:Actor:"></span><span class="target" id="structlibcacaoformats_1_1World_1a8606aec1f7df4cfdbd293da96d83b714"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N15libcacaoformats5World5ActorE" title="libcacaoformats::World::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">entities</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World8entitiesE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Entities in the world. </p>
 </dd></dl>
 
 </div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5ActorE">
+<span id="_CPPv3N15libcacaoformats5World5ActorE"></span><span id="_CPPv2N15libcacaoformats5World5ActorE"></span><span id="libcacaoformats::World::Actor"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Actor</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5ActorE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type for entities in the world. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor4guidE">
+<span id="_CPPv3N15libcacaoformats5World5Actor4guidE"></span><span id="_CPPv2N15libcacaoformats5World5Actor4guidE"></span><span id="libcacaoformats::World::Actor::guid__xg::Guid"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1aff1264f5a7a23fa3b70e3ec71b209a64"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">guid</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor4guidE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Actor.html#structlibcacaoformats_1_1World_1_1Actor"><span class="std std-ref">Actor</span></a> GUID. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor10parentGUIDE">
+<span id="_CPPv3N15libcacaoformats5World5Actor10parentGUIDE"></span><span id="_CPPv2N15libcacaoformats5World5Actor10parentGUIDE"></span><span id="libcacaoformats::World::Actor::parentGUID__xg::Guid"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1aba3741cd19e63e5c113dfadd668e3453"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parentGUID</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor10parentGUIDE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>GUID of parent actor or all zeroes if this is a top-level actor. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor4nameE">
+<span id="_CPPv3N15libcacaoformats5World5Actor4nameE"></span><span id="_CPPv2N15libcacaoformats5World5Actor4nameE"></span><span id="libcacaoformats::World::Actor::name__ss"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1a3ba2a09c2f7725f5fad32f288cdaa490"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor4nameE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Human-friendly actor name. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor10initialPosE">
+<span id="_CPPv3N15libcacaoformats5World5Actor10initialPosE"></span><span id="_CPPv2N15libcacaoformats5World5Actor10initialPosE"></span><span id="libcacaoformats::World::Actor::initialPos__Vec3:float:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1a67e2ed20f9b159fd7156300b27e0f7a3"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html#_CPPv4I0EN15libcacaoformats4Vec3E" title="libcacaoformats::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialPos</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor10initialPosE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Initial position. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor10initialRotE">
+<span id="_CPPv3N15libcacaoformats5World5Actor10initialRotE"></span><span id="_CPPv2N15libcacaoformats5World5Actor10initialRotE"></span><span id="libcacaoformats::World::Actor::initialRot__Vec3:float:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1ab0fb7aa645c9e6ce9df07b5f0660d15d"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html#_CPPv4I0EN15libcacaoformats4Vec3E" title="libcacaoformats::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialRot</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor10initialRotE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Initial rotation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor12initialScaleE">
+<span id="_CPPv3N15libcacaoformats5World5Actor12initialScaleE"></span><span id="_CPPv2N15libcacaoformats5World5Actor12initialScaleE"></span><span id="libcacaoformats::World::Actor::initialScale__Vec3:float:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1acb357185a0266a1948df99dba025f2f1"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html#_CPPv4I0EN15libcacaoformats4Vec3E" title="libcacaoformats::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialScale</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor12initialScaleE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Initial scale. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World5Actor10componentsE">
+<span id="_CPPv3N15libcacaoformats5World5Actor10componentsE"></span><span id="_CPPv2N15libcacaoformats5World5Actor10componentsE"></span><span id="libcacaoformats::World::Actor::components__std::vector:Component:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Actor_1ae626d4fb4add020c3ae1a5425ff4ab8b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N15libcacaoformats5World9ComponentE" title="libcacaoformats::World::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">components</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World5Actor10componentsE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Components mounted on this actor initially. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World9ComponentE">
 <span id="_CPPv3N15libcacaoformats5World9ComponentE"></span><span id="_CPPv2N15libcacaoformats5World9ComponentE"></span><span id="libcacaoformats::World::Component"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Component"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World9ComponentE" title="Link to this definition"><span/></a><br /></dt>
@@ -491,57 +542,6 @@
 <dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World9Component10reflectionE">
 <span id="_CPPv3N15libcacaoformats5World9Component10reflectionE"></span><span id="_CPPv2N15libcacaoformats5World9Component10reflectionE"></span><span id="libcacaoformats::World::Component::reflection__ss"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Component_1a1dd4e17899ebd6f1fbafba7a3aaea277"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reflection</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World9Component10reflectionE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>YAML-encoded component reflection data (for use with Silica) </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6EntityE">
-<span id="_CPPv3N15libcacaoformats5World6EntityE"></span><span id="_CPPv2N15libcacaoformats5World6EntityE"></span><span id="libcacaoformats::World::Entity"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Entity</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6EntityE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Type for entities in the world. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity4guidE">
-<span id="_CPPv3N15libcacaoformats5World6Entity4guidE"></span><span id="_CPPv2N15libcacaoformats5World6Entity4guidE"></span><span id="libcacaoformats::World::Entity::guid__xg::Guid"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a5570753fe402decafbe7d468c8ef6308"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">guid</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity4guidE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="structlibcacaoformats_1_1World_1_1Entity.html#structlibcacaoformats_1_1World_1_1Entity"><span class="std std-ref">Entity</span></a> GUID. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity10parentGUIDE">
-<span id="_CPPv3N15libcacaoformats5World6Entity10parentGUIDE"></span><span id="_CPPv2N15libcacaoformats5World6Entity10parentGUIDE"></span><span id="libcacaoformats::World::Entity::parentGUID__xg::Guid"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a1174a47544db9843ae84718bd80a5df5"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parentGUID</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity10parentGUIDE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>GUID of parent entity or all zeroes if this is a top-level entity. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity4nameE">
-<span id="_CPPv3N15libcacaoformats5World6Entity4nameE"></span><span id="_CPPv2N15libcacaoformats5World6Entity4nameE"></span><span id="libcacaoformats::World::Entity::name__ss"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a6031a1eb4adace0f1d7891404394b890"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity4nameE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Human-friendly entity name. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity10initialPosE">
-<span id="_CPPv3N15libcacaoformats5World6Entity10initialPosE"></span><span id="_CPPv2N15libcacaoformats5World6Entity10initialPosE"></span><span id="libcacaoformats::World::Entity::initialPos__Vec3:float:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a86f956582964cddc23793011c9963e5f"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html#_CPPv4I0EN15libcacaoformats4Vec3E" title="libcacaoformats::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialPos</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity10initialPosE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Initial position. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity10initialRotE">
-<span id="_CPPv3N15libcacaoformats5World6Entity10initialRotE"></span><span id="_CPPv2N15libcacaoformats5World6Entity10initialRotE"></span><span id="libcacaoformats::World::Entity::initialRot__Vec3:float:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a8cfc474c41114d614deb51d6b6b6aefe"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html#_CPPv4I0EN15libcacaoformats4Vec3E" title="libcacaoformats::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialRot</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity10initialRotE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Initial rotation. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity12initialScaleE">
-<span id="_CPPv3N15libcacaoformats5World6Entity12initialScaleE"></span><span id="_CPPv2N15libcacaoformats5World6Entity12initialScaleE"></span><span id="libcacaoformats::World::Entity::initialScale__Vec3:float:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a5330ce60f1bcbe4ef201daa2555a18dc"></span><a class="reference internal" href="structlibcacaoformats_1_1Vec3.html#_CPPv4I0EN15libcacaoformats4Vec3E" title="libcacaoformats::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialScale</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity12initialScaleE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Initial scale. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats5World6Entity10componentsE">
-<span id="_CPPv3N15libcacaoformats5World6Entity10componentsE"></span><span id="_CPPv2N15libcacaoformats5World6Entity10componentsE"></span><span id="libcacaoformats::World::Entity::components__std::vector:Component:"></span><span class="target" id="structlibcacaoformats_1_1World_1_1Entity_1a2bfa8fad074fd92c175fcf206d5af5cb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N15libcacaoformats5World9ComponentE" title="libcacaoformats::World::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">components</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats5World6Entity10componentsE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Components mounted on this entity initially. </p>
 </dd></dl>
 
 </div>
@@ -572,11 +572,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="structlibcacaoformats_1_1World_1_1Component.html"
+       href="structlibcacaoformats_1_1World_1_1Actor.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct World::Component</p>
+        <p class="prev-next-title">Struct World::Actor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -609,19 +609,19 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World13initialCamPosE"><code class="docutils literal notranslate"><span class="pre">World::initialCamPos</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World13initialCamRotE"><code class="docutils literal notranslate"><span class="pre">World::initialCamRot</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World8entitiesE"><code class="docutils literal notranslate"><span class="pre">World::entities</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5ActorE"><code class="docutils literal notranslate"><span class="pre">World::Actor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor4guidE"><code class="docutils literal notranslate"><span class="pre">World::Actor::guid</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor10parentGUIDE"><code class="docutils literal notranslate"><span class="pre">World::Actor::parentGUID</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor4nameE"><code class="docutils literal notranslate"><span class="pre">World::Actor::name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor10initialPosE"><code class="docutils literal notranslate"><span class="pre">World::Actor::initialPos</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor10initialRotE"><code class="docutils literal notranslate"><span class="pre">World::Actor::initialRot</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor12initialScaleE"><code class="docutils literal notranslate"><span class="pre">World::Actor::initialScale</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World5Actor10componentsE"><code class="docutils literal notranslate"><span class="pre">World::Actor::components</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World9ComponentE"><code class="docutils literal notranslate"><span class="pre">World::Component</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World9Component6typeIDE"><code class="docutils literal notranslate"><span class="pre">World::Component::typeID</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World9Component10reflectionE"><code class="docutils literal notranslate"><span class="pre">World::Component::reflection</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6EntityE"><code class="docutils literal notranslate"><span class="pre">World::Entity</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity4guidE"><code class="docutils literal notranslate"><span class="pre">World::Entity::guid</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity10parentGUIDE"><code class="docutils literal notranslate"><span class="pre">World::Entity::parentGUID</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity4nameE"><code class="docutils literal notranslate"><span class="pre">World::Entity::name</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity10initialPosE"><code class="docutils literal notranslate"><span class="pre">World::Entity::initialPos</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity10initialRotE"><code class="docutils literal notranslate"><span class="pre">World::Entity::initialRot</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity12initialScaleE"><code class="docutils literal notranslate"><span class="pre">World::Entity::initialScale</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats5World6Entity10componentsE"><code class="docutils literal notranslate"><span class="pre">World::Entity::components</span></code></a></li>
 </ul>
 </li>
 </ul>

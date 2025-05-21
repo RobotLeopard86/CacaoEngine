@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="dark">
+<html lang="en" data-content_root="../" data-theme="dark">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Function CheckException &#8212; Cacao Engine Docs</title>
+    <title>File Actor.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -27,34 +27,32 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=81f007b9"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
-    <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'libapis/common/function_libcacaocommon_8hpp_1a5c414bb60808540fa2dbc40aa0fc8ee6';</script>
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_engine_include_Cacao_Actor.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
-    <link rel="icon" href="../../_static/cacaologo.png"/>
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Cacao Formats Library API" href="../formats/root.html" />
-    <link rel="prev" title="Class obytestream" href="classobytestream.html" />
+    <link rel="icon" href="../_static/cacaologo.png"/>
+    <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -76,7 +74,7 @@
   <dialog id="pst-search-dialog">
     
 <form class="bd-search d-flex align-items-center"
-      action="../../search.html"
+      action="../search.html"
       method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
   <input type="search"
@@ -112,7 +110,7 @@
     
   
 
-<a class="navbar-brand logo" href="../../index.html">
+<a class="navbar-brand logo" href="../index.html">
   
   
   
@@ -121,8 +119,8 @@
     
     
     
-    <img src="../../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
-    <img src="../../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
+    <img src="../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
+    <img src="../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
   
   
     <p class="title logo__title">Cacao Engine Documentation</p>
@@ -160,21 +158,21 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../manual.html">
+  <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../api/root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../../libapis.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
     Library API References
   </a>
 </li>
@@ -269,21 +267,21 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../manual.html">
+  <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../api/root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../../libapis.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
     Library API References
   </a>
 </li>
@@ -331,44 +329,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="root.html">Cacao Common Utilities API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="classbytestreambuf.html">Class bytestreambuf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classibytestream.html">Class ibytestream</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classobytestream.html">Class obytestream</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Function CheckException</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../formats/root.html">Cacao Formats Library API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../formats/namespace_libcacaoformats.html">Namespace libcacaoformats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1ImageBuffer.html">Struct ImageBuffer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Material.html">Struct Material</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Material_1_1TextureRef.html">Struct Material::TextureRef</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Matrix.html">Template Struct Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1PackedAsset.html">Struct PackedAsset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Vec2.html">Template Struct Vec2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Vec3.html">Template Struct Vec3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Vec4.html">Template Struct Vec4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1World.html">Struct World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1World_1_1Actor.html">Struct World::Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1World_1_1Component.html">Struct World::Component</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1PackedContainer.html">Class PackedContainer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1PackedDecoder.html">Class PackedDecoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1PackedEncoder.html">Class PackedEncoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1UnpackedDecoder.html">Class UnpackedDecoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1UnpackedEncoder.html">Class UnpackedEncoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html">Enum PackedFormat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/function_libcacaoformats_8hpp_1a86bc11a367bed0973d2b78d4855fb450.html">Function libcacaoformats::DecodeImage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/function_libcacaoformats_8hpp_1a0db15021cd8217e4903183420068f6bf.html">Function libcacaoformats::EncodeImage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/typedef_libcacaoformats_8hpp_1a575311473aeb953908ff37e0c07315b0.html">Typedef libcacaoformats::AssetPack</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../audiodecoder/root.html">Cacao Audio Decoder Library API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../audiodecoder/namespace_libcacaoaudiodecode.html">Namespace libcacaoaudiodecode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../audiodecoder/structlibcacaoaudiodecode_1_1Result.html">Struct Result</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../audiodecoder/function_libcacaoaudiodecode_8hpp_1a28893bbbc327c0f6336ae1cebeb05b4a.html">Function libcacaoaudiodecode::DecodeAudio</a></li>
-</ul>
-</details></li>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_Actor.hpp.html">Program Listing for File Actor.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -400,17 +362,11 @@
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
-      <a href="../../index.html" class="nav-link" aria-label="Home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../../libapis.html" class="nav-link">Library API References</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="root.html" class="nav-link">Cacao Common Utilities API</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Function CheckException</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File Actor.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -427,28 +383,58 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="function-checkexception">
-<span id="exhale-function-libcacaocommon-8hpp-1a5c414bb60808540fa2dbc40aa0fc8ee6"></span><h1>Function CheckException<a class="headerlink" href="#function-checkexception" title="Link to this heading"><span/></a></h1>
+  <section id="file-actor-hpp">
+<span id="file-engine-include-cacao-actor-hpp"></span><h1>File Actor.hpp<a class="headerlink" href="#file-actor-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="dir_engine_include_Cacao.html#dir-engine-include-cacao"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao</span></code>)</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_libs_common_include_libcacaocommon.hpp.html#file-libs-common-include-libcacaocommon-hpp"><span class="std std-ref">File libcacaocommon.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="#definition-engine-include-cacao-actor-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Actor.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
 </ul>
-<section id="function-documentation">
-<h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414CheckExceptionbNSt6stringE">
-<span id="_CPPv314CheckExceptionbNSt6stringE"></span><span id="_CPPv214CheckExceptionbNSt6stringE"></span><span id="CheckException__b.ss"></span><span class="target" id="libcacaocommon_8hpp_1a5c414bb60808540fa2dbc40aa0fc8ee6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CheckException</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cond</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">msg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414CheckExceptionbNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Quick utility to throw an exception on an error condition. </p>
-<p>The exception will be thrown if the condition evaluates to false</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cond</strong> – The condition to evaluate </p></li>
-<li><p><strong>msg</strong> – The message for the exception thrown </p></li>
+</nav>
+<section id="definition-engine-include-cacao-actor-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Actor.hpp</span></code>)<a class="headerlink" href="#definition-engine-include-cacao-actor-hpp" title="Link to this heading"><span/></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_Actor.hpp.html">Program Listing for File Actor.hpp</a></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
+</div>
+</section>
+<section id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DllHelper.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_DllHelper.hpp.html#file-engine-include-cacao-dllhelper-hpp"><span class="std std-ref">File DllHelper.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Event.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_Event.hpp.html#file-engine-include-cacao-event-hpp"><span class="std std-ref">File Event.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Exceptions.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_Exceptions.hpp.html#file-engine-include-cacao-exceptions-hpp"><span class="std std-ref">File Exceptions.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Transform.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_Transform.hpp.html#file-engine-include-cacao-transform-hpp"><span class="std std-ref">File Transform.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crossguid/guid.hpp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">map</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">optional</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typeindex</span></code></p></li>
+</ul>
+</section>
+<section id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file_engine_include_Cacao_World.hpp.html#file-engine-include-cacao-world-hpp"><span class="std std-ref">File World.hpp</span></a></p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_Cacao.html#namespace-cacao"><span class="std std-ref">Namespace Cacao</span></a></p></li>
+</ul>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="classCacao_1_1Actor.html#exhale-class-classcacao-1-1actor"><span class="std std-ref">Class Actor</span></a></p></li>
+</ul>
 </section>
 </section>
 
@@ -462,24 +448,6 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="classobytestream.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class obytestream</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../formats/root.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Cacao Formats Library API</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -499,10 +467,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv414CheckExceptionbNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CheckException()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-engine-include-cacao-actor-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Actor.hpp</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#includes">Includes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#included-by">Included By</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 </ul>
   </nav></div>
 
@@ -519,8 +488,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
