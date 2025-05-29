@@ -1,4 +1,4 @@
-project('cacaoengine', 'c', 'cpp', 'objcpp', 'c', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype', 'default_library=static' ])
+project('cacaoengine', 'c', 'cpp', 'objcpp', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype', 'default_library=static' ])
 
 # We are Ninja-only
 if get_option('backend') != 'ninja'
@@ -138,18 +138,7 @@ slang_dep = declare_dependency(dependencies: [slang_core, slang_compiler_core, s
 shaderbasemod = custom_target('cacaoshaderbase', input: meson.project_source_root() / 'tools' / 'shaderc' / 'cacaoshaderbase.slang', output: 'cacaoshaderbase.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
 
 # Configure yaml-cpp
-yaml_opts = cmake.subproject_options()
-yaml_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'YAML_CPP_BUILD_TOOLS': 'OFF',
-	'YAML_CPP_BUILD_TESTS': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-yaml_opts.set_install(false)
-yaml_cpp = cmake.subproject('yaml', options: yaml_opts, required: true).dependency('yaml-cpp')
+yaml_cpp = subproject('yaml-cpp', required: true).get_variable('yaml_dep')
 
 # Configure Silica
 silica = subproject('silica', required: true, default_options: {
