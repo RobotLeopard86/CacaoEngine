@@ -40,10 +40,12 @@ namespace Cacao {
 
 		///@cond
 		struct Impl;
-		std::unique_ptr<Impl> impl;
 		///@endcond
 
 	  private:
+		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
+
 		std::vector<char> encodedAudio;
 
 		Sound(std::vector<char>&& encoded);

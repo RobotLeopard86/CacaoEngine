@@ -183,10 +183,12 @@ namespace Cacao {
 
 		///@cond
 		struct Impl;
-		std::unique_ptr<Impl> impl;
 		///@endcond
 
 	  private:
+		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
+
 		friend class X11Common;
 		friend class WaylandCommon;
 

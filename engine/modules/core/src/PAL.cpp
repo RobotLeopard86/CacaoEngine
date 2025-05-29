@@ -2,6 +2,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "PALCommon.hpp"
 #include "ModuleCreators.hpp"
+#include "ImplAccessor.hpp"
 
 namespace Cacao {
 	struct PAL::Impl {
@@ -70,5 +71,12 @@ namespace Cacao {
 		Check<BadInitStateException>(impl->mod->Initialized(), "Cannot terminate an uninitialized module!");
 		Check<BadInitStateException>(!impl->mod->Connected(), "Cannot terminate a connected module!");
 		impl->mod->Term();
+	}
+
+	ImplAccessor::ImplAccessor() {}
+
+	ImplAccessor& ImplAccessor::Get() {
+		static ImplAccessor _instance;
+		return _instance;
 	}
 }

@@ -1,10 +1,11 @@
 #include "LinuxWSI.hpp"
 #include "WSI.hpp"
 #include "Cacao/Window.hpp"
+#include "ImplAccessor.hpp"
 
 namespace Cacao {
 	void CreateSurface() {
-		if(Window::Get().impl->useX) {
+		if(IMPL(Window).useX) {
 			XConnect();
 		} else {
 			WaylandConnect();

@@ -42,9 +42,7 @@ namespace Cacao {
 			return realized;
 		}
 
-		virtual ~Asset() {
-			if(realized) DropRealized();
-		}
+		virtual ~Asset() {}
 
 	  protected:
 		Asset()

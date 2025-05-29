@@ -4,6 +4,7 @@
 #ifdef __linux__
 #include "LinuxRouter.hpp"
 #endif
+#include "ImplAccessor.hpp"
 
 #include <functional>
 
@@ -62,7 +63,7 @@ namespace Cacao {
 		std::vector<const char*> requiredInstanceExts;
 		requiredInstanceExts.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 #ifdef __linux__
-		if(Window::Get().impl->useX)
+		if(IMPL(Window).useX)
 			requiredInstanceExts.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
 		else
 			requiredInstanceExts.push_back(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
