@@ -51,8 +51,9 @@ namespace Cacao {
 
 		/**
 		 * @brief Check if the actor is active
+		 * @details This takes into account both if the actor is enabled and its parent Actor is active
 		 *
-		 * @return If the actor is active
+		 * @note This will return false if the parent Actor is inactive
 		 */
 		bool IsActive() {
 			return functionallyActive;
