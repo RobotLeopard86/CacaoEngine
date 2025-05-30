@@ -15,7 +15,7 @@
 namespace Cacao {
 	class Component;
 
-	class CACAO_API Actor {
+	class CACAO_API Actor : public std::enable_shared_from_this<Actor> {
 	  public:
 		/**
 		 * @brief Create a new actor
@@ -149,7 +149,7 @@ namespace Cacao {
 	  private:
 		Actor(const std::string& name, std::optional<std::shared_ptr<Actor>> parent);
 
-		std::shared_ptr<Actor> selfPtr, parentPtr;
+		std::shared_ptr<Actor> parentPtr;
 		std::map<std::type_index, std::shared_ptr<Component>> components;
 		std::vector<std::shared_ptr<Actor>> children;
 

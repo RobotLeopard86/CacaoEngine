@@ -25,6 +25,7 @@ namespace Cacao {
 
 	void Actor::Reparent(std::optional<std::shared_ptr<Actor>> newParent) {
 		//If we aren't orphaned, remove ourselves from the current parent
+		std::shared_ptr<Actor> selfPtr = shared_from_this();
 		if(!parentPtr || (parentPtr && parentPtr != selfPtr)) {
 			auto it = std::find(parentPtr->children.begin(), parentPtr->children.end(), selfPtr);
 			if(it != parentPtr->children.end()) parentPtr->children.erase(it);
@@ -58,25 +59,27 @@ namespace Cacao {
 		for(auto comp : components) {
 			comp.second.reset();
 		}
+		components.clear();
 
 		//Release ownership of all children
 		for(auto child : children) {
+			child->Reparent(std::nullopt);
 			child.reset();
 		}
+		children.clear();
 
 		//Reset pointers to avoid destructor issues
 		parentPtr.reset();
-		selfPtr.reset();
 	}
 
 	void Actor::PostMountComponent(std::shared_ptr<Component> c) {
-		c->actor = *selfPtr;
+		c->actor = weak_from_this();
 		c->OnMount();
 		c->SetEnabled(true);
 	}
 
 	void Actor::NotifyFunctionallyActiveStateChanged() {
-		functionallyActive = (parentPtr != selfPtr ? parentPtr->IsActive() : true) && active;
+		functionallyActive = (parentPtr != shared_from_this() ? parentPtr->IsActive() : true) && active;
 		for(auto child : children) {
 			child->NotifyFunctionallyActiveStateChanged();
 		}
@@ -93,12 +96,6 @@ namespace Cacao {
 	std::shared_ptr<Actor> Actor::Create(const std::string& name, std::optional<std::shared_ptr<Actor>> parent) {
 		//Make actor
 		std::shared_ptr<Actor> e = std::shared_ptr<Actor>(new Actor(name, parent));
-
-		//Give actor its self pointer
-		e->selfPtr = e;
-
-		//Set actor's parent to itself if requested
-		if(!parent.has_value()) e->parentPtr = e->selfPtr;
 
 		//Return actor
 		return e;

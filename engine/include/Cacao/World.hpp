@@ -7,6 +7,8 @@
 namespace Cacao {
 	/**
 	 * @brief A collection of entities and a camera comprising an area of gameplay
+	 *
+	 * @warning If there are still outstanding references to contained Actors when the destructor is called, it may not be able to prevent memory leaks and the Actor will probably be in a broken state.
 	 */
 	class CACAO_API World {
 	  public:
@@ -39,6 +41,7 @@ namespace Cacao {
 
 	  private:
 		World();
+		~World();
 
 		std::shared_ptr<Actor> root;
 

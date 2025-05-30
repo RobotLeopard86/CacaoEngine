@@ -16,7 +16,7 @@ namespace Cacao {
 		 * @note This will return false if the owning Actor is inactive
 		 */
 		const bool IsEnabled() {
-			return actor.get().IsActive() && enabled;
+			return actor.lock()->IsActive() && enabled;
 		}
 
 		/**
@@ -33,9 +33,12 @@ namespace Cacao {
 		 * @brief Get the owning actor of this component
 		 *
 		 * @return A reference to the owning actor
+		 *
+		 * @throws NonexistentValueException If the actor no longer exists
 		 */
-		Actor& GetOwner() {
-			return actor;
+		std::shared_ptr<Actor> GetOwner() {
+			Check<NonexistentValueException>(!actor.expired(), "Cannot get expired Actor from Component!");
+			return actor.lock();
 		}
 
 		/**
@@ -52,7 +55,7 @@ namespace Cacao {
 
 		virtual void OnEnableStateChange() {};
 
-		std::reference_wrapper<Actor> actor [[maybe_unused]];
+		std::weak_ptr<Actor> actor [[maybe_unused]];
 
 		friend class Actor;
 

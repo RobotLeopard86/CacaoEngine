@@ -11,14 +11,14 @@ namespace Cacao {
 	class CACAO_API Asset {
 	  public:
 		/**
-		 * @brief Synchronously convert the loaded data into a form suitable for use
+		 * @brief Synchronously convert the loaded data into a form suitable for playback
 		 *
 		 * @throws BadRealizeStateException If the asset is already realized
 		 */
 		virtual void Realize() = 0;
 
 		/**
-		 * @brief Asynchronously convert the loaded data into a form suitable for use
+		 * @brief Asynchronously convert the loaded data into a form suitable for playback
 		 *
 		 * @return A future that will resolve when realization is complete or fails
 		 *
