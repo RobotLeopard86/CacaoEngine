@@ -7,21 +7,21 @@ engine_headers = include_directories('include')
 install_subdir('include' / 'Cacao', install_dir: 'include', install_tag: 'cacao')
 
 # Headers private to modules
-module_private_headers = include_directories('modules' / 'private')
+module_private_headers = include_directories('src' / 'private')
 
 # Always-included modules
 backends = get_option('backends')
-subdir('modules' / 'shader-tgtgen')
-subdir('modules' / 'core')
+subdir('src' / 'shader-tgtgen')
+subdir('src' / 'core')
 
 # Windowing modules
 windowing_deps = []
 if host_machine.system() == 'windows'
-    subdir('modules' / 'win32')
+    subdir('src' / 'win32')
 elif host_machine.system() == 'darwin'
-    subdir('modules' / 'macos')
+    subdir('src' / 'macos')
 elif host_machine.system() == 'linux'
-    subdir('modules' / 'linux')
+    subdir('src' / 'linux')
 else
     error('Unsupported platform!')
 endif
@@ -29,7 +29,7 @@ endif
 # Graphics backends
 gfx_deps = []
 foreach b : backends
-    subdir('modules' / b)
+    subdir('src' / b)
 endforeach
 
 # Engine library
@@ -37,4 +37,4 @@ libcacao = shared_library('cacao', dependencies: [core_dep, windowing_deps, gfx_
 cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [core_deps])
 
 # Game runtime
-subdir('exe')
+subdir('src' / 'runtime')
