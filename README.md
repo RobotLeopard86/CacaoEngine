@@ -5,7 +5,7 @@
 Cacao Engine is a 3D game engine developed by RobotLeopard86. It is written in C++ and uses Meson as the build system. Project planning happens on [Taiga](https://tree.taiga.io/project/robotleopard86-cacao-engine).
 
 ## Building
-See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/latest/manual/building.html) for information.
+See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/dev/manual/building.html) for information.
 
 ## Documentation
 Documentation is built and deployed automatically to https://robotleopard86.github.io/CacaoEngine.  

@@ -1,7 +1,7 @@
 # Versioning Scheme
 
 ## Versioning Format
-Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of `[Generation].[Major].[Minor].[Mini][Patch](-[Stage][Build])`. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. 
+Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of `[Generation].[Major].[Minor][Patch](-[Stage][Build])`. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. 
 
 ## Stages
 * `a` - Alpha/nightly releases. Likely very unstable.
