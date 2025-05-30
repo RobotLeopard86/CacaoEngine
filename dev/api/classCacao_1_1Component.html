@@ -513,11 +513,14 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component8GetOwnerEv">
-<span id="_CPPv3N5Cacao9Component8GetOwnerEv"></span><span id="_CPPv2N5Cacao9Component8GetOwnerEv"></span><span id="Cacao::Component::GetOwner"></span><span class="target" id="classCacao_1_1Component_1acfc4a138275f8e0cc5dfab2a04d3235d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetOwner</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component8GetOwnerEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao9Component8GetOwnerEv"></span><span id="_CPPv2N5Cacao9Component8GetOwnerEv"></span><span id="Cacao::Component::GetOwner"></span><span class="target" id="classCacao_1_1Component_1a0ea6f6165785f8bc93c55277998c2fb9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetOwner</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component8GetOwnerEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the owning actor of this component. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A reference to the owning actor </p>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the actor no longer exists </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A reference to the owning actor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -555,7 +558,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component5actorE">
-<span id="_CPPv3N5Cacao9Component5actorE"></span><span id="_CPPv2N5Cacao9Component5actorE"></span><span id="Cacao::Component::actor__std::reference_wrapper:Actor:"></span><span class="target" id="classCacao_1_1Component_1a94cc46d4d80ed9237317d612757379de"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">reference_wrapper</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">actor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9Component5actorE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao9Component5actorE"></span><span id="_CPPv2N5Cacao9Component5actorE"></span><span id="Cacao::Component::actor__std::weak_ptr:Actor:"></span><span class="target" id="classCacao_1_1Component_1a26b6a92f517c9b84c0510fcf2b4be4cf"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">weak_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">actor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9Component5actorE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>

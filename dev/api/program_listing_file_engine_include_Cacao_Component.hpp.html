@@ -391,7 +391,7 @@
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Component</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsEnabled</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">actor</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">IsActive</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">actor</span><span class="p">.</span><span class="n">lock</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">IsActive</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -399,8 +399,9 @@
 <span class="w">            </span><span class="n">OnEnableStateChange</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">Actor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">GetOwner</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">actor</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetOwner</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="o">!</span><span class="n">actor</span><span class="p">.</span><span class="n">expired</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;Cannot get expired Actor from Component!&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">actor</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">OnMount</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
@@ -412,7 +413,7 @@
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnEnableStateChange</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">actor</span><span class="w"> </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]];</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">actor</span><span class="w"> </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]];</span>
 
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
 
