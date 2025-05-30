@@ -67,7 +67,7 @@ namespace Cacao {
 			std::chrono::milliseconds fixedTickRate = std::chrono::milliseconds(Engine::Get().config.fixedTickRate);
 
 			//Check if we should run a fixed tick
-			constexpr std::chrono::milliseconds fixedTickGraceWindow = 2ms;
+			constexpr std::chrono::milliseconds fixedTickGraceWindow = 1ms;
 			if(sclock::now() >= (nextFixedTick - fixedTickGraceWindow) && sclock::now() <= (nextFixedTick + fixedTickGraceWindow)) {
 				//Run the tick
 				FixedTick();
