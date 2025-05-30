@@ -156,27 +156,15 @@ crossguid = crossguid_sp.get_variable('crossguid_dep')
 xg_headers_dep = crossguid_sp.get_variable('crossguid_headers_dep')
 
 # Configure SPIRV-Cross
-spv_cross_opts = cmake.subproject_options()
-spv_cross_opts.add_cmake_defines({
-	'SPIRV_CROSS_STATIC': 'ON',
-	'SPIRV_CROSS_SHARED': 'OFF',
-	'SPIRV_CROSS_CLI': 'OFF',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-spv_cross_opts.set_install(false)
-spv_cross_sp = cmake.subproject('spirv-cross', options: spv_cross_opts, required: true)
-spv_core = spv_cross_sp.dependency('spirv-cross-core')
-spv_c = spv_cross_sp.dependency('spirv-cross-c')
-spv_cpp = spv_cross_sp.dependency('spirv-cross-cpp')
-spv_rfl = spv_cross_sp.dependency('spirv-cross-reflect')
-spv_util = spv_cross_sp.dependency('spirv-cross-util')
-spv_glsl = spv_cross_sp.dependency('spirv-cross-glsl')
-spv_hlsl = spv_cross_sp.dependency('spirv-cross-hlsl')
-spv_msl = spv_cross_sp.dependency('spirv-cross-msl')
-spirv_cross = declare_dependency(dependencies: [spv_core, spv_c, spv_cpp, spv_rfl, spv_util, spv_glsl, spv_hlsl, spv_msl])
+spv_cross_sp = subproject('spirv-cross', required: true)
+spv_core = spv_cross_sp.get_variable('spv_core')
+spv_cpp = spv_cross_sp.get_variable('spv_cpp')
+spv_rfl = spv_cross_sp.get_variable('spv_reflect')
+spv_util = spv_cross_sp.get_variable('spv_util')
+spv_glsl = spv_cross_sp.get_variable('spv_glsl')
+spv_hlsl = spv_cross_sp.get_variable('spv_hlsl')
+spv_msl = spv_cross_sp.get_variable('spv_msl')
+spirv_cross = declare_dependency(dependencies: [spv_core, spv_cpp, spv_rfl, spv_util, spv_glsl, spv_hlsl, spv_msl])
 
 # CLI11
 cli11_dep = subproject('cli11', required: true).get_variable('CLI11_dep')
