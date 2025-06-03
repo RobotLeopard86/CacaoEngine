@@ -50,5 +50,7 @@ namespace Cacao {
 
 		Sound(std::vector<char>&& encoded);
 		~Sound();
+
+		friend class ResourceManager;
 	};
 }

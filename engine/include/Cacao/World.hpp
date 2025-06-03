@@ -65,6 +65,6 @@ namespace Cacao {
 			return std::nullopt;
 		}
 
-		friend class WorldManager;
+		friend class ResourceManager;
 	};
 }
