@@ -36,6 +36,8 @@ Worlds are where your game takes place. They are stored separately from assets, 
 Their addresses use the type prefix `w`, and the identifier is the name of the world.
 
 ## Binary Objects
-Binary objects refer to objects accessible in game binaries (components and services). Due to the sensitive and interconnected nature of code, binary objects **do not** use the overlay stack and are thus not possible to override.
+Binary objects refer to objects accessible in game binaries (at present this is just components and helpers). Due to the sensitive and interconnected nature of code, binary objects **do not** use the overlay stack and are thus not possible to override.
 
-Their addresses use the type prefix `b` and the identifier follows the format `<svc|com>@<package>/<object identifier>`. Use `svc` for services and `com` for components.
+Their addresses use the type prefix `b` and the identifier follows the format `<package>@<type>/<object identifier>`. The list of types is as follows:
+* `com` - Component
+* `hlp` - Helper
