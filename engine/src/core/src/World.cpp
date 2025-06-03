@@ -1,7 +1,8 @@
 #include "Cacao/World.hpp"
 
 namespace Cacao {
-	World::World() {
+	World::World(const std::string& addr)
+	  : Resource(addr) {
 		//Create root actor
 		root = Actor::Create("__WORLDROOT__", std::nullopt);
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DllHelper.hpp"
+#include "Resource.hpp"
 
 #include <future>
 
@@ -8,7 +9,7 @@ namespace Cacao {
 	/**
 	 * @brief Base class for asset types
 	 */
-	class CACAO_API Asset {
+	class CACAO_API Asset : public Resource {
 	  public:
 		/**
 		 * @brief Synchronously convert the loaded data into a form suitable for playback
@@ -45,8 +46,8 @@ namespace Cacao {
 		virtual ~Asset() {}
 
 	  protected:
-		Asset()
-		  : realized(false) {}
+		Asset(const std::string& addr)
+		  : Resource(addr), realized(false) {}
 
 		bool realized;
 	};

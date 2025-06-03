@@ -3,6 +3,7 @@
 #include "DllHelper.hpp"
 #include "Camera.hpp"
 #include "Actor.hpp"
+#include "Resource.hpp"
 
 namespace Cacao {
 	/**
@@ -10,7 +11,7 @@ namespace Cacao {
 	 *
 	 * @warning If there are still outstanding references to contained Actors when the destructor is called, it may not be able to prevent memory leaks and the Actor will probably be in a broken state.
 	 */
-	class CACAO_API World {
+	class CACAO_API World : public Resource {
 	  public:
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
 
@@ -40,7 +41,7 @@ namespace Cacao {
 		}
 
 	  private:
-		World();
+		World(const std::string& addr);
 		~World();
 
 		std::shared_ptr<Actor> root;
