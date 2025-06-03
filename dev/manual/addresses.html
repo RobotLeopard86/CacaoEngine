@@ -447,14 +447,10 @@
 <p>Worlds are where your game takes place. They are stored separately from assets, but may reference them. Loading a world will often trigger asset loading as well. World discovery will fail if the world is not in the proper location.</p>
 <p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">w</span></code>, and the identifier is the name of the world.</p>
 </section>
-<section id="binary-objects">
-<h2>Binary Objects<a class="headerlink" href="#binary-objects" title="Link to this heading"><span/></a></h2>
-<p>Binary objects refer to objects accessible in game binaries (at present this is just components and helpers). Due to the sensitive and interconnected nature of code, binary objects <strong>do not</strong> use the overlay stack and are thus not possible to override.</p>
-<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">b</span></code> and the identifier follows the format <code class="docutils literal notranslate"><span class="pre">&lt;package&gt;&#64;&lt;type&gt;/&lt;object</span> <span class="pre">identifier&gt;</span></code>. The list of types is as follows:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">com</span></code> - Component</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">hlp</span></code> - Helper</p></li>
-</ul>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading"><span/></a></h2>
+<p>Component classes are stored in game binaries and made accessible to the engine at module load through the identification hook. Due to the sensitive and interconnected nature of code, components <strong>do not</strong> use the overlay stack and are thus not possible to override.</p>
+<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">c</span></code> and the identifier follows the format <code class="docutils literal notranslate"><span class="pre">&lt;package&gt;/&lt;component</span> <span class="pre">class</span> <span class="pre">name&gt;</span></code>.</p>
 </section>
 </section>
 
@@ -508,7 +504,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assets">Assets</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worlds">Worlds</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-objects">Binary Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components">Components</a></li>
 </ul>
   </nav></div>
 
