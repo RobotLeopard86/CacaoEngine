@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Template Class Flushable &#8212; Cacao Engine Docs</title>
+    <title>Resource Addresses &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Flushable';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/addresses';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Logger" href="classCacao_1_1Logger.html" />
-    <link rel="prev" title="Class EventManager" href="classCacao_1_1EventManager.html" />
+    <link rel="next" title="Shader Guide" href="shaders.html" />
+    <link rel="prev" title="Definition Files" href="deffiles.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -159,15 +159,15 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="root.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
   </a>
 </li>
@@ -268,15 +268,15 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="root.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
   </a>
 </li>
@@ -331,89 +331,30 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Resource Addresses</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="backends.html">Backends</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backends/gl.html">OpenGL Backend Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backends/vk.html">Vulkan Backend Info</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventConsumer.html">Class EventConsumer</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
-</ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Class Flushable</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html">Template Function Cacao::Check(bool, std::string)</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a5a954146f893e313a466f7d1978404df.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string)</a></li>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -450,9 +391,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
+    <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Template Class Flushable</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Resource Addresses</span></li>
   </ul>
 </nav>
 </div>
@@ -469,51 +410,47 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="template-class-flushable">
-<span id="exhale-class-classcacao-1-1flushable"></span><h1>Template Class Flushable<a class="headerlink" href="#template-class-flushable" title="Link to this heading"><span/></a></h1>
+  <section id="resource-addresses">
+<h1>Resource Addresses<a class="headerlink" href="#resource-addresses" title="Link to this heading"><span/></a></h1>
+<aside class="topic">
+<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
+<p>The information on this page pertains to the engine post-restructuring.</p>
+</aside>
+<p>Loading anything related to your game in Cacao Engine requires you to know its address. This is a specially-formatted string describing how to fetch the resource and its identifier.  Specifically, it is formated like this: <code class="docutils literal notranslate"><span class="pre">&lt;type</span> <span class="pre">prefix&gt;:&lt;identifier&gt;</span></code>. Note that all addresses are case-sensitive.</p>
+<p>As a general note, the engine will refuse to load unpacked Cacao Engine formats at runtime. They will only be loaded in the editor. For that reason, referencing an unpacked-format file will fail as the engine won’t be able to discover it.</p>
+<p>Below, the different formats are specified.</p>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"><span/></a></h2>
+<p>Resources are the base type of anything that can be loaded. This section is about <strong>blob resources</strong> (often just called resources), which are stored in asset packs and are blobs of data that the engine does not interfere with. They can be literally anything.</p>
+<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">r</span></code>, and the identifier is the path to the resource within the asset pack. This mirrors the structure of the resource folder used to create the pack. It uses forward slashes for directory deliminators, but does not support using <code class="docutils literal notranslate"><span class="pre">..</span></code> or anything like that.</p>
+</section>
+<section id="assets">
+<h2>Assets<a class="headerlink" href="#assets" title="Link to this heading"><span/></a></h2>
+<p>Assets are anything that is contained in an asset pack and is of a certain type deemed useful by the engine. At present, this is:</p>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Flushable.hpp.html#file-engine-include-cacao-flushable-hpp"><span class="std std-ref">File Flushable.hpp</span></a></p></li>
+<li><p>2D Textures</p></li>
+<li><p>Cubemaps</p></li>
+<li><p>Sounds</p></li>
+<li><p>Models</p></li>
+<li><p>Fonts</p></li>
+<li><p>Shaders</p></li>
+<li><p>Materials</p></li>
 </ul>
-<section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao9FlushableE">
-<span id="_CPPv3I0EN5Cacao9FlushableE"></span><span id="_CPPv2I0EN5Cacao9FlushableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Flushable"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao9FlushableE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Utility that caches changes to an object and applies them on command. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable9FlushableER1T">
-<span id="_CPPv3N5Cacao9Flushable9FlushableER1T"></span><span id="_CPPv2N5Cacao9Flushable9FlushableER1T"></span><span id="Cacao::Flushable::Flushable__TR"></span><span class="target" id="classCacao_1_1Flushable_1af25c2b87ede2fa05f9f91d96674bcd82"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Flushable9FlushableER1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new flushable. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>obj</strong> – The original object </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableptEv">
-<span id="_CPPv3N5Cacao9FlushableptEv"></span><span id="_CPPv2N5Cacao9FlushableptEv"></span><span id="Cacao::Flushable::pointer-operator"></span><span class="target" id="classCacao_1_1Flushable_1a1f19bc3eaf9d0e6590fbca528dbab29a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9FlushableptEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Access the object copy where changes can be made. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableaSE1T">
-<span id="_CPPv3N5Cacao9FlushableaSE1T"></span><span id="_CPPv2N5Cacao9FlushableaSE1T"></span><span id="Cacao::Flushable::assign-operator__T"></span><span class="target" id="classCacao_1_1Flushable_1aa954a014c290b214baed25539e1692c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newDat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9FlushableaSE1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Overwrite the object copy with new data. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable5FlushEv">
-<span id="_CPPv3N5Cacao9Flushable5FlushEv"></span><span id="_CPPv2N5Cacao9Flushable5FlushEv"></span><span id="Cacao::Flushable::Flush"></span><span class="target" id="classCacao_1_1Flushable_1aa576d2339edc75767f5c9fb22e0cc204"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flush</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Flushable5FlushEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Write the changes back to the original object. </p>
-</dd></dl>
-
+<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">a</span></code>, and the identifier is the asset address as specified in the asset pack.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you use auto-generated asset addresses for your packs and don’t recall the asset address, use the <code class="docutils literal notranslate"><span class="pre">ce-xak</span></code> tool to list the assets in a pack.</p>
 </div>
-</dd></dl>
-
+</section>
+<section id="worlds">
+<h2>Worlds<a class="headerlink" href="#worlds" title="Link to this heading"><span/></a></h2>
+<p>Worlds are where your game takes place. They are stored separately from assets, but may reference them. Loading a world will often trigger asset loading as well. World discovery will fail if the world is not in the proper location.</p>
+<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">w</span></code>, and the identifier is the name of the world.</p>
+</section>
+<section id="binary-objects">
+<h2>Binary Objects<a class="headerlink" href="#binary-objects" title="Link to this heading"><span/></a></h2>
+<p>Binary objects refer to objects accessible in game binaries (components and services). Due to the sensitive and interconnected nature of code, binary objects <strong>do not</strong> use the overlay stack and are thus not possible to override.</p>
+<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">b</span></code> and the identifier follows the format <code class="docutils literal notranslate"><span class="pre">&lt;svc|com&gt;&#64;&lt;package&gt;/&lt;object</span> <span class="pre">identifier&gt;</span></code>. Use <code class="docutils literal notranslate"><span class="pre">svc</span></code> for services and <code class="docutils literal notranslate"><span class="pre">com</span></code> for components.</p>
 </section>
 </section>
 
@@ -528,20 +465,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1EventManager.html"
+       href="deffiles.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class EventManager</p>
+        <p class="prev-next-title">Definition Files</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Logger.html"
+       href="shaders.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Logger</p>
+        <p class="prev-next-title">Shader Guide</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -564,16 +501,10 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao9FlushableE"><code class="docutils literal notranslate"><span class="pre">Flushable</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Flushable9FlushableER1T"><code class="docutils literal notranslate"><span class="pre">Flushable::Flushable()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9FlushableptEv"><code class="docutils literal notranslate"><span class="pre">Flushable::operator-&gt;()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9FlushableaSE1T"><code class="docutils literal notranslate"><span class="pre">Flushable::operator=()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Flushable5FlushEv"><code class="docutils literal notranslate"><span class="pre">Flushable::Flush()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assets">Assets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worlds">Worlds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-objects">Binary Objects</a></li>
 </ul>
   </nav></div>
 
