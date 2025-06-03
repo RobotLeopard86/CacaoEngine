@@ -449,8 +449,12 @@
 </section>
 <section id="binary-objects">
 <h2>Binary Objects<a class="headerlink" href="#binary-objects" title="Link to this heading"><span/></a></h2>
-<p>Binary objects refer to objects accessible in game binaries (components and services). Due to the sensitive and interconnected nature of code, binary objects <strong>do not</strong> use the overlay stack and are thus not possible to override.</p>
-<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">b</span></code> and the identifier follows the format <code class="docutils literal notranslate"><span class="pre">&lt;svc|com&gt;&#64;&lt;package&gt;/&lt;object</span> <span class="pre">identifier&gt;</span></code>. Use <code class="docutils literal notranslate"><span class="pre">svc</span></code> for services and <code class="docutils literal notranslate"><span class="pre">com</span></code> for components.</p>
+<p>Binary objects refer to objects accessible in game binaries (at present this is just components and helpers). Due to the sensitive and interconnected nature of code, binary objects <strong>do not</strong> use the overlay stack and are thus not possible to override.</p>
+<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">b</span></code> and the identifier follows the format <code class="docutils literal notranslate"><span class="pre">&lt;package&gt;&#64;&lt;type&gt;/&lt;object</span> <span class="pre">identifier&gt;</span></code>. The list of types is as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">com</span></code> - Component</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hlp</span></code> - Helper</p></li>
+</ul>
 </section>
 </section>
 
