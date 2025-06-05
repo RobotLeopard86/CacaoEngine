@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.hpp"
+#include "Time.hpp"
 
 namespace Cacao {
 	class Script : public Component {
@@ -22,7 +23,7 @@ namespace Cacao {
 		 *
 		 * @param timestep The time in seconds since the last dynamic tick (not necessarily when the script was executed)
 		 */
-		virtual void OnDynTick(double timestep) {};
+		virtual void OnDynTick(time::fseconds timestep) {};
 
 		/**
 		 * @brief Runs each fixed tick that the script is enabled and in an active World

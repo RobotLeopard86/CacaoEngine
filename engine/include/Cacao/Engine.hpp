@@ -5,6 +5,7 @@
 
 #include "DllHelper.hpp"
 #include "Log.hpp"
+#include "Time.hpp"
 
 namespace Cacao {
 	/**
@@ -35,7 +36,7 @@ namespace Cacao {
 			/**
 			 * @brief The rate at which fixed ticks should occur, specified as the amount of time between fixed ticks in milliseconds
 			 */
-			int fixedTickRate = 20;
+			std::chrono::milliseconds fixedTickRate = 20ms;
 
 			/**
 			 * @brief The number of frames the renderer can be behind before skipping some to catch up

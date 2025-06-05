@@ -2,7 +2,6 @@
 
 #include "DllHelper.hpp"
 #include "Resource.hpp"
-#include "BlobResource.hpp"
 
 #include <memory>
 
