@@ -385,6 +385,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Component.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Time.hpp&quot;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Script</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Component</span><span class="w"> </span><span class="p">{</span>
@@ -393,7 +394,7 @@
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnDynTick</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">timestep</span><span class="p">)</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnDynTick</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">fseconds</span><span class="w"> </span><span class="n">timestep</span><span class="p">)</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnFixedTick</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
