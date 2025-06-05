@@ -120,7 +120,7 @@ namespace Cacao {
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T>
-		void GetComponent() {
+		void DeleteComponent() {
 			Check<ContainerException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
 			components.erase(std::type_index(typeid(T)));
 		}

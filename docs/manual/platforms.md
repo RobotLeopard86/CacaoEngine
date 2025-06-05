@@ -1,5 +1,9 @@
 # Platform Support
 
+```{topic} This page is **up-to-date**! 
+The information on this page pertains to the engine post-restructuring.
+```
+
 ## Supported OSes and Architectures
 * x86_64 Windows
 * aarch64 macOS

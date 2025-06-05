@@ -2,6 +2,10 @@
 
 #include "Actor.hpp"
 #include "DllHelper.hpp"
+#include "Resource.hpp"
+
+#include <functional>
+#include <memory>
 
 namespace Cacao {
 	/**

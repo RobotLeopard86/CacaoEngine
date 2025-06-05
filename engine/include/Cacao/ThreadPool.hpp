@@ -36,7 +36,8 @@ namespace Cacao {
 		/**
 		 * @brief Place a task into the queue with an expected return value
 		 *
-		 * @param task The task to execute
+		 * @param func The task to execute
+		 * @param args The arguments to the task function
 		 *
 		 * @return A future that will be fulfilled when the task completes
 		 *
@@ -64,7 +65,8 @@ namespace Cacao {
 		 *
 		 * @note All functions will be automatically signaled to stop when the pool is
 		 *
-		 * @param task The function to execute
+		 * @param func The function to execute
+		 * @param args The arguments to the task function
 		 *
 		 * @return An object by which the function can be requested to stop
 		 *
