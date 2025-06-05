@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>File Exceptions.hpp &#8212; Cacao Engine Docs</title>
+    <title>Program Listing for File BlobResource.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_engine_include_Cacao_Exceptions.hpp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_engine_include_Cacao_BlobResource.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -236,10 +236,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -329,8 +325,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_Exceptions.hpp.html">Program Listing for File Exceptions.hpp</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Program Listing for File BlobResource.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -366,7 +362,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File Exceptions.hpp</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Program Listing for File BlobResource.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -383,58 +379,27 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="file-exceptions-hpp">
-<span id="file-engine-include-cacao-exceptions-hpp"></span><h1>File Exceptions.hpp<a class="headerlink" href="#file-exceptions-hpp" title="Link to this heading"><span/></a></h1>
-<p>↰ <a class="reference internal" href="dir_engine_include_Cacao.html#dir-engine-include-cacao"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao</span></code>)</p>
-<nav class="contents local" id="contents">
-<p class="topic-title">Contents</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#definition-engine-include-cacao-exceptions-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Exceptions.hpp</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
-<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
-<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
-<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
-</ul>
-</nav>
-<section id="definition-engine-include-cacao-exceptions-hpp">
-<h2>Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Exceptions.hpp</span></code>)<a class="headerlink" href="#definition-engine-include-cacao-exceptions-hpp" title="Link to this heading"><span/></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_Exceptions.hpp.html">Program Listing for File Exceptions.hpp</a></li>
-</ul>
+  <section id="program-listing-for-file-blobresource-hpp">
+<span id="program-listing-file-engine-include-cacao-blobresource-hpp"></span><h1>Program Listing for File BlobResource.hpp<a class="headerlink" href="#program-listing-for-file-blobresource-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="file_engine_include_Cacao_BlobResource.hpp.html#file-engine-include-cacao-blobresource-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/BlobResource.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">BlobResource</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Resource</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
+<span class="w">        </span><span class="n">BlobResource</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">Resource</span><span class="p">(</span><span class="n">addr</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
 </div>
-</section>
-<section id="includes">
-<h2>Includes<a class="headerlink" href="#includes" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">DllHelper.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_DllHelper.hpp.html#file-engine-include-cacao-dllhelper-hpp"><span class="std std-ref">File DllHelper.hpp</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Log.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_Log.hpp.html#file-engine-include-cacao-log-hpp"><span class="std std-ref">File Log.hpp</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sstream</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></li>
-</ul>
-</section>
-<section id="included-by">
-<h2>Included By<a class="headerlink" href="#included-by" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="file_engine_include_Cacao_Actor.hpp.html#file-engine-include-cacao-actor-hpp"><span class="std std-ref">File Actor.hpp</span></a></p></li>
-<li><p><a class="reference internal" href="file_engine_include_Cacao_EventConsumer.hpp.html#file-engine-include-cacao-eventconsumer-hpp"><span class="std std-ref">File EventConsumer.hpp</span></a></p></li>
-<li><p><a class="reference internal" href="file_engine_include_Cacao_ThreadPool.hpp.html#file-engine-include-cacao-threadpool-hpp"><span class="std std-ref">File ThreadPool.hpp</span></a></p></li>
-<li><p><a class="reference internal" href="file_engine_include_Cacao_TickController.hpp.html#file-engine-include-cacao-tickcontroller-hpp"><span class="std std-ref">File TickController.hpp</span></a></p></li>
-</ul>
-</section>
-<section id="namespaces">
-<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="namespace_Cacao.html#namespace-cacao"><span class="std std-ref">Namespace Cacao</span></a></p></li>
-</ul>
-</section>
-<section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="function_Exceptions_8hpp_1a9065e72124fbb9e4bf6444df35375e5d.html#exhale-function-exceptions-8hpp-1a9065e72124fbb9e4bf6444df35375e5d"><span class="std std-ref">Template Function Cacao::Check(bool, std::string)</span></a></p></li>
-<li><p><a class="reference internal" href="function_Exceptions_8hpp_1a5a954146f893e313a466f7d1978404df.html#exhale-function-exceptions-8hpp-1a5a954146f893e313a466f7d1978404df"><span class="std std-ref">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string)</span></a></p></li>
-</ul>
-</section>
 </section>
 
 
@@ -453,28 +418,6 @@
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-engine-include-cacao-exceptions-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Exceptions.hpp</span></code>)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#includes">Includes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#included-by">Included By</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
