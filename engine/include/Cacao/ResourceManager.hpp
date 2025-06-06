@@ -30,6 +30,9 @@ namespace Cacao {
 		 *
 		 * @param address The identifier component of the resource address to use
 		 * @param pkg The identifier of the package to associate this resource with
+		 *
+		 * @warning When instantiating a ComponentExporter, <b>do not</b> include the package identifier in the address parameter as is standard in resource addresses, since the package parameter exists to give that info.
+		 * A BadValueException will be thrown if the package identifier is included.
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Resource, T>
@@ -44,7 +47,7 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Resource, T>
-		std::shared_ptr<T> Load(const std::string& address, const std::string& pkg) = delete;
+		std::shared_ptr<T> Load(const std::string& address) = delete;
 
 	  private:
 		struct Impl;
