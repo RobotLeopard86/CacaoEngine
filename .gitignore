@@ -14,6 +14,7 @@ subprojects/*
 !subprojects/dr_libs
 !subprojects/cli11
 !subprojects/spinners-plus-plus
+!subprojects/hires_sleep
 subprojects/nlohmannjson.wrap
 subprojects/reflex.wrap
 subprojects/inja.wrap

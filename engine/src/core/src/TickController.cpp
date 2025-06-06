@@ -3,11 +3,18 @@
 #include "Cacao/Engine.hpp"
 #include "Cacao/Time.hpp"
 
+#include "high_resolution_sleep.hpp"
+
 #include <chrono>
 #include <array>
 #include <numeric>
 #include <cmath>
 #include <random>
+
+#ifdef _WIN32
+#include <Windows.h>
+#include <timeapi.h>
+#endif
 
 namespace Cacao {
 	struct TickController::Impl {
@@ -69,29 +76,30 @@ namespace Cacao {
 			time::fseconds fixedTickRate = std::chrono::duration_cast<time::fseconds>(Engine::Get().config.fixedTickRate);
 
 			//Check if we should run a fixed tick
-			constexpr time::dmilliseconds fixedTickGraceWindow = 1_dms;
+			constexpr std::chrono::milliseconds fixedTickGraceWindow = 2ms;
 			if(now >= (nextFixedTick - fixedTickGraceWindow) && now <= (nextFixedTick + fixedTickGraceWindow)) {
 				//Run the tick
 				FixedTick();
 
-				//Set the next tick time
+				//Variable update
 				nextFixedTick += fixedTickRate;
+				now = std::chrono::steady_clock::now();
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
-			}
-
-			//Did we miss a fixed tick?
-			if(now > (nextFixedTick + fixedTickGraceWindow)) {
+			} else if(now > (nextFixedTick + fixedTickGraceWindow)) {
 				//If we're over halfway until the next fixed tick, skip the one we missed
 				if(now <= (nextFixedTick + fixedTickGraceWindow + (fixedTickRate / 2))) {
-					Logger::Engine(Logger::Level::Warn) << "Overshot a fixed tick!";
+					Logger::Engine(Logger::Level::Warn) << "Overshot a fixed tick! (Past: " << std::chrono::duration_cast<time::dmilliseconds>(now - (nextFixedTick + fixedTickGraceWindow)) << ")";
 					FixedTick();
 				}
+
+				//Variable update
 				nextFixedTick += fixedTickRate;
+				now = std::chrono::steady_clock::now();
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
 			}
 
 			//Clear tick time queue if it's been long enough, since this is probably out-of-date now
-			constexpr time::dmilliseconds maxTimeSinceDynTicks = 10_dms;
+			constexpr std::chrono::milliseconds maxTimeSinceDynTicks = 10ms;
 			if((time::dtime_point(now) - lastTickTimeUpdate) >= maxTimeSinceDynTicks) {
 				Logger::Engine(Logger::Level::Warn) << "Dynamic tick time calculation reset needed!";
 				dynTickTimes[0] = 0_ds;
@@ -114,24 +122,29 @@ namespace Cacao {
 				dynTickTimes[0] = dynTickTimes[1];
 				dynTickTimes[1] = dynTickTimes[2];
 				dynTickTimes[2] = std::chrono::duration_cast<time::dseconds>(postTick - preTick);
+				lastTickTimeUpdate = now;
 			} else {
-				//We'll wait out the time until the next tick
-				std::this_thread::sleep_until(nextFixedTick - 2ms);
+				//We'll wait out the time until the next tick more or less
+				high_resolution_sleep::sleep_ms((nextFixedTick - now - 0.2ms).count());
 			}
 		}
+
+		//If on Windows, we have to reset the time period since high_resolution_sleep messes with it.
+#ifdef _WIN32
+		timeEndPeriod(1);
+#endif
 	}
 
 	void TickController::Impl::DynTick(time::dseconds timestep) {
-		Logger::Engine(Logger::Level::Trace) << "Running a dynamic tick; it's been " << timestep << " since the last one.";
+		Logger::Engine(Logger::Level::Trace) << "Running a dynamic tick; it's been " << std::chrono::duration_cast<time::dmilliseconds>(timestep) << " since the last one.";
 		std::random_device randDev;
 		std::mt19937_64 rng(randDev());
-		std::uniform_int_distribution<std::mt19937::result_type> dist(20, 500);
-		std::chrono::microseconds nap = std::chrono::microseconds(dist(rng));
-		std::this_thread::sleep_for(nap);
+		std::uniform_int_distribution<std::mt19937::result_type> dist(132, 1250);
+		high_resolution_sleep::sleep_us(dist(rng));
 	}
 
 	void TickController::Impl::FixedTick() {
 		Logger::Engine(Logger::Level::Trace) << "Running a fixed tick.";
-		std::this_thread::sleep_for(0.2_dms);
+		high_resolution_sleep::sleep_ms(2);
 	}
 }

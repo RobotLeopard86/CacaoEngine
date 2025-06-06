@@ -38,10 +38,11 @@ spdlog_dep = subproject('spdlog', required: true, default_options: {
 	'std_format': 'disabled'
 }).get_variable('spdlog_dep')
 
-# glm, dynalo, and thread-pool
+# glm, dynalo, thread-pool, and high_resolution_sleep
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
 dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
 thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
+hires_sleep_dep = subproject('hires_sleep', required: true).get_variable('hires_sleep_dep')
 
 # Configure icu
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
@@ -83,6 +84,7 @@ core_deps = [
 	spdlog_dep,
 	dynalo_dep,
 	thread_pool_dep,
+	hires_sleep_dep,
 	icu_dep,
 	freetype_dep,
 	harfbuzz_dep,
