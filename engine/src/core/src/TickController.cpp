@@ -129,7 +129,7 @@ namespace Cacao {
 			}
 		}
 
-		//If on Windows, we have to reset the time period since high_resolution_sleep messes with it.
+//If on Windows, we have to reset the time period since high_resolution_sleep messes with it.
 #ifdef _WIN32
 		timeEndPeriod(1);
 #endif
@@ -139,8 +139,8 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Running a dynamic tick; it's been " << std::chrono::duration_cast<time::dmilliseconds>(timestep) << " since the last one.";
 		std::random_device randDev;
 		std::mt19937_64 rng(randDev());
-		std::uniform_int_distribution<std::mt19937::result_type> dist(132, 1250);
-		high_resolution_sleep::sleep_us(dist(rng));
+		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 3);
+		high_resolution_sleep::sleep_ms(dist(rng));
 	}
 
 	void TickController::Impl::FixedTick() {
