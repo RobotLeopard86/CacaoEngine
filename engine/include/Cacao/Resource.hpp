@@ -39,4 +39,27 @@ namespace Cacao {
 
 		const std::vector<unsigned char> data;
 	};
+
+	/**
+	 * @brief A wrapper class that exists to track the state of resources in the overlay stack so that when changes occur, they are automatically reflected.
+	 */
+	template<typename T>
+		requires std::is_base_of_v<Resource, T>
+	class CACAO_API ResourceTracker {
+	  public:
+		/**
+		 * @brief Create a forwarder tracking a given resource address
+		 *
+		 * @param trackingAddress The resource address to track
+		 *
+		 * @throws BadValueException If the tracking address refers to a component
+		 */
+		ResourceForwarder(const std::string& trackingAddress);
+
+		/**
+		 * @brief Access the underlying resource
+		 */
+		std::shared_ptr<T> operator->() {
+		}
+	};
 }

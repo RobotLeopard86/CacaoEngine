@@ -26,17 +26,19 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Create and register a new resource
+		 * @brief Create and register a new resource (a ComponentExporter may not be created in this way)
 		 *
 		 * @param address The identifier component of the resource address to use
 		 * @param pkg The identifier of the package to associate this resource with
 		 *
-		 * @warning When instantiating a ComponentExporter, <b>do not</b> include the package identifier in the address parameter as is standard in resource addresses, since the package parameter exists to give that info.
-		 * A BadValueException will be thrown if the package identifier is included.
+		 * @throws NonexistentValueException If the requested package to associate with does not exist
+		 * @throws BadValueException If the requested package already has an asset of that name
+		 *
+		 * @note This does not return the resource. The reason for this is because
 		 */
 		template<typename T>
-			requires std::is_base_of_v<Resource, T>
-		std::shared_ptr<T> Instantiate(const std::string& address, const std::string& pkg) = delete;
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>)
+		void Instantiate(const std::string& address, const std::string& pkg) = delete;
 
 		/**
 		 * @brief Load a resource by address
@@ -44,10 +46,11 @@ namespace Cacao {
 		 * @param address The resource address to load from
 		 *
 		 * @throws BadValueException If the template type does not match the loaded type of the asset
+		 * @throws NonexistentValueException If there is no resource at the provided address
 		 */
 		template<typename T>
-			requires std::is_base_of_v<Resource, T>
-		std::shared_ptr<T> Load(const std::string& address) = delete;
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>)
+		ResourceTracker<T>& Load(const std::string& address) = delete;
 
 	  private:
 		struct Impl;
