@@ -2,6 +2,7 @@
 
 #include "Cacao/Window.hpp"
 #include "Cacao/Sound.hpp"
+#include "Cacao/ResourceManager.hpp"
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
 
@@ -17,6 +18,10 @@ namespace Cacao {
 
 		Window::Impl& GetWindow() {
 			return *Window::Get().impl;
+		}
+
+		ResourceManager::Impl& GetResourceManager() {
+			return *ResourceManager::Get().impl;
 		}
 
 		Sound::Impl& GetSound(Sound& s) {

@@ -2,6 +2,7 @@
 
 #include "DllHelper.hpp"
 #include "Resource.hpp"
+#include "BlobResource.hpp"
 
 #include <memory>
 
@@ -30,15 +31,16 @@ namespace Cacao {
 		 *
 		 * @param address The identifier component of the resource address to use
 		 * @param pkg The identifier of the package to associate this resource with
+		 * @param args The arguments to the resource constructor
 		 *
 		 * @throws NonexistentValueException If the requested package to associate with does not exist
 		 * @throws BadValueException If the requested package already has an asset of that name
 		 *
-		 * @note This does not return the resource. The reason for this is because
+		 * @note This does not return the resource. The reason for this is because when a resource is registered it may be lower in the overlay stack.
 		 */
-		template<typename T>
-			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>)
-		void Instantiate(const std::string& address, const std::string& pkg) = delete;
+		template<typename T, typename... Args>
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && std::is_constructible_v<T, Args&&...>
+		void Instantiate(const std::string& address, const std::string& pkg, Args&&... args) = delete;
 
 		/**
 		 * @brief Load a resource by address
@@ -52,9 +54,12 @@ namespace Cacao {
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>)
 		ResourceTracker<T>& Load(const std::string& address) = delete;
 
-	  private:
+		///@cond
 		struct Impl;
+		///@endcond
+	  private:
 		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
 
 		ResourceManager();
 		~ResourceManager();

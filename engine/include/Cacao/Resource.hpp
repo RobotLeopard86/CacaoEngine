@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace Cacao {
 	/**
@@ -30,17 +31,6 @@ namespace Cacao {
 	};
 
 	/**
-	 * @brief The base type for any game-defined resource types loaded from data blobs
-	 */
-	class CACAO_API BlobResource : public Resource {
-	  protected:
-		BlobResource(const std::string& addr, std::vector<unsigned char>&& data)
-		  : Resource(addr), data(data) {}
-
-		const std::vector<unsigned char> data;
-	};
-
-	/**
 	 * @brief A wrapper class that exists to track the state of resources in the overlay stack so that when changes occur, they are automatically reflected.
 	 */
 	template<typename T>
@@ -54,12 +44,16 @@ namespace Cacao {
 		 *
 		 * @throws BadValueException If the tracking address refers to a component
 		 */
-		ResourceForwarder(const std::string& trackingAddress);
+		ResourceTracker(const std::string& trackingAddress);
 
 		/**
 		 * @brief Access the underlying resource
 		 */
 		std::shared_ptr<T> operator->() {
+			//still need to figure out this mechanism
 		}
+
+	  private:
+		std::string track;
 	};
 }

@@ -3,9 +3,8 @@
 #include "DllHelper.hpp"
 #include "Transform.hpp"
 #include "Exceptions.hpp"
-#include "Event.hpp"
+#include "ComponentExporter.hpp"
 
-#include <typeindex>
 #include <map>
 #include <memory>
 #include <optional>
@@ -86,6 +85,19 @@ namespace Cacao {
 			Check<ContainerException>(!components.contains(std::type_index(typeid(T))), "A component of the type specified already exists on the actor!");
 			components.insert_or_assign(std::type_index(typeid(T)), std::make_shared<T>(std::forward<Args...>(args...)));
 			PostMountComponent(components[std::type_index(typeid(T))]);
+		}
+
+		/**
+		 * @brief Create a new component and add it to this actor
+		 *
+		 * @param exporter The ResourceTracker for the ComponentExporter from which to construct the
+		 *
+		 * @throws ContainerException If a component of this type already exists on the actor
+		 */
+		void MountComponent(ResourceTracker<ComponentExporter>& exporter) {
+			Check<ContainerException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
+			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->factory());
+			PostMountComponent(components[std::type_index(std::type_index(exporter->type))]);
 		}
 
 		/**
