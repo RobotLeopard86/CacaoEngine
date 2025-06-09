@@ -2,10 +2,11 @@
 
 #include <mutex>
 #include <string>
+#include <chrono>
 
 #include "DllHelper.hpp"
-#include "Log.hpp"
-#include "Time.hpp"
+
+using namespace std::chrono_literals;
 
 namespace Cacao {
 	/**
@@ -80,7 +81,7 @@ namespace Cacao {
 		 *
 		 * @return The initialization config values
 		 */
-		const InitConfig& GetInitConfig() {
+		const InitConfig& GetInitConfig() const {
 			return icfg;
 		}
 
@@ -149,7 +150,7 @@ namespace Cacao {
 		 *
 		 * @return The engine state
 		 */
-		const State GetState() {
+		State GetState() const {
 			std::lock_guard lk(stateMtx);
 			return state;
 		}

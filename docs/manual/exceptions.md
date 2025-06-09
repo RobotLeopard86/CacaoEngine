@@ -20,5 +20,6 @@ Cacao Engine exceptions come in a variety of different classes (though they are 
 * `BadValue` - A value was passed that did not meet constraints
 * `NonexistentValue` - A value was requested but an error/null value was returned instead
 * `NullValue` - A null value was given when a non-null value was expected
+* `ExistingValue` - An object was requested to be created but another one already exists with the requested identifier
 * `Container` - Something went wrong pertaining to a list or map
 * `Misc` - Anything that doesn't fit the above categories

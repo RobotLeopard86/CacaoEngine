@@ -34,7 +34,7 @@ namespace Cacao {
 		 * @param args The arguments to the resource constructor
 		 *
 		 * @throws NonexistentValueException If the requested package to associate with does not exist
-		 * @throws BadValueException If the requested package already has an asset of that name
+		 * @throws ExistingValueException If the requested package already has an asset of that name
 		 *
 		 * @note This does not return the resource. The reason for this is because when a resource is registered it may be lower in the overlay stack.
 		 */
