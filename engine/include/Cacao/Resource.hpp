@@ -3,7 +3,6 @@
 #include "DllHelper.hpp"
 
 #include <string>
-#include <vector>
 #include <memory>
 
 namespace Cacao {
