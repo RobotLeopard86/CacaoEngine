@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class Component &#8212; Cacao Engine Docs</title>
+    <title>Class OverlayStack &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Component';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1OverlayStack';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class ComponentExporter" href="classCacao_1_1ComponentExporter.html" />
-    <link rel="prev" title="Class Camera" href="classCacao_1_1Camera.html" />
+    <link rel="next" title="Class PAL" href="classCacao_1_1PAL.html" />
+    <link rel="prev" title="Template Class MultiFuture" href="classCacao_1_1MultiFuture.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -358,8 +358,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Component</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ComponentExporter.html">Class ComponentExporter</a></li>
@@ -388,8 +388,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1OverlayStack.html">Class OverlayStack</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class OverlayStack</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
@@ -512,7 +512,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Component</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class OverlayStack</span></li>
   </ul>
 </nav>
 </div>
@@ -529,108 +529,63 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-component">
-<span id="exhale-class-classcacao-1-1component"></span><h1>Class Component<a class="headerlink" href="#class-component" title="Link to this heading"><span/></a></h1>
+  <section id="class-overlaystack">
+<span id="exhale-class-classcacao-1-1overlaystack"></span><h1>Class OverlayStack<a class="headerlink" href="#class-overlaystack" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Component.hpp.html#file-engine-include-cacao-component-hpp"><span class="std std-ref">File Component.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_OverlayStack.hpp.html#file-engine-include-cacao-overlaystack-hpp"><span class="std std-ref">File OverlayStack.hpp</span></a></p></li>
 </ul>
-<section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="derived-type">
-<h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Script</span></code> (<a class="reference internal" href="classCacao_1_1Script.html#exhale-class-classcacao-1-1script"><span class="std std-ref">Class Script</span></a>)</p></li>
-</ul>
-</section>
-</section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9ComponentE">
-<span id="_CPPv3N5Cacao9ComponentE"></span><span id="_CPPv2N5Cacao9ComponentE"></span><span id="Cacao::Component"></span><span class="target" id="classCacao_1_1Component"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9ComponentE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>An object attached to an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> that performs tasks on its behalf. </p>
-<p>Subclassed by <a class="reference internal" href="classCacao_1_1Script.html#classCacao_1_1Script"><span class="std std-ref">Cacao::Script</span></a></p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStackE">
+<span id="_CPPv3N5Cacao12OverlayStackE"></span><span id="_CPPv2N5Cacao12OverlayStackE"></span><span id="Cacao::OverlayStack"></span><span class="target" id="classCacao_1_1OverlayStack"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverlayStack</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStackE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Package ordering handler singleton. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component9IsEnabledEv">
-<span id="_CPPv3N5Cacao9Component9IsEnabledEv"></span><span id="_CPPv2N5Cacao9Component9IsEnabledEv"></span><span id="Cacao::Component::IsEnabled"></span><span class="target" id="classCacao_1_1Component_1a304e1666e0045da5b8492d2bdd611070"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsEnabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component9IsEnabledEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if the component is enabled. </p>
-<p>This takes into account both if the component itself is enabled and its owning <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is active</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This will return false if the owning <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is inactive </p>
-</div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component10SetEnabledEb">
-<span id="_CPPv3N5Cacao9Component10SetEnabledEb"></span><span id="_CPPv2N5Cacao9Component10SetEnabledEb"></span><span id="Cacao::Component::SetEnabled__b"></span><span class="target" id="classCacao_1_1Component_1ae6882d64033281699d7ec57435706185"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetEnabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component10SetEnabledEb" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Activate or deactivate the component. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE">
+<span id="_CPPv3N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE"></span><span id="_CPPv2N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE"></span><span id="Cacao::OverlayStack::RegisterPkg__ssCR"></span><span class="target" id="classCacao_1_1OverlayStack_1a53ec9ed54135add80e55b6a40ec7ef3a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterPkg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Register a new game package. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>state</strong> – The new activation state </p>
+<dd class="field-odd"><p><strong>id</strong> – The ID of the new package; should be in reverse domain format (e.g. com.example.MyPkg), but this is not enforced</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If there is already a package with that ID </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component8GetOwnerEv">
-<span id="_CPPv3N5Cacao9Component8GetOwnerEv"></span><span id="_CPPv2N5Cacao9Component8GetOwnerEv"></span><span id="Cacao::Component::GetOwner"></span><span class="target" id="classCacao_1_1Component_1a0ea6f6165785f8bc93c55277998c2fb9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetOwner</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component8GetOwnerEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get the owning actor of this component. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack13UnregisterPkgERKNSt6stringE">
+<span id="_CPPv3N5Cacao12OverlayStack13UnregisterPkgERKNSt6stringE"></span><span id="_CPPv2N5Cacao12OverlayStack13UnregisterPkgERKNSt6stringE"></span><span id="Cacao::OverlayStack::UnregisterPkg__ssCR"></span><span class="target" id="classCacao_1_1OverlayStack_1a3c3bd9542636a7623c0727f2aa19d336"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnregisterPkg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack13UnregisterPkgERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Unregister a game package. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the actor no longer exists </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – The ID of the package</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A reference to the owning actor</p>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If there is already no package with that ID </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If the requested package is still used in the stack </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component7OnMountEv">
-<span id="_CPPv3N5Cacao9Component7OnMountEv"></span><span id="_CPPv2N5Cacao9Component7OnMountEv"></span><span id="Cacao::Component::OnMount"></span><span class="target" id="classCacao_1_1Component_1ac276cbd2b8a9adf10bbd10b62d5e9e5b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnMount</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component7OnMountEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Runs when the component is first mounted on an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a>. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>All setup should be performed here, <strong>NOT</strong> in the constructor. Only when this function is called is the component properly configured. </p>
-</div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9ComponentD0Ev">
-<span id="_CPPv3N5Cacao9ComponentD0Ev"></span><span id="_CPPv2N5Cacao9ComponentD0Ev"></span><span id="Cacao::Component::~Component"></span><span class="target" id="classCacao_1_1Component_1a6f11670fc6cf0050d7c5b7927fc0bfaa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Component</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9ComponentD0Ev" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component9ComponentEv">
-<span id="_CPPv3N5Cacao9Component9ComponentEv"></span><span id="_CPPv2N5Cacao9Component9ComponentEv"></span><span id="Cacao::Component::Component"></span><span class="target" id="classCacao_1_1Component_1ad5aef00283ecada1461371e9584f25ac"></span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component9ComponentEv" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component19OnEnableStateChangeEv">
-<span id="_CPPv3N5Cacao9Component19OnEnableStateChangeEv"></span><span id="_CPPv2N5Cacao9Component19OnEnableStateChangeEv"></span><span id="Cacao::Component::OnEnableStateChange"></span><span class="target" id="classCacao_1_1Component_1a5419c228b0ed80e9ad2e57dcdb2b2342"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnEnableStateChange</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component19OnEnableStateChangeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component5actorE">
-<span id="_CPPv3N5Cacao9Component5actorE"></span><span id="_CPPv2N5Cacao9Component5actorE"></span><span id="Cacao::Component::actor__std::weak_ptr:Actor:"></span><span class="target" id="classCacao_1_1Component_1a26b6a92f517c9b84c0510fcf2b4be4cf"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">weak_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">actor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9Component5actorE" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
-<dl>
-<dt class="sig sig-object cpp">
-<em class="property"><span class="pre">friend</span> <span class="pre">class</span></em> <span class="pre">Actor</span></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack3GetEv">
+<span id="_CPPv3N5Cacao12OverlayStack3GetEv"></span><span id="_CPPv2N5Cacao12OverlayStack3GetEv"></span><span id="Cacao::OverlayStack::Get"></span><span class="target" id="classCacao_1_1OverlayStack_1aff913e9e0eddbc5b6782f72a1e52e1d1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao12OverlayStackE" title="Cacao::OverlayStack"><span class="n"><span class="pre">OverlayStack</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack3GetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
 </dl>
+</dd></dl>
 
 </div>
 </dd></dl>
@@ -649,20 +604,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Camera.html"
+       href="classCacao_1_1MultiFuture.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Camera</p>
+        <p class="prev-next-title">Template Class MultiFuture</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1ComponentExporter.html"
+       href="classCacao_1_1PAL.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class ComponentExporter</p>
+        <p class="prev-next-title">Class PAL</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -685,20 +640,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9ComponentE"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9IsEnabledEv"><code class="docutils literal notranslate"><span class="pre">Component::IsEnabled()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component10SetEnabledEb"><code class="docutils literal notranslate"><span class="pre">Component::SetEnabled()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component8GetOwnerEv"><code class="docutils literal notranslate"><span class="pre">Component::GetOwner()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component7OnMountEv"><code class="docutils literal notranslate"><span class="pre">Component::OnMount()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9ComponentD0Ev"><code class="docutils literal notranslate"><span class="pre">Component::~Component()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9ComponentEv"><code class="docutils literal notranslate"><span class="pre">Component::Component()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component19OnEnableStateChangeEv"><code class="docutils literal notranslate"><span class="pre">Component::OnEnableStateChange()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component5actorE"><code class="docutils literal notranslate"><span class="pre">Component::actor</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStackE"><code class="docutils literal notranslate"><span class="pre">OverlayStack</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OverlayStack::RegisterPkg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack13UnregisterPkgERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OverlayStack::UnregisterPkg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack3GetEv"><code class="docutils literal notranslate"><span class="pre">OverlayStack::Get()</span></code></a></li>
 </ul>
 </li>
 </ul>

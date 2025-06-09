@@ -386,10 +386,11 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Log.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Time.hpp&quot;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono_literals</span><span class="p">;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Engine</span><span class="w"> </span><span class="p">{</span>
@@ -419,7 +420,7 @@
 <span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">forceX11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">InitConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetInitConfig</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">InitConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetInitConfig</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">icfg</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -444,7 +445,7 @@
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CoreShutdown</span><span class="p">();</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">State</span><span class="w"> </span><span class="nf">GetState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">State</span><span class="w"> </span><span class="nf">GetState</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">stateMtx</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
