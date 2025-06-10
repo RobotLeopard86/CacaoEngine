@@ -1,4 +1,5 @@
 #include "Cacao/Log.hpp"
+#include "SingletonGet.hpp"
 
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -43,6 +44,8 @@ namespace Cacao {
 	}
 
 	Logger::~Logger() {}
+
+	CACAOST_GET(Logger)
 
 	Logger::LogToken Logger::Engine(Level level) {
 		LogToken lt;

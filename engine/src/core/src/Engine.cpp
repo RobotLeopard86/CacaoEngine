@@ -8,6 +8,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
+#include "SingletonGet.hpp"
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
@@ -25,10 +26,7 @@ namespace Cacao {
 		if(state == State::Alive) CoreShutdown();
 	}
 
-	Engine& Engine::Get() {
-		static Engine _instance;
-		return _instance;
-	}
+	CACAOST_GET(Engine)
 
 	void Engine::CoreInit(const Engine::InitConfig& initCfg) {
 		Check<BadStateException>(state == State::Dead, "Engine must be in dead state to run core initialization!");
@@ -190,4 +188,6 @@ namespace Cacao {
 		state = State::Dead;
 		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete.";
 	}
+
+	CACAOST_GET(Window)
 }

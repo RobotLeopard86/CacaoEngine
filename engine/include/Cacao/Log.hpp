@@ -18,10 +18,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static Logger& Get() {
-			static Logger _instance;
-			return _instance;
-		}
+		static Logger& Get();
 
 		///@cond
 		Logger(const Logger&) = delete;

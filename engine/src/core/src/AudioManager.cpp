@@ -1,5 +1,6 @@
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "SingletonGet.hpp"
 
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -23,6 +24,8 @@ namespace Cacao {
 	AudioManager::~AudioManager() {
 		if(IsInitialized()) Terminate();
 	}
+
+	CACAOST_GET(AudioManager)
 
 	void AudioManager::Initialize() {
 		Check<BadInitStateException>(!IsInitialized(), "The audio system must not be initialized when Initialize is called!");

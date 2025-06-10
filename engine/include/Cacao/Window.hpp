@@ -18,10 +18,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static Window& Get() {
-			static Window _instance;
-			return _instance;
-		}
+		static Window& Get();
 
 		///@cond
 		Window(const Window&) = delete;

@@ -1,10 +1,8 @@
 #pragma once
 
 #include "DllHelper.hpp"
-#include "Exceptions.hpp"
 
 #include <memory>
-#include <chrono>
 
 namespace Cacao {
 	/**
@@ -17,10 +15,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static TickController& Get() {
-			static TickController _instance;
-			return _instance;
-		}
+		static TickController& Get();
 
 		///@cond
 		TickController(const TickController&) = delete;

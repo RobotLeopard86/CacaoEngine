@@ -1,4 +1,5 @@
 #include "Cacao/ThreadPool.hpp"
+#include "SingletonGet.hpp"
 
 #include "thread_pool/thread_pool.h"
 
@@ -18,6 +19,8 @@ namespace Cacao {
 	ThreadPool::~ThreadPool() {
 		if(IsRunning()) Stop();
 	}
+
+	CACAOST_GET(ThreadPool)
 
 	bool ThreadPool::IsRunning() {
 		return (bool)impl->pool;

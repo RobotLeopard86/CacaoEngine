@@ -1,12 +1,10 @@
 #pragma once
 
 #include <map>
-#include <functional>
 #include <vector>
 
 #include "Event.hpp"
 #include "EventConsumer.hpp"
-#include "MultiFuture.hpp"
 #include "DllHelper.hpp"
 
 namespace Cacao {
@@ -20,10 +18,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static EventManager& Get() {
-			static EventManager _instance;
-			return _instance;
-		}
+		static EventManager& Get();
 
 		///@cond
 		EventManager(const EventManager&) = delete;

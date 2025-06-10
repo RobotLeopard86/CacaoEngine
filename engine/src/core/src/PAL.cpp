@@ -3,6 +3,7 @@
 #include "PALCommon.hpp"
 #include "ModuleCreators.hpp"
 #include "ImplAccessor.hpp"
+#include "SingletonGet.hpp"
 
 namespace Cacao {
 	struct PAL::Impl {
@@ -75,8 +76,6 @@ namespace Cacao {
 
 	ImplAccessor::ImplAccessor() {}
 
-	ImplAccessor& ImplAccessor::Get() {
-		static ImplAccessor _instance;
-		return _instance;
-	}
+	CACAOST_GET(ImplAccessor)
+	CACAOST_GET(PAL)
 }

@@ -49,7 +49,8 @@ namespace Cacao {
 		 * @brief Access the underlying resource
 		 */
 		std::shared_ptr<T> operator->() {
-			//still need to figure out this mechanism
+			//still need to figure out this mechanism, this is a dummy placeholder
+			return std::shared_ptr<T>(nullptr);
 		}
 
 	  private:

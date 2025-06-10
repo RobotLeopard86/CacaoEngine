@@ -15,10 +15,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static AudioManager& Get() {
-			static AudioManager _instance;
-			return _instance;
-		}
+		static AudioManager& Get();
 
 		///@cond
 		AudioManager(const AudioManager&) = delete;

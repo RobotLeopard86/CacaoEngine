@@ -2,13 +2,12 @@
 #include "Cacao/ThreadPool.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/Time.hpp"
+#include "SingletonGet.hpp"
 
 #include "high_resolution_sleep.hpp"
 
 #include <chrono>
 #include <array>
-#include <numeric>
-#include <cmath>
 #include <random>
 
 #ifdef _WIN32
@@ -38,6 +37,8 @@ namespace Cacao {
 	TickController::~TickController() {
 		if(running) Stop();
 	}
+
+	CACAOST_GET(TickController)
 
 	void TickController::Start() {
 		Check<BadInitStateException>(!running, "The tick controller must not be running when Start is called!");

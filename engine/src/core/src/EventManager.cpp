@@ -1,9 +1,12 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "SingletonGet.hpp"
 
 #include <stdexcept>
 
 namespace Cacao {
+	CACAOST_GET(EventManager)
+
 	void EventManager::UnsubscribeAllConsumers() {
 		std::map<std::string, std::vector<EventConsumer>> consumersCopy;
 

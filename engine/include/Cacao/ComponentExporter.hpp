@@ -38,6 +38,7 @@ namespace Cacao {
 			RegisterSelf();
 		}
 
-		void RegisterSelf();
+		//stub
+		void RegisterSelf() {}
 	};
 }

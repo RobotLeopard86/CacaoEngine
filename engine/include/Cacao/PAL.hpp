@@ -19,10 +19,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static PAL& Get() {
-			static PAL _instance;
-			return _instance;
-		}
+		static PAL& Get();
 
 		///@cond
 		PAL(const PAL&) = delete;

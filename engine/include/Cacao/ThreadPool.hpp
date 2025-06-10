@@ -21,10 +21,7 @@ namespace Cacao {
 		 *
 		 * @return The instance
 		 */
-		static ThreadPool& Get() {
-			static ThreadPool _instance;
-			return _instance;
-		}
+		static ThreadPool& Get();
 
 		///@cond
 		ThreadPool(const ThreadPool&) = delete;
