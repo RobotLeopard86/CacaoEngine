@@ -445,7 +445,7 @@
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CoreShutdown</span><span class="p">();</span>
 
-<span class="w">        </span><span class="n">State</span><span class="w"> </span><span class="nf">GetState</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">State</span><span class="w"> </span><span class="nf">GetState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">stateMtx</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
