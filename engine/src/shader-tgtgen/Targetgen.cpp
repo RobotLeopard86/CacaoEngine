@@ -40,6 +40,8 @@ namespace Targetgen {
 			return ComPtr<ISlangBlob>(new VecBlob(v));
 		}
 
+		virtual ~VecBlob() {}
+
 	  private:
 		const std::vector<unsigned char> data;
 		std::atomic<uint32_t> refCount;
@@ -180,5 +182,8 @@ namespace Targetgen {
 				CheckException(false, err.str());
 			}
 		}
+
+		//Return result
+		return cso;
 	}
 }

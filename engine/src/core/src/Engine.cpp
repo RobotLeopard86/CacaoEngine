@@ -64,13 +64,17 @@ namespace Cacao {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run graphics initialization!");
 
 		//This will call the Window constructor which will decide whether X or Wayland is to be used
-		//We don't care about the window yet, so we just discard it
+		//We don't care about the window yet, so we just discard the return value
 		{
 			Window::Get();
 		}
 
 		//In descending order of priority
+#ifndef __APPLE__
 		std::vector<std::string> backends = {"vulkan", "opengl"};
+#else
+		std::vector<std::string> backends = {"opengl"};
+#endif
 		if(!icfg.initialRequestedBackend.empty()) {
 			auto it = std::find(backends.begin(), backends.end(), icfg.initialRequestedBackend);
 			if(it != backends.end()) {

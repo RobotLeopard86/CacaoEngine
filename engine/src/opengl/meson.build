@@ -32,7 +32,7 @@ else
 endif
 
 # OpenGL module
-glmodule = shared_library('cacaogl', sources: gl_sources, include_directories: gl_inc, 
-	dependencies: gl_deps, install: true, install_tag: 'cacao', override_options: ['b_lundef=false'])
+glmodule = static_library('cacaogl', sources: gl_sources, include_directories: gl_inc, 
+	dependencies: gl_deps, install: true, install_tag: 'cacao', pic: true)
 gl_dep = declare_dependency(link_with: glmodule)
 gfx_deps += gl_dep

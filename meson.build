@@ -83,6 +83,19 @@ if host_machine.system() == 'linux'
 	endforeach
 endif
 
+# Get graphics backends
+backends = get_option('backends')
+if backends.length() == 0
+    error('At least one graphics backend must be selected!')
+endif
+backend_keymap = {
+	'opengl': 'GL',
+	'vulkan': 'VK'
+}
+foreach b : backends
+	add_project_arguments('-DHAS_' + backend_keymap[b], language: ['c', 'cpp'])
+endforeach
+
 # Define debug macro
 if bt.contains('debug')
 	add_project_arguments(['-D_DEBUG'], language: 'cpp')

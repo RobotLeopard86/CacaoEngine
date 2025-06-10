@@ -22,15 +22,19 @@ namespace Cacao {
 	void PAL::SetModule(const std::string& mod) {
 		Check<MiscException>(impl->mod.use_count() <= 1, "Cannot change the module when objects referencing the old one still exist!");
 #ifndef __APPLE__
+#ifdef HAS_VK
 		if(mod.compare("vulkan") == 0) {
 			impl->mod = CreateVulkanModule();
 			return;
 		}
 #endif
+#endif
+#ifdef HAS_GL
 		if(mod.compare("opengl") == 0) {
 			impl->mod = CreateOpenGLModule();
 			return;
 		}
+#endif
 		Check<NonexistentValueException>(false, "The requested module does not exist!");
 	}
 

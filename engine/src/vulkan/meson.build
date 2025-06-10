@@ -37,9 +37,9 @@ else
 endif
 
 # Vulkan module
-vkmodule = shared_library('cacaovk', sources: vk_sources, include_directories: vk_inc, 
+vkmodule = static_library('cacaovk', sources: vk_sources, include_directories: vk_inc, pic: true,
 	dependencies: vk_deps, cpp_args: ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', 
 	'-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1003000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', 
-	'-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1', '-Wno-nullability-completeness'], install: true, install_tag: 'cacao', override_options: ['b_lundef=false'])
+	'-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1', '-Wno-nullability-completeness'], install: true, install_tag: 'cacao')
 vk_dep = declare_dependency(link_with: vkmodule)
 gfx_deps += vk_dep

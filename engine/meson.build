@@ -10,10 +10,6 @@ install_subdir('include' / 'Cacao', install_dir: 'include', install_tag: 'cacao'
 module_private_headers = include_directories('src' / 'private')
 
 # Always-included modules
-backends = get_option('backends')
-if backends.length() == 0
-    error('At least one graphics backend must be selected!')
-endif
 subdir('src' / 'shader-tgtgen')
 subdir('src' / 'core')
 
@@ -36,7 +32,7 @@ foreach b : backends
 endforeach
 
 # Engine library
-libcacao = shared_library('cacao', dependencies: [core_dep, windowing_deps, gfx_deps])
+libcacao = shared_library('cacao', dependencies: [core_dep, windowing_deps, gfx_deps], install: true, install_tag: 'cacao')
 cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [core_deps])
 
 # Game runtime
