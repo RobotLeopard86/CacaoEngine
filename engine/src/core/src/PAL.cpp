@@ -27,7 +27,7 @@ namespace Cacao {
 		}
 #endif
 		if(mod.compare("opengl") == 0) {
-			//impl->mod = CreateOpenGLModule();
+			impl->mod = CreateOpenGLModule();
 			return;
 		}
 		Check<NonexistentValueException>(false, "The requested module does not exist!");

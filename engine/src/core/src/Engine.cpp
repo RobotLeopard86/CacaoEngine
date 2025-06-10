@@ -13,7 +13,6 @@
 #define CACAO_VER "unknown"
 #endif
 
-#include <array>
 #include <vector>
 
 namespace Cacao {
@@ -88,8 +87,8 @@ namespace Cacao {
 		for(const std::string& backend : backends) {
 			//Set module in PAL
 			Logger::Engine(Logger::Level::Trace) << "Trying backend \"" << backend << "\"...";
-			PAL::Get().SetModule(backend);
 			try {
+				PAL::Get().SetModule(backend);
 				if(PAL::Get().InitializeModule()) {
 					found = true;
 					chosen = backend;

@@ -150,7 +150,7 @@ namespace Cacao {
 		 *
 		 * @return The engine state
 		 */
-		State GetState() const {
+		State GetState() {
 			std::lock_guard lk(stateMtx);
 			return state;
 		}

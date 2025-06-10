@@ -11,6 +11,9 @@ module_private_headers = include_directories('src' / 'private')
 
 # Always-included modules
 backends = get_option('backends')
+if backends.length() == 0
+    error('At least one graphics backend must be selected!')
+endif
 subdir('src' / 'shader-tgtgen')
 subdir('src' / 'core')
 
