@@ -20,11 +20,11 @@ elif host_machine.system() == 'linux'
 	gl_inc += '..' / 'linux'
     if linux_windowing.contains('x11')
 		gl_sources +=  'wsi' / 'XWSI.cpp'
-		gl_dep += [xcb_dep, xcb_ks_dep, xcb_atom_dep, xcb_randr_dep]
+		gl_deps += [xcb_dep, xcb_ks_dep, xcb_atom_dep, xcb_randr_dep]
 	endif
 	if linux_windowing.contains('wayland')
 		gl_sources += 'wsi' / 'WaylandWSI.cpp'
-		gl_dep += [wayland_client, xdg_output_dep, xkbcommon_dep, libdecor_dep]
+		gl_deps += [wayland_client, xdg_output_dep, xkbcommon_dep, libdecor_dep]
 	endif
 	gl_sources += 'wsi' / 'LinuxWSI.cpp'
 else
