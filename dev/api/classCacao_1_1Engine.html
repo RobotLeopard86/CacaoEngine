@@ -568,8 +568,8 @@
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine5State7StoppedE">
-<span id="_CPPv3N5Cacao6Engine5State7StoppedE"></span><span id="_CPPv2N5Cacao6Engine5State7StoppedE"></span><span class="target" id="classCacao_1_1Engine_1a4be9704fc54c3b6a5422b7530dccadacac23e2b09ebe6bf4cb5e2a9abe85c0be2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Stopped</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine5State7StoppedE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine5State5ReadyE">
+<span id="_CPPv3N5Cacao6Engine5State5ReadyE"></span><span id="_CPPv2N5Cacao6Engine5State5ReadyE"></span><span class="target" id="classCacao_1_1Engine_1a4be9704fc54c3b6a5422b7530dccadacae7d31fc0602fb2ede144d18cdffd816b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ready</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine5State5ReadyE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -612,7 +612,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine3RunEv">
 <span id="_CPPv3N5Cacao6Engine3RunEv"></span><span id="_CPPv2N5Cacao6Engine3RunEv"></span><span id="Cacao::Engine::Run"></span><span class="target" id="classCacao_1_1Engine_1a2c8e56b1f1faaf246121a72590f61c99"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine3RunEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Perform any final pre-run tasks and start the game loop. </p>
-<p>The engine must be in the Stopped state when this method is called </p>
+<p>The engine must be in the Ready state when this method is called </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -627,7 +627,7 @@
 <span id="_CPPv3N5Cacao6Engine11GfxShutdownEv"></span><span id="_CPPv2N5Cacao6Engine11GfxShutdownEv"></span><span id="Cacao::Engine::GfxShutdown"></span><span class="target" id="classCacao_1_1Engine_1a6b22a51a8990bc1a8cf9694ed37b0625"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GfxShutdown</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine11GfxShutdownEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Shutdown windowing and graphics systems. </p>
 <p>Any GPU resources still existing at this time will be destroyed via appropriate functions before shutdown</p>
-<p>The engine must be in the Stopped state when this method is called </p>
+<p>The engine must be in the Ready state when this method is called </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -792,7 +792,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine5StateE"><code class="docutils literal notranslate"><span class="pre">Engine::State</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine5State4DeadE"><code class="docutils literal notranslate"><span class="pre">Engine::State::Dead</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine5State5AliveE"><code class="docutils literal notranslate"><span class="pre">Engine::State::Alive</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine5State7StoppedE"><code class="docutils literal notranslate"><span class="pre">Engine::State::Stopped</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine5State5ReadyE"><code class="docutils literal notranslate"><span class="pre">Engine::State::Ready</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine5State7RunningE"><code class="docutils literal notranslate"><span class="pre">Engine::State::Running</span></code></a></li>
 </ul>
 </li>
