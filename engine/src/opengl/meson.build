@@ -14,7 +14,7 @@ if host_machine.system() == 'windows'
     gl_sources += 'wsi' / 'Win32WSI.cpp'
 	gl_inc += '..' / 'win32'
 elif host_machine.system() == 'darwin'
-    #gl_sources += 'wsi' / 'MacOSWSI.cpp'
+    gl_sources += 'ctx' / 'MacOS.mm'
 	gl_inc += '..' / 'macos'
 elif host_machine.system() == 'linux'
 	gl_inc += '..' / 'linux'
@@ -33,6 +33,6 @@ endif
 
 # OpenGL module
 glmodule = static_library('cacaogl', sources: gl_sources, include_directories: gl_inc, 
-	dependencies: gl_deps, install: true, install_tag: 'cacao', pic: true)
+	dependencies: gl_deps, install: true, install_tag: 'cacao', pic: true, objcpp_args: '-Wno-deprecated-declarations')
 gl_dep = declare_dependency(link_with: glmodule)
 gfx_deps += gl_dep

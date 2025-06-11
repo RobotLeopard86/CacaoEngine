@@ -48,6 +48,8 @@ namespace Cacao {
 
 	Window::~Window() {
 		if(open) Close();
+		[impl->mac->del release];
+		[impl->mac->app release];
 	}
 
 	void Window::Open(const std::string& title, glm::uvec2 size, bool visible, Mode mode) {
@@ -67,11 +69,12 @@ namespace Cacao {
 			impl->mac->wdel = [[CacaoWinDelegate alloc] init];
 			impl->mac->win = [[NSWindow alloc] initWithContentRect:frame styleMask:windowedStyle backing:NSBackingStoreBuffered defer:NO];
 			[impl->mac->win setTitle:[[NSString alloc] initWithCString:title.c_str() encoding:[NSString defaultCStringEncoding]]];
+			[impl->mac->win setIsVisible:visible];
 			[impl->mac->win setDelegate:impl->mac->wdel];
 			[impl->mac->win makeKeyAndOrderFront:nil];
 
 			//Connect graphics
-			//PAL::Get().GfxConnect();
+			PAL::Get().GfxConnect();
 
 			//Start app loop
 			[impl->mac->app activateIgnoringOtherApps:YES];
@@ -90,7 +93,7 @@ namespace Cacao {
 		open = false;
 
 		//Disconnect graphics
-		//PAL::Get().GfxDisconnect();
+		PAL::Get().GfxDisconnect();
 
 		//Close window and release delegate
 		[impl->mac->win close];

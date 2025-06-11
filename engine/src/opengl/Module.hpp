@@ -3,9 +3,6 @@
 #include "PALCommon.hpp"
 #include "Cacao/EventSystem.hpp"
 
-#include <thread>
-#include <mutex>
-
 namespace Cacao {
 	class OpenGLModule : public PALModule {
 	  public:
@@ -20,18 +17,14 @@ namespace Cacao {
 		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
 		\* ------------------------------------------- */
 
-		bool vsync;
-
 		OpenGLModule()
 		  : PALModule("opengl") {}
 		~OpenGLModule() {}
 
 	  private:
 		EventConsumer resizer;
+		
 	};
 
 	inline std::shared_ptr<OpenGLModule> gl;
-
-	void UpdateCtxSync();
-	void UpdateCtxConnection();
 }
