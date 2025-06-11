@@ -1,7 +1,9 @@
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/EventSystem.hpp"
+#include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
 #include <Foundation/Foundation.h>
 #include <AppKit/AppKit.h>
@@ -19,7 +21,7 @@ namespace Cacao {
 
 		//Initialize and configure NSApplication
 		@autoreleasepool {
-			[CacaoApp sharedApplication];
+			impl->mac->app = [CacaoApp sharedApplication];
 			impl->mac->del = [[CacaoAppDelegate alloc] init];
 			[impl->mac->app setActivationPolicy:NSApplicationActivationPolicyRegular];
 			[impl->mac->app setDelegate:impl->mac->del];

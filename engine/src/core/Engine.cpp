@@ -22,7 +22,7 @@ namespace Cacao {
 
 	Engine::~Engine() {
 		if(state == State::Running) Quit();
-		if(state == State::Stopped) GfxShutdown();
+		if(state == State::Ready) GfxShutdown();
 		if(state == State::Alive) CoreShutdown();
 	}
 
@@ -115,11 +115,11 @@ namespace Cacao {
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
 		std::lock_guard lkg(stateMtx);
-		state = State::Stopped;
+		state = State::Ready;
 	}
 
 	void Engine::Run() {
-		Check<BadStateException>(state == State::Stopped, "Engine must be in stopped state to start!");
+		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to start!");
 		{
 			std::lock_guard lkg(stateMtx);
 			state = State::Running;
@@ -144,7 +144,7 @@ namespace Cacao {
 
 		//Set state
 		std::lock_guard lkg(stateMtx);
-		state = State::Stopped;
+		state = State::Ready;
 		Logger::Engine(Logger::Level::Info) << "Engine shutdown requested!";
 
 		//Stop the tick controller
@@ -157,7 +157,7 @@ namespace Cacao {
 	}
 
 	void Engine::GfxShutdown() {
-		Check<BadStateException>(state == State::Stopped, "Engine must be in stopped state to run graphics shutdown!");
+		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
 
 		//Close window
 		Logger::Engine(Logger::Level::Trace) << "Destroying window...";
@@ -166,6 +166,7 @@ namespace Cacao {
 		//Unload backend
 		Logger::Engine(Logger::Level::Trace) << "Terminating graphics backend...";
 		PAL::Get().TerminateModule();
+		PAL::Get().DestroyMP();
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;

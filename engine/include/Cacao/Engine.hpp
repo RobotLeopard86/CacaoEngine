@@ -93,7 +93,7 @@ namespace Cacao {
 		enum class State {
 			Dead,
 			Alive,
-			Stopped,
+			Ready,
 			Running
 		};
 
@@ -116,7 +116,7 @@ namespace Cacao {
 		/**
 		 * @brief Perform any final pre-run tasks and start the game loop
 		 *
-		 * The engine must be in the Stopped state when this method is called
+		 * The engine must be in the Ready state when this method is called
 		 */
 		void Run();
 
@@ -132,7 +132,7 @@ namespace Cacao {
 		 *
 		 * @details Any GPU resources still existing at this time will be destroyed via appropriate functions before shutdown
 		 *
-		 * The engine must be in the Stopped state when this method is called
+		 * The engine must be in the Ready state when this method is called
 		 */
 		void GfxShutdown();
 
