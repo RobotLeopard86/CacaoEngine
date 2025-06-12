@@ -386,6 +386,8 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;crossguid/guid.hpp&quot;</span>
+
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
@@ -398,9 +400,17 @@
 <span class="w">        </span><span class="n">OverlayStack</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">OverlayStack</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
 <span class="w">        </span><span class="n">OverlayStack</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">OverlayStack</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RegisterPkg</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">PackageDescriptor</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">RegisterPkg</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">PackageDescriptor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pkgDesc</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UnregisterPkg</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetPkgPosition</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">int8_t</span><span class="w"> </span><span class="n">pos</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetPrimaryPkg</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="nf">ResolveResourceAddr</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">);</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">OverlayStack</span><span class="p">();</span>

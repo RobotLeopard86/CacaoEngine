@@ -543,12 +543,15 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE">
-<span id="_CPPv3N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE"></span><span id="_CPPv2N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE"></span><span id="Cacao::OverlayStack::RegisterPkg__ssCR"></span><span class="target" id="classCacao_1_1OverlayStack_1a53ec9ed54135add80e55b6a40ec7ef3a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterPkg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringERK17PackageDescriptor">
+<span id="_CPPv3N5Cacao12OverlayStack11RegisterPkgERKNSt6stringERK17PackageDescriptor"></span><span id="_CPPv2N5Cacao12OverlayStack11RegisterPkgERKNSt6stringERK17PackageDescriptor"></span><span id="Cacao::OverlayStack::RegisterPkg__ssCR.PackageDescriptorCR"></span><span class="target" id="classCacao_1_1OverlayStack_1a8948062ba2cad32c95934b6f6b4c39c5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterPkg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PackageDescriptor</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pkgDesc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringERK17PackageDescriptor" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Register a new game package. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>id</strong> – The ID of the new package; should be in reverse domain format (e.g. com.example.MyPkg), but this is not enforced</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The ID of the new package; should be in reverse domain format (e.g. com.example.MyPkg), but this is not enforced </p></li>
+<li><p><strong>pkgDesc</strong> – The package descriptor</p></li>
+</ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If there is already a package with that ID </p>
@@ -567,8 +570,66 @@
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If there is already no package with that ID </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If the requested package is still used in the stack </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">MiscException</span></span></span> – If the requested package is hosting a resource that is not provided by another package in the stack </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack14SetPkgPositionERKNSt6stringE6int8_t">
+<span id="_CPPv3N5Cacao12OverlayStack14SetPkgPositionERKNSt6stringE6int8_t"></span><span id="_CPPv2N5Cacao12OverlayStack14SetPkgPositionERKNSt6stringE6int8_t"></span><span id="Cacao::OverlayStack::SetPkgPosition__ssCR.int8_t"></span><span class="target" id="classCacao_1_1OverlayStack_1a720a337c9b6e26778098fb9564fba819"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPkgPosition</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span>, <span class="n"><span class="pre">int8_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack14SetPkgPositionERKNSt6stringE6int8_t" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the position of a package in the stack. </p>
+<p><p><div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Because the <code class="docutils literal notranslate"><span class="pre">pos</span></code> parameter is clamped, you can use <code class="docutils literal notranslate"><span class="pre">-INT8_MAX</span></code> and <code class="docutils literal notranslate"><span class="pre">INT8_MAX</span></code> to move a package to the bottom and top of the stack respectively.</p>
+</div>
+</p>
+ </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The ID of the package to move </p></li>
+<li><p><strong>pos</strong> – The new position of the package; this will be clamped to the stack size if exceeding it</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If there is already no package with that ID </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the package specified is the primary package</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack13SetPrimaryPkgERKNSt6stringE">
+<span id="_CPPv3N5Cacao12OverlayStack13SetPrimaryPkgERKNSt6stringE"></span><span id="_CPPv2N5Cacao12OverlayStack13SetPrimaryPkgERKNSt6stringE"></span><span id="Cacao::OverlayStack::SetPrimaryPkg__ssCR"></span><span class="target" id="classCacao_1_1OverlayStack_1a579fe47cbbe71de393c7961fa1ea1135"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPrimaryPkg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack13SetPrimaryPkgERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set a package as the primary package. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This will effectively move the package to the bottom of the stack, since nothing can be below the primary package</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – The ID of the package to make the primary package</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If there is already no package with that ID </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12OverlayStack19ResolveResourceAddrERKNSt6stringE">
+<span id="_CPPv3N5Cacao12OverlayStack19ResolveResourceAddrERKNSt6stringE"></span><span id="_CPPv2N5Cacao12OverlayStack19ResolveResourceAddrERKNSt6stringE"></span><span id="Cacao::OverlayStack::ResolveResourceAddr__ssCR"></span><span class="target" id="classCacao_1_1OverlayStack_1a147fc6478b9df29f9acd69732f906352"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResolveResourceAddr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12OverlayStack19ResolveResourceAddrERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Convert a resource address to a resource cache lookup ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> – The resource address to resolve</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If there is no known package that can provide the requested resource </p>
 </dd>
 </dl>
 </dd></dl>
@@ -642,8 +703,11 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStackE"><code class="docutils literal notranslate"><span class="pre">OverlayStack</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OverlayStack::RegisterPkg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack11RegisterPkgERKNSt6stringERK17PackageDescriptor"><code class="docutils literal notranslate"><span class="pre">OverlayStack::RegisterPkg()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack13UnregisterPkgERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OverlayStack::UnregisterPkg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack14SetPkgPositionERKNSt6stringE6int8_t"><code class="docutils literal notranslate"><span class="pre">OverlayStack::SetPkgPosition()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack13SetPrimaryPkgERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OverlayStack::SetPrimaryPkg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack19ResolveResourceAddrERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OverlayStack::ResolveResourceAddr()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12OverlayStack3GetEv"><code class="docutils literal notranslate"><span class="pre">OverlayStack::Get()</span></code></a></li>
 </ul>
 </li>
