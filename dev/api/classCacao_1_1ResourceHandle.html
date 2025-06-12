@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class ThreadPool &#8212; Cacao Engine Docs</title>
+    <title>Template Class ResourceHandle &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1ThreadPool';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1ResourceHandle';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class TickController" href="classCacao_1_1TickController.html" />
-    <link rel="prev" title="Class Sound" href="classCacao_1_1Sound.html" />
+    <link rel="next" title="Class ResourceManager" href="classCacao_1_1ResourceManager.html" />
+    <link rel="prev" title="Class Resource" href="classCacao_1_1Resource.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -403,8 +403,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceHandle.html">Template Class ResourceHandle</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Class ResourceHandle</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
@@ -415,8 +415,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class ThreadPool</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
@@ -515,7 +515,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class ThreadPool</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Template Class ResourceHandle</span></li>
   </ul>
 </nav>
 </div>
@@ -532,122 +532,37 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-threadpool">
-<span id="exhale-class-classcacao-1-1threadpool"></span><h1>Class ThreadPool<a class="headerlink" href="#class-threadpool" title="Link to this heading"><span/></a></h1>
+  <section id="template-class-resourcehandle">
+<span id="exhale-class-classcacao-1-1resourcehandle"></span><h1>Template Class ResourceHandle<a class="headerlink" href="#template-class-resourcehandle" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_ThreadPool.hpp.html#file-engine-include-cacao-threadpool-hpp"><span class="std std-ref">File ThreadPool.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Resource.hpp.html#file-engine-include-cacao-resource-hpp"><span class="std std-ref">File Resource.hpp</span></a></p></li>
 </ul>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPoolE">
-<span id="_CPPv3N5Cacao10ThreadPoolE"></span><span id="_CPPv2N5Cacao10ThreadPoolE"></span><span id="Cacao::ThreadPool"></span><span class="target" id="classCacao_1_1ThreadPool"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ThreadPool</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPoolE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Thread pool singleton. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao14ResourceHandleE">
+<span id="_CPPv3I0EN5Cacao14ResourceHandleE"></span><span id="_CPPv2I0EN5Cacao14ResourceHandleE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ResourceHandle"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResourceHandle</span></span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao14ResourceHandleE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A wrapper class that exists to track the state of resources in the overlay stack so that when changes occur, they are automatically reflected. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args">
-<span id="_CPPv3I0Dp0EN5Cacao10ThreadPool4ExecE1FDp4Args"></span><span id="_CPPv2I0Dp0EN5Cacao10ThreadPool4ExecE1FDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">R</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">invoke_result_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args" title="Cacao::ThreadPool::Exec::F"><span class="n"><span class="pre">F</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args" title="Cacao::ThreadPool::Exec::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ThreadPool_1afcf9ed2993bc1c06316e8a0b024eb9a0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args" title="Cacao::ThreadPool::Exec::R"><span class="n"><span class="pre">R</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Exec</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args" title="Cacao::ThreadPool::Exec::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">func</span></span>, <a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args" title="Cacao::ThreadPool::Exec::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Place a task into the queue with an expected return value. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14ResourceHandle14ResourceHandleERKNSt6stringE">
+<span id="_CPPv3N5Cacao14ResourceHandle14ResourceHandleERKNSt6stringE"></span><span id="_CPPv2N5Cacao14ResourceHandle14ResourceHandleERKNSt6stringE"></span><span id="Cacao::ResourceHandle::ResourceHandle__ssCR"></span><span class="target" id="classCacao_1_1ResourceHandle_1a6e4fc374e81fa1642074662c36a634ec"></span><span class="sig-name descname"><span class="n"><span class="pre">ResourceHandle</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">trackingAddress</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao14ResourceHandle14ResourceHandleERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a forwarder tracking a given resource address. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> – The task to execute </p></li>
-<li><p><strong>args</strong> – The arguments to the task function</p></li>
-</ul>
+<dd class="field-odd"><p><strong>trackingAddress</strong> – The resource address to track</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A future that will be fulfilled when the task completes</p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the tracking address refers to a component </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0DpEN5Cacao10ThreadPool14ExecContinuousENSt11stop_sourceE1FDp4Args">
-<span id="_CPPv3I0DpEN5Cacao10ThreadPool14ExecContinuousE1FDp4Args"></span><span id="_CPPv2I0DpEN5Cacao10ThreadPool14ExecContinuousE1FDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ThreadPool_1a23cdb50a5183efad0f12aa6f1bfa6834"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">stop_source</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExecContinuous</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao10ThreadPool14ExecContinuousENSt11stop_sourceE1FDp4Args" title="Cacao::ThreadPool::ExecContinuous::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">func</span></span>, <a class="reference internal" href="#_CPPv4I0DpEN5Cacao10ThreadPool14ExecContinuousENSt11stop_sourceE1FDp4Args" title="Cacao::ThreadPool::ExecContinuous::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN5Cacao10ThreadPool14ExecContinuousENSt11stop_sourceE1FDp4Args" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Run a looping function on the thread pool that can be signaled to stop. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>All functions will be automatically signaled to stop when the pool is</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> – The function to execute </p></li>
-<li><p><strong>args</strong> – The arguments to the task function</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>An object by which the function can be requested to stop</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool5StartEv">
-<span id="_CPPv3N5Cacao10ThreadPool5StartEv"></span><span id="_CPPv2N5Cacao10ThreadPool5StartEv"></span><span id="Cacao::ThreadPool::Start"></span><span class="target" id="classCacao_1_1ThreadPool_1aa8e959a6d0dccda6cf53aa651c9bc77a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Start</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool5StartEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Start the thread pool. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is running </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool4StopEv">
-<span id="_CPPv3N5Cacao10ThreadPool4StopEv"></span><span id="_CPPv2N5Cacao10ThreadPool4StopEv"></span><span id="Cacao::ThreadPool::Stop"></span><span class="target" id="classCacao_1_1ThreadPool_1ad760969d156b923660f0dccc804e1224"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Stop</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool4StopEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Signal all continuous functions to stop and stop the pool. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool9IsRunningEv">
-<span id="_CPPv3N5Cacao10ThreadPool9IsRunningEv"></span><span id="_CPPv2N5Cacao10ThreadPool9IsRunningEv"></span><span id="Cacao::ThreadPool::IsRunning"></span><span class="target" id="classCacao_1_1ThreadPool_1ae397162a2316ee6173f8e87f7e6d55be"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsRunning</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool9IsRunningEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if the pool is running. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether the pool is running </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool14GetThreadCountEv">
-<span id="_CPPv3N5Cacao10ThreadPool14GetThreadCountEv"></span><span id="_CPPv2N5Cacao10ThreadPool14GetThreadCountEv"></span><span id="Cacao::ThreadPool::GetThreadCount"></span><span class="target" id="classCacao_1_1ThreadPool_1ab9deeafdbf91235ce4e8caaba177b7b6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetThreadCount</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool14GetThreadCountEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check how many threads are in the pool. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the pool is not running </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Number of threads in pool</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10ThreadPool3GetEv">
-<span id="_CPPv3N5Cacao10ThreadPool3GetEv"></span><span id="_CPPv2N5Cacao10ThreadPool3GetEv"></span><span id="Cacao::ThreadPool::Get"></span><span class="target" id="classCacao_1_1ThreadPool_1a7d011ee9a610faa49eb937e7e6f82bb5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao10ThreadPoolE" title="Cacao::ThreadPool"><span class="n"><span class="pre">ThreadPool</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10ThreadPool3GetEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get the instance and create one if there isn’t one. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The instance </p>
-</dd>
-</dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14ResourceHandleptEv">
+<span id="_CPPv3N5Cacao14ResourceHandleptEv"></span><span id="_CPPv2N5Cacao14ResourceHandleptEv"></span><span id="Cacao::ResourceHandle::pointer-operator"></span><span class="target" id="classCacao_1_1ResourceHandle_1a181845492da15adb595e014bf87edc7e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao14ResourceHandleE" title="Cacao::ResourceHandle::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao14ResourceHandleptEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Access the underlying resource. </p>
 </dd></dl>
 
 </div>
@@ -667,20 +582,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Sound.html"
+       href="classCacao_1_1Resource.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Sound</p>
+        <p class="prev-next-title">Class Resource</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1TickController.html"
+       href="classCacao_1_1ResourceManager.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class TickController</p>
+        <p class="prev-next-title">Class ResourceManager</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -704,14 +619,9 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10ThreadPoolE"><code class="docutils literal notranslate"><span class="pre">ThreadPool</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0Dp0EN5Cacao10ThreadPool4ExecENSt13shared_futureI1REE1FDp4Args"><code class="docutils literal notranslate"><span class="pre">ThreadPool::Exec()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0DpEN5Cacao10ThreadPool14ExecContinuousENSt11stop_sourceE1FDp4Args"><code class="docutils literal notranslate"><span class="pre">ThreadPool::ExecContinuous()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10ThreadPool5StartEv"><code class="docutils literal notranslate"><span class="pre">ThreadPool::Start()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10ThreadPool4StopEv"><code class="docutils literal notranslate"><span class="pre">ThreadPool::Stop()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10ThreadPool9IsRunningEv"><code class="docutils literal notranslate"><span class="pre">ThreadPool::IsRunning()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10ThreadPool14GetThreadCountEv"><code class="docutils literal notranslate"><span class="pre">ThreadPool::GetThreadCount()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10ThreadPool3GetEv"><code class="docutils literal notranslate"><span class="pre">ThreadPool::Get()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao14ResourceHandleE"><code class="docutils literal notranslate"><span class="pre">ResourceHandle</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ResourceHandle14ResourceHandleERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ResourceHandle::ResourceHandle()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14ResourceHandleptEv"><code class="docutils literal notranslate"><span class="pre">ResourceHandle::operator-&gt;()</span></code></a></li>
 </ul>
 </li>
 </ul>

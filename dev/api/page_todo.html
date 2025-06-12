@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Program Listing for File World.hpp &#8212; Cacao Engine Docs</title>
+    <title>Todo List &#8212; Cacao Engine Docs</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_engine_include_Cacao_World.hpp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/page_todo';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -325,10 +325,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Program Listing for File World.hpp</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
     </div>
   
@@ -362,7 +359,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Program Listing for File World.hpp</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Todo List</span></li>
   </ul>
 </nav>
 </div>
@@ -379,61 +376,20 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="program-listing-for-file-world-hpp">
-<span id="program-listing-file-engine-include-cacao-world-hpp"></span><h1>Program Listing for File World.hpp<a class="headerlink" href="#program-listing-for-file-world-hpp" title="Link to this heading"><span/></a></h1>
-<p>↰ <a class="reference internal" href="file_engine_include_Cacao_World.hpp.html#file-engine-include-cacao-world-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/World.hpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+  <section id="todo-list">
+<span id="page-todo"></span><h1>Todo List<a class="headerlink" href="#todo-list" title="Link to this heading"><span/></a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="todo"></span><em><span class="pre">page</span></em> <span class="sig-name descname"><span class="pre">todo</span></span></dt>
+<dd><p><dl>
+<dt class="sig sig-object cpp">
+<span class="pre">Struct</span> <a class="reference internal" href="structCacao_1_1OverlayStack_1_1PackageDescriptor.html#structCacao_1_1OverlayStack_1_1PackageDescriptor"><span class="std std-ref"><span class="pre">Cacao::OverlayStack::PackageDescriptor</span></span></a></dt>
+<dd><p><span class="target" id="todo_1_todo000001"></span>This will be finalized later </p>
+</dd></dl>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Camera.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Actor.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
+</p>
+</dd></dl>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">World</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Resource</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Camera</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cam</span><span class="p">;</span>
-
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ReparentToRoot</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">actor</span><span class="p">);</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">GetRootChildren</span><span class="p">();</span>
-
-<span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">P</span><span class="o">&gt;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">FindActor</span><span class="p">(</span><span class="n">P</span><span class="w"> </span><span class="n">predicate</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">//Search for the object</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">actorSearchRunner</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">GetAllChildren</span><span class="p">(),</span><span class="w"> </span><span class="n">predicate</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">World</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pkg</span><span class="p">);</span>
-<span class="w">        </span><span class="o">~</span><span class="n">World</span><span class="p">();</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">root</span><span class="p">;</span>
-
-<span class="w">        </span><span class="c1">//Recursive function for actually running a actor search</span>
-<span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">P</span><span class="o">&gt;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">actorSearchRunner</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="w"> </span><span class="n">predicate</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">//Iterate through all children</span>
-<span class="w">            </span><span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="c1">//Does this child pass the predicate?</span>
-<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">child</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">child</span><span class="p">);</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="c1">//Search through children</span>
-<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">actorSearchRunner</span><span class="p">(</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">GetAllChildren</span><span class="p">(),</span><span class="w"> </span><span class="n">predicate</span><span class="p">);</span>
-<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">found</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="n">found</span><span class="p">;</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="c1">//Nothing was found, return null option</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ResourceManager</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="p">}</span>
-</pre></div>
-</div>
 </section>
 
 

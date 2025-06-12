@@ -344,6 +344,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1OverlayStack_1_1PackageDescriptor.html">Struct OverlayStack::PackageDescriptor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -401,10 +404,10 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceHandle.html">Template Class ResourceHandle</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceTracker.html">Template Class ResourceTracker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
@@ -532,7 +535,7 @@
   <section id="class-blobresource">
 <span id="exhale-class-classcacao-1-1blobresource"></span><h1>Class BlobResource<a class="headerlink" href="#class-blobresource" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_BlobResource.hpp.html#file-engine-include-cacao-blobresource-hpp"><span class="std std-ref">File BlobResource.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Resource.hpp.html#file-engine-include-cacao-resource-hpp"><span class="std std-ref">File Resource.hpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
@@ -552,8 +555,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12BlobResource12BlobResourceERKNSt6stringERRNSt6vectorIhEE">
-<span id="_CPPv3N5Cacao12BlobResource12BlobResourceERKNSt6stringERRNSt6vectorIhEE"></span><span id="_CPPv2N5Cacao12BlobResource12BlobResourceERKNSt6stringERRNSt6vectorIhEE"></span><span id="Cacao::BlobResource::BlobResource__ssCR.std::vector:unsigned-c:RR"></span><span class="target" id="classCacao_1_1BlobResource_1af824c3384e31ce5a28ecbf280c92804f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlobResource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12BlobResource12BlobResourceERKNSt6stringERRNSt6vectorIhEE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12BlobResource12BlobResourceERKNSt6stringERKNSt6stringERRNSt6vectorIhEE">
+<span id="_CPPv3N5Cacao12BlobResource12BlobResourceERKNSt6stringERKNSt6stringERRNSt6vectorIhEE"></span><span id="_CPPv2N5Cacao12BlobResource12BlobResourceERKNSt6stringERKNSt6stringERRNSt6vectorIhEE"></span><span id="Cacao::BlobResource::BlobResource__ssCR.ssCR.std::vector:unsigned-c:RR"></span><span class="target" id="classCacao_1_1BlobResource_1a8e96bfe837b98804391a4cf36d65502c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlobResource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pkg</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12BlobResource12BlobResourceERKNSt6stringERKNSt6stringERRNSt6vectorIhEE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -623,7 +626,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12BlobResourceE"><code class="docutils literal notranslate"><span class="pre">BlobResource</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12BlobResource12BlobResourceERKNSt6stringERRNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">BlobResource::BlobResource()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12BlobResource12BlobResourceERKNSt6stringERKNSt6stringERRNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">BlobResource::BlobResource()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12BlobResource4dataE"><code class="docutils literal notranslate"><span class="pre">BlobResource::data</span></code></a></li>
 </ul>
 </li>

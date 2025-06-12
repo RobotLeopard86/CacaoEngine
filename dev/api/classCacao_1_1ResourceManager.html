@@ -53,8 +53,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Class ResourceTracker" href="classCacao_1_1ResourceTracker.html" />
-    <link rel="prev" title="Class Resource" href="classCacao_1_1Resource.html" />
+    <link rel="next" title="Class Script" href="classCacao_1_1Script.html" />
+    <link rel="prev" title="Template Class ResourceHandle" href="classCacao_1_1ResourceHandle.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -344,6 +344,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1OverlayStack_1_1PackageDescriptor.html">Struct OverlayStack::PackageDescriptor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -400,11 +403,11 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceHandle.html">Template Class ResourceHandle</a></li>
+</ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class ResourceManager</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceTracker.html">Template Class ResourceTracker</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
@@ -561,15 +564,16 @@
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the requested package to associate with does not exist </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If the requested package already has an asset of that name</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If the requested package already has an asset of that name </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadTypeException</span></span></span> – If a package already provides a resource with the provided address, but it is of a different type than is currently being instantiated</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao15ResourceManager4LoadER15ResourceTrackerI1TERKNSt6stringE">
-<span id="_CPPv3I0EN5Cacao15ResourceManager4LoadERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao15ResourceManager4LoadERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ResourceManager_1aaa4cc992fc9c138ac8b80d927e7fd38b"></span><a class="reference internal" href="classCacao_1_1ResourceTracker.html#_CPPv4I0EN5Cacao15ResourceTrackerE" title="Cacao::ResourceTracker"><span class="n"><span class="pre">ResourceTracker</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadER15ResourceTrackerI1TERKNSt6stringE" title="Cacao::ResourceManager::Load::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Load</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadER15ResourceTrackerI1TERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao15ResourceManager4LoadER14ResourceHandleI1TERKNSt6stringE">
+<span id="_CPPv3I0EN5Cacao15ResourceManager4LoadERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao15ResourceManager4LoadERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ResourceManager_1a3931cb54646649d8fae8f34d70d84e27"></span><a class="reference internal" href="classCacao_1_1ResourceHandle.html#_CPPv4I0EN5Cacao14ResourceHandleE" title="Cacao::ResourceHandle"><span class="n"><span class="pre">ResourceHandle</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadER14ResourceHandleI1TERKNSt6stringE" title="Cacao::ResourceManager::Load::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Load</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadER14ResourceHandleI1TERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Load a resource by address. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -615,20 +619,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Resource.html"
+       href="classCacao_1_1ResourceHandle.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Resource</p>
+        <p class="prev-next-title">Template Class ResourceHandle</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1ResourceTracker.html"
+       href="classCacao_1_1Script.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Template Class ResourceTracker</p>
+        <p class="prev-next-title">Class Script</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -654,7 +658,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao15ResourceManagerE"><code class="docutils literal notranslate"><span class="pre">ResourceManager</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0DpEN5Cacao15ResourceManager11InstantiateEvRKNSt6stringERKNSt6stringEDpRR4Args"><code class="docutils literal notranslate"><span class="pre">ResourceManager::Instantiate()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadER15ResourceTrackerI1TERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ResourceManager::Load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadER14ResourceHandleI1TERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ResourceManager::Load()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao15ResourceManager3GetEv"><code class="docutils literal notranslate"><span class="pre">ResourceManager::Get()</span></code></a></li>
 </ul>
 </li>
