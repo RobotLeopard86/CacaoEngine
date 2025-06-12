@@ -90,11 +90,11 @@ namespace Cacao {
 		/**
 		 * @brief Create a new component and add it to this actor
 		 *
-		 * @param exporter The ResourceTracker for the ComponentExporter from which to construct the
+		 * @param exporter The handle to the ComponentExporter from which to construct the component
 		 *
 		 * @throws ContainerException If a component of this type already exists on the actor
 		 */
-		void MountComponent(ResourceTracker<ComponentExporter>& exporter) {
+		void MountComponent(ResourceHandle<ComponentExporter>& exporter) {
 			Check<ContainerException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
 			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->factory());
 			PostMountComponent(components[std::type_index(std::type_index(exporter->type))]);

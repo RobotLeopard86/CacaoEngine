@@ -4,6 +4,7 @@
 
 #include "crossguid/guid.hpp"
 
+#include <memory>
 #include <string>
 
 namespace Cacao {
@@ -31,7 +32,7 @@ namespace Cacao {
 		 *
 		 * @todo This will be finalized later
 		 */
-		struct PackageDescriptor;
+		struct PackageDescriptor {};
 
 		/**
 		 * @brief Register a new game package
@@ -89,7 +90,18 @@ namespace Cacao {
 		 */
 		xg::Guid ResolveResourceAddr(const std::string& address);
 
+		///@cond
+		struct Impl;
+		///@endcond
 	  private:
 		OverlayStack();
+		~OverlayStack();
+
+		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
+
+		xg::Guid ResolveResourceAddr_Real(const std::string& addr, const std::string& pkgId);
+
+		friend class Resource;
 	};
 }

@@ -48,7 +48,7 @@ namespace Cacao {
 
 		std::vector<char> encodedAudio;
 
-		Sound(std::vector<char>&& encoded);
+		Sound(std::vector<char>&& encoded, const std::string& addr, const std::string& pkg);
 		~Sound();
 
 		friend class ResourceManager;

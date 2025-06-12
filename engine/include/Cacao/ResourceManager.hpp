@@ -2,7 +2,8 @@
 
 #include "DllHelper.hpp"
 #include "Resource.hpp"
-#include "BlobResource.hpp"
+
+#include "crossguid/guid.hpp"
 
 #include <memory>
 
@@ -35,6 +36,7 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If the requested package to associate with does not exist
 		 * @throws ExistingValueException If the requested package already has an asset of that name
+		 * @throws BadTypeException If a package already provides a resource with the provided address, but it is of a different type than is currently being instantiated
 		 *
 		 * @note This does not return the resource. The reason for this is because when a resource is registered it may be lower in the overlay stack.
 		 */
@@ -52,7 +54,7 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>)
-		ResourceTracker<T>& Load(const std::string& address) = delete;
+		ResourceHandle<T>& Load(const std::string& address) = delete;
 
 		///@cond
 		struct Impl;

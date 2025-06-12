@@ -41,7 +41,7 @@ namespace Cacao {
 		}
 
 	  private:
-		World(const std::string& addr);
+		World(const std::string& addr, const std::string& pkg);
 		~World();
 
 		std::shared_ptr<Actor> root;

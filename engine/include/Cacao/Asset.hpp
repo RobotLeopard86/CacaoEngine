@@ -46,8 +46,8 @@ namespace Cacao {
 		virtual ~Asset() {}
 
 	  protected:
-		Asset(const std::string& addr)
-		  : Resource(addr), realized(false) {}
+		Asset(const std::string& addr, const std::string& pkg)
+		  : Resource(addr, pkg), realized(false) {}
 
 		bool realized;
 	};
