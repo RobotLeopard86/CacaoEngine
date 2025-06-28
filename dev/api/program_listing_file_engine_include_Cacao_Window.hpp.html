@@ -429,50 +429,28 @@
 
 <span class="w">        </span><span class="c1">//======================= PROPERTY GETTERS =======================</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsOpen</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">open</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsOpen</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsVisible</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">open</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">visible</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsVisible</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsMinimized</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsMinimized</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetTitle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">open</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">GetTitle</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="nf">GetSize</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">open</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">});</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="nf">GetSize</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="nf">GetContentAreaSize</span><span class="p">();</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="nf">GetContentAreaSize</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">Mode</span><span class="w"> </span><span class="nf">GetMode</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">open</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Mode</span><span class="o">::</span><span class="n">Windowed</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">Mode</span><span class="w"> </span><span class="nf">GetMode</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">class</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ImplAccessor</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">X11Common</span><span class="p">;</span>
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">WaylandCommon</span><span class="p">;</span>
-
 <span class="w">        </span><span class="n">Window</span><span class="p">();</span>
 <span class="w">        </span><span class="o">~</span><span class="n">Window</span><span class="p">();</span>
-
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">open</span><span class="p">,</span><span class="w"> </span><span class="n">visible</span><span class="p">;</span>
-<span class="w">        </span><span class="n">Mode</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">;</span>
-
-<span class="w">        </span><span class="c1">//This is only used for restoring window position and size when switching modes</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">lastPos</span><span class="p">;</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">uvec2</span><span class="w"> </span><span class="n">lastSize</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

@@ -53,7 +53,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct OverlayStack::PackageDescriptor" href="structCacao_1_1OverlayStack_1_1PackageDescriptor.html" />
+    <link rel="next" title="Class Actor" href="classCacao_1_1Actor.html" />
     <link rel="prev" title="Struct Engine::Config" href="structCacao_1_1Engine_1_1Config.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -344,9 +344,6 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1OverlayStack_1_1PackageDescriptor.html">Struct OverlayStack::PackageDescriptor</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -392,9 +389,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1OverlayStack.html">Class OverlayStack</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -402,9 +396,6 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceHandle.html">Template Class ResourceHandle</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
@@ -563,12 +554,19 @@
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig8forceX11E">
-<span id="_CPPv3N5Cacao6Engine10InitConfig8forceX11E"></span><span id="_CPPv2N5Cacao6Engine10InitConfig8forceX11E"></span><span id="Cacao::Engine::InitConfig::forceX11__b"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1a30b7ceb6fdd76e4ff6dac3aa5f0aede3"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">forceX11</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig8forceX11E" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Whether to disable attempting to use Wayland and force the usage of X11 instead. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig23preferredWindowProviderE">
+<span id="_CPPv3N5Cacao6Engine10InitConfig23preferredWindowProviderE"></span><span id="_CPPv2N5Cacao6Engine10InitConfig23preferredWindowProviderE"></span><span id="Cacao::Engine::InitConfig::preferredWindowProvider__ss"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1ab8598b37904b20111836576065732404"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">preferredWindowProvider</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig23preferredWindowProviderE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The preferred windowing provider to use. </p>
+<p>The available options are: <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">win32</span></code> Windows API (Windows only) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cocoa</span></code> Cocoa (MacOS only) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x11</span></code> X11 via XCB (Linux only) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wayland</span></code> Wayland (Linux only)</p></li>
+</ul>
+</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This flag is ignored if not on Linux </p>
+<p>If the provider requested is not available or this string is empty, default behavior will be used </p>
 </div>
 </dd></dl>
 
@@ -598,11 +596,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="structCacao_1_1OverlayStack_1_1PackageDescriptor.html"
+       href="classCacao_1_1Actor.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct OverlayStack::PackageDescriptor</p>
+        <p class="prev-next-title">Class Actor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -630,7 +628,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfigE"><code class="docutils literal notranslate"><span class="pre">InitConfig</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig10standaloneE"><code class="docutils literal notranslate"><span class="pre">InitConfig::standalone</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig23initialRequestedBackendE"><code class="docutils literal notranslate"><span class="pre">InitConfig::initialRequestedBackend</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig8forceX11E"><code class="docutils literal notranslate"><span class="pre">InitConfig::forceX11</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig23preferredWindowProviderE"><code class="docutils literal notranslate"><span class="pre">InitConfig::preferredWindowProvider</span></code></a></li>
 </ul>
 </li>
 </ul>
