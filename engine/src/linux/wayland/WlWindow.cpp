@@ -5,12 +5,10 @@
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
 
-#include <memory>
-
 #define win Window::Get()
 
 namespace Cacao {
-	void WaylandCommon::CreateWindow() {
+	void WaylandWindowImpl::CreateWindow() {
 		//Connect to Wayland
 		display = wl_display_connect(nullptr);
 		Check<ExternalException>(display != nullptr, "Failed to connect to Wayland display!");
@@ -21,7 +19,7 @@ namespace Cacao {
 		//Add registry listener to fetch compositor
 		wl_registry_listener listener = {};
 		listener.global = [](void* selfp, wl_registry* r, uint32_t id, const char* iface, uint32_t ver) {
-			WaylandCommon* self = reinterpret_cast<WaylandCommon*>(selfp);
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			std::string interface(iface);
 			if(interface.compare(wl_compositor_interface.name) == 0) {
 				self->compositor = (wl_compositor*)wl_registry_bind(r, id, &wl_compositor_interface, ver);
@@ -47,39 +45,39 @@ namespace Cacao {
 
 		//Create output listener
 		outListener = {};
-		outListener.logical_size = [](void* selfp, zxdg_output_v1* output, int lw, int lh) {
-			WaylandCommon* self = reinterpret_cast<WaylandCommon*>(selfp);
+		outListener.logical_size = [](void* selfp, zxdg_output_v1*, int lw, int lh) {
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			self->outputSize = {lw, lh};
 		};
 
 		//Create and register surface listener
 		surfListener = {};
-		surfListener.enter = [](void* selfp, wl_surface* surface, wl_output* output) {
+		surfListener.enter = [](void* selfp, wl_surface*, wl_output* output) {
 			//Get xdg_output
-			WaylandCommon* self = reinterpret_cast<WaylandCommon*>(selfp);
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			self->out = zxdg_output_manager_v1_get_xdg_output(self->outMgr, output);
 
 			//Register size listener
 			zxdg_output_v1_add_listener(self->out, &(self->outListener), self);
 		};
-		surfListener.leave = [](void* selfp, wl_surface* surface, wl_output* output) {
+		surfListener.leave = [](void* selfp, wl_surface*, wl_output*) {
 			//Release xdg_output object
-			WaylandCommon* self = reinterpret_cast<WaylandCommon*>(selfp);
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			zxdg_output_v1_destroy(self->out);
 		};
 		wl_surface_add_listener(surf, &surfListener, this);
 
 		//Set a fake content size so the graphics system can initialize (this might not be accurate, but the resize event will correct it)
-		lastKnownContentSize = win.size;
+		lastKnownContentSize = size;
 
 		//Connect the graphics system (the shenanigans with open are for the GetContentAreaSize method to work)
-		win.open = true;
+		open = true;
 		PAL::Get().GfxConnect();
-		win.open = false;
+		open = false;
 
 		//Initialize libdecor
 		libdecor_interface decorInterface = {};
-		decorInterface.error = [](libdecor* ctx, libdecor_error err, const char* msg) {
+		decorInterface.error = [](libdecor*, libdecor_error, const char* msg) {
 			std::stringstream emsg;
 			emsg << "Libdecor encountered an error: " << msg;
 			Logger::Engine(Logger::Level::Error) << emsg.str();
@@ -90,32 +88,32 @@ namespace Cacao {
 
 		//Decorate window (I wouldn't need to do this if GNOME would be reasonable and add SSD, but...)
 		libdecor_frame_interface frameInterface = {};
-		frameInterface.close = [](libdecor_frame* frame, void* usr) {
+		frameInterface.close = [](libdecor_frame*, void*) {
 			Engine::Get().Quit();
 		};
-		frameInterface.commit = [](libdecor_frame* frame, void* usr) {};
+		frameInterface.commit = [](libdecor_frame*, void*) {};
 		frameInterface.configure = [](libdecor_frame* frame, libdecor_configuration* cfg, void* usr) {
+			//Get this
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(usr);
+
 			//Get new size
 			glm::ivec2 newSize = {0, 0};
 			libdecor_configuration_get_content_size(cfg, frame, &newSize.x, &newSize.y);
 
 			//Update window size
 			if(newSize.x <= 0 || newSize.y <= 0) {
-				newSize.x = win.size.x;
-				newSize.y = win.size.y;
+				newSize.x = self->size.x;
+				newSize.y = self->size.y;
 			} else {
-				win.size = newSize;
+				self->size = newSize;
 			}
 
-			//Get this
-			WaylandCommon* self = reinterpret_cast<WaylandCommon*>(usr);
-
 			//Fire a window resize event
-			DataEvent<glm::uvec2> wre("WindowResize", win.size);
+			DataEvent<glm::uvec2> wre("WindowResize", self->size);
 			EventManager::Get().Dispatch(wre);
 
 			//Set new libdecor state
-			libdecor_state* state = libdecor_state_new(win.size.x, win.size.y);
+			libdecor_state* state = libdecor_state_new(self->size.x, self->size.y);
 			libdecor_frame_commit(frame, state, cfg);
 			libdecor_state_free(state);
 
@@ -145,7 +143,7 @@ namespace Cacao {
 		}
 	}
 
-	void WaylandCommon::DestroyWindow() {
+	void WaylandWindowImpl::DestroyWindow() {
 		//Destroy libdecor objects
 		libdecor_frame_unref(frame);
 		libdecor_unref(decor);
@@ -163,7 +161,7 @@ namespace Cacao {
 		wl_display_disconnect(display);
 	}
 
-	void WaylandCommon::HandleEvents() {
+	void WaylandWindowImpl::HandleEvents() {
 		//Dispatch libdecor events
 		auto ldd = libdecor_dispatch(decor, 0);
 		//Check<ExternalException>(ldd >= 0, "Failed to dispatch libdecor event!");
@@ -215,26 +213,26 @@ namespace Cacao {
 		}
 	}
 
-	const glm::uvec2 WaylandCommon::ContentAreaSize() {
+	const glm::uvec2 WaylandWindowImpl::ContentAreaSize() {
 		return lastKnownContentSize;
 	}
 
-	void WaylandCommon::Visibility(bool visible) {
+	void WaylandWindowImpl::Visibility(bool visible) {
 		libdecor_frame_set_visibility(frame, visible);
 	}
 
-	void WaylandCommon::Title(const std::string& title) {
+	void WaylandWindowImpl::Title(const std::string& title) {
 		libdecor_frame_set_title(frame, title.c_str());
 	}
 
-	void WaylandCommon::Resize(const glm::uvec2& size) {
+	void WaylandWindowImpl::Resize(const glm::uvec2& size) {
 		//Set new libdecor state
-		libdecor_state* state = libdecor_state_new(win.size.x, win.size.y);
+		libdecor_state* state = libdecor_state_new(size.x, size.y);
 		libdecor_frame_commit(frame, state, nullptr);
 		libdecor_state_free(state);
 	}
 
-	void WaylandCommon::ModeChange(Window::Mode mode) {
+	void WaylandWindowImpl::ModeChange(Window::Mode mode) {
 		//Unset fullscreen if leaving exclusive mode
 		if(mode != Window::Mode::Fullscreen) {
 			libdecor_frame_unset_fullscreen(frame);
@@ -258,7 +256,7 @@ namespace Cacao {
 					libdecor_frame_commit(frame, state, nullptr);
 					libdecor_state_free(state);
 				}
-				win.size = outputSize;
+				size = outputSize;
 				break;
 			case Window::Mode::Fullscreen:
 				//Disable decorations
@@ -270,15 +268,15 @@ namespace Cacao {
 		}
 	}
 
-	void WaylandCommon::SaveWinSize() {
-		win.lastSize = lastKnownContentSize;
+	void WaylandWindowImpl::SaveWinSize() {
+		lastSize = lastKnownContentSize;
 	}
 
-	void WaylandCommon::RestoreWin() {
+	void WaylandWindowImpl::RestoreWin() {
 		//Set new libdecor state
-		libdecor_state* state = libdecor_state_new(win.lastSize.x, win.lastSize.y);
+		libdecor_state* state = libdecor_state_new(lastSize.x, lastSize.y);
 		libdecor_frame_commit(frame, state, nullptr);
 		libdecor_state_free(state);
-		win.size = win.lastSize;
+		size = lastSize;
 	}
 }

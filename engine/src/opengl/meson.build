@@ -19,20 +19,20 @@ elif host_machine.system() == 'darwin'
 elif host_machine.system() == 'linux'
 	gl_inc += '..' / 'linux'
     if linux_windowing.contains('x11')
-		gl_sources +=  'wsi' / 'XWSI.cpp'
+		#gl_sources +=  'wsi' / 'XWSI.cpp'
 		gl_deps += [xcb_dep, xcb_ks_dep, xcb_atom_dep, xcb_randr_dep]
 	endif
 	if linux_windowing.contains('wayland')
-		gl_sources += 'wsi' / 'WaylandWSI.cpp'
+		#gl_sources += 'wsi' / 'WaylandWSI.cpp'
 		gl_deps += [wayland_client, xdg_output_dep, xkbcommon_dep, libdecor_dep]
 	endif
-	gl_sources += 'wsi' / 'LinuxWSI.cpp'
+	#gl_sources += 'wsi' / 'LinuxWSI.cpp'
 else
     error('Unsupported platform for OpenGL module!')
 endif
 
 # OpenGL module
 glmodule = static_library('cacaogl', sources: gl_sources, include_directories: gl_inc, 
-	dependencies: gl_deps, install: true, install_tag: 'cacao', pic: true, objcpp_args: '-Wno-deprecated-declarations')
-gl_dep = declare_dependency(link_with: glmodule)
+	dependencies: gl_deps, install: true, install_tag: 'cacao', pic: true, objcpp_args: ['-Wno-deprecated-declarations', '-DGL_SILENCE_DEPRECATION'])
+gl_dep = declare_dependency(link_whole: glmodule)
 gfx_deps += gl_dep

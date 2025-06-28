@@ -1,7 +1,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
-#include "Cacao/EventSystem.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Win32Types.hpp"
 #include "Cacao/PAL.hpp"
 

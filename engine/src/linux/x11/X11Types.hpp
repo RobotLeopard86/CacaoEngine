@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cacao/Window.hpp"
+#include "WindowImplBase.hpp"
 
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
@@ -9,7 +10,7 @@
 #include <vector>
 
 namespace Cacao {
-	class X11Common {
+	class X11WindowImpl : public Window::Impl {
 	  public:
 		xcb_connection_t* connection;
 		xcb_window_t window;

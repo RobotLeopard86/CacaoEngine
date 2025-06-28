@@ -6,6 +6,6 @@
 
 namespace Cacao {
 	struct ResourceManager::Impl {
-		std::map<xg::Guid, std::weak_ptr<Resource>> cache;
+		std::map<std::string, std::weak_ptr<Resource>> cache;
 	};
 }

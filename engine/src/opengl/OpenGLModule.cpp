@@ -1,17 +1,20 @@
 #include "Module.hpp"
-#include "ModuleCreators.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
+#include "Cacao/PAL.hpp"
+#include "ImplAccessor.hpp"
 #ifdef __linux__
 #include "LinuxRouter.hpp"
 #endif
 #include "glad/gl.h"
 
 namespace Cacao {
-	std::shared_ptr<PALModule> CreateOpenGLModule() {
-		gl = std::make_shared<OpenGLModule>();
-		return std::static_pointer_cast<PALModule>(gl);
-	}
+	struct OpenGLModuleRegistrar {
+		OpenGLModuleRegistrar() {
+			IMPL(PAL).registry.insert_or_assign("opengl", []() { gl = std::make_shared<OpenGLModule>(); return gl; });
+		}
+	};
+	__attribute__((used)) OpenGLModuleRegistrar glmr;
 
 	void OpenGLModule::Init() {
 		didInit = true;

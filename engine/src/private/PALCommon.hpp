@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <map>
+#include <functional>
 
 #include "Cacao/DllHelper.hpp"
+#include "Cacao/PAL.hpp"
 
 namespace Cacao {
 	class CACAO_API PALModule {
@@ -38,9 +39,9 @@ namespace Cacao {
 		bool didInit;
 		bool connected;
 	};
-}
 
-#define PAL_BACKED_IMPL(c)                             \
-	struct Cacao::c::Impl {                            \
-		std::shared_ptr<Cacao::PAL##c##Interface> pal; \
+	struct PAL::Impl {
+		std::shared_ptr<PALModule> mod;
+		std::map<std::string, std::function<std::shared_ptr<PALModule>()>> registry;
 	};
+}

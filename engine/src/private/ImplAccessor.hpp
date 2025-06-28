@@ -3,7 +3,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Sound.hpp"
 #include "Cacao/ResourceManager.hpp"
-#include "Cacao/OverlayStack.hpp"
+#include "Cacao/PAL.hpp"
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
 
@@ -25,8 +25,8 @@ namespace Cacao {
 			return *ResourceManager::Get().impl;
 		}
 
-		OverlayStack::Impl& GetOverlayStack() {
-			return *OverlayStack::Get().impl;
+		PAL::Impl& GetPAL() {
+			return *PAL::Get().impl;
 		}
 
 		Sound::Impl& GetSound(Sound& s) {

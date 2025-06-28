@@ -70,10 +70,18 @@ namespace Cacao {
 		}
 
 		//In descending order of priority
+		std::vector<std::string> backends;
 #ifndef __APPLE__
-		std::vector<std::string> backends = {"vulkan", "opengl"};
+#ifdef HAS_VK
+		backends.push_back("vulkan");
+#endif
+#ifdef HAS_GL
+		backends.push_back("opengl");
+#endif
 #else
-		std::vector<std::string> backends = {"opengl"};
+#ifdef HAS_GL
+		backends.push_back("opengl");
+#endif
 #endif
 		if(!icfg.initialRequestedBackend.empty()) {
 			auto it = std::find(backends.begin(), backends.end(), icfg.initialRequestedBackend);

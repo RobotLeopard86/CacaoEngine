@@ -2,7 +2,7 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
-#include "Cacao/EventSystem.hpp"
+#include "Cacao/EventManager.hpp"
 #include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
 #include <Foundation/Foundation.h>

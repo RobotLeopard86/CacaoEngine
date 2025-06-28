@@ -69,11 +69,17 @@ namespace Cacao {
 			std::string initialRequestedBackend;
 
 			/**
-			 * @brief Whether to disable attempting to use Wayland and force the usage of X11 instead
+			 * @brief The preferred windowing provider to use
 			 *
-			 * @note This flag is ignored if not on Linux
+			 * The available options are:
+			 * \li \c win32 Windows API (Windows only)
+			 * \li \c cocoa Cocoa (MacOS only)
+			 * \li \c x11 X11 via XCB (Linux only)
+			 * \li \c wayland Wayland (Linux only)
+			 *
+			 * @note If the provider requested is not available or this string is empty, default behavior will be used
 			 */
-			bool forceX11 = false;
+			std::string preferredWindowProvider;
 		};
 
 		/**

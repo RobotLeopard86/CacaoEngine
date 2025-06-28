@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
 #ifdef __linux__
 	//X11 option
-	app.add_flag("--x11-only,-x", icfg.forceX11, "Force the usage of X11 for windowing.")->default_val(false);
+	app.add_flag_callback("--x11-only,-x", [&icfg]() { icfg.preferredWindowProvider = "x11"; }, "Force the usage of X11 for windowing.")->default_val(false);
 #endif
 
 	//Parse

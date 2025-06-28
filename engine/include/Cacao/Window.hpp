@@ -122,18 +122,14 @@ namespace Cacao {
 		 *
 		 * @return Whether the window is open
 		 */
-		bool IsOpen() {
-			return open;
-		}
+		bool IsOpen() const;
 
 		/**
 		 * @brief Check if the window is visible
 		 *
 		 * @return Whether the window is visible, or false if the window is not open
 		 */
-		bool IsVisible() {
-			return open && visible;
-		}
+		bool IsVisible() const;
 
 		/**
 		 * @brief Check if the window is minimized
@@ -142,63 +138,45 @@ namespace Cacao {
 		 *
 		 * @return Whether the window is minimized, or true if the window is not open
 		 */
-		bool IsMinimized();
+		bool IsMinimized() const;
 
 		/**
 		 * @brief Check the window title
 		 *
 		 * @return The window title, or an empty string if the window is not open
 		 */
-		const std::string GetTitle() {
-			return (open ? title : "");
-		}
+		const std::string GetTitle() const;
 
 		/**
 		 * @brief Check the window size
 		 *
 		 * @return The window size, or {0, 0} if the window is not open
 		 */
-		const glm::uvec2 GetSize() {
-			return (open ? size : glm::uvec2 {0, 0});
-		}
+		const glm::uvec2 GetSize() const;
 
 		/**
 		 * @brief Check the pixel size of the content area
 		 *
 		 * @return The content area size, or {0, 0} if the window is not open
 		 */
-		const glm::uvec2 GetContentAreaSize();
+		const glm::uvec2 GetContentAreaSize() const;
 
 		/**
 		 * @brief Check the window mode
 		 *
 		 * @return The window mode, or Mode::Windowed if the window is not open
 		 */
-		const Mode GetMode() {
-			return (open ? mode : Mode::Windowed);
-		}
+		Mode GetMode() const;
 
 		///@cond
-		struct Impl;
+		class Impl;
 		///@endcond
 
 	  private:
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
 
-		friend class X11Common;
-		friend class WaylandCommon;
-
 		Window();
 		~Window();
-
-		bool open, visible;
-		Mode mode;
-		glm::uvec2 size;
-		std::string title;
-
-		//This is only used for restoring window position and size when switching modes
-		glm::uvec2 lastPos;
-		glm::uvec2 lastSize;
 	};
 }

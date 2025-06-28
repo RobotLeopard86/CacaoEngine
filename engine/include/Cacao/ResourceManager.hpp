@@ -3,8 +3,6 @@
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 
-#include "crossguid/guid.hpp"
-
 #include <memory>
 
 namespace Cacao {
@@ -34,27 +32,27 @@ namespace Cacao {
 		 * @param pkg The identifier of the package to associate this resource with
 		 * @param args The arguments to the resource constructor
 		 *
-		 * @throws NonexistentValueException If the requested package to associate with does not exist
-		 * @throws ExistingValueException If the requested package already has an asset of that name
-		 * @throws BadTypeException If a package already provides a resource with the provided address, but it is of a different type than is currently being instantiated
+		 * @throws BadValueException If the address provided is malformed
 		 *
-		 * @note This does not return the resource. The reason for this is because when a resource is registered it may be lower in the overlay stack.
+		 * @return A handle to the resource
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && std::is_constructible_v<T, Args&&...>
-		void Instantiate(const std::string& address, const std::string& pkg, Args&&... args) = delete;
+		std::shared_ptr<T> Instantiate(const std::string& address, Args&&... args) = delete;
 
 		/**
 		 * @brief Load a resource by address
 		 *
 		 * @param address The resource address to load from
 		 *
-		 * @throws BadValueException If the template type does not match the loaded type of the asset
+		 * @throws BadValueException If the template type does not match the loaded type of the resource
 		 * @throws NonexistentValueException If there is no resource at the provided address
+		 *
+		 * @return A handle to the resource
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>)
-		ResourceHandle<T>& Load(const std::string& address) = delete;
+		std::shared_ptr<T> Load(const std::string& address) = delete;
 
 		///@cond
 		struct Impl;

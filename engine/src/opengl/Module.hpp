@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PALCommon.hpp"
-#include "Cacao/EventSystem.hpp"
+#include "Cacao/EventManager.hpp"
 
 namespace Cacao {
 	class OpenGLModule : public PALModule {
@@ -23,7 +23,6 @@ namespace Cacao {
 
 	  private:
 		EventConsumer resizer;
-		
 	};
 
 	inline std::shared_ptr<OpenGLModule> gl;

@@ -1,18 +1,20 @@
 #include "Module.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Window.hpp"
+#include "Cacao/PAL.hpp"
+#include <memory>
 #ifdef __linux__
 #include "LinuxRouter.hpp"
 #endif
 #include "ImplAccessor.hpp"
 
-#include <functional>
-
 namespace Cacao {
-	std::shared_ptr<PALModule> CreateVulkanModule() {
-		vulkan = std::make_shared<VulkanModule>();
-		return std::static_pointer_cast<PALModule>(vulkan);
-	}
+	struct VulkanModuleRegistrar {
+		VulkanModuleRegistrar() {
+			IMPL(PAL).registry.insert_or_assign("vulkan", []() { vulkan = std::make_shared<VulkanModule>(); return vulkan; });
+		}
+	};
+	__attribute__((used)) VulkanModuleRegistrar vkmr;
 
 	void VulkanModule::Destroy() {
 		vulkan.reset();

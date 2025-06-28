@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Cacao/Window.hpp"
+#include "WindowImplBase.hpp"
 
 #include <wayland-client.h>
 #include "libdecor.h"
 #include "xdg-output-unstable-v1-client-protocol.h"
 
 namespace Cacao {
-	class WaylandCommon {
+	class WaylandWindowImpl : public Window::Impl {
 	  public:
 		wl_display* display = nullptr;
 		wl_compositor* compositor = nullptr;
@@ -21,6 +22,7 @@ namespace Cacao {
 		libdecor* decor = nullptr;
 		libdecor_frame* frame = nullptr;
 		bool configured = false;
+		glm::uvec2 lastKnownContentSize;
 
 		void CreateWindow();
 		void DestroyWindow();
@@ -42,7 +44,5 @@ namespace Cacao {
 
 		void SaveWinSize();
 		void RestoreWin();
-
-		glm::uvec2 lastKnownContentSize;
 	};
 }

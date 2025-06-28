@@ -4,7 +4,6 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "X11Types.hpp"
-#include "../LinuxRouter.hpp"
 
 #include <memory>
 
@@ -14,7 +13,7 @@
 #define win Window::Get()
 
 namespace Cacao {
-	void X11Common::CreateWindow() {
+	void X11WindowImpl::CreateWindow() {
 		//Connect to X server
 		connection = xcb_connect(nullptr, nullptr);
 		Check<ExternalException>(connection != nullptr, "Failed to connect to X server!");
@@ -25,7 +24,7 @@ namespace Cacao {
 		xcb_screen_t* screen = scrIter.data;
 
 		//We want to start the window centered, so time to calculate that position
-		glm::i16vec2 centered = {(screen->width_in_pixels / 2) - (win.size.x / 2), (screen->height_in_pixels / 2) - (win.size.y / 2)};
+		glm::i16vec2 centered = {(screen->width_in_pixels / 2) - (size.x / 2), (screen->height_in_pixels / 2) - (size.y / 2)};
 
 		//Create window
 		window = xcb_generate_id(connection);
@@ -33,11 +32,11 @@ namespace Cacao {
 		uint32_t valueList[] = {
 			screen->black_pixel,
 			XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_FOCUS_CHANGE};
-		xcb_create_window(connection, XCB_COPY_FROM_PARENT, window, screen->root, centered.x, centered.y, win.size.x,
-			win.size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, valueMask, valueList);
+		xcb_create_window(connection, XCB_COPY_FROM_PARENT, window, screen->root, centered.x, centered.y, size.x,
+			size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, valueMask, valueList);
 
 		//Set initial title
-		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, win.title.size(), win.title.c_str());
+		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, title.size(), title.c_str());
 
 		//Allow the window to be closed (because X is stupid and doesn't assume that by default)
 		//The top part is requesting the atoms to use for property setting, the last part is actually setting the property
@@ -52,7 +51,7 @@ namespace Cacao {
 		free(delReply);
 
 		//If we should start visible, make the window visible
-		if(win.visible) xcb_map_window(connection, window);
+		if(visible) xcb_map_window(connection, window);
 
 		//Send commands to X server and wait for completion
 		xcb_flush(connection);
@@ -61,7 +60,7 @@ namespace Cacao {
 		PAL::Get().GfxConnect();
 	}
 
-	void X11Common::DestroyWindow() {
+	void X11WindowImpl::DestroyWindow() {
 		//Disconnect graphics
 		PAL::Get().GfxDisconnect();
 
@@ -76,7 +75,7 @@ namespace Cacao {
 		window = 0;
 	}
 
-	void X11Common::HandleEvents() {
+	void X11WindowImpl::HandleEvents() {
 		xcb_generic_event_t* event;
 		while((event = xcb_poll_for_event(connection)) != nullptr) {
 			uint8_t responseType = event->response_type & ~0x80;
@@ -90,16 +89,16 @@ namespace Cacao {
 				//Window has been resized
 				case XCB_CONFIGURE_NOTIFY: {
 					//Ignore updates while in borderless mode
-					if(win.mode == Window::Mode::Borderless) break;
+					if(mode == Window::Mode::Borderless) break;
 
 					//Get the configure info
 					xcb_configure_notify_event_t* cfgEvent = reinterpret_cast<xcb_configure_notify_event_t*>(event);
 
 					//Apply the new size value to the window
-					win.size = {cfgEvent->width, cfgEvent->height};
+					size = {cfgEvent->width, cfgEvent->height};
 
 					//Fire an event
-					DataEvent<glm::uvec2> wre("WindowResize", win.size);
+					DataEvent<glm::uvec2> wre("WindowResize", size);
 					EventManager::Get().Dispatch(wre);
 					break;
 				}
@@ -126,7 +125,7 @@ namespace Cacao {
 		}
 	}
 
-	bool X11Common::Minimized() {
+	bool X11WindowImpl::Minimized() {
 		//Request the window state atom from the X server
 		xcb_intern_atom_cookie_t atomCookie = xcb_intern_atom(connection, 0, 8, "WM_STATE");
 		xcb_intern_atom_reply_t* atomReply = xcb_intern_atom_reply(connection, atomCookie, nullptr);
@@ -157,7 +156,7 @@ namespace Cacao {
 		return reply;
 	}
 
-	const glm::uvec2 X11Common::ContentAreaSize() {
+	const glm::uvec2 X11WindowImpl::ContentAreaSize() {
 		//Request the window geometry from the X server
 		xcb_get_geometry_reply_t* reply = FetchGeometry(connection, window);
 		glm::uvec2 ret = {reply->width, reply->height};
@@ -165,7 +164,7 @@ namespace Cacao {
 		return ret;
 	}
 
-	void X11Common::Visibility(bool visible) {
+	void X11WindowImpl::Visibility(bool visible) {
 		if(visible) {
 			xcb_map_window(connection, window);
 		} else {
@@ -174,12 +173,12 @@ namespace Cacao {
 		xcb_flush(connection);
 	}
 
-	void X11Common::Title(const std::string& title) {
+	void X11WindowImpl::Title(const std::string& title) {
 		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8, title.size(), title.c_str());
 		xcb_flush(connection);
 	}
 
-	void X11Common::Resize(const glm::uvec2& size) {
+	void X11WindowImpl::Resize(const glm::uvec2& size) {
 		//Convert size to 16-bit for XCB so we can feed the GLM pointer
 		glm::u16vec2 size16 {size.x, size.y};
 
@@ -188,28 +187,28 @@ namespace Cacao {
 		xcb_flush(connection);
 	}
 
-	void X11Common::SaveWinPos() {
+	void X11WindowImpl::SaveWinPos() {
 		xcb_get_geometry_reply_t* reply = FetchGeometry(connection, window);
-		win.lastPos = {reply->x, reply->y};
+		lastPos = {reply->x, reply->y};
 		free(reply);
 	}
 
-	void X11Common::SaveWinSize() {
+	void X11WindowImpl::SaveWinSize() {
 		xcb_get_geometry_reply_t* reply = FetchGeometry(connection, window);
-		win.lastSize = {reply->width, reply->height};
+		lastSize = {reply->width, reply->height};
 		free(reply);
 	}
 
-	void X11Common::RestoreWin() {
+	void X11WindowImpl::RestoreWin() {
 		//Create value list
-		const uint16_t valueList[] = {(uint16_t)win.lastPos.x, (uint16_t)win.lastPos.y, (uint16_t)win.lastSize.x, (uint16_t)win.lastSize.y};
+		const uint16_t valueList[] = {(uint16_t)lastPos.x, (uint16_t)lastPos.y, (uint16_t)lastSize.x, (uint16_t)lastSize.y};
 
 		//Set size and position
 		xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
 		xcb_flush(connection);
 	}
 
-	void X11Common::ModeChange(Window::Mode mode) {
+	void X11WindowImpl::ModeChange(Window::Mode mode) {
 		//Fetch atoms
 
 		//Request the window state atom from the X server
@@ -282,7 +281,7 @@ namespace Cacao {
 		xcb_randr_output_t output = xcb_randr_monitor_info_outputs(&monitor)[0];
 
 		//Remove fullscreen state and restore CRTC config if needed
-		if(mode != Window::Mode::Fullscreen && win.mode == Window::Mode::Fullscreen) {
+		if(mode != Window::Mode::Fullscreen && this->mode == Window::Mode::Fullscreen) {
 			xcb_delete_property(connection, window, state);
 			if(crtcSet) xcb_randr_set_crtc_config(connection, crtcState.crtc, crtcState.timestamp, crtcState.configTimestamp, crtcState.position.x,
 				crtcState.position.y, crtcState.videoMode, crtcState.rotation, crtcState.outputs.size(), crtcState.outputs.data());
@@ -321,7 +320,7 @@ namespace Cacao {
 				//Set window size to monitor size
 				int16_t valueList[] = {monitor.x, monitor.y, (int16_t)monitor.width, (int16_t)monitor.height};
 				xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
-				win.size = {monitor.width, monitor.height};
+				size = {monitor.width, monitor.height};
 
 				//Set the fullscreen property
 				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, state, XCB_ATOM_ATOM, 32, 1, &fullscreen);
@@ -344,15 +343,15 @@ namespace Cacao {
 					xcb_randr_mode_info_t modeInfo = modes[i];
 
 					//If we found it exactly, we're golden
-					if(modeInfo.width == win.size.x && modeInfo.height == win.size.y) {
+					if(modeInfo.width == size.x && modeInfo.height == size.y) {
 						bestVideoMode = modeInfo.id;
 						foundExact = true;
 						break;
 					}
 
 					//Otherwise, keep selecting modes that are closest to the resolution until we find one
-					unsigned int xDistCurrent = abs((int)win.size.x - modeInfo.width);
-					unsigned int yDistCurrent = abs((int)win.size.y - modeInfo.height);
+					unsigned int xDistCurrent = abs((int)size.x - modeInfo.width);
+					unsigned int yDistCurrent = abs((int)size.y - modeInfo.height);
 					if(xDistCurrent < xDistLast || yDistCurrent < yDistLast) {
 						bestVideoMode = modeInfo.id;
 						xDistLast = xDistCurrent;
@@ -363,7 +362,7 @@ namespace Cacao {
 				free(resReply);
 
 				//Set size to best video mode's if not exact
-				if(!foundExact) win.size = vidModeSize;
+				if(!foundExact) size = vidModeSize;
 
 				//Find ouput CRTC
 				xcb_randr_get_output_info_cookie_t outInfoCookie = xcb_randr_get_output_info(connection, output, XCB_CURRENT_TIME);
@@ -398,7 +397,7 @@ namespace Cacao {
 				xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, bypass, XCB_ATOM_CARDINAL, 32, 1, &doBypass);
 
 				//Set window size to video mode size
-				int16_t valueList[] = {monitor.x, monitor.y, (int16_t)win.size.x, (int16_t)win.size.y};
+				int16_t valueList[] = {monitor.x, monitor.y, (int16_t)size.x, (int16_t)size.y};
 				xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
 
 				//Set new CRTC config

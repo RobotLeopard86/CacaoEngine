@@ -12,7 +12,7 @@ namespace Cacao {
 	 * @warning This class is only for engine use. While it is documented, <b>no clients should use this class</b>
 	 *
 	 */
-	class PAL {
+	class CACAO_API PAL {
 	  public:
 		/**
 		 * @brief Get the instance and create one if there isn't one
@@ -101,9 +101,12 @@ namespace Cacao {
 		 */
 		void DestroyMP();
 
-	  private:
+		///@cond
 		struct Impl;
+		///@endcond
+	  private:
 		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
 
 		PAL();
 		~PAL();

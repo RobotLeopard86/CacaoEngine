@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PALCommon.hpp"
-#include "Cacao/EventSystem.hpp"
+#include "Cacao/EventManager.hpp"
 
 #ifdef __linux__
 #ifdef HAS_X11
