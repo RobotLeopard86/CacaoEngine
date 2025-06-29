@@ -8,6 +8,8 @@
 #include <cstdlib>
 
 namespace Cacao {
+	std::map<std::string, std::function<std::unique_ptr<Window::Impl>()>> Window::Impl::registry;
+
 	Window::Window() {
 		//Create implementation pointer
 
@@ -15,6 +17,7 @@ namespace Cacao {
 		std::string provider = Engine::Get().GetInitConfig().preferredWindowProvider;
 		if(Impl::registry.contains(provider)) {
 			impl = Impl::registry[provider]();
+			goto create_ptr;
 		}
 
 		//Platform behavior
@@ -25,15 +28,38 @@ namespace Cacao {
 		provider = "cocoa";
 #endif
 #ifdef __linux__
-		//Decide whether to use Wayland or X11 based on environment variables
+		{
+			//Decide whether to use Wayland or X11 based on environment variables
 #define GETENV(v) []() { const char* p = std::getenv(v); if(p == nullptr) return std::string(""); else return std::string(p); }()
-		std::string sessionType = GETENV("XDG_SESSION_TYPE");
-		std::string xDisplay = GETENV("DISPLAY");
-		std::string wlDisplay = GETENV("WAYLAND_DISPLAY");
+			std::string sessionType = GETENV("XDG_SESSION_TYPE");
+			std::string xDisplay = GETENV("DISPLAY");
+			std::string wlDisplay = GETENV("WAYLAND_DISPLAY");
 #undef GETENV
-		bool useX = false;
-		if(!sessionType.empty()) {
-			if(sessionType.compare("wayland") == 0) {
+			bool useX = false;
+			if(!sessionType.empty()) {
+				if(sessionType.compare("wayland") == 0) {
+#ifdef HAS_WAYLAND
+					if(!wlDisplay.empty()) {
+						useX = false;
+						goto choice_made;
+					}
+#endif
+#ifdef HAS_X11
+					if(!xDisplay.empty()) {
+						useX = true;
+						goto choice_made;
+					}
+#endif
+				}
+#ifdef HAS_X11
+				if(sessionType.compare("x11") == 0) {
+					if(!xDisplay.empty()) {
+						useX = true;
+						goto choice_made;
+					}
+				}
+#endif
+			} else {
 #ifdef HAS_WAYLAND
 				if(!wlDisplay.empty()) {
 					useX = false;
@@ -45,36 +71,16 @@ namespace Cacao {
 					useX = true;
 					goto choice_made;
 				}
-#endif
-			}
-#ifdef HAS_X11
-			if(sessionType.compare("x11") == 0) {
-				if(!xDisplay.empty()) {
-					useX = true;
-					goto choice_made;
-				}
 			}
 #endif
-		} else {
-#ifdef HAS_WAYLAND
-			if(!wlDisplay.empty()) {
-				useX = false;
-				goto choice_made;
-			}
-#endif
-#ifdef HAS_X11
-			if(!xDisplay.empty()) {
-				useX = true;
-				goto choice_made;
-			}
+			Check<MiscException>(false, "Failed to resolve choice of Linux windowing system!");
+		choice_made:
+			Logger::Engine(Logger::Level::Info) << "Running under " << (useX ? "X11" : "Wayland") << ".";
+			provider = (useX ? "x11" : "wayland");
 		}
 #endif
-		Check<MiscException>(false, "Failed to resolve choice of Linux windowing system!");
-	choice_made:
-		Logger::Engine(Logger::Level::Info) << "Running under " << (useX ? "X11" : "Wayland") << ".";
-		provider = (useX ? "x11" : "wayland");
-#endif
 
+	create_ptr:
 		//Create pointer
 		Check<MiscException>(Impl::registry.contains(provider), "No windowing system provider is registered that meets criteria!");
 		impl = Impl::registry[provider]();

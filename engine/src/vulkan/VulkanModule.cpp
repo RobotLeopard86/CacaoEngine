@@ -1,12 +1,10 @@
 #include "Module.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
-#include <memory>
-#ifdef __linux__
-#include "LinuxRouter.hpp"
-#endif
+#include "WindowImplBase.hpp"
 #include "ImplAccessor.hpp"
+
+#include <memory>
 
 namespace Cacao {
 	struct VulkanModuleRegistrar {
@@ -65,7 +63,7 @@ namespace Cacao {
 		std::vector<const char*> requiredInstanceExts;
 		requiredInstanceExts.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 #ifdef __linux__
-		if(IMPL(Window).useX)
+		if(IMPL(Window).ProviderID().compare("x11") == 0)
 			requiredInstanceExts.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
 		else
 			requiredInstanceExts.push_back(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);

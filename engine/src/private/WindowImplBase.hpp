@@ -8,6 +8,7 @@
 namespace Cacao {
 	class Window::Impl {
 	  public:
+		//======================= WINDOW FUNCTIONALITY =======================
 		virtual void CreateWindow() = 0;
 		virtual void DestroyWindow() = 0;
 		virtual void HandleEvents() = 0;
@@ -20,9 +21,11 @@ namespace Cacao {
 		virtual void SaveWinPos() = 0;
 		virtual void SaveWinSize() = 0;
 		virtual void RestoreWin() = 0;
+		virtual const std::string ProviderID() const = 0;
 
 		virtual ~Impl() = default;
 
+		//======================= STATE PROPERTIES =======================
 		bool open, visible;
 		Mode mode;
 		glm::uvec2 size;
@@ -31,7 +34,7 @@ namespace Cacao {
 		glm::uvec2 lastSize;
 
 		// clang-format off
-		static std::map<std::string, std::function<std::unique_ptr<Impl>&&()>> registry;
+		static std::map<std::string, std::function<std::unique_ptr<Impl>()>> registry;
 		// clang-format on
 	};
 }

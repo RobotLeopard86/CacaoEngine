@@ -24,25 +24,29 @@ namespace Cacao {
 		bool configured = false;
 		glm::uvec2 lastKnownContentSize;
 
-		void CreateWindow();
-		void DestroyWindow();
-		void HandleEvents();
+		void CreateWindow() override;
+		void DestroyWindow() override;
+		void HandleEvents() override;
 
 		//Wayland can't check for minimization
-		bool Minimized() {
+		bool Minimized() override {
 			return false;
 		}
 
-		const glm::uvec2 ContentAreaSize();
-		void Visibility(bool visible);
-		void Title(const std::string& title);
-		void Resize(const glm::uvec2& size);
-		void ModeChange(Window::Mode mode);
+		const glm::uvec2 ContentAreaSize() override;
+		void Visibility(bool visible) override;
+		void Title(const std::string& title) override;
+		void Resize(const glm::uvec2& size) override;
+		void ModeChange(Window::Mode mode) override;
 
 		//Wayland can't see window position
-		void SaveWinPos() {}
+		void SaveWinPos() override {}
 
-		void SaveWinSize();
-		void RestoreWin();
+		void SaveWinSize() override;
+		void RestoreWin() override;
+
+		const std::string ProviderID() const override {
+			return "wayland";
+		}
 	};
 }

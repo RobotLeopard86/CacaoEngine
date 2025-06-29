@@ -1,5 +1,7 @@
 #pragma once
 
 namespace Cacao {
-	void CreateSurface();
+	void Win32_CreateSurface();
+	void X_CreateSurface();
+	void Wayland_CreateSurface();
 }

@@ -4,10 +4,18 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
+#include <memory>
 
 #define win Window::Get()
 
 namespace Cacao {
+	struct WaylandWinRegistrar {
+		WaylandWinRegistrar() {
+			Window::Impl::registry.insert_or_assign("wayland", []() { return std::make_unique<WaylandWindowImpl>(); });
+		}
+	};
+	__attribute__((used)) WaylandWinRegistrar wwr;
+
 	void WaylandWindowImpl::CreateWindow() {
 		//Connect to Wayland
 		display = wl_display_connect(nullptr);

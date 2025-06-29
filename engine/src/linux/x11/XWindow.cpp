@@ -13,6 +13,13 @@
 #define win Window::Get()
 
 namespace Cacao {
+	struct XWinRegistrar {
+		XWinRegistrar() {
+			Window::Impl::registry.insert_or_assign("x11", []() { return std::make_unique<X11WindowImpl>(); });
+		}
+	};
+	__attribute__((used)) XWinRegistrar xwr;
+
 	void X11WindowImpl::CreateWindow() {
 		//Connect to X server
 		connection = xcb_connect(nullptr, nullptr);
@@ -386,7 +393,7 @@ namespace Cacao {
 				crtcState.size.x = crtcReply->width;
 				crtcState.size.y = crtcReply->height;
 				crtcState.rotation = crtcReply->rotation;
-				crtcState.outputs.assign(xcb_randr_get_crtc_info_outputs(crtcReply), xcb_randr_get_crtc_info_outputs(crtcReply) + xcb_randr_get_crtc_info_outputs_length(crtcReply) * sizeof(xcb_randr_output_t));
+				crtcState.outputs.assign(xcb_randr_get_crtc_info_outputs(crtcReply), xcb_randr_get_crtc_info_outputs(crtcReply) + (xcb_randr_get_crtc_info_outputs_length(crtcReply) * sizeof(xcb_randr_output_t)));
 
 				//Disable decorations
 				hints.flags = 0;

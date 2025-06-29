@@ -27,17 +27,21 @@ namespace Cacao {
 		} crtcState;
 		bool crtcSet;
 
-		void CreateWindow();
-		void DestroyWindow();
-		void HandleEvents();
-		bool Minimized();
-		const glm::uvec2 ContentAreaSize();
-		void Visibility(bool visible);
-		void Title(const std::string& title);
-		void Resize(const glm::uvec2& size);
-		void ModeChange(Window::Mode mode);
-		void SaveWinPos();
-		void SaveWinSize();
-		void RestoreWin();
+		void CreateWindow() override;
+		void DestroyWindow() override;
+		void HandleEvents() override;
+		bool Minimized() override;
+		const glm::uvec2 ContentAreaSize() override;
+		void Visibility(bool visible) override;
+		void Title(const std::string& title) override;
+		void Resize(const glm::uvec2& size) override;
+		void ModeChange(Window::Mode mode) override;
+		void SaveWinPos() override;
+		void SaveWinSize() override;
+		void RestoreWin() override;
+
+		const std::string ProviderID() const override {
+			return "x11";
+		}
 	};
 }

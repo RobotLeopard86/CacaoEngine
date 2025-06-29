@@ -31,7 +31,6 @@ elif host_machine.system() == 'linux'
 		vk_sources += 'wsi' / 'WaylandWSI.cpp'
 		vk_deps += [wayland_client, xdg_output_dep, xkbcommon_dep, libdecor_dep]
 	endif
-	vk_sources += 'wsi' / 'LinuxWSI.cpp'
 else
     error('Unsupported platform for Vulkan module!')
 endif

@@ -5,9 +5,9 @@
 #include "ImplAccessor.hpp"
 
 namespace Cacao {
-	void CreateSurface() {
+	void Win32_CreateSurface() {
 		Check<ExternalException>(vulkan->physDev.getWin32PresentationSupportKHR(0) == VK_TRUE, "Device does not support Vulkan presentation!");
-		vk::Win32SurfaceCreateInfoKHR wci({}, IMPL(Window).win->hInst, IMPL(Window).win->hWnd);
+		vk::Win32SurfaceCreateInfoKHR wci({}, WIN_IMPL(Win32).hInst, WIN_IMPL(Win32).hWnd);
 		vulkan->surface = vulkan->instance.createWin32SurfaceKHR(wci);
 	}
 }
