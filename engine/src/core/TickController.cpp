@@ -137,15 +137,15 @@ namespace Cacao {
 	}
 
 	void TickController::Impl::DynTick(time::dseconds timestep) {
-		Logger::Engine(Logger::Level::Trace) << "Running a dynamic tick; it's been " << std::chrono::duration_cast<time::dmilliseconds>(timestep) << " since the last one.";
+		//dummy
 		std::random_device randDev;
 		std::mt19937_64 rng(randDev());
 		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 3);
-		high_resolution_sleep::sleep_ms(dist(rng));
+		high_resolution_sleep::sleep_ms(dist(rng) + (0 / timestep.count()));
 	}
 
 	void TickController::Impl::FixedTick() {
-		Logger::Engine(Logger::Level::Trace) << "Running a fixed tick.";
+		//dummy
 		high_resolution_sleep::sleep_ms(2);
 	}
 }
