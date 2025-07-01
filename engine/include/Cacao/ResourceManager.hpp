@@ -29,7 +29,6 @@ namespace Cacao {
 		 * @brief Create and register a new resource (a ComponentExporter may not be created in this way)
 		 *
 		 * @param address The identifier component of the resource address to use
-		 * @param pkg The identifier of the package to associate this resource with
 		 * @param args The arguments to the resource constructor
 		 *
 		 * @throws BadValueException If the address provided is malformed

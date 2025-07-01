@@ -6,12 +6,12 @@ The information on this page pertains to the engine post-restructuring.
 
 Loading anything related to your game in Cacao Engine requires you to know its address. This is a specially-formatted string describing how to fetch the resource and its identifier.  Specifically, it is formated like this: `<type prefix>:<identifier>`. Note that all addresses are case-sensitive.  
 
-As a general note, the engine will refuse to load unpacked Cacao Engine formats at runtime. They will only be loaded in the editor. For that reason, referencing an unpacked-format file will fail as the engine won't be able to discover it.
+As a general note, the engine will refuse to load unpacked Cacao Engine formats at runtime. For that reason, referencing an unpacked-format file will fail as the engine won't be able to discover it.
 
 Below, the different formats are specified.
 
-## Resources
-Resources are the base type of anything that can be loaded. This section is about **blob resources** (often just called resources), which are stored in asset packs and are blobs of data that the engine does not interfere with. They can be literally anything.  
+## Blob Resources
+Blob resources are stored in asset packs and are blobs of data that the engine does not interfere with. They can contain any content, whether that be JSON, some binary data, or whatever else.  
 
 Their addresses use the type prefix `r`, and the identifier is the path to the resource within the asset pack. This mirrors the structure of the resource folder used to create the pack. It uses forward slashes for directory deliminators, but does not support using `..` or anything like that.
 
@@ -36,6 +36,6 @@ Worlds are where your game takes place. They are stored separately from assets, 
 Their addresses use the type prefix `w`, and the identifier is the name of the world.
 
 ## Components
-Component classes are stored in game binaries and made accessible to the engine at module load through the identification hook. Due to the sensitive and interconnected nature of code, components **do not** use the overlay stack and are thus not possible to override.
+Component classes are stored in game binaries and made accessible to the engine via the identification hook.
 
-Their addresses use the type prefix `c` and the identifier follows the format `<package>/<component class name>`.
+Their addresses use the type prefix `c` and the identifier is simply the component class name.

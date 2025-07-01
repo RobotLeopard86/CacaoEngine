@@ -18,8 +18,8 @@ namespace Cacao {
 	 */
 	class CACAO_API ComponentExporter : public Resource {
 	  public:
-		std::function<std::shared_ptr<Component>()> factory;
-		std::type_index type;
+		const std::function<std::shared_ptr<Component>()> factory;
+		const std::type_index type;
 
 		/**
 		 * @brief Create a new exporter
