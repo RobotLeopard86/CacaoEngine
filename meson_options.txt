@@ -5,8 +5,7 @@ option('build_engine', type: 'boolean', value: true, description: 'Whether to bu
 option('backends', type: 'array', value: [], description: 'The backends to enable for graphics.', choices: ['opengl', 'vulkan'])
 option('linux_windowing', type: 'array', value: ['x11', 'wayland'], description: '(Linux only) The windowing systems to support.', choices: ['x11', 'wayland'])
 option('windows_noconsole', type: 'boolean', value: false, description: '(Windows only) Whether to hide the console window created by default.')
-option('exe_name', type: 'string', value: 'cacaoengine', description: 'The name of the engine executable. Useful for games that want to have their name be the executable name.')
 
-option('build_playground', type: 'boolean', value: false, description: 'Whether to build the playground demo app.')
+option('build_sandbox', type: 'boolean', value: false, description: 'Whether to build the sandbox demo app.')
 
 option('build_tools', type: 'boolean', value: true, description: 'Whether to build the auxiliary tools for engine game development.')

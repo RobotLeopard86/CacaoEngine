@@ -1,7 +1,8 @@
 #import "MacOSTypes.hpp"
-#include <atomic>
 #include "Cacao/Engine.hpp"
 #include "ImplAccessor.hpp"
+
+#include <atomic>
 
 static std::atomic_bool quitRequested;
 
@@ -30,7 +31,7 @@ static std::atomic_bool quitRequested;
 @implementation CacaoWinDelegate
 
 - (void)windowWillClose:(id)sender {
-	if(!quitRequested) [IMPL(Window).mac->app terminate:sender];
+	if(!quitRequested) [WIN_IMPL(MacOS).app terminate:sender];
 }
 
 @end

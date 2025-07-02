@@ -1,12 +1,11 @@
 #include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
-#include <AppKit/AppKit.h>
 #include "Cacao/Exceptions.hpp"
-#include <memory>
 #include "../Context.hpp"
 
-#define GL_SILENCE_DEPRECATION
+#include <AppKit/AppKit.h>
 #import <OpenGL/OpenGL.h>
+#include <memory>
 
 #include "glad/gl.h"
 
@@ -96,14 +95,14 @@ namespace Cacao {
 
 		//Create OpenGL view (which handles context creation stuff) and make it the content view
 		err = "";
-		impl->view = [[CacaoGLView alloc] initWithFrame:IMPL(Window).mac->win.frame];
+		impl->view = [[CacaoGLView alloc] initWithFrame:WIN_IMPL(MacOS).win.frame];
 		Check<ExternalException>(impl->view != nil, err);
-		[IMPL(Window).mac->win setContentView:impl->view];
+		[WIN_IMPL(MacOS).win setContentView:impl->view];
 	}
 
 	Context::~Context() {
 		//Free OpenGL view
-		[IMPL(Window).mac->win setContentView:nil];
+		[WIN_IMPL(MacOS).win setContentView:nil];
 		[impl->view release];
 	}
 

@@ -33,7 +33,9 @@ endforeach
 
 # Engine library
 libcacao = shared_library('cacao', dependencies: [core_dep, windowing_deps, gfx_deps], install: true, install_tag: 'cacao')
-cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [core_deps])
 
-# Game runtime
-subdir('src' / 'runtime')
+# Game loader
+subdir('src' / 'loader')
+
+# Final dependency
+cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, link_whole: libloader, dependencies: [core_deps])
