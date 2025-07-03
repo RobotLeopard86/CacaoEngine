@@ -1,8 +1,8 @@
 #include "Cacao/World.hpp"
 
 namespace Cacao {
-	World::World(const std::string& addr, const std::string& pkg)
-	  : Resource(addr, pkg) {
+	World::World(const std::string& addr)
+	  : Resource(addr) {
 		//Create root actor
 		root = Actor::Create("__WORLDROOT__", std::nullopt);
 	}
@@ -36,7 +36,7 @@ namespace Cacao {
 		actor->Reparent(root);
 	}
 
-	std::vector<std::shared_ptr<Actor>> World::GetRootChildren() {
+	std::vector<std::shared_ptr<Actor>> World::GetRootChildren() const {
 		return root->GetAllChildren();
 	}
 }

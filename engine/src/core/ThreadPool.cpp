@@ -22,11 +22,11 @@ namespace Cacao {
 
 	CACAOST_GET(ThreadPool)
 
-	bool ThreadPool::IsRunning() {
+	bool ThreadPool::IsRunning() const {
 		return (bool)impl->pool;
 	}
 
-	std::size_t ThreadPool::GetThreadCount() {
+	std::size_t ThreadPool::GetThreadCount() const {
 		Check<BadInitStateException>(IsRunning(), "The thread pool must be running to check the thread count!");
 		return impl->pool->size();
 	}

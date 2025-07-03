@@ -25,7 +25,7 @@ namespace Cacao {
 		/**
 		 * @brief Get all entities that are direct children of the root actor
 		 */
-		std::vector<std::shared_ptr<Actor>> GetRootChildren();
+		std::vector<std::shared_ptr<Actor>> GetRootChildren() const;
 
 		/**
 		 * @brief Find an Actor by some arbitrary condition
@@ -35,20 +35,20 @@ namespace Cacao {
 		 * @return An optional that contains the actor if it was found
 		 */
 		template<typename P>
-		std::optional<std::shared_ptr<Actor>> FindActor(P predicate) {
+		std::optional<std::shared_ptr<Actor>> FindActor(P predicate) const {
 			//Search for the object
 			return actorSearchRunner(root->GetAllChildren(), predicate);
 		}
 
 	  private:
-		World(const std::string& addr, const std::string& pkg);
+		World(const std::string& addr);
 		~World();
 
 		std::shared_ptr<Actor> root;
 
 		//Recursive function for actually running a actor search
 		template<typename P>
-		std::optional<std::shared_ptr<Actor>> actorSearchRunner(std::vector<std::shared_ptr<Actor>> target, P predicate) {
+		std::optional<std::shared_ptr<Actor>> actorSearchRunner(std::vector<std::shared_ptr<Actor>> target, P predicate) const {
 			//Iterate through all children
 			for(auto child : target) {
 				//Does this child pass the predicate?

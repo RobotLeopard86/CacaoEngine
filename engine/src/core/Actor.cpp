@@ -4,7 +4,7 @@
 #include <algorithm>
 
 namespace Cacao {
-	glm::mat4 Actor::GetWorldTransformMatrix() {
+	glm::mat4 Actor::GetWorldTransformMatrix() const {
 		//Calculate the transformation matrix
 		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
 		std::shared_ptr<Actor> curParent = parentPtr;
@@ -79,16 +79,25 @@ namespace Cacao {
 	}
 
 	void Actor::NotifyFunctionallyActiveStateChanged() {
+		bool wasFA = functionallyActive;
 		functionallyActive = (parentPtr != shared_from_this() ? parentPtr->IsActive() : true) && active;
+		if(wasFA == functionallyActive) return;
 		for(auto child : children) {
 			child->NotifyFunctionallyActiveStateChanged();
 		}
 		for(auto comp : components) {
-			comp.second->OnEnableStateChange();
+			if(comp.second->enabled) {
+				if(wasFA) {
+					comp.second->OnDisable();
+				} else {
+					comp.second->OnEnable();
+				}
+			}
 		}
 	}
 
 	void Actor::SetActive(bool state) {
+		if(state == active) return;
 		active = state;
 		NotifyFunctionallyActiveStateChanged();
 	}

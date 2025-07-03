@@ -44,7 +44,9 @@ namespace Cacao {
 		 *
 		 * @return Whether the controller is running
 		 */
-		bool IsRunning();
+		bool IsRunning() const {
+			return running;
+		}
 
 	  private:
 		struct Impl;

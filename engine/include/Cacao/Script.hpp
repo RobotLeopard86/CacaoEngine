@@ -4,17 +4,20 @@
 #include "Time.hpp"
 
 namespace Cacao {
+	/**
+	 * @brief A component that
+	 */
 	class Script : public Component {
 	  public:
 		/**
 		 * @brief Runs when the script is enabled or when the owning Actor becomes active if the script was already enabled
 		 */
-		virtual void OnEnable() {};
+		void OnEnable() override {};
 
 		/**
 		 * @brief Runs when the script is disabled or when the owning Actor becomes inactive if the script was already enabled
 		 */
-		virtual void OnDisable() {};
+		void OnDisable() override {};
 
 		/**
 		 * @brief Runs each dynamic tick that the script is enabled and in an active World
@@ -34,7 +37,5 @@ namespace Cacao {
 
 	  protected:
 		Script();
-
-		void OnEnableStateChange() override;
 	};
 }

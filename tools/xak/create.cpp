@@ -27,7 +27,7 @@ CreateCmd::CreateCmd(CLI::App& app) {
 				  << "\t* A Cacao Engine packed cubemap\n"
 				  << "\t* A Cacao Engine packed material\n"
 				  << "\t* A 2D texture file (.png, .jpg/.jpeg, .bmp, .tga, or .hdr)\n"
-				  << "\t* A model file (.fbx, .glb, .dae, or .obj)\n"
+				  << "\t* A model file (.fbx, .glb, .dae, or .obj) containing one or more meshes and optionally textures.\n"
 				  << "\t* A font file (.ttf or .otf)\n"
 				  << "\t* A sound file (.mp3, .wav, .ogg (Ogg Vorbis), or .opus (Ogg Opus))\n\n"
 				  << "Any file not in of these categories will not be placed into the asset pack.\n"
@@ -124,6 +124,9 @@ void CreateCmd::Callback() {
 		for(const auto& [_, v] : addrMapAsMap) {
 			if(std::find(foundAddrs.cbegin(), foundAddrs.cend(), v) != foundAddrs.cend()) {
 				XAK_ERROR("Asset address map contains duplicate addresses!")
+			}
+			if(v.find_first_not_of("abcdefghghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789_") != std::string::npos) {
+				XAK_ERROR("Address listed in map contains invalid characters! (Hint: only lowercase letters, uppercase letters, numbers, and underscores are allowed.)")
 			}
 			foundAddrs.push_back(v);
 		}
@@ -473,8 +476,7 @@ asset_process:
 			std::string work = base;
 			do {
 				work = base;
-				work += std::to_string(counter);
-				counter++;
+				work += std::to_string(counter++);
 			} while(assetTable.contains(work));
 			trueAddr = work;
 			CVLOG("Done.")

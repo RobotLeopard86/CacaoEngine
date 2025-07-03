@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cacao/ComponentExporter.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 
@@ -36,7 +37,7 @@ namespace Cacao {
 		 * @return A handle to the resource
 		 */
 		template<typename T, typename... Args>
-			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && std::is_constructible_v<T, Args&&...>
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<ComponentExporter, T>) && std::is_constructible_v<T, Args&&...>
 		std::shared_ptr<T> Instantiate(const std::string& address, Args&&... args) = delete;
 
 		/**

@@ -64,7 +64,7 @@ namespace Cacao {
 		 * @brief Check if two EventConsumers are equal
 		 * @details Compares GUIDs (which should basically never overlap)
 		 */
-		bool operator==(const EventConsumer& rhs) {
+		bool operator==(const EventConsumer& rhs) const {
 			return (guid == rhs.guid);
 		}
 

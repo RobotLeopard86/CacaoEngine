@@ -29,7 +29,7 @@ namespace Cacao {
 		 *
 		 * @return The camera position in world space
 		 */
-		virtual glm::vec3 GetPosition() = 0;
+		virtual glm::vec3 GetPosition() const = 0;
 
 		/**
 		 * @brief Set the position of the camera
@@ -43,7 +43,7 @@ namespace Cacao {
 		 *
 		 * @return The camera rotation
 		 */
-		virtual glm::vec3 GetRotation() = 0;
+		virtual glm::vec3 GetRotation() const = 0;
 
 		/**
 		 * @brief Set the rotation of the camera
@@ -57,14 +57,14 @@ namespace Cacao {
 		 *
 		 * @return The projection matrix
 		 */
-		virtual glm::mat4 GetProjectionMatrix() = 0;
+		virtual glm::mat4 GetProjectionMatrix() const = 0;
 
 		/**
 		 * @brief Get the view matrix
 		 *
 		 * @return The view matrix
 		 */
-		virtual glm::mat4 GetViewMatrix() = 0;
+		virtual glm::mat4 GetViewMatrix() const = 0;
 
 		/**
 		 * @brief Event handler for resizing the projection matrix when the window size changes

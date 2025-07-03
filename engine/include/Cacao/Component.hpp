@@ -3,7 +3,6 @@
 #include "Actor.hpp"
 #include "DllHelper.hpp"
 
-#include <functional>
 #include <memory>
 
 namespace Cacao {
@@ -18,7 +17,7 @@ namespace Cacao {
 		 *
 		 * @note This will return false if the owning Actor is inactive
 		 */
-		const bool IsEnabled() {
+		bool IsEnabled() const {
 			return actor.lock()->IsActive() && enabled;
 		}
 
@@ -29,7 +28,9 @@ namespace Cacao {
 		 */
 		void SetEnabled(bool state) {
 			enabled = state;
-			OnEnableStateChange();
+			if(IsEnabled()) {
+				OnEnable();
+			}
 		}
 
 		/**
@@ -39,10 +40,15 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If the actor no longer exists
 		 */
-		std::shared_ptr<Actor> GetOwner() {
+		std::shared_ptr<Actor> GetOwner() const {
 			Check<NonexistentValueException>(!actor.expired(), "Cannot get expired Actor from Component!");
 			return actor.lock();
 		}
+
+		virtual ~Component() {}
+
+	  protected:
+		Component();
 
 		/**
 		 * @brief Runs when the component is first mounted on an Actor
@@ -51,12 +57,15 @@ namespace Cacao {
 		 */
 		virtual void OnMount() {};
 
-		virtual ~Component() {}
+		/**
+		 * @brief Runs when the component is enabled or when the owning Actor becomes active if the component was already enabled
+		 */
+		virtual void OnEnable() {};
 
-	  protected:
-		Component();
-
-		virtual void OnEnableStateChange() {};
+		/**
+		 * @brief Runs when the component is disabled or when the owning Actor becomes inactive if the component was already enabled
+		 */
+		virtual void OnDisable() {};
 
 		std::weak_ptr<Actor> actor [[maybe_unused]];
 

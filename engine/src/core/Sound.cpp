@@ -7,14 +7,45 @@
 #include "libcacaocommon.hpp"
 
 namespace Cacao {
-	Sound::Sound(std::vector<char>&& encoded)
-	  : Asset(), encodedAudio(encoded) {
+	Sound::Sound(std::vector<char>&& encodedAudio, const std::string& addr)
+	  : Asset(addr), encodedAudio(encodedAudio) {
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
 	}
 
 	Sound::~Sound() {
 		if(realized) DropRealized();
+	}
+
+	Sound::Sound(Sound&& other)
+	  : Asset(other.address), encodedAudio(other.encodedAudio) {
+		//Steal the implementation pointer
+		impl = std::move(other.impl);
+
+		//Copy realization state
+		realized = other.realized;
+		other.realized = false;
+
+		//Blank out other asset address
+		other.address = "";
+	}
+
+	Sound& Sound::operator=(Sound&& other) {
+		//Implementation pointer
+		impl = std::move(other.impl);
+
+		//Realization state
+		realized = other.realized;
+		other.realized = false;
+
+		//Asset address
+		address = other.address;
+		other.address = "";
+
+		//Encoded audio buffer
+		encodedAudio = std::move(other.encodedAudio);
+
+		return *this;
 	}
 
 	void Sound::Realize() {

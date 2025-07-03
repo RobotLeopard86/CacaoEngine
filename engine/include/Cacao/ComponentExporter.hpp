@@ -28,13 +28,13 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Component, T> && (!std::is_same_v<Script, T>)
-		static ComponentExporter Create(std::function<std::shared_ptr<T>> factory, const std::string& addr, const std::string& pkg) {
-			return ComponentExporter(addr, pkg, typeid(T), [factory]() { return std::static_pointer_cast<Component>(factory()); });
+		static ComponentExporter Create(std::function<std::shared_ptr<T>> factory, const std::string& addr) {
+			return ComponentExporter(addr, typeid(T), [factory]() { return std::static_pointer_cast<Component>(factory()); });
 		}
 
 	  private:
-		ComponentExporter(const std::string& addr, const std::string& pkg, std::type_index tp, std::function<std::shared_ptr<Component>()> f)
-		  : Resource(addr, pkg), factory(f), type(tp) {
+		ComponentExporter(const std::string& addr, std::type_index tp, std::function<std::shared_ptr<Component>()> f)
+		  : Resource(addr), factory(f), type(tp) {
 			RegisterSelf();
 		}
 

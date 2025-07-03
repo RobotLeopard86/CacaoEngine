@@ -37,14 +37,14 @@ namespace Cacao {
 		 *
 		 * @return The world-space transformation matrix
 		 */
-		glm::mat4 GetWorldTransformMatrix();
+		glm::mat4 GetWorldTransformMatrix() const;
 
 		/**
 		 * @brief Access the parent of this actor
 		 *
 		 * @return The parent actor, or an empty pointer if this is an orphaned actor
 		 */
-		std::shared_ptr<Actor> GetParent() {
+		std::shared_ptr<Actor> GetParent() const {
 			return parentPtr;
 		}
 
@@ -54,7 +54,7 @@ namespace Cacao {
 		 *
 		 * @note This will return false if the parent Actor is inactive
 		 */
-		bool IsActive() {
+		bool IsActive() const {
 			return functionallyActive;
 		}
 
@@ -107,7 +107,7 @@ namespace Cacao {
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T>
-		bool HasComponent() {
+		bool HasComponent() const {
 			return components.contains(std::type_index(typeid(T)));
 		}
 
@@ -120,7 +120,7 @@ namespace Cacao {
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T>
-		std::shared_ptr<T> GetComponent() {
+		std::shared_ptr<T> GetComponent() const {
 			Check<ContainerException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
 			return std::dynamic_pointer_cast<T>(components.at(std::type_index(typeid(T))));
 		}
@@ -144,7 +144,7 @@ namespace Cacao {
 		 *
 		 * @return All actor components
 		 */
-		std::map<std::type_index, std::shared_ptr<Component>> GetAllComponents() {
+		std::map<std::type_index, std::shared_ptr<Component>> GetAllComponents() const {
 			return components;
 		}
 
@@ -153,7 +153,7 @@ namespace Cacao {
 		 *
 		 * @return All child entities
 		 */
-		std::vector<std::shared_ptr<Actor>> GetAllChildren() {
+		std::vector<std::shared_ptr<Actor>> GetAllChildren() const {
 			return children;
 		}
 

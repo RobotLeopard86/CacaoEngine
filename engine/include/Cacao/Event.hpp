@@ -25,7 +25,7 @@ namespace Cacao {
 		 *
 		 * @return The event type
 		 */
-		std::string GetType() {
+		const std::string GetType() const {
 			return type;
 		}
 
@@ -56,7 +56,7 @@ namespace Cacao {
 		 *
 		 * @return The data
 		 */
-		T GetData() {
+		T GetData() const {
 			return data;
 		}
 

@@ -25,7 +25,7 @@ namespace Cacao {
 		 *
 		 * @return The camera position in world space
 		 */
-		glm::vec3 GetPosition() override {
+		glm::vec3 GetPosition() constoverride {
 			return position;
 		}
 
@@ -44,7 +44,7 @@ namespace Cacao {
 		 *
 		 * @return The camera rotation
 		 */
-		glm::vec3 GetRotation() override {
+		glm::vec3 GetRotation() constoverride {
 			return rotation;
 		}
 
@@ -63,7 +63,7 @@ namespace Cacao {
 		 *
 		 * @return The FOV
 		 */
-		float GetFOV() {
+		float GetFOV() const {
 			return fov;
 		}
 
@@ -82,7 +82,7 @@ namespace Cacao {
 		 *
 		 * @return The projection matrix
 		 */
-		glm::mat4 GetProjectionMatrix() override {
+		glm::mat4 GetProjectionMatrix() const override {
 			return projectionMatrix;
 		}
 
@@ -91,7 +91,7 @@ namespace Cacao {
 		 *
 		 * @return The view matrix
 		 */
-		glm::mat4 GetViewMatrix() override {
+		glm::mat4 GetViewMatrix() const override {
 			return viewMatrix;
 		}
 
@@ -100,7 +100,7 @@ namespace Cacao {
 		 *
 		 * @return The unit vector pointing out at the camera's rotation
 		 */
-		glm::vec3 GetFrontVector() {
+		glm::vec3 GetFrontVector() const {
 			return frontVec;
 		}
 
@@ -109,7 +109,7 @@ namespace Cacao {
 		 *
 		 * @return The unit vector perpendicular to both the front and world up vectors
 		 */
-		glm::vec3 GetRightVector() {
+		glm::vec3 GetRightVector() const {
 			return rightVec;
 		}
 
@@ -118,7 +118,7 @@ namespace Cacao {
 		 *
 		 * @return The unit vector perpendicular to both the front and right vectors
 		 */
-		glm::vec3 GetUpVector() {
+		glm::vec3 GetUpVector() const {
 			return upVec;
 		}
 
@@ -127,7 +127,7 @@ namespace Cacao {
 		 *
 		 * @return The look target (which is the position + the front vector)
 		 */
-		glm::vec3 GetLookTarget() {
+		glm::vec3 GetLookTarget() const {
 			return position + frontVec;
 		}
 

@@ -12,8 +12,15 @@ namespace Cacao {
 	 */
 	class CACAO_API Sound final : public Asset {
 	  public:
+		///@cond
+		Sound(const Sound&) = delete;
+		Sound(Sound&&);
+		Sound& operator=(const Sound&) = delete;
+		Sound& operator=(Sound&&);
+		///@endcond
+
 		/**
-		 * @brief Synchronously convert the audio data into a form suitable for use
+		 * @brief Synchronously convert the audio data into a form suitable for playback
 		 *
 		 * @throws BadRealizeStateException If the sound is already realized
 		 * @throws BadInitStateException If the audio system is not initialized
@@ -21,7 +28,7 @@ namespace Cacao {
 		void Realize();
 
 		/**
-		 * @brief Asynchronously convert the audio data into a form suitable for use
+		 * @brief Asynchronously convert the audio data into a form suitable for playback
 		 *
 		 * @return A future that will resolve when realization is complete or fails
 		 *
@@ -42,15 +49,14 @@ namespace Cacao {
 		struct Impl;
 		///@endcond
 
+		~Sound();
+
 	  private:
+		Sound(std::vector<char>&& encodedAudio, const std::string& addr);
+
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
 
 		std::vector<char> encodedAudio;
-
-		Sound(std::vector<char>&& encoded, const std::string& addr, const std::string& pkg);
-		~Sound();
-
-		friend class ResourceManager;
 	};
 }

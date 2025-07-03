@@ -124,7 +124,7 @@ namespace Cacao {
 		 *
 		 * @return Whether the pool is running
 		 */
-		bool IsRunning();
+		bool IsRunning() const;
 
 		/**
 		 * @brief Check how many threads are in the pool
@@ -133,7 +133,7 @@ namespace Cacao {
 		 *
 		 * @throws BadInitStateException If the pool is not running
 		 */
-		std::size_t GetThreadCount();
+		std::size_t GetThreadCount() const;
 
 	  private:
 		struct Impl;

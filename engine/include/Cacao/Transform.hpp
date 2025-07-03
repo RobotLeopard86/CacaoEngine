@@ -28,7 +28,7 @@ namespace Cacao {
 		 *
 		 * @return The position
 		 */
-		glm::vec3 GetPosition() {
+		glm::vec3 GetPosition() const {
 			return pos;
 		}
 
@@ -37,7 +37,7 @@ namespace Cacao {
 		 *
 		 * @return The rotation
 		 */
-		glm::vec3 GetRotation() {
+		glm::vec3 GetRotation() const {
 			return rot;
 		}
 
@@ -46,7 +46,7 @@ namespace Cacao {
 		 *
 		 * @return The scale
 		 */
-		glm::vec3 GetScale() {
+		glm::vec3 GetScale() const {
 			return scale;
 		}
 
@@ -85,7 +85,7 @@ namespace Cacao {
 		 *
 		 * @return The transformation matrix
 		 */
-		glm::mat4 GetTransformationMatrix() {
+		glm::mat4 GetTransformationMatrix() const {
 			return transMat;
 		}
 

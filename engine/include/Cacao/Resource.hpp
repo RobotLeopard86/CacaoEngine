@@ -4,7 +4,6 @@
 #include "DllHelper.hpp"
 
 #include <string>
-#include <memory>
 #include <vector>
 
 namespace Cacao {
@@ -18,28 +17,51 @@ namespace Cacao {
 		 *
 		 * @return The address
 		 */
-		std::string GetAddress() {
+		const std::string GetAddress() const {
 			return address;
 		}
 
 		virtual ~Resource();
 
 	  protected:
-		Resource(const std::string& addr, const std::string& pkg)
-		  : address(addr), pkg(pkg) {}
+		Resource(const std::string& addr)
+		  : address(addr) {}
 
-		const std::string address;
-		const std::string pkg;
+		std::string address;
 	};
 
 	/**
-	 * @brief The base type for any game-defined resource types loaded from data blobs
+	 * @brief Base class for resource blobs (it does functionally nothing but it's for grouping purposes)
 	 */
 	class CACAO_API BlobResource : public Resource {
 	  protected:
-		BlobResource(const std::string& addr, const std::string& pkg, std::vector<unsigned char>&& data)
-		  : Resource(addr, pkg), data(data) {}
+		BlobResource(const std::string& addr)
+		  : Resource(addr) {}
+	};
+
+	/**
+	 * @brief The resource type for binary data blobs
+	 */
+	class CACAO_API BinaryBlobResource : public BlobResource {
+	  private:
+		BinaryBlobResource(const std::string& addr, std::vector<unsigned char>&& data)
+		  : BlobResource(addr), data(data) {}
 
 		const std::vector<unsigned char> data;
+
+		friend class ResourceManager;
+	};
+
+	/**
+	 * @brief The resource type for data blobs containing text
+	 */
+	class CACAO_API TextBlobResource : public BlobResource {
+	  private:
+		TextBlobResource(const std::string& addr, std::string data)
+		  : BlobResource(addr), data(data) {}
+
+		const std::string data;
+
+		friend class ResourceManager;
 	};
 }

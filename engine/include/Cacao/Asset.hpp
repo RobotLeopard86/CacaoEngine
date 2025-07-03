@@ -12,14 +12,14 @@ namespace Cacao {
 	class CACAO_API Asset : public Resource {
 	  public:
 		/**
-		 * @brief Synchronously convert the loaded data into a form suitable for playback
+		 * @brief Synchronously convert the loaded data into a form suitable for use
 		 *
 		 * @throws BadRealizeStateException If the asset is already realized
 		 */
 		virtual void Realize() = 0;
 
 		/**
-		 * @brief Asynchronously convert the loaded data into a form suitable for playback
+		 * @brief Asynchronously convert the loaded data into a form suitable for use
 		 *
 		 * @return A future that will resolve when realization is complete or fails
 		 *
@@ -46,8 +46,8 @@ namespace Cacao {
 		virtual ~Asset() {}
 
 	  protected:
-		Asset(const std::string& addr, const std::string& pkg)
-		  : Resource(addr, pkg), realized(false) {}
+		Asset(const std::string& addr)
+		  : Resource(addr), realized(false) {}
 
 		bool realized;
 	};
