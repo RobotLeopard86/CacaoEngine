@@ -395,7 +395,7 @@
 <span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eventType</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GetType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GetType</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -410,7 +410,7 @@
 <span class="w">        </span><span class="n">DataEvent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">eventType</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">eventData</span><span class="p">)</span>
 <span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">Event</span><span class="p">(</span><span class="n">eventType</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="p">(</span><span class="n">eventData</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 
-<span class="w">        </span><span class="n">T</span><span class="w"> </span><span class="n">GetData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">T</span><span class="w"> </span><span class="n">GetData</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 

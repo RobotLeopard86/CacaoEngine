@@ -426,12 +426,12 @@
 </section>
 <section id="assets">
 <h2>Assets<a class="headerlink" href="#assets" title="Link to this heading"><span/></a></h2>
-<p>Assets are anything that is contained in an asset pack and is of a certain type deemed useful by the engine. At present, this is:</p>
+<p>Assets are contained in an asset pack and are resources that have a direct engine-related use. At present, this is:</p>
 <ul class="simple">
 <li><p>2D Textures</p></li>
 <li><p>Cubemaps</p></li>
 <li><p>Sounds</p></li>
-<li><p>Models</p></li>
+<li><p>Models (see dedicated section below)</p></li>
 <li><p>Fonts</p></li>
 <li><p>Shaders</p></li>
 <li><p>Materials</p></li>
@@ -441,6 +441,11 @@
 <p class="admonition-title">Tip</p>
 <p>If you use auto-generated asset addresses for your packs and don’t recall the asset address, use the <code class="docutils literal notranslate"><span class="pre">ce-xak</span></code> tool to list the assets in a pack.</p>
 </div>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading"><span/></a></h2>
+<p>Models are also stored in asset packs just like assets. However, their main use comes from the meshes and textures that they contain. While models themselves may be loaded by directly using their address, often you will want to specifically refer to the contained assets.</p>
+<p>To access these, you use a special address. These address use the type prefix <code class="docutils literal notranslate"><span class="pre">m</span></code>, and the identifier is the model asset address followed by either a <code class="docutils literal notranslate"><span class="pre">/</span></code> for models or a <code class="docutils literal notranslate"><span class="pre">%</span></code> for textures, and then the mesh/texture name within the model. You do not need these special addresses when working with the <code class="docutils literal notranslate"><span class="pre">Model</span></code> class API, but the resource manager will accept them and cache the model for future requests.</p>
 </section>
 <section id="worlds">
 <h2>Worlds<a class="headerlink" href="#worlds" title="Link to this heading"><span/></a></h2>
@@ -503,6 +508,7 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blob-resources">Blob Resources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assets">Assets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worlds">Worlds</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components">Components</a></li>
 </ul>
