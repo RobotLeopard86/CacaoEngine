@@ -21,6 +21,9 @@ Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of `
 	* Stages `a` and `b` - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.
 	* Stage `rc` - Monotonic increases with numbers not shared between stages or patch versions.
 
+## Nicknames
+Each new minor release of Cacao Engine is given a new nickname. The first letter of a nickname starts as A and will change every major release, cycling through to Z and then back to A. All minor releases are given a new nickname with the same first letter. Nicknames may not repeat. There is no rule on what must constitute a nickname.
+
 ## Stability
 All prerelease versions of Cacao Engine are **not** guaranteed to be stable and may not function correctly or at all on all devices/platforms. Once a prerelease has been tested on all platforms and functions correctly, that version will be promoted to the full release.  
 All full release versions are stable and verified to work correctly on all platforms (though per-device compatibility may vary).

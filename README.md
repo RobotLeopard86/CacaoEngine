@@ -12,7 +12,7 @@ Documentation is built and deployed automatically to https://robotleopard86.gith
 If you want to build it yourself, everything is located in the `docs` folder. See the [docs build instructions page](docs/README.md) for more information.
 
 ## Branching Scheme
-Cacao Engine uses two branches, `main` and `dev`. `main` should be considered stable and should **NEVER** be pushed to on its own. `dev` is where main work can happen and is allowed to be unstable and break. Only once `dev` is in a stable state can it be merged into `main` via a pull request.
+Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all core development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split). During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All alpha and beta testing should continue in `dev` and be merged into that branch until the stable release is completed. Once the release is made, the staging branch should be merged back into `main`, synchronizing it with `dev`, and the staging branch should be deleted. Release tags should be made from `main`.
 
 ## Licensing
 Cacao Engine and its auxiliary libraries and tools are licensed under the Apache License 2.0, which can be found in the root directory. All third-party licenses are present in the `licenses` folder.
