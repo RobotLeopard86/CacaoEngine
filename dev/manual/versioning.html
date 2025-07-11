@@ -431,10 +431,10 @@
 <section id="number-incrementing">
 <h2>Number Incrementing<a class="headerlink" href="#number-incrementing" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Generation - Year during which work on release began (so ifr the year rolls over during development, nothing changes until the next release)</p></li>
+<li><p>Generation - Year during which work on the release began (so if the year rolls over during development, nothing changes until the next release), should not be incremented until the next major release after rollover to avoid confusion</p></li>
 <li><p>Major - Incremented for large new feature additions or any breaking changes, API or behavioral.</p></li>
 <li><p>Minor - Incremented for non-breaking changes or when the Patch rolls over.</p></li>
-<li><p>Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there’s probabably been enough changed to warrant a new minor release).</p></li>
+<li><p>Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there’s probably been enough changed to warrant a new minor release).</p></li>
 <li><p>Build - Stage-dependent:</p>
 <ul>
 <li><p>Stages <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.</p></li>
