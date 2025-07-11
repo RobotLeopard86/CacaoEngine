@@ -13,10 +13,10 @@ Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of `
 * `rc` - Release candidates. Should be almost entirely stable.
 
 ## Number Incrementing
-* Generation - Year during which work on release began (so ifr the year rolls over during development, nothing changes until the next release)
+* Generation - Year during which work on the release began (so if the year rolls over during development, nothing changes until the next release), should not be incremented until the next major release after rollover to avoid confusion
 * Major - Incremented for large new feature additions or any breaking changes, API or behavioral.
 * Minor - Incremented for non-breaking changes or when the Patch rolls over.
-* Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there's probabably been enough changed to warrant a new minor release).
+* Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there's probably been enough changed to warrant a new minor release).
 * Build - Stage-dependent:
 	* Stages `a` and `b` - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.
 	* Stage `rc` - Monotonic increases with numbers not shared between stages or patch versions.
