@@ -434,91 +434,10 @@
 </ul>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedEncoderE">
-<span id="_CPPv3N15libcacaoformats13PackedEncoderE"></span><span id="_CPPv2N15libcacaoformats13PackedEncoderE"></span><span id="libcacaoformats::PackedEncoder"></span><span class="target" id="classlibcacaoformats_1_1PackedEncoder"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedEncoder</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedEncoderE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Encoder for uncompressed packed format buffers. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedEncoder13EncodeCubemapERKNSt5arrayI11ImageBufferXL6EEEE">
-<span id="_CPPv3N15libcacaoformats13PackedEncoder13EncodeCubemapERKNSt5arrayI11ImageBufferXL6EEEE"></span><span id="_CPPv2N15libcacaoformats13PackedEncoder13EncodeCubemapERKNSt5arrayI11ImageBufferX6EEE"></span><span id="libcacaoformats::PackedEncoder::EncodeCubemap__std::array:ImageBuffer.6:CR"></span><span class="target" id="classlibcacaoformats_1_1PackedEncoder_1acc01c26b42f5fd7f94ef17c4bc803d72"></span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeCubemap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="structlibcacaoformats_1_1ImageBuffer.html#_CPPv4N15libcacaoformats11ImageBufferE" title="libcacaoformats::ImageBuffer"><span class="n"><span class="pre">ImageBuffer</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">6</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cubemap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedEncoder13EncodeCubemapERKNSt5arrayI11ImageBufferXL6EEEE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Encode a set of cubemap images faces into a packed cubemap. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>cubemap</strong> – A list of cubemap faces in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face</p>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If one of the faces holds invalid data or has zero dimensions </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A <a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> encapsulating the encoded cubemap data, with all faces encoded in PNG format</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedEncoder12EncodeShaderERKNSt6vectorIhEE">
-<span id="_CPPv3N15libcacaoformats13PackedEncoder12EncodeShaderERKNSt6vectorIhEE"></span><span id="_CPPv2N15libcacaoformats13PackedEncoder12EncodeShaderERKNSt6vectorIhEE"></span><span id="libcacaoformats::PackedEncoder::EncodeShader__std::vector:unsigned-c:CR"></span><span class="target" id="classlibcacaoformats_1_1PackedEncoder_1a857ae064953ccdc3ba59ea4b47a1fdb9"></span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeShader</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ir</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedEncoder12EncodeShaderERKNSt6vectorIhEE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Encode shader IR into a packed shader object. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ir</strong> – Shader Slang IR</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> encapsulating the shader code </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedEncoder14EncodeMaterialERK8Material">
-<span id="_CPPv3N15libcacaoformats13PackedEncoder14EncodeMaterialERK8Material"></span><span id="_CPPv2N15libcacaoformats13PackedEncoder14EncodeMaterialERK8Material"></span><span id="libcacaoformats::PackedEncoder::EncodeMaterial__MaterialCR"></span><span class="target" id="classlibcacaoformats_1_1PackedEncoder_1abd8ad06df034f64987b7c817b5303a25"></span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeMaterial</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1Material.html#_CPPv4N15libcacaoformats8MaterialE" title="libcacaoformats::Material"><span class="n"><span class="pre">Material</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedEncoder14EncodeMaterialERK8Material" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Encode material data and a shader reference into a packed material. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mat</strong> – The <a class="reference internal" href="structlibcacaoformats_1_1Material.html#structlibcacaoformats_1_1Material"><span class="std std-ref">Material</span></a> object with the data to encode</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> encapsulating the shader reference and material data </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedEncoder11EncodeWorldERK5World">
-<span id="_CPPv3N15libcacaoformats13PackedEncoder11EncodeWorldERK5World"></span><span id="_CPPv2N15libcacaoformats13PackedEncoder11EncodeWorldERK5World"></span><span id="libcacaoformats::PackedEncoder::EncodeWorld__WorldCR"></span><span class="target" id="classlibcacaoformats_1_1PackedEncoder_1a4915c4305b520e5d407562174c4b61d3"></span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeWorld</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1World.html#_CPPv4N15libcacaoformats5WorldE" title="libcacaoformats::World"><span class="n"><span class="pre">World</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">world</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedEncoder11EncodeWorldERK5World" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Encode world data into a packed format. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>world</strong> – The decoded <a class="reference internal" href="structlibcacaoformats_1_1World.html#structlibcacaoformats_1_1World"><span class="std std-ref">World</span></a> object</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> encapsulating the world data and initial state </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats13PackedEncoder15EncodeAssetPackERK9AssetPack">
-<span id="_CPPv3N15libcacaoformats13PackedEncoder15EncodeAssetPackERK9AssetPack"></span><span id="_CPPv2N15libcacaoformats13PackedEncoder15EncodeAssetPackERK9AssetPack"></span><span id="libcacaoformats::PackedEncoder::EncodeAssetPack__AssetPackCR"></span><span class="target" id="classlibcacaoformats_1_1PackedEncoder_1a655605ea9db19673a36bd2293ebc7ff5"></span><a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EncodeAssetPack</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_libcacaoformats_8hpp_1a575311473aeb953908ff37e0c07315b0.html#_CPPv4N15libcacaoformats9AssetPackE" title="libcacaoformats::AssetPack"><span class="n"><span class="pre">AssetPack</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pack</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats13PackedEncoder15EncodeAssetPackERK9AssetPack" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Combine asset pack files into a merged pack. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>pack</strong> – A map of filenames to <a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html#structlibcacaoformats_1_1PackedAsset"><span class="std std-ref">PackedAsset</span></a> objects from the asset pack</p>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the provided pack data has no assets </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A <a class="reference internal" href="classlibcacaoformats_1_1PackedContainer.html#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> encapsulating the asset info and asset files</p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class “libcacaoformats::PackedEncoder” in doxygen xml output for project “Cacao Engine” from directory: ./_doxy/cacao/xml</p>
 </div>
-</dd></dl>
-
 </section>
 </section>
 
@@ -569,17 +488,7 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedEncoderE"><code class="docutils literal notranslate"><span class="pre">PackedEncoder</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedEncoder13EncodeCubemapERKNSt5arrayI11ImageBufferXL6EEEE"><code class="docutils literal notranslate"><span class="pre">PackedEncoder::EncodeCubemap()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedEncoder12EncodeShaderERKNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedEncoder::EncodeShader()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedEncoder14EncodeMaterialERK8Material"><code class="docutils literal notranslate"><span class="pre">PackedEncoder::EncodeMaterial()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedEncoder11EncodeWorldERK5World"><code class="docutils literal notranslate"><span class="pre">PackedEncoder::EncodeWorld()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats13PackedEncoder15EncodeAssetPackERK9AssetPack"><code class="docutils literal notranslate"><span class="pre">PackedEncoder::EncodeAssetPack()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a></li>
 </ul>
   </nav></div>
 

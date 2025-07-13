@@ -558,59 +558,6 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6VertexE">
 <span id="_CPPv3N5Cacao6VertexE"></span><span id="_CPPv2N5Cacao6VertexE"></span><span id="Cacao::Vertex"></span><span class="target" id="structCacao_1_1Vertex"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Vertex</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6VertexE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>All data about a given vertex in a mesh. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Vertex6VertexEN3glm4vec3EN3glm4vec2EN3glm4vec3EN3glm4vec3EN3glm4vec3E">
-<span id="_CPPv3N5Cacao6Vertex6VertexEN3glm4vec3EN3glm4vec2EN3glm4vec3EN3glm4vec3EN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Vertex6VertexEN3glm4vec3EN3glm4vec2EN3glm4vec3EN3glm4vec3EN3glm4vec3E"></span><span id="Cacao::Vertex::Vertex__glm::vec3.glm::vec2.glm::vec3.glm::vec3.glm::vec3"></span><span class="target" id="structCacao_1_1Vertex_1a7cb9c96bf4a149283f68c321ec3bb991"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Vertex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec2</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">texCoords</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec2</span></span><span class="p"><span class="pre">(</span></span><span class="m"><span class="pre">0.0f</span></span><span class="p"><span class="pre">)</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tangent</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="p"><span class="pre">(</span></span><span class="m"><span class="pre">0.0f</span></span><span class="p"><span class="pre">)</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bitangent</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="p"><span class="pre">(</span></span><span class="m"><span class="pre">0.0f</span></span><span class="p"><span class="pre">)</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">normal</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="p"><span class="pre">(</span></span><span class="m"><span class="pre">0.0f</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Vertex6VertexEN3glm4vec3EN3glm4vec2EN3glm4vec3EN3glm4vec3EN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new vertex. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> – The position in local space </p></li>
-<li><p><strong>texCoords</strong> – The texture coordinates (optional, defaults to {0, 0}) </p></li>
-<li><p><strong>tangent</strong> – The right vector in tangent space (optional, defaults to {0, 0, 0}) </p></li>
-<li><p><strong>bitangent</strong> – The front vector in tangent space (optional, defaults to {0, 0, 0}) </p></li>
-<li><p><strong>normal</strong> – The up vector in tangent space (optional, defaults to {0, 0, 0}) </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Vertex8positionE">
-<span id="_CPPv3N5Cacao6Vertex8positionE"></span><span id="_CPPv2N5Cacao6Vertex8positionE"></span><span id="Cacao::Vertex::position__glm::vec3C"></span><span class="target" id="structCacao_1_1Vertex_1a8f75d299cb89358d51bfe08211d9cdcb"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Vertex8positionE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The position in local space. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Vertex9texCoordsE">
-<span id="_CPPv3N5Cacao6Vertex9texCoordsE"></span><span id="_CPPv2N5Cacao6Vertex9texCoordsE"></span><span id="Cacao::Vertex::texCoords__glm::vec2C"></span><span class="target" id="structCacao_1_1Vertex_1a96756c39f8c309e7d13d345b866dcdde"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">texCoords</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Vertex9texCoordsE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The texture coordinates. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Vertex7tangentE">
-<span id="_CPPv3N5Cacao6Vertex7tangentE"></span><span id="_CPPv2N5Cacao6Vertex7tangentE"></span><span id="Cacao::Vertex::tangent__glm::vec3C"></span><span class="target" id="structCacao_1_1Vertex_1af17c9e00f082f0b0dbd49bd90e1f2849"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tangent</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Vertex7tangentE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The right vector in tangent space. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Vertex9bitangentE">
-<span id="_CPPv3N5Cacao6Vertex9bitangentE"></span><span id="_CPPv2N5Cacao6Vertex9bitangentE"></span><span id="Cacao::Vertex::bitangent__glm::vec3C"></span><span class="target" id="structCacao_1_1Vertex_1afe66fe646c883410ae703233e5209bb4"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bitangent</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Vertex9bitangentE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The front vector in tangent space. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Vertex6normalE">
-<span id="_CPPv3N5Cacao6Vertex6normalE"></span><span id="_CPPv2N5Cacao6Vertex6normalE"></span><span id="Cacao::Vertex::normal__glm::vec3C"></span><span class="target" id="structCacao_1_1Vertex_1adda15a2363188e1a576dadfa6040d1bd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normal</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Vertex6normalE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>The up vector in tangent space. </p>
-</dd></dl>
-
-</div>
 </dd></dl>
 
 </section>
@@ -664,15 +611,7 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6VertexE"><code class="docutils literal notranslate"><span class="pre">Vertex</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Vertex6VertexEN3glm4vec3EN3glm4vec2EN3glm4vec3EN3glm4vec3EN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">Vertex::Vertex()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Vertex8positionE"><code class="docutils literal notranslate"><span class="pre">Vertex::position</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Vertex9texCoordsE"><code class="docutils literal notranslate"><span class="pre">Vertex::texCoords</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Vertex7tangentE"><code class="docutils literal notranslate"><span class="pre">Vertex::tangent</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Vertex9bitangentE"><code class="docutils literal notranslate"><span class="pre">Vertex::bitangent</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Vertex6normalE"><code class="docutils literal notranslate"><span class="pre">Vertex::normal</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6VertexE"><code class="docutils literal notranslate"><span class="pre">Vertex</span></code></a></li>
 </ul>
 </li>
 </ul>
