@@ -344,6 +344,12 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -368,6 +374,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ComponentExporter.html">Class ComponentExporter</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -387,6 +396,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -411,6 +423,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
@@ -548,7 +563,11 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0DpEN5Cacao15ResourceManager11InstantiateENSt10shared_ptrI1TEERKNSt6stringEDpRR4Args">
 <span id="_CPPv3I0DpEN5Cacao15ResourceManager11InstantiateERKNSt6stringEDpRR4Args"></span><span id="_CPPv2I0DpEN5Cacao15ResourceManager11InstantiateERKNSt6stringEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ResourceManager_1ae366286fe3f7d612e148ae5aa55a671a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao15ResourceManager11InstantiateENSt10shared_ptrI1TEERKNSt6stringEDpRR4Args" title="Cacao::ResourceManager::Instantiate::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Instantiate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span>, <a class="reference internal" href="#_CPPv4I0DpEN5Cacao15ResourceManager11InstantiateENSt10shared_ptrI1TEERKNSt6stringEDpRR4Args" title="Cacao::ResourceManager::Instantiate::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4I0DpEN5Cacao15ResourceManager11InstantiateENSt10shared_ptrI1TEERKNSt6stringEDpRR4Args" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create and register a new resource (a <a class="reference internal" href="classCacao_1_1ComponentExporter.html#classCacao_1_1ComponentExporter"><span class="std std-ref">ComponentExporter</span></a> may not be created in this way) </p>
+<dd><p>Create and register a new resource. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A <a class="reference internal" href="classCacao_1_1ComponentExporter.html#classCacao_1_1ComponentExporter"><span class="std std-ref">ComponentExporter</span></a> may not be created in this way for type-checking reasons; use <a class="reference internal" href="classCacao_1_1ComponentExporter.html#classCacao_1_1ComponentExporter_1a209c98f15a03457aff7d6ee4433ff995"><span class="std std-ref">ComponentExporter::Create</span></a> instead</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
