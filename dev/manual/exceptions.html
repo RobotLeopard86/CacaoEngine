@@ -420,20 +420,20 @@
 <section id="built-in-exceptions">
 <h2>Built-In Exceptions<a class="headerlink" href="#built-in-exceptions" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">External</span></code> - The exception came from an non-Cacao library and is not associated with the engine itself</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">External</span></code> - The exception came from a non-Cacao library and is not associated with the engine itself, but is being forwarded</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FileNotFound</span></code> - A requested file was not found</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">IO</span></code> - An I/O error occurred</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FileOpen</span></code> - A file could not be opened</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">InvalidYAML</span></code> - YAML input followed a different schema than what was expected</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BadInitState</span></code> - Something was in the wrong initialization state</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">BadRealizeState</span></code> - A resource’s realized representation existed when it should not have or did not exist when it should have</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BadRealizeState</span></code> - A resource’s realized representation existed when it should not have, or did not exist when it should have</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BadState</span></code> - Something was in the wrong state</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BadThread</span></code> - A function was called on an unsupported thread</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BadType</span></code> - An object of a different type than the expected one was passed</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BadValue</span></code> - A value was passed that did not meet constraints</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NonexistentValue</span></code> - A value was requested but an error/null value was returned instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NonexistentValue</span></code> - A value was requested, but an error value was returned instead or the value did not exist</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExistingValue</span></code> - A value was expected not to exist when it did</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">NullValue</span></code> - A null value was given when a non-null value was expected</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Container</span></code> - Something went wrong pertaining to a list or map</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Misc</span></code> - Anything that doesn’t fit the above categories</p></li>
 </ul>
 </section>
