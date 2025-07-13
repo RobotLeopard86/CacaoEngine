@@ -93,10 +93,11 @@ exhale_projects_args = {
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
 									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,std*,CACAO_API
-                                    ENABLE_PREPROCESSING   = YES
-									MACRO_EXPANSION        = YES
-									EXPAND_ONLY_PREDEF     = YES
-									PREDEFINED             += CACAO_API=
+                                    ENABLE_PREPROCESSING = YES
+									MACRO_EXPANSION = YES
+									EXPAND_ONLY_PREDEF = YES
+                                    EXTRACT_PRIVATE = YES
+									PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./api",
         "rootFileTitle": "API Reference"
