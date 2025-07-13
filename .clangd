@@ -1,8 +1,9 @@
 CompileFlags:
   Add: [-std=c++20, -Wall, -Wextra]
-  Compiler: /usr/bin/clang++
 Diagnostics:
   UnusedIncludes: None
+  Includes:
+    IgnoreHeader: glm/.*\.hpp
 ---
 If:
   PathMatch: engine/src/macos/.*

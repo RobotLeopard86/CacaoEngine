@@ -20,12 +20,6 @@ namespace Cacao {
 		impl->mod = impl->registry[mod]();
 	}
 
-	void PAL::DestroyMP() {
-		Check<PALModule, NonexistentValueException>(impl->mod, "Cannot destroy a null module!");
-		impl->mod->Destroy();
-		impl->mod.reset();
-	}
-
 	bool PAL::InitializeModule() {
 		Check<PALModule, NonexistentValueException>(impl->mod, "Cannot initialize a null module!");
 		Check<BadInitStateException>(!impl->mod->Initialized(), "Cannot initialize an already initialized module!");

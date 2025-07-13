@@ -38,7 +38,7 @@ namespace Cacao {
 			Fatal = 4 ///<Fatal Errors
 		};
 
-		///@cond
+		///@brief A small object used to make the logging API more ergonomic. Use operator<< with it just like with std::cout to write log messages (no ending newline or std::endl necessary)
 		struct LogToken {
 			Level lvl;
 			std::ostringstream oss;
@@ -61,7 +61,6 @@ namespace Cacao {
 				Logger::Get().ImplLog(oss.str(), lvl, isClient);
 			}
 		};
-		///@endcond
 
 		/**
 		 * @brief Log a message from the engine

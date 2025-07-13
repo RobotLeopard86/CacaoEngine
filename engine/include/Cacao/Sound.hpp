@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cacao/ResourceManager.hpp"
 #include "DllHelper.hpp"
 #include "Asset.hpp"
 
@@ -52,7 +53,16 @@ namespace Cacao {
 		~Sound();
 
 	  private:
+		/**
+		 * @brief Create a new sound from encoded audio data
+		 *
+		 * @note This constructor must be called indirectly via ResourceManager::Instantiate
+		 *
+		 * @param encodedAudio A buffer of audio, encoded in the format of WAV, MP3, Ogg Vorbis, or Ogg Opus
+		 * @param addr The resource address identifier to associate with the sound
+		 */
 		Sound(std::vector<char>&& encodedAudio, const std::string& addr);
+		friend class ResourceManager;
 
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;

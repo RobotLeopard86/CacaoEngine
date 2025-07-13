@@ -27,7 +27,9 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Create and register a new resource (a ComponentExporter may not be created in this way)
+		 * @brief Create and register a new resource
+		 *
+		 * @note A ComponentExporter may not be created in this way for type-checking reasons; use ComponentExporter::Create instead
 		 *
 		 * @param address The identifier component of the resource address to use
 		 * @param args The arguments to the resource constructor

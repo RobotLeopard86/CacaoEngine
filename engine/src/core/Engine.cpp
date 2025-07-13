@@ -9,6 +9,8 @@
 #include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
+#include "ImplAccessor.hpp"
+#include "PALCommon.hpp"
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
@@ -174,7 +176,8 @@ namespace Cacao {
 		//Unload backend
 		Logger::Engine(Logger::Level::Trace) << "Terminating graphics backend...";
 		PAL::Get().TerminateModule();
-		PAL::Get().DestroyMP();
+		IMPL(PAL).mod->Destroy();
+		IMPL(PAL).mod.reset();
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;

@@ -77,12 +77,12 @@ namespace Cacao {
 		 *
 		 * @param args The arguments to the component constructor
 		 *
-		 * @throws ContainerException If a component of this type already exists on the actor
+		 * @throws ExistingValueException If a component of this type already exists on the actor
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T> && std::is_constructible_v<T, Args&&...>
 		void MountComponent(Args&&... args) {
-			Check<ContainerException>(!components.contains(std::type_index(typeid(T))), "A component of the type specified already exists on the actor!");
+			Check<ExistingValueException>(!components.contains(std::type_index(typeid(T))), "A component of the type specified already exists on the actor!");
 			components.insert_or_assign(std::type_index(typeid(T)), std::make_shared<T>(std::forward<Args...>(args...)));
 			PostMountComponent(components[std::type_index(typeid(T))]);
 		}
@@ -92,10 +92,10 @@ namespace Cacao {
 		 *
 		 * @param exporter The handle to the ComponentExporter from which to construct the component
 		 *
-		 * @throws ContainerException If a component of this type already exists on the actor
+		 * @throws ExistingValueException If a component of this type already exists on the actor
 		 */
 		void MountComponent(std::shared_ptr<ComponentExporter> exporter) {
-			Check<ContainerException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
+			Check<ExistingValueException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
 			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->factory());
 			PostMountComponent(components[std::type_index(std::type_index(exporter->type))]);
 		}
@@ -116,24 +116,24 @@ namespace Cacao {
 		 *
 		 * @return The component
 		 *
-		 * @throws ContainerException If a component of this type does not exist on the actor
+		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T>
 		std::shared_ptr<T> GetComponent() const {
-			Check<ContainerException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
+			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
 			return std::dynamic_pointer_cast<T>(components.at(std::type_index(typeid(T))));
 		}
 
 		/**
 		 * @brief Delete a component from the actor
 		 *
-		 * @throws ContainerException If a component of this type does not exist on the actor
+		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T>
 		void DeleteComponent() {
-			Check<ContainerException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
+			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
 			components.erase(std::type_index(typeid(T)));
 		}
 

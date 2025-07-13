@@ -92,15 +92,6 @@ namespace Cacao {
 		template<typename T>
 		void ConfigureImplPtr(T& obj) = delete;
 
-		/**
-		 * @brief Destroys the module pointer
-		 *
-		 * @warning SetModule must be called after this function before any other PAL actions
-		 *
-		 * @throws NonexistentValueException If there is no active module
-		 */
-		void DestroyMP();
-
 		///@cond
 		struct Impl;
 		///@endcond
