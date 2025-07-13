@@ -76,6 +76,16 @@ breathe_projects = {
 }
 breathe_default_project = "Cacao Engine"
 
+def specificationsForKind(kind):
+    if kind == "class":
+        return [
+          ":members:",
+          ":protected-members:",
+          ":private-members:"
+        ]
+    else:
+        return []
+
 exhale_args = {
     "containmentFolder":     "unknown",
     "rootFileName":          "root.rst",
@@ -83,7 +93,10 @@ exhale_args = {
     "rootFileTitle":         "Unknown",
     "createTreeView":        True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    ""
+    "exhaleDoxygenStdin":    "",
+    "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(
+        specificationsForKind
+    )
 }
 
 exhale_projects_args = {
