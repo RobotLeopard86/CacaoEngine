@@ -387,6 +387,7 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sstream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fstream&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 
@@ -428,7 +429,9 @@
 <span class="w">            </span><span class="p">}</span>
 
 <span class="w">            </span><span class="o">~</span><span class="n">LogToken</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">Logger</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">ImplLog</span><span class="p">(</span><span class="n">oss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span><span class="w"> </span><span class="n">lvl</span><span class="p">,</span><span class="w"> </span><span class="n">isClient</span><span class="p">);</span>
+<span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">Logger</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">ImplLog</span><span class="p">(</span><span class="n">oss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span><span class="w"> </span><span class="n">lvl</span><span class="p">,</span><span class="w"> </span><span class="n">isClient</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(...)</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">};</span>
 
