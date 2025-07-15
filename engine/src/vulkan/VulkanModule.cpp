@@ -3,6 +3,7 @@
 #include "Cacao/PAL.hpp"
 #include "WindowImplBase.hpp"
 #include "ImplAccessor.hpp"
+#include "vulkan/vulkan_handles.hpp"
 
 #include <memory>
 
@@ -37,11 +38,14 @@ namespace Cacao {
 		}
 
 		//Sort devices in descending order based on scores
-		std::sort(devices->begin(), devices->end(), [&scores, devices](const vk::PhysicalDevice& a, const vk::PhysicalDevice& b) {
+		std::vector<vk::PhysicalDevice> devWork = *devices;
+		std::sort(devWork.begin(), devWork.end(), [&scores, devices](const vk::PhysicalDevice& a, const vk::PhysicalDevice& b) {
 			auto indexA = std::distance(devices->begin(), std::find(devices->begin(), devices->end(), a));
 			auto indexB = std::distance(devices->begin(), std::find(devices->begin(), devices->end(), b));
 			return scores[indexA] > scores[indexB];
 		});
+
+		*devices = devWork;
 	}
 
 	void VulkanModule::Init() {
