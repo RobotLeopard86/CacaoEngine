@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <fstream>
 
 #include "DllHelper.hpp"
 
@@ -58,7 +59,9 @@ namespace Cacao {
 			}
 
 			~LogToken() {
-				Logger::Get().ImplLog(oss.str(), lvl, isClient);
+				try {
+					Logger::Get().ImplLog(oss.str(), lvl, isClient);
+				} catch(...) {}
 			}
 		};
 
