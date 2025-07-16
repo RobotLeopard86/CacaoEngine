@@ -562,6 +562,39 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfigE">
 <span id="_CPPv3N5Cacao6Engine10InitConfigE"></span><span id="_CPPv2N5Cacao6Engine10InitConfigE"></span><span id="Cacao::Engine::InitConfig"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InitConfig</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfigE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Configuration values that are set for startup and cannot be modified afterwards. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig10standaloneE">
+<span id="_CPPv3N5Cacao6Engine10InitConfig10standaloneE"></span><span id="_CPPv2N5Cacao6Engine10InitConfig10standaloneE"></span><span id="Cacao::Engine::InitConfig::standalone__b"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1ae277e7b24234eb00374cd32c7b302944"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">standalone</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig10standaloneE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Whether the engine is running outside of a bundle. </p>
+<p>If this flag is set, the engine will not attempt to validate that it is in a game bundle on startup. This will also disable all systems related to the default asset loader and bundle systems. Assets, worlds, and game modules will need to be manually loaded and configured in this mode. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig23initialRequestedBackendE">
+<span id="_CPPv3N5Cacao6Engine10InitConfig23initialRequestedBackendE"></span><span id="_CPPv2N5Cacao6Engine10InitConfig23initialRequestedBackendE"></span><span id="Cacao::Engine::InitConfig::initialRequestedBackend__ss"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1afd6dcfde40f84d551641dcb4f17ca461"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialRequestedBackend</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig23initialRequestedBackendE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The requested backend to try to initialize first, overriding the default setting. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig23preferredWindowProviderE">
+<span id="_CPPv3N5Cacao6Engine10InitConfig23preferredWindowProviderE"></span><span id="_CPPv2N5Cacao6Engine10InitConfig23preferredWindowProviderE"></span><span id="Cacao::Engine::InitConfig::preferredWindowProvider__ss"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1ab8598b37904b20111836576065732404"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">preferredWindowProvider</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig23preferredWindowProviderE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The preferred windowing provider to use. </p>
+<p>The available options are: <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">win32</span></code> Windows API (Windows only) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cocoa</span></code> Cocoa (MacOS only) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x11</span></code> X11 via XCB (Linux only) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wayland</span></code> Wayland (Linux only)</p></li>
+</ul>
+</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the provider requested is not available or this string is empty, default behavior will be used </p>
+</div>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -616,7 +649,12 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-relationships">Nested Relationships</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfigE"><code class="docutils literal notranslate"><span class="pre">InitConfig</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfigE"><code class="docutils literal notranslate"><span class="pre">InitConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig10standaloneE"><code class="docutils literal notranslate"><span class="pre">InitConfig::standalone</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig23initialRequestedBackendE"><code class="docutils literal notranslate"><span class="pre">InitConfig::initialRequestedBackend</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig23preferredWindowProviderE"><code class="docutils literal notranslate"><span class="pre">InitConfig::preferredWindowProvider</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

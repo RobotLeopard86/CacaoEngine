@@ -434,10 +434,157 @@
 </ul>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainerE">
+<span id="_CPPv3N15libcacaoformats15PackedContainerE"></span><span id="_CPPv2N15libcacaoformats15PackedContainerE"></span><span id="libcacaoformats::PackedContainer"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Loaded structure of a generic packed file format. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You generally shouldn’t use the direct constructor. For most use cases, a <a class="reference internal" href="classlibcacaoformats_1_1PackedEncoder.html#classlibcacaoformats_1_1PackedEncoder"><span class="std std-ref">PackedEncoder</span></a> should work instead. </p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIhEE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIhEE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIhEE"></span><span id="libcacaoformats::PackedContainer::PackedContainer__PackedFormat.uint16_t.std::vector:unsigned-c:RR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ac2cf4c3b63ce01b80a2718f85ab9e18a"></span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html#_CPPv4N15libcacaoformats12PackedFormatE" title="libcacaoformats::PackedFormat"><span class="n"><span class="pre">PackedFormat</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">format</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ver</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIhEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> by manually specifying attributes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> – The format code of the container </p></li>
+<li><p><strong>ver</strong> – The version of the format </p></li>
+<li><p><strong>data</strong> – The uncompressed data to be stored</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If there is no data </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIcEE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIcEE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIcEE"></span><span id="libcacaoformats::PackedContainer::PackedContainer__PackedFormat.uint16_t.std::vector:c:RR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ac305797a58f28c405656c2048e94285a"></span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html#_CPPv4N15libcacaoformats12PackedFormatE" title="libcacaoformats::PackedFormat"><span class="n"><span class="pre">PackedFormat</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">format</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ver</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIcEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> by manually specifying attributes, allowing a signed char. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> – The format code of the container </p></li>
+<li><p><strong>ver</strong> – The version of the format </p></li>
+<li><p><strong>data</strong> – The uncompressed data to be stored, autoconverted to unsigned char</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If there is no data </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer15PackedContainerEv">
+<span id="_CPPv3N15libcacaoformats15PackedContainer15PackedContainerEv"></span><span id="_CPPv2N15libcacaoformats15PackedContainer15PackedContainerEv"></span><span id="libcacaoformats::PackedContainer::PackedContainer"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ac50f69a05b7e7fe1fa6ea449760aa2b1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create an empty <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a>, only useful for default constructing if needed. </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>doxygenclass: Cannot find class “libcacaoformats::PackedContainer” in doxygen xml output for project “Cacao Engine” from directory: ./_doxy/cacao/xml</p>
+<p>This will produce a <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> with no data, the version set to 0 and the type set to Shader. DO NOT USE THIS CONTAINER! </p>
 </div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERK15PackedContainer">
+<span id="_CPPv3N15libcacaoformats15PackedContainer15PackedContainerERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats15PackedContainer15PackedContainerERK15PackedContainer"></span><span id="libcacaoformats::PackedContainer::PackedContainer__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ade3dfdc4f879bda466f1fe5ba80a7e1f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERK15PackedContainer" title="libcacaoformats::PackedContainer::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERR15PackedContainer">
+<span id="_CPPv3N15libcacaoformats15PackedContainer15PackedContainerERR15PackedContainer"></span><span id="_CPPv2N15libcacaoformats15PackedContainer15PackedContainerERR15PackedContainer"></span><span id="libcacaoformats::PackedContainer::PackedContainer__PackedContainerRR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ac14192eabf06084d4e8fa77e766f1873"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PackedContainer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERR15PackedContainer" title="libcacaoformats::PackedContainer::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERR15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContaineraSERK15PackedContainer">
+<span id="_CPPv3N15libcacaoformats15PackedContaineraSERK15PackedContainer"></span><span id="_CPPv2N15libcacaoformats15PackedContaineraSERK15PackedContainer"></span><span id="libcacaoformats::PackedContainer::assign-operator__PackedContainerCR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1a4580e2af55f9598f144237a9a4930a28"></span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContaineraSERK15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContaineraSERR15PackedContainer">
+<span id="_CPPv3N15libcacaoformats15PackedContaineraSERR15PackedContainer"></span><span id="_CPPv2N15libcacaoformats15PackedContaineraSERR15PackedContainer"></span><span id="libcacaoformats::PackedContainer::assign-operator__PackedContainerRR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ac5c3a573340162fccb93708159e5b62a"></span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContaineraSERR15PackedContainer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE"></span><span id="libcacaoformats::PackedContainer::ExportToStream__osR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1abc2bae04401a6ccd0571ab828f1791f0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExportToStream</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Export a <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> to a buffer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stream</strong> – A stream to output data to</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the container has no data or data compression fails </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer6formatE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer6formatE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer6formatE"></span><span id="libcacaoformats::PackedContainer::format__PackedFormatC"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1ab33424049e0729867fdaa9fd822d496e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html#_CPPv4N15libcacaoformats12PackedFormatE" title="libcacaoformats::PackedFormat"><span class="n"><span class="pre">PackedFormat</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">format</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer6formatE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of contents. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer7versionE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer7versionE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer7versionE"></span><span id="libcacaoformats::PackedContainer::version__uint16_tC"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1a6cfbff6a81c3423013d4266a2c2eccc4"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer7versionE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>File type version. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer7payloadE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer7payloadE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer7payloadE"></span><span id="libcacaoformats::PackedContainer::payload__std::vector:unsigned-c:C"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1a104a95cdcc425581c6bba81ab4800b04"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">payload</span></span></span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer7payloadE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Decompressed payload data. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer10FromStreamERNSt7istreamE">
+<span id="_CPPv3N15libcacaoformats15PackedContainer10FromStreamERNSt7istreamE"></span><span id="_CPPv2N15libcacaoformats15PackedContainer10FromStreamERNSt7istreamE"></span><span id="libcacaoformats::PackedContainer::FromStream__isR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1a7aaf85870f4a6cbd396bbbf97b3fdffa"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromStream</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer10FromStreamERNSt7istreamE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> from a stream. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stream</strong> – A stream referencing the contents of a packed file format</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the stream is not valid, does not represent a valid packed file </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15libcacaoformats15PackedContainer9FromAssetERK11PackedAsset">
+<span id="_CPPv3N15libcacaoformats15PackedContainer9FromAssetERK11PackedAsset"></span><span id="_CPPv2N15libcacaoformats15PackedContainer9FromAssetERK11PackedAsset"></span><span id="libcacaoformats::PackedContainer::FromAsset__PackedAssetCR"></span><span class="target" id="classlibcacaoformats_1_1PackedContainer_1a29fa9915f119ffa26fcfd1919db8b725"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N15libcacaoformats15PackedContainerE" title="libcacaoformats::PackedContainer"><span class="n"><span class="pre">PackedContainer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromAsset</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html#_CPPv4N15libcacaoformats11PackedAssetE" title="libcacaoformats::PackedAsset"><span class="n"><span class="pre">PackedAsset</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">asset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15libcacaoformats15PackedContainer9FromAssetERK11PackedAsset" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a <a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> from a <a class="reference internal" href="structlibcacaoformats_1_1PackedAsset.html#structlibcacaoformats_1_1PackedAsset"><span class="std std-ref">PackedAsset</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>asset</strong> – A packed asset from an asset pack</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the asset is of an unsupported type or the buffer is an invalid </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#classlibcacaoformats_1_1PackedContainer"><span class="std std-ref">PackedContainer</span></a> object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
 </section>
 </section>
 
@@ -488,7 +635,25 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainerE"><code class="docutils literal notranslate"><span class="pre">PackedContainer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerE12PackedFormat8uint16_tRRNSt6vectorIcEE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerEv"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERK15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer15PackedContainerERR15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedContainer::PackedContainer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContaineraSERK15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedContainer::operator=()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContaineraSERR15PackedContainer"><code class="docutils literal notranslate"><span class="pre">PackedContainer::operator=()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer14ExportToStreamERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::ExportToStream()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer6formatE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer7versionE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::version</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer7payloadE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::payload</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer10FromStreamERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">PackedContainer::FromStream()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15libcacaoformats15PackedContainer9FromAssetERK11PackedAsset"><code class="docutils literal notranslate"><span class="pre">PackedContainer::FromAsset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
