@@ -394,7 +394,7 @@
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">PerspectiveCamera</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">fov</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="nf">GetPosition</span><span class="p">()</span><span class="w"> </span><span class="n">constoverride</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="nf">GetPosition</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -403,7 +403,7 @@
 <span class="w">            </span><span class="n">RecalculateViewMatrix</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="nf">GetRotation</span><span class="p">()</span><span class="w"> </span><span class="n">constoverride</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="nf">GetRotation</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">rotation</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
