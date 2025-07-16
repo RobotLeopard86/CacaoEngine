@@ -76,15 +76,21 @@ breathe_projects = {
 }
 breathe_default_project = "Cacao Engine"
 
-def specificationsForKind(kind):
-    if kind == "class":
-        return [
-          ":members:",
-          ":protected-members:",
-          ":private-members:"
-        ]
-    else:
-        return []
+def normal_sfk(kind):
+    ret = []
+    if kind == 'class' or kind == 'struct':
+        for d in [":members:", ":protected-members:", ":private-members:", ":undoc-members:"]:
+            ret.append(d)
+        
+    return ret
+
+def cacao_sfk(kind):
+    ret = [':project: Cacao Engine']
+    if kind == 'class' or kind == 'struct':
+        for d in [":members:", ":protected-members:", ":undoc-members:"]:
+            ret.append(d)
+        
+    return ret
 
 exhale_args = {
     "containmentFolder":     "unknown",
@@ -93,7 +99,8 @@ exhale_args = {
     "rootFileTitle":         "Unknown",
     "createTreeView":        True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    ""
+    "exhaleDoxygenStdin":    "",
+    "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(normal_sfk)
 }
 
 exhale_projects_args = {
@@ -111,9 +118,7 @@ exhale_projects_args = {
 									'''),
         "containmentFolder": "./api",
         "rootFileTitle": "API Reference",
-        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(
-            specificationsForKind
-        )
+        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(cacao_sfk)
     },
     "libcacaoformats": {
         "exhaleDoxygenStdin": dedent('''
