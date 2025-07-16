@@ -6,6 +6,7 @@ import exhale.configs
 import exhale.utils
 import exhale.deploy
 from pprint import pprint
+from functools import partial
 
 # This code was taken from https://github.com/mithro/sphinx-contrib-mithro/tree/master/sphinx-contrib-exhale-multiproject because Sphinx had trouble loading it as a module
 def exhale_environment_ready(app):
@@ -76,19 +77,13 @@ breathe_projects = {
 }
 breathe_default_project = "Cacao Engine"
 
-def normal_sfk(kind):
-    ret = []
+def sfk(proj, kind):
+    ret = [":project: " + proj]
     if kind == 'class' or kind == 'struct':
-        for d in [":members:", ":protected-members:", ":private-members:", ":undoc-members:"]:
+        for d in [":members:", ":protected-members:"]:
             ret.append(d)
-        
-    return ret
-
-def cacao_sfk(kind):
-    ret = [':project: Cacao Engine']
-    if kind == 'class' or kind == 'struct':
-        for d in [":members:", ":protected-members:", ":undoc-members:"]:
-            ret.append(d)
+    if proj == "Cacao Engine":
+        ret.append(":private-members:")
         
     return ret
 
@@ -100,7 +95,6 @@ exhale_args = {
     "createTreeView":        True,
     "exhaleExecutesDoxygen": True,
     "exhaleDoxygenStdin":    "",
-    "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(normal_sfk)
 }
 
 exhale_projects_args = {
@@ -118,7 +112,7 @@ exhale_projects_args = {
 									'''),
         "containmentFolder": "./api",
         "rootFileTitle": "API Reference",
-        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(cacao_sfk)
+        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(lambda k: partial(sfk, "Cacao Engine")(k))
     },
     "libcacaoformats": {
         "exhaleDoxygenStdin": dedent('''
@@ -127,7 +121,8 @@ exhale_projects_args = {
 									MAX_INITIALIZER_LINES = 0
 									'''),
         "containmentFolder": "./libapis/formats",
-        "rootFileTitle": "Cacao Formats Library API"
+        "rootFileTitle": "Cacao Formats Library API",
+        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(lambda k: partial(sfk, "libcacaoformats")(k))
     },
      "libcacaoaudiodecoder": {
         "exhaleDoxygenStdin": dedent('''
@@ -136,7 +131,8 @@ exhale_projects_args = {
 									MAX_INITIALIZER_LINES = 0
 									'''),
         "containmentFolder": "./libapis/audiodecoder",
-        "rootFileTitle": "Cacao Audio Decoder Library API"
+        "rootFileTitle": "Cacao Audio Decoder Library API",
+        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(lambda k: partial(sfk, "libcacaoaudiodecoder")(k))
     },
      "libcacaocommon": {
         "exhaleDoxygenStdin": dedent('''
@@ -146,7 +142,8 @@ exhale_projects_args = {
                                     EXCLUDE_SYMBOLS = std
 									'''),
         "containmentFolder": "./libapis/common",
-        "rootFileTitle": "Cacao Common Utilities API"
+        "rootFileTitle": "Cacao Common Utilities API",
+        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(lambda k: partial(sfk, "libcacaocommon")(k))
     }
 }
 
