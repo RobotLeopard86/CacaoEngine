@@ -1,7 +1,6 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "PALCommon.hpp"
-#include "ImplAccessor.hpp"
 #include "SingletonGet.hpp"
 
 namespace Cacao {
@@ -54,8 +53,5 @@ namespace Cacao {
 		impl->mod->Term();
 	}
 
-	ImplAccessor::ImplAccessor() {}
-
-	CACAOST_GET(ImplAccessor)
 	CACAOST_GET(PAL)
 }

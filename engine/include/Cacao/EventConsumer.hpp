@@ -1,12 +1,9 @@
 #pragma once
 
 #include "Event.hpp"
-#include "Exceptions.hpp"
-#include "MultiFuture.hpp"
 #include "DllHelper.hpp"
 
 #include <functional>
-#include <vector>
 
 #include "crossguid/guid.hpp"
 

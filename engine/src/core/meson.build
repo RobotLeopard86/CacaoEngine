@@ -108,6 +108,7 @@ libcore = static_library('cacaocore', sources: [
 	'Actor.cpp',
 	'EventManager.cpp',
 	'Log.cpp',
+	'Misc.cpp',
 	'PAL.cpp',
 	'ResourceManager.cpp',
 	'ThreadPool.cpp',

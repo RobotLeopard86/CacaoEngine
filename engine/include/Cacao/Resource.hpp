@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Cacao/Exceptions.hpp"
 #include "DllHelper.hpp"
 
 #include <string>

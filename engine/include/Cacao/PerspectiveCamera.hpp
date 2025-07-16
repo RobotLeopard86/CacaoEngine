@@ -25,7 +25,7 @@ namespace Cacao {
 		 *
 		 * @return The camera position in world space
 		 */
-		glm::vec3 GetPosition() constoverride {
+		glm::vec3 GetPosition() const override {
 			return position;
 		}
 
@@ -44,7 +44,7 @@ namespace Cacao {
 		 *
 		 * @return The camera rotation
 		 */
-		glm::vec3 GetRotation() constoverride {
+		glm::vec3 GetRotation() const override {
 			return rotation;
 		}
 

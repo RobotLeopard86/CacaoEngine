@@ -16,9 +16,8 @@ namespace Cacao {
 	/**
 	 * @brief A wrapper object for component creation used for exporting components from game code to make them visible to the engine
 	 */
-	class CACAO_API ComponentExporter : public Resource {
+	class CACAO_API ComponentExporter : public Resource, std::enable_shared_from_this<ComponentExporter> {
 	  public:
-		const std::function<std::shared_ptr<Component>()> factory;
 		const std::type_index type;
 
 		/**
@@ -32,11 +31,20 @@ namespace Cacao {
 			return ComponentExporter(addr, typeid(T), [factory]() { return std::static_pointer_cast<Component>(factory()); });
 		}
 
+		/**
+		 * @brief Create a new instance of the component
+		 *
+		 * @return Component instance pointer
+		 */
+		std::shared_ptr<Component> Instantiate();
+
 	  private:
 		ComponentExporter(const std::string& addr, std::type_index tp, std::function<std::shared_ptr<Component>()> f)
-		  : Resource(addr), factory(f), type(tp) {
+		  : Resource(addr), type(tp), factory(f) {
 			RegisterSelf();
 		}
+
+		const std::function<std::shared_ptr<Component>()> factory;
 
 		//stub
 		void RegisterSelf() {}

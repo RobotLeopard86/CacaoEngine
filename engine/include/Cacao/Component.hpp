@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Actor.hpp"
+#include "Cacao/ComponentExporter.hpp"
 #include "DllHelper.hpp"
 
 #include <memory>
@@ -70,8 +71,10 @@ namespace Cacao {
 		std::weak_ptr<Actor> actor [[maybe_unused]];
 
 		friend class Actor;
+		friend class ComponentExporter;
 
 	  private:
 		bool enabled;
+		std::shared_ptr<ComponentExporter> expHnd;
 	};
 }

@@ -96,7 +96,7 @@ namespace Cacao {
 		 */
 		void MountComponent(std::shared_ptr<ComponentExporter> exporter) {
 			Check<ExistingValueException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
-			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->factory());
+			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->Instantiate());
 			PostMountComponent(components[std::type_index(std::type_index(exporter->type))]);
 		}
 
