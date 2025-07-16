@@ -14,6 +14,9 @@
 namespace Cacao {
 	class Component;
 
+	/**
+	 * @brief An object that exists within a World
+	 */
 	class CACAO_API Actor : public std::enable_shared_from_this<Actor> {
 	  public:
 		/**

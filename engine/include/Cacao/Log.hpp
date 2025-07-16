@@ -67,8 +67,9 @@ namespace Cacao {
 		/**
 		 * @brief Log a message from the engine
 		 *
-		 * @param message The message to log
 		 * @param level The severity of the message (optional, defaults to Info)
+		 *
+		 * @return A LogToken, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value.
 		 *
 		 * @note For use only by the engine internally.
 		 */
@@ -77,8 +78,9 @@ namespace Cacao {
 		/**
 		 * @brief Log a message from the game
 		 *
-		 * @param message The message to log
 		 * @param level The severity of the message (optional, defaults to Info)
+		 *
+		 * @return A LogToken, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value.
 		 *
 		 * @note For use by games using the engine.
 		 */

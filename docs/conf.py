@@ -93,10 +93,7 @@ exhale_args = {
     "rootFileTitle":         "Unknown",
     "createTreeView":        True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "",
-    "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(
-        specificationsForKind
-    )
+    "exhaleDoxygenStdin":    ""
 }
 
 exhale_projects_args = {
@@ -113,7 +110,10 @@ exhale_projects_args = {
 									PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./api",
-        "rootFileTitle": "API Reference"
+        "rootFileTitle": "API Reference",
+        "customSpecificationsMapping": exhale.utils.makeCustomSpecificationsMapping(
+            specificationsForKind
+        )
     },
     "libcacaoformats": {
         "exhaleDoxygenStdin": dedent('''
