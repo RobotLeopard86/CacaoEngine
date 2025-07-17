@@ -10,13 +10,20 @@
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
-#include "PALCommon.hpp"
+#include "SafeGetenv.hpp"
+#include "impl/PAL.hpp"
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <shlobj.h>
+#endif
+
 #include <vector>
+#include <filesystem>
 
 namespace Cacao {
 	Engine::Engine()
@@ -32,6 +39,7 @@ namespace Cacao {
 
 	void Engine::CoreInit(const Engine::InitConfig& initCfg) {
 		Check<BadStateException>(state == State::Dead, "Engine must be in dead state to run core initialization!");
+		Check<BadValueException>(!initCfg.clientID.id.empty() && !initCfg.clientID.displayName.empty(), "Invalid client identitification given to engine core initialization!");
 
 		//Store config
 		icfg = initCfg;
@@ -117,7 +125,7 @@ namespace Cacao {
 
 		//Open window
 		Logger::Engine(Logger::Level::Trace) << "Creating window...";
-		Window::Get().Open("Cacao Engine", {1280, 720}, true, Window::Mode::Windowed);
+		Window::Get().Open(icfg.clientID.displayName, {1280, 720}, true, Window::Mode::Windowed);
 
 		//Enable V-Sync by default
 		PAL::Get().SetVSync(true);
@@ -205,5 +213,31 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete.";
 	}
 
-	CACAOST_GET(Window)
+	const std::filesystem::path Engine::GetDataDirectory() {
+		//Start with a fallback
+		std::filesystem::path p = std::filesystem::current_path();
+
+		//Platform-specific detection
+#ifdef _WIN32
+		PWSTR path = nullptr;
+		if(SUCCEEDED(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &path))) {
+			p = std::filesystem::path(path);
+			CoTaskMemFree(path);
+		}
+#elif defined(__APPLE__)
+		std::string home = safe_getenv("HOME");
+		if(!home.empty()) p = std::filesystem::path(home) / "Library" / "Application Support"
+#elif defined(__linux__)
+		std::string home = safe_getenv("HOME");
+		if(!home.empty()) p = std::filesystem::path(home) / ".local" / "share";
+#endif
+
+		//Append game ID
+		p /= icfg.clientID.id;
+
+		//Make directory if nonexistent
+		if(!std::filesystem::exists(p)) std::filesystem::create_directories(p);
+
+		return p;
+	}
 }

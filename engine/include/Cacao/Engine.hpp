@@ -3,8 +3,10 @@
 #include <mutex>
 #include <string>
 #include <chrono>
+#include <filesystem>
 
 #include "DllHelper.hpp"
+#include "Identity.hpp"
 
 using namespace std::chrono_literals;
 
@@ -31,7 +33,7 @@ namespace Cacao {
 		//======================= CONFIGURATION =======================
 
 		/**
-		 * @brief Configuration values for the engine
+		 * @brief Configuration values for the engine that may change at runtime
 		 */
 		struct CACAO_API Config {
 			/**
@@ -80,6 +82,21 @@ namespace Cacao {
 			 * @note If the provider requested is not available or this string is empty, default behavior will be used
 			 */
 			std::string preferredWindowProvider;
+
+			/**
+			 * @brief Whether or not to suppress console logging output
+			 */
+			bool suppressConsoleLogging = false;
+
+			/**
+			 * @brief Whether or not to suppress file logging output
+			 */
+			bool suppressFileLogging = false;
+
+			/**
+			 * @brief ID of the client application. This should be in reverse-domain format (e.g. com.example.MyGame), but this is not enforced
+			 */
+			ClientIdentity clientID;
 		};
 
 		/**
@@ -90,6 +107,15 @@ namespace Cacao {
 		const InitConfig& GetInitConfig() const {
 			return icfg;
 		}
+
+		/**
+		 * @brief Get a path to the data directory where logs and game data should be stored
+		 *
+		 * This path will be created if it does not exist when this function is called
+		 *
+		 * @return Data directory path
+		 */
+		const std::filesystem::path GetDataDirectory();
 
 		//======================= LIFECYCLE =======================
 

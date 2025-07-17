@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PALCommon.hpp"
+#include "impl/PAL.hpp"
 #include "Cacao/EventManager.hpp"
 
 namespace Cacao {

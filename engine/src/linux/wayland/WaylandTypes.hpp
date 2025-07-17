@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cacao/Window.hpp"
-#include "WindowImplBase.hpp"
+#include "impl/Window.hpp"
 
 #include <wayland-client.h>
 #include "libdecor.h"

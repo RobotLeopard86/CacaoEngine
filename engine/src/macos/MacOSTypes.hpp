@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cacao/Window.hpp"
-#include "WindowImplBase.hpp"
+#include "impl/Window.hpp"
 
 #include <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>

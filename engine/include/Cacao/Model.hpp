@@ -11,8 +11,19 @@ namespace Cacao {
 	 */
 	class CACAO_API Model : public Resource {
 	  public:
-		const std::vector<std::string> meshList;///<List of meshes available for retrieval
-		const std::vector<std::string> texList; ///<List of textures available for retrieval
+		/**
+		 * @brief Get a list of stored meshes
+		 *
+		 * @return Mesh ID list
+		 */
+		const std::vector<std::string> ListMeshes();
+
+		/**
+		 * @brief Get a list of stored textures
+		 *
+		 * @return Texture ID list
+		 */
+		const std::vector<std::string> ListTextures();
 
 		/**
 		 * @brief Retrieve a stored Mesh by its ID

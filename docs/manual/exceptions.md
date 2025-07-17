@@ -18,7 +18,6 @@ Cacao Engine exceptions come in a variety of different classes (though they are 
 * `BadThread` - A function was called on an unsupported thread
 * `BadType` - An object of a different type than the expected one was passed
 * `BadValue` - A value was passed that did not meet constraints
-* `NonexistentValue` - A value was requested, but an error value was returned instead or the value did not exist
+* `NonexistentValue` - A value was expected, but an error or null value was returned or the value did not exist
 * `ExistingValue` - A value was expected not to exist when it did
-* `NullValue` - A null value was given when a non-null value was expected
 * `Misc` - Anything that doesn't fit the above categories

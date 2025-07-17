@@ -1,15 +1,21 @@
 #include "Cacao/Engine.hpp"
+#include "Cacao/Identity.hpp"
+#include "include/cacaoloader.hpp"
 
 #include "CLI11.hpp"
 
 #include <filesystem>
 
 int main(int argc, char* argv[]) {
+	//Identify game client
+	const Cacao::ClientIdentity client = Cacao::Loader::SelfIdentify();
+
 	//Configure CLI
-	CLI::App app("Cacao Engine game runtime", std::filesystem::path(argv[0]).filename().string());
+	CLI::App app(client.displayName, std::filesystem::path(argv[0]).filename().string());
 	Cacao::Engine::InitConfig icfg = {};
 	icfg.standalone = true;
 	icfg.initialRequestedBackend = "vulkan";
+	icfg.clientID = client;
 
 	//Backend option
 	app.add_option("--backend,-B", icfg.initialRequestedBackend, "The preferred backend to use. One of ['opengl', 'vulkan'];")->default_val("vulkan")->check([](const std::string& v) {
@@ -21,6 +27,10 @@ int main(int argc, char* argv[]) {
 	//X11 option
 	app.add_flag_callback("--x11-only,-x", [&icfg]() { icfg.preferredWindowProvider = "x11"; }, "Force the usage of X11 for windowing.")->default_val(false);
 #endif
+
+	//Logging options
+	app.add_flag_callback("--quiet,-q", [&icfg]() { icfg.suppressConsoleLogging = true; }, "Suppress all console logging output.")->default_val(false);
+	app.add_flag_callback("--no-file-log,-N", [&icfg]() { icfg.suppressFileLogging = true; }, "Suppress creation and use of logfile.")->default_val(false);
 
 	//Parse
 	CLI11_PARSE(app, argc, argv);

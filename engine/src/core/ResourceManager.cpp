@@ -1,6 +1,6 @@
 #include "Cacao/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
-#include "ResourceMgrImpl.hpp"
+#include "impl/ResourceManager.hpp"
 #include "SingletonGet.hpp"
 
 namespace Cacao {

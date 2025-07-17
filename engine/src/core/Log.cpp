@@ -1,4 +1,5 @@
 #include "Cacao/Log.hpp"
+#include "Cacao/Engine.hpp"
 #include "SingletonGet.hpp"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -14,6 +15,7 @@ namespace Cacao {
 		std::shared_ptr<spdlog::logger> engine, client;
 		std::shared_ptr<spdlog::sinks::basic_file_sink_mt> logfileSink;
 		std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> stdoutSink;
+		bool noLog;
 	};
 
 	Logger::Logger() {
@@ -24,9 +26,17 @@ namespace Cacao {
 		impl = std::make_unique<Impl>();
 
 		//Create sinks
-		impl->logfileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfilePath.string(), true);
-		impl->stdoutSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::always);
-		std::array<spdlog::sink_ptr, 2> sinks {{impl->logfileSink, impl->stdoutSink}};
+		std::vector<spdlog::sink_ptr> sinks;
+		if(!Engine::Get().GetInitConfig().suppressFileLogging) {
+			impl->logfileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logfilePath.string(), true);
+			sinks.push_back(impl->logfileSink);
+		}
+		if(!Engine::Get().GetInitConfig().suppressConsoleLogging) {
+			impl->stdoutSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::always);
+			sinks.push_back(impl->stdoutSink);
+		}
+		impl->noLog = sinks.size() <= 0;
+		if(impl->noLog) return;
 
 		//Create and register loggers
 		impl->engine = std::make_shared<spdlog::logger>("engine", sinks.begin(), sinks.end());
@@ -61,6 +71,9 @@ namespace Cacao {
 	}
 
 	void Logger::ImplLog(std::string message, Level level, bool isClient) {
+		//Skip if no logging enabled
+		if(impl->noLog) return;
+
 		//Set logger
 		std::shared_ptr<spdlog::logger> logger = (isClient ? impl->client : impl->engine);
 

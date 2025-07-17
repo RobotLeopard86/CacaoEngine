@@ -37,5 +37,9 @@ libcacao = shared_library('cacao', dependencies: [core_dep, windowing_deps, gfx_
 # Game loader
 subdir('src' / 'loader')
 
+# Loader headers
+loader_headers = include_directories('src' / 'loader' / 'include')
+install_subdir('src' / 'loader' / 'include', strip_directory: true, install_dir: 'include', install_tag: 'cacao')
+
 # Final dependency
-cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, link_whole: libloader, dependencies: [core_deps])
+cacao_dep = declare_dependency(include_directories: [engine_headers, loader_headers], link_with: libcacao, link_whole: libloader, dependencies: [core_deps])

@@ -49,7 +49,6 @@ namespace Cacao {
 	DEF_EXCEPTION(BadValue, "Bad Value")
 	DEF_EXCEPTION(NonexistentValue, "Nonexistent Value")
 	DEF_EXCEPTION(ExistingValue, "Existing Value")
-	DEF_EXCEPTION(NullValue, "Null Value")
 	DEF_EXCEPTION(Misc, "Miscellaneous")
 
 #undef DEF_EXCEPTION

@@ -2,7 +2,9 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Engine.hpp"
-#include "WindowImplBase.hpp"
+#include "SingletonGet.hpp"
+#include "SafeGetenv.hpp"
+#include "impl/Window.hpp"
 
 #include <memory>
 #include <cstdlib>
@@ -30,11 +32,9 @@ namespace Cacao {
 #ifdef __linux__
 		{
 			//Decide whether to use Wayland or X11 based on environment variables
-#define GETENV(v) []() { const char* p = std::getenv(v); if(p == nullptr) return std::string(""); else return std::string(p); }()
-			std::string sessionType = GETENV("XDG_SESSION_TYPE");
-			std::string xDisplay = GETENV("DISPLAY");
-			std::string wlDisplay = GETENV("WAYLAND_DISPLAY");
-#undef GETENV
+			std::string sessionType = safe_getenv("XDG_SESSION_TYPE");
+			std::string xDisplay = safe_getenv("DISPLAY");
+			std::string wlDisplay = safe_getenv("WAYLAND_DISPLAY");
 			bool useX = false;
 			if(!sessionType.empty()) {
 				if(sessionType.compare("wayland") == 0) {
@@ -229,4 +229,6 @@ namespace Cacao {
 
 		impl->mode = newMode;
 	}
+
+	CACAOST_GET(Window)
 }

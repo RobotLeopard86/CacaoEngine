@@ -1,7 +1,7 @@
 #include "../Module.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
-#include "WindowImplBase.hpp"
+#include "impl/Window.hpp"
 #include "WSI.hpp"
 
 #include <array>

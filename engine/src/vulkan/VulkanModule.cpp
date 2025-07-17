@@ -1,7 +1,7 @@
 #include "Module.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/PAL.hpp"
-#include "WindowImplBase.hpp"
+#include "impl/Window.hpp"
 #include "ImplAccessor.hpp"
 #include "vulkan/vulkan_handles.hpp"
 
