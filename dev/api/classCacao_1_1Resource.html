@@ -557,6 +557,12 @@
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
+<section id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">private</span> <span class="pre">std::enable_shared_from_this&lt;</span> <span class="pre">Resource</span> <span class="pre">&gt;</span></code></p></li>
+</ul>
+</section>
 <section id="derived-types">
 <h3>Derived Types<a class="headerlink" href="#derived-types" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
@@ -572,7 +578,7 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao8ResourceE">
-<span id="_CPPv3N5Cacao8ResourceE"></span><span id="_CPPv2N5Cacao8ResourceE"></span><span id="Cacao::Resource"></span><span class="target" id="classCacao_1_1Resource"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Resource</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8ResourceE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao8ResourceE"></span><span id="_CPPv2N5Cacao8ResourceE"></span><span id="Cacao::Resource"></span><span class="target" id="classCacao_1_1Resource"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Resource</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">private</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_shared_from_this</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5Cacao8ResourceE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Base class for any game-related resource (world, asset, arbitrary blob, etc.) </p>
 <p>Subclassed by <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Cacao::Asset</span></a>, <a class="reference internal" href="classCacao_1_1BlobResource.html#classCacao_1_1BlobResource"><span class="std std-ref">Cacao::BlobResource</span></a>, <a class="reference internal" href="classCacao_1_1ComponentExporter.html#classCacao_1_1ComponentExporter"><span class="std std-ref">Cacao::ComponentExporter</span></a>, <a class="reference internal" href="classCacao_1_1Model.html#classCacao_1_1Model"><span class="std std-ref">Cacao::Model</span></a>, <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">Cacao::World</span></a></p>
 <div class="breathe-sectiondef docutils container">
@@ -587,6 +593,32 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8ResourceD0Ev">
+<span id="_CPPv3N5Cacao8ResourceD0Ev"></span><span id="_CPPv2N5Cacao8ResourceD0Ev"></span><span id="Cacao::Resource::~Resource"></span><span class="target" id="classCacao_1_1Resource_1a64995966aa2ddc66c85f78fa495e83e6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Resource</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8ResourceD0Ev" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Resource8ResourceERKNSt6stringE">
+<span id="_CPPv3N5Cacao8Resource8ResourceERKNSt6stringE"></span><span id="_CPPv2N5Cacao8Resource8ResourceERKNSt6stringE"></span><span id="Cacao::Resource::Resource__ssCR"></span><span class="target" id="classCacao_1_1Resource_1a3047d2cba139d71c00f4864756ddf673"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Resource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Resource8ResourceERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Resource12RegisterSelfEv">
+<span id="_CPPv3N5Cacao8Resource12RegisterSelfEv"></span><span id="_CPPv2N5Cacao8Resource12RegisterSelfEv"></span><span id="Cacao::Resource::RegisterSelf"></span><span class="target" id="classCacao_1_1Resource_1a3d6a6178b7f3adb772e66eebf29793df"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterSelf</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Resource12RegisterSelfEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Resource7addressE">
+<span id="_CPPv3N5Cacao8Resource7addressE"></span><span id="_CPPv2N5Cacao8Resource7addressE"></span><span id="Cacao::Resource::address__ss"></span><span class="target" id="classCacao_1_1Resource_1ae7f82494b104cb68790f515a01bd90a0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8Resource7addressE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -642,12 +674,17 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-type">Base Type</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-types">Derived Types</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8ResourceE"><code class="docutils literal notranslate"><span class="pre">Resource</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao8Resource10GetAddressEv"><code class="docutils literal notranslate"><span class="pre">Resource::GetAddress()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8ResourceD0Ev"><code class="docutils literal notranslate"><span class="pre">Resource::~Resource()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Resource8ResourceERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Resource::Resource()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Resource12RegisterSelfEv"><code class="docutils literal notranslate"><span class="pre">Resource::RegisterSelf()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Resource7addressE"><code class="docutils literal notranslate"><span class="pre">Resource::address</span></code></a></li>
 </ul>
 </li>
 </ul>

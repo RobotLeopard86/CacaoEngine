@@ -570,6 +570,37 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao18BinaryBlobResourceE">
 <span id="_CPPv3N5Cacao18BinaryBlobResourceE"></span><span id="_CPPv2N5Cacao18BinaryBlobResourceE"></span><span id="Cacao::BinaryBlobResource"></span><span class="target" id="classCacao_1_1BinaryBlobResource"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryBlobResource</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1BlobResource.html#_CPPv4N5Cacao12BlobResourceE" title="Cacao::BlobResource"><span class="n"><span class="pre">BlobResource</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao18BinaryBlobResourceE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>The resource type for binary data blobs. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao18BinaryBlobResource7GetDataEv">
+<span id="_CPPv3N5Cacao18BinaryBlobResource7GetDataEv"></span><span id="_CPPv2N5Cacao18BinaryBlobResource7GetDataEv"></span><span id="Cacao::BinaryBlobResource::GetData"></span><span class="target" id="classCacao_1_1BinaryBlobResource_1a4156298b8995409dcd7b5df6402d92b6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetData</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao18BinaryBlobResource7GetDataEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Access the stored data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A constant reference to the data </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao18BinaryBlobResource6CreateERRNSt6vectorIhEERKNSt6stringE">
+<span id="_CPPv3N5Cacao18BinaryBlobResource6CreateERRNSt6vectorIhEERKNSt6stringE"></span><span id="_CPPv2N5Cacao18BinaryBlobResource6CreateERRNSt6vectorIhEERKNSt6stringE"></span><span id="Cacao::BinaryBlobResource::Create__std::vector:unsigned-c:RR.ssCR"></span><span class="target" id="classCacao_1_1BinaryBlobResource_1af7e6b8f107384fbd3acb2a73171e8814"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao18BinaryBlobResourceE" title="Cacao::BinaryBlobResource"><span class="n"><span class="pre">BinaryBlobResource</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao18BinaryBlobResource6CreateERRNSt6vectorIhEERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new blob from data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The data blob to store </p></li>
+<li><p><strong>addr</strong> – The resource address identifier to associate with the blob </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -627,7 +658,11 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao18BinaryBlobResourceE"><code class="docutils literal notranslate"><span class="pre">BinaryBlobResource</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao18BinaryBlobResourceE"><code class="docutils literal notranslate"><span class="pre">BinaryBlobResource</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao18BinaryBlobResource7GetDataEv"><code class="docutils literal notranslate"><span class="pre">BinaryBlobResource::GetData()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao18BinaryBlobResource6CreateERRNSt6vectorIhEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">BinaryBlobResource::Create()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -570,6 +570,37 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao16TextBlobResourceE">
 <span id="_CPPv3N5Cacao16TextBlobResourceE"></span><span id="_CPPv2N5Cacao16TextBlobResourceE"></span><span id="Cacao::TextBlobResource"></span><span class="target" id="classCacao_1_1TextBlobResource"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TextBlobResource</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1BlobResource.html#_CPPv4N5Cacao12BlobResourceE" title="Cacao::BlobResource"><span class="n"><span class="pre">BlobResource</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao16TextBlobResourceE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>The resource type for data blobs containing text. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao16TextBlobResource7GetDataEv">
+<span id="_CPPv3N5Cacao16TextBlobResource7GetDataEv"></span><span id="_CPPv2N5Cacao16TextBlobResource7GetDataEv"></span><span id="Cacao::TextBlobResource::GetData"></span><span class="target" id="classCacao_1_1TextBlobResource_1aae9b78b95091f8591eb21e0a8116cd40"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetData</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao16TextBlobResource7GetDataEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Access the stored data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A constant reference to the data </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao16TextBlobResource6CreateERRNSt6stringERKNSt6stringE">
+<span id="_CPPv3N5Cacao16TextBlobResource6CreateERRNSt6stringERKNSt6stringE"></span><span id="_CPPv2N5Cacao16TextBlobResource6CreateERRNSt6stringERKNSt6stringE"></span><span id="Cacao::TextBlobResource::Create__ssRR.ssCR"></span><span class="target" id="classCacao_1_1TextBlobResource_1a6ae69fce43c20663d0bc22fb0c2b6dbc"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html#_CPPv4N5Cacao18BinaryBlobResourceE" title="Cacao::BinaryBlobResource"><span class="n"><span class="pre">BinaryBlobResource</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao16TextBlobResource6CreateERRNSt6stringERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new blob from text. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The text blob to store </p></li>
+<li><p><strong>addr</strong> – The resource address identifier to associate with the blob </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -627,7 +658,11 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16TextBlobResourceE"><code class="docutils literal notranslate"><span class="pre">TextBlobResource</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16TextBlobResourceE"><code class="docutils literal notranslate"><span class="pre">TextBlobResource</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16TextBlobResource7GetDataEv"><code class="docutils literal notranslate"><span class="pre">TextBlobResource::GetData()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao16TextBlobResource6CreateERRNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">TextBlobResource::Create()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

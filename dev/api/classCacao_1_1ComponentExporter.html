@@ -586,15 +586,27 @@
 
 </div>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ComponentExporter4typeE">
+<span id="_CPPv3N5Cacao17ComponentExporter4typeE"></span><span id="_CPPv2N5Cacao17ComponentExporter4typeE"></span><span id="Cacao::ComponentExporter::type__std::type_indexC"></span><span class="target" id="classCacao_1_1ComponentExporter_1a50298ce463d58cb6fc072f2d818273bd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ComponentExporter4typeE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE">
 <span id="_CPPv3I0EN5Cacao17ComponentExporter6CreateENSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao17ComponentExporter6CreateENSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ComponentExporter_1a209c98f15a03457aff7d6ee4433ff995"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao17ComponentExporterE" title="Cacao::ComponentExporter"><span class="n"><span class="pre">ComponentExporter</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE" title="Cacao::ComponentExporter::Create::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">factory</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a new exporter. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This exists for both invocation sugar and stricter type-checking </p>
-</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factory</strong> – A function that constructs the component on demand </p></li>
+<li><p><strong>addr</strong> – The resource address identifier to associate with the component exporter </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -657,6 +669,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ComponentExporterE"><code class="docutils literal notranslate"><span class="pre">ComponentExporter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ComponentExporter11InstantiateEv"><code class="docutils literal notranslate"><span class="pre">ComponentExporter::Instantiate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ComponentExporter4typeE"><code class="docutils literal notranslate"><span class="pre">ComponentExporter::type</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ComponentExporter::Create()</span></code></a></li>
 </ul>
 </li>
