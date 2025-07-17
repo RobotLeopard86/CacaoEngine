@@ -13,6 +13,16 @@ namespace Cacao {
 	 */
 	class CACAO_API Sound final : public Asset {
 	  public:
+		/**
+		 * @brief Create a new sound from encoded audio data
+		 *
+		 * @param encodedAudio A buffer of audio, encoded in the format of WAV, MP3, Ogg Vorbis, or Ogg Opus
+		 * @param addr The resource address identifier to associate with the sound
+		 */
+		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr) {
+			return std::make_shared<Sound>(encodedAudio, addr);
+		}
+
 		///@cond
 		Sound(const Sound&) = delete;
 		Sound(Sound&&);
@@ -53,14 +63,6 @@ namespace Cacao {
 		~Sound();
 
 	  private:
-		/**
-		 * @brief Create a new sound from encoded audio data
-		 *
-		 * @note This constructor must be called indirectly via ResourceManager::Instantiate
-		 *
-		 * @param encodedAudio A buffer of audio, encoded in the format of WAV, MP3, Ogg Vorbis, or Ogg Opus
-		 * @param addr The resource address identifier to associate with the sound
-		 */
 		Sound(std::vector<char>&& encodedAudio, const std::string& addr);
 		friend class ResourceManager;
 

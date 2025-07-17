@@ -37,6 +37,17 @@ namespace Cacao {
 	 */
 	class CACAO_API Mesh final : public Asset {
 	  public:
+		/**
+		 * @brief Create a new mesh from vertex and index data
+		 *
+		 * @param vtx The vertices of the mesh
+		 * @param idx The indices of the mesh, grouped in sets of triangles, corresponding to the vertex index in vtx
+		 * @param addr The resource address identifier to associate with the mesh
+		 */
+		static std::shared_ptr<Mesh> Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
+			return std::make_shared<Mesh>(vtx, idx, addr);
+		}
+
 		///@cond
 		Mesh(const Mesh&) = delete;
 		Mesh(Mesh&&);
@@ -77,15 +88,6 @@ namespace Cacao {
 		~Mesh();
 
 	  private:
-		/**
-		 * @brief Create a new mesh from vertex and index data
-		 *
-		 * @note This constructor must be called indirectly via ResourceManager::Instantiate
-		 *
-		 * @param vtx The vertices of the mesh
-		 * @param idx The indices of the mesh, grouped in sets of triangles, corresponding to the vertex index in vtx
-		 * @param addr The resource address identifier to associate with the mesh
-		 */
 		Mesh(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr);
 		friend class ResourceManager;
 

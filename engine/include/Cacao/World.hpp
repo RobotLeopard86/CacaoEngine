@@ -5,6 +5,8 @@
 #include "Actor.hpp"
 #include "Resource.hpp"
 
+#include "libcacaoformats.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief A collection of entities and a camera comprising an area of gameplay
@@ -13,6 +15,26 @@ namespace Cacao {
 	 */
 	class CACAO_API World : public Resource {
 	  public:
+		/**
+		 * @brief Create a new blank world
+		 *
+		 * @param addr The resource address identifier to associate with the world
+		 */
+		static std::shared_ptr<World> Create(const std::string& addr) {
+			libcacaoformats::World w;
+			return std::make_shared<World>(w, addr);
+		}
+
+		/**
+		 * @brief Create a new world from data
+		 *
+		 * @param world The libcacaoformats representation of the world
+		 * @param addr The resource address identifier to associate with the world
+		 */
+		static std::shared_ptr<World> Create(libcacaoformats::World&& world, const std::string& addr) {
+			return std::make_shared<World>(world, addr);
+		}
+
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
 
 		/**
@@ -41,7 +63,7 @@ namespace Cacao {
 		}
 
 	  private:
-		World(const std::string& addr);
+		World(libcacaoformats::World&& world, const std::string& addr);
 		~World();
 
 		std::shared_ptr<Actor> root;

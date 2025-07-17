@@ -5,12 +5,24 @@
 
 #include "libcacaoformats.hpp"
 
+#include <memory>
+
 namespace Cacao {
 	/**
 	 * @brief Asset type for 3D cube textures
 	 */
 	class CACAO_API Cubemap final : public Asset {
 	  public:
+		/**
+		 * @brief Create a new cubemap from image data
+		 *
+		 * @param faces The face images of the cubemap, in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
+		 * @param addr The resource address identifier to associate with the cubemap
+		 */
+		static std::shared_ptr<Cubemap> Create(std::array<libcacaoformats::ImageBuffer, 6>&& faces, const std::string& addr) {
+			return std::make_shared<Cubemap>(faces, addr);
+		}
+
 		///@cond
 		Cubemap(const Cubemap&) = delete;
 		Cubemap(Cubemap&&);
@@ -51,14 +63,6 @@ namespace Cacao {
 		~Cubemap();
 
 	  private:
-		/**
-		 * @brief Create a new cubemap from image data
-		 *
-		 * @note This constructor must be called indirectly via ResourceManager::Instantiate
-		 *
-		 * @param faces The face images of the cubemap, in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
-		 * @param addr The resource address identifier to associate with the cubemap
-		 */
 		Cubemap(std::array<libcacaoformats::ImageBuffer, 6>&& faces, const std::string& addr);
 		friend class ResourceManager;
 

@@ -1,8 +1,10 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/ResourceManager.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/config.h"
+#include "assimp/material.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/texture.h"
@@ -78,6 +80,9 @@ namespace Cacao {
 		if(impl->scene->HasTextures()) {
 			for(unsigned int i = 0; i < impl->scene->mNumTextures; i++) {
 				aiTexture* tex = impl->scene->mTextures[i];
+
+				//TODO: Screen for known texture compression algorithms
+
 				impl->textureIndex.insert_or_assign(tex->mFilename.length == 0 ? (std::string("Tex") + std::to_string(i)) : std::string(tex->mFilename.C_Str()), tex);
 			}
 		}
@@ -97,5 +102,97 @@ namespace Cacao {
 			accum.push_back(id);
 		}
 		return accum;
+	}
+
+	std::shared_ptr<Mesh> Model::GetMesh(const std::string& id) {
+		Check<NonexistentValueException>(impl->meshIndex.contains(id), "Cannot retrieve nonexistent mesh from model!");
+
+		//Get mesh info
+		aiMesh* amesh = impl->meshIndex[id];
+		bool hasTexCoord = amesh->HasTextureCoords(0);
+		bool hasTanBitan = amesh->HasTangentsAndBitangents();
+		bool hasNormals = amesh->HasNormals();
+
+		//Create output buffers
+		std::vector<Vertex> vertices;
+		std::vector<glm::uvec3> indices;
+
+		//Handle vertices
+		for(unsigned int i = 0; i < amesh->mNumVertices; i++) {
+			//Get position
+			aiVector3D vert = amesh->mVertices[i];
+			glm::vec3 position = {vert.x, vert.y, vert.z};
+
+			glm::vec2 texCoords = glm::vec2(0.0f);
+			glm::vec3 tangent = glm::vec3(0.0f);
+			glm::vec3 bitangent = glm::vec3(0.0f);
+			glm::vec3 normal = glm::vec3(0.0f);
+
+			//Texture coordinates
+			if(hasTexCoord) {
+				aiVector3D tc = amesh->mTextureCoords[0][i];
+				texCoords = {tc.x, tc.y};
+			}
+
+			//Tangent and bitangent vectors
+			if(hasTanBitan) {
+				aiVector3D tan = amesh->mTangents[i];
+				aiVector3D bitan = amesh->mBitangents[i];
+				tangent = {tan.x, tan.y, tan.z};
+				bitangent = {bitan.x, bitan.y, bitan.z};
+			}
+
+			//Normal vectors
+			if(hasNormals) {
+				aiVector3D norm = amesh->mNormals[i];
+				normal = {norm.x, norm.y, norm.z};
+			}
+
+			//Apply axis correction
+			switch(impl->orient) {
+				case Impl::ModelOrientation::PosY:
+					break;
+				case Impl::ModelOrientation::NegY:
+					position = glm::rotateZ(position, glm::radians(180.0f));
+					break;
+				case Impl::ModelOrientation::PosX:
+					position = glm::rotateZ(position, glm::radians(-90.0f));
+					break;
+				case Impl::ModelOrientation::NegX:
+					position = glm::rotateZ(position, glm::radians(90.0f));
+					break;
+				case Impl::ModelOrientation::PosZ:
+					position = glm::rotateX(position, glm::radians(-90.0f));
+					break;
+				case Impl::ModelOrientation::NegZ:
+					position = glm::rotateX(position, glm::radians(90.0f));
+					break;
+			}
+
+			//Add vertex
+			Vertex vertex {position, texCoords, tangent, bitangent, normal};
+			vertices.push_back(vertex);
+		}
+
+		//Handle indices
+		for(unsigned int i = 0; i < amesh->mNumFaces; i++) {
+			aiFace face = amesh->mFaces[i];
+			indices.push_back({face.mIndices[0], face.mIndices[1], face.mIndices[2]});
+		}
+
+		//Construct and return mesh
+		std::stringstream meshAddr("m:");
+		meshAddr << address.substr(2) << "/" << id;
+		std::shared_ptr<Mesh> mesh = Mesh::Create(std::move(vertices), std::move(indices), meshAddr.str());
+		return mesh;
+	}
+
+	std::shared_ptr<Tex2D> Model::GetTexture(const std::string& id) {
+		Check<NonexistentValueException>(impl->textureIndex.contains(id), "Cannot retrieve nonexistent mesh from texture!");
+
+		//Get texture info
+		aiTexture* tex = impl->textureIndex[id];
+
+		//TODO: Decode and return texture info
 	}
 }

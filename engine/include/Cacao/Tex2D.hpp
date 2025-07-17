@@ -5,12 +5,24 @@
 
 #include "libcacaoformats.hpp"
 
+#include <memory>
+
 namespace Cacao {
 	/**
 	 * @brief Asset type for 2D textures
 	 */
 	class CACAO_API Tex2D final : public Asset {
 	  public:
+		/**
+		 * @brief Create a new 2D texture from image data
+		 *
+		 * @param imageBuffer The image data for the texture
+		 * @param addr The resource address identifier to associate with the texture
+		 */
+		static std::shared_ptr<Tex2D> Create(libcacaoformats::ImageBuffer&& imageBuffer, const std::string& addr) {
+			return std::make_shared<Tex2D>(imageBuffer, addr);
+		}
+
 		///@cond
 		Tex2D(const Tex2D&) = delete;
 		Tex2D(Tex2D&&);
@@ -51,14 +63,6 @@ namespace Cacao {
 		~Tex2D();
 
 	  private:
-		/**
-		 * @brief Create a new 2D texture from image data
-		 *
-		 * @note This constructor must be called indirectly via ResourceManager::Instantiate
-		 *
-		 * @param imageBuffer The image data for the texture
-		 * @param addr The resource address identifier to associate with the texture
-		 */
 		Tex2D(libcacaoformats::ImageBuffer&& imageBuffer, const std::string& addr);
 		friend class ResourceManager;
 

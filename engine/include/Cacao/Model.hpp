@@ -12,6 +12,16 @@ namespace Cacao {
 	class CACAO_API Model : public Resource {
 	  public:
 		/**
+		 * @brief Create a new model from data
+		 *
+		 * @param modelBin A blob of model data encoded as FBX Binary, glTF Binary (.glb), Collada, or Wavefront OBJ
+		 * @param addr The resource address identifier to associate with the model
+		 */
+		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
+			return std::make_shared<Model>(modelBin, addr);
+		}
+
+		/**
 		 * @brief Get a list of stored meshes
 		 *
 		 * @return Mesh ID list
@@ -51,14 +61,6 @@ namespace Cacao {
 		struct Impl;
 		///@endcond
 	  private:
-		/**
-		 * @brief Create a new model from data
-		 *
-		 * @note This constructor must be called indirectly via ResourceManager::Instantiate
-		 *
-		 * @param modelBin A blob of model data encoded as FBX Binary, glTF Binary (.glb), Collada, or Wavefront OBJ
-		 * @param addr The resource address identifier to associate with the model
-		 */
 		Model(std::vector<unsigned char>&& modelBin, const std::string& addr);
 		friend class ResourceManager;
 

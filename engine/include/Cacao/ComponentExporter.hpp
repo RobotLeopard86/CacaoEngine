@@ -23,7 +23,8 @@ namespace Cacao {
 		/**
 		 * @brief Create a new exporter
 		 *
-		 * @note This exists for both invocation sugar and stricter type-checking
+		 * @param factory A function that constructs the component on demand
+		 * @param addr The resource address identifier to associate with the component exporter
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Component, T> && (!std::is_same_v<Script, T>)
@@ -40,13 +41,8 @@ namespace Cacao {
 
 	  private:
 		ComponentExporter(const std::string& addr, std::type_index tp, std::function<std::shared_ptr<Component>()> f)
-		  : Resource(addr), type(tp), factory(f) {
-			RegisterSelf();
-		}
+		  : Resource(addr), type(tp), factory(f) {}
 
 		const std::function<std::shared_ptr<Component>()> factory;
-
-		//stub
-		void RegisterSelf() {}
 	};
 }

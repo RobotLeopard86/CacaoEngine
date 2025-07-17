@@ -27,22 +27,6 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Create and register a new resource
-		 *
-		 * @note A ComponentExporter may not be created in this way for type-checking reasons; use ComponentExporter::Create instead
-		 *
-		 * @param address The identifier component of the resource address to use
-		 * @param args The arguments to the resource constructor
-		 *
-		 * @throws BadValueException If the address provided is malformed
-		 *
-		 * @return A handle to the resource
-		 */
-		template<typename T, typename... Args>
-			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<ComponentExporter, T>) && std::is_constructible_v<T, Args&&...>
-		std::shared_ptr<T> Instantiate(const std::string& address, Args&&... args) = delete;
-
-		/**
 		 * @brief Load a resource by address
 		 *
 		 * @param address The resource address to load from
