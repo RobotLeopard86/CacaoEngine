@@ -387,8 +387,10 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;filesystem&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Identity.hpp&quot;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono_literals</span><span class="p">;</span>
 
@@ -418,11 +420,19 @@
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">initialRequestedBackend</span><span class="p">;</span>
 
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">preferredWindowProvider</span><span class="p">;</span>
+
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">suppressConsoleLogging</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">suppressFileLogging</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="w">            </span><span class="n">ClientIdentity</span><span class="w"> </span><span class="n">clientID</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">InitConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetInitConfig</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">icfg</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">GetDataDirectory</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">//======================= LIFECYCLE =======================</span>
 

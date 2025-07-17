@@ -338,6 +338,9 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -570,6 +573,28 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model10ListMeshesEv">
+<span id="_CPPv3N5Cacao5Model10ListMeshesEv"></span><span id="_CPPv2N5Cacao5Model10ListMeshesEv"></span><span id="Cacao::Model::ListMeshes"></span><span class="target" id="classCacao_1_1Model_1ab110420a07809f30bf6514eadc29efb1"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ListMeshes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Model10ListMeshesEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get a list of stored meshes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="classCacao_1_1Mesh.html#classCacao_1_1Mesh"><span class="std std-ref">Mesh</span></a> ID list </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model12ListTexturesEv">
+<span id="_CPPv3N5Cacao5Model12ListTexturesEv"></span><span id="_CPPv2N5Cacao5Model12ListTexturesEv"></span><span id="Cacao::Model::ListTextures"></span><span class="target" id="classCacao_1_1Model_1ab21fc40a83f3e09f9d268893b023a2ae"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ListTextures</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Model12ListTexturesEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get a list of stored textures. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Texture ID list </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model7GetMeshERKNSt6stringE">
 <span id="_CPPv3N5Cacao5Model7GetMeshERKNSt6stringE"></span><span id="_CPPv2N5Cacao5Model7GetMeshERKNSt6stringE"></span><span id="Cacao::Model::GetMesh__ssCR"></span><span class="target" id="classCacao_1_1Model_1a1eee53b78db1b1361bb7eabdbe686b7f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetMesh</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Model7GetMeshERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Retrieve a stored <a class="reference internal" href="classCacao_1_1Mesh.html#classCacao_1_1Mesh"><span class="std std-ref">Mesh</span></a> by its ID. </p>
@@ -601,21 +626,6 @@
 <dd class="field-odd"><p>A handle to the texture resource</p>
 </dd>
 </dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model8meshListE">
-<span id="_CPPv3N5Cacao5Model8meshListE"></span><span id="_CPPv2N5Cacao5Model8meshListE"></span><span id="Cacao::Model::meshList__std::vector:ss:C"></span><span class="target" id="classCacao_1_1Model_1a1112e7502abe9a7c7a7234cd01af50e7"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meshList</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Model8meshListE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>List of meshes available for retrieval. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Model7texListE">
-<span id="_CPPv3N5Cacao5Model7texListE"></span><span id="_CPPv2N5Cacao5Model7texListE"></span><span id="Cacao::Model::texList__std::vector:ss:C"></span><span class="target" id="classCacao_1_1Model_1ab8caf50fba5b52309b9ac70f4a869670"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">texList</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Model7texListE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>List of textures available for retrieval. </p>
 </dd></dl>
 
 </div>
@@ -698,10 +708,10 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5ModelE"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model10ListMeshesEv"><code class="docutils literal notranslate"><span class="pre">Model::ListMeshes()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model12ListTexturesEv"><code class="docutils literal notranslate"><span class="pre">Model::ListTextures()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model7GetMeshERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Model::GetMesh()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model10GetTextureERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Model::GetTexture()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model8meshListE"><code class="docutils literal notranslate"><span class="pre">Model::meshList</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model7texListE"><code class="docutils literal notranslate"><span class="pre">Model::texList</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Model5ModelERRNSt6vectorIhEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Model::Model()</span></code></a></li>
 </ul>
 </li>
