@@ -1,6 +1,5 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/ResourceManager.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/config.h"

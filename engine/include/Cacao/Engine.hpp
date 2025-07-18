@@ -6,6 +6,8 @@
 #include <chrono>
 #include <filesystem>
 #include <thread>
+#include <queue>
+#include <functional>
 
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"

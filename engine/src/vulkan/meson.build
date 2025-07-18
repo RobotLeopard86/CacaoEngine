@@ -12,6 +12,7 @@ vk_sources = [
 	'Swapchain.cpp',
 	'VulkanModule.cpp',
 	'VulkanImpl.cpp',
+	'impls' / 'VulkanMesh.cpp',
 	'wsi' / 'Common.cpp'
 ]
 vk_inc = [engine_headers, module_private_headers]
