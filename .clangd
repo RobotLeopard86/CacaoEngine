@@ -1,0 +1,18 @@
+If:
+  PathMatch: 
+    - .*\.hpp
+    - .*\.cpp
+    - .*\.mm
+CompileFlags:
+  Add: [-std=c++20, -Wall, -Wextra]
+Diagnostics:
+  UnusedIncludes: None
+  Includes:
+    IgnoreHeader:
+      - glm/.*\.hpp
+      - PALConfigurables\.hpp
+---
+If:
+  PathMatch: engine/src/macos/.*
+CompileFlags:
+   Add: [-x, objective-c++]
