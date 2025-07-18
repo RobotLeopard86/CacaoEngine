@@ -20,7 +20,7 @@ namespace Cacao {
 		 * @param addr The resource address identifier to associate with the texture
 		 */
 		static std::shared_ptr<Tex2D> Create(libcacaoformats::ImageBuffer&& imageBuffer, const std::string& addr) {
-			return std::make_shared<Tex2D>(imageBuffer, addr);
+			return std::shared_ptr<Tex2D>(new Tex2D(std::move(imageBuffer), addr));
 		}
 
 		///@cond
@@ -64,6 +64,7 @@ namespace Cacao {
 
 	  private:
 		Tex2D(libcacaoformats::ImageBuffer&& imageBuffer, const std::string& addr);
+		friend class PAL;
 		friend class ResourceManager;
 
 		std::unique_ptr<Impl> impl;

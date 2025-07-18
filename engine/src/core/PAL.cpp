@@ -1,7 +1,9 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Mesh.hpp"
 #include "impl/PAL.hpp"
 #include "SingletonGet.hpp"
+#include "PALConfigurables.hpp"
 
 namespace Cacao {
 	PAL::PAL() {
@@ -52,6 +54,17 @@ namespace Cacao {
 		Check<BadInitStateException>(!impl->mod->Connected(), "Cannot terminate a connected module!");
 		impl->mod->Term();
 	}
+
+#define CONFIGURE_IMPLPTR(t)                                                                                                                 \
+	template<>                                                                                                                               \
+	void PAL::ConfigureImplPtr<t>(t & obj) {                                                                                                 \
+		Check<PALModule, NonexistentValueException>(impl->mod, "Cannot configure an implementation pointer using a null module!");           \
+		Check<BadInitStateException>(impl->mod->Initialized(), "Cannot configure an implementation pointer using an uninitialized module!"); \
+		obj.impl.reset(impl->mod->Configure##t());                                                                                           \
+	}
+
+	CONFIGURE_IMPLPTR(Mesh)
+#undef CONFIGURE_IMPLPTR
 
 	CACAOST_GET(PAL)
 }

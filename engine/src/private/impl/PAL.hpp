@@ -7,6 +7,8 @@
 #include "Cacao/DllHelper.hpp"
 #include "Cacao/PAL.hpp"
 
+#include "Mesh.hpp"
+
 namespace Cacao {
 	class CACAO_API PALModule {
 	  public:
@@ -19,9 +21,8 @@ namespace Cacao {
 		virtual void Destroy() = 0;
 		virtual void SetVSync(bool state) = 0;
 
-		/* ------------------------------------------- *\
-		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
-		\* ------------------------------------------- */
+		//==================== IMPL POINTER CONFIGURATION ====================
+		virtual Mesh::Impl* ConfigureMesh() = 0;
 
 		virtual ~PALModule() {}
 

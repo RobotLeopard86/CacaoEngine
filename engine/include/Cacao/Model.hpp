@@ -18,7 +18,7 @@ namespace Cacao {
 		 * @param addr The resource address identifier to associate with the model
 		 */
 		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
-			return std::make_shared<Model>(modelBin, addr);
+			return std::shared_ptr<Model>(new Model(std::move(modelBin), addr));
 		}
 
 		/**
@@ -60,6 +60,9 @@ namespace Cacao {
 		///@cond
 		struct Impl;
 		///@endcond
+
+		~Model();
+
 	  private:
 		Model(std::vector<unsigned char>&& modelBin, const std::string& addr);
 		friend class ResourceManager;

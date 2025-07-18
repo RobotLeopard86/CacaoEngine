@@ -12,6 +12,7 @@
 #include "ImplAccessor.hpp"
 #include "SafeGetenv.hpp"
 #include "impl/PAL.hpp"
+#include <thread>
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
@@ -50,6 +51,9 @@ namespace Cacao {
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
 		ThreadPool::Get().Start();
+
+		//Store thread ID
+		mainThread = std::this_thread::get_id();
 
 		/* ------------------------------------- *\
 		|*      PLACEHOLDER: BUNDLE LOADING      *|
@@ -154,6 +158,19 @@ namespace Cacao {
 		while(state == State::Running) {
 			//Handle OS events
 			Window::Get().HandleOSEvents();
+
+			//Process events from the main thread tasks queue
+			std::vector<std::function<void()>> tasks;
+			{
+				std::lock_guard lk(mttQueueMtx);
+				while(!mainThreadTasksQueue.empty()) {
+					tasks.push_back(mainThreadTasksQueue.front());
+					mainThreadTasksQueue.pop();
+				}
+			}
+			for(const auto& task : tasks) {
+				task();
+			}
 		}
 	}
 
@@ -226,7 +243,7 @@ namespace Cacao {
 		}
 #elif defined(__APPLE__)
 		std::string home = safe_getenv("HOME");
-		if(!home.empty()) p = std::filesystem::path(home) / "Library" / "Application Support"
+		if(!home.empty()) p = std::filesystem::path(home) / "Library" / "Application Support";
 #elif defined(__linux__)
 		std::string home = safe_getenv("HOME");
 		if(!home.empty()) p = std::filesystem::path(home) / ".local" / "share";

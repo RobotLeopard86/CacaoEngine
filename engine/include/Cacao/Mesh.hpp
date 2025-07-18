@@ -45,7 +45,7 @@ namespace Cacao {
 		 * @param addr The resource address identifier to associate with the mesh
 		 */
 		static std::shared_ptr<Mesh> Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
-			return std::make_shared<Mesh>(vtx, idx, addr);
+			return std::shared_ptr<Mesh>(new Mesh(std::move(vtx), std::move(idx), addr));
 		}
 
 		///@cond
@@ -82,7 +82,7 @@ namespace Cacao {
 		void DropRealized();
 
 		///@cond
-		struct Impl;
+		class Impl;
 		///@endcond
 
 		~Mesh();
@@ -90,11 +90,9 @@ namespace Cacao {
 	  private:
 		Mesh(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr);
 		friend class ResourceManager;
+		friend class PAL;
 
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
-
-		std::vector<Vertex> vertices;
-		std::vector<glm::uvec3> indices;
 	};
 }

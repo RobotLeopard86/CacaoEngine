@@ -1,7 +1,7 @@
 #pragma once
 
 #include "impl/PAL.hpp"
-#include "Cacao/EventManager.hpp"
+#include "Cacao/EventConsumer.hpp"
 
 namespace Cacao {
 	class OpenGLModule : public PALModule {
@@ -13,9 +13,8 @@ namespace Cacao {
 		void Destroy() override;
 		void SetVSync(bool state) override;
 
-		/* ------------------------------------------- *\
-		|*      PLACEHOLDER: IMPL CONFIGURATORS        *|
-		\* ------------------------------------------- */
+		//==================== IMPL POINTER CONFIGURATION ====================
+		virtual Mesh::Impl* ConfigureMesh() override;
 
 		OpenGLModule()
 		  : PALModule("opengl") {}

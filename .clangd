@@ -8,7 +8,9 @@ CompileFlags:
 Diagnostics:
   UnusedIncludes: None
   Includes:
-    IgnoreHeader: glm/.*\.hpp
+    IgnoreHeader:
+      - glm/.*\.hpp
+      - PALConfigurables\.hpp
 ---
 If:
   PathMatch: engine/src/macos/.*

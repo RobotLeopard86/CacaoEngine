@@ -7,6 +7,8 @@
 
 #include "libcacaoformats.hpp"
 
+#include <memory>
+
 namespace Cacao {
 	/**
 	 * @brief A collection of entities and a camera comprising an area of gameplay
@@ -16,23 +18,23 @@ namespace Cacao {
 	class CACAO_API World : public Resource {
 	  public:
 		/**
-		 * @brief Create a new blank world
-		 *
-		 * @param addr The resource address identifier to associate with the world
-		 */
-		static std::shared_ptr<World> Create(const std::string& addr) {
-			libcacaoformats::World w;
-			return std::make_shared<World>(w, addr);
-		}
-
-		/**
 		 * @brief Create a new world from data
 		 *
 		 * @param world The libcacaoformats representation of the world
 		 * @param addr The resource address identifier to associate with the world
 		 */
 		static std::shared_ptr<World> Create(libcacaoformats::World&& world, const std::string& addr) {
-			return std::make_shared<World>(world, addr);
+			return std::shared_ptr<World>(new World(std::move(world), addr));
+		}
+
+		/**
+		 * @brief Create a new blank world
+		 *
+		 * @param addr The resource address identifier to associate with the world
+		 */
+		static std::shared_ptr<World> Create(const std::string& addr) {
+			libcacaoformats::World w;
+			return Create(std::move(w), addr);
 		}
 
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
@@ -57,14 +59,16 @@ namespace Cacao {
 		 * @return An optional that contains the actor if it was found
 		 */
 		template<typename P>
+			requires std::is_invocable_r_v<bool, P, std::shared_ptr<Actor>>
 		std::optional<std::shared_ptr<Actor>> FindActor(P predicate) const {
 			//Search for the object
 			return actorSearchRunner(root->GetAllChildren(), predicate);
 		}
 
+		~World();
+
 	  private:
 		World(libcacaoformats::World&& world, const std::string& addr);
-		~World();
 
 		std::shared_ptr<Actor> root;
 

@@ -45,11 +45,15 @@ namespace Cacao {
 		std::shared_future<R> Exec(F func, Args... args) {
 			Check<BadInitStateException>(IsRunning(), "The thread pool must be running to execute a task!");
 
-			//Wrap the function so it doesn't need any arguments
-			auto wrapper = std::bind(std::forward<F>(func), std::forward<Args...>(args...));
-
 			//Create a task and get a result future
-			std::shared_ptr<std::packaged_task<R()>> task = std::make_shared<std::packaged_task<R()>>(std::move(wrapper));
+			std::shared_ptr<std::packaged_task<R()>> task;
+			if constexpr(sizeof...(args) == 0) {
+				task = std::make_shared<std::packaged_task<R()>>(std::move(func));
+			} else {
+				//Wrap the function so it doesn't need any arguments
+				auto wrapper = std::bind(std::forward<F>(func), std::forward<Args...>(args...));
+				task = std::make_shared<std::packaged_task<R()>>(std::move(wrapper));
+			}
 			std::shared_future<R> result = task->get_future().share();
 
 			//Use closures to capture the task so its future can be set

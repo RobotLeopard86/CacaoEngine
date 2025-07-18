@@ -20,7 +20,7 @@ namespace Cacao {
 		 * @param addr The resource address identifier to associate with the cubemap
 		 */
 		static std::shared_ptr<Cubemap> Create(std::array<libcacaoformats::ImageBuffer, 6>&& faces, const std::string& addr) {
-			return std::make_shared<Cubemap>(faces, addr);
+			return std::shared_ptr<Cubemap>(new Cubemap(std::move(faces), addr));
 		}
 
 		///@cond
@@ -64,6 +64,7 @@ namespace Cacao {
 
 	  private:
 		Cubemap(std::array<libcacaoformats::ImageBuffer, 6>&& faces, const std::string& addr);
+		friend class PAL;
 		friend class ResourceManager;
 
 		std::unique_ptr<Impl> impl;

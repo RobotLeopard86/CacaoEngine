@@ -47,7 +47,7 @@ namespace Cacao {
 
 		//Submit buffer to queue
 		{
-			std::lock_guard<std::mutex> lk(vulkan->immqLock);
+			std::lock_guard lk(vulkan->immqLock);
 			vulkan->immQueue.submit2(submit, fence);
 		}
 

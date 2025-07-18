@@ -1,10 +1,16 @@
 #include "Cacao/World.hpp"
+#include "Cacao/PerspectiveCamera.hpp"
 
 namespace Cacao {
-	World::World(const std::string& addr)
+	World::World(libcacaoformats::World&& world, const std::string& addr)
 	  : Resource(addr) {
 		//Create root actor
 		root = Actor::Create("__WORLDROOT__", std::nullopt);
+
+		//Create camera
+		cam = std::make_shared<PerspectiveCamera>();
+		cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
+		cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
 	}
 
 	World::~World() {

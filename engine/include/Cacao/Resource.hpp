@@ -55,7 +55,7 @@ namespace Cacao {
 		 * @param addr The resource address identifier to associate with the blob
 		 */
 		static std::shared_ptr<BinaryBlobResource> Create(std::vector<unsigned char>&& data, const std::string& addr) {
-			return std::make_shared<BinaryBlobResource>(data, addr);
+			return std::shared_ptr<BinaryBlobResource>(new BinaryBlobResource(std::move(data), addr));
 		}
 
 		/**
@@ -87,8 +87,8 @@ namespace Cacao {
 		 * @param data The text blob to store
 		 * @param addr The resource address identifier to associate with the blob
 		 */
-		static std::shared_ptr<BinaryBlobResource> Create(std::string&& data, const std::string& addr) {
-			return std::make_shared<BinaryBlobResource>(data, addr);
+		static std::shared_ptr<TextBlobResource> Create(std::string&& data, const std::string& addr) {
+			return std::shared_ptr<TextBlobResource>(new TextBlobResource(std::move(data), addr));
 		}
 
 		/**

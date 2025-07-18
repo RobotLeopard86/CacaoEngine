@@ -85,9 +85,10 @@ namespace Cacao {
 		/**
 		 * @brief Configure the implementation pointer for a PAL-backed object
 		 *
-		 * Loads the implementation pointer with an interface object from the loaded module
+		 * Loads the implementation pointer with an interface object from the active module
 		 *
-		 * @throws MiscException If the module necessary to configure the pointer is loaded
+		 * @throws BadInitStateException If the module has not been initialized
+		 * @throws BadStateException If the graphics backend and window are not connected
 		 */
 		template<typename T>
 		void ConfigureImplPtr(T& obj) = delete;

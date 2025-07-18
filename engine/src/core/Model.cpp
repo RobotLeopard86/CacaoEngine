@@ -4,7 +4,6 @@
 
 #include "assimp/Importer.hpp"
 #include "assimp/config.h"
-#include "assimp/material.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/texture.h"
@@ -87,6 +86,8 @@ namespace Cacao {
 			}
 		}
 	}
+
+	Model::~Model() {}
 
 	const std::vector<std::string> Model::ListMeshes() {
 		std::vector<std::string> accum;

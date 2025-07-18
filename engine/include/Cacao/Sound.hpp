@@ -20,7 +20,7 @@ namespace Cacao {
 		 * @param addr The resource address identifier to associate with the sound
 		 */
 		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr) {
-			return std::make_shared<Sound>(encodedAudio, addr);
+			return std::shared_ptr<Sound>(new Sound(std::move(encodedAudio), addr));
 		}
 
 		///@cond

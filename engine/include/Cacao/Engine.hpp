@@ -1,10 +1,13 @@
 #pragma once
 
+#include <future>
 #include <mutex>
 #include <string>
 #include <chrono>
 #include <filesystem>
+#include <thread>
 
+#include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Identity.hpp"
 
@@ -108,6 +111,8 @@ namespace Cacao {
 			return icfg;
 		}
 
+		//===================== UTILITY FUNCTIONS =====================
+
 		/**
 		 * @brief Get a path to the data directory where logs and game data should be stored
 		 *
@@ -117,7 +122,51 @@ namespace Cacao {
 		 */
 		const std::filesystem::path GetDataDirectory();
 
-		//======================= LIFECYCLE =======================
+		/**
+		 * @brief Run a task on the main thread
+		 *
+		 * @warning Since rendering happens on the main thread, excessive use of this method for other purposes may slow rendering performance
+		 *
+		 * @param func The task to execute
+		 * @param args The arguments to the task function
+		 *
+		 * @return A future that will be fulfilled when the task completes
+		 *
+		 * @throws BadStateException If the engine is not in the Running state
+		 */
+		template<typename F, typename... Args, typename R = std::invoke_result_t<F&&, Args&&...>>
+			requires std::invocable<F&&, Args&&...>
+		std::shared_future<R> RunTaskOnMainThread(F func, Args... args) {
+			Check<BadStateException>(state == State::Running, "Engine must be in running state to submit main thread task!");
+
+			//Create a task and get a result future
+			std::shared_ptr<std::packaged_task<R()>> task;
+			if constexpr(sizeof...(args) == 0) {
+				task = std::make_shared<std::packaged_task<R()>>(std::move(func));
+			} else {
+				//Wrap the function so it doesn't need any arguments
+				auto wrapper = std::bind(std::forward<F>(func), std::forward<Args...>(args...));
+				task = std::make_shared<std::packaged_task<R()>>(std::move(wrapper));
+			}
+			std::shared_future<R> result = task->get_future().share();
+
+			//Is this the main thread?
+			if(std::this_thread::get_id() == mainThread) {
+				(*task)();
+				return result;
+			}
+
+			//Add task to queue
+			{
+				std::lock_guard lk(mttQueueMtx);
+				mainThreadTasksQueue.emplace([task]() { (*task)(); });
+			}
+
+			//Return future
+			return result;
+		}
+
+		//========================= LIFECYCLE =========================
 
 		/**
 		 * @brief The current state of the engine
@@ -191,6 +240,10 @@ namespace Cacao {
 		InitConfig icfg;
 		State state;
 		std::mutex stateMtx;
+
+		std::queue<std::function<void()>> mainThreadTasksQueue;
+		std::mutex mttQueueMtx;
+		std::thread::id mainThread;
 
 		Engine();
 		~Engine();

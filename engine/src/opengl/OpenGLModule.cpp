@@ -1,6 +1,7 @@
 #include "Module.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
 #ifdef __linux__
@@ -37,6 +38,7 @@ namespace Cacao {
 
 		connected = true;
 	}
+
 	void OpenGLModule::Disconnect() {
 		connected = false;
 
@@ -46,10 +48,13 @@ namespace Cacao {
 		//Destroy context
 		ctx.reset();
 	}
+
 	void OpenGLModule::Destroy() {
 		gl.reset();
 	}
+
 	void OpenGLModule::SetVSync(bool state) {
 		ctx->SetVSync(state);
 	}
+
 }

@@ -67,6 +67,8 @@ html_permalinks_icon = "<span/>"
 html_use_index = False
 html_domain_indices = False
 html_copy_source = False
+html_static_path = ["assets"]
+html_css_files = ["fonts.css"]
 
 breathe_projects = {
     "Cacao Engine": "./_doxy/cacao/xml",
