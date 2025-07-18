@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -627,6 +628,30 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args">
+<span id="_CPPv3I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadE1FDp4Args"></span><span id="_CPPv2I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadE1FDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">R</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">invoke_result_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args" title="Cacao::Engine::RunTaskOnMainThread::F"><span class="n"><span class="pre">F</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args" title="Cacao::Engine::RunTaskOnMainThread::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Engine_1a2d27d1afd51412104a10b3d381a37cb6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args" title="Cacao::Engine::RunTaskOnMainThread::R"><span class="n"><span class="pre">R</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunTaskOnMainThread</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args" title="Cacao::Engine::RunTaskOnMainThread::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">func</span></span>, <a class="reference internal" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args" title="Cacao::Engine::RunTaskOnMainThread::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Run a task on the main thread. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since rendering happens on the main thread, excessive use of this method for other purposes may slow rendering performance</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – The task to execute </p></li>
+<li><p><strong>args</strong> – The arguments to the task function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If the engine is not in the Running state </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A future that will be fulfilled when the task completes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig">
 <span id="_CPPv3N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="_CPPv2N5Cacao6Engine8CoreInitERK10InitConfig"></span><span id="Cacao::Engine::CoreInit__InitConfigCR"></span><span class="target" id="classCacao_1_1Engine_1a7273e4fa3dcdeec0c9425ce4966a3c5c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoreInit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Engine10InitConfigE" title="Cacao::Engine::InitConfig"><span class="n"><span class="pre">InitConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">initCfg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Initialize all engine systems that don’t require graphics or windowing. </p>
@@ -856,6 +881,7 @@
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Engine13GetInitConfigEv"><code class="docutils literal notranslate"><span class="pre">Engine::GetInitConfig()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine16GetDataDirectoryEv"><code class="docutils literal notranslate"><span class="pre">Engine::GetDataDirectory()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0Dp0EN5Cacao6Engine19RunTaskOnMainThreadENSt13shared_futureI1REE1FDp4Args"><code class="docutils literal notranslate"><span class="pre">Engine::RunTaskOnMainThread()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine8CoreInitERK10InitConfig"><code class="docutils literal notranslate"><span class="pre">Engine::CoreInit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine7GfxInitEv"><code class="docutils literal notranslate"><span class="pre">Engine::GfxInit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine3RunEv"><code class="docutils literal notranslate"><span class="pre">Engine::Run()</span></code></a></li>
