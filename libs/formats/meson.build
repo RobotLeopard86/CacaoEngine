@@ -1,6 +1,5 @@
 # Get simple dependencies
 formats_deps = [yaml_cpp, crossguid]
-formats_deps += subproject('dr_libs', required: true).get_variable('dr_libs_dep')
 formats_deps += subproject('stb', required: true).get_variable('stb_dep')
 
 # bzip2
