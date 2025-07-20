@@ -29,12 +29,12 @@ formats_deps += libarchive_sp.get_variable('libarchive_dep')
 formats_deps += commonlib_dep
 
 formats_lib = static_library('cacaoformats', sources: [
-	'src/ImageOperations.cpp',
-    'src/UnpackedDecode.cpp',
-	'src/UnpackedEncode.cpp',
-    'src/PackedContainer.cpp',
-    'src/PackedDecode.cpp',
-	'src/PackedEncode.cpp'
+	'src' / 'ImageOperations.cpp',
+    'src' / 'UnpackedDecode.cpp',
+	'src' / 'UnpackedEncode.cpp',
+    'src' / 'PackedContainer.cpp',
+    'src' / 'PackedDecode.cpp',
+	'src' / 'PackedEncode.cpp'
 ], include_directories: ['include', 'src'], pic: true, dependencies: formats_deps, install: true, install_tag: 'cacao')
 
 formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib, dependencies: formats_deps)

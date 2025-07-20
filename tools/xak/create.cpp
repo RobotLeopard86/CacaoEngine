@@ -13,7 +13,7 @@ CreateCmd::CreateCmd(CLI::App& app) {
 
 	//Directories
 	CLI::Option* assets = cmd->add_option("-a,--assets-dir", assetRoot, "Path to a directory containing assets to place in this pack. Subdirectories of this path will not be searched. Use --help-assets-dir to see more info.")->check(CLI::ExistingDirectory);
-	CLI::Option* res = cmd->add_option("-r,--res-dir", resRoot, "Path to a directory containing arbitray files to embed as resources in this pack. The folder structure will be copied as-is.")->check(CLI::ExistingDirectory);
+	CLI::Option* res = cmd->add_option("-r,--res-dir", resRoot, "Path to a directory containing arbitrary files to embed as blob resources in this pack. The folder structure will be copied as-is.")->check(CLI::ExistingDirectory);
 
 	//Address map
 	CLI::Option* addr = cmd->add_option("-M,--addr-map", addrMapPath, "Path to a file mapping asset filenames to asset addresses for engine reference")->check(CLI::ExistingFile);
@@ -26,13 +26,12 @@ CreateCmd::CreateCmd(CLI::App& app) {
 				  << "\t* A Cacao Engine packed shader\n"
 				  << "\t* A Cacao Engine packed cubemap\n"
 				  << "\t* A Cacao Engine packed material\n"
-				  << "\t* A 2D texture file (.png, .jpg/.jpeg, .bmp, .tga, or .hdr)\n"
-				  << "\t* A model file (.fbx, .glb, .dae, or .obj) containing one or more meshes and optionally textures.\n"
-				  << "\t* A font file (.ttf or .otf)\n"
-				  << "\t* A sound file (.mp3, .wav, .ogg (Ogg Vorbis), or .opus (Ogg Opus))\n\n"
+				  << "\t* A 2D texture file (PNG, JPEG, WebP, Targa/TGA, TIFF, or KTX2)\n"
+				  << "\t* A model file (FBX, glTF2 binary (.glb), Collada (.dae), or Wavefront OBJ) containing one or more meshes and optionally textures.\n"
+				  << "\t* A font file (TrueType (.ttf) or OpenType (.otf))\n"
+				  << "\t* A sound file (MP3, WAV, Ogg Vorbis (.ogg), Ogg Opus (.opus))\n\n"
 				  << "Any file not in of these categories will not be placed into the asset pack.\n"
-				  << "To embed an arbitrary resource, place it in a subpath of the directory specified in --res-dir.\n\n"
-				  << "Targa image files (.tga) must have a bit depth of 8, 15, 16, 24, or 32 to be considered valid if RGB, 8 or 16 only if colormapped." << std::endl;
+				  << "To embed an arbitrary blob resource, place it in a subpath of the directory specified in --res-dir.\n\n";
 		exit(0);
 	};
 	CLI::Option* assetsDirHelp = cmd->add_flag_callback("--help-assets-dir", assetsDirHelpFunc, "View more information about the --assets-dir option")->excludes(assets, res);
@@ -142,19 +141,19 @@ void CreateCmd::Callback() {
 	CVLOG("Done.")
 	if(noRes) goto asset_process;
 
-	//Search for resources
+	//Search for blob resources
 res_begin:
-	CVLOG_NONL("Discovering resources... ")
+	CVLOG_NONL("Discovering blob resources... ")
 	for(auto&& res : std::filesystem::recursive_directory_iterator(resRoot)) {
 		if(!res.is_regular_file()) continue;
 		resources.push_back(res.path());
 	}
 	CVLOG("Done.")
 
-	//Add resources to asset table
+	//Add blob resources to asset table
 	for(const std::filesystem::path& res : resources) {
 		//Log
-		CVLOG_NONL("Adding resource " << res << "... ")
+		CVLOG_NONL("Adding blob resource " << res << "... ")
 
 		//Create packed asset object
 		libcacaoformats::PackedAsset pa = {};
@@ -164,7 +163,7 @@ res_begin:
 		pa.buffer = [res]() {
 			std::ifstream stream(res);
 			if(!stream.is_open()) {
-				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open resource data stream!")
+				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open blob resource data stream!")
 			}
 			try {
 				//Grab size
@@ -181,9 +180,9 @@ res_begin:
 				return contents;
 			} catch(std::ios_base::failure& ios_failure) {
 				if(errno == 0) {
-					XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read resource data stream: \"" << ios_failure.what() << "\"!")
+					XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read blob resource data stream: \"" << ios_failure.what() << "\"!")
 				}
-				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read resource data stream!");
+				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to read blob resource data stream!");
 			}
 		}();
 		if(fail) return;

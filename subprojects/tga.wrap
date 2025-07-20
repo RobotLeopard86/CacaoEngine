@@ -1,0 +1,5 @@
+[wrap-git]
+url = https://github.com/aseprite/tga
+depth = 1
+revision = cd3420c3a5797f1200fd1e1970ca29598f2c2436
+patch_directory = tga

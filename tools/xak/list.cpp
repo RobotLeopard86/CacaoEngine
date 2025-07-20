@@ -1,6 +1,5 @@
 #include "commands.hpp"
 
-#include <filesystem>
 #include <string>
 
 #include "libcacaoformats.hpp"
@@ -18,7 +17,7 @@ ListCmd::ListCmd(CLI::App& app) {
 	doAssets = true;
 	doResources = true;
 	CLI::Option* assetsOnly = cmd->add_flag_callback("-A,--assets-only", [this]() { doResources = false; }, "Only list assets");
-	CLI::Option* resOnly = cmd->add_flag_callback("-R,--resources-only", [this]() { doAssets = false; }, "Only list resources");
+	CLI::Option* resOnly = cmd->add_flag_callback("-R,--resources-only", [this]() { doAssets = false; }, "Only list blob resources");
 	assetsOnly->excludes(resOnly);
 	resOnly->excludes(assetsOnly);
 
@@ -102,7 +101,7 @@ void ListCmd::Callback() {
 	}
 	if(r.size() > 0) {
 		if(a.size() > 0) std::cout << std::endl;
-		std::cout << "Resources:" << std::endl;
+		std::cout << "Blob Resources:" << std::endl;
 		for(const std::string& res : r) {
 			std::cout << res << std::endl;
 		}
