@@ -74,7 +74,8 @@ breathe_projects = {
     "Cacao Engine": "./_doxy/cacao/xml",
     "libcacaoformats": "./_doxy/formats/xml",
     "libcacaocommon": "./_doxy/commonlib/xml",
-    "libcacaoaudiodecoder": "./_doxy/audiodecoder/xml"
+    "libcacaoaudiodecoder": "./_doxy/audiodecoder/xml",
+    "libcacaoimage": "./_doxy/image/xml"
 }
 breathe_default_project = "Cacao Engine"
 
@@ -112,6 +113,15 @@ exhale_projects_args = {
 									'''),
         "containmentFolder": "./libapis/formats",
         "rootFileTitle": "Cacao Formats Library API"
+    },
+     "libcacaoimage": {
+        "exhaleDoxygenStdin": dedent('''
+									INPUT = ../libs/image/include
+									HIDE_UNDOC_MEMBERS = YES
+									MAX_INITIALIZER_LINES = 0
+									'''),
+        "containmentFolder": "./libapis/image",
+        "rootFileTitle": "Cacao Images Library API"
     },
      "libcacaoaudiodecoder": {
         "exhaleDoxygenStdin": dedent('''
