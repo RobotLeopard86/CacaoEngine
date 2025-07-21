@@ -1,5 +1,8 @@
 #include "libcacaoimage.hpp"
+
 #include <stdexcept>
+#include <array>
+#include <cstring>
 
 namespace libcacaoimage {
 	Image decode::DecodeGeneric(std::istream& input) {

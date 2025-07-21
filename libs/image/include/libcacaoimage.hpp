@@ -3,6 +3,7 @@
 #include <vector>
 #include <istream>
 #include <ostream>
+#include <cstdint>
 
 namespace libcacaoimage {
 	///@brief Decoded image representation
