@@ -1,5 +1,5 @@
 # Dependencies
-image_deps = []
+image_deps = [commonlib_dep]
 
 # Configure KTX
 ktx_opts = cmake.subproject_options()
@@ -24,8 +24,13 @@ ktx_sp = cmake.subproject('ktx', options: ktx_opts, required: true)
 image_deps += ktx_sp.dependency('ktx')
 image_deps += ktx_sp.dependency('astcenc-none-static')
 
-# libpng
+# libpng + zlib
 image_deps += subproject('libpng', required: true, default_options: ['default_library=static']).get_variable('libpng_dep')
+image_deps += subproject('zlib', required: true, default_options: {
+	'default_library': 'static',
+	'tests': 'disabled',
+	'solo': true
+}).get_variable('zlib_dep')
 
 # libjpeg-turbo
 image_deps += subproject('libjpeg-turbo', required: true, default_options: {

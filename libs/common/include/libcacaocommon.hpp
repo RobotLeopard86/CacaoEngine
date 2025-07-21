@@ -6,6 +6,7 @@
 #include <exception>
 #include <string>
 #include <cstring>
+#include <functional>
 #include <stdexcept>
 
 /**
@@ -15,9 +16,13 @@
  *
  * @param cond The condition to evaluate
  * @param msg The message for the exception thrown
+ * @param unwindFn A function to clean up state before exception throwing should the condition be false
  */
-inline void CheckException(bool cond, std::string msg) {
-	if(!cond) throw std::runtime_error(msg);
+inline void CheckException(bool cond, std::string msg, std::function<void()> unwindFn = []() {}) {
+	if(!cond) {
+		unwindFn();
+		throw std::runtime_error(msg);
+	}
 }
 
 /**
