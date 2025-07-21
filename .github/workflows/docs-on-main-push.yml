@@ -39,6 +39,7 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
+          rm -rvf /tmp/PAGESBUILD/dev
           sphinx-build -b html -j auto -a . /tmp/PAGESBUILD/main
       - name: Add changes
         run: |
