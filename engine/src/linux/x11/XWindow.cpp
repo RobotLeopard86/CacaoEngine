@@ -274,7 +274,7 @@ namespace Cacao {
 		//Find the monitor which the window is likely on
 		xcb_randr_monitor_info_t monitor = {};
 		bool found = false;
-		for(int i = 0; i < monCount; i++) {
+		for(int i = 0; i < monCount; ++i) {
 			xcb_randr_monitor_info_t mon = monInfo.data[i];
 			if(winAbsPos.x >= mon.x && winAbsPos.x < (mon.x + mon.width) && winAbsPos.y >= mon.y && winAbsPos.y < (mon.y + mon.height)) {
 				monitor = mon;
@@ -346,7 +346,7 @@ namespace Cacao {
 				unsigned int xDistLast = UINT32_MAX, yDistLast = UINT32_MAX;
 				bool foundExact = false;
 				glm::u16vec2 vidModeSize = {0, 0};
-				for(int i = 0; i < modeCount; i++) {
+				for(int i = 0; i < modeCount; ++i) {
 					xcb_randr_mode_info_t modeInfo = modes[i];
 
 					//If we found it exactly, we're golden

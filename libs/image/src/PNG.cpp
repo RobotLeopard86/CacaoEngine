@@ -3,8 +3,6 @@
 
 #include "png.h"
 
-#include <iostream>
-
 namespace libcacaoimage {
 	Image decode::DecodePNG(std::istream& input) {
 		//Quick check to confirm PNG
@@ -85,7 +83,7 @@ namespace libcacaoimage {
 		std::size_t bytesPerRow = png_get_rowbytes(png, info);
 		img.data.resize(bytesPerRow * img.h);
 		std::vector<png_bytep> rowPointers(img.h);
-		for(std::size_t y = 0; y < img.h; y++) {
+		for(std::size_t y = 0; y < img.h; ++y) {
 			rowPointers[y] = img.data.data() + (y * bytesPerRow);
 		}
 
@@ -103,7 +101,7 @@ namespace libcacaoimage {
 	void encode::EncodePNG(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
-		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid bit depth for PNG encoding; 8 or 16 is required.");
+		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid bit depth; only 8 and 16 are allowed.");
 		CheckException(src.data.size() > 0, "Cannot encode an image with a zero-sized data buffer!");
 
 		//Initialize libpng
@@ -160,7 +158,7 @@ namespace libcacaoimage {
 
 		//Hand over image data
 		std::vector<png_bytep> rowPointers(src.h);
-		for(std::size_t y = 0; y < src.h; y++) {
+		for(std::size_t y = 0; y < src.h; ++y) {
 			rowPointers[y] = const_cast<unsigned char*>(src.data.data()) + (y * src.w * channelcount * (src.bitsPerChannel / 8));
 		}
 		png_set_rows(png, info, rowPointers.data());

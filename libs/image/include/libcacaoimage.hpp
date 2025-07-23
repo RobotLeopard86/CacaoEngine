@@ -17,17 +17,17 @@ namespace libcacaoimage {
 			RGB,						///<Three channels
 			RGBA						///<Four channels
 		} layout;						///<Layout of data buffer
-		uint8_t bitsPerChannel;			///<How many bits are in each image channel (8, 16, or 32)
+		uint8_t bitsPerChannel;			///<How many bits are in each image channel (only 8 or 16)
 		std::vector<unsigned char> data;///<Image buffer
 
 		///@brief Supported formats
 		enum class Format {
-			PNG,
-			JPEG,
-			WebP,
-			TGA,
-			TIFF,
-			KTX2
+			PNG, ///<PNG
+			JPEG,///<JPEG
+			WebP,///<WebP
+			TGA, ///<TGA (Targa)
+			TIFF,///<TIFF
+			KTX2 ///<KTX2
 		} format;///<Original encoded format (set by decoder functions, useful for decoding and re-encoding)
 	};
 

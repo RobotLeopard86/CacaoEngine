@@ -108,7 +108,7 @@ namespace libcacaoformats {
 
 		//Process keys
 		std::size_t offsetCounter = saLen + 3;
-		for(uint8_t i = 0; i < numKeys; i++) {
+		for(uint8_t i = 0; i < numKeys; ++i) {
 			//Get key name
 			CheckException(container.payload.size() > offsetCounter + 1, "Material packed container is too small to contain key name length!");
 			uint8_t keyNameLen = 0;
@@ -484,7 +484,7 @@ namespace libcacaoformats {
 				case 3: {
 					Material::TextureRef ref {};
 					CheckException(container.payload.size() > offsetCounter + 1, "Material packed container key is too small to contain texture reference string length!");
-					uint32_t texLen = 0;
+					uint8_t texLen = 0;
 					std::memcpy(&texLen, container.payload.data() + offsetCounter++, 1);
 					CheckException(container.payload.size() > offsetCounter + 1, "Material packed container key is too small to contain texture reference string of provided length!");
 					ref.path = std::string("\0", texLen);
@@ -548,7 +548,7 @@ namespace libcacaoformats {
 		//If we don't need to process entities, return value now
 		if(actorCount == 0) return out;
 
-		for(uint64_t i = 0; i < actorCount; i++) {
+		for(uint64_t i = 0; i < actorCount; ++i) {
 			World::Actor ent {};
 
 			//Read GUID bytes

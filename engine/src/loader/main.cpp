@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//We have two vectors because we have to pass a char** to main, but we still need to keep the std::strings so the memory isn't deallocated
 	std::vector<std::string> utf8Args;
 	std::vector<char*> argv;
-	for(int i = 0; i < argc; i++) {
+	for(int i = 0; i < argc; ++i) {
 		//Get length of argument
 		int argLength = WideCharToMultiByte(CP_UTF8, 0, argvW[i], -1, nullptr, 0, nullptr, nullptr);
 		if(argLength <= 0) continue;

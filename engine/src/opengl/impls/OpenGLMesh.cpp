@@ -7,7 +7,7 @@ namespace Cacao {
 		return Engine::Get().RunTaskOnMainThread([this]() {
 			//Unpack index buffer data
 			std::vector<unsigned int> ibd(indices.size() * 3);
-			for(unsigned int i = 0; i < indices.size(); i++) {
+			for(unsigned int i = 0; i < indices.size(); ++i) {
 				glm::vec3 idx = indices[i];
 				ibd[i * 3] = idx.x;
 				ibd[(i * 3) + 1] = idx.y;

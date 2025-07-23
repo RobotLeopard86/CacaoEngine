@@ -121,7 +121,8 @@ exhale_projects_args = {
 									MAX_INITIALIZER_LINES = 0
 									'''),
         "containmentFolder": "./libapis/image",
-        "rootFileTitle": "Cacao Images Library API"
+        "rootFileTitle": "Cacao Images Library API",
+        "afterTitleDescription": ".. note:: As per the license obligations of ``libjpeg-turbo``, we are required to state:\n\n\t**This software is based in part on the work of the Independent JPEG Group.**"
     },
      "libcacaoaudiodecoder": {
         "exhaleDoxygenStdin": dedent('''

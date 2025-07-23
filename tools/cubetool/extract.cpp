@@ -48,7 +48,7 @@ ExtractCmd::ExtractCmd(CLI::App& app) {
 
 void ExtractCmd::Callback() {
 	if(doAll) {
-		for(uint8_t i = 0; i < 6; i++) faces.emplace_back(i);
+		for(uint8_t i = 0; i < 6; ++i) faces.emplace_back(i);
 	}
 	if(faces.size() <= 0) {
 		CUBE_ERROR("No faces selected for extraction!")

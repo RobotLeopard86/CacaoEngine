@@ -46,7 +46,7 @@ namespace Cacao {
 			int retval;
 			for(const std::future<T>& fut : *this) {
 				//Wait for no time to get status
-				if(fut.wait_for(std::chrono::duration<double>::zero()) == std::future_status::ready) retval++;
+				if(fut.wait_for(std::chrono::duration<double>::zero()) == std::future_status::ready) ++retval;
 			}
 			return retval;
 		}

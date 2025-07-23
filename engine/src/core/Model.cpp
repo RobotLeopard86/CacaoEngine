@@ -67,7 +67,7 @@ namespace Cacao {
 
 		//Populate mesh list
 		std::vector<std::string> meshIDs;
-		for(unsigned int i = 0; i < impl->scene->mNumMeshes; i++) {
+		for(unsigned int i = 0; i < impl->scene->mNumMeshes; ++i) {
 			aiMesh* mesh = impl->scene->mMeshes[i];
 			std::string meshID = mesh->mName.length == 0 ? (std::string("Mesh") + std::to_string(i)) : std::string(mesh->mName.C_Str());
 			impl->meshIndex.insert_or_assign(meshID, mesh);
@@ -76,7 +76,7 @@ namespace Cacao {
 
 		//Texture scanning
 		if(impl->scene->HasTextures()) {
-			for(unsigned int i = 0; i < impl->scene->mNumTextures; i++) {
+			for(unsigned int i = 0; i < impl->scene->mNumTextures; ++i) {
 				aiTexture* tex = impl->scene->mTextures[i];
 
 				//TODO: Screen for known texture compression algorithms
@@ -118,7 +118,7 @@ namespace Cacao {
 		std::vector<glm::uvec3> indices;
 
 		//Handle vertices
-		for(unsigned int i = 0; i < amesh->mNumVertices; i++) {
+		for(unsigned int i = 0; i < amesh->mNumVertices; ++i) {
 			//Get position
 			aiVector3D vert = amesh->mVertices[i];
 			glm::vec3 position = {vert.x, vert.y, vert.z};
@@ -175,7 +175,7 @@ namespace Cacao {
 		}
 
 		//Handle indices
-		for(unsigned int i = 0; i < amesh->mNumFaces; i++) {
+		for(unsigned int i = 0; i < amesh->mNumFaces; ++i) {
 			aiFace face = amesh->mFaces[i];
 			indices.push_back({face.mIndices[0], face.mIndices[1], face.mIndices[2]});
 		}

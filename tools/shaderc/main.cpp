@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
 	//Merge input and output vectors
 	VLOG_NONL("Preparing tasks list... ")
 	std::map<std::filesystem::path, std::filesystem::path> tasks;
-	for(unsigned int i = 0; i < input.size(); i++) {
+	for(unsigned int i = 0; i < input.size(); ++i) {
 		if(!std::filesystem::exists(output[i].parent_path())) {
 			std::filesystem::create_directories(output[i].parent_path());
 		}
