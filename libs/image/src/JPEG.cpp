@@ -3,11 +3,13 @@
 
 #include "turbojpeg.h"
 
+#include <iostream>
+
 namespace libcacaoimage {
 	Image decode::DecodeJPEG(std::istream& input) {
 		//Quick check to confirm JPEG
 		std::array<unsigned char, 3> jpgSig;
-		input.read(reinterpret_cast<char*>(jpgSig.data()), 8);
+		input.read(reinterpret_cast<char*>(jpgSig.data()), 3);
 		CheckException(jpgSig[0] == 0xFF && jpgSig[1] == 0xD8 && jpgSig[2] == 0xFF, "Non-JPEG data passed to DecodeJPEG!");
 		input.seekg(0);
 
@@ -89,5 +91,45 @@ namespace libcacaoimage {
 	}
 
 	void encode::EncodeJPEG(const Image& src, std::ostream& out) {
+		//Input validation
+		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
+		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid bit depth; only 8 and 16 are allowed.");
+		CheckException(src.data.size() > 0, "Cannot encode an image with a zero-sized data buffer!");
+		CheckException(src.layout != Image::Layout::RGBA, "Cannot encode an image with an alpha channel to JPEG format!");
+
+		//Initialize TurboJPEG
+		tjhandle tj = tj3Init(TJINIT_COMPRESS);
+		CheckException(tj, "Failed to initialize TurboJPEG!");
+
+		//Make output buffer (maximum size needed, will almost certainly be trimmed down)
+		std::vector<unsigned char> outBuf(tj3JPEGBufSize(src.w, src.h, TJSAMP_444));
+
+		//Configure settings
+		CheckException(tj3Set(tj, TJPARAM_NOREALLOC, true) == 0, "Failed to disable TurboJPEG auto-reallocation!", [&tj]() { tj3Destroy(tj); });
+		CheckException(tj3Set(tj, TJPARAM_PRECISION, src.bitsPerChannel) == 0, "Failed to set TurboJPEG precision!", [&tj]() { tj3Destroy(tj); });
+		if(src.bitsPerChannel == 8) CheckException(tj3Set(tj, TJPARAM_QUALITY, 90) == 0, "Failed to set TurboJPEG quality!", [&tj]() { tj3Destroy(tj); });
+		CheckException(tj3Set(tj, TJPARAM_SUBSAMP, TJSAMP_444) == 0, "Failed to set TurboJPEG subsampling settings!", [&tj]() { tj3Destroy(tj); });
+
+		//Encode the data
+		int pixelFormat = (src.layout == Image::Layout::RGB ? TJPF_RGB : TJPF_GRAY);
+		int pitch = src.w * (src.layout == Image::Layout::RGB ? 3 : 1);
+		std::size_t outSize = outBuf.size();
+		if(src.bitsPerChannel == 8) {
+			unsigned char* outPtr = outBuf.data();
+			CheckException(tj3Compress8(tj, src.data.data(), src.w, pitch, src.h, pixelFormat, &outPtr, &outSize) == 0, "Failed to encode JPEG data!", [&tj]() { std::cout << tj3GetErrorStr(tj) << std::endl; tj3Destroy(tj); });
+		} else {
+			unsigned char* outPtr = outBuf.data();
+			CheckException(tj3Compress16(tj, reinterpret_cast<const uint16_t*>(src.data.data()), src.w, pitch, src.h, pixelFormat, &outPtr, &outSize) == 0,
+				"Failed to encode JPEG data!", [&tj]() { tj3Destroy(tj); });
+		}
+
+		//Trim the buffer to remove unnecessary end padding
+		outBuf.resize(outSize);
+
+		//Write output to stream
+		out.write(reinterpret_cast<char*>(outBuf.data()), outBuf.size());
+
+		//Cleanup
+		tj3Destroy(tj);
 	}
 }

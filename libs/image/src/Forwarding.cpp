@@ -8,14 +8,14 @@ namespace libcacaoimage {
 	Image decode::DecodeGeneric(std::istream& input) {
 		//Read the first eighteen bytes (all detected types are within this range)
 		std::array<unsigned char, 18> rbuf;
-		input.read(reinterpret_cast<char*>(rbuf.data()), 4);
+		input.read(reinterpret_cast<char*>(rbuf.data()), 18);
 		input.seekg(0);
 
 		//Check the bytes we got
 		if(rbuf[0] == 0xFF && rbuf[1] == 0xD8 && rbuf[2] == 0xFF) {
 			//JPEG
 			return DecodeJPEG(input);
-		} else if(rbuf[0] == 0x89 && rbuf[1] == 0x50 && rbuf[2] == 0x4E && rbuf[3] == 0x47 && rbuf[4] == 0x0D && rbuf[5] == 0x0A && rbuf[6] == 0x1A && rbuf[7] == 0x1A) {
+		} else if(rbuf[0] == 0x89 && rbuf[1] == 0x50 && rbuf[2] == 0x4E && rbuf[3] == 0x47 && rbuf[4] == 0x0D && rbuf[5] == 0x0A && rbuf[6] == 0x1A && rbuf[7] == 0x0A) {
 			//PNG
 			return DecodePNG(input);
 		} else if(rbuf[0] == 'R' && rbuf[1] == 'I' && rbuf[2] == 'F' && rbuf[3] == 'F' && rbuf[8] == 'W' && rbuf[9] == 'E' && rbuf[10] == 'B' && rbuf[11] == 'P') {
@@ -72,11 +72,11 @@ namespace libcacaoimage {
 	void encode::Reencode(const Image& src, std::ostream& out) {
 		switch(src.format) {
 			case Image::Format::PNG: return EncodePNG(src, out);
-			case Image::Format::JPEG: return EncodePNG(src, out);
-			case Image::Format::WebP: return EncodePNG(src, out);
-			case Image::Format::TGA: return EncodePNG(src, out);
-			case Image::Format::TIFF: return EncodePNG(src, out);
-			case Image::Format::KTX2: return EncodePNG(src, out);
+			case Image::Format::JPEG: return EncodeJPEG(src, out);
+			case Image::Format::WebP: return EncodeWebP(src, out);
+			case Image::Format::TGA: return EncodeTGA(src, out);
+			case Image::Format::TIFF: return EncodeTIFF(src, out);
+			case Image::Format::KTX2: return EncodeKTX(src, out);
 			default: throw std::runtime_error("Invalid image format!");
 		}
 	}
