@@ -40,6 +40,8 @@ namespace libcacaoimage {
 		//Get image characteristics
 		Image img;
 		img.format = Image::Format::PNG;
+		img.lossy = false;
+		img.quality = 100;
 		int bitdepth = -1, colortype = -1;
 		png_get_IHDR(png, info, &img.w, &img.h, &bitdepth, &colortype, nullptr, nullptr, nullptr);
 

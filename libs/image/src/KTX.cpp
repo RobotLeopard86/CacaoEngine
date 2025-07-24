@@ -1,4 +1,5 @@
 #include "libcacaoimage.hpp"
+#include "libcacaocommon.hpp"
 
 namespace libcacaoimage {
 	Image decode::DecodeKTX(std::istream& input) {

@@ -29,6 +29,9 @@ namespace libcacaoimage {
 			TIFF,///<TIFF
 			KTX2 ///<KTX2
 		} format;///<Original encoded format (set by decoder functions, useful for decoding and re-encoding)
+
+		int quality;///<0-100, image quality for encoding in supported formats
+		bool lossy; ///<Whether to use lossy compression when encoding in supported formats
 	};
 
 	///@brief Image decoding functions
@@ -131,7 +134,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void Reencode(const Image& src, std::ostream& out);
 
@@ -141,7 +144,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodePNG(const Image& src, std::ostream& out);
 
@@ -151,7 +154,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodeJPEG(const Image& src, std::ostream& out);
 
@@ -161,7 +164,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodeWebP(const Image& src, std::ostream& out);
 
@@ -171,7 +174,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodeTGA(const Image& src, std::ostream& out);
 
@@ -181,7 +184,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodeTIFF(const Image& src, std::ostream& out);
 
@@ -191,7 +194,7 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
-		 * @throws std::runtime_error If encoding fails
+		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodeKTX(const Image& src, std::ostream& out);
 	}
