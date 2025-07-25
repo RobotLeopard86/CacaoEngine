@@ -5,6 +5,11 @@
 #include <map>
 #include <functional>
 
+#ifdef _WIN32
+#undef CreateWindow
+#undef DestroyWindow
+#endif
+
 namespace Cacao {
 	class Window::Impl {
 	  public:

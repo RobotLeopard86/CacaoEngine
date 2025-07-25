@@ -3,6 +3,9 @@
 
 #include "png.h"
 
+#include <array>
+#include <bit>
+
 namespace libcacaoimage {
 	Image decode::DecodePNG(std::istream& input) {
 		//Quick check to confirm PNG

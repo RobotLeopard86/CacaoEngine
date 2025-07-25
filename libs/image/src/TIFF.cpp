@@ -6,6 +6,7 @@
 #include "tiffio.hxx"
 
 #include <iostream>
+#include <array>
 
 namespace libcacaoimage {
 	Image decode::DecodeTIFF(std::istream& input) {

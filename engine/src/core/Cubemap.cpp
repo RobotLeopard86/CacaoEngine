@@ -1,29 +1,28 @@
-#include "Cacao/Mesh.hpp"
+#include "Cacao/Cubemap.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/ThreadPool.hpp"
-#include "impl/Mesh.hpp"
+#include "impl/Cubemap.hpp"
 #include "PALConfigurables.hpp"
 
 #include <future>
 
 namespace Cacao {
-	Mesh::Mesh(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr)
+	Cubemap::Cubemap(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr)
 	  : Asset(addr) {
 		//Create implementation pointer
 		PAL::Get().ConfigureImplPtr(*this);
 
 		//Fill data
-		impl->vertices = std::move(vtx);
-		impl->indices = std::move(idx);
+		impl->faces = faces;
 	}
 
-	Mesh::~Mesh() {
+	Cubemap::~Cubemap() {
 		if(realized) DropRealized();
 	}
 
-	void Mesh::Realize() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized mesh!");
+	void Cubemap::Realize() {
+		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
 
 		if(impl->DoWaitAsyncForSync()) {
 			impl->Realize().value().get();
@@ -32,8 +31,8 @@ namespace Cacao {
 		}
 	}
 
-	std::shared_future<void> Mesh::RealizeAsync() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized mesh!");
+	std::shared_future<void> Cubemap::RealizeAsync() {
+		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
 
 		if(impl->DoWaitAsyncForSync()) {
 			return impl->Realize().value();
@@ -42,8 +41,8 @@ namespace Cacao {
 		}
 	}
 
-	void Mesh::DropRealized() {
-		Check<BadRealizeStateException>(realized, "Cannot drop the realized representation of an unrealized mesh; it does not exist!");
+	void Cubemap::DropRealized() {
+		Check<BadRealizeStateException>(realized, "Cannot drop the realized representation of an unrealized cubemap; it does not exist!");
 
 		realized = false;
 		impl->DropRealized();

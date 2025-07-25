@@ -10,6 +10,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
 
+#include <map>
+
 namespace Cacao {
 	struct Model::Impl {
 		Assimp::Importer importer;

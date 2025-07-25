@@ -3,6 +3,8 @@
 
 #include "turbojpeg.h"
 
+#include <array>
+
 namespace libcacaoimage {
 	Image decode::DecodeJPEG(std::istream& input) {
 		//Quick check to confirm JPEG

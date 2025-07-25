@@ -1,20 +1,34 @@
 diff --git a/libtiff/meson.build b/libtiff/meson.build
-index a2aaf96..d8aa923 100644
+index a2aaf965..a66978c2 100644
 --- a/libtiff/meson.build
 +++ b/libtiff/meson.build
-@@ -80,6 +80,20 @@ tiff4_lib = library(
+@@ -80,6 +80,34 @@ tiff4_lib = library(
    version: library_version,
  )
  
 +if tiffxx
-+  add_languages('cpp', tiffxx)
++  add_languages('cpp')
++
++  defs = []
++  if host_machine.system() == 'windows'
++    defs += '-D_DLL'
++    defs += '-D_MT'
++    if get_option('buildtype') == 'debug'
++      defs += '-D_DEBUG'
++      defs += '-D_ITERATOR_DEBUG_LEVEL=2'
++      defs += '-fms-runtime-lib=dll_dbg'
++    else
++      defs += '-fms-runtime-lib=dll'
++    endif
++  endif
 +
 +  tiff4xx_lib = library(
 +    'tiffxx',
 +    'tif_stream.cxx',
 +    install: true,
 +    dependencies: [m_dep, jbig_dep, jpeg_dep, lerc_dep, lzma_dep, webp_dep, zlib_dep, zstd_dep],
-+    link_whole: tiff4_lib
++    link_whole: tiff4_lib,
++    cpp_args: defs
 +  )
 +
 +  install_headers('tiffio.hxx')
@@ -24,7 +38,7 @@ index a2aaf96..d8aa923 100644
    'tiff.h',
    'tiffio.h',
 diff --git a/meson.build b/meson.build
-index e1538f6..7174ecf 100644
+index e1538f61..7174ecf7 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -142,6 +142,8 @@ cdata.set('TIFF_MAX_DIR_COUNT', 1048576)
@@ -51,7 +65,7 @@ index e1538f6..7174ecf 100644
    tiff4_lib,
    filebase: 'libtiff-4',
 diff --git a/meson_options.txt b/meson_options.txt
-index 2646f73..ea8b2a4 100644
+index 2646f737..ea8b2a43 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -25,3 +25,7 @@ option('zlib', type: 'feature',

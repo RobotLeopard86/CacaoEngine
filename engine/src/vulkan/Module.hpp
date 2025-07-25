@@ -61,6 +61,8 @@ namespace Cacao {
 
 		//==================== IMPL POINTER CONFIGURATION ====================
 		virtual Mesh::Impl* ConfigureMesh() override;
+		virtual Tex2D::Impl* ConfigureTex2D() override;
+		virtual Cubemap::Impl* ConfigureCubemap() override;
 
 		vk::Instance instance;
 		vk::PhysicalDevice physDev;

@@ -3,7 +3,7 @@
 #include "DllHelper.hpp"
 #include "Asset.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoimage.hpp"
 
 #include <memory>
 
@@ -19,7 +19,7 @@ namespace Cacao {
 		 * @param imageBuffer The image data for the texture
 		 * @param addr The resource address identifier to associate with the texture
 		 */
-		static std::shared_ptr<Tex2D> Create(libcacaoformats::ImageBuffer&& imageBuffer, const std::string& addr) {
+		static std::shared_ptr<Tex2D> Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
 			return std::shared_ptr<Tex2D>(new Tex2D(std::move(imageBuffer), addr));
 		}
 
@@ -57,19 +57,17 @@ namespace Cacao {
 		void DropRealized();
 
 		///@cond
-		struct Impl;
+		class Impl;
 		///@endcond
 
 		~Tex2D();
 
 	  private:
-		Tex2D(libcacaoformats::ImageBuffer&& imageBuffer, const std::string& addr);
+		Tex2D(libcacaoimage::Image&& imageBuffer, const std::string& addr);
 		friend class PAL;
 		friend class ResourceManager;
 
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
-
-		libcacaoformats::ImageBuffer img;
 	};
 }

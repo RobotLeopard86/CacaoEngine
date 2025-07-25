@@ -8,8 +8,6 @@ ktx_opts.add_cmake_defines({
 	'BUILD_TESTING': 'OFF',
 	'ASTCENC_ISA_NONE': 'ON',
 	'KTX_FEATURE_GL_UPLOAD': 'OFF',
-	'KTX_FEATURE_KTX1': 'OFF',
-	'KTX_FEATURE_KTX2': 'ON',
 	'KTX_FEATURE_TESTS': 'OFF',
 	'KTX_FEATURE_TOOLS': 'OFF',
 	'KTX_FEATURE_TOOLS_CTS': 'OFF',
@@ -25,12 +23,12 @@ image_deps += ktx_sp.dependency('ktx')
 image_deps += ktx_sp.dependency('astcenc-none-static')
 
 # libpng + zlib
-image_deps += subproject('libpng', required: true, default_options: ['default_library=static']).get_variable('libpng_dep')
 image_deps += subproject('zlib', required: true, default_options: {
 	'default_library': 'static',
 	'tests': 'disabled',
 	'solo': true
 }).get_variable('zlib_dep')
+image_deps += subproject('libpng', required: true, default_options: ['default_library=static']).get_variable('libpng_dep')
 
 # libjpeg-turbo
 image_deps += subproject('libjpeg-turbo', required: true, default_options: {

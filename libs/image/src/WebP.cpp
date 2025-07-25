@@ -4,6 +4,8 @@
 #include "webp/decode.h"
 #include "webp/encode.h"
 
+#include <array>
+
 namespace libcacaoimage {
 	Image decode::DecodeWebP(std::istream& input) {
 		//Quick check to confirm WebP

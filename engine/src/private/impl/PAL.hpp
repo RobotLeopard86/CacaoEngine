@@ -8,6 +8,8 @@
 #include "Cacao/PAL.hpp"
 
 #include "Mesh.hpp"
+#include "Tex2D.hpp"
+#include "Cubemap.hpp"
 
 namespace Cacao {
 	class CACAO_API PALModule {
@@ -23,6 +25,8 @@ namespace Cacao {
 
 		//==================== IMPL POINTER CONFIGURATION ====================
 		virtual Mesh::Impl* ConfigureMesh() = 0;
+		virtual Tex2D::Impl* ConfigureTex2D() = 0;
+		virtual Cubemap::Impl* ConfigureCubemap() = 0;
 
 		virtual ~PALModule() {}
 

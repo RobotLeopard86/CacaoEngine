@@ -13,6 +13,8 @@ vk_sources = [
 	'VulkanModule.cpp',
 	'VulkanImpl.cpp',
 	'impls' / 'VulkanMesh.cpp',
+	'impls' / 'VulkanTex2D.cpp',
+	'impls' / 'VulkanCubemap.cpp',
 	'wsi' / 'Common.cpp'
 ]
 vk_inc = [engine_headers, module_private_headers]

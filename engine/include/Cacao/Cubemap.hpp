@@ -3,9 +3,10 @@
 #include "DllHelper.hpp"
 #include "Asset.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoimage.hpp"
 
 #include <memory>
+#include <array>
 
 namespace Cacao {
 	/**
@@ -19,7 +20,7 @@ namespace Cacao {
 		 * @param faces The face images of the cubemap, in the order of +X face, -X face, +Y face, -Y face, +Z face, -Z face
 		 * @param addr The resource address identifier to associate with the cubemap
 		 */
-		static std::shared_ptr<Cubemap> Create(std::array<libcacaoformats::ImageBuffer, 6>&& faces, const std::string& addr) {
+		static std::shared_ptr<Cubemap> Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr) {
 			return std::shared_ptr<Cubemap>(new Cubemap(std::move(faces), addr));
 		}
 
@@ -57,19 +58,17 @@ namespace Cacao {
 		void DropRealized();
 
 		///@cond
-		struct Impl;
+		class Impl;
 		///@endcond
 
 		~Cubemap();
 
 	  private:
-		Cubemap(std::array<libcacaoformats::ImageBuffer, 6>&& faces, const std::string& addr);
+		Cubemap(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr);
 		friend class PAL;
 		friend class ResourceManager;
 
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
-
-		std::array<libcacaoformats::ImageBuffer, 6> img;
 	};
 }

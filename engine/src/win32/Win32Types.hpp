@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Cacao/Window.hpp"
-#include "impl/Window.hpp"
-
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 #include <string>
+
+#include "Cacao/Window.hpp"
+#include "impl/Window.hpp"
 
 namespace Cacao {
 	class Win32WindowImpl : public Window::Impl {
