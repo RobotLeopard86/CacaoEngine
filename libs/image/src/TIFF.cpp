@@ -6,6 +6,7 @@
 #include "tiffio.hxx"
 
 #include <iostream>
+#include <memory>
 #include <array>
 
 namespace libcacaoimage {
