@@ -51,8 +51,9 @@ image_deps += subproject('libtiff', required: true, default_options: {
 	'lzma': 'disabled',
 	'webp': 'disabled',
 	'zlib': 'disabled',
-	'zstd': 'disabled'
-}).get_variable('libtiff4_dep')
+	'zstd': 'disabled',
+	'tiffxx': true
+}).get_variable('libtiff4xx_dep')
 
 # libwebp
 image_deps += subproject('libwebp', required: true, default_options: {
