@@ -4,7 +4,9 @@ glad_dep = subproject('glad').get_variable('glad_dep')
 # Sources
 gl_sources = [
 	'OpenGLModule.cpp',
-	'impls' / 'OpenGLMesh.cpp'
+	'impls' / 'OpenGLMesh.cpp',
+	'impls' / 'OpenGLTex2D.cpp',
+	'impls' / 'OpenGLCubemap.cpp'
 ]
 gl_inc = [engine_headers, module_private_headers]
 gl_deps = [glad_dep, glm_dep, xg_headers_dep]

@@ -198,4 +198,15 @@ namespace libcacaoimage {
 		 */
 		void EncodeKTX(const Image& src, std::ostream& out);
 	}
+
+	/**
+	 * @brief Convert an Image with a 16-bit color depth to one with an 8-bit color depth
+	 *
+	 * @param src The source 16-bit image
+	 *
+	 * @return A new image with 8-bit color depth
+	 *
+	 * @throws std::runtime_error If the source image is not 16-bit
+	 */
+	Image Convert16To8BitColor(const Image& src);
 }

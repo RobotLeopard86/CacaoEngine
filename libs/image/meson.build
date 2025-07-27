@@ -73,14 +73,20 @@ image_deps += subproject('libwebp', required: true, default_options: {
 # tga
 image_deps += subproject('tga', required: true).get_variable('tga_dep')
 
+# Generate 16-to-18-bit color depth mapping LUT
+lutgen = executable('lutgen', 'LUTGen.cpp', native: true)
+lut_hpp = custom_target('lut', command: [lutgen, '@OUTPUT@'], output: 'colordepth_lut.hpp')
+
 image_lib = static_library('cacaoimage', sources: [
+	'src' / 'Colordepth.cpp',
 	'src' / 'Forwarding.cpp',
 	'src' / 'JPEG.cpp',
 	'src' / 'KTX.cpp',
 	'src' / 'PNG.cpp',
 	'src' / 'TGA.cpp',
 	'src' / 'TIFF.cpp',
-	'src' / 'WebP.cpp'
+	'src' / 'WebP.cpp',
+	lut_hpp
 ], include_directories: ['include', 'src'], pic: true, dependencies: image_deps, install: true, install_tag: 'cacao')
 
 image_dep = declare_dependency(include_directories: 'include', link_with: image_lib, dependencies: image_deps)
