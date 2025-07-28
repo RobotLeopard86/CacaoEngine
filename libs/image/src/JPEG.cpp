@@ -95,7 +95,7 @@ namespace libcacaoimage {
 	void encode::EncodeJPEG(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
-		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid bit depth; only 8 and 16 are allowed.");
+		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid color depth; only 8 and 16 are allowed.");
 		CheckException(src.data.size() > 0, "Cannot encode an image with a zero-sized data buffer!");
 		CheckException(src.layout != Image::Layout::RGBA, "Cannot encode an image with an alpha channel to JPEG format!");
 		if(src.lossy) {

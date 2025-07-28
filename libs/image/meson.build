@@ -1,26 +1,5 @@
 # Dependencies
-image_deps = [commonlib_dep]
-
-# Configure KTX
-ktx_opts = cmake.subproject_options()
-ktx_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'BUILD_TESTING': 'OFF',
-	'ASTCENC_ISA_NONE': 'ON',
-	'KTX_FEATURE_GL_UPLOAD': 'OFF',
-	'KTX_FEATURE_TESTS': 'OFF',
-	'KTX_FEATURE_TOOLS': 'OFF',
-	'KTX_FEATURE_TOOLS_CTS': 'OFF',
-	'KTX_FEATURE_VK_UPLOAD': 'OFF',
-    'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-ktx_opts.set_install(false)
-ktx_sp = cmake.subproject('ktx', options: ktx_opts, required: true)
-image_deps += ktx_sp.dependency('ktx')
-image_deps += ktx_sp.dependency('astcenc-none-static')
+image_deps = [commonlib_dep]	
 
 # libpng + zlib
 image_deps += subproject('zlib', required: true, default_options: {
@@ -81,7 +60,6 @@ image_lib = static_library('cacaoimage', sources: [
 	'src' / 'Colordepth.cpp',
 	'src' / 'Forwarding.cpp',
 	'src' / 'JPEG.cpp',
-	'src' / 'KTX.cpp',
 	'src' / 'PNG.cpp',
 	'src' / 'TGA.cpp',
 	'src' / 'TIFF.cpp',

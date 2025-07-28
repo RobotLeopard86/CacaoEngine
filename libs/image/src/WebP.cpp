@@ -74,7 +74,7 @@ namespace libcacaoimage {
 	void encode::EncodeWebP(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
-		CheckException(src.bitsPerChannel == 8, "Invalid bit depth for WebP encoding; only 8 bits per channel are supported.");
+		CheckException(src.bitsPerChannel == 8, "Invalid color depth for WebP encoding; only 8 bits per channel are supported.");
 		CheckException(src.data.size() > 0, "Cannot encode an image with a zero-sized data buffer!");
 		CheckException(src.layout != Image::Layout::Grayscale, "Cannot encode a grayscale image to WebP format!");
 		CheckException(src.quality >= 0 && src.quality <= 100, "Quality value must be between 0 and 100!");

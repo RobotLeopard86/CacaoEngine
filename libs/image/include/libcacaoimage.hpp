@@ -27,7 +27,6 @@ namespace libcacaoimage {
 			WebP,///<WebP
 			TGA, ///<TGA (Targa)
 			TIFF,///<TIFF
-			KTX2 ///<KTX2
 		} format;///<Original encoded format (set by decoder functions, useful for decoding and re-encoding)
 
 		int quality;///<0-100, image quality for encoding in supported formats
@@ -111,19 +110,6 @@ namespace libcacaoimage {
 		 * @throws std::runtime_error If the data is not in TIFF format or if decoding fails
 		 */
 		Image DecodeTIFF(std::istream& input);
-
-		/**
-		 * @brief Decode a KTX2 image
-		 *
-		 * If you know your image is KTX2, this avoids the overhead of format determination
-		 *
-		 * @param input An input stream to the encoded data
-		 *
-		 * @return The decoded image data
-		 *
-		 * @throws std::runtime_error If the data is not in KTX2 format or if decoding fails
-		 */
-		Image DecodeKTX(std::istream& input);
 	}
 
 	///@brief Image encoding functions
@@ -187,16 +173,6 @@ namespace libcacaoimage {
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		void EncodeTIFF(const Image& src, std::ostream& out);
-
-		/**
-		 * @brief Encode a KTX2 image
-		 *
-		 * @param src The image data to encode
-		 * @param out The output stream to write the encoded data to
-		 *
-		 * @throws std::runtime_error If encoding fails or settings or invalid
-		 */
-		void EncodeKTX(const Image& src, std::ostream& out);
 	}
 
 	/**

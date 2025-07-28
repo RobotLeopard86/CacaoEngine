@@ -24,9 +24,6 @@ namespace libcacaoimage {
 		} else if(rbuf[0] == 'I' && rbuf[1] == 'I' && rbuf[2] == '*' && rbuf[3] == 0) {
 			//TIFF
 			return DecodeTIFF(input);
-		} else if(rbuf[0] == 0xAB && rbuf[1] == 'K' && rbuf[2] == 'T' && rbuf[3] == 'X' && rbuf[4] == ' ' && rbuf[5] == '2') {
-			//KTX2
-			return DecodeKTX(input);
 		} else {
 #pragma pack(push, 1)
 			struct TGAHeader {
@@ -76,7 +73,6 @@ namespace libcacaoimage {
 			case Image::Format::WebP: return EncodeWebP(src, out);
 			case Image::Format::TGA: return EncodeTGA(src, out);
 			case Image::Format::TIFF: return EncodeTIFF(src, out);
-			case Image::Format::KTX2: return EncodeKTX(src, out);
 			default: throw std::runtime_error("Invalid image format!");
 		}
 	}
