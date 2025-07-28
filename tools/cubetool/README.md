@@ -8,10 +8,10 @@ Input images referenced in an unpacked cubemap file may be in one of these forma
 * JPEG
 * PNG
 * TGA
-* BMP
-* HDR
+* TIFF
+* WebP
 
-Output images will always be stored as PNG files, as that's how the packed format stores them.
+Output images from the extractor will be converted to PNG files when outputted for easiest use (though they are stored as lossless WebP images in the packed file).
 
 ## Command-Line Usage
 ```

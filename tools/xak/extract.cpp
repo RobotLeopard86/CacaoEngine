@@ -150,10 +150,10 @@ void ExtractCmd::Callback() {
 						oasset += ".png";
 					} else if(pa.buffer[0] == 0xFF) {
 						oasset += ".jpg";
-					} else if(pa.buffer[0] == '#') {
-						oasset += ".hdr";
-					} else if(pa.buffer[0] == 'B') {
-						oasset += ".bmp";
+					} else if(pa.buffer[0] == 'I') {
+						oasset += ".tiff";
+					} else if(pa.buffer[0] == 'R') {
+						oasset += ".webp";
 					} else {
 						oasset += ".tga";
 					}

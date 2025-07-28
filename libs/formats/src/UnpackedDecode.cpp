@@ -14,7 +14,7 @@ namespace libcacaoformats {
 		return (unsigned int)i;
 	}
 
-	std::array<ImageBuffer, 6> UnpackedDecoder::DecodeCubemap(std::istream& data, std::function<std::unique_ptr<std::istream>(const std::string&)> loader) {
+	std::array<libcacaoimage::Image, 6> UnpackedDecoder::DecodeCubemap(std::istream& data, std::function<std::unique_ptr<std::istream>(const std::string&)> loader) {
 		CheckException(data.good(), "Data stream for unpacked cubemap is invalid!");
 
 		//Load YAML
@@ -54,13 +54,13 @@ namespace libcacaoformats {
 		CheckException(nzs->good(), "Back face data input stream is invalid!");
 
 		//Decode image data
-		std::array<ImageBuffer, 6> out;
-		out[0] = DecodeImage(*pxs);
-		out[1] = DecodeImage(*nxs);
-		out[2] = DecodeImage(*pys);
-		out[3] = DecodeImage(*nys);
-		out[4] = DecodeImage(*pzs);
-		out[5] = DecodeImage(*nzs);
+		std::array<libcacaoimage::Image, 6> out;
+		out[0] = libcacaoimage::decode::DecodeGeneric(*pxs);
+		out[1] = libcacaoimage::decode::DecodeGeneric(*nxs);
+		out[2] = libcacaoimage::decode::DecodeGeneric(*pys);
+		out[3] = libcacaoimage::decode::DecodeGeneric(*nys);
+		out[4] = libcacaoimage::decode::DecodeGeneric(*pzs);
+		out[5] = libcacaoimage::decode::DecodeGeneric(*nzs);
 
 		//Return result
 		return out;

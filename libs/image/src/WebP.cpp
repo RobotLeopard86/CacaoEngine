@@ -71,7 +71,7 @@ namespace libcacaoimage {
 		return img;
 	}
 
-	void encode::EncodeWebP(const Image& src, std::ostream& out) {
+	std::size_t encode::EncodeWebP(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
 		CheckException(src.bitsPerChannel == 8, "Invalid color depth for WebP encoding; only 8 bits per channel are supported.");
@@ -109,5 +109,11 @@ namespace libcacaoimage {
 
 		//Write output
 		out.write(reinterpret_cast<char*>(data), size);
+
+		//Free the returned data buffer now that it's been written
+		WebPFree(data);
+
+		//Return the written size
+		return size;
 	}
 }

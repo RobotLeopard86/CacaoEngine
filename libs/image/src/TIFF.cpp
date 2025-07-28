@@ -97,14 +97,18 @@ namespace libcacaoimage {
 		return img;
 	}
 
-	void encode::EncodeTIFF(const Image& src, std::ostream& out) {
+	std::size_t encode::EncodeTIFF(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
 		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid color depth; only 8 and 16 are allowed.");
 		CheckException(src.data.size() > 0, "Cannot encode an image with a zero-sized data buffer!");
 
+		//Make a fake stream for libtiff so we can track how many bytes are written purposes
+		std::vector<char> buffer;
+		obytestream stream(buffer);
+
 		//Open TIFF stream
-		std::unique_ptr<TIFF, decltype(&TIFFClose)> tiff(TIFFStreamOpen("__memtiff", &out), TIFFClose);
+		std::unique_ptr<TIFF, decltype(&TIFFClose)> tiff(TIFFStreamOpen("__memtiff", &stream), TIFFClose);
 		CheckException((bool)tiff, "Failed to create TIFF encoder!");
 
 		//Calculate values for encoding
@@ -153,6 +157,8 @@ namespace libcacaoimage {
 		//Flush stream to confirm write
 		TIFFFlush(tiff.get());
 
-		//Cleanup will, again, be handled by RAII and unique_ptr
+		//Now write our buffer to the real stream
+		out.write(buffer.data(), buffer.size());
+		return buffer.size();
 	}
 }

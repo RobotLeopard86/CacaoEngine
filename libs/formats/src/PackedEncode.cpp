@@ -1,7 +1,9 @@
 #include "libcacaoformats.hpp"
 
 #include "libcacaocommon.hpp"
+#include "libcacaoimage.hpp"
 
+#include <cstring>
 #include <sstream>
 #include <utility>
 #include <iostream>
@@ -13,10 +15,10 @@
 #include "bzlib.h"
 
 namespace libcacaoformats {
-	PackedContainer PackedEncoder::EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap) {
+	PackedContainer PackedEncoder::EncodeCubemap(const std::array<libcacaoimage::Image, 6>& cubemap) {
 		//Validate input
-		for(const ImageBuffer& buf : cubemap) {
-			CheckException(buf.channelCount > 0 && buf.size.x > 0 && buf.size.y > 0, "Cubemap face for packed encoding has invalid dimensions or channel count!");
+		for(const libcacaoimage::Image& buf : cubemap) {
+			CheckException(buf.w > 0 && buf.h > 0, "Cubemap face for packed encoding has invalid dimensions or channel count!");
 			CheckException(!buf.data.empty(), "Cubemap face for packed encoding has empty data buffer!");
 		}
 
@@ -34,18 +36,12 @@ namespace libcacaoformats {
 		out.write(reinterpret_cast<char*>(&zero), sizeof(uint64_t));
 
 		//Encode face data and write it out, manipulating sizes as we do so
-		uint64_t pngSz = EncodeImage(cubemap[0], out);
-		std::memcpy(outBuffer.data(), &pngSz, sizeof(uint64_t));
-		pngSz = EncodeImage(cubemap[1], out);
-		std::memcpy(outBuffer.data() + sizeof(uint64_t), &pngSz, sizeof(uint64_t));
-		pngSz = EncodeImage(cubemap[2], out);
-		std::memcpy(outBuffer.data() + (2 * sizeof(uint64_t)), &pngSz, sizeof(uint64_t));
-		pngSz = EncodeImage(cubemap[3], out);
-		std::memcpy(outBuffer.data() + (3 * sizeof(uint64_t)), &pngSz, sizeof(uint64_t));
-		pngSz = EncodeImage(cubemap[4], out);
-		std::memcpy(outBuffer.data() + (4 * sizeof(uint64_t)), &pngSz, sizeof(uint64_t));
-		pngSz = EncodeImage(cubemap[5], out);
-		std::memcpy(outBuffer.data() + (5 * sizeof(uint64_t)), &pngSz, sizeof(uint64_t));
+		for(uint8_t i = 0; i < 6; i++) {
+			libcacaoimage::Image img = cubemap[i];
+			img.lossy = false;
+			uint64_t size = libcacaoimage::encode::EncodeWebP(img, out);
+			std::memcpy(outBuffer.data() + (i * sizeof(uint64_t)), &size, sizeof(uint64_t));
+		}
 
 		//Create and return packed container
 		return PackedContainer(PackedFormat::Cubemap, 1, std::move(outBuffer));

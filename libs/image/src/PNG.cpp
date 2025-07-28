@@ -2,6 +2,7 @@
 #include "libcacaocommon.hpp"
 
 #include "png.h"
+#include "zlib.h"
 
 #include <array>
 #include <bit>
@@ -103,7 +104,7 @@ namespace libcacaoimage {
 		return img;
 	}
 
-	void encode::EncodePNG(const Image& src, std::ostream& out) {
+	std::size_t encode::EncodePNG(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
 		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid color depth; only 8 and 16 are allowed.");
@@ -122,17 +123,24 @@ namespace libcacaoimage {
 		// clang-format off
 
 		//Set up IO write callback
-		png_set_write_fn(png, &out, [](png_structp png, png_bytep bytesIn, png_size_t writeBytes) {
+		struct IO {
+			std::ostream* ostr;
+			std::size_t writtenBytes;
+		} io = {.ostr = &out, .writtenBytes = 0};
+		png_set_write_fn(png, &io, [](png_structp png, png_bytep bytesIn, png_size_t writeBytes) {
 			//Obtain the stream
-			std::ostream* stream = static_cast<std::ostream*>(png_get_io_ptr(png));
-			if(!stream) png_error(png, "Failed to retrieve output data stream!");
+			IO* io = static_cast<IO*>(png_get_io_ptr(png));
+			if(!io) png_error(png, "Failed to retrieve output IO struct!");
+			std::ostream* stream = io->ostr;
 
 			//Write the data
 			if(!stream->write(reinterpret_cast<char*>(bytesIn), writeBytes)) png_error(png, "Failed to write data to output stream!"); 
+			io->writtenBytes += writeBytes;
 		}, [](png_structp png) {
 			//Obtain the stream
-			std::ostream* stream = static_cast<std::ostream*>(png_get_io_ptr(png));
-			if(!stream) png_error(png, "Failed to retrieve output data stream!");
+			IO* io = static_cast<IO*>(png_get_io_ptr(png));
+			if(!io) png_error(png, "Failed to retrieve output IO struct!");
+			std::ostream* stream = io->ostr;
 
 			//Flush it
 			stream->flush(); 
@@ -161,6 +169,9 @@ namespace libcacaoimage {
 		//Declare sRGB and gamma
 		png_set_sRGB_gAMA_and_cHRM(png, info, PNG_sRGB_INTENT_PERCEPTUAL);
 
+		//Set compression
+		png_set_compression_level(png, Z_BEST_COMPRESSION);
+
 		//Hand over image data
 		std::vector<png_bytep> rowPointers(src.h);
 		for(std::size_t y = 0; y < src.h; ++y) {
@@ -176,5 +187,7 @@ namespace libcacaoimage {
 
 		//Cleanup libpng
 		png_destroy_write_struct(&png, &info);
+
+		return io.writtenBytes;
 	}
 }

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "libcacaoformats.hpp"
+#include "libcacaoimage.hpp"
 
 CreateCmd::CreateCmd(CLI::App& app) {
 	//Create the command CLI
@@ -67,7 +68,7 @@ void CreateCmd::Callback() {
 	//Decode the file
 	VLOG("Loading input files:")
 	libcacaoformats::UnpackedDecoder dec;
-	std::array<libcacaoformats::ImageBuffer, 6> decoded;
+	std::array<libcacaoimage::Image, 6> decoded;
 	try {
 		decoded = dec.DecodeCubemap(in, loaderFunc);
 	} catch(const std::runtime_error& e) {

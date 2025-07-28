@@ -92,7 +92,7 @@ namespace libcacaoimage {
 		return img;
 	}
 
-	void encode::EncodeJPEG(const Image& src, std::ostream& out) {
+	std::size_t encode::EncodeJPEG(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
 		CheckException(src.bitsPerChannel == 8 || src.bitsPerChannel == 16, "Invalid color depth; only 8 and 16 are allowed.");
@@ -140,5 +140,7 @@ namespace libcacaoimage {
 
 		//Cleanup
 		tj3Destroy(tj);
+
+		return outBuf.size();
 	}
 }

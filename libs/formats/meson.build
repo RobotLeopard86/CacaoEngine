@@ -1,6 +1,5 @@
 # Get simple dependencies
-formats_deps = [yaml_cpp, crossguid]
-formats_deps += subproject('stb', required: true).get_variable('stb_dep')
+formats_deps = [yaml_cpp, crossguid, image_dep]
 
 # bzip2
 bz2_sp = subproject('bzip2', required: true, default_options: ['default_library=static'])
@@ -29,7 +28,6 @@ formats_deps += libarchive_sp.get_variable('libarchive_dep')
 formats_deps += commonlib_dep
 
 formats_lib = static_library('cacaoformats', sources: [
-	'src' / 'ImageOperations.cpp',
     'src' / 'UnpackedDecode.cpp',
 	'src' / 'UnpackedEncode.cpp',
     'src' / 'PackedContainer.cpp',

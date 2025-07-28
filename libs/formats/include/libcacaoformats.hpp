@@ -14,6 +14,8 @@
 
 #include "crossguid/guid.hpp"
 
+#include "libcacaoimage.hpp"
+
 namespace libcacaoformats {
 	///@brief Two-component vector
 	template<typename T>
@@ -41,38 +43,6 @@ namespace libcacaoformats {
 			return data[idx];
 		}
 	};
-
-	///@brief Decoded image data and properties necessary to use it
-	struct ImageBuffer {
-		std::vector<unsigned char> data;///<Decoded data
-		Vec2<uint32_t> size;			///<Image dimensions
-		uint8_t channelCount;			///<Image channel count (1=Grayscale,3=RGB,4=RGBA)
-	};
-
-	/**
-	 * @brief Convenience function for decoding image data
-	 *
-	 * @details Supports JPEG, PNG, TGA, BMP, and HDR
-	 *
-	 * @param encoded The encoded image data to decode, provided via stream
-	 *
-	 * @return An ImageBuffer containing the decoded information
-	 *
-	 * @throws std::runtime_error If no data is provided, data is of an unsupported format, or the image decoding fails
-	 */
-	ImageBuffer DecodeImage(std::istream& encoded);
-
-	/**
-	 * @brief Convenience function for encoding ImageBuffer data to PNG format
-	 *
-	 * @param img The ImageBuffer to encode
-	 * @param out A stream to output the resulting PNG-encoded data to
-	 *
-	 * @return The size of the resulting PNG-encoded data
-	 *
-	 * @throws std::runtime_error If the image has zero dimensions or holds invalid data
-	 */
-	std::size_t EncodeImage(const ImageBuffer& img, std::ostream& out);
 
 	///@brief List of codes identifying different packed formats
 	enum class PackedFormat {
@@ -244,7 +214,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the container does not hold a valid cubemap
 		 */
-		std::array<ImageBuffer, 6> DecodeCubemap(const PackedContainer& container);
+		std::array<libcacaoimage::Image, 6> DecodeCubemap(const PackedContainer& container);
 
 		/**
 		 * @brief Extract the code from a shader
@@ -304,7 +274,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If the data does not represent a valid cubemap or the provided IO callback fails to load faces
 		 */
-		std::array<ImageBuffer, 6> DecodeCubemap(std::istream& data, std::function<std::unique_ptr<std::istream>(const std::string&)> loader);
+		std::array<libcacaoimage::Image, 6> DecodeCubemap(std::istream& data, std::function<std::unique_ptr<std::istream>(const std::string&)> loader);
 
 		/**
 		 * @brief Extract the data from an unpacked material
@@ -341,7 +311,7 @@ namespace libcacaoformats {
 		 *
 		 * @throws std::runtime_error If one of the faces holds invalid data or has zero dimensions
 		 */
-		PackedContainer EncodeCubemap(const std::array<ImageBuffer, 6>& cubemap);
+		PackedContainer EncodeCubemap(const std::array<libcacaoimage::Image, 6>& cubemap);
 
 		/**
 		 * @brief Encode shader IR into a packed shader object

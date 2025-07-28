@@ -66,7 +66,7 @@ namespace libcacaoimage {
 		throw std::runtime_error("Unknown file type!");
 	}
 
-	void encode::Reencode(const Image& src, std::ostream& out) {
+	std::size_t encode::Reencode(const Image& src, std::ostream& out) {
 		switch(src.format) {
 			case Image::Format::PNG: return EncodePNG(src, out);
 			case Image::Format::JPEG: return EncodeJPEG(src, out);

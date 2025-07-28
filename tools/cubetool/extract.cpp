@@ -4,6 +4,7 @@
 #include <string>
 
 #include "libcacaoformats.hpp"
+#include "libcacaoimage.hpp"
 
 ExtractCmd::ExtractCmd(CLI::App& app) {
 	//Create the command CLI
@@ -66,7 +67,7 @@ void ExtractCmd::Callback() {
 	//Decode the file
 	VLOG_NONL("Decoding input file... ")
 	libcacaoformats::PackedDecoder dec;
-	std::array<libcacaoformats::ImageBuffer, 6> decoded;
+	std::array<libcacaoimage::Image, 6> decoded;
 	try {
 		libcacaoformats::PackedContainer pc = libcacaoformats::PackedContainer::FromStream(in);
 		decoded = dec.DecodeCubemap(pc);
@@ -92,7 +93,7 @@ void ExtractCmd::Callback() {
 		//Encode and write contents
 		VLOG("Writing output... ")
 		try {
-			libcacaoformats::EncodeImage(decoded[i], outStream);
+			libcacaoimage::encode::EncodePNG(decoded[i], outStream);
 		} catch(const std::runtime_error& e) {
 			CUBE_ERROR(e.what())
 		}

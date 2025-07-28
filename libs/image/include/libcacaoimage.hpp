@@ -122,7 +122,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		void Reencode(const Image& src, std::ostream& out);
+		std::size_t Reencode(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a PNG image
@@ -132,7 +132,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		void EncodePNG(const Image& src, std::ostream& out);
+		std::size_t EncodePNG(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a JPEG image
@@ -142,7 +142,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		void EncodeJPEG(const Image& src, std::ostream& out);
+		std::size_t EncodeJPEG(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a WebP image
@@ -152,7 +152,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		void EncodeWebP(const Image& src, std::ostream& out);
+		std::size_t EncodeWebP(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a TGA (Targa) image
@@ -162,7 +162,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		void EncodeTGA(const Image& src, std::ostream& out);
+		std::size_t EncodeTGA(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a TIFF image
@@ -172,7 +172,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		void EncodeTIFF(const Image& src, std::ostream& out);
+		std::size_t EncodeTIFF(const Image& src, std::ostream& out);
 	}
 
 	/**

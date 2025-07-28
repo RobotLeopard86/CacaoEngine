@@ -1,5 +1,6 @@
 #include "libcacaoimage.hpp"
 #include "libcacaocommon.hpp"
+#include <cstddef>
 
 #include "tga.h"
 
@@ -8,9 +9,9 @@ namespace libcacaoimage {
 	class StreamFileInterface : public tga::FileInterface {
 	  public:
 		StreamFileInterface(std::istream& stream)
-		  : str(stream.rdbuf()), mode(Mode::In) {}
+		  : str(stream.rdbuf()), written(0), mode(Mode::In) {}
 		StreamFileInterface(std::ostream& stream)
-		  : str(stream.rdbuf()), mode(Mode::Out) {}
+		  : str(stream.rdbuf()), written(0), mode(Mode::Out) {}
 
 		StreamFileInterface(const StreamFileInterface&) = delete;
 		StreamFileInterface(StreamFileInterface&&) = delete;
@@ -42,10 +43,16 @@ namespace libcacaoimage {
 		void write8(uint8_t value) override {
 			if(mode == Mode::In) return;
 			str.write(reinterpret_cast<char*>(&value), 1);
+			++written;
+		}
+
+		std::size_t getWritten() {
+			return written;
 		}
 
 	  private:
 		std::iostream str;
+		std::size_t written;
 		enum class Mode {
 			In,
 			Out
@@ -111,7 +118,7 @@ namespace libcacaoimage {
 		return img;
 	}
 
-	void encode::EncodeTGA(const Image& src, std::ostream& out) {
+	std::size_t encode::EncodeTGA(const Image& src, std::ostream& out) {
 		//Input validation
 		CheckException(src.w > 0 && src.h > 0, "Cannot encode an image with zeroed dimensions!");
 		CheckException(src.bitsPerChannel == 8, "Invalid color depth for TGA encoding; only 8 bits per channel are supported.");
@@ -158,5 +165,7 @@ namespace libcacaoimage {
 
 		//Write the footer
 		enc.writeFooter();
+
+		return sfi.getWritten();
 	}
 }

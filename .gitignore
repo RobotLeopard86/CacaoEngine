@@ -10,7 +10,6 @@ subprojects/*
 !subprojects/*.wrap
 !subprojects/packagefiles
 !subprojects/glad
-!subprojects/stb
 !subprojects/dr_libs
 !subprojects/cli11
 !subprojects/spinners-plus-plus

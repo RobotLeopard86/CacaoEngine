@@ -4,19 +4,15 @@
 #include "YAMLValidate.hpp"
 
 #include <cstdint>
-#include <sstream>
 #include <cstring>
-#include <iomanip>
 #include <filesystem>
 
 #define LIBARCHIVE_STATIC
 #include "archive.h"
 #include "archive_entry.h"
-#include "yaml-cpp/yaml.h"
-#include "bzlib.h"
 
 namespace libcacaoformats {
-	std::array<ImageBuffer, 6> PackedDecoder::DecodeCubemap(const PackedContainer& container) {
+	std::array<libcacaoimage::Image, 6> PackedDecoder::DecodeCubemap(const PackedContainer& container) {
 		CheckException(container.format == PackedFormat::Cubemap, "Packed container provided for cubemap decoding is not a cubemap!");
 		CheckException(container.payload.size() > 48, "Cubemap packed container is too small to contain face size data!");
 
@@ -47,19 +43,19 @@ namespace libcacaoformats {
 		offsetCounter += nzs;
 
 		//Decode face buffers
-		std::array<ImageBuffer, 6> out {};
+		std::array<libcacaoimage::Image, 6> out {};
 		ibytestream pxStream(pxFB);
-		out[0] = DecodeImage(pxStream);
+		out[0] = libcacaoimage::decode::DecodeGeneric(pxStream);
 		ibytestream nxStream(nxFB);
-		out[1] = DecodeImage(nxStream);
+		out[1] = libcacaoimage::decode::DecodeGeneric(nxStream);
 		ibytestream pyStream(pyFB);
-		out[2] = DecodeImage(pyStream);
+		out[2] = libcacaoimage::decode::DecodeGeneric(pyStream);
 		ibytestream nyStream(nyFB);
-		out[3] = DecodeImage(nyStream);
+		out[3] = libcacaoimage::decode::DecodeGeneric(nyStream);
 		ibytestream pzStream(pzFB);
-		out[4] = DecodeImage(pzStream);
+		out[4] = libcacaoimage::decode::DecodeGeneric(pzStream);
 		ibytestream nzStream(nzFB);
-		out[5] = DecodeImage(nzStream);
+		out[5] = libcacaoimage::decode::DecodeGeneric(nzStream);
 
 		//Return result
 		return out;

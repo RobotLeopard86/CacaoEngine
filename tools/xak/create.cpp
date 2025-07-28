@@ -26,10 +26,10 @@ CreateCmd::CreateCmd(CLI::App& app) {
 				  << "\t* A Cacao Engine packed shader\n"
 				  << "\t* A Cacao Engine packed cubemap\n"
 				  << "\t* A Cacao Engine packed material\n"
-				  << "\t* A 2D texture file (PNG, JPEG, WebP, Targa/TGA, TIFF, or KTX2)\n"
+				  << "\t* A 2D texture file (PNG, JPEG, WebP, Targa/TGA, or TIFF)\n"
 				  << "\t* A model file (FBX, glTF2 binary (.glb), Collada (.dae), or Wavefront OBJ) containing one or more meshes and optionally textures.\n"
-				  << "\t* A font file (TrueType (.ttf) or OpenType (.otf))\n"
-				  << "\t* A sound file (MP3, WAV, Ogg Vorbis (.ogg), Ogg Opus (.opus))\n\n"
+				  << "\t* A font file (TrueType or OpenType)\n"
+				  << "\t* A sound file (MP3, WAV, Ogg Vorbis, Ogg Opus)\n\n"
 				  << "Any file not in of these categories will not be placed into the asset pack.\n"
 				  << "To embed an arbitrary blob resource, place it in a subpath of the directory specified in --res-dir.\n\n";
 		exit(0);
@@ -254,11 +254,7 @@ asset_process:
 		//Check header for validity
 		std::size_t pabSz = pa.buffer.size();
 		if(pabSz >= 2) {
-			if(pa.buffer[0] == 'B' && pa.buffer[1] == 'M') {
-				//BMP image
-				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
-				goto asset_ok;
-			} else if(pa.buffer[0] == 0xFF && pa.buffer[1] == 0xE0) {
+			if(pa.buffer[0] == 0xFF && pa.buffer[1] == 0xE0) {
 				//MP3 audio
 				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
 				goto asset_ok;
@@ -336,6 +332,10 @@ asset_process:
 					pa.kind = libcacaoformats::PackedAsset::Kind::Material;
 					goto asset_ok;
 				}
+			} else if(pa.buffer[0] == 'I' && pa.buffer[1] == 'I' && pa.buffer[2] == '*' && pa.buffer[3] == 0x00) {
+				//TIFF image
+				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+				goto asset_ok;
 			}
 		}
 		if(pabSz >= 5 && pa.buffer[0] == 0x00 && pa.buffer[1] == 0x01 && pa.buffer[2] == 0x00 && pa.buffer[3] == 0x00 && pa.buffer[4] == 0x00) {
@@ -355,40 +355,27 @@ asset_process:
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= 7) {
-			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5], (char)pa.buffer[6]};
-				str.compare("#?RGBE\n") == 0) {
-
-				//HDR image
-				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
-				goto asset_ok;
-			}
-		}
 		if(pabSz >= 8 && pa.buffer[0] == 0x89 && pa.buffer[1] == 0x50 && pa.buffer[2] == 0x4E && pa.buffer[3] == 0x47 &&
-			pa.buffer[4] == 0x0D && pa.buffer[5] == 0x0A && pa.buffer[6] == 0x1A && pa.buffer[7] == 0x0a) {
+			pa.buffer[4] == 0x0D && pa.buffer[5] == 0x0A && pa.buffer[6] == 0x1A && pa.buffer[7] == 0x0A) {
 
 			//PNG image
 			pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
 			goto asset_ok;
 		}
-		if(pabSz >= 11) {
-			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
-				   (char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10]};
-				str.compare("#?RADIANCE\n") == 0) {
-
-				//HDR image
-				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
-				goto asset_ok;
-			}
-		}
 		if(pabSz >= 12) {
 			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
 				   (char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10], (char)pa.buffer[11]};
-				str.starts_with("RIFF") && str.ends_with("WAVE")) {
+				str.starts_with("RIFF")) {
 
-				//WAV audio
-				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
-				goto asset_ok;
+				if(str.ends_with("WEBP")) {
+					//WebP image
+					pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+					goto asset_ok;
+				} else if(str.ends_with("WAVE")) {
+					//WAV audio
+					pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+					goto asset_ok;
+				}
 			}
 		}
 		if(pabSz >= 18) {
