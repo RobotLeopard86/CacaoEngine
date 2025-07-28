@@ -133,6 +133,7 @@ namespace libcacaoimage {
 
 		//Trim the buffer to remove unnecessary end padding
 		outBuf.resize(outSize);
+		outBuf.shrink_to_fit();
 
 		//Write output to stream
 		out.write(reinterpret_cast<char*>(outBuf.data()), outBuf.size());

@@ -551,6 +551,7 @@ namespace libcacaoformats {
 
 		//Trim output buffer to free any memory not used
 		outBuffer.resize(used);
+		outBuffer.shrink_to_fit();
 
 		//Create and return packed container
 		return PackedContainer(PackedFormat::AssetPack, 1, std::move(outBuffer));

@@ -147,6 +147,7 @@ namespace libcacaoformats {
 
 		//Trim compressed data to free any memory not used
 		compressed.resize(destSize);
+		compressed.shrink_to_fit();
 
 		//Write compressed data
 		stream.write(reinterpret_cast<char*>(compressed.data()), compressed.size());

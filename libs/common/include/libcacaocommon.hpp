@@ -159,19 +159,21 @@ class bytestreambuf : public std::streambuf {
 class ibytestream : public std::istream {
   public:
 	ibytestream(std::vector<char>& data)
-	  : std::istream(junkBuf(data)), buf(data) {
-		rdbuf(&buf);
-		init(&buf);
-		delete junk;
+	  : std::istream(bufInit(data)) {
+		rdbuf(buf);
+		init(buf);
+	}
+
+	~ibytestream() {
+		delete buf;
 	}
 
   private:
-	bytestreambuf buf;
-	bytestreambuf* junk;
+	bytestreambuf* buf;
 
-	bytestreambuf* junkBuf(std::vector<char>& data) {
-		junk = new bytestreambuf(data);
-		return junk;
+	bytestreambuf* bufInit(std::vector<char>& data) {
+		buf = new bytestreambuf(data);
+		return buf;
 	}
 };
 
@@ -181,10 +183,20 @@ class ibytestream : public std::istream {
 class obytestream : public std::ostream {
   public:
 	obytestream(std::vector<char>& data)
-	  : std::ostream(&buf), buf(data) {
-		rdbuf(&buf);
+	  : std::ostream(bufInit(data)) {
+		rdbuf(buf);
+		init(buf);
+	}
+
+	~obytestream() {
+		delete buf;
 	}
 
   private:
-	bytestreambuf buf;
+	bytestreambuf* buf;
+
+	bytestreambuf* bufInit(std::vector<char>& data) {
+		buf = new bytestreambuf(data);
+		return buf;
+	}
 };
