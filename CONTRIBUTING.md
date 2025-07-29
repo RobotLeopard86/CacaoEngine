@@ -10,7 +10,11 @@ When submitting code, it must be formatted using [`clang-format`](https://clang.
 * Member fields and variables should be named in camelCase
 * Do not use Hungarian notation
   
-Please also avoid the use of `auto`, except for iterators and map iteration destructuring (`auto& [one, two] : someMap`).  
+Please also avoid the use of `auto`, except for the below cases:  
+* Iterators
+* Map iteration destructuring (`auto& [one, two] : someMap`)
+* Lambda functions/`std::bind`
+
 In addition, `#include` directives must be grouped (one for Cacao Engine includes, one for STL types and system headers, and one for external libraries). Do not use angle-bracketed includes except for system and STL headers.
 
 ## Branching Scheme

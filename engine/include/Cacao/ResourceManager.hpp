@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Cacao/ComponentExporter.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 
