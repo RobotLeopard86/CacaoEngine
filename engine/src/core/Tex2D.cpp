@@ -4,6 +4,7 @@
 #include "Cacao/ThreadPool.hpp"
 #include "impl/Tex2D.hpp"
 #include "PALConfigurables.hpp"
+#include "libcacaoimage.hpp"
 
 #include <future>
 
@@ -14,7 +15,7 @@ namespace Cacao {
 		PAL::Get().ConfigureImplPtr(*this);
 
 		//Fill data
-		impl->img = imageBuffer;
+		impl->img = libcacaoimage::Convert16To8BitColor(imageBuffer);
 	}
 
 	Tex2D::~Tex2D() {
@@ -25,9 +26,9 @@ namespace Cacao {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized texture!");
 
 		if(impl->DoWaitAsyncForSync()) {
-			impl->Realize().value().get();
+			impl->Realize(realized).value().get();
 		} else {
-			impl->Realize();
+			impl->Realize(realized);
 		}
 	}
 
@@ -35,9 +36,9 @@ namespace Cacao {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized texture!");
 
 		if(impl->DoWaitAsyncForSync()) {
-			return impl->Realize().value();
+			return impl->Realize(realized).value();
 		} else {
-			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(); });
+			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(realized); });
 		}
 	}
 

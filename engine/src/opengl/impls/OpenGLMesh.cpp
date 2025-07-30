@@ -3,17 +3,18 @@
 #include "Module.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLMeshImpl::Realize() {
-		return Engine::Get().RunTaskOnMainThread([this]() {
-			//Unpack index buffer data
-			std::vector<unsigned int> ibd(indices.size() * 3);
-			for(unsigned int i = 0; i < indices.size(); ++i) {
-				glm::vec3 idx = indices[i];
-				ibd[i * 3] = idx.x;
-				ibd[(i * 3) + 1] = idx.y;
-				ibd[(i * 3) + 2] = idx.z;
-			}
+	std::optional<std::shared_future<void>> OpenGLMeshImpl::Realize(bool& success) {
+		//Unpack index buffer data
+		std::vector<unsigned int> ibd(indices.size() * 3);
+		for(unsigned int i = 0; i < indices.size(); ++i) {
+			glm::vec3 idx = indices[i];
+			ibd[i * 3] = idx.x;
+			ibd[(i * 3) + 1] = idx.y;
+			ibd[(i * 3) + 2] = idx.z;
+		}
 
+		//Open-GL specific stuff needs to be on the main thread
+		return Engine::Get().RunTaskOnMainThread([this, &ibd, &success]() {
 			//Generate buffers and vertex array
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
@@ -47,6 +48,8 @@ namespace Cacao {
 			//Save vertex array state
 			glBindVertexArray(vao);
 			glBindVertexArray(0);
+
+			success = true;
 		});
 	}
 

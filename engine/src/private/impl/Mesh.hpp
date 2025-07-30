@@ -7,7 +7,7 @@
 namespace Cacao {
 	class Mesh::Impl {
 	  public:
-		virtual std::optional<std::shared_future<void>> Realize() = 0;
+		virtual std::optional<std::shared_future<void>> Realize(bool& success) = 0;
 		virtual void DropRealized() = 0;
 
 		/*

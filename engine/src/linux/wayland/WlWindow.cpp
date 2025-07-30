@@ -4,7 +4,6 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
-#include <memory>
 
 #define win Window::Get()
 

@@ -25,9 +25,9 @@ namespace Cacao {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
 
 		if(impl->DoWaitAsyncForSync()) {
-			impl->Realize().value().get();
+			impl->Realize(realized).value().get();
 		} else {
-			impl->Realize();
+			impl->Realize(realized);
 		}
 	}
 
@@ -35,9 +35,9 @@ namespace Cacao {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
 
 		if(impl->DoWaitAsyncForSync()) {
-			return impl->Realize().value();
+			return impl->Realize(realized).value();
 		} else {
-			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(); });
+			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(realized); });
 		}
 	}
 

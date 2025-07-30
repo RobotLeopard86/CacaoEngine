@@ -3,7 +3,7 @@
 #include "Module.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLCubemapImpl::Realize() {
+	std::optional<std::shared_future<void>> OpenGLCubemapImpl::Realize(bool& success) {
 		//TODO
 		return std::nullopt;
 	}

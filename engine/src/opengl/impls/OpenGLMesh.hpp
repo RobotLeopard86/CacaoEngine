@@ -7,7 +7,7 @@
 namespace Cacao {
 	class OpenGLMeshImpl : public Mesh::Impl {
 	  public:
-		std::optional<std::shared_future<void>> Realize() override;
+		std::optional<std::shared_future<void>> Realize(bool& success) override;
 		void DropRealized() override;
 		bool DoWaitAsyncForSync() const override {
 			return true;
