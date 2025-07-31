@@ -4,6 +4,7 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
+#include <wayland-client-protocol.h>
 
 namespace Cacao {
 	struct WaylandWinRegistrar {
@@ -19,7 +20,7 @@ namespace Cacao {
 		Check<ExternalException>(display != nullptr, "Failed to connect to Wayland display!");
 
 		//Get the registry
-		reg = wl_display_get_registry(display);
+		registry = wl_display_get_registry(display);
 
 		//Add registry listener to fetch compositor
 		wl_registry_listener listener = {};
@@ -33,7 +34,7 @@ namespace Cacao {
 			}
 		};
 		listener.global_remove = [](void*, wl_registry*, uint32_t) {};
-		wl_registry_add_listener(reg, &listener, this);
+		wl_registry_add_listener(registry, &listener, this);
 
 		//Fetch global objects
 		wl_display_roundtrip(display);
@@ -42,8 +43,8 @@ namespace Cacao {
 		Check<ExternalException>(outMgr != nullptr, "Failed to get Wayland output manager!");
 
 		//Create surface
-		surf = wl_compositor_create_surface(compositor);
-		Check<ExternalException>(surf != nullptr, "Failed to create surface!");
+		surface = wl_compositor_create_surface(compositor);
+		Check<ExternalException>(surface != nullptr, "Failed to create surface!");
 
 		//Let Wayland process surface creation
 		wl_display_roundtrip(display);
@@ -72,7 +73,7 @@ namespace Cacao {
 		};
 		surfListener.preferred_buffer_scale = [](void*, wl_surface*, int) {};
 		surfListener.preferred_buffer_transform = [](void*, wl_surface*, unsigned int) {};
-		wl_surface_add_listener(surf, &surfListener, this);
+		wl_surface_add_listener(surface, &surfListener, this);
 
 		//Set a fake content size so the graphics system can initialize (this might not be accurate, but the resize event will correct it)
 		lastKnownContentSize = size;
@@ -82,17 +83,13 @@ namespace Cacao {
 		PAL::Get().GfxConnect();
 		open = false;
 
-		//Initialize libdecor
+		//Initialize libdecor interfaces
 		decorInterface.error = [](libdecor*, libdecor_error, const char* msg) {
 			std::stringstream emsg;
 			emsg << "Libdecor encountered an error: " << msg;
 			Logger::Engine(Logger::Level::Error) << emsg.str();
 			Check<ExternalException>(false, emsg.str());
 		};
-		decor = libdecor_new(display, &decorInterface);
-		Check<ExternalException>(decor != nullptr, "Failed to create libdecor context!");
-
-		//Decorate window (I wouldn't need to do this if GNOME would add SSD, but...)
 		frameInterface.close = [](libdecor_frame*, void*) {
 			Engine::Get().Quit();
 		};
@@ -128,39 +125,20 @@ namespace Cacao {
 			//Save size
 			self->lastKnownContentSize = newSize;
 		};
-		frame = libdecor_decorate(decor, surf, &frameInterface, this);
-		Check<ExternalException>(frame != nullptr, "Failed to create libdecor frame!");
-
-		//Set attributes (the app ID will be changed to that of the primary bundle when that is implemented)
-		libdecor_frame_set_app_id(frame, "net.rl86.CacaoEngine");
-		libdecor_frame_set_title(frame, "Cacao Engine");
-
-		//Map frame and start configuration
-		libdecor_frame_map(frame);
-
-		//Let Wayland process decoration setup
-		wl_display_roundtrip(display);
-		wl_display_roundtrip(display);
-
-		//Wait until libdecor configuration is done
-		while(!configured) {
-			Check<ExternalException>(libdecor_dispatch(decor, 0) >= 0, "Failed to dispatch one or more libdecor events while waiting for configure!");
-		}
 	}
 
 	void WaylandWindowImpl::DestroyWindow() {
 		//Destroy libdecor objects
-		libdecor_frame_unref(frame);
-		libdecor_unref(decor);
+		Visibility(false);
 
 		//Disconnect graphics
 		PAL::Get().GfxDisconnect();
 
 		//Destroy surface
-		wl_surface_destroy(surf);
+		wl_surface_destroy(surface);
 
 		//Destroy registry
-		wl_registry_destroy(reg);
+		wl_registry_destroy(registry);
 
 		//Disconnect from Wayland display
 		wl_display_disconnect(display);
@@ -223,7 +201,37 @@ namespace Cacao {
 	}
 
 	void WaylandWindowImpl::Visibility(bool visible) {
-		libdecor_frame_set_visibility(frame, visible);
+		if(visible) {
+			//Setup libdecor
+			decor = libdecor_new(display, &decorInterface);
+			Check<ExternalException>(decor != nullptr, "Failed to create libdecor context!");
+			frame = libdecor_decorate(decor, surface, &frameInterface, this);
+			Check<ExternalException>(frame != nullptr, "Failed to create libdecor frame!");
+
+			//Set attributes (the app ID will be changed to that of the primary bundle when that is implemented)
+			libdecor_frame_set_app_id(frame, Engine::Get().GetInitConfig().clientID.id.c_str());
+			libdecor_frame_set_title(frame, title.c_str());
+
+			//Map frame and start configuration
+			libdecor_frame_map(frame);
+
+			//Let Wayland process decoration setup
+			wl_display_roundtrip(display);
+			wl_display_roundtrip(display);
+
+			//Wait until libdecor configuration is done
+			while(!configured) {
+				Check<ExternalException>(libdecor_dispatch(decor, 0) >= 0, "Failed to dispatch one or more libdecor events while waiting for configure!");
+			}
+		} else {
+			//Destroy libdecor objects
+			libdecor_frame_unref(frame);
+			libdecor_unref(decor);
+
+			//Attach a null buffer to hide the surface
+			wl_surface_attach(surface, nullptr, 0, 0);
+			wl_surface_commit(surface);
+		}
 	}
 
 	void WaylandWindowImpl::Title(const std::string& title) {

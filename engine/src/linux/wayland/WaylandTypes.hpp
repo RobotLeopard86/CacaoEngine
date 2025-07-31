@@ -12,8 +12,8 @@ namespace Cacao {
 	  public:
 		wl_display* display = nullptr;
 		wl_compositor* compositor = nullptr;
-		wl_registry* reg = nullptr;
-		wl_surface* surf = nullptr;
+		wl_registry* registry = nullptr;
+		wl_surface* surface = nullptr;
 		zxdg_output_manager_v1* outMgr = nullptr;
 		zxdg_output_v1* out = nullptr;
 		wl_surface_listener surfListener = {};

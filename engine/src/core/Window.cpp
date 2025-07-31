@@ -114,6 +114,9 @@ namespace Cacao {
 
 		impl->open = true;
 
+		//Apply initial visibility state
+		impl->Visibility(impl->visible);
+
 		//Apply initial mode
 		SetMode(mode);
 	}
