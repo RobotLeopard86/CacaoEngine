@@ -199,7 +199,10 @@ namespace Cacao {
 		Check<BadInitStateException>(impl->open, "The window must be open to set the title!");
 		Check<BadValueException>(newSize.x > 0 && newSize.y > 0, "New window size must not have any zero or negative coordinates!");
 
+		//Leave borderless mode if in it (because borderless is just a window at the size of the screen, nothing special)
+		if(impl->mode == Mode::Borderless) SetMode(Mode::Windowed);
 		impl->size = newSize;
+
 		impl->Resize(newSize);
 
 		//Fire a window resize event

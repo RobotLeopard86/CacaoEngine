@@ -258,6 +258,7 @@ namespace Cacao {
 			case Window::Mode::Windowed:
 				//Enable decorations
 				libdecor_frame_set_visibility(frame, true);
+				size = lastSize;
 				break;
 			case Window::Mode::Borderless:
 				//Disable decorations
@@ -290,6 +291,5 @@ namespace Cacao {
 		libdecor_state* state = libdecor_state_new(lastSize.x, lastSize.y);
 		libdecor_frame_commit(frame, state, nullptr);
 		libdecor_state_free(state);
-		size = lastSize;
 	}
 }
