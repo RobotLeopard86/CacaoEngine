@@ -48,7 +48,7 @@ namespace Cacao {
 		try {
 			vulkan->swapchain.chain = vulkan->dev.createSwapchainKHR(swapchainCI);
 		} catch(vk::SystemError& err) {
-			std::rethrow_exception(std::current_exception());
+			Check<ExternalException>(false, "Failed to create swapchain!");
 		}
 
 		//Get new swapchain images
@@ -60,7 +60,16 @@ namespace Cacao {
 			vk::ImageViewCreateInfo imageViewCI(
 				{}, vulkan->swapchain.images[i], vk::ImageViewType::e2D, vulkan->surfaceFormat.format, {},
 				vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
-			swapchainImageViews[i] = vulkan->dev.createImageView(imageViewCI);
+			try {
+				swapchainImageViews[i] = vulkan->dev.createImageView(imageViewCI);
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to create swapchain image view!", [&swapchainImageViews, &i]() {
+					for(; i > 0; --i) {
+						vulkan->dev.destroyImageView(swapchainImageViews[i]);
+					}
+					vulkan->dev.destroyImageView(swapchainImageViews[0]);
+				});
+			}
 		}
 		vulkan->swapchain.views = swapchainImageViews;
 
@@ -79,7 +88,11 @@ namespace Cacao {
 		try {
 			vulkan->depth.view = vulkan->dev.createImageView(depthViewCI);
 		} catch(vk::SystemError& err) {
-			std::rethrow_exception(std::current_exception());
+			Check<ExternalException>(false, "Failed to create depth image view!", [&swapchainImageViews]() {
+				for(std::size_t i = 0; i < swapchainImageViews.size(); ++i) {
+					vulkan->dev.destroyImageView(swapchainImageViews[i]);
+				}
+			});
 		}
 	}
 }

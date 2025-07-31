@@ -5,8 +5,6 @@
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
 
-#define win Window::Get()
-
 namespace Cacao {
 	struct WaylandWinRegistrar {
 		WaylandWinRegistrar() {
@@ -72,6 +70,8 @@ namespace Cacao {
 			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			zxdg_output_v1_destroy(self->out);
 		};
+		surfListener.preferred_buffer_scale = [](void*, wl_surface*, int) {};
+		surfListener.preferred_buffer_transform = [](void*, wl_surface*, unsigned int) {};
 		wl_surface_add_listener(surf, &surfListener, this);
 
 		//Set a fake content size so the graphics system can initialize (this might not be accurate, but the resize event will correct it)
@@ -83,7 +83,6 @@ namespace Cacao {
 		open = false;
 
 		//Initialize libdecor
-		libdecor_interface decorInterface = {};
 		decorInterface.error = [](libdecor*, libdecor_error, const char* msg) {
 			std::stringstream emsg;
 			emsg << "Libdecor encountered an error: " << msg;
@@ -93,8 +92,7 @@ namespace Cacao {
 		decor = libdecor_new(display, &decorInterface);
 		Check<ExternalException>(decor != nullptr, "Failed to create libdecor context!");
 
-		//Decorate window (I wouldn't need to do this if GNOME would be reasonable and add SSD, but...)
-		libdecor_frame_interface frameInterface = {};
+		//Decorate window (I wouldn't need to do this if GNOME would add SSD, but...)
 		frameInterface.close = [](libdecor_frame*, void*) {
 			Engine::Get().Quit();
 		};

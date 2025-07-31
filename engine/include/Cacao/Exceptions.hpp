@@ -3,6 +3,7 @@
 #include "DllHelper.hpp"
 #include "Log.hpp"
 
+#include <functional>
 #include <string>
 #include <sstream>
 
@@ -60,12 +61,13 @@ namespace Cacao {
 	 *
 	 * @param condition The condition to check.
 	 * @param message The human-readable message to print if the condition is false
-	 *
+	 * @param unwindFn A function to clean up state before exception throwing should the condition be false (to handle non-RAII-conformant stuff)
 	 */
 	template<typename E>
 		requires std::is_base_of_v<Exception, E>
-	CACAO_API void Check(bool condition, std::string message) {
+	CACAO_API void Check(bool condition, std::string message, std::function<void()> unwindFn = []() {}) {
 		if(!condition) {
+			unwindFn();
 			E ex(message);
 			Logger::Engine(Logger::Level::Error) << ex.what();
 			throw ex;
@@ -77,11 +79,11 @@ namespace Cacao {
 	 *
 	 * @param ptr The shared_ptr to check for a value.
 	 * @param message The human-readable message to print if the condition is false
-	 *
+	 * @param unwindFn A function to clean up state before exception throwing should the condition be false (to handle non-RAII-conformant stuff)
 	 */
 	template<typename P, typename E>
 		requires std::is_base_of_v<Exception, E>
-	CACAO_API void Check(std::shared_ptr<P> ptr, std::string message) {
-		Check<E>((bool)ptr, message);
+	CACAO_API void Check(std::shared_ptr<P> ptr, std::string message, std::function<void()> unwindFn = []() {}) {
+		Check<E>((bool)ptr, message, unwindFn);
 	}
 }

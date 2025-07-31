@@ -21,6 +21,8 @@ namespace Cacao {
 		glm::ivec2 outputSize = {0, 0};
 		libdecor* decor = nullptr;
 		libdecor_frame* frame = nullptr;
+		libdecor_interface decorInterface = {};
+		libdecor_frame_interface frameInterface = {};
 		bool configured = false;
 		glm::uvec2 lastKnownContentSize;
 

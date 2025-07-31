@@ -23,7 +23,11 @@ namespace Cacao {
 			imm.fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 			immediates.insert_or_assign(threadID, imm);
 		} catch(...) {
-			Check<ExternalException>(false, "Failed to create immediate object for thread!");
+			Check<ExternalException>(false, "Failed to create immediate object for thread!", [&imm]() {
+				vulkan->dev.freeCommandBuffers(imm.pool, imm.cmd);
+				vulkan->dev.destroyCommandPool(imm.pool);
+				vulkan->dev.destroyFence(imm.fence);
+			});
 		}
 		return imm;
 	}

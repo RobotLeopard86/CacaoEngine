@@ -1,5 +1,6 @@
 #include "Module.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "impl/Window.hpp"
 #include "ImplAccessor.hpp"

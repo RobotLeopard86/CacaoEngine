@@ -156,10 +156,7 @@ yaml_cpp = subproject('yaml-cpp', required: true).get_variable('yaml_dep')
 # Configure Silica
 silica = subproject('silica', required: true, default_options: {
 	'example': false,
-	# Warning: THIS WILL BE CHANGING TO TRUE SOON. 
-	# THIS IS FALSE FOR NOW BECAUSE WHILE CORE SYSTEMS STUFF IS GOING ON, I DON'T WANT TO DEAL WITH SILICA'S 
-	# EMBEDDED LLVM AND THE LENGTHY CONFIGURE/BUILD TIMES IT CAUSES
-	'generator': false
+	'generator': true
 })
 silica_dep = silica.get_variable('silica_dep')
 

@@ -17,3 +17,10 @@ If:
   PathMatch: engine/src/macos/.*
 CompileFlags:
    Add: [-x, objective-c++]
+---
+If:
+  PathMatch: engine/src/vulkan/.*
+Diagnostics:
+  Includes:
+    IgnoreHeader:
+      - vulkan/vulkan.hpp

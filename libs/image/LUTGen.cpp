@@ -1,5 +1,6 @@
 #include <array>
 #include <cstdint>
+#include <cmath>
 #include <algorithm>
 #include <fstream>
 #include <iostream>

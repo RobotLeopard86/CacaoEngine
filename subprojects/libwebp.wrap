@@ -6,6 +6,7 @@ revision = v1.5.0
 patch_filename = libwebp_1.5.0-1_patch.zip
 patch_url = https://wrapdb.mesonbuild.com/v2/libwebp_1.5.0-1/get_patch
 patch_hash = 5e94fed7f748f73500a30eee83cc194a2a2b9f906145184d79a19feb14b4aca0
+diff_files = webp-pic.patch
 
 [provide]
 dependency_names = libsharyuv, libwebp, libwebpdecoder, libwebpdemux, libwebpmux
