@@ -126,10 +126,7 @@ namespace Cacao {
 			}};
 		RankPhysicalDevices(&okDevs, physDevChecks);
 		physDev = okDevs[0];
-		if(!physDev) {
-			instance.destroy();
-			Check<ExternalException>(false, "No devices support the required Vulkan extensions!");
-		}
+		Check<ExternalException>(physDev, "No devices support the required Vulkan extensions!", [this]() { instance.destroy(); });
 		Logger::Engine(Logger::Level::Trace) << "Selected Vulkan device \"" << physDev.getProperties().deviceName << "\".";
 
 		//Create logical device
