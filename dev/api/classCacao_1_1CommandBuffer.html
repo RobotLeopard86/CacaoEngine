@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class Asset &#8212; Cacao Engine Docs</title>
+    <title>Class CommandBuffer &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Asset';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1CommandBuffer';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class AudioManager" href="classCacao_1_1AudioManager.html" />
-    <link rel="prev" title="Class Actor" href="classCacao_1_1Actor.html" />
+    <link rel="next" title="Class Component" href="classCacao_1_1Component.html" />
+    <link rel="prev" title="Class Camera" href="classCacao_1_1Camera.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -356,8 +356,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Asset</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
@@ -371,8 +371,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CommandBuffer.html">Class CommandBuffer</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class CommandBuffer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
@@ -540,7 +540,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Asset</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class CommandBuffer</span></li>
   </ul>
 </nav>
 </div>
@@ -557,105 +557,40 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-asset">
-<span id="exhale-class-classcacao-1-1asset"></span><h1>Class Asset<a class="headerlink" href="#class-asset" title="Link to this heading"><span/></a></h1>
+  <section id="class-commandbuffer">
+<span id="exhale-class-classcacao-1-1commandbuffer"></span><h1>Class CommandBuffer<a class="headerlink" href="#class-commandbuffer" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Asset.hpp.html#file-engine-include-cacao-asset-hpp"><span class="std std-ref">File Asset.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_GPU.hpp.html#file-engine-include-cacao-gpu-hpp"><span class="std std-ref">File GPU.hpp</span></a></p></li>
 </ul>
-<section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Resource</span></code> (<a class="reference internal" href="classCacao_1_1Resource.html#exhale-class-classcacao-1-1resource"><span class="std std-ref">Class Resource</span></a>)</p></li>
-</ul>
-</section>
-<section id="derived-types">
-<h3>Derived Types<a class="headerlink" href="#derived-types" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Cubemap</span></code> (<a class="reference internal" href="classCacao_1_1Cubemap.html#exhale-class-classcacao-1-1cubemap"><span class="std std-ref">Class Cubemap</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Mesh</span></code> (<a class="reference internal" href="classCacao_1_1Mesh.html#exhale-class-classcacao-1-1mesh"><span class="std std-ref">Class Mesh</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Sound</span></code> (<a class="reference internal" href="classCacao_1_1Sound.html#exhale-class-classcacao-1-1sound"><span class="std std-ref">Class Sound</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Tex2D</span></code> (<a class="reference internal" href="classCacao_1_1Tex2D.html#exhale-class-classcacao-1-1tex2d"><span class="std std-ref">Class Tex2D</span></a>)</p></li>
-</ul>
-</section>
-</section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5AssetE">
-<span id="_CPPv3N5Cacao5AssetE"></span><span id="_CPPv2N5Cacao5AssetE"></span><span id="Cacao::Asset"></span><span class="target" id="classCacao_1_1Asset"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Asset</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Resource.html#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao5AssetE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Base class for asset types. </p>
-<p>Subclassed by <a class="reference internal" href="classCacao_1_1Cubemap.html#classCacao_1_1Cubemap"><span class="std std-ref">Cacao::Cubemap</span></a>, <a class="reference internal" href="classCacao_1_1Mesh.html#classCacao_1_1Mesh"><span class="std std-ref">Cacao::Mesh</span></a>, <a class="reference internal" href="classCacao_1_1Sound.html#classCacao_1_1Sound"><span class="std std-ref">Cacao::Sound</span></a>, <a class="reference internal" href="classCacao_1_1Tex2D.html#classCacao_1_1Tex2D"><span class="std std-ref">Cacao::Tex2D</span></a></p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset7RealizeEv">
-<span id="_CPPv3N5Cacao5Asset7RealizeEv"></span><span id="_CPPv2N5Cacao5Asset7RealizeEv"></span><span id="Cacao::Asset::Realize"></span><span class="target" id="classCacao_1_1Asset_1a5189e08447b2e85e4fd0e8c4d6095072"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao5Asset7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Synchronously convert the loaded data into a form suitable for use. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the asset is already realized </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset12RealizeAsyncEv">
-<span id="_CPPv3N5Cacao5Asset12RealizeAsyncEv"></span><span id="_CPPv2N5Cacao5Asset12RealizeAsyncEv"></span><span id="Cacao::Asset::RealizeAsync"></span><span class="target" id="classCacao_1_1Asset_1ab42a58bf75953d5ab978bf24d363b6a6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizeAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao5Asset12RealizeAsyncEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Asynchronously convert the loaded data into a form suitable for use. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the asset is already realized </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A future that will resolve when realization is complete or fails</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset12DropRealizedEv">
-<span id="_CPPv3N5Cacao5Asset12DropRealizedEv"></span><span id="_CPPv2N5Cacao5Asset12DropRealizedEv"></span><span id="Cacao::Asset::DropRealized"></span><span class="target" id="classCacao_1_1Asset_1a074f6d7435659ed3ea7a4d54cb82a890"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DropRealized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao5Asset12DropRealizedEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Destroy the realized representation of the asset. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the asset is not realized </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Asset10IsRealizedEv">
-<span id="_CPPv3NK5Cacao5Asset10IsRealizedEv"></span><span id="_CPPv2NK5Cacao5Asset10IsRealizedEv"></span><span id="Cacao::Asset::IsRealizedC"></span><span class="target" id="classCacao_1_1Asset_1aa3fae3e1af25c474a661f7ab058988a8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsRealized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Asset10IsRealizedEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if the asset is realized. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether the asset is realized </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5AssetD0Ev">
-<span id="_CPPv3N5Cacao5AssetD0Ev"></span><span id="_CPPv2N5Cacao5AssetD0Ev"></span><span id="Cacao::Asset::~Asset"></span><span class="target" id="classCacao_1_1Asset_1ad901463a38eed8f711da58f565a8d8c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Asset</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5AssetD0Ev" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBufferE">
+<span id="_CPPv3N5Cacao13CommandBufferE"></span><span id="_CPPv2N5Cacao13CommandBufferE"></span><span id="Cacao::CommandBuffer"></span><span class="target" id="classCacao_1_1CommandBuffer"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CommandBuffer</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBufferE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A structure for usage by the GPU manager to invoke a set of GPU commands. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the subclasses of this are recognized by the <a class="reference internal" href="classCacao_1_1GPUManager.html#classCacao_1_1GPUManager"><span class="std std-ref">GPUManager</span></a> implementations; for that reason it is not currently possible to create custom jobs except through the designated interfaces </p>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset5AssetERKNSt6stringE">
-<span id="_CPPv3N5Cacao5Asset5AssetERKNSt6stringE"></span><span id="_CPPv2N5Cacao5Asset5AssetERKNSt6stringE"></span><span id="Cacao::Asset::Asset__ssCR"></span><span class="target" id="classCacao_1_1Asset_1ac452501b34df12105921282c649733d9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Asset</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Asset5AssetERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer13CommandBufferEv">
+<span id="_CPPv3N5Cacao13CommandBuffer13CommandBufferEv"></span><span id="_CPPv2N5Cacao13CommandBuffer13CommandBufferEv"></span><span id="Cacao::CommandBuffer::CommandBuffer"></span><span class="target" id="classCacao_1_1CommandBuffer_1a8b00c387509623ba2a275d5442b77aed"></span><span class="sig-name descname"><span class="n"><span class="pre">CommandBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer7ExecuteEv">
+<span id="_CPPv3N5Cacao13CommandBuffer7ExecuteEv"></span><span id="_CPPv2N5Cacao13CommandBuffer7ExecuteEv"></span><span id="Cacao::CommandBuffer::Execute"></span><span class="target" id="classCacao_1_1CommandBuffer_1a77e7ae54d78c1597a8c6d084f72ae398"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Execute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer7ExecuteEv" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Asset8realizedE">
-<span id="_CPPv3N5Cacao5Asset8realizedE"></span><span id="_CPPv2N5Cacao5Asset8realizedE"></span><span id="Cacao::Asset::realized__b"></span><span class="target" id="classCacao_1_1Asset_1a4957e09f23027aff7c7cf68900d87a3c"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">realized</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Asset8realizedE" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl>
+<dt class="sig sig-object cpp">
+<em class="property"><span class="pre">friend</span> <span class="pre">class</span></em> <span class="pre">GPUManager</span></dt>
+</dl>
 
 </div>
 </dd></dl>
@@ -674,20 +609,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Actor.html"
+       href="classCacao_1_1Camera.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Actor</p>
+        <p class="prev-next-title">Class Camera</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1AudioManager.html"
+       href="classCacao_1_1Component.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class AudioManager</p>
+        <p class="prev-next-title">Class Component</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -710,20 +645,10 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-type">Base Type</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-types">Derived Types</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5AssetE"><code class="docutils literal notranslate"><span class="pre">Asset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Asset7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Asset::Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Asset12RealizeAsyncEv"><code class="docutils literal notranslate"><span class="pre">Asset::RealizeAsync()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Asset12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">Asset::DropRealized()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Asset10IsRealizedEv"><code class="docutils literal notranslate"><span class="pre">Asset::IsRealized()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5AssetD0Ev"><code class="docutils literal notranslate"><span class="pre">Asset::~Asset()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Asset5AssetERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Asset::Asset()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Asset8realizedE"><code class="docutils literal notranslate"><span class="pre">Asset::realized</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBufferE"><code class="docutils literal notranslate"><span class="pre">CommandBuffer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::CommandBuffer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer7ExecuteEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::Execute()</span></code></a></li>
 </ul>
 </li>
 </ul>
