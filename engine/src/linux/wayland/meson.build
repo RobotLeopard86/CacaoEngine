@@ -5,7 +5,7 @@ xkbcommon_dep   = dependency('xkbcommon', required: true)
 # Configure libdecor
 libdecor = subproject('libdecor', required: true, default_options: {
 	'demo': false,
-	'gtk': 'enabled'
+	'gtk': 'disabled'
 })
 libdecor_dep = libdecor.get_variable('libdecor_dep')
 desktopsettings = libdecor.get_variable('desktop_settings_dep')
