@@ -42,12 +42,7 @@ namespace libcacaoimage {
 		CheckException(bitsPerSample == 8 || bitsPerSample == 16, "Unsupported sample bitdepth state; only 8 or 16-bit color is allowed!");
 		img.bitsPerChannel = static_cast<uint8_t>(bitsPerSample);
 		CheckException(samplesPerPixel <= 4 && samplesPerPixel >= 1 && samplesPerPixel != 2, "Unsupported sample-per-pixel state; only 8 or 16-bit color is allowed!");
-		switch(samplesPerPixel) {
-			case 1: img.layout = Image::Layout::Grayscale; break;
-			case 3: img.layout = Image::Layout::RGB; break;
-			case 4: img.layout = Image::Layout::RGBA; break;
-			default: break;
-		}
+		img.layout = Image::Layout(static_cast<uint8_t>(samplesPerPixel));
 
 		//Calculate data for read
 		const uint8_t bytesPerChnl = (bitsPerSample / 8);
@@ -112,19 +107,16 @@ namespace libcacaoimage {
 		CheckException((bool)tiff, "Failed to create TIFF encoder!");
 
 		//Calculate values for encoding
-		uint16_t samplesPerPixel = 0;
+		uint8_t samplesPerPixel = static_cast<uint8_t>(src.layout);
 		uint16_t photometric;
 		switch(src.layout) {
 			case Image::Layout::Grayscale:
-				samplesPerPixel = 1;
 				photometric = PHOTOMETRIC_MINISBLACK;
 				break;
 			case Image::Layout::RGB:
-				samplesPerPixel = 3;
 				photometric = PHOTOMETRIC_RGB;
 				break;
 			case Image::Layout::RGBA:
-				samplesPerPixel = 4;
 				photometric = PHOTOMETRIC_RGB;
 
 				//We also need to mark our extra channel as an alpha channel

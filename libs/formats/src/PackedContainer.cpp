@@ -4,6 +4,7 @@
 #include "libcacaocommon.hpp"
 
 #include <cstdint>
+#include <bit>
 
 namespace libcacaoformats {
 	std::vector<unsigned char> Unsign(const std::vector<char>& vec) {
@@ -107,8 +108,8 @@ namespace libcacaoformats {
 	void PackedContainer::ExportToStream(std::ostream& stream) {
 		CheckException(stream.good(), "Output stream for packed container export is invalid!");
 
-		//Write Cacao Engine magic number (written backwards for endianness)
-		constexpr unsigned int magic = 0x00CACA;
+		//Write Cacao Engine magic number
+		constexpr unsigned int magic = (std::endian::native == std::endian::little ? 0x00CACA : 0xCACA00);
 		stream.write(reinterpret_cast<const char*>(&magic), 3);
 
 		//Write format code

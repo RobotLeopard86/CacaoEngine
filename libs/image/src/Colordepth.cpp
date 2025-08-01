@@ -19,14 +19,8 @@ namespace libcacaoimage {
 
 		//Prepare for conversion
 		out.data.resize(src.data.size() / 2);
-		const std::size_t channels = [&src]() {
-			switch(src.layout) {
-				case Image::Layout::Grayscale: return 1;
-				case Image::Layout::RGB: return 3;
-				case Image::Layout::RGBA: return 4;
-			}
-		}();
-		const std::size_t pixels = src.data.size() / 2 / channels;
+		const uint8_t channels = static_cast<uint8_t>(src.layout);
+		const std::size_t pixels = src.data.size() / channels / 2;
 
 		//Convert data
 		for(std::size_t px = 0; px < pixels; ++px) {

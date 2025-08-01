@@ -137,17 +137,15 @@ namespace libcacaoimage {
 		head.colormapLength = 0;
 		head.colormap = {};
 		head.imageDescriptor = 0x20;
+		head.bitsPerPixel = static_cast<uint8_t>(src.layout) * 8;
 		switch(src.layout) {
 			case Image::Layout::Grayscale:
-				head.bitsPerPixel = 8;
 				head.imageType = tga::ImageType::RleGray;
 				break;
 			case Image::Layout::RGB:
-				head.bitsPerPixel = 24;
 				head.imageType = tga::ImageType::RleRgb;
 				break;
 			case Image::Layout::RGBA:
-				head.bitsPerPixel = 32;
 				head.imageType = tga::ImageType::RleRgb;
 				head.imageDescriptor |= 0x8;
 				break;

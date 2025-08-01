@@ -2,15 +2,18 @@
 #include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
-#include "AudioImpl.hpp"
+#include "impl/Sound.hpp"
 
 #include "libcacaocommon.hpp"
 
 namespace Cacao {
 	Sound::Sound(std::vector<char>&& encodedAudio, const std::string& addr)
-	  : Asset(addr), encodedAudio(encodedAudio) {
+	  : Asset(addr) {
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
+
+		//Move audio buffer
+		impl->encodedAudio = encodedAudio;
 	}
 
 	Sound::~Sound() {
@@ -18,7 +21,7 @@ namespace Cacao {
 	}
 
 	Sound::Sound(Sound&& other)
-	  : Asset(other.address), encodedAudio(other.encodedAudio) {
+	  : Asset(other.address) {
 		//Steal the implementation pointer
 		impl = std::move(other.impl);
 
@@ -42,9 +45,6 @@ namespace Cacao {
 		address = other.address;
 		other.address = "";
 
-		//Encoded audio buffer
-		encodedAudio = std::move(other.encodedAudio);
-
 		return *this;
 	}
 
@@ -53,7 +53,7 @@ namespace Cacao {
 		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to realize a sound!");
 
 		//Decode audio (yes, we rethrow the exception. deal with it.)
-		ibytestream audioIn(encodedAudio);
+		ibytestream audioIn(impl->encodedAudio);
 		try {
 			impl->audio = libcacaoaudiodecode::DecodeAudio(audioIn);
 		} catch(const std::runtime_error& e) {

@@ -12,10 +12,10 @@ namespace libcacaoimage {
 		unsigned int h;///<Height of image in pixels
 
 		///@brief Possible channel layout in of data buffer
-		enum class Layout {
-			Grayscale,					///<One channel
-			RGB,						///<Three channels
-			RGBA						///<Four channels
+		enum class Layout : uint8_t {
+			Grayscale = 1,				///<One channel
+			RGB = 3,					///<Three channels (RGB order)
+			RGBA = 4					///<Four channels (RGBA order)
 		} layout;						///<Layout of data buffer
 		uint8_t bitsPerChannel;			///<How many bits are in each image channel (only 8 or 16)
 		std::vector<unsigned char> data;///<Image buffer
@@ -185,4 +185,13 @@ namespace libcacaoimage {
 	 * @throws std::runtime_error If the source image is not 16-bit
 	 */
 	Image Convert16To8BitColor(const Image& src);
+
+	/**
+	 * @brief Flip an Image's pixels vertically to accomodate graphics APIs like OpenGL
+	 *
+	 * @param src The source image
+	 *
+	 * @return A flipped copy of the image
+	 */
+	Image Flip(const Image& src);
 }

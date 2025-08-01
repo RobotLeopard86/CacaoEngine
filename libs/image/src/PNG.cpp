@@ -78,12 +78,7 @@ namespace libcacaoimage {
 		//Get channel layout
 		uint8_t channels = png_get_channels(png, info);
 		CheckException(channels <= 4 && channels > 0 && channels != 2, "Invalid channel layout detected!", [&png, &info]() { png_destroy_read_struct(&png, &info, nullptr); });
-		switch(channels) {
-			case 1: img.layout = Image::Layout::Grayscale; break;
-			case 3: img.layout = Image::Layout::RGB; break;
-			case 4: img.layout = Image::Layout::RGBA; break;
-			default: break;
-		}
+		img.layout = Image::Layout(channels);
 
 		//Prepare data buffer
 		std::size_t bytesPerRow = png_get_rowbytes(png, info);
@@ -148,19 +143,16 @@ namespace libcacaoimage {
 		// clang-format on
 
 		//Create image write struct
-		int colortype = -1, channelcount = -1;
+		int colortype = -1, channelcount = static_cast<uint8_t>(src.layout);
 		switch(src.layout) {
 			case Image::Layout::Grayscale:
 				colortype = PNG_COLOR_TYPE_GRAY;
-				channelcount = 1;
 				break;
 			case Image::Layout::RGB:
 				colortype = PNG_COLOR_TYPE_RGB;
-				channelcount = 3;
 				break;
 			case Image::Layout::RGBA:
 				colortype = PNG_COLOR_TYPE_RGBA;
-				channelcount = 4;
 				break;
 			default: break;
 		}

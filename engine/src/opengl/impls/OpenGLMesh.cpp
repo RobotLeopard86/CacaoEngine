@@ -59,6 +59,11 @@ namespace Cacao {
 			glDeleteBuffers(1, &vbo);
 			glDeleteBuffers(1, &ibo);
 			glDeleteVertexArrays(1, &vao);
+
+			//Zero buffer names to avoid confusion
+			vbo = 0;
+			ibo = 0;
+			vao = 0;
 		});
 	}
 

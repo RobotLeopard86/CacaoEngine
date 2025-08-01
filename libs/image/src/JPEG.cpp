@@ -120,7 +120,7 @@ namespace libcacaoimage {
 
 		//Encode the data
 		int pixelFormat = (src.layout == Image::Layout::RGB ? TJPF_RGB : TJPF_GRAY);
-		int pitch = src.w * (src.layout == Image::Layout::RGB ? 3 : 1);
+		int pitch = src.w * static_cast<uint8_t>(src.layout);
 		std::size_t outSize = outBuf.size();
 		if(src.bitsPerChannel == 8) {
 			unsigned char* outPtr = outBuf.data();

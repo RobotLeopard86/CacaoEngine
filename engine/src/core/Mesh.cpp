@@ -22,6 +22,34 @@ namespace Cacao {
 		if(realized) DropRealized();
 	}
 
+	Mesh::Mesh(Mesh&& other)
+	  : Asset(other.address) {
+		//Steal the implementation pointer
+		impl = std::move(other.impl);
+
+		//Copy realization state
+		realized = other.realized;
+		other.realized = false;
+
+		//Blank out other asset address
+		other.address = "";
+	}
+
+	Mesh& Mesh::operator=(Mesh&& other) {
+		//Implementation pointer
+		impl = std::move(other.impl);
+
+		//Realization state
+		realized = other.realized;
+		other.realized = false;
+
+		//Asset address
+		address = other.address;
+		other.address = "";
+
+		return *this;
+	}
+
 	void Mesh::Realize() {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized mesh!");
 

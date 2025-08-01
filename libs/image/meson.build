@@ -58,6 +58,7 @@ lut_hpp = custom_target('lut', command: [lutgen, '@OUTPUT@'], output: 'colordept
 
 image_lib = static_library('cacaoimage', sources: [
 	'src' / 'Colordepth.cpp',
+	'src' / 'Flip.cpp',
 	'src' / 'Forwarding.cpp',
 	'src' / 'JPEG.cpp',
 	'src' / 'PNG.cpp',

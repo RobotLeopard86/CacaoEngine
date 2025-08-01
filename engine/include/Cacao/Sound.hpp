@@ -68,7 +68,5 @@ namespace Cacao {
 
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
-
-		std::vector<char> encodedAudio;
 	};
 }

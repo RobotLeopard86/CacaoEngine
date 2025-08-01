@@ -10,9 +10,12 @@ namespace Cacao {
 	std::optional<std::shared_future<void>> OpenGLTex2DImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the main thread
 		return Engine::Get().RunTaskOnMainThread([this, &success]() {
+			//Flip texture
+			libcacaoimage::Image flipped = libcacaoimage::Flip(img);
+
 			//Get texture format
 			GLenum internalFormat;
-			switch(img.layout) {
+			switch(flipped.layout) {
 				case libcacaoimage::Image::Layout::Grayscale:
 					format = GL_RED;
 					internalFormat = GL_RED;
@@ -35,7 +38,7 @@ namespace Cacao {
 			glBindTexture(GL_TEXTURE_2D, gpuTex);
 
 			//Transfer image data
-			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, img.w, img.h, 0, format, GL_UNSIGNED_BYTE, img.data.data());
+			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, flipped.w, flipped.h, 0, format, GL_UNSIGNED_BYTE, flipped.data.data());
 			GL_CHECK("Failed to transfer image data to GPU texture!")
 
 			//Configure and generate mipmaps
@@ -60,6 +63,9 @@ namespace Cacao {
 		Engine::Get().RunTaskOnMainThread([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
+
+			//Zero object name to avoid confusion
+			gpuTex = 0;
 		});
 	}
 

@@ -15,11 +15,39 @@ namespace Cacao {
 		PAL::Get().ConfigureImplPtr(*this);
 
 		//Fill data
-		impl->img = libcacaoimage::Convert16To8BitColor(imageBuffer);
+		impl->img = (imageBuffer.bitsPerChannel == 16 ? libcacaoimage::Convert16To8BitColor(imageBuffer) : std::move(imageBuffer));
 	}
 
 	Tex2D::~Tex2D() {
 		if(realized) DropRealized();
+	}
+
+	Tex2D::Tex2D(Tex2D&& other)
+	  : Asset(other.address) {
+		//Steal the implementation pointer
+		impl = std::move(other.impl);
+
+		//Copy realization state
+		realized = other.realized;
+		other.realized = false;
+
+		//Blank out other asset address
+		other.address = "";
+	}
+
+	Tex2D& Tex2D::operator=(Tex2D&& other) {
+		//Implementation pointer
+		impl = std::move(other.impl);
+
+		//Realization state
+		realized = other.realized;
+		other.realized = false;
+
+		//Asset address
+		address = other.address;
+		other.address = "";
+
+		return *this;
 	}
 
 	void Tex2D::Realize() {
