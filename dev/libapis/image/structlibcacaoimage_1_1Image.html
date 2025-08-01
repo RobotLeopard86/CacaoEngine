@@ -385,6 +385,7 @@
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1aad1e0e7c7d19fb913ba7a082404d4b26.html">Function libcacaoimage::encode::EncodeTIFF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1ac04aca41034cc366d5cbfd3666d4da83.html">Function libcacaoimage::encode::EncodeWebP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1a5c257474c0db7fa2580d322e8294effb.html">Function libcacaoimage::encode::Reencode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_libcacaoimage_8hpp_1ad8294b59286b644ee0f0eef04df0c2a2.html">Function libcacaoimage::Flip</a></li>
 </ul>
 </details></li>
 </ul>
@@ -460,25 +461,25 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N13libcacaoimage5Image6LayoutE">
-<span id="_CPPv3N13libcacaoimage5Image6LayoutE"></span><span id="_CPPv2N13libcacaoimage5Image6LayoutE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a8bae1b70b158a9f26e5b6088541f420d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Layout</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6LayoutE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N13libcacaoimage5Image6LayoutE"></span><span id="_CPPv2N13libcacaoimage5Image6LayoutE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a064e2a9d939f89f1ada75f328f83a3a9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Layout</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6LayoutE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Possible channel layout in of data buffer. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N13libcacaoimage5Image6Layout9GrayscaleE">
-<span id="_CPPv3N13libcacaoimage5Image6Layout9GrayscaleE"></span><span id="_CPPv2N13libcacaoimage5Image6Layout9GrayscaleE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a8bae1b70b158a9f26e5b6088541f420dad3f6975213fb5546d8486b54b025dbd7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Grayscale</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6Layout9GrayscaleE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N13libcacaoimage5Image6Layout9GrayscaleE"></span><span id="_CPPv2N13libcacaoimage5Image6Layout9GrayscaleE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a064e2a9d939f89f1ada75f328f83a3a9ad3f6975213fb5546d8486b54b025dbd7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Grayscale</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6Layout9GrayscaleE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>One channel. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N13libcacaoimage5Image6Layout3RGBE">
-<span id="_CPPv3N13libcacaoimage5Image6Layout3RGBE"></span><span id="_CPPv2N13libcacaoimage5Image6Layout3RGBE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a8bae1b70b158a9f26e5b6088541f420da889574aebacda6bfd3e534e2b49b8028"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RGB</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6Layout3RGBE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Three channels. </p>
+<span id="_CPPv3N13libcacaoimage5Image6Layout3RGBE"></span><span id="_CPPv2N13libcacaoimage5Image6Layout3RGBE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a064e2a9d939f89f1ada75f328f83a3a9a889574aebacda6bfd3e534e2b49b8028"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RGB</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6Layout3RGBE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Three channels (RGB order) </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N13libcacaoimage5Image6Layout4RGBAE">
-<span id="_CPPv3N13libcacaoimage5Image6Layout4RGBAE"></span><span id="_CPPv2N13libcacaoimage5Image6Layout4RGBAE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a8bae1b70b158a9f26e5b6088541f420daea3495a278957dc58165e48a8945469f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RGBA</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6Layout4RGBAE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Four channels. </p>
+<span id="_CPPv3N13libcacaoimage5Image6Layout4RGBAE"></span><span id="_CPPv2N13libcacaoimage5Image6Layout4RGBAE"></span><span class="target" id="structlibcacaoimage_1_1Image_1a064e2a9d939f89f1ada75f328f83a3a9aea3495a278957dc58165e48a8945469f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RGBA</span></span></span><a class="headerlink" href="#_CPPv4N13libcacaoimage5Image6Layout4RGBAE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Four channels (RGBA order) </p>
 </dd></dl>
 
 </dd></dl>
