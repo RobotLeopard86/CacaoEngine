@@ -24,6 +24,8 @@ namespace Cacao {
 
 	/**
 	 * @brief The centralized GPU interaction system
+	 *
+	 * @warning Wild usage of this system is <b>not recommended</b> since you will end up fighting with the world renderer. For this reason, you should only access this interface during the pre- and post-render hooks in the FrameProcessor (not yet implemented).
 	 */
 	class CACAO_API GPUManager {
 	  public:
@@ -53,9 +55,9 @@ namespace Cacao {
 		/**
 		 * @brief Submit a task to the GPU for processing, detached from the caller
 		 *
-		 * @param cmd The CommandBuffer containing the task to execute
-		 *
 		 * @warning If using this function, there is <b>no way</b> to tell if the command has executed. For this reason, it is <b>strongly encouraged</b> to use Submit instead.
+		 *
+		 * @param cmd The CommandBuffer containing the task to execute
 		 */
 		void SubmitDetached(const CommandBuffer& cmd);
 

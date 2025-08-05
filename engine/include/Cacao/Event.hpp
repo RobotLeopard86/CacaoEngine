@@ -13,8 +13,7 @@ namespace Cacao {
 		/**
 		 * @brief Create a new event
 		 *
-		 * @param eventType The type of event
-		 * See the page "Events" in the manual for a list of engine events
+		 * @param eventType The type of event; see the page "Events" in the manual for a list of engine events
 		 */
 		Event(std::string eventType) {
 			type = eventType;
@@ -43,8 +42,7 @@ namespace Cacao {
 		/**
 		 * @brief Create a new data event
 		 *
-		 * @param eventType The type of event
-		 * See the page "Events" in the manual for a list of engine events and their data types
+		 * @param eventType The type of event; see the page "Events" in the manual for a list of engine events and their data types
 		 *
 		 * @param eventData The data to store
 		 */

@@ -67,22 +67,22 @@ namespace Cacao {
 		/**
 		 * @brief Log a message from the engine
 		 *
+		 * @note For use only by the engine internally.
+		 *
 		 * @param level The severity of the message (optional, defaults to Info)
 		 *
 		 * @return A LogToken, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value.
-		 *
-		 * @note For use only by the engine internally.
 		 */
 		static LogToken Engine(Level level = Level::Info);
 
 		/**
 		 * @brief Log a message from the game
 		 *
+		 * @note For use by games using the engine.
+		 *
 		 * @param level The severity of the message (optional, defaults to Info)
 		 *
 		 * @return A LogToken, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value.
-		 *
-		 * @note For use by games using the engine.
 		 */
 		static LogToken Client(Level level = Level::Info);
 
