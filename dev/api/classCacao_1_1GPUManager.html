@@ -568,6 +568,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManagerE">
 <span id="_CPPv3N5Cacao10GPUManagerE"></span><span id="_CPPv2N5Cacao10GPUManagerE"></span><span id="Cacao::GPUManager"></span><span class="target" id="classCacao_1_1GPUManager"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUManager</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManagerE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>The centralized GPU interaction system. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Wild usage of this system is <strong>not recommended</strong> since you will end up fighting with the world renderer. For this reason, you should only access this interface during the pre- and post-render hooks in the FrameProcessor (not yet implemented). </p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -590,11 +594,11 @@
 <dd><p>Submit a task to the GPU for processing, detached from the caller. </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If using this function, there is <strong>no way</strong> to tell if the command has executed. For this reason, it is <strong>strongly encouraged</strong> to use Submit instead. </p>
+<p>If using this function, there is <strong>no way</strong> to tell if the command has executed. For this reason, it is <strong>strongly encouraged</strong> to use Submit instead.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>cmd</strong> – The <a class="reference internal" href="classCacao_1_1CommandBuffer.html#classCacao_1_1CommandBuffer"><span class="std std-ref">CommandBuffer</span></a> containing the task to execute</p>
+<dd class="field-odd"><p><strong>cmd</strong> – The <a class="reference internal" href="classCacao_1_1CommandBuffer.html#classCacao_1_1CommandBuffer"><span class="std std-ref">CommandBuffer</span></a> containing the task to execute </p>
 </dd>
 </dl>
 </dd></dl>
