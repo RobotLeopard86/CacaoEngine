@@ -41,8 +41,13 @@ int main(int argc, char* argv[]) {
 	std::ofstream out(argv[1]);
 	out << "#pragma once\n\n#include <cstdint>\n\ninline constexpr uint8_t lut[65536] = {\n";
 	for(size_t i = 0; i < lut.size(); ++i) {
+		//Write the byte as text (this is why we don't cast to uint8_t)
 		out << static_cast<unsigned>(lut[i]);
+
+		//Comma for next element
 		if(i != lut.size() - 1) out << ", ";
+
+		//Write a newline for formatting
 		if((i + 1) % 16 == 0) out << "\n";
 	}
 	out << "};\n";

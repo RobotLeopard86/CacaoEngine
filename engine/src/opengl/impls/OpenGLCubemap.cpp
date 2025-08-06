@@ -3,6 +3,7 @@
 #include "Module.hpp"
 
 #include "glad/gl.h"
+#include "libcacaoimage.hpp"
 
 namespace Cacao {
 	std::optional<std::shared_future<void>> OpenGLCubemapImpl::Realize(bool& success) {
@@ -15,7 +16,15 @@ namespace Cacao {
 			//Bind texture
 			glBindTexture(GL_TEXTURE_CUBE_MAP, gpuTex);
 
-			//TODO: Transfer image data
+			//Transfer face images
+			uint8_t i = 0;
+			for(const libcacaoimage::Image& image : faces) {
+				//Flip image because OpenGL likes it that way
+				libcacaoimage::Image flipped = libcacaoimage::Flip(image);
+
+				//Copy image data to GPU and adjust increment
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8, flipped.w, flipped.h, 0, GL_RGB, GL_UNSIGNED_BYTE, flipped.data.data());
+			}
 
 			//Apply cubemap filtering
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

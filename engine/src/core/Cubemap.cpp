@@ -15,7 +15,7 @@ namespace Cacao {
 		//Create implementation pointer
 		PAL::Get().ConfigureImplPtr(*this);
 
-		//Validate images
+		//Validate images and do conversion if needed
 		std::array<libcacaoimage::Image, 6> images = std::move(faces);
 		for(uint8_t i = 0; i < 6; ++i) {
 			Check<BadValueException>(images[i].layout == libcacaoimage::Image::Layout::RGB, "Only RGB images are supported for cubemaps!");

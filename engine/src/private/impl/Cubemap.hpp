@@ -19,6 +19,7 @@ namespace Cacao {
 		*/
 		virtual bool DoWaitAsyncForSync() const = 0;
 
+		//Order: +X, -X, +Y, -Y, +Z, -Z
 		std::array<libcacaoimage::Image, 6> faces;
 
 		virtual ~Impl() = default;
