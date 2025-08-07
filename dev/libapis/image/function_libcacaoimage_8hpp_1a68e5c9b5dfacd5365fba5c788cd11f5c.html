@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Function libcacaoimage::encode::EncodeTIFF &#8212; Cacao Engine Docs</title>
+    <title>Function libcacaoimage::ChangeChannelLayout &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'libapis/image/function_namespacelibcacaoimage_1_1encode_1aad1e0e7c7d19fb913ba7a082404d4b26';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'libapis/image/function_libcacaoimage_8hpp_1a68e5c9b5dfacd5365fba5c788cd11f5c';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Function libcacaoimage::encode::EncodeWebP" href="function_namespacelibcacaoimage_1_1encode_1ac04aca41034cc366d5cbfd3666d4da83.html" />
-    <link rel="prev" title="Function libcacaoimage::encode::EncodeTGA" href="function_namespacelibcacaoimage_1_1encode_1ac71a1d1408ddbe112c987d7a1d4df092.html" />
+    <link rel="next" title="Function libcacaoimage::Convert16To8BitColor" href="function_libcacaoimage_8hpp_1adf0f0dd87f78fea5ae3f40994455ebf4.html" />
+    <link rel="prev" title="Struct Image" href="structlibcacaoimage_1_1Image.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -372,7 +372,7 @@
 <li class="toctree-l2"><a class="reference internal" href="namespace_libcacaoimage__decode.html">Namespace libcacaoimage::decode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="namespace_libcacaoimage__encode.html">Namespace libcacaoimage::encode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structlibcacaoimage_1_1Image.html">Struct Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_libcacaoimage_8hpp_1a68e5c9b5dfacd5365fba5c788cd11f5c.html">Function libcacaoimage::ChangeChannelLayout</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Function libcacaoimage::ChangeChannelLayout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_libcacaoimage_8hpp_1adf0f0dd87f78fea5ae3f40994455ebf4.html">Function libcacaoimage::Convert16To8BitColor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1decode_1a59c81f6748f5621bf48b24a482b408f7.html">Function libcacaoimage::decode::DecodeGeneric</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1decode_1ab4fe6f6d2fa3aa75c8e1daaf44a97f78.html">Function libcacaoimage::decode::DecodeJPEG</a></li>
@@ -383,7 +383,7 @@
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1a93ced0d9c564a354e52f33744e79c54a.html">Function libcacaoimage::encode::EncodeJPEG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1a68239de603528ec0895ace026cc7e497.html">Function libcacaoimage::encode::EncodePNG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1ac71a1d1408ddbe112c987d7a1d4df092.html">Function libcacaoimage::encode::EncodeTGA</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Function libcacaoimage::encode::EncodeTIFF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1aad1e0e7c7d19fb913ba7a082404d4b26.html">Function libcacaoimage::encode::EncodeTIFF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1ac04aca41034cc366d5cbfd3666d4da83.html">Function libcacaoimage::encode::EncodeWebP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_namespacelibcacaoimage_1_1encode_1a5c257474c0db7fa2580d322e8294effb.html">Function libcacaoimage::encode::Reencode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_libcacaoimage_8hpp_1ad8294b59286b644ee0f0eef04df0c2a2.html">Function libcacaoimage::Flip</a></li>
@@ -430,7 +430,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">Cacao Images Library API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Function libcacaoimage::encode::EncodeTIFF</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Function libcacaoimage::ChangeChannelLayout</span></li>
   </ul>
 </nav>
 </div>
@@ -447,26 +447,35 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="function-libcacaoimage-encode-encodetiff">
-<span id="exhale-function-namespacelibcacaoimage-1-1encode-1aad1e0e7c7d19fb913ba7a082404d4b26"></span><h1>Function libcacaoimage::encode::EncodeTIFF<a class="headerlink" href="#function-libcacaoimage-encode-encodetiff" title="Link to this heading"><span/></a></h1>
+  <section id="function-libcacaoimage-changechannellayout">
+<span id="exhale-function-libcacaoimage-8hpp-1a68e5c9b5dfacd5365fba5c788cd11f5c"></span><h1>Function libcacaoimage::ChangeChannelLayout<a class="headerlink" href="#function-libcacaoimage-changechannellayout" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_libs_image_include_libcacaoimage.hpp.html#file-libs-image-include-libcacaoimage-hpp"><span class="std std-ref">File libcacaoimage.hpp</span></a></p></li>
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N13libcacaoimage6encode10EncodeTIFFERK5ImageRNSt7ostreamE">
-<span id="_CPPv3N13libcacaoimage6encode10EncodeTIFFERK5ImageRNSt7ostreamE"></span><span id="_CPPv2N13libcacaoimage6encode10EncodeTIFFERK5ImageRNSt7ostreamE"></span><span id="libcacaoimage::encode::EncodeTIFF__ImageCR.osR"></span><span class="target" id="namespacelibcacaoimage_1_1encode_1aad1e0e7c7d19fb913ba7a082404d4b26"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">libcacaoimage</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">EncodeTIFF</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoimage_1_1Image.html#_CPPv4N13libcacaoimage5ImageE" title="libcacaoimage::Image"><span class="n"><span class="pre">Image</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13libcacaoimage6encode10EncodeTIFFERK5ImageRNSt7ostreamE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Encode a TIFF image. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N13libcacaoimage19ChangeChannelLayoutERK5ImageN5Image6LayoutE">
+<span id="_CPPv3N13libcacaoimage19ChangeChannelLayoutERK5ImageN5Image6LayoutE"></span><span id="_CPPv2N13libcacaoimage19ChangeChannelLayoutERK5ImageN5Image6LayoutE"></span><span id="libcacaoimage::ChangeChannelLayout__ImageCR.Image::Layout"></span><span class="target" id="libcacaoimage_8hpp_1a68e5c9b5dfacd5365fba5c788cd11f5c"></span><a class="reference internal" href="structlibcacaoimage_1_1Image.html#_CPPv4N13libcacaoimage5ImageE" title="libcacaoimage::Image"><span class="n"><span class="pre">Image</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">libcacaoimage</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ChangeChannelLayout</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structlibcacaoimage_1_1Image.html#_CPPv4N13libcacaoimage5ImageE" title="libcacaoimage::Image"><span class="n"><span class="pre">Image</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="structlibcacaoimage_1_1Image.html#_CPPv4N13libcacaoimage5ImageE" title="libcacaoimage::Image"><span class="n"><span class="pre">Image</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="structlibcacaoimage_1_1Image.html#_CPPv4N13libcacaoimage5Image6LayoutE" title="libcacaoimage::Image::Layout"><span class="n"><span class="pre">Layout</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">layout</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13libcacaoimage19ChangeChannelLayoutERK5ImageN5Image6LayoutE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Adjust the channel layout of an <a class="reference internal" href="structlibcacaoimage_1_1Image.html#structlibcacaoimage_1_1Image"><span class="std std-ref">Image</span></a>. </p>
+<p>Conversion Rules: <ul class="simple">
+<li><p>When converting to grayscale, the equation is this: gray = 0.2126r + 0.7152g + 0.0722b (ITU recommendation BT.709) </p></li>
+<li><p>When converting to RGB from grayscale, all of the RGB channels are set to the same value (the grayscale value) </p></li>
+<li><p>Whenever alpha is added, it is as a fully opaque channel</p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – The image data to encode </p></li>
-<li><p><strong>out</strong> – The output stream to write the encoded data to</p></li>
+<li><p><strong>src</strong> – The source image </p></li>
+<li><p><strong>layout</strong> – The new image layout</p></li>
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If encoding fails or settings or invalid </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the source image’s layout is the same as the new layout </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new image with the new layout</p>
 </dd>
 </dl>
 </dd></dl>
@@ -485,20 +494,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="function_namespacelibcacaoimage_1_1encode_1ac71a1d1408ddbe112c987d7a1d4df092.html"
+       href="structlibcacaoimage_1_1Image.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Function libcacaoimage::encode::EncodeTGA</p>
+        <p class="prev-next-title">Struct Image</p>
       </div>
     </a>
     <a class="right-next"
-       href="function_namespacelibcacaoimage_1_1encode_1ac04aca41034cc366d5cbfd3666d4da83.html"
+       href="function_libcacaoimage_8hpp_1adf0f0dd87f78fea5ae3f40994455ebf4.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Function libcacaoimage::encode::EncodeWebP</p>
+        <p class="prev-next-title">Function libcacaoimage::Convert16To8BitColor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -522,7 +531,7 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoimage6encode10EncodeTIFFERK5ImageRNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">EncodeTIFF()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoimage19ChangeChannelLayoutERK5ImageN5Image6LayoutE"><code class="docutils literal notranslate"><span class="pre">ChangeChannelLayout()</span></code></a></li>
 </ul>
 </li>
 </ul>
