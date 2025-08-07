@@ -61,6 +61,7 @@ image_lib = static_library('cacaoimage', sources: [
 	'src' / 'Flip.cpp',
 	'src' / 'Forwarding.cpp',
 	'src' / 'JPEG.cpp',
+	'src' / 'Layout.cpp',
 	'src' / 'PNG.cpp',
 	'src' / 'TGA.cpp',
 	'src' / 'TIFF.cpp',

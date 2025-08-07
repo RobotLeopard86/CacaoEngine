@@ -18,8 +18,11 @@ namespace Cacao {
 		//Validate images and do conversion if needed
 		std::array<libcacaoimage::Image, 6> images = std::move(faces);
 		for(uint8_t i = 0; i < 6; ++i) {
-			Check<BadValueException>(images[i].layout == libcacaoimage::Image::Layout::RGB, "Only RGB images are supported for cubemaps!");
+			//Convert to 8-bit
 			if(images[i].bitsPerChannel == 16) images[i] = libcacaoimage::Convert16To8BitColor(images[i]);
+
+			//Ensure RGB layout
+			if(images[i].layout != libcacaoimage::Image::Layout::RGB) images[i] = libcacaoimage::ChangeChannelLayout(images[i], libcacaoimage::Image::Layout::RGB);
 		}
 
 		//Fill data

@@ -194,4 +194,21 @@ namespace libcacaoimage {
 	 * @return A flipped copy of the image
 	 */
 	Image Flip(const Image& src);
+
+	/**
+	 * @brief Adjust the channel layout of an Image
+	 *
+	 * Conversion Rules: <ul>
+	 * <li>When converting to grayscale, the equation is this: gray = 0.2126r + 0.7152g + 0.0722b (ITU recommendation BT.709)</li>
+	 * <li>When converting to RGB from grayscale, all of the RGB channels are set to the same value (the grayscale value)</li>
+	 * <li>Whenever alpha is added, it is as a fully opaque channel</li></ul>
+	 *
+	 * @param src The source image
+	 * @param layout The new image layout
+	 *
+	 * @return A new image with the new layout
+	 *
+	 * @throws std::runtime_error If the source image's layout is the same as the new layout
+	 */
+	Image ChangeChannelLayout(const Image& src, Image::Layout layout);
 }
