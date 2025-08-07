@@ -417,7 +417,7 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">running</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Submit</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CommandBuffer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">cmd</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Submit</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">cmd</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetVSync</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">newState</span><span class="p">);</span>
 
