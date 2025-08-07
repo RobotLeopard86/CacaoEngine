@@ -4,8 +4,12 @@
 #include "Cacao/Mesh.hpp"
 #include "Cacao/Tex2D.hpp"
 #include "Cacao/Cubemap.hpp"
+#include "Cacao/GPU.hpp"
 
 namespace Cacao {
+	template<>
+	void PAL::ConfigureImplPtr<GPUManager>(GPUManager&);
+
 	template<>
 	void PAL::ConfigureImplPtr<Mesh>(Mesh&);
 

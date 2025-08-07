@@ -7,6 +7,7 @@ eternal_dep = subproject('eternal').get_variable('eternal_dep')
 # Sources
 gl_sources = [
 	'OpenGLModule.cpp',
+	'GPU.cpp',
 	'impls' / 'OpenGLMesh.cpp',
 	'impls' / 'OpenGLTex2D.cpp',
 	'impls' / 'OpenGLCubemap.cpp'
@@ -16,7 +17,7 @@ gl_deps = [glad_dep, glm_dep, eternal_dep, xg_headers_dep]
 
 # Graphics connection
 if host_machine.system() == 'windows'
-    gl_sources += 'wsi' / 'Win32WSI.cpp'
+    #gl_sources += 'wsi' / 'Win32WSI.cpp'
 	gl_inc += '..' / 'win32'
 elif host_machine.system() == 'darwin'
     gl_sources += 'ctx' / 'MacOS.mm'

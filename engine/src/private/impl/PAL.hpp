@@ -10,6 +10,7 @@
 #include "Mesh.hpp"
 #include "Tex2D.hpp"
 #include "Cubemap.hpp"
+#include "GPUManager.hpp"
 
 namespace Cacao {
 	class CACAO_API PALModule {
@@ -27,6 +28,7 @@ namespace Cacao {
 		virtual Mesh::Impl* ConfigureMesh() = 0;
 		virtual Tex2D::Impl* ConfigureTex2D() = 0;
 		virtual Cubemap::Impl* ConfigureCubemap() = 0;
+		virtual GPUManager::Impl* ConfigureGPUManager() = 0;
 
 		virtual ~PALModule() {}
 

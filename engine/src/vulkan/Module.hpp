@@ -50,7 +50,7 @@ namespace Cacao {
 		static std::map<std::thread::id, Immediate> immediates;
 	};
 
-	class VulkanModule : public PALModule {
+	class VulkanModule final : public PALModule {
 	  public:
 		void Init() override;
 		void Term() override;
@@ -63,6 +63,7 @@ namespace Cacao {
 		virtual Mesh::Impl* ConfigureMesh() override;
 		virtual Tex2D::Impl* ConfigureTex2D() override;
 		virtual Cubemap::Impl* ConfigureCubemap() override;
+		virtual GPUManager::Impl* ConfigureGPUManager() override;
 
 		vk::Instance instance;
 		vk::PhysicalDevice physDev;

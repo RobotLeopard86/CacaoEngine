@@ -3,8 +3,10 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Engine.hpp"
 #include "SingletonGet.hpp"
-#include "SafeGetenv.hpp"
 #include "impl/Window.hpp"
+#ifdef __linux__
+#include "SafeGetenv.hpp"
+#endif
 
 #include <memory>
 #include <cstdlib>

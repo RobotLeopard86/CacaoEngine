@@ -109,6 +109,7 @@ libcore = static_library('cacaocore', sources: [
 	'Cubemap.cpp',
 	'Engine.cpp',	
 	'EventManager.cpp',
+	'GPUManager.cpp',
 	'Log.cpp',
 	'Mesh.cpp',
 	'Misc.cpp',

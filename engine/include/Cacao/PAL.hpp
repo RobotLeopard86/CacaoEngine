@@ -59,15 +59,6 @@ namespace Cacao {
 		void GfxConnect();
 
 		/**
-		 * @brief Set the V-Sync state
-		 *
-		 * @param newState Whether V-Sync should be enabled
-		 *
-		 * @throws BadStateException If the graphics backend and window are not connected
-		 */
-		void SetVSync(bool newState);
-
-		/**
 		 * @brief Disonnect the window and graphics backend
 		 *
 		 * @throws BadStateException If the graphics backend and window are not connected

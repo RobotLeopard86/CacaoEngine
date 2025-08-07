@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "DllHelper.hpp"
-#include "ImplAccessor.hpp"
 
 namespace Cacao {
 	/**
@@ -16,10 +15,9 @@ namespace Cacao {
 	  public:
 		//Preset command buffer generators will exist here eventually
 	  protected:
-		CommandBuffer();
-		void Execute();
-
-		friend class GPUManager;
+		CommandBuffer() {}
+		virtual void Execute() = 0;
+		virtual ~CommandBuffer() = default;
 	};
 
 	/**
@@ -44,6 +42,31 @@ namespace Cacao {
 		///@endcond
 
 		/**
+		 * @brief Start the GPU manager
+		 *
+		 * @throws BadInitStateException If the GPU manager is already running
+		 * @throws BadInitStateException If the thread pool is not running
+		 * @throws BadStateException If the graphics backend and window are not connected
+		 */
+		void Start();
+
+		/**
+		 * @brief Stop the GPU manager
+		 *
+		 * @throws BadInitStateException If the GPU manager is not running
+		 */
+		void Stop();
+
+		/**
+		 * @brief Check if the GPU manager is running
+		 *
+		 * @return Whether the GPU manager is running
+		 */
+		bool IsRunning() const {
+			return running;
+		}
+
+		/**
 		 * @brief Submit a task to the GPU for processing
 		 *
 		 * @param cmd The CommandBuffer containing the task to execute
@@ -53,13 +76,13 @@ namespace Cacao {
 		std::shared_future<void> Submit(const CommandBuffer& cmd);
 
 		/**
-		 * @brief Submit a task to the GPU for processing, detached from the caller
+		 * @brief Set the V-Sync state
 		 *
-		 * @warning If using this function, there is <b>no way</b> to tell if the command has executed. For this reason, it is <b>strongly encouraged</b> to use Submit instead.
+		 * @param newState Whether V-Sync should be enabled
 		 *
-		 * @param cmd The CommandBuffer containing the task to execute
+		 * @throws BadInitStateException If the GPU manager is not running
 		 */
-		void SubmitDetached(const CommandBuffer& cmd);
+		void SetVSync(bool newState);
 
 		///@cond
 		class Impl;
@@ -67,6 +90,9 @@ namespace Cacao {
 	  private:
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
+		friend class PAL;
+
+		bool running;
 
 		GPUManager();
 		~GPUManager();

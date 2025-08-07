@@ -1,10 +1,14 @@
 #pragma once
 
+#include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
+#include "impl/GPUManager.hpp"
 #include "Cacao/EventConsumer.hpp"
 #include "Cacao/Exceptions.hpp"
 
 #include <sstream>
+#include <future>
+#include <mutex>
 
 #include "eternal.hpp"
 #include "glad/gl.h"
@@ -25,7 +29,45 @@ constexpr const inline auto glErrors = mapbox::eternal::map<GLenum, mapbox::eter
 	}
 
 namespace Cacao {
-	class OpenGLModule : public PALModule {
+	class OpenGLCommandBuffer final : public CommandBuffer {
+	  public:
+		OpenGLCommandBuffer(std::function<void()> task)
+		  : task(task), promise() {}
+
+		void Execute() override {
+			try {
+				task();
+				promise.set_value();
+			} catch(...) {
+				promise.set_exception(std::current_exception());
+			}
+		}
+
+		OpenGLCommandBuffer(const OpenGLCommandBuffer& other)
+		  : task(other.task), promise() {}
+
+		std::shared_future<void> GetFuture() {
+			return promise.get_future().share();
+		}
+
+	  private:
+		std::function<void()> task;
+		std::promise<void> promise;
+	};
+
+	class OpenGLGPU final : public GPUManager::Impl {
+	  public:
+		std::shared_future<void> SubmitCmdBuffer(const CommandBuffer& cmd) override;
+		void RunloopStart() override;
+		void RunloopStop() override;
+		void RunloopIteration() override;
+
+	  private:
+		std::queue<OpenGLCommandBuffer> commands;
+		std::mutex queueMtx;
+	};
+
+	class OpenGLModule final : public PALModule {
 	  public:
 		void Init() override;
 		void Term() override;
@@ -38,6 +80,7 @@ namespace Cacao {
 		virtual Mesh::Impl* ConfigureMesh() override;
 		virtual Tex2D::Impl* ConfigureTex2D() override;
 		virtual Cubemap::Impl* ConfigureCubemap() override;
+		virtual GPUManager::Impl* ConfigureGPUManager() override;
 
 		OpenGLModule()
 		  : PALModule("opengl") {}

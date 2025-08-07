@@ -1,5 +1,6 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/GPU.hpp"
 #include "Cacao/Mesh.hpp"
 #include "impl/PAL.hpp"
 #include "SingletonGet.hpp"
@@ -39,11 +40,6 @@ namespace Cacao {
 		impl->mod->Connect();
 	}
 
-	void PAL::SetVSync(bool newState) {
-		Check<BadInitStateException>(impl->mod->Connected(), "Cannot set V-Sync state with an unconnected module!");
-		impl->mod->SetVSync(newState);
-	}
-
 	void PAL::GfxDisconnect() {
 		Check<BadInitStateException>(impl->mod->Connected(), "Cannot disconnect an unconnected module!");
 		impl->mod->Disconnect();
@@ -66,6 +62,7 @@ namespace Cacao {
 	CONFIGURE_IMPLPTR(Mesh)
 	CONFIGURE_IMPLPTR(Tex2D)
 	CONFIGURE_IMPLPTR(Cubemap)
+	CONFIGURE_IMPLPTR(GPUManager)
 #undef CONFIGURE_IMPLPTR
 
 	CACAOST_GET(PAL)

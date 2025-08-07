@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cacao/GPU.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/PAL.hpp"
@@ -11,6 +12,7 @@
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
 #define WIN_IMPL(tp) static_cast<tp##WindowImpl&>(ImplAccessor::Get().GetWindow())
+#define GPU_IMPL(tp) static_cast<tp##GPU&>(ImplAccessor::Get().GetGPUManager())
 
 #define IA_MKGETTER(tp)         \
 	tp::Impl& Get##tp(tp& _o) { \
@@ -35,6 +37,7 @@ namespace Cacao {
 		IA_MKGETTER_SINGLE(Window)
 		IA_MKGETTER_SINGLE(ResourceManager)
 		IA_MKGETTER_SINGLE(PAL)
+		IA_MKGETTER_SINGLE(GPUManager)
 
 		//Resources
 		IA_MKGETTER(Sound)

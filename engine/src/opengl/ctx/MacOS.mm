@@ -73,6 +73,9 @@ static CFBundleRef glFramework;
 	//Enable sRGB rendering
 	glEnable(GL_FRAMEBUFFER_SRGB);
 
+	//Yield the context so the GPU manager can have it
+	[NSOpenGLContext clearCurrentContext];
+
 	return self;
 }
 
@@ -101,6 +104,9 @@ namespace Cacao {
 	}
 
 	Context::~Context() {
+		//Steal the context to make sure it's properly handled
+		MakeCurrent();
+
 		//Free OpenGL view
 		[WIN_IMPL(MacOS).win setContentView:nil];
 		[impl->view release];
@@ -113,5 +119,13 @@ namespace Cacao {
 
 	void Context::SwapBuffers() {
 		[impl->view.ctx flushBuffer];
+	}
+
+	void Context::MakeCurrent() {
+		[impl->view.ctx makeCurrentContext];
+	}
+
+	void Context::Yield() {
+		[NSOpenGLContext clearCurrentContext];
 	}
 }

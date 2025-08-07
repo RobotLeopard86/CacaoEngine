@@ -1,4 +1,5 @@
 #include "Cacao/Engine.hpp"
+#include "Cacao/GPU.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
@@ -131,8 +132,12 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Creating window...";
 		Window::Get().Open(icfg.clientID.displayName, {1280, 720}, true, Window::Mode::Windowed);
 
+		//Start the GPU manager
+		Logger::Engine(Logger::Level::Trace) << "Starting GPU manager...";
+		GPUManager::Get().Start();
+
 		//Enable V-Sync by default
-		PAL::Get().SetVSync(true);
+		GPUManager::Get().SetVSync(true);
 
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
@@ -193,6 +198,10 @@ namespace Cacao {
 
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
+
+		//Stop the GPU manager
+		Logger::Engine(Logger::Level::Trace) << "Stopping GPU manager...";
+		GPUManager::Get().Stop();
 
 		//Close window
 		Logger::Engine(Logger::Level::Trace) << "Destroying window...";
