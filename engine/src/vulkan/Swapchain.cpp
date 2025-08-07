@@ -7,14 +7,14 @@ namespace Cacao {
 		//Wait for device to be idle
 		vulkan->dev.waitIdle();
 
-		//Delete the old swapchain if it exists
+		//Delete the old swapchain images if they existed
 		if(vulkan->swapchain.chain) {
-			vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
+			vulkan->dev.destroyImageView(vulkan->depth.view);
+			vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
 			for(auto iv : vulkan->swapchain.views) {
 				vulkan->dev.destroyImageView(iv);
 			}
-			vulkan->dev.destroyImageView(vulkan->depth.view);
-			vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
+			vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
 		}
 
 		//Get surface capabilities
@@ -26,7 +26,7 @@ namespace Cacao {
 		extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
 		extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
 
-		//Decice present mode
+		//Decide present mode
 		auto pmodes = vulkan->physDev.getSurfacePresentModesKHR(vulkan->surface);
 		vk::PresentModeKHR presentMode;
 		if(vulkan->vsync) {

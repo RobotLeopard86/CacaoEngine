@@ -73,7 +73,7 @@ namespace Cacao {
 		 *
 		 * @returns A future that will resolve when the task has finished executing
 		 */
-		std::shared_future<void> Submit(const CommandBuffer& cmd);
+		std::shared_future<void> Submit(CommandBuffer&& cmd);
 
 		/**
 		 * @brief Set the V-Sync state

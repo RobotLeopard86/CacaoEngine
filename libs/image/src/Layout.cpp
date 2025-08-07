@@ -1,5 +1,3 @@
-#pragma once
-
 #include "libcacaoimage.hpp"
 #include "libcacaocommon.hpp"
 

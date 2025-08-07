@@ -26,6 +26,10 @@ namespace Cacao {
 		Check<BadStateException>(!running, "The graphics backend and window must be connected to start the GPU manager!");
 		Check<BadInitStateException>(ThreadPool::Get().IsRunning(), "The thread pool must be running to start the GPU manager!");
 
+		//Setup
+		impl->vsreq.needChange = false;
+		impl->vsreq.value = true;
+
 		//Put run loop in the thread pool continuously
 		impl->stopper = ThreadPool::Get().ExecContinuous([this](std::stop_token stop) { impl->Runloop(stop); });
 
@@ -59,8 +63,8 @@ namespace Cacao {
 		RunloopStop();
 	}
 
-	std::shared_future<void> GPUManager::Submit(const CommandBuffer& cmd) {
-		return impl->SubmitCmdBuffer(cmd);
+	std::shared_future<void> GPUManager::Submit(CommandBuffer&& cmd) {
+		return impl->SubmitCmdBuffer(std::move(cmd));
 	}
 
 	void GPUManager::SetVSync(bool newState) {

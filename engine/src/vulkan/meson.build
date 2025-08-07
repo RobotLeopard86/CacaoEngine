@@ -8,7 +8,7 @@ vmahpp = subproject('vma-hpp', required: true).get_variable('vma_hpp_dep')
 
 # Sources
 vk_sources = [
-	'Immediate.cpp',
+	'GPU.cpp',
 	'Swapchain.cpp',
 	'VulkanModule.cpp',
 	'VulkanImpl.cpp',

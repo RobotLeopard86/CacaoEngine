@@ -34,7 +34,7 @@ namespace Cacao {
 		cmd.Execute();
 	}
 
-	std::shared_future<void> OpenGLGPU::SubmitCmdBuffer(const CommandBuffer& cmd) {
+	std::shared_future<void> OpenGLGPU::SubmitCmdBuffer(CommandBuffer&& cmd) {
 		//Make sure this is an OpenGL buffer
 		OpenGLCommandBuffer glCmd = [&cmd]() {
 			try {

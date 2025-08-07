@@ -130,8 +130,8 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Selected Vulkan device \"" << physDev.getProperties().deviceName << "\".";
 
 		//Create logical device
-		std::array<float, 2> qps {{1.0, 0.5}};
-		vk::DeviceQueueCreateInfo queueCI({}, 0, qps);
+		float priority = 1.0f;
+		vk::DeviceQueueCreateInfo queueCI({}, 0, priority);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
 		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
@@ -147,9 +147,8 @@ namespace Cacao {
 		//Initialize device Vulkan functions
 		VULKAN_HPP_DEFAULT_DISPATCHER.init(instance, dev);
 
-		//Get queues
-		gfxQueue = dev.getQueue(0, 0);
-		immQueue = dev.getQueue(0, 1);
+		//Get queue
+		queue = dev.getQueue(0, 0);
 
 		//Create memory allocator
 		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);

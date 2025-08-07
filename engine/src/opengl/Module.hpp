@@ -57,7 +57,7 @@ namespace Cacao {
 
 	class OpenGLGPU final : public GPUManager::Impl {
 	  public:
-		std::shared_future<void> SubmitCmdBuffer(const CommandBuffer& cmd) override;
+		std::shared_future<void> SubmitCmdBuffer(CommandBuffer&& cmd) override;
 		void RunloopStart() override;
 		void RunloopStop() override;
 		void RunloopIteration() override;

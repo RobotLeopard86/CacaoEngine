@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "Cacao/EventConsumer.hpp"
 
@@ -40,14 +41,48 @@ namespace Cacao {
 		vk::CommandPool pool;
 		vk::CommandBuffer cmd;
 		vk::Fence fence;
+		std::mutex mtx;
 
-		static Immediate Get();
 		static void Cleanup();
-
-		void Submit(bool wait);
 
 	  private:
 		static std::map<std::thread::id, Immediate> immediates;
+
+		static Immediate& Get();
+		friend class VulkanCommandBuffer;
+		friend class VulkanModule;
+	};
+
+	//THIS IS NOT THREAD-SAFE
+	class VulkanCommandBuffer : public CommandBuffer {
+	  public:
+		VulkanCommandBuffer();
+		VulkanCommandBuffer(VulkanCommandBuffer&&);
+		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
+
+		vk::CommandBuffer& operator->() {
+			return imm.get().cmd;
+		}
+
+		void Execute() override;
+
+	  private:
+		std::reference_wrapper<Immediate> imm;
+		std::unique_lock<std::mutex> lock;
+		std::promise<void> promise;
+		friend class VulkanGPU;
+	};
+
+	class VulkanGPU final : public GPUManager::Impl {
+	  public:
+		std::shared_future<void> SubmitCmdBuffer(CommandBuffer&& cmd) override;
+		void RunloopStart() override {}
+		void RunloopStop() override {}
+		void RunloopIteration() override;
+
+	  private:
+		std::vector<VulkanCommandBuffer> submitted;
+		std::mutex mutex;
 	};
 
 	class VulkanModule final : public PALModule {
@@ -78,7 +113,8 @@ namespace Cacao {
 		vma::Allocator allocator;
 		ViewImage depth;
 		vk::Format selectedDF;
-		vk::Queue gfxQueue;
+		vk::Queue queue;
+		std::mutex queueMtx;
 		vk::CommandPool renderPool;
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
@@ -89,10 +125,6 @@ namespace Cacao {
 		~VulkanModule() {}
 
 	  private:
-		vk::Queue immQueue;
-		std::mutex immqLock;
-		friend Immediate;
-
 		EventConsumer resizer;
 	};
 
