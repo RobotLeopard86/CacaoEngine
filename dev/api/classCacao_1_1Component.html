@@ -357,6 +357,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -657,7 +660,11 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component5actorE">
 <span id="_CPPv3N5Cacao9Component5actorE"></span><span id="_CPPv2N5Cacao9Component5actorE"></span><span id="Cacao::Component::actor__std::weak_ptr:Actor:"></span><span class="target" id="classCacao_1_1Component_1a26b6a92f517c9b84c0510fcf2b4be4cf"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">weak_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Actor.html#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">actor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9Component5actorE" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not lock and store this pointer for longer than necessary (i.e. function scope)! Doing so will break world tree unwinding! </p>
+</div>
+</dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
