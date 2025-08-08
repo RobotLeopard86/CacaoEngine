@@ -70,6 +70,7 @@ namespace Cacao {
 	void GPUManager::SetVSync(bool newState) {
 		Check<BadInitStateException>(running, "Cannot set V-Sync state when the GPU manager isn't running!");
 		std::lock_guard lk(impl->vsreq.mtx);
+		if(impl->vsreq.value == newState) return;
 		impl->vsreq.value = newState;
 		impl->vsreq.needChange = true;
 	}

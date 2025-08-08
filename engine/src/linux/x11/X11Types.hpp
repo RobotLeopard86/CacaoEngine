@@ -14,6 +14,7 @@ namespace Cacao {
 	  public:
 		xcb_connection_t* connection;
 		xcb_window_t window;
+		xcb_atom_t delAtom;
 
 		struct CRTCState {
 			xcb_randr_crtc_t crtc;

@@ -9,12 +9,12 @@ namespace Cacao {
 
 		//Delete the old swapchain images if they existed
 		if(vulkan->swapchain.chain) {
+			vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
 			vulkan->dev.destroyImageView(vulkan->depth.view);
 			vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
 			for(auto iv : vulkan->swapchain.views) {
 				vulkan->dev.destroyImageView(iv);
 			}
-			vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
 		}
 
 		//Get surface capabilities

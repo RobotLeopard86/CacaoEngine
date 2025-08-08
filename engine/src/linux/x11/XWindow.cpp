@@ -1,4 +1,5 @@
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/EventManager.hpp"
@@ -8,6 +9,7 @@
 #include <memory>
 
 #include <xcb/xcb_icccm.h>
+#include <xcb/xproto.h>
 #include "glm/gtc/type_ptr.hpp"
 
 #define win Window::Get()
@@ -38,7 +40,7 @@ namespace Cacao {
 		uint32_t valueMask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
 		uint32_t valueList[] = {
 			screen->black_pixel,
-			XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_FOCUS_CHANGE};
+			XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_FOCUS_CHANGE};
 		xcb_create_window(connection, XCB_COPY_FROM_PARENT, window, screen->root, centered.x, centered.y, size.x,
 			size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, valueMask, valueList);
 
@@ -53,7 +55,8 @@ namespace Cacao {
 		xcb_intern_atom_cookie_t delCookie = xcb_intern_atom(connection, 0, strlen("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW");
 		xcb_intern_atom_reply_t* delReply = xcb_intern_atom_reply(connection, delCookie, nullptr);
 		Check<ExternalException>(delReply != nullptr, "Failed to query deletion atom from X server!");
-		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, protoReply->atom, XCB_ATOM_ATOM, 32, 1, &delReply->atom);
+		delAtom = delReply->atom;
+		xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, protoReply->atom, XCB_ATOM_ATOM, 32, 1, &delAtom);
 		free(protoReply);
 		free(delReply);
 
@@ -83,12 +86,25 @@ namespace Cacao {
 	}
 
 	void X11WindowImpl::HandleEvents() {
+		//We store this so we don't get flooded with intermediate configures and only respond to the last one
+		xcb_configure_notify_event_t* lastCfgEvent = nullptr;
+
+		//Process events
 		xcb_generic_event_t* event;
 		while((event = xcb_poll_for_event(connection)) != nullptr) {
 			uint8_t responseType = event->response_type & ~0x80;
 			switch(responseType) {
+				//Window might be closing but we have to check
+				case XCB_CLIENT_MESSAGE: {
+					//Get the client message info
+					xcb_client_message_event_t* cmEvent = reinterpret_cast<xcb_client_message_event_t*>(event);
+
+					//If this isn't window close, break
+					//Otherwise we allow fallthrough
+					if(cmEvent->data.data32[0] != delAtom) break;
+				}
+
 				//Window is closing
-				case XCB_CLIENT_MESSAGE:
 				case XCB_DESTROY_NOTIFY:
 					Engine::Get().Quit();
 					break;
@@ -101,12 +117,11 @@ namespace Cacao {
 					//Get the configure info
 					xcb_configure_notify_event_t* cfgEvent = reinterpret_cast<xcb_configure_notify_event_t*>(event);
 
-					//Apply the new size value to the window
-					size = {cfgEvent->width, cfgEvent->height};
-
-					//Fire an event
-					DataEvent<glm::uvec2> wre("WindowResize", size);
-					EventManager::Get().Dispatch(wre);
+					//Set last configure event pointer
+					if(lastCfgEvent) {
+						free(lastCfgEvent);
+						lastCfgEvent = cfgEvent;
+					}
 					break;
 				}
 
@@ -125,10 +140,22 @@ namespace Cacao {
 					EventManager::Get().Dispatch(e);
 					break;
 				}
+
+				default: break;
 			}
 
 			//Free the event
-			free(event);
+			if(responseType != XCB_CONFIGURE_NOTIFY) free(event);
+		}
+
+		//Apply last configure event if needed
+		if(lastCfgEvent) {
+			//Apply the new size value to the window
+			size = {lastCfgEvent->width, lastCfgEvent->height};
+
+			//Fire an event
+			DataEvent<glm::uvec2> wre("WindowResize", size);
+			EventManager::Get().Dispatch(wre);
 		}
 	}
 
