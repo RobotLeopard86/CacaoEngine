@@ -44,12 +44,12 @@ namespace Cacao {
 		 *
 		 * @param actor The actor to reparent
 		 */
-		void ReparentToRoot(std::shared_ptr<Actor> actor);
+		void ReparentToRoot(ActorHandle actor);
 
 		/**
 		 * @brief Get all entities that are direct children of the root actor
 		 */
-		std::vector<std::shared_ptr<Actor>> GetRootChildren() const;
+		std::vector<ActorHandle> GetRootChildren() const;
 
 		/**
 		 * @brief Find an Actor by some arbitrary condition
@@ -59,8 +59,8 @@ namespace Cacao {
 		 * @return An optional that contains the actor if it was found
 		 */
 		template<typename P>
-			requires std::is_invocable_r_v<bool, P, std::shared_ptr<Actor>>
-		std::optional<std::shared_ptr<Actor>> FindActor(P predicate) const {
+			requires std::is_invocable_r_v<bool, P, ActorHandle>
+		std::optional<ActorHandle> FindActor(P predicate) const {
 			//Search for the object
 			return actorSearchRunner(root->GetAllChildren(), predicate);
 		}
@@ -70,19 +70,20 @@ namespace Cacao {
 	  private:
 		World(libcacaoformats::World&& world, const std::string& addr);
 
-		std::shared_ptr<Actor> root;
+		ActorHandle root;
 
 		//Recursive function for actually running a actor search
 		template<typename P>
-		std::optional<std::shared_ptr<Actor>> actorSearchRunner(std::vector<std::shared_ptr<Actor>> target, P predicate) const {
+		std::optional<ActorHandle> actorSearchRunner(std::vector<ActorHandle> target, P predicate) const {
 			//Iterate through all children
 			for(auto child : target) {
 				//Does this child pass the predicate?
 				if(predicate(child)) {
-					return std::optional<std::shared_ptr<Actor>>(child);
+					return std::optional<ActorHandle>(child);
 				}
+
 				//Search through children
-				std::optional<std::shared_ptr<Actor>> found = actorSearchRunner(child->GetAllChildren(), predicate);
+				std::optional<ActorHandle> found = actorSearchRunner(child->GetAllChildren(), predicate);
 				if(found.has_value()) {
 					return found;
 				}
@@ -92,5 +93,6 @@ namespace Cacao {
 		}
 
 		friend class ResourceManager;
+		friend class Actor;
 	};
 }

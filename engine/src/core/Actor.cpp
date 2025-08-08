@@ -1,60 +1,16 @@
 #include "Cacao/Actor.hpp"
 #include "Cacao/Component.hpp"
+#include "Cacao/Exceptions.hpp"
+#include "Cacao/World.hpp"
 
 #include <algorithm>
+#include <memory>
+
+#define SELF_HANDLE [this]() {ActorHandle h; h.actor = shared_from_this(); h.world = world.lock(); return h; }()
+#define SELF_HANDLE_NOCONST [this]() {ActorHandle h; h.actor = std::const_pointer_cast<Actor>(shared_from_this()); h.world = world.lock(); return h; }()
 
 namespace Cacao {
-	glm::mat4 Actor::GetWorldTransformMatrix() const {
-		//Calculate the transformation matrix
-		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
-		std::shared_ptr<Actor> curParent = parentPtr;
-		glm::mat4 transMat = transform.GetTransformationMatrix();
-		while(true) {
-			//If the next parent's parent is itself (so orphaned or world root), we stop
-			if(curParent->parentPtr == curParent) break;
-
-			//Apply this transformation
-			transMat = curParent->transform.GetTransformationMatrix() * transMat;
-
-			//Otherwise, move on to the next parent
-			curParent = curParent->parentPtr;
-		}
-
-		return transMat;
-	}
-
-	void Actor::Reparent(std::optional<std::shared_ptr<Actor>> newParent) {
-		//If we aren't orphaned, remove ourselves from the current parent
-		std::shared_ptr<Actor> selfPtr = shared_from_this();
-		if(!parentPtr || (parentPtr && parentPtr != selfPtr)) {
-			auto it = std::find(parentPtr->children.begin(), parentPtr->children.end(), selfPtr);
-			if(it != parentPtr->children.end()) parentPtr->children.erase(it);
-		}
-
-		//Check if we want to become orphaned
-		if(!newParent.has_value()) {
-			parentPtr = selfPtr;
-			return;
-		}
-
-		//Get parent value
-		std::shared_ptr<Actor> np = newParent.value();
-		if(np == selfPtr) {
-			parentPtr = selfPtr;
-			return;
-		}
-
-		//Add ourselves as a child to the new parent
-		np->children.push_back(selfPtr);
-
-		//Set parent pointer
-		parentPtr = np;
-	}
-
 	Actor::~Actor() {
-		//Become an orphan
-		Reparent(std::nullopt);
-
 		//Release ownership of all components
 		for(auto comp : components) {
 			comp.second.reset();
@@ -62,14 +18,50 @@ namespace Cacao {
 		components.clear();
 
 		//Release ownership of all children
-		for(auto child : children) {
-			child->Reparent(std::nullopt);
-			child.reset();
-		}
 		children.clear();
 
 		//Reset pointers to avoid destructor issues
 		parentPtr.reset();
+	}
+
+	glm::mat4 Actor::GetWorldTransformMatrix() const {
+		//Calculate the transformation matrix
+		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
+		ActorHandle current = SELF_HANDLE_NOCONST;
+		glm::mat4 transMat = transform.GetTransformationMatrix();
+		while(!(current = current->GetParent()).IsNull()) {
+			//Apply this transformation
+			transMat = current->transform.GetTransformationMatrix() * transMat;
+		}
+
+		return transMat;
+	}
+
+	ActorHandle Actor::GetParent() const {
+		ActorHandle hnd;
+		if(isRoot || parentPtr.lock()->isRoot) return hnd;
+		hnd.actor = parentPtr.lock();
+		hnd.world = world.lock();
+		return hnd;
+	}
+
+	void Actor::Reparent(ActorHandle newParent) {
+		//Remove ourselves from the current parent
+		std::shared_ptr<Actor> selfPtr = shared_from_this();
+		std::shared_ptr<Actor> parent = parentPtr.lock();
+		auto it = std::find_if(parent->children.begin(), parent->children.end(), [&selfPtr](ActorHandle a) {
+			return a.actor == selfPtr;
+		});
+		if(it != parent->children.end()) parent->children.erase(it);
+
+		//Make sure we aren't parenting to ourselves
+		Check<BadValueException>(newParent.actor != selfPtr, "Cannot parent an Actor to itself!");
+
+		//Add ourselves as a child to the new parent
+		newParent->children.push_back(SELF_HANDLE);
+
+		//Set parent pointer
+		parentPtr = newParent.actor;
 	}
 
 	void Actor::PostMountComponent(std::shared_ptr<Component> c) {
@@ -80,7 +72,7 @@ namespace Cacao {
 
 	void Actor::NotifyFunctionallyActiveStateChanged() {
 		bool wasFA = functionallyActive;
-		functionallyActive = (parentPtr != shared_from_this() ? parentPtr->IsActive() : true) && active;
+		functionallyActive = (isRoot ? true : parentPtr.lock()->IsActive()) && active;
 		if(wasFA == functionallyActive) return;
 		for(auto child : children) {
 			child->NotifyFunctionallyActiveStateChanged();
@@ -102,17 +94,30 @@ namespace Cacao {
 		NotifyFunctionallyActiveStateChanged();
 	}
 
-	std::shared_ptr<Actor> Actor::Create(const std::string& name, std::optional<std::shared_ptr<Actor>> parent) {
+	ActorHandle Actor::Create(const std::string& name, ActorHandle parent) {
+		Check<NonexistentValueException>(!parent.IsNull(), "Cannot make an actor with a null handle for a parent!");
+
 		//Make actor
-		std::shared_ptr<Actor> e = std::shared_ptr<Actor>(new Actor(name, parent));
+		ActorHandle hnd;
+		hnd.actor = std::shared_ptr<Actor>(new Actor(name, parent));
+		hnd.world = parent.world;
 
 		//Return actor
-		return e;
+		return hnd;
 	}
 
-	Actor::Actor(const std::string& name, std::optional<std::shared_ptr<Actor>> parent)
-	  : name(name), guid(xg::newGuid()), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), active(true), functionallyActive(true) {
-		if(parent.has_value()) parentPtr = parent.value();
+	ActorHandle Actor::Create(const std::string& name, std::shared_ptr<World> world) {
+		//Make actor
+		ActorHandle hnd;
+		hnd.actor = std::shared_ptr<Actor>(new Actor(name, world->root));
+		hnd.world = world;
+
+		//Return actor
+		return hnd;
+	}
+
+	Actor::Actor(const std::string& name, ActorHandle parent)
+	  : name(name), guid(xg::newGuid()), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parentPtr(parent.actor), world(parent->world), active(true), functionallyActive(true) {
 		NotifyFunctionallyActiveStateChanged();
 	}
 }

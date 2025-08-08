@@ -7,32 +7,87 @@
 
 #include <map>
 #include <memory>
-#include <optional>
 
 #include "crossguid/guid.hpp"
 
 namespace Cacao {
 	class Component;
+	class Actor;
+	class World;
+
+	/**
+	 * @brief An ownership-management handle for Actors to maintain the actor tree
+	 */
+	class ActorHandle {
+	  public:
+		/**
+		 * @brief Create a new "null" ActorHandle pointing to nothing
+		 */
+		ActorHandle() {}
+
+		/**
+		 * @brief Access the underlying Actor
+		 */
+		Actor* operator->() {
+			return actor.get();
+		}
+
+		/**
+		 * @brief Access the underlying Actor, but constant
+		 */
+		const Actor* operator->() const {
+			return actor.get();
+		}
+
+		/**
+		 * @brief Check if this is a "null" handle
+		 *
+		 * @return Whether this handle is managing an Actor or not
+		 */
+		bool IsNull() {
+			return (bool)actor;
+		}
+
+	  private:
+		friend class Actor;
+		friend class World;
+
+		//Owning reference to actor
+		std::shared_ptr<Actor> actor;
+
+		//Owning reference to actor world
+		std::shared_ptr<World> world;
+	};
 
 	/**
 	 * @brief An object that exists within a World
 	 */
-	class CACAO_API Actor : public std::enable_shared_from_this<Actor> {
+	class CACAO_API Actor : protected std::enable_shared_from_this<Actor> {
 	  public:
 		/**
 		 * @brief Create a new actor
 		 *
-		 * @note You can't use the constructor because the actor needs to have an accesible shared_ptr to itself
+		 * @param name The initial name of the actor
+		 * @param parent The initial actor parent
+		 *
+		 * @return A handle to the new actor
+		 *
+		 * @throws NonexistentValueException If the provided parent is a null handle
+		 */
+		static ActorHandle Create(const std::string& name, ActorHandle parent);
+
+		/**
+		 * @brief Create a new actor attached to the world root
 		 *
 		 * @param name The initial name of the actor
-		 * @param parent The initial actor parent (set this to nullopt to create an orphaned actor)
+		 * @param world The world to place the actor in
 		 *
-		 * @return A shared_ptr to the actor
+		 * @return A handle to the new actor
 		 */
-		static std::shared_ptr<Actor> Create(const std::string& name, std::optional<std::shared_ptr<Actor>> parent);
+		static ActorHandle Create(const std::string& name, std::shared_ptr<World> world);
 
 		std::string name;	///<The human-readable name of the actor
-		xg::Guid guid;		///<Actor ID, unique
+		const xg::Guid guid;///<Actor ID, unique
 		Transform transform;///<Actor transform relative to parent
 
 		/**
@@ -45,11 +100,9 @@ namespace Cacao {
 		/**
 		 * @brief Access the parent of this actor
 		 *
-		 * @return The parent actor, or an empty pointer if this is an orphaned actor
+		 * @return The parent actor, or a null handle if the parent is the world root
 		 */
-		std::shared_ptr<Actor> GetParent() const {
-			return parentPtr;
-		}
+		ActorHandle GetParent() const;
 
 		/**
 		 * @brief Check if the actor is active
@@ -71,9 +124,9 @@ namespace Cacao {
 		/**
 		 * @brief Change the parent of this actor
 		 *
-		 * @param newParent The new parent of this actor, or nullopt to orphan the actor
+		 * @param newParent The new parent of this actor
 		 */
-		void Reparent(std::optional<std::shared_ptr<Actor>> newParent);
+		void Reparent(ActorHandle newParent);
 
 		/**
 		 * @brief Create a new component and add it to this actor
@@ -156,22 +209,25 @@ namespace Cacao {
 		 *
 		 * @return All child entities
 		 */
-		std::vector<std::shared_ptr<Actor>> GetAllChildren() const {
+		std::vector<ActorHandle> GetAllChildren() const {
 			return children;
 		}
 
 		~Actor();
 
 	  private:
-		Actor(const std::string& name, std::optional<std::shared_ptr<Actor>> parent);
+		Actor(const std::string& name, ActorHandle parent);
+		friend class World;
 
-		std::shared_ptr<Actor> parentPtr;
+		std::weak_ptr<Actor> parentPtr;
+		std::weak_ptr<World> world;
 		std::map<std::type_index, std::shared_ptr<Component>> components;
-		std::vector<std::shared_ptr<Actor>> children;
+		std::vector<ActorHandle> children;
 
 		void PostMountComponent(std::shared_ptr<Component> c);
 		void NotifyFunctionallyActiveStateChanged();
 
 		bool active, functionallyActive;
+		bool isRoot = false;
 	};
 }

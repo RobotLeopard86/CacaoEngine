@@ -68,6 +68,9 @@ namespace Cacao {
 		 */
 		virtual void OnDisable() {};
 
+		/**
+		 * @warning Do not lock and store this pointer for longer than necessary (i.e. function scope)! Doing so will break world tree unwinding!
+		 */
 		std::weak_ptr<Actor> actor [[maybe_unused]];
 
 		friend class Actor;
