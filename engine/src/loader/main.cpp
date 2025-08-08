@@ -5,6 +5,7 @@
 #include "CLI11.hpp"
 
 #include <filesystem>
+#include <cstdlib>
 
 int main(int argc, char* argv[]) {
 	//Identify game client
@@ -32,8 +33,18 @@ int main(int argc, char* argv[]) {
 	app.add_flag_callback("--quiet,-q", [&icfg]() { icfg.suppressConsoleLogging = true; }, "Suppress all console logging output.")->default_val(false);
 	app.add_flag_callback("--no-file-log,-N", [&icfg]() { icfg.suppressFileLogging = true; }, "Suppress creation and use of logfile.")->default_val(false);
 
+#ifdef __APPLE__
+	//macOS chatter
+	bool macChatter = false;
+	app.add_flag("--no-suppress-syslog,-Y", macChatter, "Disable macOS system framework trace info from being printed to the console when debugging.");
+#endif
+
 	//Parse
 	CLI11_PARSE(app, argc, argv);
+
+#ifdef __APPLE__
+	if(!macChatter) setenv("OS_ACTIVITY_MODE", "disable", 1);
+#endif
 
 	//Engine initialization
 	Cacao::Engine::Get().CoreInit(icfg);
