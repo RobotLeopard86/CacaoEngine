@@ -2,8 +2,10 @@
 #include "Cacao/Exceptions.hpp"
 #include "Module.hpp"
 #include "Context.hpp"
+
 #include <future>
 #include <stdexcept>
+#include <optional>
 
 namespace Cacao {
 	void OpenGLGPU::RunloopStart() {
@@ -18,9 +20,12 @@ namespace Cacao {
 
 	void OpenGLGPU::RunloopIteration() {
 		//Pop the next task off the queue
-		OpenGLCommandBuffer cmd = [this]() {
+		std::optional<OpenGLCommandBuffer> cmd = [this]() -> std::optional<OpenGLCommandBuffer> {
 			//Lock the queue
 			std::lock_guard lk(queueMtx);
+
+			//Check if queue is empty
+			if(commands.empty()) return std::nullopt;
 
 			//Pop the item
 			OpenGLCommandBuffer& cb = commands.front();
@@ -30,16 +35,19 @@ namespace Cacao {
 			return std::move(cb);
 		}();
 
+		//Make sure we got a command
+		if(!cmd.has_value()) return;
+
 		//Run it
-		cmd.Execute();
+		cmd.value().Execute();
 	}
 
 	std::shared_future<void> OpenGLGPU::SubmitCmdBuffer(CommandBuffer&& cmd) {
 		//Make sure this is an OpenGL buffer
-		OpenGLCommandBuffer glCmd = [&cmd]() {
-			try {
-				return std::move(dynamic_cast<const OpenGLCommandBuffer&>(cmd));
-			} catch(...) {
+		OpenGLCommandBuffer glCmd = [&cmd]() -> OpenGLCommandBuffer&& {
+			if(OpenGLCommandBuffer* glcb = dynamic_cast<OpenGLCommandBuffer*>(&cmd)) {
+				return static_cast<OpenGLCommandBuffer&&>(*glcb);
+			} else {
 				Check<BadTypeException>(false, "Cannot submit a non-OpenGL command buffer to the OpenGL backend!");
 				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
 			}
