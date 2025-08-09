@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cacao/Cubemap.hpp"
 #include "DllHelper.hpp"
 #include "Camera.hpp"
 #include "Actor.hpp"
@@ -38,6 +39,8 @@ namespace Cacao {
 		}
 
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
+
+		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
 
 		/**
 		 * @brief Set an actor's parent to the root actor (adding it to the world if it wasn't already)

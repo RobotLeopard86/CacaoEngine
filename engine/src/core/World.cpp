@@ -1,6 +1,7 @@
 #include "Cacao/World.hpp"
 #include "Cacao/Actor.hpp"
 #include "Cacao/PerspectiveCamera.hpp"
+#include "Cacao/ResourceManager.hpp"
 
 namespace Cacao {
 	World::World(libcacaoformats::World&& world, const std::string& addr)
@@ -13,6 +14,9 @@ namespace Cacao {
 		cam = std::make_shared<PerspectiveCamera>();
 		cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
 		cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
+
+		//Skybox
+		if(!world.skyboxRef.empty()) skyboxTex = ResourceManager::Get().Load<Cubemap>(world.skyboxRef);
 	}
 
 	World::~World() {}

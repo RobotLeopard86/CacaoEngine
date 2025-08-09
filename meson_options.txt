@@ -1,11 +1,11 @@
-option('build_libs', type: 'boolean', value: true, description: 'Whether to build the supporting libraries.')
-option('testing', type: 'boolean', value: false, description: 'Whether to run unit testing for supported targets')
+option('build_libs', type: 'boolean', value: true, description: 'Whether or not to build the supporting libraries.')
+option('testing', type: 'boolean', value: false, description: 'Whether or not to run unit testing for supported targets')
 
-option('build_engine', type: 'boolean', value: true, description: 'Whether to build the engine.')
+option('build_engine', type: 'boolean', value: true, description: 'Whether or not to build the engine.')
 option('backends', type: 'array', value: [], description: 'The backends to enable for graphics.', choices: ['opengl', 'vulkan'])
 option('linux_windowing', type: 'array', value: ['x11', 'wayland'], description: '(Linux only) The windowing systems to support.', choices: ['x11', 'wayland'])
-option('windows_noconsole', type: 'boolean', value: false, description: '(Windows only) Whether to hide the console window created by default.')
+option('windows_noconsole', type: 'boolean', value: false, description: '(Windows only) Whether or not to hide the console window created by default.')
 
-option('build_sandbox', type: 'boolean', value: false, description: 'Whether to build the sandbox demo app.')
+option('build_sandbox', type: 'boolean', value: false, description: 'Whether or not to build the sandbox demo app.')
 
-option('build_tools', type: 'boolean', value: true, description: 'Whether to build the auxiliary tools for engine game development.')
+option('build_tools', type: 'boolean', value: true, description: 'Whether or not to build the auxiliary tools for engine game development.')

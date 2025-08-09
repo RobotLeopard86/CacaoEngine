@@ -19,6 +19,7 @@ Table of Contents:
 	manual/quickstart
 	manual/platforms
 	manual/versioning
+	manual/backends
 	manual/building
 	manual/vs
 	manual/bundles
@@ -29,4 +30,3 @@ Table of Contents:
 	manual/deffiles
 	manual/addresses
 	manual/shaders
-	manual/backends

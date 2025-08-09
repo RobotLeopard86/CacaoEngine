@@ -50,8 +50,14 @@ int main(int argc, char* argv[]) {
 	Cacao::Engine::Get().CoreInit(icfg);
 	Cacao::Engine::Get().GfxInit();
 
+	//Launch hook
+	Cacao::Loader::LaunchHook();
+
 	//Run
 	Cacao::Engine::Get().Run();
+
+	//Termination hook
+	Cacao::Loader::TerminateHook();
 
 	//Engine shutdown
 	Cacao::Engine::Get().GfxShutdown();

@@ -2,6 +2,11 @@
 
 #include "DllHelper.hpp"
 #include "Resource.hpp"
+#include "Cubemap.hpp"
+#include "Mesh.hpp"
+#include "Model.hpp"
+#include "Sound.hpp"
+#include "Tex2D.hpp"
 
 #include <memory>
 
@@ -49,4 +54,22 @@ namespace Cacao {
 		ResourceManager();
 		~ResourceManager();
 	};
+
+	///@cond
+	//Allowed Load specializations
+	template<>
+	std::shared_ptr<Cubemap> ResourceManager::Load<Cubemap>(const std::string&);
+
+	template<>
+	std::shared_ptr<Mesh> ResourceManager::Load<Mesh>(const std::string&);
+
+	template<>
+	std::shared_ptr<Model> ResourceManager::Load<Model>(const std::string&);
+
+	template<>
+	std::shared_ptr<Sound> ResourceManager::Load<Sound>(const std::string&);
+
+	template<>
+	std::shared_ptr<Tex2D> ResourceManager::Load<Tex2D>(const std::string&);
+	///@endcond
 }

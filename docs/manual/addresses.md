@@ -39,8 +39,3 @@ To access these, you use a special address. These address use the type prefix `m
 Worlds are where your game takes place. They are stored separately from assets, but may reference them. Loading a world will often trigger asset loading as well. World discovery will fail if the world is not in the proper location.  
 
 Their addresses use the type prefix `w`, and the identifier is the name of the world.
-
-## Components
-Component classes are stored in game binaries and made accessible to the engine via the identification hook.
-
-Their addresses use the type prefix `c` and the identifier is simply the component class name.
