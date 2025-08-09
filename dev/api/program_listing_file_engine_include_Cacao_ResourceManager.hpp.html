@@ -387,6 +387,11 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cubemap.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Mesh.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Model.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Sound.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Tex2D.hpp&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 
@@ -412,6 +417,22 @@
 <span class="w">        </span><span class="n">ResourceManager</span><span class="p">();</span>
 <span class="w">        </span><span class="o">~</span><span class="n">ResourceManager</span><span class="p">();</span>
 <span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="c1">//Allowed Load specializations</span>
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Cubemap</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Cubemap</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Mesh</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Sound</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Sound</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Tex2D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Tex2D</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>

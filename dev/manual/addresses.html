@@ -336,6 +336,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
@@ -348,12 +349,6 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="backends.html">Backends</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl.html">OpenGL Backend Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk.html">Vulkan Backend Info</a></li>
 </ul>
 </details></li>
 </ul>
@@ -453,11 +448,6 @@
 <p>Worlds are where your game takes place. They are stored separately from assets, but may reference them. Loading a world will often trigger asset loading as well. World discovery will fail if the world is not in the proper location.</p>
 <p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">w</span></code>, and the identifier is the name of the world.</p>
 </section>
-<section id="components">
-<h2>Components<a class="headerlink" href="#components" title="Link to this heading"><span/></a></h2>
-<p>Component classes are stored in game binaries and made accessible to the engine via the identification hook.</p>
-<p>Their addresses use the type prefix <code class="docutils literal notranslate"><span class="pre">c</span></code> and the identifier is simply the component class name.</p>
-</section>
 </section>
 
 
@@ -511,7 +501,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assets">Assets</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worlds">Worlds</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components">Components</a></li>
 </ul>
   </nav></div>
 
