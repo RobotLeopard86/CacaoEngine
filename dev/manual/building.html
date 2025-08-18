@@ -419,6 +419,8 @@
 </div>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"><span/></a></h2>
+<section id="all-platforms">
+<h3>All Platforms<a class="headerlink" href="#all-platforms" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
 <li><p>Git</p></li>
 <li><p>Meson</p></li>
@@ -426,9 +428,7 @@
 <li><p>Python 3</p></li>
 <li><p>CMake</p></li>
 </ul>
-<details>
-<summary><b><i>Platform-specific System Dependencies</i></b></summary>
-<hr/>
+</section>
 <section id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Link to this heading"><span/></a></h3>
 <p>Install the Windows SDK via <a class="reference external" href="https://visualstudio.microsoft.com">Visual Studio</a> or <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk">direct download</a>.</p>
@@ -455,8 +455,6 @@
 <section id="linux-notes">
 <h3>Linux Notes<a class="headerlink" href="#linux-notes" title="Link to this heading"><span/></a></h3>
 <p>You may be able to use a subset of the listed packages by disabling some features. For example, the Wayland-related packages are not needed if only building for X11, and the XCB packages are not needed if only building for Wayland (though <code class="docutils literal notranslate"><span class="pre">libxkbcommon</span></code> is mandatory). Similarly, you may not need Pipewire packages or ALSA packages if not targeting those audio subsystems, though it is recommended to always include them for best compatibility.</p>
-<hr/>
-</details>
 </section>
 </section>
 <section id="compiler-support">
@@ -528,6 +526,7 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#all-platforms">All Platforms</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos">macOS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fedora-linux-and-derivatives-e-g-rhel-nobara">Fedora Linux and derivatives (e.g. RHEL, Nobara):</a></li>

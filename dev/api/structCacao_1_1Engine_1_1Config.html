@@ -351,6 +351,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceQuery.html">Struct ResourceQuery</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -465,6 +468,9 @@
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_ResourceManager_8hpp_1a831420643795e2f5c846185713756f3e.html">Typedef Cacao::ResourceLoader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -573,25 +579,25 @@
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine6ConfigE">
-<span id="_CPPv3N5Cacao6Engine6ConfigE"></span><span id="_CPPv2N5Cacao6Engine6ConfigE"></span><span id="Cacao::Engine::Config"></span><span class="target" id="structCacao_1_1Engine_1_1Config"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine6ConfigE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine6ConfigE"></span><span id="_CPPv2N5Cacao6Engine6ConfigE"></span><span id="Cacao::Engine::Config"></span><span class="target" id="structCacao_1_1Engine_1_1Config"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><br /></dt>
 <dd><p>Configuration values for the engine that may change at runtime. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine6Config13fixedTickRateE">
-<span id="_CPPv3N5Cacao6Engine6Config13fixedTickRateE"></span><span id="_CPPv2N5Cacao6Engine6Config13fixedTickRateE"></span><span id="Cacao::Engine::Config::fixedTickRate__std::chrono::milliseconds"></span><span class="target" id="structCacao_1_1Engine_1_1Config_1af67df7a1a232540284e79083744c13a9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">milliseconds</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixedTickRate</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine6Config13fixedTickRateE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine6Config13fixedTickRateE"></span><span id="_CPPv2N5Cacao6Engine6Config13fixedTickRateE"></span><span id="Cacao::Engine::Config::fixedTickRate__std::chrono::milliseconds"></span><span class="target" id="structCacao_1_1Engine_1_1Config_1af67df7a1a232540284e79083744c13a9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">milliseconds</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fixedTickRate</span></span></span><br /></dt>
 <dd><p>The rate at which fixed ticks should occur, specified as the amount of time between fixed ticks in milliseconds. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine6Config11maxFrameLagE">
-<span id="_CPPv3N5Cacao6Engine6Config11maxFrameLagE"></span><span id="_CPPv2N5Cacao6Engine6Config11maxFrameLagE"></span><span id="Cacao::Engine::Config::maxFrameLag__i"></span><span class="target" id="structCacao_1_1Engine_1_1Config_1a28af1676c580c9966c367f43d1162bb4"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxFrameLag</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine6Config11maxFrameLagE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine6Config11maxFrameLagE"></span><span id="_CPPv2N5Cacao6Engine6Config11maxFrameLagE"></span><span id="Cacao::Engine::Config::maxFrameLag__i"></span><span class="target" id="structCacao_1_1Engine_1_1Config_1a28af1676c580c9966c367f43d1162bb4"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxFrameLag</span></span></span><br /></dt>
 <dd><p>The number of frames the renderer can be behind before skipping some to catch up. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine6Config16alwaysRerenderUIE">
-<span id="_CPPv3N5Cacao6Engine6Config16alwaysRerenderUIE"></span><span id="_CPPv2N5Cacao6Engine6Config16alwaysRerenderUIE"></span><span id="Cacao::Engine::Config::alwaysRerenderUI__b"></span><span class="target" id="structCacao_1_1Engine_1_1Config_1abe8d4f4bdb4bfbcd297c6f310c6101bc"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alwaysRerenderUI</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine6Config16alwaysRerenderUIE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Engine6Config16alwaysRerenderUIE"></span><span id="_CPPv2N5Cacao6Engine6Config16alwaysRerenderUIE"></span><span id="Cacao::Engine::Config::alwaysRerenderUI__b"></span><span class="target" id="structCacao_1_1Engine_1_1Config_1abe8d4f4bdb4bfbcd297c6f310c6101bc"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alwaysRerenderUI</span></span></span><br /></dt>
 <dd><p>Whether or not to always re-render the UI every frame. Useful for inspecting UI graphics calls in RenderDoc or similar. </p>
 </dd></dl>
 

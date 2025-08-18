@@ -412,7 +412,7 @@
 <p class="topic-title">This page is <strong>up-to-date</strong>!</p>
 <p>The information on this page pertains to the engine post-restructuring.</p>
 </aside>
-<p>Loading anything related to your game in Cacao Engine requires you to know its address. This is a specially-formatted string describing how to fetch the resource and its identifier.  Specifically, it is formated like this: <code class="docutils literal notranslate"><span class="pre">&lt;type</span> <span class="pre">prefix&gt;:&lt;identifier&gt;</span></code>. Note that all addresses are case-sensitive.</p>
+<p>Loading anything related to your game in Cacao Engine requires you to know its address. This is a specially-formatted string describing how to fetch the resource and its identifier.  Specifically, it is formated like this: <code class="docutils literal notranslate"><span class="pre">&lt;type</span> <span class="pre">prefix&gt;:&lt;identifier&gt;</span></code>. Note that all addresses are case-sensitive. Unless explicitly specified by the resource type (such as a <code class="docutils literal notranslate"><span class="pre">/</span></code> for a separator), only alphanumeric characters and underscores are permitted in the identifier.</p>
 <p>As a general note, the engine will refuse to load unpacked Cacao Engine formats at runtime. For that reason, referencing an unpacked-format file will fail as the engine won’t be able to discover it.</p>
 <p>Below, the different formats are specified.</p>
 <section id="blob-resources">

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class Event &#8212; Cacao Engine Docs</title>
+    <title>Struct ResourceQuery &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Event';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/structCacao_1_1ResourceQuery';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class EventConsumer" href="classCacao_1_1EventConsumer.html" />
-    <link rel="prev" title="Class Engine" href="classCacao_1_1Engine.html" />
+    <link rel="next" title="Struct Vertex" href="structCacao_1_1Vertex.html" />
+    <link rel="prev" title="Struct Logger::LogToken" href="structCacao_1_1Logger_1_1LogToken.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -350,8 +350,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceQuery.html">Struct ResourceQuery</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct ResourceQuery</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
@@ -395,8 +395,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Event</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventConsumer.html">Class EventConsumer</a></li>
@@ -549,7 +549,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Event</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct ResourceQuery</span></li>
   </ul>
 </nav>
 </div>
@@ -566,58 +566,42 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-event">
-<span id="exhale-class-classcacao-1-1event"></span><h1>Class Event<a class="headerlink" href="#class-event" title="Link to this heading"><span/></a></h1>
+  <section id="struct-resourcequery">
+<span id="exhale-struct-structcacao-1-1resourcequery"></span><h1>Struct ResourceQuery<a class="headerlink" href="#struct-resourcequery" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Event.hpp.html#file-engine-include-cacao-event-hpp"><span class="std std-ref">File Event.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_ResourceManager.hpp.html#file-engine-include-cacao-resourcemanager-hpp"><span class="std std-ref">File ResourceManager.hpp</span></a></p></li>
 </ul>
-<section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="derived-type">
-<h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::DataEvent&lt;</span> <span class="pre">T</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classCacao_1_1DataEvent.html#exhale-class-classcacao-1-1dataevent"><span class="std std-ref">Template Class DataEvent</span></a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5EventE">
-<span id="_CPPv3N5Cacao5EventE"></span><span id="_CPPv2N5Cacao5EventE"></span><span id="Cacao::Event"></span><span class="target" id="classCacao_1_1Event"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Event</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5EventE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>An event. </p>
-<p>Subclassed by <a class="reference internal" href="classCacao_1_1DataEvent.html#classCacao_1_1DataEvent"><span class="std std-ref">Cacao::DataEvent&lt; T &gt;</span></a></p>
+<section id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13ResourceQueryE">
+<span id="_CPPv3N5Cacao13ResourceQueryE"></span><span id="_CPPv2N5Cacao13ResourceQueryE"></span><span id="Cacao::ResourceQuery"></span><span class="target" id="structCacao_1_1ResourceQuery"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResourceQuery</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao13ResourceQueryE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A structure describing a request for a resource load from the <a class="reference internal" href="classCacao_1_1ResourceManager.html#classCacao_1_1ResourceManager"><span class="std std-ref">ResourceManager</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Event5EventENSt6stringE">
-<span id="_CPPv3N5Cacao5Event5EventENSt6stringE"></span><span id="_CPPv2N5Cacao5Event5EventENSt6stringE"></span><span id="Cacao::Event::Event__ss"></span><span class="target" id="classCacao_1_1Event_1a95a5ace00787515e6ddc42bceb120105"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Event</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eventType</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Event5EventENSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new event. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>eventType</strong> – The type of event; see the page “Events” in the manual for a list of engine events </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Event7GetTypeEv">
-<span id="_CPPv3NK5Cacao5Event7GetTypeEv"></span><span id="_CPPv2NK5Cacao5Event7GetTypeEv"></span><span id="Cacao::Event::GetTypeC"></span><span class="target" id="classCacao_1_1Event_1aa4a9065bc33e5b368cec6c4a3dcd4f34"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Event7GetTypeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get the event type. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The event type </p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Event4typeE">
-<span id="_CPPv3N5Cacao5Event4typeE"></span><span id="_CPPv2N5Cacao5Event4typeE"></span><span id="Cacao::Event::type__ss"></span><span class="target" id="classCacao_1_1Event_1a62d79ba8d06e54386347934fec66e19e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Event4typeE" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13ResourceQuery4addrE">
+<span id="_CPPv3N5Cacao13ResourceQuery4addrE"></span><span id="_CPPv2N5Cacao13ResourceQuery4addrE"></span><span id="Cacao::ResourceQuery::addr__ssC"></span><span class="target" id="structCacao_1_1ResourceQuery_1a16d5c7600779889f7a776a5abe208f5c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addr</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao13ResourceQuery4addrE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A well-formatted resource address (this does not mean the resource actually exists, just that the address is correctly formatted) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13ResourceQuery4typeE">
+<span id="_CPPv3N5Cacao13ResourceQuery4typeE"></span><span id="_CPPv2N5Cacao13ResourceQuery4typeE"></span><span id="Cacao::ResourceQuery::type__std::type_indexC"></span><span class="target" id="structCacao_1_1ResourceQuery_1af001bb9e31c8c7aa56a4e7a5f8727dc5"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao13ResourceQuery4typeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The requested resource type. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13ResourceQuery6submitE">
+<span id="_CPPv3N5Cacao13ResourceQuery6submitE"></span><span id="_CPPv2N5Cacao13ResourceQuery6submitE"></span><span class="target" id="structCacao_1_1ResourceQuery_1a0cd144464d3b06471345e7945bda1a61"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Resource.html#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submit</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao13ResourceQuery6submitE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The submission hook for successful load. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13ResourceQuery4failE">
+<span id="_CPPv3N5Cacao13ResourceQuery4failE"></span><span id="_CPPv2N5Cacao13ResourceQuery4failE"></span><span class="target" id="structCacao_1_1ResourceQuery_1a65a550c540ca2e77dcd466f559a0cd04"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">exception_ptr</span></span><span class="w"> </span><span class="n"><span class="pre">ex</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fail</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao13ResourceQuery4failE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The submission hook for a failed load. </p>
+</dd></dl>
 
 </div>
 </dd></dl>
@@ -636,20 +620,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Engine.html"
+       href="structCacao_1_1Logger_1_1LogToken.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Engine</p>
+        <p class="prev-next-title">Struct Logger::LogToken</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1EventConsumer.html"
+       href="structCacao_1_1Vertex.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class EventConsumer</p>
+        <p class="prev-next-title">Struct Vertex</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -672,15 +656,12 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5EventE"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Event5EventENSt6stringE"><code class="docutils literal notranslate"><span class="pre">Event::Event()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Event7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Event::GetType()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Event4typeE"><code class="docutils literal notranslate"><span class="pre">Event::type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13ResourceQueryE"><code class="docutils literal notranslate"><span class="pre">ResourceQuery</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13ResourceQuery4addrE"><code class="docutils literal notranslate"><span class="pre">ResourceQuery::addr</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13ResourceQuery4typeE"><code class="docutils literal notranslate"><span class="pre">ResourceQuery::type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13ResourceQuery6submitE"><code class="docutils literal notranslate"><span class="pre">ResourceQuery::submit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13ResourceQuery4failE"><code class="docutils literal notranslate"><span class="pre">ResourceQuery::fail</span></code></a></li>
 </ul>
 </li>
 </ul>
