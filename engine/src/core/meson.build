@@ -116,7 +116,7 @@ libcore = static_library('cacaocore', sources: [
 	'Model.cpp',
 	'PAL.cpp',
 	'PerspectiveCamera.cpp',
-	'ResourceManager.cpp',
+	'Resource.cpp',
 	'Sound.cpp',
 	'Tex2D.cpp',
 	'ThreadPool.cpp',

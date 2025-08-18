@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cacao/Cubemap.hpp"
+#include "Cubemap.hpp"
 #include "DllHelper.hpp"
 #include "Camera.hpp"
 #include "Actor.hpp"
@@ -9,6 +9,7 @@
 #include "libcacaoformats.hpp"
 
 #include <memory>
+#include <optional>
 
 namespace Cacao {
 	/**
@@ -16,13 +17,15 @@ namespace Cacao {
 	 *
 	 * @warning If there are still outstanding references to contained Actors when the destructor is called, it may not be able to prevent memory leaks and the Actor will probably be in a broken state.
 	 */
-	class CACAO_API World : public Resource {
+	class CACAO_API World final : public Resource {
 	  public:
 		/**
 		 * @brief Create a new world from data
 		 *
 		 * @param world The libcacaoformats representation of the world
-		 * @param addr The resource address identifier to associate with the world
+		 * @param addr The resource address to associate with the world
+		 *
+		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<World> Create(libcacaoformats::World&& world, const std::string& addr) {
 			return std::shared_ptr<World>(new World(std::move(world), addr));
@@ -31,7 +34,9 @@ namespace Cacao {
 		/**
 		 * @brief Create a new blank world
 		 *
-		 * @param addr The resource address identifier to associate with the world
+		 * @param addr The resource address to associate with the world
+		 *
+		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<World> Create(const std::string& addr) {
 			libcacaoformats::World w;

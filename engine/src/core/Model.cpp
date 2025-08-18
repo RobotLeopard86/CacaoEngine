@@ -34,6 +34,9 @@ namespace Cacao {
 
 	Model::Model(std::vector<unsigned char>&& modelBin, const std::string& addr)
 	  : Resource(addr) {
+		Check<BadValueException>(ValidateResourceAddr<Model>(addr), "Resource address is malformed!");
+		Check<BadValueException>(!modelBin.empty(), "Cannot construct a model with empty data!");
+
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
 

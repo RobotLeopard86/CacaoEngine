@@ -11,6 +11,9 @@
 namespace Cacao {
 	Tex2D::Tex2D(libcacaoimage::Image&& imageBuffer, const std::string& addr)
 	  : Asset(addr) {
+		Check<BadValueException>(ValidateResourceAddr<Tex2D>(addr), "Resource address is malformed!");
+		Check<BadValueException>(!imageBuffer.data.empty(), "Cannot construct a sound with an empty image buffer!");
+
 		//Create implementation pointer
 		PAL::Get().ConfigureImplPtr(*this);
 

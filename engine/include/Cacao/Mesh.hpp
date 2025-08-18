@@ -42,7 +42,10 @@ namespace Cacao {
 		 *
 		 * @param vtx The vertices of the mesh
 		 * @param idx The indices of the mesh, grouped in sets of triangles, corresponding to the vertex index in vtx
-		 * @param addr The resource address identifier to associate with the mesh
+		 * @param addr The resource address to associate with the mesh
+		 *
+		 * @throws BadValueException If the vertex or index data is empty
+		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<Mesh> Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
 			return std::shared_ptr<Mesh>(new Mesh(std::move(vtx), std::move(idx), addr));

@@ -9,6 +9,9 @@
 namespace Cacao {
 	Sound::Sound(std::vector<char>&& encodedAudio, const std::string& addr)
 	  : Asset(addr) {
+		Check<BadValueException>(ValidateResourceAddr<Sound>(addr), "Resource address is malformed!");
+		Check<BadValueException>(!encodedAudio.empty(), "Cannot construct a sound with an empty audio buffer!");
+
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
 

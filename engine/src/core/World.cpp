@@ -6,6 +6,8 @@
 namespace Cacao {
 	World::World(libcacaoformats::World&& world, const std::string& addr)
 	  : Resource(addr) {
+		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
+
 		//Create root actor
 		root.actor = std::shared_ptr<Actor>(new Actor("__WORLDROOT__", ActorHandle {}));
 		root->isRoot = true;
@@ -16,7 +18,7 @@ namespace Cacao {
 		cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
 
 		//Skybox
-		if(!world.skyboxRef.empty()) skyboxTex = ResourceManager::Get().Load<Cubemap>(world.skyboxRef);
+		if(!world.skyboxRef.empty()) skyboxTex = ResourceManager::Get().Load<Cubemap>(world.skyboxRef).get();
 	}
 
 	World::~World() {}

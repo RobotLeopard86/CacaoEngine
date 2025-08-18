@@ -17,7 +17,10 @@ namespace Cacao {
 		 * @brief Create a new 2D texture from image data
 		 *
 		 * @param imageBuffer The image data for the texture
-		 * @param addr The resource address identifier to associate with the texture
+		 * @param addr The resource address to associate with the texture
+		 *
+		 * @throws BadValueException If the image buffer is empty
+		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<Tex2D> Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
 			return std::shared_ptr<Tex2D>(new Tex2D(std::move(imageBuffer), addr));

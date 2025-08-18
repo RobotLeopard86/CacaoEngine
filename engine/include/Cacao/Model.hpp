@@ -9,13 +9,16 @@ namespace Cacao {
 	/**
 	 * @brief A resource representation of a model file, containing meshes and textures found within
 	 */
-	class CACAO_API Model : public Resource {
+	class CACAO_API Model final : public Resource {
 	  public:
 		/**
 		 * @brief Create a new model from data
 		 *
 		 * @param modelBin A blob of model data encoded as FBX Binary, glTF Binary (.glb), Collada, or Wavefront OBJ
-		 * @param addr The resource address identifier to associate with the model
+		 * @param addr The resource address to associate with the model
+		 *
+		 * @throws BadValueException If the model data is empty
+		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
 			return std::shared_ptr<Model>(new Model(std::move(modelBin), addr));

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Cacao/ResourceManager.hpp"
 #include "DllHelper.hpp"
 #include "Asset.hpp"
 
@@ -17,7 +16,10 @@ namespace Cacao {
 		 * @brief Create a new sound from encoded audio data
 		 *
 		 * @param encodedAudio A buffer of audio, encoded in the format of WAV, MP3, Ogg Vorbis, or Ogg Opus
-		 * @param addr The resource address identifier to associate with the sound
+		 * @param addr The resource address to associate with the sound
+		 *
+		 * @throws BadValueException If the audio buffer is empty
+		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr) {
 			return std::shared_ptr<Sound>(new Sound(std::move(encodedAudio), addr));

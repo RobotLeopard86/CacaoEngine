@@ -10,6 +10,9 @@
 namespace Cacao {
 	Mesh::Mesh(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr)
 	  : Asset(addr) {
+		Check<BadValueException>(ValidateResourceAddr<Mesh>(addr), "Resource address is malformed!");
+		Check<BadValueException>(!vtx.empty() && !idx.empty(), "Cannot construct a mesh with empty data!");
+
 		//Create implementation pointer
 		PAL::Get().ConfigureImplPtr(*this);
 

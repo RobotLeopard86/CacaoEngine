@@ -10,15 +10,13 @@ Before you begin, please check the [Platform Support page](./platforms) to ensur
 ```
 
 ## Prerequisites
+
+#### All Platforms
 * Git
 * Meson
 * Ninja
 * Python 3
 * CMake
-
-<details>
-<summary><b><i>Platform-specific System Dependencies</i></b></summary>
-<hr/>
 
 #### Windows
 Install the Windows SDK via [Visual Studio](https://visualstudio.microsoft.com) or [direct download](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk).
@@ -40,8 +38,6 @@ Run the following command to install all necessary system packages (you may need
 
 #### Linux Notes
 You may be able to use a subset of the listed packages by disabling some features. For example, the Wayland-related packages are not needed if only building for X11, and the XCB packages are not needed if only building for Wayland (though `libxkbcommon` is mandatory). Similarly, you may not need Pipewire packages or ALSA packages if not targeting those audio subsystems, though it is recommended to always include them for best compatibility.
-<hr/>
-</details>
 
 ## Compiler Support
 Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  

@@ -12,6 +12,8 @@
 namespace Cacao {
 	Cubemap::Cubemap(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr)
 	  : Asset(addr) {
+		Check<BadValueException>(ValidateResourceAddr<Cubemap>(addr), "Resource address is malformed!");
+
 		//Create implementation pointer
 		PAL::Get().ConfigureImplPtr(*this);
 

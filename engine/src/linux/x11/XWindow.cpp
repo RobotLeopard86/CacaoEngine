@@ -120,8 +120,8 @@ namespace Cacao {
 					//Set last configure event pointer
 					if(lastCfgEvent) {
 						free(lastCfgEvent);
-						lastCfgEvent = cfgEvent;
 					}
+					lastCfgEvent = cfgEvent;
 					break;
 				}
 
