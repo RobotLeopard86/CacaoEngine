@@ -6,7 +6,7 @@
 #include "Cacao/EventConsumer.hpp"
 #include "Cacao/Exceptions.hpp"
 
-#include <sstream>
+#include <queue>
 #include <future>
 #include <mutex>
 

@@ -49,7 +49,7 @@ namespace Cacao {
 		GenSwapchain();
 
 		//Register swapchain regeneration consumer
-		vulkan->resizer = EventConsumer([](Event& e) {
+		vulkan->resizer = EventConsumer([](Event&) {
 			GenSwapchain();
 		});
 		EventManager::Get().SubscribeConsumer("WindowResize", vulkan->resizer);

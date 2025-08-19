@@ -1,12 +1,11 @@
+#include "Cacao/Event.hpp"
 #include "Module.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
-#ifdef __linux__
-#include "LinuxRouter.hpp"
-#endif
+
 #include "glad/gl.h"
 
 namespace Cacao {
@@ -30,9 +29,9 @@ namespace Cacao {
 		glViewport(0, 0, contentSize.x, contentSize.y);
 
 		//Register viewport resize consumer
-		resizer = EventConsumer([](Event&) {
-			glm::uvec2 contentSize = Window::Get().GetContentAreaSize();
-			glViewport(0, 0, contentSize.x, contentSize.y);
+		resizer = EventConsumer([](Event& e) {
+			DataEvent<glm::uvec2>& wre = static_cast<DataEvent<glm::uvec2>&>(e);
+			glViewport(0, 0, wre.GetData().x, wre.GetData().x);
 		});
 		EventManager::Get().SubscribeConsumer("WindowResize", resizer);
 
