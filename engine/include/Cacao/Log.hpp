@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <format>
 
 #include "DllHelper.hpp"
 
@@ -38,7 +39,12 @@ namespace Cacao {
 			Fatal = 4 ///<Fatal Errors
 		};
 
-		///@brief A small object used to make the logging API more ergonomic. Use operator<< with it just like with std::cout to write log messages (no ending newline or std::endl necessary)
+		/**
+		 * @brief A small object used to make the logging API more ergonomic.
+		 * 
+		 * Use operator<< with it just like with std::cout to write log messages (no ending newline or @c std::endl necessary)
+		 * You can also use LogFormatted just like you would @c std::format
+		 */
 		struct LogToken {
 			Level lvl;
 			std::ostringstream oss;
@@ -51,10 +57,40 @@ namespace Cacao {
 			LogToken& operator=(const LogToken&) = delete;
 			LogToken& operator=(LogToken&&) = default;
 
+			/**
+			 * @brief Add a value to the log stream
+			 * 
+			 * @param value The value to log (ostream overrides for formatting like <tt>std::ostream& operator<<(std::ostream& out, const T& val)</tt>) should work
+			 * 
+			 * @return This object to continue the stream chain
+			 */
 			template<typename T>
 			LogToken& operator<<(const T& value) {
 				oss << value;
 				return *this;
+			}
+
+			/**
+			 * @brief Add a formatted string to the log stream
+			 * 
+			 * @param fmtstr The format string to log
+			 * @param args The arguments to the format string
+			 */
+			template<typename... Args>
+			void LogFormatted(std::format_string<Args...> fmtstr, Args&&... args) {
+				oss << std::format(fmtstr, args...);
+			}
+
+			/**
+			 * @brief Add a formatted string to the log stream with an explicit locale
+			 * 
+			 * @param locale The locale to use for formatting
+			 * @param fmtstr The format string to log
+			 * @param args The arguments to the format string
+			 */
+			template<typename... Args>
+			void LogFormatted(const std::locale& locale, std::format_string<Args...> fmtstr, Args&&... args) {
+				oss << std::format(locale, fmtstr, args...);
 			}
 
 			~LogToken() {
