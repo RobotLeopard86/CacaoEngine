@@ -679,7 +679,8 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogTokenE">
 <span id="_CPPv3N5Cacao6Logger8LogTokenE"></span><span id="_CPPv2N5Cacao6Logger8LogTokenE"></span><span id="Cacao::Logger::LogToken"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogToken</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>A small object used to make the logging API more ergonomic. Use operator&lt;&lt; with it just like with std::cout to write log messages (no ending newline or std::endl necessary) </p>
+<dd><p>A small object used to make the logging API more ergonomic. </p>
+<p>Use operator&lt;&lt; with it just like with std::cout to write log messages (no ending newline or <code class="docutils literal notranslate"><span class="pre">std::endl</span></code> necessary) You can also use LogFormatted just like you would <code class="docutils literal notranslate"><span class="pre">std::format</span></code></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -710,7 +711,45 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao6Logger8LogTokenlsER8LogTokenRK1T">
 <span id="_CPPv3I0EN5Cacao6Logger8LogTokenlsERK1T"></span><span id="_CPPv2I0EN5Cacao6Logger8LogTokenlsERK1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1af13766d64fc815c4b1b9b13627e2811d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao6Logger8LogTokenlsER8LogTokenRK1T" title="Cacao::Logger::LogToken::operator&lt;&lt;::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao6Logger8LogTokenlsER8LogTokenRK1T" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Add a value to the log stream. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to log (ostream overrides for formatting like <code class="docutils literal notranslate"><span class="pre">std::ostream&amp;</span> <span class="pre">operator&lt;&lt;(std::ostream&amp;</span> <span class="pre">out,</span> <span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">val)</span></code>) should work</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>This object to continue the stream chain </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args">
+<span id="_CPPv3IDpEN5Cacao6Logger8LogToken12LogFormattedENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span id="_CPPv2IDpEN5Cacao6Logger8LogToken12LogFormattedENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1a7f262248eacb6c9e52dfcdd0626f3130"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogFormatted</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fmtstr</span></span>, <a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Add a formatted string to the log stream. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fmtstr</strong> – The format string to log </p></li>
+<li><p><strong>args</strong> – The arguments to the format string </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args">
+<span id="_CPPv3IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span id="_CPPv2IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1a75f784c4116241110f89a29974e03703"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogFormatted</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">locale</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">locale</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fmtstr</span></span>, <a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Add a formatted string to the log stream with an explicit locale. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>locale</strong> – The locale to use for formatting </p></li>
+<li><p><strong>fmtstr</strong> – The format string to log </p></li>
+<li><p><strong>args</strong> – The arguments to the format string </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogTokenD0Ev">
@@ -814,6 +853,8 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenaSERK8LogToken"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::operator=()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenaSERR8LogToken"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::operator=()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao6Logger8LogTokenlsER8LogTokenRK1T"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::operator&lt;&lt;()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogFormatted()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogFormatted()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenD0Ev"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::~LogToken()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3lvlE"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::lvl</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3ossE"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::oss</span></code></a></li>
