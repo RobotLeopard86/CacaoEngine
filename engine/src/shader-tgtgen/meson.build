@@ -6,7 +6,7 @@ foreach be : backends
 	tgtgen_args += '-DBE_' + be.to_upper()
 endforeach
 if backends.contains('opengl')
-	tgtgen_src = 'GLSL.cpp'
+	tgtgen_src += 'GLSL.cpp'
 	tgtgen_deps += spirv_cross
 endif
 

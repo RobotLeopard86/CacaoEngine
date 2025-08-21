@@ -1,8 +1,8 @@
-# GLAD
-glad_dep = subproject('glad').get_variable('glad_dep')
+# Glad OpenGL loader
+gladgl_dep = subproject('glad-gl', required: true).get_variable('glad_gl_dep')
 
 # eternal (for constexpr map)
-eternal_dep = subproject('eternal').get_variable('eternal_dep')
+eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
 
 # Sources
 gl_sources = [
@@ -13,12 +13,13 @@ gl_sources = [
 	'impls' / 'OpenGLCubemap.cpp'
 ]
 gl_inc = [engine_headers, module_private_headers]
-gl_deps = [glad_dep, glm_dep, eternal_dep, xg_headers_dep]
+gl_deps = [gladgl_dep, glm_dep, eternal_dep, xg_headers_dep]
 
 # Graphics connection
 if host_machine.system() == 'windows'
-    #gl_sources += 'wsi' / 'Win32WSI.cpp'
+    gl_sources += 'ctx' / 'WGL.cpp'
 	gl_inc += '..' / 'win32'
+	gl_deps += [cpp.find_library('gdi32', required: true), cpp.find_library('opengl32', required: true), subproject('glad-wgl', required: true).get_variable('glad_wgl_dep')]
 elif host_machine.system() == 'darwin'
     gl_sources += 'ctx' / 'MacOS.mm'
 	gl_inc += '..' / 'macos'

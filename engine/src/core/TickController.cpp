@@ -126,7 +126,7 @@ namespace Cacao {
 				lastTickTimeUpdate = now;
 			} else {
 				//We'll wait out the time until the next tick more or less
-				high_resolution_sleep::sleep_ms((nextFixedTick - now - 0.2ms).count());
+				high_resolution_sleep::sleep_ms((nextFixedTick - now - 0.2_dms).count());
 			}
 		}
 

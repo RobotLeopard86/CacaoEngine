@@ -3,10 +3,6 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
-#include "KHR/khrplatform.h"
-#include <EGL/eglplatform.h>
-#include <wayland-client-core.h>
-#include <wayland-egl-core.h>
 
 #ifdef HAS_X11
 #include "x11/X11Types.hpp"
@@ -16,10 +12,14 @@
 #include "wayland/WaylandTypes.hpp"
 
 #include <wayland-egl.h>
+#include <wayland-client-core.h>
 #endif
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#include <KHR/khrplatform.h>
+#include <EGL/eglplatform.h>
+
 #include <sstream>
 
 #include "eternal.hpp"
@@ -186,7 +186,7 @@ namespace Cacao {
 		eglMakeCurrent(impl->dpy, impl->surface, impl->surface, impl->ctx);
 
 		//Load OpenGL functions
-		Check<ExternalException>(gladLoadGL(eglGetProcAddress), "Failed to load OpenGL functions!");
+		Check<ExternalException>(gladLoadGL(eglGetProcAddress) != 0, "Failed to load OpenGL functions!");
 
 		//Enable sRGB rendering
 		glEnable(GL_FRAMEBUFFER_SRGB);

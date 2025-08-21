@@ -29,6 +29,7 @@ namespace Cacao {
 		}
 
 		HINSTANCE hInst;
+		ATOM wndclass;
 		HWND hWnd;
 	};
 }
