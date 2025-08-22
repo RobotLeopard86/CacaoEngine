@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actor.hpp"
-#include "Cacao/ComponentExporter.hpp"
 #include "DllHelper.hpp"
 
 #include <memory>
@@ -78,6 +77,5 @@ namespace Cacao {
 
 	  private:
 		bool enabled;
-		std::shared_ptr<ComponentExporter> expHnd;
 	};
 }

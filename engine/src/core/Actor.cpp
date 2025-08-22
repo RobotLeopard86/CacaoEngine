@@ -1,4 +1,5 @@
 #include "Cacao/Actor.hpp"
+#include "Cacao/CodeRegistry.hpp"
 #include "Cacao/Component.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/World.hpp"
@@ -63,6 +64,17 @@ namespace Cacao {
 		//Set parent pointer
 		parentPtr = newParent.actor;
 	}
+
+	void Actor::MountComponent(const std::string& factoryID) {
+		//Try to create the object
+		auto [ptr, type] = CodeRegistry::Get().Instantiate<Component>(factoryID);
+
+		//Add it
+		Check<ExistingValueException>(!components.contains(type), "A component of the type specified already exists on the actor!");
+		components.insert_or_assign(type, ptr);
+		PostMountComponent(components[type]);
+	}
+
 
 	void Actor::PostMountComponent(std::shared_ptr<Component> c) {
 		c->actor = weak_from_this();

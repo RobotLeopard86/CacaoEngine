@@ -10,15 +10,16 @@
 
 #ifdef HAS_WAYLAND
 #include "wayland/WaylandTypes.hpp"
-
-#include <wayland-egl.h>
-#include <wayland-client-core.h>
 #endif
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <KHR/khrplatform.h>
 #include <EGL/eglplatform.h>
+#ifdef HAS_WAYLAND
+#include <wayland-egl.h>
+#include <wayland-client-core.h>
+#endif
 
 #include <sstream>
 

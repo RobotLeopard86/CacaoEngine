@@ -3,10 +3,10 @@
 #include "DllHelper.hpp"
 #include "Transform.hpp"
 #include "Exceptions.hpp"
-#include "ComponentExporter.hpp"
 
 #include <map>
 #include <memory>
+#include <typeindex>
 
 #include "crossguid/guid.hpp"
 
@@ -146,15 +146,12 @@ namespace Cacao {
 		/**
 		 * @brief Create a new component and add it to this actor
 		 *
-		 * @param exporter The handle to the ComponentExporter from which to construct the component
+		 * @param factoryID The ID of the Component factory in with the CodeRegistry to create the component
 		 *
 		 * @throws ExistingValueException If a component of this type already exists on the actor
+		 * @throws NonexistentValueException If the CodeRegistry does not have a Component actory registered for the provided ID
 		 */
-		void MountComponent(std::shared_ptr<ComponentExporter> exporter) {
-			Check<ExistingValueException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
-			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->Instantiate());
-			PostMountComponent(components[std::type_index(std::type_index(exporter->type))]);
-		}
+		void MountComponent(const std::string& factoryID);
 
 		/**
 		 * @brief Check if a component is on an actor

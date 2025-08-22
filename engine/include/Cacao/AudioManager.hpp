@@ -65,9 +65,12 @@ namespace Cacao {
 		 */
 		float GetGlobalGain();
 
-	  private:
+		///@cond
 		struct Impl;
+		///@endcond
+	  private:
 		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
 
 		AudioManager();
 		~AudioManager();

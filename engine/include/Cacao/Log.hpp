@@ -41,7 +41,7 @@ namespace Cacao {
 
 		/**
 		 * @brief A small object used to make the logging API more ergonomic.
-		 * 
+		 *
 		 * Use operator<< with it just like with std::cout to write log messages (no ending newline or @c std::endl necessary)
 		 * You can also use LogFormatted just like you would @c std::format
 		 */
@@ -59,9 +59,9 @@ namespace Cacao {
 
 			/**
 			 * @brief Add a value to the log stream
-			 * 
+			 *
 			 * @param value The value to log (ostream overrides for formatting like <tt>std::ostream& operator<<(std::ostream& out, const T& val)</tt>) should work
-			 * 
+			 *
 			 * @return This object to continue the stream chain
 			 */
 			template<typename T>
@@ -72,7 +72,7 @@ namespace Cacao {
 
 			/**
 			 * @brief Add a formatted string to the log stream
-			 * 
+			 *
 			 * @param fmtstr The format string to log
 			 * @param args The arguments to the format string
 			 */
@@ -83,7 +83,7 @@ namespace Cacao {
 
 			/**
 			 * @brief Add a formatted string to the log stream with an explicit locale
-			 * 
+			 *
 			 * @param locale The locale to use for formatting
 			 * @param fmtstr The format string to log
 			 * @param args The arguments to the format string
@@ -112,9 +112,9 @@ namespace Cacao {
 		static LogToken Engine(Level level = Level::Info);
 
 		/**
-		 * @brief Log a message from the game
+		 * @brief Log a message from the client
 		 *
-		 * @note For use by games using the engine.
+		 * @note For use by engine clients.
 		 *
 		 * @param level The severity of the message (optional, defaults to Info)
 		 *

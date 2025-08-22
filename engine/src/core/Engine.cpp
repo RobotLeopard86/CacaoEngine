@@ -258,7 +258,7 @@ namespace Cacao {
 		if(!home.empty()) p = std::filesystem::path(home) / ".local" / "share";
 #endif
 
-		//Append game ID
+		//Append client ID
 		p /= icfg.clientID.id;
 
 		//Make directory if nonexistent

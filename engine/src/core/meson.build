@@ -106,6 +106,7 @@ libcore = static_library('cacaocore', sources: [
 	'expf.c',
 	'Actor.cpp',
 	'AudioManager.cpp',
+	'CodeRegistry.cpp',
 	'Cubemap.cpp',
 	'Engine.cpp',	
 	'EventManager.cpp',
