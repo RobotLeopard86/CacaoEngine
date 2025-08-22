@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class ComponentExporter &#8212; Cacao Engine Docs</title>
+    <title>Class CodeRegistry &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1ComponentExporter';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1CodeRegistry';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Cubemap" href="classCacao_1_1Cubemap.html" />
-    <link rel="prev" title="Class Component" href="classCacao_1_1Component.html" />
+    <link rel="next" title="Class CommandBuffer" href="classCacao_1_1CommandBuffer.html" />
+    <link rel="prev" title="Class Camera" href="classCacao_1_1Camera.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -377,14 +377,14 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
 </ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class CodeRegistry</a></li>
+</ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CommandBuffer.html">Class CommandBuffer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
-</ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class ComponentExporter</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
@@ -549,7 +549,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class ComponentExporter</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class CodeRegistry</span></li>
   </ul>
 </nav>
 </div>
@@ -566,61 +566,70 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-componentexporter">
-<span id="exhale-class-classcacao-1-1componentexporter"></span><h1>Class ComponentExporter<a class="headerlink" href="#class-componentexporter" title="Link to this heading"><span/></a></h1>
+  <section id="class-coderegistry">
+<span id="exhale-class-classcacao-1-1coderegistry"></span><h1>Class CodeRegistry<a class="headerlink" href="#class-coderegistry" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_ComponentExporter.hpp.html#file-engine-include-cacao-componentexporter-hpp"><span class="std std-ref">File ComponentExporter.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_CodeRegistry.hpp.html#file-engine-include-cacao-coderegistry-hpp"><span class="std std-ref">File CodeRegistry.hpp</span></a></p></li>
 </ul>
-<section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="base-types">
-<h3>Base Types<a class="headerlink" href="#base-types" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Resource</span></code> (<a class="reference internal" href="classCacao_1_1Resource.html#exhale-class-classcacao-1-1resource"><span class="std std-ref">Class Resource</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">private</span> <span class="pre">std::enable_shared_from_this&lt;</span> <span class="pre">ComponentExporter</span> <span class="pre">&gt;</span></code></p></li>
-</ul>
-</section>
-</section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ComponentExporterE">
-<span id="_CPPv3N5Cacao17ComponentExporterE"></span><span id="_CPPv2N5Cacao17ComponentExporterE"></span><span id="Cacao::ComponentExporter"></span><span class="target" id="classCacao_1_1ComponentExporter"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ComponentExporter</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Resource.html#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">private</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_shared_from_this</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ComponentExporterE" title="Cacao::ComponentExporter"><span class="n"><span class="pre">ComponentExporter</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5Cacao17ComponentExporterE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>A wrapper object for component creation used for exporting components from game code to make them visible to the engine. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12CodeRegistryE">
+<span id="_CPPv3N5Cacao12CodeRegistryE"></span><span id="_CPPv2N5Cacao12CodeRegistryE"></span><span id="Cacao::CodeRegistry"></span><span class="target" id="classCacao_1_1CodeRegistry"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CodeRegistry</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao12CodeRegistryE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Registry for client object factories. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ComponentExporter11InstantiateEv">
-<span id="_CPPv3N5Cacao17ComponentExporter11InstantiateEv"></span><span id="_CPPv2N5Cacao17ComponentExporter11InstantiateEv"></span><span id="Cacao::ComponentExporter::Instantiate"></span><span class="target" id="classCacao_1_1ComponentExporter_1adadb71b37905a96801e53bbf81f3f988"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Instantiate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao17ComponentExporter11InstantiateEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new instance of the component. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao12CodeRegistry15RegisterFactoryEvRKNSt6stringENSt8functionIFP1TvEEENSt10type_indexE">
+<span id="_CPPv3I0EN5Cacao12CodeRegistry15RegisterFactoryERKNSt6stringENSt8functionIFP1TvEEENSt10type_indexE"></span><span id="_CPPv2I0EN5Cacao12CodeRegistry15RegisterFactoryERKNSt6stringENSt8functionIFP1TvEEENSt10type_indexE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1CodeRegistry_1a80b053a7f7d90133459d3089e64eed45"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterFactory</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao12CodeRegistry15RegisterFactoryEvRKNSt6stringENSt8functionIFP1TvEEENSt10type_indexE" title="Cacao::CodeRegistry::RegisterFactory::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">factory</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao12CodeRegistry15RegisterFactoryEvRKNSt6stringENSt8functionIFP1TvEEENSt10type_indexE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Register a factory for a type of code object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> instance pointer </p>
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Code</strong> – object base type</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> – The ID of the object factory </p></li>
+<li><p><strong>factory</strong> – A factory function to make the object </p></li>
+<li><p><strong>type</strong> – The type of the object that will be returned from the factory</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If another factory of the same base type already has the provided ID </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao12CodeRegistry11InstantiateENSt4pairINSt10shared_ptrI1TEENSt10type_indexEEERKNSt6stringE">
+<span id="_CPPv3I0EN5Cacao12CodeRegistry11InstantiateERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao12CodeRegistry11InstantiateERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1CodeRegistry_1af52e175b3b0ef65947bb975caaadcac5"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao12CodeRegistry11InstantiateENSt4pairINSt10shared_ptrI1TEENSt10type_indexEEERKNSt6stringE" title="Cacao::CodeRegistry::Instantiate::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Instantiate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao12CodeRegistry11InstantiateENSt4pairINSt10shared_ptrI1TEENSt10type_indexEEERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create an object instance using a registered factory. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Code</strong> – object base type</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>id</strong> – The ID of the factory to use</p>
+</dd>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If no factory has been registered with the provided ID for the provided base type </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pair containing the instantiated object and its actual type</p>
 </dd>
 </dl>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ComponentExporter4typeE">
-<span id="_CPPv3N5Cacao17ComponentExporter4typeE"></span><span id="_CPPv2N5Cacao17ComponentExporter4typeE"></span><span id="Cacao::ComponentExporter::type__std::type_indexC"></span><span class="target" id="classCacao_1_1ComponentExporter_1a50298ce463d58cb6fc072f2d818273bd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ComponentExporter4typeE" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE">
-<span id="_CPPv3I0EN5Cacao17ComponentExporter6CreateENSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao17ComponentExporter6CreateENSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ComponentExporter_1a209c98f15a03457aff7d6ee4433ff995"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao17ComponentExporterE" title="Cacao::ComponentExporter"><span class="n"><span class="pre">ComponentExporter</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE" title="Cacao::ComponentExporter::Create::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">factory</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new exporter. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12CodeRegistry3GetEv">
+<span id="_CPPv3N5Cacao12CodeRegistry3GetEv"></span><span id="_CPPv2N5Cacao12CodeRegistry3GetEv"></span><span id="Cacao::CodeRegistry::Get"></span><span class="target" id="classCacao_1_1CodeRegistry_1ac6435ab26acc92fa8eef7e2c5f91cfc6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao12CodeRegistryE" title="Cacao::CodeRegistry"><span class="n"><span class="pre">CodeRegistry</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12CodeRegistry3GetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the instance and create one if there isn’t one. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>factory</strong> – A function that constructs the component on demand </p></li>
-<li><p><strong>addr</strong> – The resource address identifier to associate with the component exporter </p></li>
-</ul>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
 </dd>
 </dl>
 </dd></dl>
@@ -642,20 +651,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Component.html"
+       href="classCacao_1_1Camera.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Component</p>
+        <p class="prev-next-title">Class Camera</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Cubemap.html"
+       href="classCacao_1_1CommandBuffer.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Cubemap</p>
+        <p class="prev-next-title">Class CommandBuffer</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -678,15 +687,11 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-types">Base Types</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ComponentExporterE"><code class="docutils literal notranslate"><span class="pre">ComponentExporter</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ComponentExporter11InstantiateEv"><code class="docutils literal notranslate"><span class="pre">ComponentExporter::Instantiate()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ComponentExporter4typeE"><code class="docutils literal notranslate"><span class="pre">ComponentExporter::type</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao17ComponentExporter6CreateE17ComponentExporterNSt8functionINSt10shared_ptrI1TEEEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ComponentExporter::Create()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12CodeRegistryE"><code class="docutils literal notranslate"><span class="pre">CodeRegistry</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao12CodeRegistry15RegisterFactoryEvRKNSt6stringENSt8functionIFP1TvEEENSt10type_indexE"><code class="docutils literal notranslate"><span class="pre">CodeRegistry::RegisterFactory()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao12CodeRegistry11InstantiateENSt4pairINSt10shared_ptrI1TEENSt10type_indexEEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CodeRegistry::Instantiate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12CodeRegistry3GetEv"><code class="docutils literal notranslate"><span class="pre">CodeRegistry::Get()</span></code></a></li>
 </ul>
 </li>
 </ul>

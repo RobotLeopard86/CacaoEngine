@@ -388,10 +388,10 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Transform.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Exceptions.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ComponentExporter.hpp&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;typeindex&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;crossguid/guid.hpp&quot;</span>
 
@@ -457,11 +457,7 @@
 <span class="w">            </span><span class="n">PostMountComponent</span><span class="p">(</span><span class="n">components</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">))]);</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ComponentExporter</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exporter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">ExistingValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="o">!</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="n">exporter</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">)),</span><span class="w"> </span><span class="s">&quot;A component of the type specified already exists on the actor!&quot;</span><span class="p">);</span>
-<span class="w">            </span><span class="n">components</span><span class="p">.</span><span class="n">insert_or_assign</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="n">exporter</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">)),</span><span class="w"> </span><span class="n">exporter</span><span class="o">-&gt;</span><span class="n">Instantiate</span><span class="p">());</span>
-<span class="w">            </span><span class="n">PostMountComponent</span><span class="p">(</span><span class="n">components</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="n">exporter</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">))]);</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">factoryID</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>

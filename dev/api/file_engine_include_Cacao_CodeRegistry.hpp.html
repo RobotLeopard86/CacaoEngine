@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Program Listing for File ComponentExporter.hpp &#8212; Cacao Engine Docs</title>
+    <title>File CodeRegistry.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_engine_include_Cacao_ComponentExporter.hpp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_engine_include_Cacao_CodeRegistry.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -237,6 +237,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -326,8 +330,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Program Listing for File ComponentExporter.hpp</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_CodeRegistry.hpp.html">Program Listing for File CodeRegistry.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -363,7 +367,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Program Listing for File ComponentExporter.hpp</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File CodeRegistry.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -380,43 +384,50 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="program-listing-for-file-componentexporter-hpp">
-<span id="program-listing-file-engine-include-cacao-componentexporter-hpp"></span><h1>Program Listing for File ComponentExporter.hpp<a class="headerlink" href="#program-listing-for-file-componentexporter-hpp" title="Link to this heading"><span/></a></h1>
-<p>↰ <a class="reference internal" href="file_engine_include_Cacao_ComponentExporter.hpp.html#file-engine-include-cacao-componentexporter-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/ComponentExporter.hpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;typeindex&gt;</span>
-
-<span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Script</span><span class="p">;</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Component</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ComponentExporter</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Resource</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="n">ComponentExporter</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
-
-<span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Script</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">)</span>
-<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">ComponentExporter</span><span class="w"> </span><span class="n">Create</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">factory</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ComponentExporter</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">),</span><span class="w"> </span><span class="p">[</span><span class="n">factory</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">static_pointer_cast</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="n">factory</span><span class="p">());</span><span class="w"> </span><span class="p">});</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Instantiate</span><span class="p">();</span>
-
-<span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">ComponentExporter</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="w"> </span><span class="n">tp</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span>
-<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">Resource</span><span class="p">(</span><span class="n">addr</span><span class="p">),</span><span class="w"> </span><span class="n">type</span><span class="p">(</span><span class="n">tp</span><span class="p">),</span><span class="w"> </span><span class="n">factory</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">factory</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="p">}</span>
-</pre></div>
+  <section id="file-coderegistry-hpp">
+<span id="file-engine-include-cacao-coderegistry-hpp"></span><h1>File CodeRegistry.hpp<a class="headerlink" href="#file-coderegistry-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="dir_engine_include_Cacao.html#dir-engine-include-cacao"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao</span></code>)</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-engine-include-cacao-coderegistry-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/CodeRegistry.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+</ul>
+</nav>
+<section id="definition-engine-include-cacao-coderegistry-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/CodeRegistry.hpp</span></code>)<a class="headerlink" href="#definition-engine-include-cacao-coderegistry-hpp" title="Link to this heading"><span/></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_CodeRegistry.hpp.html">Program Listing for File CodeRegistry.hpp</a></li>
+</ul>
 </div>
+</section>
+<section id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Component.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_Component.hpp.html#file-engine-include-cacao-component-hpp"><span class="std std-ref">File Component.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DllHelper.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_DllHelper.hpp.html#file-engine-include-cacao-dllhelper-hpp"><span class="std std-ref">File DllHelper.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Script.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_Script.hpp.html#file-engine-include-cacao-script-hpp"><span class="std std-ref">File Script.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">functional</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type_traits</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typeindex</span></code></p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_Cacao.html#namespace-cacao"><span class="std std-ref">Namespace Cacao</span></a></p></li>
+</ul>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="classCacao_1_1CodeRegistry.html#exhale-class-classcacao-1-1coderegistry"><span class="std std-ref">Class CodeRegistry</span></a></p></li>
+</ul>
+</section>
 </section>
 
 
@@ -435,6 +446,27 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-engine-include-cacao-coderegistry-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/CodeRegistry.hpp</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#includes">Includes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
