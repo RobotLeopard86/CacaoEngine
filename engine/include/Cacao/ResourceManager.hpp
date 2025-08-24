@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Asset.hpp"
+#include "Cacao/ThreadPool.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
@@ -113,8 +114,11 @@ namespace Cacao {
 			//Create resource query
 			ResourceQuery query(submitFn, failFn, typeid(T), address);
 
-			//Load resource
-			loader.value()(std::move(query));
+			//Load resource asynchronously
+			//If we are already on a pool thread this will block to avoid clogging other threads
+			ThreadPool::Get().Exec([this, &query]() {
+				loader.value()(std::move(query));
+			});
 
 			//Return future
 			return output.get_future().share();

@@ -4,11 +4,13 @@
 #include "thread_pool/thread_pool.h"
 
 #include <thread>
+#include <set>
 
 namespace Cacao {
 	struct ThreadPool::Impl {
 		using threadpool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 		std::unique_ptr<threadpool> pool;
+		std::set<std::thread::id> threads;
 	};
 
 	ThreadPool::ThreadPool() {
@@ -42,6 +44,17 @@ namespace Cacao {
 	}
 
 	void ThreadPool::ImplSubmit(std::function<void()> job) {
+		//Check if this is a pool thread (if so, we just run it now to avoid clogging the pool)
+		if(impl->threads.contains(std::this_thread::get_id())) {
+			job();
+			return;
+		}
+
+		//Run on the pool
 		impl->pool->enqueue_detach(job);
+	}
+
+	void ThreadPool::MarkSelfAsPoolThread() {
+		impl->threads.insert(std::this_thread::get_id());
 	}
 }

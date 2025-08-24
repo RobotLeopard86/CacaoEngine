@@ -57,7 +57,7 @@ namespace Cacao {
 			std::shared_future<R> result = task->get_future().share();
 
 			//Use closures to capture the task so its future can be set
-			ImplSubmit([task]() { (*task)(); });
+			ImplSubmit([this, task]() { MarkSelfAsPoolThread(); (*task)(); });
 			return result;
 		}
 
@@ -146,6 +146,7 @@ namespace Cacao {
 		std::vector<std::stop_source> stops;
 
 		void ImplSubmit(std::function<void()> job);
+		void MarkSelfAsPoolThread();
 
 		ThreadPool();
 		~ThreadPool();
