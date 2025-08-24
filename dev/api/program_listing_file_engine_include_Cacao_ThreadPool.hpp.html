@@ -422,7 +422,7 @@
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">shared_future</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task</span><span class="o">-&gt;</span><span class="n">get_future</span><span class="p">().</span><span class="n">share</span><span class="p">();</span>
 
 <span class="w">            </span><span class="c1">//Use closures to capture the task so its future can be set</span>
-<span class="w">            </span><span class="n">ImplSubmit</span><span class="p">([</span><span class="n">task</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">)();</span><span class="w"> </span><span class="p">});</span>
+<span class="w">            </span><span class="n">ImplSubmit</span><span class="p">([</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">task</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">MarkSelfAsPoolThread</span><span class="p">();</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">)();</span><span class="w"> </span><span class="p">});</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -477,6 +477,7 @@
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">stop_source</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stops</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ImplSubmit</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">job</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">MarkSelfAsPoolThread</span><span class="p">();</span>
 
 <span class="w">        </span><span class="n">ThreadPool</span><span class="p">();</span>
 <span class="w">        </span><span class="o">~</span><span class="n">ThreadPool</span><span class="p">();</span>

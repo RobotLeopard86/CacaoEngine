@@ -386,6 +386,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Asset.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao/ThreadPool.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Exceptions.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
@@ -472,8 +473,11 @@
 <span class="w">            </span><span class="c1">//Create resource query</span>
 <span class="w">            </span><span class="n">ResourceQuery</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="n">submitFn</span><span class="p">,</span><span class="w"> </span><span class="n">failFn</span><span class="p">,</span><span class="w"> </span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">),</span><span class="w"> </span><span class="n">address</span><span class="p">);</span>
 
-<span class="w">            </span><span class="c1">//Load resource</span>
-<span class="w">            </span><span class="n">loader</span><span class="p">.</span><span class="n">value</span><span class="p">()(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">query</span><span class="p">));</span>
+<span class="w">            </span><span class="c1">//Load resource asynchronously</span>
+<span class="w">            </span><span class="c1">//If we are already on a pool thread this will block to avoid clogging other threads</span>
+<span class="w">            </span><span class="n">ThreadPool</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">Exec</span><span class="p">([</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">query</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">loader</span><span class="p">.</span><span class="n">value</span><span class="p">()(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">query</span><span class="p">));</span>
+<span class="w">            </span><span class="p">});</span>
 
 <span class="w">            </span><span class="c1">//Return future</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">output</span><span class="p">.</span><span class="n">get_future</span><span class="p">().</span><span class="n">share</span><span class="p">();</span>
