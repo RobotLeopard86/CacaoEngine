@@ -57,7 +57,40 @@ namespace Cacao {
 			std::shared_future<R> result = task->get_future().share();
 
 			//Use closures to capture the task so its future can be set
-			ImplSubmit([this, task]() { MarkSelfAsPoolThread(); (*task)(); });
+			ImplSubmit([task]() { (*task)(); }, false);
+			return result;
+		}
+
+		/**
+		 * @brief Place an IO-bound task into the queue with an expected return value
+		 *
+		 * @warning This function uses the dedicated IO pool, which is smaller than the general pool. Do not use this for CPU-bound tasks; only short IO-constrained tasks should be placed here.
+		 *
+		 * @param func The task to execute
+		 * @param args The arguments to the task function
+		 *
+		 * @return A future that will be fulfilled when the task completes
+		 *
+		 * @throws BadInitStateException If the pool is not running
+		 */
+		template<typename F, typename... Args, typename R = std::invoke_result_t<F&&, Args&&...>>
+			requires std::invocable<F&&, Args&&...>
+		std::shared_future<R> ExecIOBound(F func, Args... args) {
+			Check<BadInitStateException>(IsRunning(), "The thread pool must be running to execute a task!");
+
+			//Create a task and get a result future
+			std::shared_ptr<std::packaged_task<R()>> task;
+			if constexpr(sizeof...(args) == 0) {
+				task = std::make_shared<std::packaged_task<R()>>(std::move(func));
+			} else {
+				//Wrap the function so it doesn't need any arguments
+				auto wrapper = std::bind(std::forward<F>(func), std::forward<Args...>(args...));
+				task = std::make_shared<std::packaged_task<R()>>(std::move(wrapper));
+			}
+			std::shared_future<R> result = task->get_future().share();
+
+			//Use closures to capture the task so its future can be set
+			ImplSubmit([task]() { (*task)(); }, true);
 			return result;
 		}
 
@@ -92,7 +125,8 @@ namespace Cacao {
 					if(auto it = std::find(stops.begin(), stops.end(), stop); it != stops.end()) {
 						stops.erase(it);
 					}
-				});
+				},
+					false);
 			} else {
 				auto wrapper = std::bind_front(std::forward<F>(func), stop.get_token(), std::forward<Args...>(args...));
 
@@ -103,7 +137,8 @@ namespace Cacao {
 					if(auto it = std::find(stops.begin(), stops.end(), stop); it != stops.end()) {
 						stops.erase(it);
 					}
-				});
+				},
+					false);
 			}
 
 			return stop;
@@ -145,8 +180,7 @@ namespace Cacao {
 
 		std::vector<std::stop_source> stops;
 
-		void ImplSubmit(std::function<void()> job);
-		void MarkSelfAsPoolThread();
+		void ImplSubmit(std::function<void()> job, bool io);
 
 		ThreadPool();
 		~ThreadPool();

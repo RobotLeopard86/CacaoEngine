@@ -12,7 +12,7 @@
 #include <memory>
 
 namespace Cacao {
-	World::World(libcacaoformats::World&& world, const std::string& addr)
+	World::World(const std::string& addr)
 	  : Resource(addr) {
 		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
 
@@ -22,11 +22,8 @@ namespace Cacao {
 
 		//Create camera
 		cam = std::make_shared<PerspectiveCamera>();
-		cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
-		cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
-
-		//Skybox
-		if(!world.skyboxRef.empty()) skyboxTex = ResourceManager::Get().Load<Cubemap>(world.skyboxRef).get();
+		cam->SetPosition(glm::vec3 {0});
+		cam->SetRotation(glm::vec3 {0});
 	}
 
 	World::~World() {}
@@ -47,6 +44,10 @@ namespace Cacao {
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
 	}
+
+	WorldManager::~WorldManager() {}
+
+	CACAOST_GET(WorldManager)
 
 	std::string WorldManager::GetActiveWorld() {
 		return impl->active ? impl->active->GetAddress() : "";

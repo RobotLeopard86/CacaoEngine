@@ -20,18 +20,6 @@ namespace Cacao {
 	class CACAO_API World final : public Resource {
 	  public:
 		/**
-		 * @brief Create a new world from data
-		 *
-		 * @param world The libcacaoformats representation of the world
-		 * @param addr The resource address to associate with the world
-		 *
-		 * @throws BadValueException If the address is malformed
-		 */
-		static std::shared_ptr<World> Create(libcacaoformats::World&& world, const std::string& addr) {
-			return std::shared_ptr<World>(new World(std::move(world), addr));
-		}
-
-		/**
 		 * @brief Create a new blank world
 		 *
 		 * @param addr The resource address to associate with the world
@@ -39,9 +27,18 @@ namespace Cacao {
 		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<World> Create(const std::string& addr) {
-			libcacaoformats::World w;
-			return Create(std::move(w), addr);
+			return std::shared_ptr<World>(new World(addr));
 		}
+
+		/**
+		 * @brief Create a new world using data
+		 *
+		 * @param addr The resource address to associate with the world
+		 * @param world The world information for setup
+		 *
+		 * @throws BadValueException If the address is malformed
+		 */
+		static std::shared_ptr<World> Create(const std::string& addr, const libcacaoformats::World& world);
 
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
 
@@ -76,7 +73,7 @@ namespace Cacao {
 		~World();
 
 	  private:
-		World(libcacaoformats::World&& world, const std::string& addr);
+		World(const std::string& addr);
 
 		ActorHandle root;
 

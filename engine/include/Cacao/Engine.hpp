@@ -102,6 +102,11 @@ namespace Cacao {
 			 * @brief ID of the client application. This should be in reverse-domain format (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
+
+			/**
+			 * @brief The number of threads to use for the IO thread pool. Will be overridden to a value of engine's choice if set to 0.
+			 */
+			unsigned int ioPoolThreads;
 		};
 
 		/**

@@ -13,6 +13,8 @@
 #include <typeindex>
 #include <functional>
 #include <typeinfo>
+#include <string>
+#include <functional>
 
 namespace Cacao {
 	/**

@@ -1,16 +1,16 @@
 #include "Cacao/ThreadPool.hpp"
+#include "Cacao/Engine.hpp"
 #include "SingletonGet.hpp"
 
 #include "thread_pool/thread_pool.h"
 
 #include <thread>
-#include <set>
 
 namespace Cacao {
 	struct ThreadPool::Impl {
 		using threadpool = dp::thread_pool<dp::details::default_function_type, std::jthread>;
 		std::unique_ptr<threadpool> pool;
-		std::set<std::thread::id> threads;
+		std::unique_ptr<threadpool> iopool;
 	};
 
 	ThreadPool::ThreadPool() {
@@ -30,31 +30,27 @@ namespace Cacao {
 
 	std::size_t ThreadPool::GetThreadCount() const {
 		Check<BadInitStateException>(IsRunning(), "The thread pool must be running to check the thread count!");
-		return impl->pool->size();
+		return impl->pool->size() + impl->iopool->size();
 	}
 
 	void ThreadPool::Start() {
 		Check<BadInitStateException>(!IsRunning(), "The thread pool must be not running when Start is called!");
-		impl->pool.reset(new Impl::threadpool());
+		int ioThreads = Engine::Get().GetInitConfig().ioPoolThreads;
+		impl->pool.reset(new Impl::threadpool(std::thread::hardware_concurrency() - ioThreads));
+		impl->iopool.reset(new Impl::threadpool(ioThreads));
 	}
 
 	void ThreadPool::Stop() {
 		Check<BadInitStateException>(IsRunning(), "The thread pool must be running when Stop is called!");
 		impl->pool.reset(nullptr);
+		impl->iopool.reset(nullptr);
 	}
 
-	void ThreadPool::ImplSubmit(std::function<void()> job) {
-		//Check if this is a pool thread (if so, we just run it now to avoid clogging the pool)
-		if(impl->threads.contains(std::this_thread::get_id())) {
-			job();
-			return;
-		}
-
-		//Run on the pool
-		impl->pool->enqueue_detach(job);
-	}
-
-	void ThreadPool::MarkSelfAsPoolThread() {
-		impl->threads.insert(std::this_thread::get_id());
+	void ThreadPool::ImplSubmit(std::function<void()> job, bool io) {
+		//Run on the appropriate pool
+		if(io)
+			impl->iopool->enqueue_detach(job);
+		else
+			impl->pool->enqueue_detach(job);
 	}
 }
