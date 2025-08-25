@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Asset.hpp"
-#include "Cacao/ThreadPool.hpp"
+#include "ThreadPool.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 
-#include <exception>
 #include <memory>
 #include <future>
 #include <optional>
@@ -18,23 +17,16 @@
 
 namespace Cacao {
 	/**
-	 * @brief A structure describing a request for a resource load from the ResourceManager
+	 * @brief A function that takes in a ResourceQuery and provides the appropriate resource
+	 *
+	 * @note This function should expect to be invoked in a synchronous manner, though on a worker thread in the standard thread pool.
+	 *
+	 * @warning If your loader requires @b any form of IO-bound task (e.g. filesystem or networking), @b please perform that task
+	 *
+	 * @param addr The resource address to load
+	 * @param type The type of object expected as a result
 	 */
-	struct ResourceQuery {
-	  public:
-		const std::string addr;										///<A well-formatted resource address (this does not mean the resource actually exists, just that the address is correctly formatted)
-		const std::type_index type;									///<The requested resource type
-		const std::function<void(std::shared_ptr<Resource>)> submit;///<The submission hook for successful load
-		const std::function<void(std::exception_ptr ex)> fail;		///<The submission hook for a failed load
-
-	  private:
-		ResourceQuery(decltype(submit) submitFn, decltype(fail) failFn, std::type_index ti, const std::string& addr) : addr(addr), type(ti), submit(submitFn), fail(failFn) {}
-
-		friend class ResourceManager;
-	};
-
-	///@brief A function that takes in a ResourceQuery and provides the appropriate resource
-	using ResourceLoader = std::function<void(ResourceQuery&&)>;
+	using ResourceLoader = std::function<void(const std::string& addr, const std::type_index type)>;
 
 	/**
 	 * @brief Singleton for handling the loading of resources from a game bundle
@@ -73,57 +65,28 @@ namespace Cacao {
 			//Validate the address
 			Check<BadValueException>(Resource::ValidateResourceAddr<T>(address), "Cannot load a resource from a malformed address string!");
 
-			//Check cache
-			std::shared_ptr<Resource> maybeCached = CheckCache(address);
-			if(maybeCached) {
-				//There is a cached resource
-				try {
-					//Try to cast the resource to the correct type and return it
-					std::promise<std::shared_ptr<T>> p;
-					std::shared_ptr<T> cached = std::dynamic_pointer_cast<T>(maybeCached);
-					p.set_value(cached);
-					return p.get_future().share();
-				} catch(const std::bad_cast&) {
-					Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
-					return {};
-				}
-			}
-
-			//Resource was not in cache, we need to load it
-			//Check for a valid loader
-			Check<BadStateException>(loader.has_value(), "No resource loader configured!");
-
-			//Set up submission hooks
-			std::promise<std::shared_ptr<T>> output;
-			const auto submitFn = [&output](std::shared_ptr<Resource> r) {
-				//Type-check the result
-				if(std::shared_ptr<T> value = std::dynamic_pointer_cast<T>(std::move(r))) {
-					//Set the result
-					output.set_value(value);
-				} else {
-					//Make exception pointer to set for failure
+			//Run load operation asynchronously
+			return ThreadPool::Get().Exec([this, &address]() -> std::shared_ptr<T> {
+				//Check cache
+				std::shared_ptr<Resource> maybeCached = CheckCache(address);
+				if(maybeCached) {
+					//There is a cached resource
 					try {
-						Check<BadTypeException>(false, "Resource loader returned improperly-typed result!");
-					} catch(...) {
-						output.set_exception(std::current_exception());
+						//Try to cast the resource to the correct type and return it
+						return std::dynamic_pointer_cast<T>(maybeCached);
+					} catch(const std::bad_cast&) {
+						Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
+						return {};
 					}
 				}
-			};
-			const auto failFn = [&output](std::exception_ptr ex) {
-				output.set_exception(ex);
-			};
 
-			//Create resource query
-			ResourceQuery query(submitFn, failFn, typeid(T), address);
+				//Resource was not in cache, we need to load it
+				//Check for a valid loader
+				Check<BadStateException>(loader.has_value(), "No resource loader configured!");
 
-			//Load resource asynchronously
-			//If we are already on a pool thread this will block to avoid clogging other threads
-			ThreadPool::Get().Exec([this, &query]() {
-				loader.value()(std::move(query));
+				//Try to load the asset
+				loader.value()(address, std::type_index(typeid(T)));
 			});
-
-			//Return future
-			return output.get_future().share();
 		}
 
 		/**

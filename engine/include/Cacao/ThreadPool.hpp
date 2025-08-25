@@ -6,6 +6,7 @@
 #include <memory>
 #include <future>
 #include <concepts>
+#include <type_traits>
 #include <vector>
 #include <functional>
 #include <algorithm>
@@ -74,7 +75,7 @@ namespace Cacao {
 		 * @throws BadInitStateException If the pool is not running
 		 */
 		template<typename F, typename... Args, typename R = std::invoke_result_t<F&&, Args&&...>>
-			requires std::invocable<F&&, Args&&...>
+			requires std::invocable<F&&, Args&&...> && (!std::is_same_v<R, void>)
 		std::shared_future<R> ExecIOBound(F func, Args... args) {
 			Check<BadInitStateException>(IsRunning(), "The thread pool must be running to execute a task!");
 
