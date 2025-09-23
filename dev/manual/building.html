@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Build Instructions &#8212; Cacao Engine Docs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/building';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/cacaologo.png"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visual Studio Compatibility" href="vs.html" />
+    <link rel="prev" title="Backend Info" href="backends.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
+    <img src="../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Cacao Engine Documentation</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/root.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/root.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Build Instructions</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="build-instructions">
+<h1>Build Instructions<a class="headerlink" href="#build-instructions" title="Link to this heading"><span/></a></h1>
+<aside class="topic">
+<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
+<p>The information on this page pertains to the engine post-restructuring.</p>
+</aside>
+<p>These instructions will guide you through the process of building Cacao Engine.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Before you begin, please check the <a class="reference internal" href="platforms.html"><span class="doc std std-doc">Platform Support page</span></a> to ensure you have a compatible system!</p>
+</div>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"><span/></a></h2>
+<section id="all-platforms">
+<h3>All Platforms<a class="headerlink" href="#all-platforms" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p>Git</p></li>
+<li><p>Meson</p></li>
+<li><p>Ninja</p></li>
+<li><p>Python 3</p></li>
+<li><p>CMake</p></li>
+</ul>
+</section>
+<section id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Link to this heading"><span/></a></h3>
+<p>Install the Windows SDK via <a class="reference external" href="https://visualstudio.microsoft.com">Visual Studio</a> or <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-sdk">direct download</a>.</p>
+</section>
+<section id="macos">
+<h3>macOS<a class="headerlink" href="#macos" title="Link to this heading"><span/></a></h3>
+<p>Install <a class="reference external" href="https://developer.apple.com/xcode">Xcode</a> or the Command Line Tools for Developers (run <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code> in your terminal to install) to get the macOS SDK.</p>
+</section>
+<section id="fedora-linux-and-derivatives-e-g-rhel-nobara">
+<h3>Fedora Linux and derivatives (e.g. RHEL, Nobara):<a class="headerlink" href="#fedora-linux-and-derivatives-e-g-rhel-nobara" title="Link to this heading"><span/></a></h3>
+<p>Run the following command to install all necessary system packages (you may need <code class="docutils literal notranslate"><span class="pre">sudo</span></code> privileges):
+<code class="docutils literal notranslate"><span class="pre">dnf</span> <span class="pre">install</span> <span class="pre">wayland-devel</span> <span class="pre">wayland-protocols-devel</span> <span class="pre">libxkbcommon-devel</span> <span class="pre">libxcb-devel</span> <span class="pre">xcb-util-devel</span> <span class="pre">xcb-util-wm-devel</span> <span class="pre">xcb-util-keysyms-devel</span> <span class="pre">libdrm-devel</span> <span class="pre">libuuid-devel</span> <span class="pre">pipewire-devel</span> <span class="pre">pulseaudio-libs-devel</span> <span class="pre">alsa-lib</span> <span class="pre">alsa-lib-devel</span> <span class="pre">libglvnd-devel</span></code></p>
+</section>
+<section id="debian-gnu-linux-and-derivatives-e-g-ubuntu-mint-pop-os">
+<h3>Debian GNU/Linux and derivatives (e.g. Ubuntu, Mint, Pop!_OS):<a class="headerlink" href="#debian-gnu-linux-and-derivatives-e-g-ubuntu-mint-pop-os" title="Link to this heading"><span/></a></h3>
+<p>Run the following command to install all necessary system packages (you may need <code class="docutils literal notranslate"><span class="pre">sudo</span></code> privileges):
+<code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">libwayland-dev</span> <span class="pre">wayland-protocols</span> <span class="pre">libxkbcommon-dev</span> <span class="pre">xorg-dev</span> <span class="pre">libxcb1-dev</span> <span class="pre">libxcb-icccm4-dev</span> <span class="pre">libxcb-keysyms1-dev</span> <span class="pre">libxcb-randr0-dev</span> <span class="pre">libxcb-util-dev</span> <span class="pre">libxcb-xkb-dev</span> <span class="pre">libdrm-dev</span> <span class="pre">uuid-dev</span> <span class="pre">libpipewire-0.3-dev</span> <span class="pre">libpulse-dev</span> <span class="pre">libasound2-dev</span> <span class="pre">libglvnd-dev</span></code></p>
+</section>
+<section id="arch-linux-and-derivatives-e-g-manjaro-garuda-endeavouros">
+<h3>Arch Linux and derivatives (e.g. Manjaro, Garuda, EndeavourOS):<a class="headerlink" href="#arch-linux-and-derivatives-e-g-manjaro-garuda-endeavouros" title="Link to this heading"><span/></a></h3>
+<p>Run the following command to install all necessary system packages (you may need <code class="docutils literal notranslate"><span class="pre">sudo</span></code> privileges):
+<code class="docutils literal notranslate"><span class="pre">pacman</span> <span class="pre">-S</span> <span class="pre">libglvnd</span> <span class="pre">mesa</span> <span class="pre">libxkbcommon</span> <span class="pre">wayland-protocols</span> <span class="pre">libxcb</span> <span class="pre">xcb-util</span> <span class="pre">xcb-util-keysyms</span> <span class="pre">xcb-util-wm</span> <span class="pre">util-linux-libs</span> <span class="pre">libdrm</span> <span class="pre">libpipewire</span> <span class="pre">libpulse</span> <span class="pre">alsa-lib</span></code></p>
+</section>
+<section id="linux-notes">
+<h3>Linux Notes<a class="headerlink" href="#linux-notes" title="Link to this heading"><span/></a></h3>
+<p>You may be able to use a subset of the listed packages by disabling some features. For example, the Wayland-related packages are not needed if only building for X11, and the XCB packages are not needed if only building for Wayland (though <code class="docutils literal notranslate"><span class="pre">libxkbcommon</span></code> is mandatory).</p>
+<p>Similarly, you may not need Pipewire packages or ALSA packages if not targeting those audio subsystems, though it is recommended to always include them for best compatibility.</p>
+</section>
+</section>
+<section id="compiler-support">
+<h2>Compiler Support<a class="headerlink" href="#compiler-support" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine is primarily built and tested using <a class="reference external" href="https://clang.llvm.org">Clang</a> with the <a class="reference external" href="https://lld.llvm.org">LLD linker</a>. While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.</p>
+<p>A note about Apple Clang: In recent versions of macOS, the <code class="docutils literal notranslate"><span class="pre">libc++</span></code> headers have been updated such that different compiler flags are necessary, but Meson does not apply the correct flags unless it detects Clang version <code class="docutils literal notranslate"><span class="pre">18.x</span></code> or newer. However, the default version shipped is <code class="docutils literal notranslate"><span class="pre">17.0.0</span></code>, so the outdated flags are used and the build will fail. There is an active issue to fix this, but in the meantime, please install Clang and LLD via <a class="reference external" href="https://brew.sh">Homebrew</a> to install the latest versions (<code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span> <span class="pre">lld</span></code>).</p>
+</section>
+<section id="build">
+<h2>Build<a class="headerlink" href="#build" title="Link to this heading"><span/></a></h2>
+<p>In the root Cacao Engine directory, run the following command to configure the build: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span> <span class="pre">-Dbackends=&lt;graphics</span> <span class="pre">backends&gt;</span></code>. The available backends are <code class="docutils literal notranslate"><span class="pre">opengl</span></code> and <code class="docutils literal notranslate"><span class="pre">vulkan</span></code>. See the <a class="reference internal" href="backends.html"><span class="doc std std-doc">backends info page</span></a> for more details.</p>
+<p>You can also choose to build the sandbox application by adding <code class="docutils literal notranslate"><span class="pre">-Dbuild_sandbox=true</span></code> to the command line.</p>
+<p>On Linux, the supported windowing systems can be selected via the <code class="docutils literal notranslate"><span class="pre">linux_windowing</span></code> option. By default, this is set to <code class="docutils literal notranslate"><span class="pre">x11,wayland</span></code> to include both, but you can choose to exclude one if you wish.</p>
+<p>Windows builds also have the option of disabling the automatic console window by setting <code class="docutils literal notranslate"><span class="pre">-Dwindows_noconsole=true</span></code> on the command line.</p>
+<p>For a complete list of options, please see the file <code class="docutils literal notranslate"><span class="pre">meson_options.txt</span></code> in the root directory.</p>
+<p>Please note that configuration may take a long time, especially in a fresh checkout of the repository, since all non-system dependencies will be downloaded at this time (some of which are large).</p>
+<p>Once configuration is complete, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">compile</span> <span class="pre">-C</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span></code> to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the <code class="docutils literal notranslate"><span class="pre">sandbox</span></code> directory in your build directory. On Windows, it will not run out of the box due to not being able to find DLLs. When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">devenv</span></code> in your build directory to set up the proper paths.</p>
+</section>
+<section id="visual-studio">
+<h2>Visual Studio<a class="headerlink" href="#visual-studio" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine has not yet been tested with Meson’s Visual Studio backend. It is not guaranteed to work, but feel free to try it out for yourself. Official guidance will be provided closer to release when testing begins.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="backends.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Backend Info</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="vs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Visual Studio Compatibility</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#all-platforms">All Platforms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos">macOS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fedora-linux-and-derivatives-e-g-rhel-nobara">Fedora Linux and derivatives (e.g. RHEL, Nobara):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debian-gnu-linux-and-derivatives-e-g-ubuntu-mint-pop-os">Debian GNU/Linux and derivatives (e.g. Ubuntu, Mint, Pop!_OS):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arch-linux-and-derivatives-e-g-manjaro-garuda-endeavouros">Arch Linux and derivatives (e.g. Manjaro, Garuda, EndeavourOS):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-notes">Linux Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-support">Compiler Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build">Build</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-studio">Visual Studio</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025 RobotLeopard86.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

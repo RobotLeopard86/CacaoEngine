@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@800&family=Red+Hat+Mono:wght@300..700&family=Red+Hat+Text&display=swap');
+
+html {
+    --pst-font-family-base: "Red Hat Text", var(--pst-font-family-base-system);
+    --pst-font-family-heading: "Red Hat Display", var(--pst-font-family-base-system);
+    --pst-font-family-monospace: "Red Hat Mono", var(--pst-font-family-monospace-system);
+}
