@@ -18,6 +18,7 @@ jobs:
           python-version: "3.12"
       - name: Install Doxygen
         run: |
+          sudo rm /var/lib/man-db/auto-update
           sudo apt-get update;
           sudo apt-get install doxygen -y
       - name: Checkout
@@ -39,10 +40,7 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
-<<<<<<< HEAD
           rm -rvf /tmp/PAGESBUILD/dev
-=======
->>>>>>> ea82cf3dac1611093e90d4e7d62cfec0345bf929
           sphinx-build -b html -j auto -a . /tmp/PAGESBUILD/main
       - name: Add changes
         run: |
