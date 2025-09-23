@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -39,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
@@ -54,7 +55,7 @@
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="GLSL Shaders" href="shaders/glsl.html" />
-    <link rel="prev" title="Definition Files" href="deffiles.html" />
+    <link rel="prev" title="Resource Addresses" href="addresses.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -167,8 +168,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -265,8 +273,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -317,25 +332,19 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Shader Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="backends.html">Backends</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
 </ul>
 </details></li>
 </ul>
@@ -415,12 +424,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="deffiles.html"
+       href="addresses.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Definition Files</p>
+        <p class="prev-next-title">Resource Addresses</p>
       </div>
     </a>
     <a class="right-next"
@@ -462,7 +471,7 @@
 
   <p class="copyright">
     
-      © Copyright 2024, RobotLeopard86.
+      © Copyright 2025 RobotLeopard86.
       <br/>
     
   </p>

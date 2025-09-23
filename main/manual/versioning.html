@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -39,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
@@ -53,7 +54,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Build Instructions" href="building.html" />
+    <link rel="next" title="Backend Info" href="backends.html" />
     <link rel="prev" title="Platform Support" href="platforms.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -167,8 +168,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -269,8 +277,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -321,25 +336,19 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Versioning Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="backends.html">Backends</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
 </ul>
 </details></li>
 </ul>
@@ -399,29 +408,45 @@
                   
   <section id="versioning-scheme">
 <h1>Versioning Scheme<a class="headerlink" href="#versioning-scheme" title="Link to this heading"><span/></a></h1>
-<p><strong>NOTE: As Cacao Engine is still in very early active development, it has not had any releases and is versioned as <code class="docutils literal notranslate"><span class="pre">INDEV</span></code>.</strong></p>
-<section id="stability">
-<h2>Stability<a class="headerlink" href="#stability" title="Link to this heading"><span/></a></h2>
-<p>All prerelease versions of Cacao Engine are <strong>not</strong> guaranteed to be stable and may not function correctly or at all on all devices/platforms. Once a prerelease has been tested on all platforms and functions correctly, that version will be promoted to the full release.<br />
-All full release versions are stable and verified to work correctly on all platforms (though per-device compatibility may vary).</p>
+<aside class="topic">
+<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
+<p>The information on this page pertains to the engine post-restructuring.</p>
+</aside>
+<section id="versioning-format">
+<h2>Versioning Format<a class="headerlink" href="#versioning-format" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine uses Evolutionary Versioning (EvoVer). This follows the format of <code class="docutils literal notranslate"><span class="pre">[Generation].[Major].[Minor][Patch](-[Stage][Build])</span></code>. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules.</p>
 </section>
-<section id="format">
-<h2>Format<a class="headerlink" href="#format" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine follows the format of <code class="docutils literal notranslate"><span class="pre">[Series].[Major].[Minor][Patch](-pre[Prerelease])</span></code>. The prerelease suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. The patch value is a letter, unlike the others, beginning at <code class="docutils literal notranslate"><span class="pre">a</span></code> and incrementing to <code class="docutils literal notranslate"><span class="pre">z</span></code>. The thinking is that if 26 patches have been made, it’s probably time for a new minor release.</p>
+<section id="stages">
+<h2>Stages<a class="headerlink" href="#stages" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> - Alpha/nightly releases. Likely very unstable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> - Beta releases. Still possibly unstable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rc</span></code> - Release candidates. Should be almost entirely stable.</p></li>
+</ul>
 </section>
 <section id="number-incrementing">
 <h2>Number Incrementing<a class="headerlink" href="#number-incrementing" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Series - Incremented for large leaps forward in engine capabilities.</p></li>
-<li><p>Major - Incremented for breaking API or behavioral changes.</p></li>
-<li><p>Minor - Incremented for features added that do not change the behavior of any existing functionality.</p></li>
-<li><p>Patch - Incremented for minor bugfix updates.</p></li>
-<li><p>Prerelease - Incremented for each new prerelease for a given version.</p></li>
+<li><p>Generation - Year during which work on the release began (so if the year rolls over during development, nothing changes until the next release), should not be incremented until the next major release after rollover to avoid confusion</p></li>
+<li><p>Major - Incremented for large new feature additions or any breaking changes, API or behavioral.</p></li>
+<li><p>Minor - Incremented for non-breaking changes or when the Patch rolls over.</p></li>
+<li><p>Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there’s probably been enough changed to warrant a new minor release).</p></li>
+<li><p>Build - Stage-dependent:</p>
+<ul>
+<li><p>Stages <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.</p></li>
+<li><p>Stage <code class="docutils literal notranslate"><span class="pre">rc</span></code> - Monotonic increases with numbers not shared between stages or patch versions.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="nicknames">
 <h2>Nicknames<a class="headerlink" href="#nicknames" title="Link to this heading"><span/></a></h2>
-<p>Each release of Cacao Engine (excluding patches) receives a new nickname. The first letter of the nicknames goes down the alphabet with each major release (wrapping back to <code class="docutils literal notranslate"><span class="pre">a</span></code> after reaching <code class="docutils literal notranslate"><span class="pre">z</span></code>), and each minor release gets a new nickname with the same first letter as the major.</p>
+<p>Each new minor release of Cacao Engine is given a new nickname. The first letter of a nickname starts as A and will change every major release, cycling through to Z and then back to A. All minor releases are given a new nickname with the same first letter. Nicknames may not repeat. There is no rule on what must constitute a nickname.</p>
+</section>
+<section id="stability">
+<h2>Stability<a class="headerlink" href="#stability" title="Link to this heading"><span/></a></h2>
+<p>All prerelease versions of Cacao Engine are <strong>not</strong> guaranteed to be stable and may not function correctly or at all on all devices/platforms. Once a prerelease has been tested on all platforms and functions correctly, that version will be promoted to the full release.<br />
+All full release versions are stable and verified to work correctly on all platforms (though per-device compatibility may vary).</p>
 </section>
 </section>
 
@@ -445,11 +470,11 @@ All full release versions are stable and verified to work correctly on all platf
       </div>
     </a>
     <a class="right-next"
-       href="building.html"
+       href="backends.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Build Instructions</p>
+        <p class="prev-next-title">Backend Info</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -472,10 +497,11 @@ All full release versions are stable and verified to work correctly on all platf
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">Stability</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format">Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versioning-format">Versioning Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stages">Stages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#number-incrementing">Number Incrementing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nicknames">Nicknames</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">Stability</a></li>
 </ul>
   </nav></div>
 
@@ -504,7 +530,7 @@ All full release versions are stable and verified to work correctly on all platf
 
   <p class="copyright">
     
-      © Copyright 2024, RobotLeopard86.
+      © Copyright 2025 RobotLeopard86.
       <br/>
     
   </p>

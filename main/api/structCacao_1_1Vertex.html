@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -39,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
@@ -53,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct thread_pool::task_item" href="structdp_1_1thread__pool_1_1task__item.html" />
-    <link rel="prev" title="Struct Vectors" href="structCacao_1_1Vectors.html" />
+    <link rel="next" title="Class Actor" href="classCacao_1_1Actor.html" />
+    <link rel="prev" title="Struct Logger::LogToken" href="structCacao_1_1Logger_1_1LogToken.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -167,8 +168,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="library_root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -269,8 +277,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="library_root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -321,58 +336,49 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_dp.html">Namespace dp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1UIRenderable.html">Struct UIRenderable</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vectors.html">Struct Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct Vertex</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structdp_1_1thread__pool_1_1task__item.html">Struct thread_pool::task_item</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AssetHandle.html">Template Class AssetHandle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AssetManager.html">Class AssetManager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html">Class BinaryBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioSystem.html">Class AudioSystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CodeRegistry.html">Class CodeRegistry</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CommandBuffer.html">Class CommandBuffer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
@@ -384,13 +390,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DynTickController.html">Class DynTickController</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Entity.html">Class Entity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
@@ -402,34 +402,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Exception.html">Class Exception</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Flushable.html">Template Class Flushable</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Font.html">Class Font</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FreetypeOwner.html">Class FreetypeOwner</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -438,46 +420,37 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1RenderController.html">Class RenderController</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Screen.html">Class Screen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SignalEventConsumer.html">Class SignalEventConsumer</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Skybox.html">Class Skybox</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Text.html">Class Text</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Texture.html">Class Texture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Texture2D.html">Class Texture2D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1UIElement.html">Class UIElement</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1UIView.html">Class UIView</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
@@ -489,49 +462,55 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classdp_1_1thread__pool.html">Template Class thread_pool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_ResourceManager_8hpp_1af45fcee4ec7b9d4f6e4c5c5934f701e3.html">Typedef Cacao::ResourceLoader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a4256b4ea68f7b83b0580b492975fac45.html">Typedef Cacao::time::dmicroseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a2ee627f4843f0e647748a3a58f6c71f4.html">Typedef Cacao::time::dmilliseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a089ce274eb27ed22b7ca888179c98e2b.html">Typedef Cacao::time::dminutes</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a1cca20bcfea3fba6bfee5a5a5088da23.html">Function Cacao::CheckException(bool, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a800ee6ea4ace65d56fb0c7e101360bf1.html">Typedef Cacao::time::dnanoseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1ad6fd7d6489952d1cc5c82366b1c5d8ac.html">Function Cacao::CheckException(YAML::Node, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ad9a328df46a51d0139cc2dd628e23ec5.html">Typedef Cacao::time::dseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a57be1cbc39b44a600c6c880e32a8cd40.html">Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a89899dad0df62386aa6ae0d32ce1df57.html">Typedef Cacao::time::dtime_point</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ac2772804de41ed7618f06a957f6dfc34.html">Typedef Cacao::time::fhours</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a99ed33722b9c7d1e9f110dd54a613754.html">Typedef Cacao::time::fmicroseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a00caf7e10b43f1e73a1bf6b077913b18.html">Typedef Cacao::time::fmilliseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1afb37cc2f7ae22667aeb1e88f14783b60.html">Typedef Cacao::time::fminutes</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a1ff9460947063ee5392a99a01c732d22.html">Typedef Cacao::time::fnanoseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ae763516073d03facfe9c309bb88a3248.html">Typedef Cacao::time::fseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1abba9b591cb84f1b4b24065abbdecd1b4.html">Typedef Cacao::time::ftime_point</a></li>
 </ul>
 </div>
 </nav></div>
@@ -568,7 +547,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="library_root.html" class="nav-link">API Reference</a></li>
+    <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct Vertex</span></li>
   </ul>
@@ -590,14 +569,14 @@
   <section id="struct-vertex">
 <span id="exhale-struct-structcacao-1-1vertex"></span><h1>Struct Vertex<a class="headerlink" href="#struct-vertex" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_cacao_include_3D_Vertex.hpp.html#file-cacao-include-3d-vertex-hpp"><span class="std std-ref">File Vertex.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Mesh.hpp.html#file-engine-include-cacao-mesh-hpp"><span class="std std-ref">File Mesh.hpp</span></a></p></li>
 </ul>
 <section id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6VertexE">
 <span id="_CPPv3N5Cacao6VertexE"></span><span id="_CPPv2N5Cacao6VertexE"></span><span id="Cacao::Vertex"></span><span class="target" id="structCacao_1_1Vertex"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Vertex</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6VertexE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>A vertex in a mesh. </p>
+<dd><p>All data about a given vertex in a mesh. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -667,20 +646,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="structCacao_1_1Vectors.html"
+       href="structCacao_1_1Logger_1_1LogToken.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Struct Vectors</p>
+        <p class="prev-next-title">Struct Logger::LogToken</p>
       </div>
     </a>
     <a class="right-next"
-       href="structdp_1_1thread__pool_1_1task__item.html"
+       href="classCacao_1_1Actor.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct thread_pool::task_item</p>
+        <p class="prev-next-title">Class Actor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -743,7 +722,7 @@
 
   <p class="copyright">
     
-      © Copyright 2024, RobotLeopard86.
+      © Copyright 2025 RobotLeopard86.
       <br/>
     
   </p>

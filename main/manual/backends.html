@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Backends &#8212; Cacao Engine Docs</title>
+    <title>Backend Info &#8212; Cacao Engine Docs</title>
   
   
   
@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -39,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
@@ -53,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Compatibility Matrix" href="backends/compatibility.html" />
-    <link rel="prev" title="HLSL Shaders" href="shaders/hlsl.html" />
+    <link rel="next" title="Build Instructions" href="building.html" />
+    <link rel="prev" title="Versioning Scheme" href="versioning.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -167,8 +168,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -231,6 +239,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -265,8 +277,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/library_root.html">
+  <a class="nav-link nav-internal" href="../api/root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -317,25 +336,19 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Backend Info</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="excodes.html">Exception Codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Backends</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="backends/vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
 </ul>
 </details></li>
 </ul>
@@ -376,7 +389,7 @@
     
     <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Backends</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Backend Info</span></li>
   </ul>
 </nav>
 </div>
@@ -393,19 +406,61 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="backends">
-<h1>Backends<a class="headerlink" href="#backends" title="Link to this heading"><span/></a></h1>
-<p>Cacao Engine supports multiple backends to run on top of.</p>
-<p>See the table of contents below for each.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="backends/compatibility.html">Compatibility Matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/gl-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-glfw</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/gl-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">gl-sdl</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/vk-glfw.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-glfw</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends/vk-sdl.html">Backend <code class="docutils literal notranslate"><span class="pre">vk-sdl</span></code></a></li>
-</ul>
+  <section id="backend-info">
+<h1>Backend Info<a class="headerlink" href="#backend-info" title="Link to this heading"><span/></a></h1>
+<aside class="topic">
+<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
+<p>The information on this page pertains to the engine post-restructuring.</p>
+</aside>
+<p>This page lists information about the available graphics backends for Cacao Engine.</p>
+<section id="opengl">
+<h2>OpenGL<a class="headerlink" href="#opengl" title="Link to this heading"><span/></a></h2>
+<p>OpenGL (no GLES support) version 4.1, Core Profile. This version was chosen as it is the last well-supported OpenGL version available on macOS.<br />
+In the future, it may be possible that some advanced features that may be added (e.g. compute shaders) may not be available using this backend, but until then you can expect complete feature parity.</p>
+</section>
+<section id="vulkan">
+<h2>Vulkan<a class="headerlink" href="#vulkan" title="Link to this heading"><span/></a></h2>
+<p>Vulkan version 1.3 or later. The <code class="docutils literal notranslate"><span class="pre">VK_KHR_swapchain</span></code> (almost universally available) and <code class="docutils literal notranslate"><span class="pre">VK_KHR_push_descriptor</span></code> (no longer needed since Vulkan 1.4) extensions are required.</p>
+</section>
+<section id="compatibility-matrix">
+<h2>Compatibility Matrix<a class="headerlink" href="#compatibility-matrix" title="Link to this heading"><span/></a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Backend</p></th>
+<th class="head"><p>Windows</p></th>
+<th class="head"><p>Mac</p></th>
+<th class="head"><p>Linux*</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OpenGL</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vulkan</p></td>
+<td><p>✅₁</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+<p>* Most testing occurs on Fedora Linux. Other distributions may have different compatibilities.</p>
+<section id="legend">
+<h3>Legend<a class="headerlink" href="#legend" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p>✅ - Fully working and supported</p></li>
+<li><p>🔷 - Intended to work but currently not working</p></li>
+<li><p>🟨 - Intended to work but untested</p></li>
+<li><p>❌ - Incompatible with platform / will not be supported</p></li>
+</ul>
+</section>
+<section id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading"><span/></a></h3>
+<p>₁ Some Intel integrated GPUs may not work correctly. If this occurs, use the OpenGL backend.</p>
+</section>
+</section>
 </section>
 
 
@@ -419,20 +474,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="shaders/hlsl.html"
+       href="versioning.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">HLSL Shaders</p>
+        <p class="prev-next-title">Versioning Scheme</p>
       </div>
     </a>
     <a class="right-next"
-       href="backends/compatibility.html"
+       href="building.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Compatibility Matrix</p>
+        <p class="prev-next-title">Build Instructions</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -442,6 +497,30 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#opengl">OpenGL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vulkan">Vulkan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compatibility-matrix">Compatibility Matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend">Legend</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -466,7 +545,7 @@
 
   <p class="copyright">
     
-      © Copyright 2024, RobotLeopard86.
+      © Copyright 2025 RobotLeopard86.
       <br/>
     
   </p>
