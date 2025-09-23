@@ -41,7 +41,10 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
+<<<<<<< HEAD
           rm -rvf /tmp/PAGESBUILD/$RELEASE_VERSION
+=======
+>>>>>>> ea82cf3dac1611093e90d4e7d62cfec0345bf929
           sphinx-build -b html -j auto -a . /tmp/PAGESBUILD/$RELEASE_VERSION
       - name: Add changes
         run: |
