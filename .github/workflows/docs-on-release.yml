@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Create temporary directory for build
         run: |
           git clone ${{ github.server_url }}/${{ github.repository }} /tmp/PAGESBUILD
           git -C /tmp/PAGESBUILD checkout gh-pages
