@@ -1,0 +1,32 @@
+diff --git a/meson.build b/meson.build
+index 756d71e..f40e4fb 100644
+--- a/meson.build
++++ b/meson.build
+@@ -126,21 +126,7 @@ else
+   )
+ endif
+ 
+-bzip2 = executable(
+-  'bzip2',
+-  ['bzip2.c'],
+-  link_with : [libbzip2],
+-  install : true,
+-  c_args : os_defines,
+-)
+-
+-executable(
+-  'bzip2recover',
+-  ['bzip2recover.c'],
+-  link_with : [libbzip2],
+-  install : true,
+-  c_args : os_defines,
+-)
++bzip2_dep = declare_dependency(include_directories: '.', link_with: libbzip2)
+ 
+ ## Install wrapper scripts
+ install_data(
+@@ -174,4 +160,3 @@ install_headers('bzlib.h')
+ 
+ subdir('man')
+ subdir('docs')
+-subdir('tests')

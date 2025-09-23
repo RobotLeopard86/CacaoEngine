@@ -24,10 +24,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+<<<<<<< HEAD
+=======
       - name: Fetch thread pool project for docs
         run: |
           git clone https://github.com/DeveloperPaul123/thread-pool subprojects/thread-pool
           git -C subprojects/thread-pool checkout 0.6.2
+>>>>>>> ea82cf3dac1611093e90d4e7d62cfec0345bf929
       - name: Create temporary directory for build
         run: |
           git clone ${{ github.server_url }}/${{ github.repository }} /tmp/PAGESBUILD
@@ -39,6 +42,10 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
+<<<<<<< HEAD
+          rm -rvf /tmp/PAGESBUILD/dev
+=======
+>>>>>>> ea82cf3dac1611093e90d4e7d62cfec0345bf929
           sphinx-build -b html -j auto -a . /tmp/PAGESBUILD/dev
       - name: Add changes
         run: |

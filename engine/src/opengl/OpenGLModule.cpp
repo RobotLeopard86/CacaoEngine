@@ -1,0 +1,59 @@
+#include "Cacao/Event.hpp"
+#include "OpenGLModule.hpp"
+#include "Context.hpp"
+#include "Cacao/Window.hpp"
+#include "Cacao/EventManager.hpp"
+#include "Cacao/PAL.hpp"
+#include "ImplAccessor.hpp"
+
+#include "glad/gl.h"
+
+namespace Cacao {
+	struct OpenGLModuleRegistrar {
+		OpenGLModuleRegistrar() {
+			IMPL(PAL).registry.insert_or_assign("opengl", []() { gl = std::make_shared<OpenGLModule>(); return gl; });
+		}
+	};
+	__attribute__((used)) OpenGLModuleRegistrar glmr;
+
+	void OpenGLModule::Init() {
+		didInit = true;
+	}
+	void OpenGLModule::Term() {
+		didInit = false;
+	}
+	void OpenGLModule::Connect() {
+		//Make context and configure
+		ctx = std::make_shared<Context>();
+		glm::uvec2 contentSize = Window::Get().GetContentAreaSize();
+		glViewport(0, 0, contentSize.x, contentSize.y);
+
+		//Register viewport resize consumer
+		resizer = EventConsumer([](Event& e) {
+			DataEvent<glm::uvec2>& wre = static_cast<DataEvent<glm::uvec2>&>(e);
+			glViewport(0, 0, wre.GetData().x, wre.GetData().x);
+		});
+		EventManager::Get().SubscribeConsumer("WindowResize", resizer);
+
+		connected = true;
+	}
+
+	void OpenGLModule::Disconnect() {
+		connected = false;
+
+		//Unsubscribe viewport resize consumer
+		EventManager::Get().UnsubscribeConsumer("WindowResize", resizer);
+
+		//Destroy context
+		ctx.reset();
+	}
+
+	void OpenGLModule::Destroy() {
+		gl.reset();
+	}
+
+	void OpenGLModule::SetVSync(bool state) {
+		ctx->SetVSync(state);
+	}
+
+}

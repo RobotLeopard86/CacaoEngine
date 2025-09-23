@@ -1,0 +1,315 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8f7db9978..29916a6c0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -153,6 +153,8 @@ if (${ENABLE_SPIRV_CODEGEN})
+ endif()
+ # SPIRV change ends
+ 
++add_definitions(-DENABLE_DXC_STATIC_LINKING -D_HAS_ITERATOR_DEBUGGING=0)
++
+ include(VersionFromVCS)
+ 
+ option(LLVM_APPEND_VC_REV
+@@ -814,7 +816,7 @@ endif()
+ include(CoverageReport)
+ 
+ # HLSL Change begin - Set default distribution value.
+-set(LLVM_DISTRIBUTION_COMPONENTS "dxc;dxcompiler;dxc-headers" CACHE STRING "")
++set(LLVM_DISTRIBUTION_COMPONENTS "dxcompiler;dxc-headers" CACHE STRING "")
+ # HLSL Change end - Set default distribution value.
+ 
+ # This must be at the end of the LLVM root CMakeLists file because it must run
+diff --git a/cmake/modules/HCT.cmake b/cmake/modules/HCT.cmake
+index bce41f5ec..50ca11024 100644
+--- a/cmake/modules/HCT.cmake
++++ b/cmake/modules/HCT.cmake
+@@ -122,14 +122,14 @@ function(add_hlsl_hctgen mode)
+                       DEPENDS ${temp_output}
+                       COMMENT "Updating ${ARG_OUTPUT}..."
+                       )
++  else()
++    add_custom_command(OUTPUT ${temp_output}.stamp
++                      COMMAND ${verification}
++                      COMMAND ${CMAKE_COMMAND} -E touch ${temp_output}.stamp
++                      DEPENDS ${output}
++                      COMMENT "Verifying clang-format results...")
+   endif()
+ 
+-  add_custom_command(OUTPUT ${temp_output}.stamp
+-                     COMMAND ${verification}
+-                     COMMAND ${CMAKE_COMMAND} -E touch ${temp_output}.stamp
+-                     DEPENDS ${output}
+-                     COMMENT "Verifying clang-format results...")
+-
+   add_custom_target(${mode}
+                     DEPENDS ${temp_output}.stamp)
+ 
+diff --git a/external/SPIRV-Tools b/external/SPIRV-Tools
+--- a/external/SPIRV-Tools
++++ b/external/SPIRV-Tools
+@@ -1 +1 @@
+-Subproject commit 4d2f0b40bfe290dea6c6904dafdf7fd8328ba346
++Subproject commit 4d2f0b40bfe290dea6c6904dafdf7fd8328ba346-dirty
+diff --git a/include/dxc/CMakeLists.txt b/include/dxc/CMakeLists.txt
+index b2bf96629..8368500fc 100644
+--- a/include/dxc/CMakeLists.txt
++++ b/include/dxc/CMakeLists.txt
+@@ -34,13 +34,6 @@ endif()
+ # actually build anything since the headers are static.
+ add_custom_target(dxc-headers)
+ 
+-install(FILES 
+-    ${DXC_PUBLIC_HEADERS}
+-    ${DXC_PLATFORM_PUBLIC_HEADERS}
+-    DESTINATION include/dxc
+-    COMPONENT dxc-headers
+-    )
+-
+ add_custom_target(install-dxc-headers
+     DEPENDS dxc-headers
+     COMMAND "${CMAKE_COMMAND}"
+diff --git a/include/dxc/dxcapi.h b/include/dxc/dxcapi.h
+index 95cc56a04..6f16293ab 100644
+--- a/include/dxc/dxcapi.h
++++ b/include/dxc/dxcapi.h
+@@ -13,15 +13,10 @@
+ #ifndef __DXC_API__
+ #define __DXC_API__
+ 
+-#ifdef _WIN32
+-#ifndef DXC_API_IMPORT
+-#define DXC_API_IMPORT __declspec(dllimport)
+-#endif
+-#else
+-#ifndef DXC_API_IMPORT
+-#define DXC_API_IMPORT __attribute__((visibility("default")))
+-#endif
++#ifdef DXC_API_IMPORT
++#undef DXC_API_IMPORT
+ #endif
++#define DXC_API_IMPORT
+ 
+ #ifdef _WIN32
+ 
+@@ -56,6 +51,9 @@ typedef HRESULT(__stdcall *DxcCreateInstance2Proc)(_In_ IMalloc *pMalloc,
+                                                    _In_ REFIID riid,
+                                                    _Out_ LPVOID *ppv);
+ 
++extern "C" HRESULT __stdcall DxcInitialize();
++extern "C" void __stdcall DxcShutdown(BOOL isProcessTermination);
++
+ /// \brief Creates a single uninitialized object of the class associated with a
+ /// specified CLSID.
+ ///
+diff --git a/lib/DxilPIXPasses/CMakeLists.txt b/lib/DxilPIXPasses/CMakeLists.txt
+index c36d11d55..23c310584 100644
+--- a/lib/DxilPIXPasses/CMakeLists.txt
++++ b/lib/DxilPIXPasses/CMakeLists.txt
+@@ -16,6 +16,7 @@ add_llvm_library(LLVMDxilPIXPasses
+   DxilReduceMSAAToSingleSample.cpp
+   DxilShaderAccessTracking.cpp
+   DxilPIXPasses.cpp
++  DxilPIXPasses.inc
+   DxilPIXVirtualRegisters.cpp
+   PixPassHelpers.cpp
+   DxilPIXAddTidToAmplificationShaderPayload.cpp
+diff --git a/lib/DxilValidation/CMakeLists.txt b/lib/DxilValidation/CMakeLists.txt
+index f454c9bba..698c6b0d2 100644
+--- a/lib/DxilValidation/CMakeLists.txt
++++ b/lib/DxilValidation/CMakeLists.txt
+@@ -6,6 +6,8 @@ add_hlsl_hctgen(DxilValidation OUTPUT DxilValidationImpl.inc BUILD_DIR)
+ add_llvm_library(LLVMDxilValidation
+   DxilContainerValidation.cpp
+   DxilValidation.cpp
++  DxilValidation.inc
++  DxilValidationImpl.inc
+   DxilValidationUtils.cpp
+ 
+   ADDITIONAL_HEADER_DIRS
+diff --git a/lib/HLSL/CMakeLists.txt b/lib/HLSL/CMakeLists.txt
+index 947fc4c14..bcde243f1 100644
+--- a/lib/HLSL/CMakeLists.txt
++++ b/lib/HLSL/CMakeLists.txt
+@@ -32,6 +32,7 @@ add_llvm_library(LLVMHLSL
+   DxilTranslateRawBuffer.cpp
+   DxilExportMap.cpp
+   DxcOptimizer.cpp
++  DxcOptimizer.inc
+   HLDeadFunctionElimination.cpp
+   HLExpandStoreIntrinsics.cpp
+   HLLegalizeParameter.cpp
+diff --git a/tools/clang/lib/Sema/CMakeLists.txt b/tools/clang/lib/Sema/CMakeLists.txt
+index a4c51fa17..407cb5663 100644
+--- a/tools/clang/lib/Sema/CMakeLists.txt
++++ b/tools/clang/lib/Sema/CMakeLists.txt
+@@ -15,6 +15,7 @@ add_clang_library(clangSema
+   CodeCompleteConsumer.cpp
+   DeclSpec.cpp
+   DelayedDiagnostic.cpp
++  gen_intrin_main_tables_15.h
+   IdentifierResolver.cpp
+   JumpDiagnostics.cpp
+   MultiplexExternalSemaSource.cpp
+diff --git a/tools/clang/tools/CMakeLists.txt b/tools/clang/tools/CMakeLists.txt
+index 9991de030..0ce4bca80 100644
+--- a/tools/clang/tools/CMakeLists.txt
++++ b/tools/clang/tools/CMakeLists.txt
+@@ -20,26 +20,8 @@ endif()
+ # on top of the Clang tooling platform. We keep them in a separate repository
+ # to keep the primary Clang repository small and focused.
+ # It also may be included by LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR.
+-add_llvm_external_project(clang-tools-extra extra)
++#add_llvm_external_project(clang-tools-extra extra)
+ 
+ # HLSL Change Starts
+ add_subdirectory(dxcompiler)
+-add_subdirectory(dxclib)
+-add_subdirectory(dxc)
+-add_subdirectory(dxcvalidator)
+-add_subdirectory(dxildll)
+-add_subdirectory(dxa)
+-add_subdirectory(dxopt)
+-add_subdirectory(dxl)
+-add_subdirectory(dxr)
+-add_subdirectory(dxv)
+-
+-# These targets can currently only be built on Windows.
+-if (MSVC)
+-add_subdirectory(d3dcomp)
+-add_subdirectory(dxrfallbackcompiler)
+-add_subdirectory(dxlib-sample)
+-# UI powered by .NET.
+-add_subdirectory(dotnetc)
+-endif (MSVC)
+ # HLSL Change Ends
+diff --git a/tools/clang/tools/dxcompiler/CMakeLists.txt b/tools/clang/tools/dxcompiler/CMakeLists.txt
+index 004d2e5ad..55166ce77 100644
+--- a/tools/clang/tools/dxcompiler/CMakeLists.txt
++++ b/tools/clang/tools/dxcompiler/CMakeLists.txt
+@@ -50,6 +50,7 @@ if (WIN32)
+ set(SOURCES
+   dxcapi.cpp
+   dxcassembler.cpp
++  DxcDisassembler.inc
+   dxclibrary.cpp
+   dxcompilerobj.cpp
+   dxcvalidator.cpp
+@@ -68,6 +69,7 @@ else ()
+ set(SOURCES
+   dxcapi.cpp
+   dxcassembler.cpp
++  DxcDisassembler.inc
+   dxclibrary.cpp
+   dxcompilerobj.cpp
+   DXCompiler.cpp
+@@ -126,7 +128,7 @@ if (MSVC)
+   find_package(DiaSDK REQUIRED) # Used for constants and declarations.
+ endif (MSVC)
+ 
+-add_clang_library(dxcompiler SHARED ${SOURCES})
++add_clang_library(dxcompiler STATIC ${SOURCES})
+ add_dependencies(dxcompiler TablegenHLSLOptions) 
+ if (MSVC)
+   # No DxcEtw on non-Windows platforms.
+diff --git a/tools/clang/tools/dxcompiler/DXCompiler.cpp b/tools/clang/tools/dxcompiler/DXCompiler.cpp
+index c54844144..13cd7572b 100644
+--- a/tools/clang/tools/dxcompiler/DXCompiler.cpp
++++ b/tools/clang/tools/dxcompiler/DXCompiler.cpp
+@@ -84,42 +84,57 @@ Cleanup:
+   }
+   return hr;
+ }
++
++HRESULT __stdcall DxcInitialize() {
+ #if defined(LLVM_ON_UNIX)
+-HRESULT __attribute__((constructor)) DllMain() { return InitMaybeFail(); }
++  return InitMaybeFail();
++#else
++  EventRegisterMicrosoft_Windows_DXCompiler_API();
++  DxcEtw_DXCompilerInitialization_Start();
++  HRESULT hr = InitMaybeFail();
++  DxcEtw_DXCompilerInitialization_Stop(hr);
++  return hr;
++#endif
++}
++
++void __stdcall DxcShutdown(BOOL isProcessTermination) {
+ 
+-void __attribute__((destructor)) DllShutdown() {
++#if defined(LLVM_ON_UNIX)
++  (void) isProcessTermination;
+   DxcSetThreadMallocToDefault();
+   ::hlsl::options::cleanupHlslOptTable();
+   ::llvm::sys::fs::CleanupPerThreadFileSystem();
+   ::llvm::llvm_shutdown();
+   DxcClearThreadMalloc();
+   DxcCleanupThreadMalloc();
++#else
++  DxcEtw_DXCompilerShutdown_Start();
++   DxcSetThreadMallocToDefault();
++   ::hlsl::options::cleanupHlslOptTable();
++   ::llvm::sys::fs::CleanupPerThreadFileSystem();
++   ::llvm::llvm_shutdown();
++  if (!isProcessTermination) { // FreeLibrary has been called or the DLL load failed
++    DxilLibCleanup(DxilLibCleanUpType::UnloadLibrary);
++  } else { // Process termination. We should not call FreeLibrary()
++    DxilLibCleanup(DxilLibCleanUpType::ProcessTermination);
++  }
++   DxcClearThreadMalloc();
++   DxcCleanupThreadMalloc();
++  DxcEtw_DXCompilerShutdown_Stop(S_OK);
++  EventUnregisterMicrosoft_Windows_DXCompiler_API();
++#endif
+ }
++
++#if defined(LLVM_ON_UNIX)
++HRESULT __attribute__((constructor)) DllMain() { return DxcInitialize(); }
++void __attribute__((destructor)) DllShutdown(){ DxcShutdown(true);}
+ #else  // LLVM_ON_UNIX
+ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD Reason, LPVOID reserved) {
+   BOOL result = TRUE;
+   if (Reason == DLL_PROCESS_ATTACH) {
+-    EventRegisterMicrosoft_Windows_DXCompiler_API();
+-    DxcEtw_DXCompilerInitialization_Start();
+-    HRESULT hr = InitMaybeFail();
+-    DxcEtw_DXCompilerInitialization_Stop(hr);
+-    result = SUCCEEDED(hr) ? TRUE : FALSE;
++    result = SUCCEEDED(DxcInitialize());
+   } else if (Reason == DLL_PROCESS_DETACH) {
+-    DxcEtw_DXCompilerShutdown_Start();
+-    DxcSetThreadMallocToDefault();
+-    ::hlsl::options::cleanupHlslOptTable();
+-    ::llvm::sys::fs::CleanupPerThreadFileSystem();
+-    ::llvm::llvm_shutdown();
+-    if (reserved ==
+-        NULL) { // FreeLibrary has been called or the DLL load failed
+-      DxilLibCleanup(DxilLibCleanUpType::UnloadLibrary);
+-    } else { // Process termination. We should not call FreeLibrary()
+-      DxilLibCleanup(DxilLibCleanUpType::ProcessTermination);
+-    }
+-    DxcClearThreadMalloc();
+-    DxcCleanupThreadMalloc();
+-    DxcEtw_DXCompilerShutdown_Stop(S_OK);
+-    EventUnregisterMicrosoft_Windows_DXCompiler_API();
++    DxcShutdown(reserved != NULL);
+   }
+ 
+   return result;
+diff --git a/tools/clang/tools/dxcompiler/dxcapi.cpp b/tools/clang/tools/dxcompiler/dxcapi.cpp
+index a6a877cba..3f737d465 100644
+--- a/tools/clang/tools/dxcompiler/dxcapi.cpp
++++ b/tools/clang/tools/dxcompiler/dxcapi.cpp
+@@ -11,11 +11,7 @@
+ 
+ #include "dxc/Support/WinIncludes.h"
+ 
+-#ifdef _WIN32
+-#define DXC_API_IMPORT __declspec(dllexport)
+-#else
+-#define DXC_API_IMPORT __attribute__((visibility("default")))
+-#endif
++#define DXC_API_IMPORT
+ 
+ #include "dxc/Support/Global.h"
+ #include "dxc/config.h"

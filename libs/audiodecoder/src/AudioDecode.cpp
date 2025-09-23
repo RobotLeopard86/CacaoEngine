@@ -1,0 +1,246 @@
+#include "AudioDecode.hpp"
+
+#include "libcacaocommon.hpp"
+#include "libcacaoaudiodecode.hpp"
+
+#define DR_MP3_IMPLEMENTATION
+#define DR_WAV_IMPLEMENTATION
+#include "dr_mp3.h"
+#include "dr_wav.h"
+#include "vorbis/codec.h"
+#include "vorbis/vorbisfile.h"
+#include "opusfile.h"
+
+#include <cstring>
+
+//This is constant for now across all Opus files when using libopusfile but this could potentially change in the future
+#define OPUSFILE_SAMPLE_RATE 48000
+
+namespace libcacaoaudiodecode {
+	Result MP3Decode(std::vector<unsigned char> encoded) {
+		//Create return object
+		Result result;
+
+		//Open the MP3
+		drmp3 mp3;
+		CheckException(drmp3_init_memory(&mp3, encoded.data(), encoded.size(), nullptr), "Failed to load MP3 sound data!");
+
+		//Get file info
+		result.sampleRate = mp3.sampleRate;
+		result.channelCount = mp3.channels;
+		drmp3_uint64 totalPCMFrameCount = drmp3_get_pcm_frame_count(&mp3);
+		result.sampleCount = totalPCMFrameCount * result.channelCount;
+
+		//Read PCM frames
+		result.data.resize(result.sampleCount);
+		drmp3_uint64 framesRead = drmp3_read_pcm_frames_s16(&mp3, totalPCMFrameCount, result.data.data());
+		CheckException(framesRead == totalPCMFrameCount, "Failed to read MP3 PCM frames!");
+
+		//Close the MP3
+		drmp3_uninit(&mp3);
+
+		return result;
+	}
+
+	Result WAVDecode(std::vector<unsigned char> encoded) {
+		//Create return object
+		Result result;
+
+		//Open the WAV
+		drwav wave;
+		CheckException(drwav_init_memory(&wave, encoded.data(), encoded.size(), nullptr), "Failed to load WAV sound data!");
+
+		//Get file info
+		result.sampleRate = wave.sampleRate;
+		result.channelCount = wave.channels;
+		drwav_uint64 totalPCMFrameCount = wave.totalPCMFrameCount;
+		result.sampleCount = totalPCMFrameCount * result.channelCount;
+
+		//Read PCM frames
+		result.data.resize(result.sampleCount);
+		drwav_uint64 framesRead = drwav_read_pcm_frames_s16(&wave, totalPCMFrameCount, result.data.data());
+		CheckException(framesRead == totalPCMFrameCount, "Failed to read WAV frames!");
+
+		//Close the WAV
+		drwav_uninit(&wave);
+
+		return result;
+	}
+
+	Result VorbisDecode(std::vector<unsigned char> encoded) {
+		//Create return object
+		Result result;
+
+		//Define some variables for decoding
+		OggVorbis_File vf;
+		int currentSection;
+
+		//Create a tracker for the Vorbis data (fake file so we can use libvorbisfile instead of the low-level Vorbis API)
+		struct VorbisTracker {
+			const unsigned char* data;
+			std::size_t size;
+			std::size_t offset;
+		} tracker {.data = encoded.data(), .size = encoded.size(), .offset = 0};
+
+		//Define Vorbis IO read callback
+		const auto read_callback = [](void* out, size_t size, size_t elems, void* src) {
+			VorbisTracker* tracker = static_cast<VorbisTracker*>(src);
+
+			//Calculate byte read count
+			size_t readBytes = size * elems;
+			if(tracker->offset + readBytes > tracker->size) readBytes = tracker->size - tracker->offset;
+
+			//Copy memory
+			std::memcpy(out, tracker->data + tracker->offset, readBytes);
+
+			//Advance offset and return
+			tracker->offset += readBytes;
+			return (tracker->offset == tracker->size ? 0 : readBytes / size);
+		};
+
+		//Open the Vorbis data
+		ov_callbacks cb = OV_CALLBACKS_STREAMONLY_NOCLOSE;
+		cb.read_func = read_callback;
+		ov_open_callbacks(&tracker, &vf, nullptr, 0, cb);
+
+		//Get file info
+		vorbis_info* info = ov_info(&vf, -1);
+		result.sampleRate = info->rate;
+		result.channelCount = info->channels;
+		result.sampleCount = ov_pcm_total(&vf, -1);
+
+		//Read the audio data
+		while(true) {
+			short pcm[4096];
+			long samplesRead = ov_read(&vf, reinterpret_cast<char*>(pcm), sizeof(pcm), 0, 2, 1, &currentSection);
+
+			if(samplesRead == 0) {
+				//End of file, so exit the loop
+				break;
+			} else if(samplesRead < 0) {
+				//Oh no, an error!
+				ov_clear(&vf);
+				CheckException(false, "Failed to read Ogg Vorbis file!");
+			} else {
+				//Add the PCM data to the end
+				result.data.insert(result.data.end(), pcm, pcm + (samplesRead / result.channelCount));
+			}
+		}
+
+		//Clean up Ogg Vorbis
+		ov_clear(&vf);
+
+		return result;
+	}
+
+	Result OpusDecode(std::vector<unsigned char> encoded) {
+		//Create return object
+		Result result;
+
+		//Open the file
+		int openError;
+		OggOpusFile* opus = op_open_memory(encoded.data(), encoded.size(), &openError);
+
+		//Get file info
+		result.sampleRate = OPUSFILE_SAMPLE_RATE;
+		const OpusHead* head = op_head(opus, 0);
+		result.channelCount = head->channel_count;
+		result.sampleCount = op_pcm_total(opus, -1);
+
+		//Read the audio data
+		result.data.reserve(result.sampleCount * result.channelCount);
+		while(true) {
+			short pcm[4096];
+			long samplesRead = op_read_stereo(opus, pcm, sizeof(pcm));
+
+			if(samplesRead == 0) {
+				//End of file, so exit the loop
+				break;
+			} else if(samplesRead < 0) {
+				//Oh no, an error!
+				op_free(opus);
+				CheckException(false, "Failed to read Opus file!");
+			} else {
+				//Add the PCM data to the end
+				result.data.insert(result.data.end(), pcm, pcm + (samplesRead * result.channelCount));
+			}
+		}
+
+		//Clean up opusfile
+		op_free(opus);
+
+		return result;
+	}
+
+	Result DecodeAudio(std::istream& encoded) {
+		CheckException(encoded.good(), "Encoded data stream for audio is invalid!");
+
+		//Determine audio format by reading header
+
+		//Grab the first four header bytes
+		std::string header(4, '\0');
+		encoded.read(header.data(), header.size());
+
+		//Dump file to buffer
+		std::vector<unsigned char> buffer = [&encoded]() {
+			try {
+				//Grab size
+				encoded.exceptions(std::ios::failbit | std::ios::badbit);
+				encoded.seekg(0, std::ios::end);
+				auto size = encoded.tellg();
+				encoded.seekg(0, std::ios::beg);
+
+				//Read data
+				std::vector<unsigned char> contents(size);
+				encoded.read(reinterpret_cast<char*>(contents.data()), size);
+
+				return contents;
+			} catch(std::ios_base::failure& ios_failure) {
+				if(errno == 0) { throw ios_failure; }
+				CheckException(false, "Failed to read encoded audio data stream!");
+				return std::vector<unsigned char>();//This will never be reached because of the exception, but the compiler would throw a warning if this wasn't here
+			}
+		}();
+
+		//Check for MP3
+		//These can either just start with a frame or have ID3 data, so we check both
+		{
+			std::string mp3 = header.substr(0, 3);
+
+			//The weird binary bit is checking for the sync instruction that all MP3 frames start with
+			if(mp3.compare("ID3") == 0 || (static_cast<unsigned char>(header[0]) == 0xFF && (static_cast<unsigned char>(header[1]) & 0xE0) == 0xE0)) {
+				return MP3Decode(buffer);
+			}
+		}
+
+		//Check for WAV
+		if(header.compare("RIFF") == 0) {
+			//Read a bit more to confirm WAV
+			std::string waveHeader(4, '\0');
+			encoded.seekg(8, std::ios::beg);
+			encoded.read(&waveHeader[0], waveHeader.size());
+			if(waveHeader == "WAVE") {
+				return WAVDecode(buffer);
+			}
+		}
+
+		//Check for Ogg stream (Vorbis/Opus)
+		if(header.compare("OggS") == 0) {
+			//Read the Ogg Header
+			std::string oggHeader(64, '\0');
+			encoded.seekg(0, std::ios::beg);
+			encoded.read(&oggHeader[0], oggHeader.size());
+
+			if(oggHeader.find("vorbis") != std::string::npos) {
+				return VorbisDecode(buffer);
+			} else if(oggHeader.find("OpusHead") != std::string::npos) {
+				return OpusDecode(buffer);
+			}
+		}
+
+		//Now we throw the exception
+		CheckException(false, "The provided sound data is of an unsupported format!");
+
+		return {};
+	}
+}

@@ -1,0 +1,11 @@
+[wrap-git]
+directory = libpng-1.6.50
+url = https://github.com/pnggroup/libpng/
+depth = 1
+revision = v1.6.50
+patch_filename = libpng_1.6.50-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/libpng_1.6.50-1/get_patch
+patch_hash = d8f364bb5b5aa342ee0cfa17ef65746ebc37ad0aa9fabfe383f185dfdaa7d4ab
+
+[provide]
+libpng = libpng_dep

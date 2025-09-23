@@ -1,0 +1,11 @@
+[wrap-git]
+directory = zlib-1.3.1
+url = https://github.com/madler/zlib
+depth = 1
+revision = v1.3.1
+patch_filename = zlib_1.3.1-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/zlib_1.3.1-1/get_patch
+patch_hash = e79b98eb24a75392009cec6f99ca5cdca9881ff20bfa174e8b8926d5c7a47095
+
+[provide]
+zlib = zlib_dep

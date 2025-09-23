@@ -1,5 +1,5 @@
 [wrap-git]
 url = https://github.com/YaaZ/VulkanMemoryAllocator-Hpp
 depth = 1
-revision = v3.1.0
+revision = v3.2.1
 patch_directory = vmahpp

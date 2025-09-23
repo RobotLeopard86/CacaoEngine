@@ -39,7 +39,7 @@ def parse_compile_commands(file_path):
 
 # Solution file
 print("Writing solution file...")
-with open('CacaoEngine.sln', 'w') as sln:
+with open('Cacao.sln', 'w') as sln:
 	sln.writelines([
 		'Microsoft Visual Studio Solution File, Format Version 12.00\n',
 		'# Visual Studio Version 17\n',
@@ -71,7 +71,7 @@ with open('CacaoEngine.sln', 'w') as sln:
 print("Scanning for code files...")
 inc_lines = []
 src_lines = []
-for dir in ['backends', 'cacao', 'playground']:
+for dir in ['core', 'crt', 'crt-formats', 'crt-unpacked-formats', 'demo']:
 	directory = pathlib.Path(dir)
 	for file_path in directory.rglob('*'):
 		if file_path.suffix == '.hpp':
@@ -151,23 +151,6 @@ with open('Cacao.vcxproj', 'w') as vcx:
 		'  </PropertyGroup>\n',
 		'  <ItemDefinitionGroup>\n',
 		'  </ItemDefinitionGroup>\n',
-		'  <ItemGroup>\n',
-		'    <None Include=".clang-format" />\n',
-		'    <None Include=".clang-format-ignore" />\n',
-		'    <None Include=".gitignore" />\n',
-		'    <None Include=".gitmodules" />\n',
-		'    <None Include="BACKENDS.md" />\n',
-		'    <None Include="BUILD.md" />\n',
-		'    <None Include="default_native.ini" />\n',
-		'    <None Include="LICENSE" />\n',
-		'    <None Include="meson.build" />\n',
-		'    <None Include="meson.options" />\n',
-		'    <None Include="playground\\src\\shaders\\ico.frag" />\n',
-		'    <None Include="playground\\src\\shaders\\ico.vert" />\n',
-		'    <None Include="playground\\src\\shaders\\prism.frag" />\n',
-		'    <None Include="playground\\src\\shaders\\prism.vert" />\n',
-		'    <None Include="README.md" />\n',
-		'  </ItemGroup>\n',
 		'  <ItemGroup>\n',
 		'    <Image Include="cacaologo.png" />\n',
 		'  </ItemGroup>\n',

@@ -1,0 +1,64 @@
+#pragma once
+
+#include "DllHelper.hpp"
+#include "World.hpp"
+
+#include <memory>
+
+namespace Cacao {
+	/**
+	 * @brief Active world management singleton
+	 */
+	class CACAO_API WorldManager {
+	  public:
+		/**
+		 * @brief Get the instance and create one if there isn't one
+		 *
+		 * @return The instance
+		 */
+		static WorldManager& Get();
+
+		///@cond
+		WorldManager(const WorldManager&) = delete;
+		WorldManager(WorldManager&&) = delete;
+		WorldManager& operator=(const WorldManager&) = delete;
+		WorldManager& operator=(WorldManager&&) = delete;
+		///@endcond
+
+		/**
+		 * @brief Set the active world
+		 *
+		 * @param addr The resource address of the world to activate
+		 * @param noload Set this to true to not load the world if it isn't currently loaded
+		 *
+		 * @throws BadValueException If the provided address is malformed
+		 * @throws NonexistentValueException If the provided address does not reference a world
+		 * @throws NonexistentValueException If noload is set and the world is not currently loaded
+		 */
+		void SetActiveWorld(const std::string& addr, bool noload = false);
+
+		/**
+		 * @brief Check the active world
+		 *
+		 * @return The resource address of the active world, or an empty string if no world is active
+		 */
+		std::string GetActiveWorld();
+
+		/**
+		 * @brief Access the active World object
+		 *
+		 * @throws BadValueException If there is no active world
+		 */
+		std::shared_ptr<World> operator()();
+
+		///@cond
+		struct Impl;
+		///@endcond
+	  private:
+		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
+
+		WorldManager();
+		~WorldManager();
+	};
+}

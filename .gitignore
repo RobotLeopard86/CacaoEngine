@@ -1,5 +1,5 @@
 # Don't send auto-created logs
-cacao-engine.log
+cacao.log
 .ninja_log
 
 # Don't send VS Code files
@@ -9,9 +9,16 @@ cacao-engine.log
 subprojects/*
 !subprojects/*.wrap
 !subprojects/packagefiles
-!subprojects/glad
-!subprojects/stb
+!subprojects/glad*
 !subprojects/dr_libs
+!subprojects/cli11
+!subprojects/spinners-plus-plus
+!subprojects/hires_sleep
+!subprojects/eternal
+subprojects/nlohmannjson.wrap
+subprojects/reflex.wrap
+subprojects/inja.wrap
+subprojects/llvm.wrap
 
 # Don't send Python crap from utility scripts
 scripts/__pycache__

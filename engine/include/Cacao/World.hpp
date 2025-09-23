@@ -1,0 +1,103 @@
+#pragma once
+
+#include "Cubemap.hpp"
+#include "DllHelper.hpp"
+#include "Camera.hpp"
+#include "Actor.hpp"
+#include "Resource.hpp"
+
+#include "libcacaoformats.hpp"
+
+#include <memory>
+#include <optional>
+
+namespace Cacao {
+	/**
+	 * @brief A collection of entities and a camera comprising an area of gameplay
+	 *
+	 * @warning If there are still outstanding references to contained Actors when the destructor is called, it may not be able to prevent memory leaks and the Actor will probably be in a broken state.
+	 */
+	class CACAO_API World final : public Resource {
+	  public:
+		/**
+		 * @brief Create a new blank world
+		 *
+		 * @param addr The resource address to associate with the world
+		 *
+		 * @throws BadValueException If the address is malformed
+		 */
+		static std::shared_ptr<World> Create(const std::string& addr) {
+			return std::shared_ptr<World>(new World(addr));
+		}
+
+		/**
+		 * @brief Create a new world using data
+		 *
+		 * @param addr The resource address to associate with the world
+		 * @param world The world information for setup
+		 *
+		 * @throws BadValueException If the address is malformed
+		 */
+		static std::shared_ptr<World> Create(const std::string& addr, const libcacaoformats::World& world);
+
+		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
+
+		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
+
+		/**
+		 * @brief Set an actor's parent to the root actor (adding it to the world if it wasn't already)
+		 *
+		 * @param actor The actor to reparent
+		 */
+		void ReparentToRoot(ActorHandle actor);
+
+		/**
+		 * @brief Get all entities that are direct children of the root actor
+		 */
+		std::vector<ActorHandle> GetRootChildren() const;
+
+		/**
+		 * @brief Find an Actor by some arbitrary condition
+		 *
+		 * @param predicate The predicate to check each actor against
+		 *
+		 * @return An optional that contains the actor if it was found
+		 */
+		template<typename P>
+			requires std::is_invocable_r_v<bool, P, ActorHandle>
+		std::optional<ActorHandle> FindActor(P predicate) const {
+			//Search for the object
+			return actorSearchRunner(root->GetAllChildren(), predicate);
+		}
+
+		~World();
+
+	  private:
+		World(const std::string& addr);
+
+		ActorHandle root;
+
+		//Recursive function for actually running a actor search
+		template<typename P>
+		std::optional<ActorHandle> actorSearchRunner(std::vector<ActorHandle> target, P predicate) const {
+			//Iterate through all children
+			for(auto child : target) {
+				//Does this child pass the predicate?
+				if(predicate(child)) {
+					return std::optional<ActorHandle>(child);
+				}
+
+				//Search through children
+				std::optional<ActorHandle> found = actorSearchRunner(child->GetAllChildren(), predicate);
+				if(found.has_value()) {
+					return found;
+				}
+			}
+			//Nothing was found, return null option
+			return std::nullopt;
+		}
+
+		friend class ResourceManager;
+		friend class Actor;
+	};
+}

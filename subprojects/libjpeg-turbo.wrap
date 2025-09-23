@@ -1,0 +1,12 @@
+[wrap-git]
+directory = libjpeg-turbo-3.1.1
+url = https://github.com/libjpeg-turbo/libjpeg-turbo
+depth = 1
+revision = 3.1.1
+patch_filename = libjpeg-turbo_3.1.1-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/libjpeg-turbo_3.1.1-1/get_patch
+patch_hash = 6d9c43f0a3700f2a74fab74d26a5e7aaadca0117770a00631077bfc28ab46abd
+diff_files = jpeg-pic.patch
+
+[provide]
+dependency_names = libjpeg, libturbojpeg

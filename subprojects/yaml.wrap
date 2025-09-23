@@ -1,4 +1,0 @@
-[wrap-git]
-url = https://github.com/jbeder/yaml-cpp
-depth = 1
-revision = yaml-cpp-0.7.0

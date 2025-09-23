@@ -6,7 +6,7 @@
     },
 	{
         "name": "Latest stable development version",
-        "version": "dev",
+        "version": "main",
         "url": "https://robotleopard86.github.io/CacaoEngine/main"
     }
 ]

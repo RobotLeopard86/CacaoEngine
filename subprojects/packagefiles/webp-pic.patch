@@ -1,0 +1,54 @@
+diff --git a/src/dec/meson.build b/src/dec/meson.build
+index c6709a6..ea7e2e0 100644
+--- a/src/dec/meson.build
++++ b/src/dec/meson.build
+@@ -15,4 +15,5 @@ webpdec_lib = static_library(
+   build_by_default: false,
+   dependencies: common_deps,
+   gnu_symbol_visibility: 'hidden',
++  pic: true
+ )
+diff --git a/src/enc/meson.build b/src/enc/meson.build
+index 916f7e7..45b6ace 100644
+--- a/src/enc/meson.build
++++ b/src/enc/meson.build
+@@ -28,4 +28,5 @@ webpenc_lib = static_library(
+   build_by_default: false,
+   dependencies: common_deps,
+   gnu_symbol_visibility: 'hidden',
++  pic: true
+ )
+diff --git a/src/meson.build b/src/meson.build
+index 00be0ea..7abfe84 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -12,6 +12,7 @@ webp_lib = library(
+     webputilsenc_lib,
+   ],
+   version: '7.1.8',
++  pic: true
+ )
+ 
+ webp_dep = declare_dependency(
+diff --git a/src/utils/meson.build b/src/utils/meson.build
+index 2c0b446..d249bcc 100644
+--- a/src/utils/meson.build
++++ b/src/utils/meson.build
+@@ -13,7 +13,7 @@ webputilsdec_lib = static_library(
+     'utils.c',
+   ],
+   build_by_default: false,
+-  pic: get_option('default_library') != 'static',
++  pic: true,
+   dependencies: common_deps,
+   gnu_symbol_visibility: 'hidden',
+ )
+@@ -26,7 +26,7 @@ webputilsenc_lib = static_library(
+     'quant_levels_utils.c',
+   ],
+   build_by_default: false,
+-  pic: get_option('default_library') != 'static',
++  pic: true,
+   dependencies: common_deps,
+   gnu_symbol_visibility: 'hidden',
+ )

@@ -1,5 +1,5 @@
 [wrap-git]
 url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
 depth = 1
-revision = v3.1.0
+revision = v3.2.1
 patch_directory = vma

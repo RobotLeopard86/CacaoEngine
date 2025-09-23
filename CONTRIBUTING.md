@@ -10,7 +10,7 @@ When submitting code, it must be formatted using [`clang-format`](https://clang.
 * Member fields and variables should be named in camelCase
 * Do not use Hungarian notation
 
-For consistency, please use American English spellings in naming and comments.  
+For consistency, please use American English spellings in interface naming.  
   
 Please also avoid the use of `auto`, except for the below cases:  
 * Iterators
