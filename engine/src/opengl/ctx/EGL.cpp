@@ -5,11 +5,11 @@
 #include "ImplAccessor.hpp"
 
 #ifdef HAS_X11
-#include "x11/X11Types.hpp"
+#include "X11Types.hpp"
 #endif
 
 #ifdef HAS_WAYLAND
-#include "wayland/WaylandTypes.hpp"
+#include "WaylandTypes.hpp"
 #endif
 
 #include <EGL/egl.h>

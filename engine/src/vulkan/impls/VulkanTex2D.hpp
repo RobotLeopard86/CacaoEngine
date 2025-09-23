@@ -2,7 +2,7 @@
 
 #include "impl/Tex2D.hpp"
 
-#include "Module.hpp"
+#include "VulkanModule.hpp"
 
 namespace Cacao {
 	class VulkanTex2DImpl : public Tex2D::Impl {

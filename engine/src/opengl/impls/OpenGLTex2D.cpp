@@ -1,6 +1,6 @@
 #include "OpenGLTex2D.hpp"
 #include "Cacao/Engine.hpp"
-#include "Module.hpp"
+#include "OpenGLModule.hpp"
 
 #include "glad/gl.h"
 

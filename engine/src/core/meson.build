@@ -68,8 +68,32 @@ versionlib = cpp.find_library('version', required: host_machine.system() == 'win
 setupapi = cpp.find_library('setupapi', required: host_machine.system() == 'windows')
 apple_audio = dependency('appleframeworks', modules: ['CoreAudio', 'AudioToolbox'], required: host_machine.system() == 'darwin')
 
-# Dependencies list
-core_deps = [
+# Add core module data
+engine_srcs += files(
+	'expf.c',
+	'Actor.cpp',
+	'AudioManager.cpp',
+	'CodeRegistry.cpp',
+	'Cubemap.cpp',
+	'Engine.cpp',	
+	'EventManager.cpp',
+	'GPUManager.cpp',
+	'Log.cpp',
+	'Mesh.cpp',
+	'Misc.cpp',
+	'Model.cpp',
+	'PAL.cpp',
+	'PerspectiveCamera.cpp',
+	'Resource.cpp',
+	'Sound.cpp',
+	'Tex2D.cpp',
+	'ThreadPool.cpp',
+	'TickController.cpp',
+	'Transform.cpp',
+	'Window.cpp',
+	'World.cpp'
+)
+engine_deps += [
 	yaml_cpp,
 	silica_dep,
 	crossguid,
@@ -100,31 +124,4 @@ core_deps = [
 	setupapi,
 	apple_audio
 ]
-
-# Core library
-libcore = static_library('cacaocore', sources: [
-	'expf.c',
-	'Actor.cpp',
-	'AudioManager.cpp',
-	'CodeRegistry.cpp',
-	'Cubemap.cpp',
-	'Engine.cpp',	
-	'EventManager.cpp',
-	'GPUManager.cpp',
-	'Log.cpp',
-	'Mesh.cpp',
-	'Misc.cpp',
-	'Model.cpp',
-	'PAL.cpp',
-	'PerspectiveCamera.cpp',
-	'Resource.cpp',
-	'Sound.cpp',
-	'Tex2D.cpp',
-	'ThreadPool.cpp',
-	'TickController.cpp',
-	'Transform.cpp',
-	'Window.cpp',
-	'World.cpp'
-], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao',
-cpp_args: '-DCACAO_VER="' + meson.project_version() + '"', pic: true)
-core_dep = declare_dependency(link_whole: libcore, dependencies: core_deps)
+engine_args += '-DCACAO_VER="' + meson.project_version() + '"'

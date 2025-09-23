@@ -67,6 +67,6 @@ image_lib = static_library('cacaoimage', sources: [
 	'src' / 'TIFF.cpp',
 	'src' / 'WebP.cpp',
 	lut_hpp
-], include_directories: ['include', 'src'], pic: true, dependencies: image_deps, install: true, install_tag: 'cacao')
+], include_directories: ['include', 'src'], pic: true, dependencies: image_deps, install: true)
 
 image_dep = declare_dependency(include_directories: 'include', link_with: image_lib, dependencies: image_deps)

@@ -1,5 +1,5 @@
 #include "Cacao/Event.hpp"
-#include "Module.hpp"
+#include "OpenGLModule.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/EventManager.hpp"

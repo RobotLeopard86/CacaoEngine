@@ -1,5 +1,5 @@
-#include "Module.hpp"
-#include "wayland/WaylandTypes.hpp"
+#include "VulkanModule.hpp"
+#include "WaylandTypes.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
 #include "WSI.hpp"

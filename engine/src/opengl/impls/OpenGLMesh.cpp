@@ -1,6 +1,6 @@
 #include "OpenGLMesh.hpp"
 #include "Cacao/Engine.hpp"
-#include "Module.hpp"
+#include "OpenGLModule.hpp"
 
 namespace Cacao {
 	std::optional<std::shared_future<void>> OpenGLMeshImpl::Realize(bool& success) {

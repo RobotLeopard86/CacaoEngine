@@ -1,6 +1,6 @@
 #include "VulkanTex2D.hpp"
 #include "Cacao/Engine.hpp"
-#include "Module.hpp"
+#include "VulkanModule.hpp"
 
 namespace Cacao {
 	std::optional<std::shared_future<void>> VulkanTex2DImpl::Realize(bool& success) {

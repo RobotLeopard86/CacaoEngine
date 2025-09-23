@@ -1,6 +1,6 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Module.hpp"
+#include "OpenGLModule.hpp"
 #include "Context.hpp"
 
 #include <future>

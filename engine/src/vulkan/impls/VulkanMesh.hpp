@@ -2,7 +2,7 @@
 
 #include "impl/Mesh.hpp"
 
-#include "Module.hpp"
+#include "VulkanModule.hpp"
 
 namespace Cacao {
 	class VulkanMeshImpl : public Mesh::Impl {

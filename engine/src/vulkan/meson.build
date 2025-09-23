@@ -6,8 +6,8 @@ vkhpp = subproject('vulkan-hpp', required: true).get_variable('vulkan_hpp_dep')
 vma = subproject('vma', required: true).get_variable('vma_dep')
 vmahpp = subproject('vma-hpp', required: true).get_variable('vma_hpp_dep')
 
-# Sources
-vk_sources = [
+# Add base OpenGL module info
+engine_srcs += files(
 	'GPU.cpp',
 	'Swapchain.cpp',
 	'VulkanModule.cpp',
@@ -16,32 +16,23 @@ vk_sources = [
 	'impls' / 'VulkanTex2D.cpp',
 	'impls' / 'VulkanCubemap.cpp',
 	'wsi' / 'Common.cpp'
-]
-vk_inc = [engine_headers, module_private_headers]
-vk_deps = [vkheaders, vkhpp, vma, vmahpp, glm_dep, xg_headers_dep]
+)
+engine_inc += include_directories('.')
+engine_deps += [vkheaders, vkhpp, vma, vmahpp]
+engine_args += ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', '-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1003000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', 
+				'-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1', '-Wno-nullability-completeness']
 
-# Graphics connection
+# Add platform-specific info
 if host_machine.system() == 'windows'
-    vk_sources += 'wsi' / 'Win32WSI.cpp'
-	vk_inc += '..' / 'win32'
+    engine_srcs += files('wsi' / 'Win32WSI.cpp')
+	engine_deps += [cpp.find_library('gdi32', required: true), cpp.find_library('opengl32', required: true), subproject('glad-wgl', required: true).get_variable('glad_wgl_dep')]
 elif host_machine.system() == 'linux'
-	vk_inc += '..' / 'linux'
-    if linux_windowing.contains('x11')
-		vk_sources +=  'wsi' / 'XWSI.cpp'
-		vk_deps += [xcb_dep, xcb_ks_dep, xcb_atom_dep, xcb_randr_dep]
+	if linux_windowing.contains('x11')
+		engine_srcs += files('wsi' / 'XWSI.cpp')
 	endif
 	if linux_windowing.contains('wayland')
-		vk_sources += 'wsi' / 'WaylandWSI.cpp'
-		vk_deps += [wayland_client, xdg_output_dep, xkbcommon_dep, libdecor_dep]
+		engine_srcs += files('wsi' / 'WaylandWSI.cpp')
 	endif
 else
     error('Unsupported platform for Vulkan module!')
 endif
-
-# Vulkan module
-vkmodule = static_library('cacaovk', sources: vk_sources, include_directories: vk_inc, pic: true,
-	dependencies: vk_deps, cpp_args: ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', 
-	'-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1003000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', 
-	'-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1', '-Wno-nullability-completeness'], install: true, install_tag: 'cacao')
-vk_dep = declare_dependency(link_whole: vkmodule)
-gfx_deps += vk_dep

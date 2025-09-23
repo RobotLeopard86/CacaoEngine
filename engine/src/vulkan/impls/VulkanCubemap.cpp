@@ -1,6 +1,6 @@
 #include "VulkanCubemap.hpp"
 #include "Cacao/Engine.hpp"
-#include "Module.hpp"
+#include "VulkanModule.hpp"
 
 namespace Cacao {
 	std::optional<std::shared_future<void>> VulkanCubemapImpl::Realize(bool& success) {

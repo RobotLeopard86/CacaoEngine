@@ -2,7 +2,7 @@
 
 #include "impl/Cubemap.hpp"
 
-#include "Module.hpp"
+#include "VulkanModule.hpp"
 
 namespace Cacao {
 	class VulkanCubemapImpl : public Cubemap::Impl {

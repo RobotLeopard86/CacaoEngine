@@ -1,5 +1,5 @@
 #include "Cacao/GPU.hpp"
-#include "Module.hpp"
+#include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "vulkan/vulkan_enums.hpp"
 #include "vulkan/vulkan_structs.hpp"
