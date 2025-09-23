@@ -22,6 +22,7 @@ namespace Cacao {
 	 * @note This function should expect to be invoked in a synchronous manner, though on a worker thread in the standard thread pool.
 	 *
 	 * @warning If your loader requires @b any form of IO-bound task (e.g. filesystem or networking), @b please perform that task
+	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
 	 *
 	 * @param addr The resource address to load
 	 * @param type The type of object expected as a result
@@ -30,6 +31,7 @@ namespace Cacao {
 
 	/**
 	 * @brief Singleton for handling the loading of resources from a game bundle
+	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
 	 */
 	class CACAO_API ResourceManager {
 	  public:
@@ -86,6 +88,8 @@ namespace Cacao {
 
 				//Try to load the asset
 				loader.value()(address, std::type_index(typeid(T)));
+
+				return {};
 			});
 		}
 
