@@ -33,22 +33,12 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Synchronously convert the audio data into a form suitable for playback
+		 * @brief Convert the audio data into a form suitable for playback
 		 *
 		 * @throws BadRealizeStateException If the sound is already realized
 		 * @throws BadInitStateException If the audio system is not initialized
 		 */
 		void Realize();
-
-		/**
-		 * @brief Asynchronously convert the audio data into a form suitable for playback
-		 *
-		 * @return A future that will resolve when realization is complete or fails
-		 *
-		 * @throws BadRealizeStateException If the sound is already realized
-		 * @throws BadInitStateException If the audio system is not initialized
-		 */
-		std::shared_future<void> RealizeAsync();
 
 		/**
 		 * @brief Destroy the realized representation of the asset

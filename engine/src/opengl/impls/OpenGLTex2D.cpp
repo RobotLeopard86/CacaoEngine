@@ -7,9 +7,9 @@
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLTex2DImpl::Realize(bool& success) {
+	void OpenGLTex2DImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the main thread
-		return Engine::Get().RunTaskOnMainThread([this, &success]() {
+		auto task = Engine::Get().RunTaskOnMainThread([this, &success]() {
 			//Flip texture
 			libcacaoimage::Image flipped = libcacaoimage::Flip(img);
 
@@ -57,16 +57,18 @@ namespace Cacao {
 
 			success = true;
 		});
+		task.get();
 	}
 
 	void OpenGLTex2DImpl::DropRealized() {
-		Engine::Get().RunTaskOnMainThread([this]() {
+		auto task = Engine::Get().RunTaskOnMainThread([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
+		task.get();
 	}
 
 	Tex2D::Impl* OpenGLModule::ConfigureTex2D() {

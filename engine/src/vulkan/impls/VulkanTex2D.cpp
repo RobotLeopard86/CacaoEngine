@@ -3,9 +3,8 @@
 #include "VulkanModule.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> VulkanTex2DImpl::Realize(bool& success) {
+	void VulkanTex2DImpl::Realize(bool& success) {
 		//TODO
-		return std::nullopt;
 	}
 
 	void VulkanTex2DImpl::DropRealized() {

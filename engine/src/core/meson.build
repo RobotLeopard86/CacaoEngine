@@ -38,10 +38,10 @@ spdlog_dep = subproject('spdlog', required: true, default_options: {
 	'std_format': 'disabled'
 }).get_variable('spdlog_dep')
 
-# glm, dynalo, thread-pool, and high_resolution_sleep
-glm_dep = subproject('glm', required: true).get_variable('glm_dep')
+# Exathread, dynalo, glm, and high_resolution_sleep
+exathread_dep = subproject('exathread', required: true).get_variable('exathread_dep')
 dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
-thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
+glm_dep = subproject('glm', required: true).get_variable('glm_dep')
 hires_sleep_dep = subproject('hires_sleep', required: true).get_variable('hires_sleep_dep')
 
 # Configure icu
@@ -87,7 +87,6 @@ engine_srcs += files(
 	'Resource.cpp',
 	'Sound.cpp',
 	'Tex2D.cpp',
-	'ThreadPool.cpp',
 	'TickController.cpp',
 	'Transform.cpp',
 	'Window.cpp',
@@ -108,7 +107,7 @@ engine_deps += [
 	glm_dep,
 	spdlog_dep,
 	dynalo_dep,
-	thread_pool_dep,
+	exathread_dep,
 	hires_sleep_dep,
 	icu_dep,
 	freetype_dep,

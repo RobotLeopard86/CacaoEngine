@@ -6,9 +6,9 @@
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLCubemapImpl::Realize(bool& success) {
+	void OpenGLCubemapImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the main thread
-		return Engine::Get().RunTaskOnMainThread([this, &success]() {
+		auto task = Engine::Get().RunTaskOnMainThread([this, &success]() {
 			//Create texture object
 			glGenTextures(1, &gpuTex);
 			GL_CHECK("Failed to create cubemap texture object!")
@@ -24,6 +24,7 @@ namespace Cacao {
 
 				//Copy image data to GPU and adjust increment
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8, flipped.w, flipped.h, 0, GL_RGB, GL_UNSIGNED_BYTE, flipped.data.data());
+				GL_CHECK("Failed to upload cubemap face texture data!")
 			}
 
 			//Apply cubemap filtering
@@ -40,16 +41,18 @@ namespace Cacao {
 
 			success = true;
 		});
+		task.get();
 	}
 
 	void OpenGLCubemapImpl::DropRealized() {
-		Engine::Get().RunTaskOnMainThread([this]() {
+		auto task = Engine::Get().RunTaskOnMainThread([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
+		task.get();
 	}
 
 	Cubemap::Impl* OpenGLModule::ConfigureCubemap() {

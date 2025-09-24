@@ -2,7 +2,7 @@
 
 #include "Cacao/GPU.hpp"
 
-#include <stop_token>
+#include <thread>
 
 namespace Cacao {
 	class GPUManager::Impl {
@@ -15,7 +15,7 @@ namespace Cacao {
 		virtual ~Impl() = default;
 
 		void Runloop(std::stop_token stop);
-		std::stop_source stopper;
+		std::unique_ptr<std::jthread> thread;
 
 		struct VSyncRequest {
 			bool needChange;

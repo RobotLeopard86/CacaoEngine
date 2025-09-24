@@ -1,7 +1,6 @@
 #include "Cacao/Tex2D.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "impl/Tex2D.hpp"
 #include "PALConfigurables.hpp"
 #include "libcacaoimage.hpp"
@@ -56,21 +55,7 @@ namespace Cacao {
 	void Tex2D::Realize() {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized texture!");
 
-		if(impl->DoWaitAsyncForSync()) {
-			impl->Realize(realized).value().get();
-		} else {
-			impl->Realize(realized);
-		}
-	}
-
-	std::shared_future<void> Tex2D::RealizeAsync() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized texture!");
-
-		if(impl->DoWaitAsyncForSync()) {
-			return impl->Realize(realized).value();
-		} else {
-			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(realized); });
-		}
+		impl->Realize(realized);
 	}
 
 	void Tex2D::DropRealized() {

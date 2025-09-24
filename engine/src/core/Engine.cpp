@@ -1,7 +1,6 @@
 #include "Cacao/Engine.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Log.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
@@ -12,7 +11,9 @@
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "SafeGetenv.hpp"
+#include "exathread.hpp"
 #include "impl/PAL.hpp"
+#include <memory>
 #include <thread>
 
 #ifndef CACAO_VER
@@ -45,16 +46,14 @@ namespace Cacao {
 
 		//Store config
 		icfg = initCfg;
-		constexpr unsigned int coreServiceCount = 2;//Tick controller, GPU manager
-		if(icfg.ioPoolThreads <= 0 || icfg.ioPoolThreads >= std::thread::hardware_concurrency() - coreServiceCount) icfg.ioPoolThreads = (std::thread::hardware_concurrency() - coreServiceCount) / 4;
-		if(icfg.ioPoolThreads == 0) icfg.ioPoolThreads = 1;
 
 		//Say hello (this will also trigger logging initialization)
 		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << "!";
 
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
-		ThreadPool::Get().Start();
+		constexpr unsigned int coreServiceCount = 2;//Tick controller, GPU manager
+		pool = exathread::Pool::Create(std::clamp<std::size_t>(std::thread::hardware_concurrency() - coreServiceCount, 2, SIZE_MAX));
 
 		//Store thread ID
 		mainThread = std::this_thread::get_id();
@@ -234,7 +233,8 @@ namespace Cacao {
 
 		//Stop thread pool
 		Logger::Engine(Logger::Level::Trace) << "Stopping thread pool...";
-		ThreadPool::Get().Stop();
+		pool->waitIdle();
+		pool.reset();
 
 		//Final goodbye message
 		std::lock_guard lkg(stateMtx);
@@ -268,5 +268,11 @@ namespace Cacao {
 		if(!std::filesystem::exists(p)) std::filesystem::create_directories(p);
 
 		return p;
+	}
+
+	std::shared_ptr<exathread::Pool> Engine::GetThreadPool() {
+		Check<exathread::Pool, BadStateException>(pool, "Engine must be in the Running state to use the thread pool!");
+
+		return pool;
 	}
 }

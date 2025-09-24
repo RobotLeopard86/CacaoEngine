@@ -3,8 +3,6 @@
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 
-#include <future>
-
 namespace Cacao {
 	/**
 	 * @brief Base class for asset types
@@ -12,20 +10,11 @@ namespace Cacao {
 	class CACAO_API Asset : public Resource {
 	  public:
 		/**
-		 * @brief Synchronously convert the loaded data into a form suitable for use
+		 * @brief Convert the loaded data into a form suitable for use
 		 *
 		 * @throws BadRealizeStateException If the asset is already realized
 		 */
 		virtual void Realize() = 0;
-
-		/**
-		 * @brief Asynchronously convert the loaded data into a form suitable for use
-		 *
-		 * @return A future that will resolve when realization is complete or fails
-		 *
-		 * @throws BadRealizeStateException If the asset is already realized
-		 */
-		virtual std::shared_future<void> RealizeAsync() = 0;
 
 		/**
 		 * @brief Destroy the realized representation of the asset

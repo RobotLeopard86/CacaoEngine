@@ -49,4 +49,4 @@ loader_headers = include_directories('src' / 'loader' / 'include')
 install_subdir('src' / 'loader' / 'include', strip_directory: true, install_dir: 'include')
 
 # Final dependency
-cacao_dep = declare_dependency(include_directories: [engine_headers, loader_headers], link_with: libcacao, link_whole: libloader, dependencies: [xg_headers_dep, glm_dep])
+cacao_dep = declare_dependency(include_directories: [engine_headers, loader_headers], link_with: libcacao, link_whole: libloader, dependencies: [xg_headers_dep, glm_dep, exathread_dep])

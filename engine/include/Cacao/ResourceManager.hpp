@@ -1,17 +1,16 @@
 #pragma once
 
 #include "Asset.hpp"
-#include "ThreadPool.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
+#include "Engine.hpp"
 
 #include <memory>
 #include <future>
 #include <optional>
 #include <typeindex>
 #include <functional>
-#include <typeinfo>
 #include <string>
 #include <functional>
 
@@ -63,12 +62,12 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && (!std::is_same_v<Asset, T>)
-		std::shared_future<std::shared_ptr<T>> Load(const std::string& address) {
+		exathread::Future<std::shared_ptr<T>> Load(const std::string& address) {
 			//Validate the address
 			Check<BadValueException>(Resource::ValidateResourceAddr<T>(address), "Cannot load a resource from a malformed address string!");
 
 			//Run load operation asynchronously
-			return ThreadPool::Get().Exec([this, &address]() -> std::shared_ptr<T> {
+			return Engine::Get().GetThreadPool()->submit([this, address]() -> std::shared_ptr<T> {
 				//Check cache
 				std::shared_ptr<Resource> maybeCached = CheckCache(address);
 				if(maybeCached) {

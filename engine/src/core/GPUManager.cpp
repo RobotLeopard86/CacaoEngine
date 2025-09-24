@@ -1,12 +1,12 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/PAL.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "impl/GPUManager.hpp"
 #include "PALConfigurables.hpp"
 #include "SingletonGet.hpp"
 #include "impl/PAL.hpp"
 #include "ImplAccessor.hpp"
+#include <thread>
 
 namespace Cacao {
 	GPUManager::GPUManager()
@@ -24,14 +24,14 @@ namespace Cacao {
 	void GPUManager::Start() {
 		Check<BadInitStateException>(!running, "The GPU manager must not be running when Start is called!");
 		Check<BadStateException>(!running, "The graphics backend and window must be connected to start the GPU manager!");
-		Check<BadInitStateException>(ThreadPool::Get().IsRunning(), "The thread pool must be running to start the GPU manager!");
 
 		//Setup
 		impl->vsreq.needChange = false;
 		impl->vsreq.value = true;
 
-		//Put run loop in the thread pool continuously
-		impl->stopper = ThreadPool::Get().ExecContinuous([this](std::stop_token stop) { impl->Runloop(stop); });
+		//Start runloop on background thread
+		auto runloop = [this](std::stop_token stop) { impl->Runloop(stop); };
+		impl->thread = std::make_unique<std::jthread>(runloop);
 
 		running = true;
 	}
@@ -42,7 +42,7 @@ namespace Cacao {
 		running = false;
 
 		//Signal run loop stop
-		impl->stopper.request_stop();
+		impl->thread->request_stop();
 	}
 
 	//This just handles looping and lifecycle to avoid code duplication in the backend

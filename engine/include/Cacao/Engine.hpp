@@ -1,6 +1,7 @@
 #pragma once
 
 #include <future>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <chrono>
@@ -12,6 +13,8 @@
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Identity.hpp"
+
+#include "exathread.hpp"
 
 using namespace std::chrono_literals;
 
@@ -102,11 +105,6 @@ namespace Cacao {
 			 * @brief ID of the client application. This should be in reverse-domain format (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
-
-			/**
-			 * @brief The number of threads to use for the IO thread pool. Will be overridden to a value of engine's choice if set to 0.
-			 */
-			unsigned int ioPoolThreads;
 		};
 
 		/**
@@ -128,6 +126,17 @@ namespace Cacao {
 		 * @return Data directory path
 		 */
 		const std::filesystem::path GetDataDirectory();
+
+		/**
+		 * @brief Get access to the engine thread pool
+		 *
+		 * @see https://robotleopard86.github.io/Exathread/1.1.0 for the documentation on how to use the pool
+		 *
+		 * @return A handle to the pool
+		 *
+		 * @throws BadStateException If the thread pool is not running
+		 */
+		std::shared_ptr<exathread::Pool> GetThreadPool();
 
 		/**
 		 * @brief Run a task on the main thread
@@ -251,6 +260,8 @@ namespace Cacao {
 		std::queue<std::function<void()>> mainThreadTasksQueue;
 		std::mutex mttQueueMtx;
 		std::thread::id mainThread;
+
+		std::shared_ptr<exathread::Pool> pool;
 
 		Engine();
 		~Engine();

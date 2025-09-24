@@ -65,10 +65,10 @@ namespace Cacao {
 		//Check resource cache
 		if(!IMPL(ResourceManager).cache.contains(addr)) {
 			//noload check
-			Check<NonexistentValueException>(noload, "World requested for activation is not loaded, and noload was specified!");
+			Check<NonexistentValueException>(noload, "World requested for activation is not loaded, and noload flag was specified!");
 
 			//Load it
-			impl->active = ResourceManager::Get().Load<World>(addr).get();
+			impl->active = *ResourceManager::Get().Load<World>(addr);
 		}
 		impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
 	}

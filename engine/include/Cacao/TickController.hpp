@@ -28,7 +28,6 @@ namespace Cacao {
 		 * @brief Start the controller
 		 *
 		 * @throws BadInitStateException If the controller is already running
-		 * @throws BadInitStateException If the thread pool is not running
 		 */
 		void Start();
 

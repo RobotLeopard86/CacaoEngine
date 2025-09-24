@@ -3,9 +3,8 @@
 #include "VulkanModule.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> VulkanCubemapImpl::Realize(bool& success) {
+	void VulkanCubemapImpl::Realize(bool& success) {
 		//TODO
-		return std::nullopt;
 	}
 
 	void VulkanCubemapImpl::DropRealized() {

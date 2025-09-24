@@ -1,7 +1,6 @@
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "impl/Cubemap.hpp"
 #include "PALConfigurables.hpp"
 
@@ -66,21 +65,7 @@ namespace Cacao {
 	void Cubemap::Realize() {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
 
-		if(impl->DoWaitAsyncForSync()) {
-			impl->Realize(realized).value().get();
-		} else {
-			impl->Realize(realized);
-		}
-	}
-
-	std::shared_future<void> Cubemap::RealizeAsync() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
-
-		if(impl->DoWaitAsyncForSync()) {
-			return impl->Realize(realized).value();
-		} else {
-			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(realized); });
-		}
+		impl->Realize(realized);
 	}
 
 	void Cubemap::DropRealized() {

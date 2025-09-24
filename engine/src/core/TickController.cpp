@@ -1,5 +1,4 @@
 #include "Cacao/TickController.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/Time.hpp"
 #include "SingletonGet.hpp"
@@ -9,6 +8,7 @@
 #include <chrono>
 #include <array>
 #include <random>
+#include <thread>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -21,7 +21,7 @@ namespace Cacao {
 		void FixedTick();
 		void Runloop(std::stop_token stop);
 
-		std::stop_source stopper;
+		std::unique_ptr<std::jthread> thread;
 
 		std::array<time::dseconds, 3> dynTickTimes;
 		time::dtime_point lastTickTimeUpdate;
@@ -42,7 +42,6 @@ namespace Cacao {
 
 	void TickController::Start() {
 		Check<BadInitStateException>(!running, "The tick controller must not be running when Start is called!");
-		Check<BadInitStateException>(ThreadPool::Get().IsRunning(), "The thread pool must be running to start the tick controller!");
 
 		//Set next fixed tick time and prepare queue
 		time::dtime_point now = std::chrono::steady_clock::now();
@@ -53,8 +52,9 @@ namespace Cacao {
 		impl->dynTickTimes[2] = 0_ds;
 		impl->lastTickTimeUpdate = now;
 
-		//Put run loop in the thread pool continuously
-		impl->stopper = ThreadPool::Get().ExecContinuous([this](std::stop_token stop) { impl->Runloop(stop); });
+		//Start runloop on background thread
+		auto runloop = [this](std::stop_token stop) { impl->Runloop(stop); };
+		impl->thread = std::make_unique<std::jthread>(runloop);
 
 		running = true;
 	}
@@ -65,7 +65,7 @@ namespace Cacao {
 		running = false;
 
 		//Signal run loop stop
-		impl->stopper.request_stop();
+		impl->thread->request_stop();
 	}
 
 	void TickController::Impl::Runloop(std::stop_token stop) {
@@ -99,6 +99,9 @@ namespace Cacao {
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
 			}
 
+			//Update now
+			now = std::chrono::steady_clock::now();
+
 			//Clear tick time queue if it's been long enough, since this is probably out-of-date now
 			constexpr std::chrono::milliseconds maxTimeSinceDynTicks = 10ms;
 			if((time::dtime_point(now) - lastTickTimeUpdate) >= maxTimeSinceDynTicks) {
@@ -109,6 +112,10 @@ namespace Cacao {
 				lastTickTimeUpdate = now;
 				avgTickTime = 0_ds;
 			}
+
+			//Update now again
+			//Look we gotta be accurate
+			now = std::chrono::steady_clock::now();
 
 			//Check if we can probably run a dynamic tick
 			if(avgTickTime < untilNextFixedTick) {

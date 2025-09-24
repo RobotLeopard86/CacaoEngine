@@ -45,7 +45,6 @@ namespace Cacao {
 		 * @brief Start the GPU manager
 		 *
 		 * @throws BadInitStateException If the GPU manager is already running
-		 * @throws BadInitStateException If the thread pool is not running
 		 * @throws BadStateException If the graphics backend and window are not connected
 		 */
 		void Start();
