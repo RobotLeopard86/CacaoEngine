@@ -444,9 +444,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -591,30 +588,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound7RealizeEv">
 <span id="_CPPv3N5Cacao5Sound7RealizeEv"></span><span id="_CPPv2N5Cacao5Sound7RealizeEv"></span><span id="Cacao::Sound::Realize"></span><span class="target" id="classCacao_1_1Sound_1a36a02262cdc0969db8895319d1d89d7b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Sound7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Synchronously convert the audio data into a form suitable for playback. </p>
+<dd><p>Convert the audio data into a form suitable for playback. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the sound is already realized </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is not initialized </p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Sound12RealizeAsyncEv">
-<span id="_CPPv3N5Cacao5Sound12RealizeAsyncEv"></span><span id="_CPPv2N5Cacao5Sound12RealizeAsyncEv"></span><span id="Cacao::Sound::RealizeAsync"></span><span class="target" id="classCacao_1_1Sound_1aae64dc3b5e0b071b08506188d4e03b1a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizeAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Sound12RealizeAsyncEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Asynchronously convert the audio data into a form suitable for playback. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the sound is already realized </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is not initialized </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A future that will resolve when realization is complete or fails</p>
 </dd>
 </dl>
 </dd></dl>
@@ -721,7 +701,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5SoundE"><code class="docutils literal notranslate"><span class="pre">Sound</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Sound::Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound12RealizeAsyncEv"><code class="docutils literal notranslate"><span class="pre">Sound::RealizeAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">Sound::DropRealized()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5SoundD0Ev"><code class="docutils literal notranslate"><span class="pre">Sound::~Sound()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Sound6CreateERRNSt6vectorIcEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Sound::Create()</span></code></a></li>

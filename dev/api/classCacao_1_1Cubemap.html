@@ -444,9 +444,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -591,30 +588,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap7RealizeEv">
 <span id="_CPPv3N5Cacao7Cubemap7RealizeEv"></span><span id="_CPPv2N5Cacao7Cubemap7RealizeEv"></span><span id="Cacao::Cubemap::Realize"></span><span class="target" id="classCacao_1_1Cubemap_1a0ada56bae120213b7a2fec09ac327bcb"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Synchronously convert the image data into a form suitable for rendering. </p>
+<dd><p>Convert the image data into a form suitable for rendering. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the cubemap is already realized </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao7Cubemap12RealizeAsyncEv">
-<span id="_CPPv3N5Cacao7Cubemap12RealizeAsyncEv"></span><span id="_CPPv2N5Cacao7Cubemap12RealizeAsyncEv"></span><span id="Cacao::Cubemap::RealizeAsync"></span><span class="target" id="classCacao_1_1Cubemap_1af553928d376ac846a5104b2cf6c70ade"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizeAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao7Cubemap12RealizeAsyncEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Asynchronously convert the image data into a form suitable for rendering. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the cubemap is already realized </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A future that will resolve when realization is complete or fails</p>
 </dd>
 </dl>
 </dd></dl>
@@ -721,7 +701,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7CubemapE"><code class="docutils literal notranslate"><span class="pre">Cubemap</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap12RealizeAsyncEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::RealizeAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">Cubemap::DropRealized()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7CubemapD0Ev"><code class="docutils literal notranslate"><span class="pre">Cubemap::~Cubemap()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao7Cubemap6CreateERRNSt5arrayIN13libcacaoimage5ImageEXL6EEEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Cubemap::Create()</span></code></a></li>

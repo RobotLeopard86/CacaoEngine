@@ -444,9 +444,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ThreadPool.html">Class ThreadPool</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -591,30 +588,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Mesh7RealizeEv">
 <span id="_CPPv3N5Cacao4Mesh7RealizeEv"></span><span id="_CPPv2N5Cacao4Mesh7RealizeEv"></span><span id="Cacao::Mesh::Realize"></span><span class="target" id="classCacao_1_1Mesh_1a5d918b037400b8963ab9f986f468a497"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Mesh7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Synchronously convert the mesh data into a form suitable for rendering. </p>
+<dd><p>Convert the mesh data into a form suitable for rendering. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the mesh is already realized </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Mesh12RealizeAsyncEv">
-<span id="_CPPv3N5Cacao4Mesh12RealizeAsyncEv"></span><span id="_CPPv2N5Cacao4Mesh12RealizeAsyncEv"></span><span id="Cacao::Mesh::RealizeAsync"></span><span class="target" id="classCacao_1_1Mesh_1af49675f09a59893a139902292af8f466"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RealizeAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Mesh12RealizeAsyncEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Asynchronously convert the mesh data into a form suitable for rendering. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the mesh is already realized </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A future that will resolve when realization is complete or fails</p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,7 +702,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4MeshE"><code class="docutils literal notranslate"><span class="pre">Mesh</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Mesh::Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh12RealizeAsyncEv"><code class="docutils literal notranslate"><span class="pre">Mesh::RealizeAsync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">Mesh::DropRealized()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4MeshD0Ev"><code class="docutils literal notranslate"><span class="pre">Mesh::~Mesh()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh6CreateERRNSt6vectorI6VertexEERRNSt6vectorIN3glm5uvec3EEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Mesh::Create()</span></code></a></li>
