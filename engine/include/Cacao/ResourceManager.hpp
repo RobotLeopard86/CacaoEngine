@@ -7,24 +7,38 @@
 #include "Engine.hpp"
 
 #include <memory>
-#include <optional>
-#include <typeindex>
-#include <functional>
+#include <type_traits>
 #include <string>
-#include <functional>
+#include <typeindex>
 
 namespace Cacao {
+	//This is a helper type typedef because fully written out it's super long and nonsensical
+	//To explain: This is the contained type of the returned unique_ptr type of a raw T (deref-ed for consistency)'s FetchData function
+	///@cond
+	template<typename T, typename R>
+	using LoaderIntermediate = decltype(std::declval<std::remove_reference_t<T>>().template FetchData<R>(std::declval<std::string>()))::element_type;
+	///@endcond
+
 	/**
-	 * @brief A function that takes in a ResourceQuery and provides the appropriate resource
+	 * @brief A concept that defines what a conforming resource loader looks like
 	 *
-	 * @note This function should expect to be invoked on a worker thread in the standard thread pool.
-	 *
-	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
-	 *
-	 * @param addr The resource address to load
-	 * @param type The type of object expected as a result
+	 * @tparam T The type of the loader object
+	 * @tparam R A Resource type produced by the loader
 	 */
-	using ResourceLoader = std::function<void(const std::string& addr, const std::type_index type)>;
+	template<typename T, typename R>
+	concept Loader = std::is_base_of_v<Resource, R> && requires(T obj, const std::string& addr) {
+		{ obj.template FetchData<R>(addr) } -> std::same_as<std::unique_ptr<LoaderIntermediate<T, R>>>;
+		{ obj.template CreateResource<R>(std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
+	};
+
+	/**
+	 * @brief A concept that describes a loader object that can handle a set of different resource types
+	 *
+	 * @tparam T The type of the loader object
+	 * @tparam Rs... The types of Resources that can be handled
+	 */
+	template<typename T, typename... Rs>
+	concept MultiLoader = (Loader<T, Rs> && ...);
 
 	/**
 	 * @brief Singleton for handling the loading of resources from a game bundle
@@ -81,27 +95,30 @@ namespace Cacao {
 
 				//Resource was not in cache, we need to load it
 				//Check for a valid loader
-				Check<BadStateException>(loader.has_value(), "No resource loader configured!");
+				Check<BadStateException>(IsLoaderRegistered(typeid(T)), "No resource loader configured for the requested type!");
 
 				//Try to load the asset
-				loader.value()(address, std::type_index(typeid(T)));
+				//TODO
 
 				return {};
 			});
 		}
 
 		/**
-		 * @brief Set the resource loader
+		 * @brief Set the resource loader for a given set of types
 		 *
-		 * @warning This function may only be called once. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader.
+		 * @warning This function may only be called once per type. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader for the default resource types.
 		 *
 		 * @param loader The resource loader to use
 		 *
 		 * @throws BadStateException If a loader has already been configured
 		 */
-		void ConfigureResourceLoader(ResourceLoader loader) {
-			Check<BadStateException>(!this->loader.has_value(), "A loader has already been configured!");
-			this->loader = loader;
+		template<typename T, typename... Types>
+			requires MultiLoader<std::remove_reference_t<T>, Types...>
+		void ConfigureResourceLoader(T&& loader) {
+			//For those unaware, this is a fold expression
+			//What this does is it will run _ConfigureResourceLoader for each type in the Types pack
+			((_ConfigureResourceLoader<T, Types>(std::move(loader))), ...);
 		}
 
 		///@cond
@@ -115,7 +132,12 @@ namespace Cacao {
 		~ResourceManager();
 
 		std::shared_ptr<Resource> CheckCache(const std::string& addr);
+		bool IsLoaderRegistered(std::type_index type);
 
-		std::optional<ResourceLoader> loader;
+		template<typename T, typename R>
+			requires Loader<std::remove_reference_t<T>, R>
+		void _ConfigureResourceLoader(T&& loader [[maybe_unused]]) {//I put the maybe_unused here to make Clang shut up while I'm working
+			Check<BadStateException>(!IsLoaderRegistered(typeid(R)), "A loader has already been configured for this type!");
+		}
 	};
 }

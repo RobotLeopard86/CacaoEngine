@@ -68,8 +68,8 @@ namespace Cacao {
 			 * @brief Whether the engine is running outside of a bundle
 			 *
 			 * @details If this flag is set, the engine will not attempt to validate that it is in a game bundle on startup.
-			 * This will also disable all systems related to the default asset loader and bundle systems.
-			 * Assets, worlds, and game modules will need to be manually loaded and configured in this mode.
+			 * This will also disable anything related to the default resource loader and bundle systems.
+			 * Assets, worlds, and game binaries will need to be manually loaded and configured in this mode.
 			 */
 			bool standalone = false;
 
