@@ -576,11 +576,7 @@
 <dd><p>A function that takes in a ResourceQuery and provides the appropriate resource. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This function should expect to be invoked in a synchronous manner, though on a worker thread in the standard thread pool.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If your loader requires <strong>any</strong> form of IO-bound task (e.g. filesystem or networking), <strong>please</strong> perform that task </p>
+<p>This function should expect to be invoked on a worker thread in the standard thread pool.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
