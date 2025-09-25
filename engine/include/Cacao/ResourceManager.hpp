@@ -7,7 +7,6 @@
 #include "Engine.hpp"
 
 #include <memory>
-#include <future>
 #include <optional>
 #include <typeindex>
 #include <functional>
@@ -18,9 +17,8 @@ namespace Cacao {
 	/**
 	 * @brief A function that takes in a ResourceQuery and provides the appropriate resource
 	 *
-	 * @note This function should expect to be invoked in a synchronous manner, though on a worker thread in the standard thread pool.
+	 * @note This function should expect to be invoked on a worker thread in the standard thread pool.
 	 *
-	 * @warning If your loader requires @b any form of IO-bound task (e.g. filesystem or networking), @b please perform that task
 	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
 	 *
 	 * @param addr The resource address to load
