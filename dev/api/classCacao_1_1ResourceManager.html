@@ -465,9 +465,6 @@
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_ResourceManager_8hpp_1af45fcee4ec7b9d4f6e4c5c5934f701e3.html">Typedef Cacao::ResourceLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -603,12 +600,12 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao15ResourceManager23ConfigureResourceLoaderE14ResourceLoader">
-<span id="_CPPv3N5Cacao15ResourceManager23ConfigureResourceLoaderE14ResourceLoader"></span><span id="_CPPv2N5Cacao15ResourceManager23ConfigureResourceLoaderE14ResourceLoader"></span><span id="Cacao::ResourceManager::ConfigureResourceLoader__ResourceLoader"></span><span class="target" id="classCacao_1_1ResourceManager_1a64b47552d1b5b385a13fc227037b5053"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConfigureResourceLoader</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_ResourceManager_8hpp_1af45fcee4ec7b9d4f6e4c5c5934f701e3.html#_CPPv4N5Cacao14ResourceLoaderE" title="Cacao::ResourceLoader"><span class="n"><span class="pre">ResourceLoader</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">loader</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao15ResourceManager23ConfigureResourceLoaderE14ResourceLoader" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Set the resource loader. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0DpEN5Cacao15ResourceManager23ConfigureResourceLoaderEvRR1T">
+<span id="_CPPv3I0DpEN5Cacao15ResourceManager23ConfigureResourceLoaderERR1T"></span><span id="_CPPv2I0DpEN5Cacao15ResourceManager23ConfigureResourceLoaderERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Types</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1ResourceManager_1a3b11ee1541f66ce6066d4f19c4f7235f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConfigureResourceLoader</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao15ResourceManager23ConfigureResourceLoaderEvRR1T" title="Cacao::ResourceManager::ConfigureResourceLoader::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">loader</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN5Cacao15ResourceManager23ConfigureResourceLoaderEvRR1T" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the resource loader for a given set of types. </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This function may only be called once. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader.</p>
+<p>This function may only be called once per type. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader for the default resource types.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -690,7 +687,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao15ResourceManagerE"><code class="docutils literal notranslate"><span class="pre">ResourceManager</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao15ResourceManager4LoadEN9exathread6FutureINSt10shared_ptrI1TEEEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ResourceManager::Load()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao15ResourceManager23ConfigureResourceLoaderE14ResourceLoader"><code class="docutils literal notranslate"><span class="pre">ResourceManager::ConfigureResourceLoader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0DpEN5Cacao15ResourceManager23ConfigureResourceLoaderEvRR1T"><code class="docutils literal notranslate"><span class="pre">ResourceManager::ConfigureResourceLoader()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao15ResourceManager3GetEv"><code class="docutils literal notranslate"><span class="pre">ResourceManager::Get()</span></code></a></li>
 </ul>
 </li>
