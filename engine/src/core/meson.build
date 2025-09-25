@@ -49,7 +49,7 @@ icu_sp = subproject('icu', required: true, default_options: ['default_library=st
 icu_dep = icu_sp.get_variable('icuuc_dep')
 
 # Configure FreeType
-freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
+freetype_sp = subproject('freetype2', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
 freetype_dep = freetype_sp.get_variable('freetype_dep')
 
 # Configure Harfbuzz
