@@ -7,5 +7,6 @@
 namespace Cacao {
 	struct ResourceManager::Impl {
 		std::map<std::string, std::weak_ptr<Resource>> cache;
+		std::map<std::type_index, ErasedLoader> loaders;
 	};
 }
