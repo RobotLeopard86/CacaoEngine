@@ -94,7 +94,7 @@ namespace Cacao {
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
 #endif
 		auto physicalDevices = instance.enumeratePhysicalDevices();
-		Check<ExternalException>(!physicalDevices.empty(), "There are no Vulkan-compatible devices!");
+		Check<ExternalException>(!physicalDevices.empty(), "There are no Vulkan-compatible devices!", [this]() { instance.destroy(); });
 		std::vector<vk::PhysicalDevice> okDevs;
 		for(vk::PhysicalDevice& pdev : physicalDevices) {
 			std::vector<vk::ExtensionProperties> availableExts = pdev.enumerateDeviceExtensionProperties();
@@ -179,8 +179,7 @@ namespace Cacao {
 		vk::BufferCreateInfo globalsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo globalsAllocCI({}, vma::MemoryUsage::eCpuToGpu);
 		try {
-			auto [globals, alloc] = allocator.createBuffer(globalsCI, globalsAllocCI);
-			globalsUBO = {.alloc = alloc, .obj = globals};
+			globalsUBO = allocator.createBuffer(globalsCI, globalsAllocCI);
 		} catch(vk::SystemError& err) {
 			Immediate::Cleanup();
 			dev.destroyCommandPool(renderPool);

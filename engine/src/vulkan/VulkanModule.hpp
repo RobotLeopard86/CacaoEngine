@@ -30,10 +30,16 @@ namespace Cacao {
 	  public:
 		vma::Allocation alloc;
 		T obj;
+
+		Allocated() {}
+		Allocated(std::pair<T, vma::Allocation> p) : alloc(p.second), obj(p.first) {}
 	};
 
 	struct ViewImage : public Allocated<vk::Image> {
 		vk::ImageView view;
+
+		ViewImage() {}
+		ViewImage(std::pair<vk::Image, vma::Allocation> p) : Allocated<vk::Image>(p) {}
 	};
 
 	class Immediate {
@@ -60,8 +66,8 @@ namespace Cacao {
 		VulkanCommandBuffer(VulkanCommandBuffer&&);
 		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
 
-		vk::CommandBuffer& operator->() {
-			return imm.get().cmd;
+		vk::CommandBuffer* operator->() {
+			return &imm.get().cmd;
 		}
 
 		void Execute() override;
