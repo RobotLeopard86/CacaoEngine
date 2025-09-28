@@ -357,6 +357,9 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -579,12 +582,22 @@
 <dd><div class="docutils container">
 <em>#include &lt;ResourceManager.hpp&gt;</em></div>
 <p>A concept that defines what a conforming resource loader looks like. </p>
+<p>
+Concept Definition: <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span>
+<span class="k">concept</span><span class="w"> </span><span class="nc">Loader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Resource</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">requires</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">FetchData</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">LoaderIntermediate</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;&gt;&gt;</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">CreateResource</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">LoaderIntermediate</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</p>
+<p>These functions should expect to be invoked in the thread pool </p>
 <dl class="field-list simple">
 <dt class="field-odd">tparam T<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The type of the loader object </p>
 </dd>
 <dt class="field-even">tparam R<span class="colon">:</span></dt>
-<dd class="field-even"><p>A Resource type produced by the loader </p>
+<dd class="field-even"><p>A Resource type produced by the loader</p>
 </dd>
 </dl>
 </dd></dl>
