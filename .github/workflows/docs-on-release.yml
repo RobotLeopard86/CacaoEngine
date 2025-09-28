@@ -31,7 +31,8 @@ jobs:
           git pull
       - name: Install Python dependencies
         run: |
-          pip install -r docs/requirements.txt
+          cd docs
+          pip install -r requirements.txt
       - name: Get release version
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV

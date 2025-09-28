@@ -32,7 +32,8 @@ jobs:
           git pull
       - name: Install Python dependencies
         run: |
-          pip install -r docs/requirements.txt
+          cd docs
+          pip install -r requirements.txt
       - name: Build documentation
         run: |
           cd docs
