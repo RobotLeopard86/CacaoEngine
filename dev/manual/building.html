@@ -465,6 +465,11 @@
 </section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Link to this heading"><span/></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>On Windows, these commands <strong>must</strong> be executed in the Visual Studio Developer Command Prompt/PowerShell, as subprojects require the Windows resource compiler (<code class="docutils literal notranslate"><span class="pre">rc.exe</span></code>) to be found, which it will not be in a standard terminal environment.</p>
+<p>For this reason, attempting to configure the project with the Visual Studio Code Meson extension will fail, as it invokes Meson directly and consequently the environment is not set up to find <code class="docutils literal notranslate"><span class="pre">rc.exe</span></code>.</p>
+</div>
 <p>In the root Cacao Engine directory, run the following command to configure the build: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span> <span class="pre">-Dbackends=&lt;graphics</span> <span class="pre">backends&gt;</span></code>. The available backends are <code class="docutils literal notranslate"><span class="pre">opengl</span></code> and <code class="docutils literal notranslate"><span class="pre">vulkan</span></code>. See the <a class="reference internal" href="backends.html"><span class="doc std std-doc">backends info page</span></a> for more details.</p>
 <p>You can also choose to build the sandbox application by adding <code class="docutils literal notranslate"><span class="pre">-Dbuild_sandbox=true</span></code> to the command line.</p>
 <p>On Linux, the supported windowing systems can be selected via the <code class="docutils literal notranslate"><span class="pre">linux_windowing</span></code> option. By default, this is set to <code class="docutils literal notranslate"><span class="pre">x11,wayland</span></code> to include both, but you can choose to exclude one if you wish.</p>
