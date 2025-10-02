@@ -21,6 +21,7 @@ namespace Cacao {
 		 * @param addr The resource address to associate with the cubemap
 		 *
 		 * @throws BadValueException If one of the faces is not in the RGB layout
+		 * @throws BadValueException If the faces are not all the same size
 		 * @throws BadValueException If the address is malformed
 		 */
 		static std::shared_ptr<Cubemap> Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr) {

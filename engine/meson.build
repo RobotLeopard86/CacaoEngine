@@ -41,12 +41,12 @@ endforeach
 # Engine library
 libcacao = shared_library('cacao', sources: engine_srcs, include_directories: engine_inc, dependencies: engine_deps, cpp_args: engine_args, objcpp_args: engine_args_objcpp, install: true)
 
-# Game loader
-subdir('src' / 'loader')
+# Game runtime
+subdir('src' / 'runtime')
 
 # Loader headers
-loader_headers = include_directories('src' / 'loader' / 'include')
-install_subdir('src' / 'loader' / 'include', strip_directory: true, install_dir: 'include')
+loader_headers = include_directories('src' / 'runtime' / 'include')
+install_subdir('src' / 'runtime' / 'include', strip_directory: true, install_dir: 'include')
 
 # Final dependency
 cacao_dep = declare_dependency(include_directories: [engine_headers, loader_headers], link_with: libcacao, link_whole: libloader, dependencies: [xg_headers_dep, glm_dep, exathread_dep])

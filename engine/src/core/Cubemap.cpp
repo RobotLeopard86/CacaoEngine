@@ -18,7 +18,14 @@ namespace Cacao {
 
 		//Validate images and do conversion if needed
 		std::array<libcacaoimage::Image, 6> images = std::move(faces);
+		glm::uvec2 refSz = {0, 0};
 		for(uint8_t i = 0; i < 6; ++i) {
+			//Ensure same sizes
+			if(refSz.x == 0 && refSz.y == 0)
+				refSz = {images[i].w, images[i].h};
+			else
+				Check<BadValueException>(images[i].w == refSz.x && images[i].h == refSz.y, "Not all cubemap faces are the same size!");
+
 			//Convert to 8-bit
 			if(images[i].bitsPerChannel == 16) images[i] = libcacaoimage::Convert16To8BitColor(images[i]);
 
