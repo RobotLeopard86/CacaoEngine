@@ -1,22 +1,60 @@
 #include "Cacao/Engine.hpp"
 #include "Cacao/Identity.hpp"
-#include "include/cacaoloader.hpp"
 
 #include "CLI11.hpp"
+#include "yaml-cpp/node/parse.h"
+#include "yaml-cpp/yaml.h"
 
 #include <filesystem>
-#include <cstdlib>
+#include <fstream>
+
+#ifndef CACAO_VER
+#define CACAO_VER "unknown"
+#endif
+
+void panic(const std::string& err, const std::string& hint) {
+	std::cerr << "ERROR: " << err << "!\n"
+			  << (!hint.empty() ? std::string("Hint: ") + hint + ".\n" : "")
+			  << "If you are an end user seeing this error, please report this to the developer of the application." << std::endl;
+	exit(-1);
+}
 
 int main(int argc, char* argv[]) {
-	//Identify game client
-	const Cacao::ClientIdentity client = Cacao::Loader::SelfIdentify();
+	//Change directory to executable location
+	if(argc < 1) {
+		//Panic if we don't have argv[0]
+		panic("Program argument list does not provide program path", "This is usually caused by incorrectly specifying arguments in CreateProcess on Windows or one of the exec functions on POSIX-like systems");
+	}
+	if(!std::filesystem::exists(argv[0])) {
+		//Panic if argv[0] is bad
+		panic("Program path argument is an invalid path", "This is usually caused by incorrectly specifying arguments in CreateProcess on Windows or one of the exec functions on POSIX-like systems");
+	}
+#ifndef __APPLE__
+	std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());
+#else
+	try {
+		std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path().parent_path() / "Resources");
+	} catch(...) {
+		//Panic if we aren't in an app-like bundle
+		panic("Excuted outside of an application bundle-like directory structure", "All Cacao Engine games on macOS must be placed into a valid .app bundle (or a similar directory structure)");
+	}
+#endif
+
+	//Validate that required spec file exists
+	if(!std::filesystem::exists("cacaospec.yml")) {
+		panic("Cacao Engine game specification file not found",
+			std::string("This means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
+	}
+
+	//Read the spec file
+	YAML::Node specRoot = YAML::LoadFile("cacaospec.yml");
 
 	//Configure CLI
-	CLI::App app(client.displayName, std::filesystem::path(argv[0]).filename().string());
+	CLI::App app(specRoot["meta"]["title"].as<std::string>(), std::filesystem::path(argv[0]).filename().string());
 	Cacao::Engine::InitConfig icfg = {};
 	icfg.standalone = true;
 	icfg.initialRequestedBackend = "vulkan";
-	icfg.clientID = client;
+	icfg.clientID = {.id = specRoot["meta"]["pkgId"].as<std::string>(), .displayName = specRoot["meta"]["title"].as<std::string>()};
 
 	//Backend option
 	app.add_option("--backend,-B", icfg.initialRequestedBackend, "The preferred backend to use. One of ['opengl', 'vulkan'];")->default_val("vulkan")->check([](const std::string& v) {
@@ -50,21 +88,15 @@ int main(int argc, char* argv[]) {
 	Cacao::Engine::Get().CoreInit(icfg);
 	Cacao::Engine::Get().GfxInit();
 
-	//Launch hook
-	Cacao::Loader::LaunchHook();
-
 	//Run
 	Cacao::Engine::Get().Run();
-
-	//Termination hook
-	Cacao::Loader::TerminateHook();
 
 	//Engine shutdown
 	Cacao::Engine::Get().GfxShutdown();
 	Cacao::Engine::Get().CoreShutdown();
 }
 
-//Windows
+//Windows no-console wrapper
 #ifdef WIN_NOCONSOLE
 #include <Windows.h>
 #include <shellapi.h>

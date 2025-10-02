@@ -1,5 +1,6 @@
 #include "Cacao/TickController.hpp"
 #include "Cacao/Engine.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/Time.hpp"
 #include "SingletonGet.hpp"
 
@@ -25,7 +26,8 @@ namespace Cacao {
 
 		std::array<time::dseconds, 3> dynTickTimes;
 		time::dtime_point lastTickTimeUpdate;
-		time::dtime_point nextFixedTick, lastDynTick;
+		time::dtime_point nextFixedTick;
+		time::dtime_point lastDynTick;
 	};
 
 	TickController::TickController()
@@ -83,8 +85,8 @@ namespace Cacao {
 				FixedTick();
 
 				//Variable update
-				nextFixedTick += fixedTickRate;
 				now = std::chrono::steady_clock::now();
+				nextFixedTick = now + fixedTickRate;
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
 			} else if(now > (nextFixedTick + fixedTickGraceWindow)) {
 				//If we're over halfway until the next fixed tick, skip the one we missed
@@ -94,8 +96,8 @@ namespace Cacao {
 				}
 
 				//Variable update
-				nextFixedTick += fixedTickRate;
 				now = std::chrono::steady_clock::now();
+				nextFixedTick = now + fixedTickRate;
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
 			}
 
@@ -103,9 +105,9 @@ namespace Cacao {
 			now = std::chrono::steady_clock::now();
 
 			//Clear tick time queue if it's been long enough, since this is probably out-of-date now
-			constexpr std::chrono::milliseconds maxTimeSinceDynTicks = 10ms;
+			constexpr std::chrono::milliseconds maxTimeSinceDynTicks = 15ms;
 			if((time::dtime_point(now) - lastTickTimeUpdate) >= maxTimeSinceDynTicks) {
-				Logger::Engine(Logger::Level::Warn) << "Dynamic tick time calculation reset needed!";
+				Logger::Engine(Logger::Level::Warn) << "Dynamic tick time calculation reset needed!" << " (Behind: " << std::chrono::duration_cast<time::dmilliseconds>(time::dtime_point(now) - lastTickTimeUpdate) << ")";
 				dynTickTimes[0] = 0_ds;
 				dynTickTimes[1] = 0_ds;
 				dynTickTimes[2] = 0_ds;
@@ -114,17 +116,18 @@ namespace Cacao {
 			}
 
 			//Update now again
-			//Look we gotta be accurate
+			//Look we gotta be accurate, ok?
 			now = std::chrono::steady_clock::now();
 
 			//Check if we can probably run a dynamic tick
-			if(avgTickTime < untilNextFixedTick) {
+			if(avgTickTime < (untilNextFixedTick + fixedTickGraceWindow)) {
 				//Run the tick
 				time::dtime_point preTick = now;
 				time::dseconds ts = std::chrono::duration_cast<time::dseconds>(preTick - lastDynTick);
 				DynTick(ts);
+				now = std::chrono::steady_clock::now();
 				time::dtime_point postTick = now;
-				lastDynTick = preTick;
+				lastDynTick = postTick;
 
 				//Store this time in the queue
 				dynTickTimes[0] = dynTickTimes[1];
@@ -133,7 +136,7 @@ namespace Cacao {
 				lastTickTimeUpdate = now;
 			} else {
 				//We'll wait out the time until the next tick more or less
-				high_resolution_sleep::sleep_ms((nextFixedTick - now - 0.2_dms).count());
+				high_resolution_sleep::sleep_ms(std::chrono::duration_cast<time::dmilliseconds>(nextFixedTick - now - 0.2_dms).count());
 			}
 		}
 
@@ -143,12 +146,12 @@ namespace Cacao {
 #endif
 	}
 
-	void TickController::Impl::DynTick(time::dseconds timestep) {
+	void TickController::Impl::DynTick(time::dseconds timestep [[maybe_unused]]) {
 		//dummy
-		std::random_device randDev;
-		std::mt19937_64 rng(randDev());
-		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 3);
-		high_resolution_sleep::sleep_ms(dist(rng) + (0 / timestep.count()));
+		static std::random_device randDev;
+		static std::mt19937_64 rng(randDev());
+		static std::uniform_int_distribution<std::mt19937::result_type> dist(1, 3);
+		high_resolution_sleep::sleep_ms(dist(rng));
 	}
 
 	void TickController::Impl::FixedTick() {

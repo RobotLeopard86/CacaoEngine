@@ -239,7 +239,7 @@ namespace Cacao {
 		//Final goodbye message
 		std::lock_guard lkg(stateMtx);
 		state = State::Dead;
-		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete.";
+		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete. Goodbye.";
 	}
 
 	const std::filesystem::path Engine::GetDataDirectory() {
