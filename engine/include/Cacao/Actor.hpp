@@ -74,7 +74,7 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If the provided parent is a null handle
 		 */
-		static ActorHandle Create(const std::string& name, ActorHandle parent);
+		static ActorHandle Create(const std::string& name, ActorHandle parent, xg::Guid guid = {});
 
 		/**
 		 * @brief Create a new actor attached to the world root
@@ -84,7 +84,7 @@ namespace Cacao {
 		 *
 		 * @return A handle to the new actor
 		 */
-		static ActorHandle Create(const std::string& name, std::shared_ptr<World> world);
+		static ActorHandle Create(const std::string& name, std::shared_ptr<World> world, xg::Guid guid = {});
 
 		std::string name;	///<The human-readable name of the actor
 		const xg::Guid guid;///<Actor ID, unique
@@ -158,7 +158,7 @@ namespace Cacao {
 		 *
 		 * @return Whether a component of the type is on the actor
 		 */
-		template<typename T, typename... Args>
+		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		bool HasComponent() const {
 			return components.contains(std::type_index(typeid(T)));
@@ -171,7 +171,7 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
-		template<typename T, typename... Args>
+		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		std::shared_ptr<T> GetComponent() const {
 			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
@@ -183,7 +183,7 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
-		template<typename T, typename... Args>
+		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		void DeleteComponent() {
 			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
@@ -213,7 +213,7 @@ namespace Cacao {
 		~Actor();
 
 	  private:
-		Actor(const std::string& name, ActorHandle parent);
+		Actor(const std::string& name, ActorHandle parent, xg::Guid);
 		friend class World;
 
 		std::weak_ptr<Actor> parentPtr;

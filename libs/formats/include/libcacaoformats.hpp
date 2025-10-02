@@ -180,13 +180,13 @@ namespace libcacaoformats {
 		Vec3<float> initialCamPos;///<Initial camera position
 		Vec3<float> initialCamRot;///<Initial camera rotation
 
-		///@brief Type for components on entities
+		///@brief Type for components on actors
 		struct Component {
 			std::string typeID;	   ///<ID of component type to instantiate
 			std::string reflection;///<YAML-encoded component reflection data (for use with Silica)
 		};
 
-		///@brief Type for entities in the world
+		///@brief Type for actors in the world
 		struct Actor {
 			xg::Guid guid;					  ///<Actor GUID
 			xg::Guid parentGUID;			  ///<GUID of parent actor or all zeroes if this is a top-level actor
@@ -196,7 +196,7 @@ namespace libcacaoformats {
 			Vec3<float> initialScale;		  ///<Initial scale
 			std::vector<Component> components;///<Components mounted on this actor initially
 		};
-		std::vector<Actor> entities;///<Entities in the world
+		std::vector<Actor> actors;///<Entities in the world
 	};
 
 	///@brief Decoded asset pack

@@ -3,6 +3,7 @@
 #include "Cacao/Component.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/World.hpp"
+#include "crossguid/guid.hpp"
 
 #include <algorithm>
 #include <memory>
@@ -106,30 +107,30 @@ namespace Cacao {
 		NotifyFunctionallyActiveStateChanged();
 	}
 
-	ActorHandle Actor::Create(const std::string& name, ActorHandle parent) {
+	ActorHandle Actor::Create(const std::string& name, ActorHandle parent, xg::Guid guid) {
 		Check<NonexistentValueException>(!parent.IsNull(), "Cannot make an actor with a null handle for a parent!");
 
 		//Make actor
 		ActorHandle hnd;
-		hnd.actor = std::shared_ptr<Actor>(new Actor(name, parent));
+		hnd.actor = std::shared_ptr<Actor>(new Actor(name, parent, (guid == xg::Guid {} ? xg::newGuid() : guid)));
 		hnd.world = parent.world;
 
 		//Return actor
 		return hnd;
 	}
 
-	ActorHandle Actor::Create(const std::string& name, std::shared_ptr<World> world) {
+	ActorHandle Actor::Create(const std::string& name, std::shared_ptr<World> world, xg::Guid guid) {
 		//Make actor
 		ActorHandle hnd;
-		hnd.actor = std::shared_ptr<Actor>(new Actor(name, world->root));
+		hnd.actor = std::shared_ptr<Actor>(new Actor(name, world->root, (guid == xg::Guid {} ? xg::newGuid() : guid)));
 		hnd.world = world;
 
 		//Return actor
 		return hnd;
 	}
 
-	Actor::Actor(const std::string& name, ActorHandle parent)
-	  : name(name), guid(xg::newGuid()), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parentPtr(parent.actor), world(parent->world), active(true), functionallyActive(true) {
+	Actor::Actor(const std::string& name, ActorHandle parent, xg::Guid guid)
+	  : name(name), guid(guid), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parentPtr(parent.actor), world(parent->world), active(true), functionallyActive(true) {
 		NotifyFunctionallyActiveStateChanged();
 	}
 }

@@ -541,7 +541,7 @@ namespace libcacaoformats {
 		std::memcpy(&actorCount, container.payload.data() + advance, 8);
 		advance += 8;
 
-		//If we don't need to process entities, return value now
+		//If we don't need to process actors, return value now
 		if(actorCount == 0) return out;
 
 		for(uint64_t i = 0; i < actorCount; ++i) {
@@ -634,11 +634,11 @@ namespace libcacaoformats {
 			}
 
 		add_actor:
-			//We put "%e" as a separator between entities for padding purposes, so skip over that
+			//We put "%e" as a separator between actors for padding purposes, so skip over that
 			advance += 2;
 
 			//Add actor to world
-			out.entities.push_back(ent);
+			out.actors.push_back(ent);
 		}
 
 		return out;
