@@ -30,9 +30,5 @@ OPTIONS:
                               specified directory 
   -q,     --quiet             Suppress all output from the compiler 
   -V,     --verbose           Enable verbose output from the compiler 
-  -S,     --spirv Excludes: --glsl 
-                              Output in SPIR-V 
-  -G,     --glsl Excludes: --spirv 
-                              Output in GLSL 
   -v,     --version           Show version info and exit 
 ```
