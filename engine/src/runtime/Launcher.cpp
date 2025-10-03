@@ -29,16 +29,7 @@ int main(int argc, char* argv[]) {
 		//Panic if argv[0] is bad
 		panic("Program path argument is an invalid path", "This is usually caused by incorrectly specifying arguments in CreateProcess on Windows or one of the exec functions on POSIX-like systems");
 	}
-#ifndef __APPLE__
 	std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());
-#else
-	try {
-		std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path().parent_path() / "Resources");
-	} catch(...) {
-		//Panic if we aren't in an app-like bundle
-		panic("Excuted outside of an application bundle-like directory structure", "All Cacao Engine games on macOS must be placed into a valid .app bundle (or a similar directory structure)");
-	}
-#endif
 
 	//Validate that required spec file exists
 	if(!std::filesystem::exists("cacaospec.yml")) {
