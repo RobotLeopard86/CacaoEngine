@@ -44,18 +44,14 @@ Similarly, you may not need Pipewire packages or ALSA packages if not targeting 
 ## Compiler Support
 Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
 
-A note about Apple Clang: In recent versions of macOS, the `libc++` headers have been updated such that different compiler flags are necessary, but Meson does not apply the correct flags unless it detects Clang version `18.x` or newer. However, the default version shipped is `17.0.0`, so the outdated flags are used and the build will fail. There is an active issue to fix this, but in the meantime, please install Clang and LLD via [Homebrew](https://brew.sh) to install the latest versions (`brew install llvm lld`).
+A note about Apple Clang: In recent versions of macOS, the `libc++` headers have been updated such that different compiler flags for assertions are necessary, but Meson does not apply the correct flags unless it detects Clang version `18.0.0` or newer. However, the default version shipped with the Command Line Tools/Xcode is `17.0.0`, so the outdated flags are used and the build will fail. There is an active issue to fix this, but in the meantime, please install Clang and LLD via [Homebrew](https://brew.sh) to get the latest versions (`brew install llvm lld`) and follow the instructions to add them to your `PATH` environment variable so Meson finds them by default.
 
 ## Build
-```{warning}
-On Windows, these commands **must** be executed in the Visual Studio Developer Command Prompt/PowerShell, as subprojects require the Windows resource compiler (`rc.exe`) to be found, which it will not be in a standard terminal environment.  
+In the root Cacao Engine directory, run the following command to configure the build: 
+macOS/Linux: `meson setup <build directory> --native-file native.ini [--buildtype release] -Dbackends=<graphics backends>`.  
+Windows    : `meson setup <build directory> --vsenv --native-file native.ini [--buildtype release] -Dbackends=<graphics backends>`.
 
-For this reason, attempting to configure the project with the Visual Studio Code Meson extension will fail, as it invokes Meson directly and consequently the environment is not set up to find `rc.exe`.
-```
-
-In the root Cacao Engine directory, run the following command to configure the build: `meson setup <build directory> --native-file native.ini -Dbackends=<graphics backends>`. The available backends are `opengl` and `vulkan`. See the [backends info page](./backends) for more details. 
-
-You can also choose to build the sandbox application by adding `-Dbuild_sandbox=true` to the command line.  
+The available backends are `opengl` and `vulkan`. See the [backends info page](./backends) for more details. You can also choose to build the sandbox application by adding `-Dbuild_sandbox=true` to the command line.  
 
 On Linux, the supported windowing systems can be selected via the `linux_windowing` option. By default, this is set to `x11,wayland` to include both, but you can choose to exclude one if you wish.
 
