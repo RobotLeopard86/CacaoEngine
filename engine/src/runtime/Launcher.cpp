@@ -29,7 +29,22 @@ int main(int argc, char* argv[]) {
 		//Panic if argv[0] is bad
 		panic("Program path argument is an invalid path", "This is usually caused by incorrectly specifying arguments in CreateProcess on Windows or one of the exec functions on POSIX-like systems");
 	}
-	std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());
+	std::filesystem::path exePath = std::filesystem::canonical(std::filesystem::absolute(std::filesystem::path(argv[0])));
+	std::filesystem::path cdTo = exePath.parent_path();
+#ifdef __APPLE__
+	bool app = false;
+	for(; !cdTo.empty(); cdTo = cdTo.parent_path()) {
+		if(cdTo.extension().string().compare(".app") == 0) {
+			app = true;
+			break;
+		}
+	}
+	if(!app)
+		cdTo = exePath.parent_path();
+	else
+		(cdTo /= "Contents") /= "Resources";
+#endif
+	std::filesystem::current_path(cdTo);
 
 	//Validate that required spec file exists
 	if(!std::filesystem::exists("cacaospec.yml")) {
