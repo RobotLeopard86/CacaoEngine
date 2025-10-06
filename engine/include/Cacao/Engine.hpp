@@ -45,14 +45,14 @@ namespace Cacao {
 		 */
 		struct CACAO_API Config {
 			/**
-			 * @brief The rate at which fixed ticks should occur, specified as the amount of time between fixed ticks in milliseconds
+			 * @brief The amount of time that should pass between fixed ticks, in milliseconds
 			 */
-			std::chrono::milliseconds fixedTickRate = 20ms;
+			std::chrono::milliseconds fixedTickInterval = 20ms;
 
 			/**
 			 * @brief The number of frames the renderer can be behind before skipping some to catch up
 			 */
-			int maxFrameLag;
+			int maxFrameLag = 2;
 
 			/**
 			 * @brief Whether or not to always re-render the UI every frame. Useful for inspecting UI graphics calls in RenderDoc or similar

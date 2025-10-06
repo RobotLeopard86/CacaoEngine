@@ -25,7 +25,6 @@ namespace Cacao {
 		std::unique_ptr<std::jthread> thread;
 
 		std::array<time::dseconds, 3> dynTickTimes;
-		time::dtime_point lastTickTimeUpdate;
 		time::dtime_point nextFixedTick;
 		time::dtime_point lastDynTick;
 	};
@@ -47,12 +46,11 @@ namespace Cacao {
 
 		//Set next fixed tick time and prepare queue
 		time::dtime_point now = std::chrono::steady_clock::now();
-		impl->nextFixedTick = now + time::dseconds(Engine::Get().config.fixedTickRate);
+		impl->nextFixedTick = now + time::dseconds(Engine::Get().config.fixedTickInterval);
 		impl->lastDynTick = now;
 		impl->dynTickTimes[0] = 0_ds;
 		impl->dynTickTimes[1] = 0_ds;
 		impl->dynTickTimes[2] = 0_ds;
-		impl->lastTickTimeUpdate = now;
 
 		//Start runloop on background thread
 		auto runloop = [this](std::stop_token stop) { impl->Runloop(stop); };
@@ -75,8 +73,9 @@ namespace Cacao {
 			//Calculate some important variables
 			time::dtime_point now = std::chrono::steady_clock::now();
 			time::dseconds untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
-			time::dseconds avgTickTime((dynTickTimes[0] + dynTickTimes[1] + dynTickTimes[2]).count() / 3.0);
-			time::fseconds fixedTickRate = std::chrono::duration_cast<time::fseconds>(Engine::Get().config.fixedTickRate);
+			time::dseconds avgTickTime = (dynTickTimes[0] + dynTickTimes[1] + dynTickTimes[2]) / 3.0;
+			time::fseconds fixedTickInterval = std::chrono::duration_cast<time::fseconds>(Engine::Get().config.fixedTickInterval);
+			//Logger::Engine(Logger::Level::Trace) << std::chrono::duration_cast<time::dmilliseconds>(untilNextFixedTick) << " until next fixed tick";
 
 			//Check if we should run a fixed tick
 			constexpr std::chrono::milliseconds fixedTickGraceWindow = 2ms;
@@ -86,37 +85,34 @@ namespace Cacao {
 
 				//Variable update
 				now = std::chrono::steady_clock::now();
-				nextFixedTick = now + fixedTickRate;
+				nextFixedTick = now + fixedTickInterval;
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
+				continue;
 			} else if(now > (nextFixedTick + fixedTickGraceWindow)) {
 				//If we're over halfway until the next fixed tick, skip the one we missed
-				if(now <= (nextFixedTick + fixedTickGraceWindow + (fixedTickRate / 2))) {
+				if(now <= (nextFixedTick + fixedTickGraceWindow + (fixedTickInterval / 2))) {
 					Logger::Engine(Logger::Level::Warn) << "Overshot a fixed tick! (Past: " << std::chrono::duration_cast<time::dmilliseconds>(now - (nextFixedTick + fixedTickGraceWindow)) << ")";
 					FixedTick();
 				}
 
 				//Variable update
 				now = std::chrono::steady_clock::now();
-				nextFixedTick = now + fixedTickRate;
+				nextFixedTick = now + fixedTickInterval;
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
 			}
 
-			//Update now
-			now = std::chrono::steady_clock::now();
-
 			//Clear tick time queue if it's been long enough, since this is probably out-of-date now
 			constexpr std::chrono::milliseconds maxTimeSinceDynTicks = 15ms;
-			if((time::dtime_point(now) - lastTickTimeUpdate) >= maxTimeSinceDynTicks) {
-				Logger::Engine(Logger::Level::Warn) << "Dynamic tick time calculation reset needed!" << " (Behind: " << std::chrono::duration_cast<time::dmilliseconds>(time::dtime_point(now) - lastTickTimeUpdate) << ")";
+			if((now - lastDynTick) >= maxTimeSinceDynTicks) {
+				Logger::Engine(Logger::Level::Warn) << "Dynamic tick time calculation reset needed!" << " (Behind: " << std::chrono::duration_cast<time::dmilliseconds>(now - lastDynTick) << ")";
 				dynTickTimes[0] = 0_ds;
 				dynTickTimes[1] = 0_ds;
 				dynTickTimes[2] = 0_ds;
-				lastTickTimeUpdate = now;
+				now = std::chrono::steady_clock::now();
 				avgTickTime = 0_ds;
 			}
 
-			//Update now again
-			//Look we gotta be accurate, ok?
+			//Update now
 			now = std::chrono::steady_clock::now();
 
 			//Check if we can probably run a dynamic tick
@@ -133,11 +129,12 @@ namespace Cacao {
 				dynTickTimes[0] = dynTickTimes[1];
 				dynTickTimes[1] = dynTickTimes[2];
 				dynTickTimes[2] = std::chrono::duration_cast<time::dseconds>(postTick - preTick);
-				lastTickTimeUpdate = now;
 			} else {
 				//We'll wait out the time until the next tick more or less
 				high_resolution_sleep::sleep_ms(std::chrono::duration_cast<time::dmilliseconds>(nextFixedTick - now - 0.2_dms).count());
 			}
+
+			Logger::Engine(Logger::Level::Trace) << "One iteration in " << std::chrono::duration_cast<time::dmilliseconds>(time::dtime_point(std::chrono::steady_clock::now()) - now);
 		}
 
 //If on Windows, we have to reset the time period since high_resolution_sleep messes with it.
@@ -156,6 +153,7 @@ namespace Cacao {
 
 	void TickController::Impl::FixedTick() {
 		//dummy
+		Logger::Engine(Logger::Level::Trace) << "fxdtick";
 		high_resolution_sleep::sleep_ms(2);
 	}
 }
