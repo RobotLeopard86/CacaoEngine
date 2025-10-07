@@ -17,15 +17,12 @@ Vulkan version 1.3 or later. The `VK_KHR_swapchain` (almost universally availabl
 | Backend | Windows | Mac | Linux* |
 | -- | ------- | --- | ------ |
 | OpenGL | ✅ | ✅ | ✅ |
-| Vulkan | ✅&#8321; | ❌ | ✅  |  
+| Vulkan | ✅ | ❌ | ✅  |  
 
-\* Most testing occurs on Fedora Linux. Other distributions may have different compatibilities.
+\* Most Linux testing occurs on Fedora Linux. Other distributions may have different compatibilities.
 
 #### Legend
 * ✅ - Fully working and supported
 * 🔷 - Intended to work but currently not working
 * 🟨 - Intended to work but untested
 * ❌ - Incompatible with platform / will not be supported
-
-#### Notes
-&#8321; Some Intel integrated GPUs may not work correctly. If this occurs, use the OpenGL backend.  

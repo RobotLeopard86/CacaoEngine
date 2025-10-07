@@ -8,9 +8,6 @@
 #include <algorithm>
 #include <memory>
 
-#define SELF_HANDLE [this]() {ActorHandle h; h.actor = shared_from_this(); h.world = world.lock(); return h; }()
-#define SELF_HANDLE_NOCONST [this]() {ActorHandle h; h.actor = std::const_pointer_cast<Actor>(shared_from_this()); h.world = world.lock(); return h; }()
-
 namespace Cacao {
 	Actor::~Actor() {
 		//Release ownership of all components
@@ -29,7 +26,7 @@ namespace Cacao {
 	glm::mat4 Actor::GetWorldTransformMatrix() const {
 		//Calculate the transformation matrix
 		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
-		ActorHandle current = SELF_HANDLE_NOCONST;
+		ActorHandle current = [this]() {ActorHandle h; h.actor = std::const_pointer_cast<Actor>(shared_from_this()); h.world = world.lock(); return h; }();
 		glm::mat4 transMat = transform.GetTransformationMatrix();
 		while(!(current = current->GetParent()).IsNull()) {
 			//Apply this transformation
@@ -51,8 +48,8 @@ namespace Cacao {
 		//Remove ourselves from the current parent
 		std::shared_ptr<Actor> selfPtr = shared_from_this();
 		std::shared_ptr<Actor> parent = parentPtr.lock();
-		auto it = std::find_if(parent->children.begin(), parent->children.end(), [&selfPtr](ActorHandle a) {
-			return a.actor == selfPtr;
+		auto it = std::find_if(parent->children.begin(), parent->children.end(), [&selfPtr](std::shared_ptr<Actor> a) {
+			return a == selfPtr;
 		});
 		if(it != parent->children.end()) parent->children.erase(it);
 
@@ -60,7 +57,7 @@ namespace Cacao {
 		Check<BadValueException>(newParent.actor != selfPtr, "Cannot parent an Actor to itself!");
 
 		//Add ourselves as a child to the new parent
-		newParent->children.push_back(SELF_HANDLE);
+		newParent->children.push_back(shared_from_this());
 
 		//Set parent pointer
 		parentPtr = newParent.actor;
@@ -105,6 +102,16 @@ namespace Cacao {
 		if(state == active) return;
 		active = state;
 		NotifyFunctionallyActiveStateChanged();
+	}
+
+	std::vector<ActorHandle> Actor::GetAllChildren() const {
+		std::vector<ActorHandle> handles;
+		for(std::shared_ptr<Actor> child : children) {
+			ActorHandle& ah = handles.emplace_back();
+			ah.actor = child;
+			ah.world = world.lock();
+		}
+		return handles;
 	}
 
 	ActorHandle Actor::Create(const std::string& name, ActorHandle parent, xg::Guid guid) {

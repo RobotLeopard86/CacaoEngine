@@ -206,9 +206,7 @@ namespace Cacao {
 		 *
 		 * @return All child entities
 		 */
-		std::vector<ActorHandle> GetAllChildren() const {
-			return children;
-		}
+		std::vector<ActorHandle> GetAllChildren() const;
 
 		~Actor();
 
@@ -219,7 +217,7 @@ namespace Cacao {
 		std::weak_ptr<Actor> parentPtr;
 		std::weak_ptr<World> world;
 		std::map<std::type_index, std::shared_ptr<Component>> components;
-		std::vector<ActorHandle> children;
+		std::vector<std::shared_ptr<Actor>> children;
 
 		void PostMountComponent(std::shared_ptr<Component> c);
 		void NotifyFunctionallyActiveStateChanged();

@@ -52,7 +52,7 @@ namespace Cacao {
 
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
-		constexpr unsigned int coreServiceCount = 2;//Tick controller, GPU manager
+		constexpr unsigned int coreServiceCount = 3;//Tick controller, GPU manager, frame processor
 		pool = exathread::Pool::Create(std::clamp<std::size_t>(std::thread::hardware_concurrency() - coreServiceCount, 2, SIZE_MAX));
 
 		//Store thread ID
@@ -141,6 +141,10 @@ namespace Cacao {
 		//Enable V-Sync by default
 		GPUManager::Get().SetVSync(true);
 
+		//Start the frame processor
+		Logger::Engine(Logger::Level::Trace) << "Starting GPU manager...";
+		GPUManager::Get().Start();
+
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
 		std::lock_guard lkg(stateMtx);
@@ -156,7 +160,7 @@ namespace Cacao {
 
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
 
-		//Start the tick controller on the thread pool
+		//Start the tick controller
 		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
 		TickController::Get().Start();
 
