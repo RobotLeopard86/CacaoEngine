@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Platform Support &#8212; Cacao Engine Docs</title>
+    <title>Program Listing for File FrameProcessor.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/platforms';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_engine_include_Cacao_FrameProcessor.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,6 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Versioning Scheme" href="versioning.html" />
-    <link rel="prev" title="Quickstart" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -160,7 +158,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
@@ -168,7 +166,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
   </a>
 </li>
@@ -239,10 +237,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -269,7 +263,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
@@ -277,7 +271,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
   </a>
 </li>
@@ -333,24 +327,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Program Listing for File FrameProcessor.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -386,10 +363,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Platform Support</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Program Listing for File FrameProcessor.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -406,53 +380,45 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="platform-support">
-<h1>Platform Support<a class="headerlink" href="#platform-support" title="Link to this heading"><span/></a></h1>
-<aside class="topic">
-<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
-<p>The information on this page pertains to the engine post-restructuring.</p>
-</aside>
-<section id="supported-oses-and-architectures">
-<h2>Supported OSes and Architectures<a class="headerlink" href="#supported-oses-and-architectures" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p>x86_64 Windows</p></li>
-<li><p>aarch64 macOS</p></li>
-<li><p>x86_64/aarch64 GNU/Linux (most distros)</p></li>
-</ul>
-</section>
-<section id="currently-supported-gnu-linux-distros">
-<h2>Currently Supported GNU/Linux Distros<a class="headerlink" href="#currently-supported-gnu-linux-distros" title="Link to this heading"><span/></a></h2>
-<p>Not every GNU/Linux distro is supported, but most are:</p>
-<ul class="simple">
-<li><p>Debian and derivatives (e.g. Ubuntu, Linux Mint, Pop!_OS)</p></li>
-<li><p>Fedora and derivatives (e.g. Nobara)</p></li>
-<li><p>Arch and derivatives (e.g. EndeavourOS, Garuda, Manjaro)</p></li>
-</ul>
-<p>SteamOS will be supported for playing games, but developing on SteamOS is not likely to be ever supported.</p>
-<p>Support for openSUSE is planned and will come in the future.</p>
-<p>More operating systems/platforms may be supported in the future, though this is not guaranteed.</p>
-</section>
-<section id="versions">
-<h2>Versions<a class="headerlink" href="#versions" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine aims to support computers running any OS version listed below or a later version, but older systems may be dropped over time.</p>
-<ul class="simple">
-<li><p>Windows 11 (all versions) and later</p></li>
-<li><p>macOS Ventura (13.x) and later</p></li>
-<li><p>Debian 12 and later, plus derivatives</p>
-<ul>
-<li><p>Ubuntu 22.04 and later, plus derivatives, while based on Debian 11, have supplementary packages that work</p></li>
-</ul>
-</li>
-<li><p>Fedora 37 and later, plus derivatives</p></li>
-<li><p>As Arch and derivatives are based on rolling releases, there are no defined versions. For best compatibility, always target the latest packages, but Cacao Engine should work on most systems that have been updated since 2024.</p></li>
-</ul>
-<p>If any issues are encountered in these versions, they should be supported to the extent that it is possible. Any issues in versions before these are <strong>not supported</strong>.</p>
-</section>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 15.1 should be supported as long any 15.x release is), but this is not guaranteed, especially if said minor release introduces major changes.
-<strong>In general, most up-to-date systems should be supported.</strong></p>
-</section>
+  <section id="program-listing-for-file-frameprocessor-hpp">
+<span id="program-listing-file-engine-include-cacao-frameprocessor-hpp"></span><h1>Program Listing for File FrameProcessor.hpp<a class="headerlink" href="#program-listing-for-file-frameprocessor-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="file_engine_include_Cacao_FrameProcessor.hpp.html#file-engine-include-cacao-frameprocessor-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/FrameProcessor.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">FrameProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">FrameProcessor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Get</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">FrameProcessor</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">FrameProcessor</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">FrameProcessor</span><span class="p">(</span><span class="n">FrameProcessor</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">FrameProcessor</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">FrameProcessor</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">FrameProcessor</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">FrameProcessor</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Start</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Stop</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsRunning</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">running</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">running</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">FrameProcessor</span><span class="p">();</span>
+<span class="w">        </span><span class="o">~</span><span class="n">FrameProcessor</span><span class="p">();</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 
 
@@ -465,51 +431,12 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="quickstart.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Quickstart</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="versioning.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Versioning Scheme</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-oses-and-architectures">Supported OSes and Architectures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#currently-supported-gnu-linux-distros">Currently Supported GNU/Linux Distros</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versions">Versions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

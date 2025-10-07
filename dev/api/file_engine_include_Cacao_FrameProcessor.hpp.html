@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Platform Support &#8212; Cacao Engine Docs</title>
+    <title>File FrameProcessor.hpp &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'manual/platforms';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/file_engine_include_Cacao_FrameProcessor.hpp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,6 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Versioning Scheme" href="versioning.html" />
-    <link rel="prev" title="Quickstart" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -160,7 +158,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
@@ -168,7 +166,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
   </a>
 </li>
@@ -269,7 +267,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../manual.html">
     Manual
   </a>
@@ -277,7 +275,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
   </a>
 </li>
@@ -332,25 +330,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_FrameProcessor.hpp.html">Program Listing for File FrameProcessor.hpp</a></li>
 </ul>
 </div>
 </nav></div>
@@ -386,10 +367,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../manual.html" class="nav-link">Manual</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Platform Support</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File FrameProcessor.hpp</span></li>
   </ul>
 </nav>
 </div>
@@ -406,52 +384,44 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="platform-support">
-<h1>Platform Support<a class="headerlink" href="#platform-support" title="Link to this heading"><span/></a></h1>
-<aside class="topic">
-<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
-<p>The information on this page pertains to the engine post-restructuring.</p>
-</aside>
-<section id="supported-oses-and-architectures">
-<h2>Supported OSes and Architectures<a class="headerlink" href="#supported-oses-and-architectures" title="Link to this heading"><span/></a></h2>
+  <section id="file-frameprocessor-hpp">
+<span id="file-engine-include-cacao-frameprocessor-hpp"></span><h1>File FrameProcessor.hpp<a class="headerlink" href="#file-frameprocessor-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="dir_engine_include_Cacao.html#dir-engine-include-cacao"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao</span></code>)</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p>x86_64 Windows</p></li>
-<li><p>aarch64 macOS</p></li>
-<li><p>x86_64/aarch64 GNU/Linux (most distros)</p></li>
+<li><p><a class="reference internal" href="#definition-engine-include-cacao-frameprocessor-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/FrameProcessor.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
 </ul>
-</section>
-<section id="currently-supported-gnu-linux-distros">
-<h2>Currently Supported GNU/Linux Distros<a class="headerlink" href="#currently-supported-gnu-linux-distros" title="Link to this heading"><span/></a></h2>
-<p>Not every GNU/Linux distro is supported, but most are:</p>
-<ul class="simple">
-<li><p>Debian and derivatives (e.g. Ubuntu, Linux Mint, Pop!_OS)</p></li>
-<li><p>Fedora and derivatives (e.g. Nobara)</p></li>
-<li><p>Arch and derivatives (e.g. EndeavourOS, Garuda, Manjaro)</p></li>
-</ul>
-<p>SteamOS will be supported for playing games, but developing on SteamOS is not likely to be ever supported.</p>
-<p>Support for openSUSE is planned and will come in the future.</p>
-<p>More operating systems/platforms may be supported in the future, though this is not guaranteed.</p>
-</section>
-<section id="versions">
-<h2>Versions<a class="headerlink" href="#versions" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine aims to support computers running any OS version listed below or a later version, but older systems may be dropped over time.</p>
-<ul class="simple">
-<li><p>Windows 11 (all versions) and later</p></li>
-<li><p>macOS Ventura (13.x) and later</p></li>
-<li><p>Debian 12 and later, plus derivatives</p>
+</nav>
+<section id="definition-engine-include-cacao-frameprocessor-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/FrameProcessor.hpp</span></code>)<a class="headerlink" href="#definition-engine-include-cacao-frameprocessor-hpp" title="Link to this heading"><span/></a></h2>
+<div class="toctree-wrapper compound">
 <ul>
-<li><p>Ubuntu 22.04 and later, plus derivatives, while based on Debian 11, have supplementary packages that work</p></li>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_engine_include_Cacao_FrameProcessor.hpp.html">Program Listing for File FrameProcessor.hpp</a></li>
 </ul>
-</li>
-<li><p>Fedora 37 and later, plus derivatives</p></li>
-<li><p>As Arch and derivatives are based on rolling releases, there are no defined versions. For best compatibility, always target the latest packages, but Cacao Engine should work on most systems that have been updated since 2024.</p></li>
-</ul>
-<p>If any issues are encountered in these versions, they should be supported to the extent that it is possible. Any issues in versions before these are <strong>not supported</strong>.</p>
+</div>
 </section>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 15.1 should be supported as long any 15.x release is), but this is not guaranteed, especially if said minor release introduces major changes.
-<strong>In general, most up-to-date systems should be supported.</strong></p>
+<section id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DllHelper.hpp</span></code> (<a class="reference internal" href="file_engine_include_Cacao_DllHelper.hpp.html#file-engine-include-cacao-dllhelper-hpp"><span class="std std-ref">File DllHelper.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_Cacao.html#namespace-cacao"><span class="std std-ref">Namespace Cacao</span></a></p></li>
+</ul>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"><span/></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="classCacao_1_1FrameProcessor.html#exhale-class-classcacao-1-1frameprocessor"><span class="std std-ref">Class FrameProcessor</span></a></p></li>
+</ul>
 </section>
 </section>
 
@@ -465,24 +435,6 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="quickstart.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Quickstart</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="versioning.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Versioning Scheme</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -502,10 +454,10 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-oses-and-architectures">Supported OSes and Architectures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#currently-supported-gnu-linux-distros">Currently Supported GNU/Linux Distros</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versions">Versions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-engine-include-cacao-frameprocessor-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/FrameProcessor.hpp</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#includes">Includes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 </ul>
   </nav></div>
 
