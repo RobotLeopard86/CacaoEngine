@@ -423,7 +423,7 @@
 <h3>All Platforms<a class="headerlink" href="#all-platforms" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
 <li><p>Git</p></li>
-<li><p>Meson</p></li>
+<li><p>Meson (version <code class="docutils literal notranslate"><span class="pre">1.9.0</span></code> or newer)</p></li>
 <li><p>Ninja</p></li>
 <li><p>Python 3</p></li>
 <li><p>CMake</p></li>
@@ -461,7 +461,6 @@
 <section id="compiler-support">
 <h2>Compiler Support<a class="headerlink" href="#compiler-support" title="Link to this heading"><span/></a></h2>
 <p>Cacao Engine is primarily built and tested using <a class="reference external" href="https://clang.llvm.org">Clang</a> with the <a class="reference external" href="https://lld.llvm.org">LLD linker</a>. While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.</p>
-<p>A note about Apple Clang: In recent versions of macOS, the <code class="docutils literal notranslate"><span class="pre">libc++</span></code> headers have been updated such that different compiler flags for assertions are necessary, but Meson does not apply the correct flags unless it detects Clang version <code class="docutils literal notranslate"><span class="pre">18.0.0</span></code> or newer. However, the default version shipped with the Command Line Tools/Xcode is <code class="docutils literal notranslate"><span class="pre">17.0.0</span></code>, so the outdated flags are used and the build will fail. There is an active issue to fix this, but in the meantime, please install Clang and LLD via <a class="reference external" href="https://brew.sh">Homebrew</a> to get the latest versions (<code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span> <span class="pre">lld</span></code>) and follow the instructions to add them to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable so Meson finds them by default.</p>
 </section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Link to this heading"><span/></a></h2>
