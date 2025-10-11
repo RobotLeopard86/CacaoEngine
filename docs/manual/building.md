@@ -13,7 +13,7 @@ Before you begin, please check the [Platform Support page](./platforms) to ensur
 
 #### All Platforms
 * Git
-* Meson
+* Meson (version `1.9.0` or newer)
 * Ninja
 * Python 3
 * CMake
@@ -43,8 +43,6 @@ Similarly, you may not need Pipewire packages or ALSA packages if not targeting 
 
 ## Compiler Support
 Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
-
-A note about Apple Clang: In recent versions of macOS, the `libc++` headers have been updated such that different compiler flags for assertions are necessary, but Meson does not apply the correct flags unless it detects Clang version `18.0.0` or newer. However, the default version shipped with the Command Line Tools/Xcode is `17.0.0`, so the outdated flags are used and the build will fail. There is an active issue to fix this, but in the meantime, please install Clang and LLD via [Homebrew](https://brew.sh) to get the latest versions (`brew install llvm lld`) and follow the instructions to add them to your `PATH` environment variable so Meson finds them by default.
 
 ## Build
 In the root Cacao Engine directory, run the following command to configure the build: 

@@ -53,7 +53,7 @@ The only exceptions to the code-commenting rule in function implementations are:
 ## Branching Scheme
 Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all core development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  
 
-During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All alpha and beta testing should continue in the staging branch until the stable release is completed. Once the release is made, the staging branch should be merged back into `dev` and `main`, synchronizing all core branches, and the staging branch should be deleted. Release tags should be made from `main`.
+During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All alpha and beta testing should continue in the staging branch until the stable release is completed. Once the release's lifecycle is complete (i.e. no more patch releases will be made and the next release will be a minor release instead), the staging branch should be merged back into `dev` and `main`, synchronizing all core branches, and the staging branch should be deleted. Release tags should be made from `main`.
 
 ## Contributing Your Changes
 All code contributions must be submitted as GitHub pull requests; standalone patches will not be accepted.  

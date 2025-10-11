@@ -7,6 +7,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <string>
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
@@ -32,14 +33,14 @@ int main(int argc, char* argv[]) {
 	std::filesystem::path exePath = std::filesystem::canonical(std::filesystem::absolute(std::filesystem::path(argv[0])));
 	std::filesystem::path cdTo = exePath.parent_path();
 #ifdef __APPLE__
-	bool app = false;
-	for(; !cdTo.empty(); cdTo = cdTo.parent_path()) {
+	bool inAppBundle = false;
+	for(; cdTo != std::filesystem::path("/"); cdTo = cdTo.parent_path()) {
 		if(cdTo.extension().string().compare(".app") == 0) {
-			app = true;
+			inAppBundle = true;
 			break;
 		}
 	}
-	if(!app)
+	if(!inAppBundle)
 		cdTo = exePath.parent_path();
 	else
 		(cdTo /= "Contents") /= "Resources";
