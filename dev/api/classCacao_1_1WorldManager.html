@@ -608,22 +608,22 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao12WorldManager14GetActiveWorldEv">
-<span id="_CPPv3N5Cacao12WorldManager14GetActiveWorldEv"></span><span id="_CPPv2N5Cacao12WorldManager14GetActiveWorldEv"></span><span id="Cacao::WorldManager::GetActiveWorld"></span><span class="target" id="classCacao_1_1WorldManager_1ac781e175e055c2cc497360489e80fe8f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetActiveWorld</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12WorldManager14GetActiveWorldEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check the active world. </p>
+<span id="_CPPv3N5Cacao12WorldManager14GetActiveWorldEv"></span><span id="_CPPv2N5Cacao12WorldManager14GetActiveWorldEv"></span><span id="Cacao::WorldManager::GetActiveWorld"></span><span class="target" id="classCacao_1_1WorldManager_1a8f6a1aba20560a7aed6174bd6eb02163"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1World.html#_CPPv4N5Cacao5WorldE" title="Cacao::World"><span class="n"><span class="pre">World</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetActiveWorld</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12WorldManager14GetActiveWorldEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Access the active <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a> object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The resource address of the active world, or an empty string if no world is active </p>
+<dd class="field-odd"><p>A handle to the active world, or an empty pointer if no world is active </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12WorldManagerclEv">
-<span id="_CPPv3N5Cacao12WorldManagerclEv"></span><span id="_CPPv2N5Cacao12WorldManagerclEv"></span><span id="Cacao::WorldManager::call-operator"></span><span class="target" id="classCacao_1_1WorldManager_1ab5b50e06d77e0acc8c638a5707c7de22"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1World.html#_CPPv4N5Cacao5WorldE" title="Cacao::World"><span class="n"><span class="pre">World</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12WorldManagerclEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Access the active <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a> object. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12WorldManager18GetActiveWorldAddrEv">
+<span id="_CPPv3N5Cacao12WorldManager18GetActiveWorldAddrEv"></span><span id="_CPPv2N5Cacao12WorldManager18GetActiveWorldAddrEv"></span><span id="Cacao::WorldManager::GetActiveWorldAddr"></span><span class="target" id="classCacao_1_1WorldManager_1a3f2841c1a176241b9487464d2f94aa99"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetActiveWorldAddr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao12WorldManager18GetActiveWorldAddrEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check the active world’s resource address. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If there is no active world </p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The resource address of the active world, or an empty string if no world is active </p>
 </dd>
 </dl>
 </dd></dl>
@@ -699,7 +699,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12WorldManagerE"><code class="docutils literal notranslate"><span class="pre">WorldManager</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12WorldManager14SetActiveWorldERKNSt6stringEb"><code class="docutils literal notranslate"><span class="pre">WorldManager::SetActiveWorld()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12WorldManager14GetActiveWorldEv"><code class="docutils literal notranslate"><span class="pre">WorldManager::GetActiveWorld()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12WorldManagerclEv"><code class="docutils literal notranslate"><span class="pre">WorldManager::operator()()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12WorldManager18GetActiveWorldAddrEv"><code class="docutils literal notranslate"><span class="pre">WorldManager::GetActiveWorldAddr()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12WorldManager3GetEv"><code class="docutils literal notranslate"><span class="pre">WorldManager::Get()</span></code></a></li>
 </ul>
 </li>

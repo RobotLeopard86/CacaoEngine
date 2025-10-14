@@ -413,8 +413,8 @@
 <p>The information on this page pertains to the engine post-restructuring.</p>
 </aside>
 <p>These instructions will guide you through the process of building Cacao Engine.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
 <p>Before you begin, please check the <a class="reference internal" href="platforms.html"><span class="doc std std-doc">Platform Support page</span></a> to ensure you have a compatible system!</p>
 </div>
 <section id="prerequisites">
@@ -428,6 +428,10 @@
 <li><p>Python 3</p></li>
 <li><p>CMake</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some Linux distros may not have the requisite Meson version available in their repositories. Follow <a class="reference external" href="https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip">the instructions here</a> to install via <code class="docutils literal notranslate"><span class="pre">pip</span></code> instead, which always has the latest versions.</p>
+</div>
 </section>
 <section id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Link to this heading"><span/></a></h3>
@@ -472,7 +476,8 @@ Windows    : <code class="docutils literal notranslate"><span class="pre">meson<
 <p>Windows builds also have the option of disabling the automatic console window by setting <code class="docutils literal notranslate"><span class="pre">-Dwindows_noconsole=true</span></code> on the command line.</p>
 <p>For a complete list of options, please see the file <code class="docutils literal notranslate"><span class="pre">meson_options.txt</span></code> in the root directory.</p>
 <p>Please note that configuration may take a long time, especially in a fresh checkout of the repository, since all non-system dependencies will be downloaded at this time (some of which are large).</p>
-<p>Once configuration is complete, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">compile</span> <span class="pre">-C</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span></code> to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the <code class="docutils literal notranslate"><span class="pre">sandbox</span></code> directory in your build directory. On Windows, it will not run out of the box due to not being able to find DLLs. When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">devenv</span></code> in your build directory to set up the proper paths.</p>
+<p>Once configuration is complete, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">compile</span> <span class="pre">-C</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span></code> to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the <code class="docutils literal notranslate"><span class="pre">sandbox</span></code> directory in your build directory.</p>
+<p>When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">devenv</span></code> in your build directory to set up the proper paths.</p>
 </section>
 <section id="visual-studio">
 <h2>Visual Studio<a class="headerlink" href="#visual-studio" title="Link to this heading"><span/></a></h2>
