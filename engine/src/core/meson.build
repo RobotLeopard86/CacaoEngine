@@ -22,13 +22,14 @@ assimp_dep = assimp_sp.dependency('assimp')
 zlib_dep = assimp_sp.dependency('zlibstatic')
 
 # Configure OpenAL-Soft
-alsoft_dep = subproject('openal-soft', required: true, default_options: {
+alsoft_sp = subproject('openal-soft', required: true, default_options: {
 	'default_library': 'shared',
 	'utils': false,
 	'rtkit': 'disabled',
 	'sdl2': 'disabled',
 	'winmm': 'disabled'
-}).get_variable('openal_dep')
+})
+alsoft_dep = alsoft_sp.get_variable('openal_dep')
 
 # Configure spdlog
 spdlog_dep = subproject('spdlog', required: true, default_options: {

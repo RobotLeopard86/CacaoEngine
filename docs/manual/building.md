@@ -5,7 +5,7 @@ The information on this page pertains to the engine post-restructuring.
 ```
 
 These instructions will guide you through the process of building Cacao Engine.  
-```{warning}
+```{attention}
 Before you begin, please check the [Platform Support page](./platforms) to ensure you have a compatible system!
 ```
 
@@ -17,6 +17,10 @@ Before you begin, please check the [Platform Support page](./platforms) to ensur
 * Ninja
 * Python 3
 * CMake
+
+```{note}
+Some Linux distros may not have the requisite Meson version available in their repositories. Follow [the instructions here](https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip) to install via `pip` instead, which always has the latest versions.
+```
 
 #### Windows
 Install the Windows SDK via [Visual Studio](https://visualstudio.microsoft.com) or [direct download](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk).
@@ -59,7 +63,9 @@ For a complete list of options, please see the file `meson_options.txt` in the r
 
 Please note that configuration may take a long time, especially in a fresh checkout of the repository, since all non-system dependencies will be downloaded at this time (some of which are large).  
 
-Once configuration is complete, run `meson compile -C <build directory>` to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the `sandbox` directory in your build directory. On Windows, it will not run out of the box due to not being able to find DLLs. When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run `meson devenv` in your build directory to set up the proper paths.
+Once configuration is complete, run `meson compile -C <build directory>` to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the `sandbox` directory in your build directory.
+
+When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run `meson devenv` in your build directory to set up the proper paths.
 
 ## Visual Studio
 Cacao Engine has not yet been tested with Meson's Visual Studio backend. It is not guaranteed to work, but feel free to try it out for yourself. Official guidance will be provided closer to release when testing begins.

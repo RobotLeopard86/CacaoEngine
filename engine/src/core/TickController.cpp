@@ -1,13 +1,18 @@
 #include "Cacao/TickController.hpp"
+#include "Cacao/Actor.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/Time.hpp"
+#include "Cacao/WorldManager.hpp"
+#include "Cacao/Script.hpp"
 #include "SingletonGet.hpp"
 
+#include "exathread.hpp"
 #include "high_resolution_sleep.hpp"
 
 #include <chrono>
 #include <array>
+#include <memory>
 #include <random>
 #include <thread>
 
@@ -163,8 +168,36 @@ namespace Cacao {
 	}
 
 	void TickController::Impl::DynTick(time::dseconds timestep [[maybe_unused]]) {
-		//dummy
-		high_resolution_sleep::sleep_ms(3);
+		//Acquire active world
+		std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
+		if(!world) return;
+
+		//Find scripts
+		std::vector<std::shared_ptr<Script>> scripts;
+		std::mutex scriptsMtx;
+		const auto scriptFinder = [world, &scripts, &scriptsMtx](ActorHandle ah) -> exathread::VoidTask {
+			auto impl = [world, &scripts, &scriptsMtx](ActorHandle ah, auto& iref) -> exathread::VoidTask {
+				//Inactive stop
+				if(!ah->IsActive()) co_return;
+
+				//Process components
+				for(auto& [ctype, cptr] : ah->GetAllComponents()) {
+					//Is this a script?
+					if(auto sptr = std::dynamic_pointer_cast<Script>(cptr)) {
+						std::lock_guard lk(scriptsMtx);
+						scripts.push_back(sptr);
+					}
+				}
+
+				//Handle children
+				exathread::MultiFuture<void> childrenFut = Engine::Get().GetThreadPool()->batch(world->GetRootChildren(), iref, iref);
+				co_await exathread::yieldUntilComplete(childrenFut);
+			};
+			impl(ah, impl);
+			co_return;
+		};
+		exathread::MultiFuture<void> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetRootChildren(), scriptFinder);
+		scriptsFut.await();
 	}
 
 	void TickController::Impl::FixedTick() {

@@ -38,18 +38,18 @@ namespace Cacao {
 		void SetActiveWorld(const std::string& addr, bool noload = false);
 
 		/**
-		 * @brief Check the active world
+		 * @brief Access the active World object
+		 *
+		 * @return A handle to the active world, or an empty pointer if no world is active
+		 */
+		std::shared_ptr<World> GetActiveWorld();
+
+		/**
+		 * @brief Check the active world's resource address
 		 *
 		 * @return The resource address of the active world, or an empty string if no world is active
 		 */
-		std::string GetActiveWorld();
-
-		/**
-		 * @brief Access the active World object
-		 *
-		 * @throws BadValueException If there is no active world
-		 */
-		std::shared_ptr<World> operator()();
+		std::string GetActiveWorldAddr();
 
 		///@cond
 		struct Impl;

@@ -114,12 +114,11 @@ namespace Cacao {
 
 	CACAOST_GET(WorldManager)
 
-	std::string WorldManager::GetActiveWorld() {
+	std::string WorldManager::GetActiveWorldAddr() {
 		return impl->active ? impl->active->GetAddress() : "";
 	}
 
-	std::shared_ptr<World> WorldManager::operator()() {
-		Check<World, NonexistentValueException>(impl->active, "No active world is set!");
+	std::shared_ptr<World> WorldManager::GetActiveWorld() {
 		return impl->active;
 	}
 
