@@ -39,9 +39,9 @@ jobs:
           else
             echo "BUILDVER=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           fi
-          echo "Building documentation for version " ${BUILDVER}
       - name: Build documentation
         run: |
+          echo "Building documentation for version " ${BUILDVER}
           cd docs
           rm -rvf /tmp/PAGESBUILD/${BUILDVER}
           sphinx-build -b html -j auto -a . /tmp/PAGESBUILD/${BUILDVER}
