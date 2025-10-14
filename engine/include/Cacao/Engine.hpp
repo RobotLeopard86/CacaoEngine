@@ -130,7 +130,7 @@ namespace Cacao {
 		/**
 		 * @brief Get access to the engine thread pool
 		 *
-		 * @see https://robotleopard86.github.io/Exathread/1.1.0 for the documentation on how to use the pool
+		 * @see https://robotleopard86.github.io/Exathread/2.0.0 for the documentation on how to use the pool
 		 *
 		 * @return A handle to the pool
 		 *

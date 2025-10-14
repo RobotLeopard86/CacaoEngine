@@ -26,7 +26,8 @@ jobs:
           sudo rm /var/lib/man-db/auto-update
           sudo apt-get update;
           sudo apt-get install doxygen -y
-          pip install -r docs/requirements.txt
+          cd docs
+          pip install -r requirements.txt
       - name: Create temporary directory for build
         run: |
           git clone ${{ github.server_url }}/${{ github.repository }} /tmp/PAGESBUILD -b gh-pages
