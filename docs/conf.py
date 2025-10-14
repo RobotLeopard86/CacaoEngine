@@ -45,7 +45,7 @@ def exhale_environment_ready(app):
 exhale.environment_ready = exhale_environment_ready
 # End sphinx-contrib-exhale-multiproject code
 
-version = os.environ.get("GITHUB_RELEASE", default="dev")
+version = os.environ.get("BUILDVER", default="dev")
 project = 'Cacao Engine'
 copyright = '2025 RobotLeopard86'
 author = 'RobotLeopard86'
