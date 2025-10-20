@@ -129,7 +129,7 @@ slang_opts.add_cmake_defines({
 	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
 })
 if host_machine.system() == 'darwin'
-	slang_opts.append_compile_args('cpp', '-Wno-#warnings')
+	slang_opts.append_compile_args('cpp', ['-Wno-#warnings', '-Wno-unused-but-set-variable'])
 endif
 slang_opts.set_install(false)
 slang_sp = cmake.subproject('slang', options: slang_opts, required: true)
