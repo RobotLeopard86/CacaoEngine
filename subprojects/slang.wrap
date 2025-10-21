@@ -3,3 +3,4 @@ url = https://github.com/shader-slang/slang
 depth = 1
 clone-recursive = true
 revision = v2025.19.1
+diff_files = slang-mesoncompat.patch

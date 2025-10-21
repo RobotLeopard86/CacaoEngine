@@ -5,7 +5,8 @@ if host_machine.system() == 'windows' and get_option('windows_noconsole') == tru
 endif
 
 # Cacao game runtime
-cacao_runtime_exe = executable('cacaort', sources: 'Launcher.cpp', dependencies: [cacao_dep, yaml_cpp, cli11_dep], cpp_args: cppargs, build_rpath: '$ORIGIN', install_rpath: '$ORIGIN', install: true)
+rpath = host_machine.system() == 'darwin' ? '@executable_path' : '$ORIGIN'
+cacao_runtime_exe = executable('cacaort', sources: 'Launcher.cpp', dependencies: [cacao_dep, yaml_cpp, cli11_dep], cpp_args: cppargs, build_rpath: rpath, install_rpath: rpath, install: true)
 
 # Runtime dependency
 cacaort_dep = declare_dependency(sources: ['abi' / 'ABIHandshake.cpp', 'abi' / 'ABI.hpp'], dependencies: cacao_dep, compile_args: bt.contains('debug') ? '-D_DEBUG' : '-DNDEBUG')
