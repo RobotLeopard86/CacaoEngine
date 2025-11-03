@@ -86,7 +86,7 @@ endif
 
 # Get graphics backends
 backends = get_option('backends')
-if backends.length() == 0
+if build_engine and backends.length() <= 0
     error('At least one graphics backend must be selected!')
 endif
 backend_keymap = {
