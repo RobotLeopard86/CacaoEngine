@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <stdexcept>// IWYU pragma: keep
 
 //This contains ABI info that we can verify to ensure that the code is even compatible
 struct ABIHandshakeInfo {

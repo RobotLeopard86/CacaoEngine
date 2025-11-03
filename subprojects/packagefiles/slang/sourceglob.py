@@ -15,7 +15,7 @@ for file in sourcedir.iterdir():
             for f2 in file.iterdir():
                 if re.match(filter, file.name) != None and (f2.suffix == '.cpp' or f2.suffix == '.h'):
                     print(f2.relative_to(root))
-        elif file.name == 'unix':
+        elif os.name != 'nt' and file.name == 'unix':
             for f2 in file.iterdir():
                 if re.match(filter, file.name) != None and (f2.suffix == '.cpp' or f2.suffix == '.h' or (f2.suffix == '.mm' and os.name == 'darwin')):
                     print(f2.relative_to(root))

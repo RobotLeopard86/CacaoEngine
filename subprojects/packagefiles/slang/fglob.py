@@ -15,7 +15,7 @@ for file in sourcedir.iterdir():
             for f2 in file.iterdir():
                 if re.match(filter, file.name) != None:
                     print(f2.relative_to(root))
-        elif file.name == 'unix':
+        elif os.name != 'nt' and file.name == 'unix':
             for f2 in file.iterdir():
                 if re.match(filter, file.name) != None:
                     print(f2.relative_to(root))

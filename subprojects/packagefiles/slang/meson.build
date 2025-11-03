@@ -5,22 +5,51 @@ project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2025.19.1', lic
 ###################################
 
 # Common stuff
-export_args = [
-    '-DSLANG_DYNAMIC',
-    '-DSLANG_DYNAMIC_EXPORT',
-]
+export_args = ['-DSLANG_STATIC']
+if get_option('default_library') == 'shared'
+    export_args = [
+        '-DSLANG_DYNAMIC',
+        '-DSLANG_DYNAMIC_EXPORT',
+    ]
+endif
 common_includes = include_directories('include', 'source')
+path_separator = (host_machine.system() == 'windows' ? '\\' : '/')
 
 # Disable certain common warnings
-if meson.get_compiler('cpp').get_argument_syntax() == 'gcc'
+argsyntax = meson.get_compiler('cpp').get_argument_syntax()
+if argsyntax == 'gcc'
     add_project_arguments(['-Wno-assume', '-Wno-reorder-ctor', '-Wno-switch', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-extra-semi', '-Wno-unused-variable', '-Wno-logical-op-parentheses'], language: 'cpp')
-elif meson.get_compiler('cpp').get_argument_syntax() == 'msvc'
+elif argsyntax == 'msvc'
     add_project_arguments(['/wd26495', '/wd4065', '/wd4189', '/wd4100', '/wd4068', '/wd4189', '/wd4805', '/wd4804'], language: 'cpp')
 endif
 
 # Disable weird error on GCC
 if meson.get_compiler('cpp').get_id() == 'gcc'
     add_project_arguments('-Wno-error=stringop-overflow', language: 'cpp')
+endif
+
+# Windows definitions
+windows_defs = []
+if host_machine.system() == 'windows'
+    windows_defs += '-DUNICODE'
+	windows_defs += '-D_DLL'
+	windows_defs += '-D_MT'
+	if get_option('buildtype') == 'debug'
+		windows_defs += '-D_DEBUG'
+		windows_defs += '-D_ITERATOR_DEBUG_LEVEL=2'
+        if argsyntax == 'gcc'
+		    windows_defs += '-fms-runtime-lib=dll_dbg'
+        else
+            windows_defs += '/MDd'
+        endif
+	else
+		if argsyntax == 'gcc'
+		    windows_defs += '-fms-runtime-lib=dll'
+        else
+            windows_defs += '/MD'
+        endif
+	endif
+    add_project_arguments(windows_defs, language: 'cpp')
 endif
 
 ###################################
@@ -79,12 +108,12 @@ verfile = configure_file(input: 'slang-tag-version.h.in', output: 'slang-tag-ver
 # core
 core_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'core'], check: true).stdout().strip().splitlines()
 core = library('core', sources: core_src, include_directories: common_includes, dependencies: [miniz_dep, lz4_dep, threads, libdl_dep, unordered_dense_dep], cpp_args: export_args)
-slang_core_dep = declare_dependency(include_directories: common_includes, dependencies: [unordered_dense_dep], link_with: core)
+slang_core_dep = declare_dependency(include_directories: common_includes, dependencies: [unordered_dense_dep], link_with: core, compile_args: [windows_defs, export_args])
 
 # compiler-core
 compiler_core_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'compiler-core'], check: true).stdout().strip().splitlines()
 compiler_core = library('compiler-core', sources: compiler_core_src, include_directories: common_includes, dependencies: [slang_core_dep, spirv_headers_dep], cpp_args: [export_args, '-fms-extensions'])
-slang_compiler_core_dep = declare_dependency(dependencies: spirv_headers_dep, link_with: compiler_core)
+slang_compiler_core_dep = declare_dependency(dependencies: spirv_headers_dep, link_with: compiler_core, compile_args: [windows_defs, export_args])
 
 ###################################
 # GENERATOR TOOLS
@@ -121,7 +150,7 @@ slang_spirv_embed_generator = executable('slang-spirv-embed-generator', sources:
 prelude_headers = run_command([python, 'fglob.py', meson.project_source_root() / 'prelude', '.*-prelude\.h'], check: true).stdout().strip().splitlines()
 prelude_sources = []
 foreach header : prelude_headers
-    out = (header.split('/')[-1]).replace('.h', '.cpp')
+    out = (header.split(path_separator)[-1]).replace('.h', '.cpp')
     prelude_sources += custom_target(out, command: [slang_embed, '@INPUT@', '@OUTPUT@', '-I' + (meson.project_source_root() / 'include'), '-I' + (meson.project_source_root() / 'source')], output: out,
         input: header)
 endforeach
@@ -134,7 +163,7 @@ slang_prelude_dep = declare_dependency(sources: prelude_sources, include_directo
 core_module_metaslang_files= run_command([python, 'fglob.py', meson.project_source_root() / 'source' / 'slang', '.*\.meta\.slang'], check: true).stdout().strip().splitlines()
 core_module_meta_outputs = []
 foreach metaslang : core_module_metaslang_files
-    core_module_meta_outputs += (metaslang.split('/')[-1]) + '.h'
+    core_module_meta_outputs += (metaslang.split(path_separator)[-1]) + '.h'
 endforeach
 core_module_meta_headers = custom_target('core_module_meta_headers', command: [slang_generate, '@INPUT@', '--target-directory', meson.current_build_dir()], 
     output: core_module_meta_outputs, input: core_module_metaslang_files)
@@ -146,15 +175,15 @@ core_module_meta_headers = custom_target('core_module_meta_headers', command: [s
 fiddle_input_files= run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang'], check: true).stdout().strip().splitlines()
 fiddle_inputs = []
 foreach input : fiddle_input_files
-    fiddle_inputs += (input.split('/')[-1])
+    fiddle_inputs += (input.split(path_separator)[-1])
 endforeach
 fiddle_outputs = []
 foreach input : fiddle_inputs
     fiddle_outputs += input + '.fiddle'
 endforeach
 fiddle_lua = run_command([python, 'fglob.py', meson.project_source_root() / 'source' / 'slang', '.*\.lua'], check: true).stdout().strip().splitlines()
-fiddle_output = custom_target('fiddle_output', command: [python, meson.project_source_root() / 'invokewrapper.py', slang_fiddle, '-i', meson.project_source_root() / 'source' / 'slang/', 
-    '-o', meson.current_build_dir() + '/', fiddle_inputs], output: fiddle_outputs, input: fiddle_input_files, depend_files: [fiddle_lua, 'invokewrapper.py'])
+fiddle_output = custom_target('fiddle_output', command: [python, meson.project_source_root() / 'invokewrapper.py', slang_fiddle, '-i', meson.project_source_root() / 'source' / 'slang' + path_separator, 
+    '-o', meson.current_build_dir() + path_separator, fiddle_inputs], output: fiddle_outputs, input: fiddle_input_files, depend_files: [fiddle_lua, 'invokewrapper.py'])
 fiddle_output_dep = declare_dependency(sources: fiddle_output, include_directories: include_directories('.'))
 
 ###################################
@@ -249,4 +278,4 @@ glsl_module = shared_module('slang_glsl_module', sources: [bootstrap_headers[1],
 
 slang = library('slang', dependencies: [slang_core_dep, slang_prelude_dep, slang_compiler_core_dep, capability_defs_dep, capability_lookup_dep,
     fiddle_output_dep, lookup_tables_dep, spirv_headers_dep, slang_common_dep, embedded_core_module_dep, embedded_core_module_source_dep], include_directories: common_includes)
-slang_dep = declare_dependency(include_directories: common_includes, sources: verfile, link_with: slang)
+slang_dep = declare_dependency(include_directories: common_includes, sources: verfile, link_with: slang, compile_args: [windows_defs, export_args])
