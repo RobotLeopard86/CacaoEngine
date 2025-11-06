@@ -1,5 +1,5 @@
 #include "OpenGLMesh.hpp"
-#include "Cacao/Engine.hpp"
+#include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
 
 namespace Cacao {
@@ -13,8 +13,8 @@ namespace Cacao {
 			ibd[(i * 3) + 2] = idx.z;
 		}
 
-		//Open-GL specific stuff needs to be on the main thread
-		auto task = Engine::Get().RunTaskOnMainThread([this, &ibd, &success]() {
+		//Open-GL specific stuff needs to be on the GPU thread
+		OpenGLCommandBuffer cmd([this, &ibd, &success]() {
 			//Generate buffers and vertex array
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
@@ -55,11 +55,11 @@ namespace Cacao {
 
 			success = true;
 		});
-		task.get();
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	void OpenGLMeshImpl::DropRealized() {
-		auto task = Engine::Get().RunTaskOnMainThread([this]() {
+		OpenGLCommandBuffer cmd([this]() {
 			//Delete buffers and vertex array
 			glDeleteBuffers(1, &vbo);
 			glDeleteBuffers(1, &ibo);
@@ -70,7 +70,7 @@ namespace Cacao {
 			ibo = 0;
 			vao = 0;
 		});
-		task.get();
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	Mesh::Impl* OpenGLModule::ConfigureMesh() {

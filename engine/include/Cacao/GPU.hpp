@@ -7,17 +7,53 @@
 
 namespace Cacao {
 	/**
-	 * @brief A structure for usage by the GPU manager to invoke a set of GPU commands
+	 * @brief A command that can be executed in a command buffer
 	 *
-	 * @note Only the subclasses of this are recognized by the GPUManager implementations; for that reason it is not currently possible to create custom jobs except through the designated interfaces
+	 * @note It is not possible to create custom commands because that would require access to the underlying private graphics interface.
+	 */
+	struct CACAO_API GPUCommand {
+		public:
+			//TODO: Make the command generators
+
+			///@cond
+			GPUCommand(const GPUCommand&) = delete;
+			GPUCommand& operator=(const GPUCommand&) = delete;
+			GPUCommand(GPUCommand&&);
+			GPUCommand& operator=(GPUCommand&&);
+			///@endcond
+
+			virtual ~GPUCommand() {};
+		protected:
+			GPUCommand() {}
+	};
+
+	/**
+	 * @brief A structure for usage by the GPU manager to invoke a set of GPU commands
 	 */
 	class CACAO_API CommandBuffer {
 	  public:
-		//Preset command buffer generators will exist here eventually
-	  protected:
+		/**
+		 * @brief Create a new empty command buffer
+		 */
 		CommandBuffer() {}
+
+		///@cond
+		CommandBuffer(const CommandBuffer&) = delete;
+		CommandBuffer& operator=(const CommandBuffer&) = delete;
+		CommandBuffer(CommandBuffer&&) = delete;
+		CommandBuffer& operator=(CommandBuffer&&) = delete;
+		///@endcond
+
+		/**
+		 * @brief Add a command to this command buffer
+		 * 
+		 * @param cmd The command to add
+		 */
+		virtual void operator+=(GPUCommand&&) {};
+
+		virtual ~CommandBuffer() {};
+	  protected:
 		virtual void Execute() = 0;
-		virtual ~CommandBuffer() = default;
 	};
 
 	/**

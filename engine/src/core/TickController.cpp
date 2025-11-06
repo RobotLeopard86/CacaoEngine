@@ -10,6 +10,7 @@
 #include "exathread.hpp"
 #include "high_resolution_sleep.hpp"
 
+#include <atomic>
 #include <chrono>
 #include <array>
 #include <memory>
@@ -81,12 +82,36 @@ namespace Cacao {
 		missedOrLateFixedTicks = 0;
 		loggedExcessiveMisses = false;
 
+		//Setup world lock
+		std::unique_lock worldLock(TickController::Get().snapshotControl.mutex);
+
 		while(!stop.stop_requested()) {
 			//Calculate some important variables
 			now = std::chrono::steady_clock::now();
 			std::chrono::milliseconds fixedTickInterval = Engine::Get().config.fixedTickInterval;
 			time::dseconds untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
 			time::dseconds avgTickTime = (dynTickTimes[0] + dynTickTimes[1] + dynTickTimes[2]) / 3.0;
+
+			//Check for frame processor snapshot request
+			if(TickController::Get().snapshotControl.request.exchange(false, std::memory_order_acq_rel)) {
+				//Release lock
+				worldLock.unlock();
+
+				//Allow frame processor to run
+				TickController::Get().snapshotControl.grant.release();
+
+				//Wait until it's done by blocking on the done semaphore
+				while(!TickController::Get().snapshotControl.done.try_acquire()) {
+					std::this_thread::yield();
+					if(stop.stop_requested()) return;
+				}
+
+				//We're done, so relock the world state and update our variables
+				worldLock.lock();
+				now = std::chrono::steady_clock::now();
+				while(now > nextFixedTick) nextFixedTick += fixedTickInterval;
+				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
+			}
 
 			//Update fixed tick miss counter
 			if((now - lastMinute) >= 1min) {

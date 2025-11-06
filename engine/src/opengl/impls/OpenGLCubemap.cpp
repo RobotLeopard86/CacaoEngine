@@ -1,5 +1,5 @@
 #include "OpenGLCubemap.hpp"
-#include "Cacao/Engine.hpp"
+#include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
 
 #include "glad/gl.h"
@@ -7,8 +7,8 @@
 
 namespace Cacao {
 	void OpenGLCubemapImpl::Realize(bool& success) {
-		//Open-GL specific stuff needs to be on the main thread
-		auto task = Engine::Get().RunTaskOnMainThread([this, &success]() {
+		//Open-GL specific stuff needs to be on the GPU thread
+		OpenGLCommandBuffer cmd([this, &success]() {
 			//Create texture object
 			glGenTextures(1, &gpuTex);
 			GL_CHECK("Failed to create cubemap texture object!")
@@ -41,18 +41,18 @@ namespace Cacao {
 
 			success = true;
 		});
-		task.get();
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	void OpenGLCubemapImpl::DropRealized() {
-		auto task = Engine::Get().RunTaskOnMainThread([this]() {
+		OpenGLCommandBuffer cmd([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
-		task.get();
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	Cubemap::Impl* OpenGLModule::ConfigureCubemap() {

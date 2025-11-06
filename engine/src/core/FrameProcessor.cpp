@@ -1,9 +1,11 @@
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/GPU.hpp"
+#include "Cacao/TickController.hpp"
 #include "SingletonGet.hpp"
 
 #include <array>
+#include <atomic>
 #include <thread>
 
 namespace Cacao {
@@ -47,6 +49,28 @@ namespace Cacao {
 
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		while(!stop.stop_requested()) {
+			//Request a snapshot of the world state
+			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
+
+			//Block until the tick controller grants the request
+			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
+				std::this_thread::yield();
+				if(stop.stop_requested()) return;
+			}
+
+			//Now we are safe to read the world state
+			{
+				//Lock the world state
+				std::unique_lock lock(TickController::Get().snapshotControl.mutex);
+
+				//TODO: World read logic
+			}
+
+			//Allow tick controller to resume
+			//It has been blocking on this semaphore
+			TickController::Get().snapshotControl.done.release();
+
+			//TODO: Final command buffer setup and submission
 		}
 	}
 }
