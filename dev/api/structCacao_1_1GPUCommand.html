@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Concept Loader &#8212; Cacao Engine Docs</title>
+    <title>Struct GPUCommand &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/conceptCacao_1_1Loader';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/structCacao_1_1GPUCommand';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Concept MultiLoader" href="conceptCacao_1_1MultiLoader.html" />
-    <link rel="prev" title="Namespace Cacao::time" href="namespace_Cacao__time.html" />
+    <link rel="next" title="Struct Logger::LogToken" href="structCacao_1_1Logger_1_1LogToken.html" />
+    <link rel="prev" title="Struct Engine::InitConfig" href="structCacao_1_1Engine_1_1InitConfig.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -338,8 +338,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Concept Loader</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1Loader.html">Concept Loader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
@@ -353,8 +353,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1GPUCommand.html">Struct GPUCommand</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct GPUCommand</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
@@ -561,7 +561,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Concept Loader</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct GPUCommand</span></li>
   </ul>
 </nav>
 </div>
@@ -578,37 +578,37 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="concept-loader">
-<span id="exhale-concept-conceptcacao-1-1loader"></span><h1>Concept Loader<a class="headerlink" href="#concept-loader" title="Link to this heading"><span/></a></h1>
+  <section id="struct-gpucommand">
+<span id="exhale-struct-structcacao-1-1gpucommand"></span><h1>Struct GPUCommand<a class="headerlink" href="#struct-gpucommand" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_ResourceManager.hpp.html#file-engine-include-cacao-resourcemanager-hpp"><span class="std std-ref">File ResourceManager.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_GPU.hpp.html#file-engine-include-cacao-gpu-hpp"><span class="std std-ref">File GPU.hpp</span></a></p></li>
 </ul>
-<section id="concept-documentation">
-<h2>Concept Documentation<a class="headerlink" href="#concept-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp concept">
-<dt class="sig sig-object cpp" id="_CPPv4I00EN5Cacao6LoaderE">
-<span id="_CPPv3I00EN5Cacao6LoaderE"></span><span id="_CPPv2I00EN5Cacao6LoaderE"></span><span class="target" id="conceptCacao_1_1Loader"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">R</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Loader</span></span></span><a class="headerlink" href="#_CPPv4I00EN5Cacao6LoaderE" title="Link to this definition"><span/></a><br /></dt>
-<dd><div class="docutils container">
-<em>#include &lt;ResourceManager.hpp&gt;</em></div>
-<p>A concept that defines what a conforming resource loader looks like. </p>
-<p>
-Concept Definition: <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span>
-<span class="k">concept</span><span class="w"> </span><span class="nc">Loader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Resource</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">requires</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">FetchData</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">LoaderIntermediate</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;&gt;&gt;</span><span class="p">;</span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">CreateResource</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">LoaderIntermediate</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">same_as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;&gt;</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
+<section id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommandE">
+<span id="_CPPv3N5Cacao10GPUCommandE"></span><span id="_CPPv2N5Cacao10GPUCommandE"></span><span id="Cacao::GPUCommand"></span><span class="target" id="structCacao_1_1GPUCommand"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUCommand</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommandE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A command that can be executed in a command buffer. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is not possible to create custom commands because that would require access to the underlying private graphics interface. </p>
 </div>
-</p>
-<p>These functions should expect to be invoked in the thread pool </p>
-<dl class="field-list simple">
-<dt class="field-odd">tparam T<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The type of the loader object </p>
-</dd>
-<dt class="field-even">tparam R<span class="colon">:</span></dt>
-<dd class="field-even"><p>A Resource type produced by the loader</p>
-</dd>
-</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommandD0Ev">
+<span id="_CPPv3N5Cacao10GPUCommandD0Ev"></span><span id="_CPPv2N5Cacao10GPUCommandD0Ev"></span><span id="Cacao::GPUCommand::~GPUCommand"></span><span class="target" id="structCacao_1_1GPUCommand_1a5aa1bcd3f71fe40103ae455653d4a849"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~GPUCommand</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommandD0Ev" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommand10GPUCommandEv">
+<span id="_CPPv3N5Cacao10GPUCommand10GPUCommandEv"></span><span id="_CPPv2N5Cacao10GPUCommand10GPUCommandEv"></span><span id="Cacao::GPUCommand::GPUCommand"></span><span class="target" id="structCacao_1_1GPUCommand_1aa6035a7ce2241bbe2449842174b15e08"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUCommand</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommand10GPUCommandEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -625,20 +625,20 @@ Concept Definition: <div class="highlight-cpp notranslate"><div class="highlight
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="namespace_Cacao__time.html"
+       href="structCacao_1_1Engine_1_1InitConfig.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Namespace Cacao::time</p>
+        <p class="prev-next-title">Struct Engine::InitConfig</p>
       </div>
     </a>
     <a class="right-next"
-       href="conceptCacao_1_1MultiLoader.html"
+       href="structCacao_1_1Logger_1_1LogToken.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Concept MultiLoader</p>
+        <p class="prev-next-title">Struct Logger::LogToken</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -661,8 +661,12 @@ Concept Definition: <div class="highlight-cpp notranslate"><div class="highlight
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#concept-documentation">Concept Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I00EN5Cacao6LoaderE"><code class="docutils literal notranslate"><span class="pre">Loader</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommandE"><code class="docutils literal notranslate"><span class="pre">GPUCommand</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommandD0Ev"><code class="docutils literal notranslate"><span class="pre">GPUCommand::~GPUCommand()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommand10GPUCommandEv"><code class="docutils literal notranslate"><span class="pre">GPUCommand::GPUCommand()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
