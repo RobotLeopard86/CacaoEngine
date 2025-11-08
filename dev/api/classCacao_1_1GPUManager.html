@@ -55,7 +55,7 @@
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class Logger" href="classCacao_1_1Logger.html" />
-    <link rel="prev" title="Class FrameProcessor" href="classCacao_1_1FrameProcessor.html" />
+    <link rel="prev" title="Class GPUCommand" href="classCacao_1_1GPUCommand.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -354,9 +354,6 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1GPUCommand.html">Struct GPUCommand</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -421,6 +418,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUCommand.html">Class GPUCommand</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class GPUManager</a></li>
@@ -632,8 +632,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager6SubmitERR13CommandBuffer">
-<span id="_CPPv3N5Cacao10GPUManager6SubmitERR13CommandBuffer"></span><span id="_CPPv2N5Cacao10GPUManager6SubmitERR13CommandBuffer"></span><span id="Cacao::GPUManager::Submit__CommandBufferRR"></span><span class="target" id="classCacao_1_1GPUManager_1adb15927272515cc118f4dfa77d65a1eb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Submit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1CommandBuffer.html#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cmd</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager6SubmitERR13CommandBuffer" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE">
+<span id="_CPPv3N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"></span><span id="_CPPv2N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"></span><span id="Cacao::GPUManager::Submit__std::unique_ptr:CommandBuffer:"></span><span class="target" id="classCacao_1_1GPUManager_1ad6407232629b3e19dcffedcd275ffe39"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Submit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1CommandBuffer.html#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cmd</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Submit a task to the GPU for processing. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -690,12 +690,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1FrameProcessor.html"
+       href="classCacao_1_1GPUCommand.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class FrameProcessor</p>
+        <p class="prev-next-title">Class GPUCommand</p>
       </div>
     </a>
     <a class="right-next"
@@ -731,7 +731,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager5StartEv"><code class="docutils literal notranslate"><span class="pre">GPUManager::Start()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager4StopEv"><code class="docutils literal notranslate"><span class="pre">GPUManager::Stop()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao10GPUManager9IsRunningEv"><code class="docutils literal notranslate"><span class="pre">GPUManager::IsRunning()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager6SubmitERR13CommandBuffer"><code class="docutils literal notranslate"><span class="pre">GPUManager::Submit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"><code class="docutils literal notranslate"><span class="pre">GPUManager::Submit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager8SetVSyncEb"><code class="docutils literal notranslate"><span class="pre">GPUManager::SetVSync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager3GetEv"><code class="docutils literal notranslate"><span class="pre">GPUManager::Get()</span></code></a></li>
 </ul>

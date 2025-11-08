@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Struct GPUCommand &#8212; Cacao Engine Docs</title>
+    <title>Class GPUCommand &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/structCacao_1_1GPUCommand';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1GPUCommand';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct Logger::LogToken" href="structCacao_1_1Logger_1_1LogToken.html" />
-    <link rel="prev" title="Struct Engine::InitConfig" href="structCacao_1_1Engine_1_1InitConfig.html" />
+    <link rel="next" title="Class GPUManager" href="classCacao_1_1GPUManager.html" />
+    <link rel="prev" title="Class FrameProcessor" href="classCacao_1_1FrameProcessor.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -353,9 +353,6 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct GPUCommand</a></li>
-</ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
@@ -421,6 +418,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class GPUCommand</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -561,7 +561,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct GPUCommand</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class GPUCommand</span></li>
   </ul>
 </nav>
 </div>
@@ -578,35 +578,66 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="struct-gpucommand">
-<span id="exhale-struct-structcacao-1-1gpucommand"></span><h1>Struct GPUCommand<a class="headerlink" href="#struct-gpucommand" title="Link to this heading"><span/></a></h1>
+  <section id="class-gpucommand">
+<span id="exhale-class-classcacao-1-1gpucommand"></span><h1>Class GPUCommand<a class="headerlink" href="#class-gpucommand" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_GPU.hpp.html#file-engine-include-cacao-gpu-hpp"><span class="std std-ref">File GPU.hpp</span></a></p></li>
 </ul>
-<section id="struct-documentation">
-<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
-<dl class="cpp struct">
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommandE">
-<span id="_CPPv3N5Cacao10GPUCommandE"></span><span id="_CPPv2N5Cacao10GPUCommandE"></span><span id="Cacao::GPUCommand"></span><span class="target" id="structCacao_1_1GPUCommand"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUCommand</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommandE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao10GPUCommandE"></span><span id="_CPPv2N5Cacao10GPUCommandE"></span><span id="Cacao::GPUCommand"></span><span class="target" id="classCacao_1_1GPUCommand"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUCommand</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommandE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>A command that can be executed in a command buffer. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It is not possible to create custom commands because that would require access to the underlying private graphics interface. </p>
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommandD0Ev">
-<span id="_CPPv3N5Cacao10GPUCommandD0Ev"></span><span id="_CPPv2N5Cacao10GPUCommandD0Ev"></span><span id="Cacao::GPUCommand::~GPUCommand"></span><span class="target" id="structCacao_1_1GPUCommand_1a5aa1bcd3f71fe40103ae455653d4a849"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~GPUCommand</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommandD0Ev" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommand10GPUCommandEv">
+<span id="_CPPv3N5Cacao10GPUCommand10GPUCommandEv"></span><span id="_CPPv2N5Cacao10GPUCommand10GPUCommandEv"></span><span id="Cacao::GPUCommand::GPUCommand"></span><span class="target" id="classCacao_1_1GPUCommand_1aa6035a7ce2241bbe2449842174b15e08"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUCommand</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommand10GPUCommandEv" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommand10GPUCommandEv">
-<span id="_CPPv3N5Cacao10GPUCommand10GPUCommandEv"></span><span id="_CPPv2N5Cacao10GPUCommand10GPUCommandEv"></span><span id="Cacao::GPUCommand::GPUCommand"></span><span class="target" id="structCacao_1_1GPUCommand_1aa6035a7ce2241bbe2449842174b15e08"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUCommand</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommand10GPUCommandEv" title="Link to this definition"><span/></a><br /></dt>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommand5applyE">
+<span id="_CPPv3N5Cacao10GPUCommand5applyE"></span><span id="_CPPv2N5Cacao10GPUCommand5applyE"></span><span class="target" id="classCacao_1_1GPUCommand_1a8768455cb3836787f0d5deb928a8084d"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="classCacao_1_1CommandBuffer.html#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommand5applyE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-static-functions">Protected Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommand11ClearScreenEN3glm4vec3E">
+<span id="_CPPv3N5Cacao10GPUCommand11ClearScreenEN3glm4vec3E"></span><span id="_CPPv2N5Cacao10GPUCommand11ClearScreenEN3glm4vec3E"></span><span id="Cacao::GPUCommand::ClearScreen__glm::vec3"></span><span class="target" id="classCacao_1_1GPUCommand_1aa2da48cd7debe978b92fda30ff621490"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao10GPUCommandE" title="Cacao::GPUCommand"><span class="n"><span class="pre">GPUCommand</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClearScreen</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">color</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommand11ClearScreenEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUCommand7PresentEv">
+<span id="_CPPv3N5Cacao10GPUCommand7PresentEv"></span><span id="_CPPv2N5Cacao10GPUCommand7PresentEv"></span><span id="Cacao::GPUCommand::Present"></span><span class="target" id="classCacao_1_1GPUCommand_1a760d5902f4003a9dbe4136f08c54e231"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao10GPUCommandE" title="Cacao::GPUCommand"><span class="n"><span class="pre">GPUCommand</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Present</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUCommand7PresentEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl>
+<dt class="sig sig-object cpp">
+<em class="property"><span class="pre">friend</span> <span class="pre">class</span></em> <span class="pre">CommandBuffer</span></dt>
+</dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<em class="property"><span class="pre">friend</span> <span class="pre">class</span></em> <span class="pre">FrameProcessor</span></dt>
+</dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<em class="property"><span class="pre">friend</span> <span class="pre">class</span></em> <span class="pre">PALModule</span></dt>
+</dl>
 
 </div>
 </dd></dl>
@@ -625,20 +656,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="structCacao_1_1Engine_1_1InitConfig.html"
+       href="classCacao_1_1FrameProcessor.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Struct Engine::InitConfig</p>
+        <p class="prev-next-title">Class FrameProcessor</p>
       </div>
     </a>
     <a class="right-next"
-       href="structCacao_1_1Logger_1_1LogToken.html"
+       href="classCacao_1_1GPUManager.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Struct Logger::LogToken</p>
+        <p class="prev-next-title">Class GPUManager</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -661,10 +692,12 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommandE"><code class="docutils literal notranslate"><span class="pre">GPUCommand</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommandD0Ev"><code class="docutils literal notranslate"><span class="pre">GPUCommand::~GPUCommand()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommand10GPUCommandEv"><code class="docutils literal notranslate"><span class="pre">GPUCommand::GPUCommand()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommand5applyE"><code class="docutils literal notranslate"><span class="pre">GPUCommand::apply</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommand11ClearScreenEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">GPUCommand::ClearScreen()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUCommand7PresentEv"><code class="docutils literal notranslate"><span class="pre">GPUCommand::Present()</span></code></a></li>
 </ul>
 </li>
 </ul>

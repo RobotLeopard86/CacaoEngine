@@ -354,9 +354,6 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1GPUCommand.html">Struct GPUCommand</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -421,6 +418,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUCommand.html">Class GPUCommand</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -592,14 +592,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer13CommandBufferEv">
-<span id="_CPPv3N5Cacao13CommandBuffer13CommandBufferEv"></span><span id="_CPPv2N5Cacao13CommandBuffer13CommandBufferEv"></span><span id="Cacao::CommandBuffer::CommandBuffer"></span><span class="target" id="classCacao_1_1CommandBuffer_1a8b00c387509623ba2a275d5442b77aed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CommandBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new empty command buffer. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBufferpLERR10GPUCommand">
-<span id="_CPPv3N5Cacao13CommandBufferpLERR10GPUCommand"></span><span id="_CPPv2N5Cacao13CommandBufferpLERR10GPUCommand"></span><span id="Cacao::CommandBuffer::add-assign-operator__GPUCommandRR"></span><span class="target" id="classCacao_1_1CommandBuffer_1aadec35df6b6a096f083ecf42a589ed8c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structCacao_1_1GPUCommand.html#_CPPv4N5Cacao10GPUCommandE" title="Cacao::GPUCommand"><span class="n"><span class="pre">GPUCommand</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBufferpLERR10GPUCommand" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer3AddERR10GPUCommand">
+<span id="_CPPv3N5Cacao13CommandBuffer3AddERR10GPUCommand"></span><span id="_CPPv2N5Cacao13CommandBuffer3AddERR10GPUCommand"></span><span id="Cacao::CommandBuffer::Add__GPUCommandRR"></span><span class="target" id="classCacao_1_1CommandBuffer_1ad28c83710e7139d0984916b7d382cee1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Add</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1GPUCommand.html#_CPPv4N5Cacao10GPUCommandE" title="Cacao::GPUCommand"><span class="n"><span class="pre">GPUCommand</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer3AddERR10GPUCommand" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Add a command to this command buffer. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -615,10 +609,29 @@
 
 </div>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer6CreateEv">
+<span id="_CPPv3N5Cacao13CommandBuffer6CreateEv"></span><span id="_CPPv2N5Cacao13CommandBuffer6CreateEv"></span><span id="Cacao::CommandBuffer::Create"></span><span class="target" id="classCacao_1_1CommandBuffer_1a38c2f9a31b9a531d81d24e61d8630b77"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer6CreateEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new empty command buffer. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer13CommandBufferEv">
+<span id="_CPPv3N5Cacao13CommandBuffer13CommandBufferEv"></span><span id="_CPPv2N5Cacao13CommandBuffer13CommandBufferEv"></span><span id="Cacao::CommandBuffer::CommandBuffer"></span><span class="target" id="classCacao_1_1CommandBuffer_1a8b00c387509623ba2a275d5442b77aed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CommandBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer7ExecuteEv">
-<span id="_CPPv3N5Cacao13CommandBuffer7ExecuteEv"></span><span id="_CPPv2N5Cacao13CommandBuffer7ExecuteEv"></span><span id="Cacao::CommandBuffer::Execute"></span><span class="target" id="classCacao_1_1CommandBuffer_1a0cb91081234590057d0d5e03d7582f10"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Execute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer7ExecuteEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao13CommandBuffer7ExecuteEv"></span><span id="_CPPv2N5Cacao13CommandBuffer7ExecuteEv"></span><span id="Cacao::CommandBuffer::Execute"></span><span class="target" id="classCacao_1_1CommandBuffer_1a322f16e350415cfe44c1fd9e301472c6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Execute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer7ExecuteEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer12GetCommandFnERR10GPUCommand">
+<span id="_CPPv3N5Cacao13CommandBuffer12GetCommandFnERR10GPUCommand"></span><span id="_CPPv2N5Cacao13CommandBuffer12GetCommandFnERR10GPUCommand"></span><span id="Cacao::CommandBuffer::GetCommandFn__GPUCommandRR"></span><span class="target" id="classCacao_1_1CommandBuffer_1a979a9f66069887d7bf927d4906f8a274"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetCommandFn</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1GPUCommand.html#_CPPv4N5Cacao10GPUCommandE" title="Cacao::GPUCommand"><span class="n"><span class="pre">GPUCommand</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer12GetCommandFnERR10GPUCommand" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -676,10 +689,12 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBufferE"><code class="docutils literal notranslate"><span class="pre">CommandBuffer</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::CommandBuffer()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBufferpLERR10GPUCommand"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::operator+=()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer3AddERR10GPUCommand"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::Add()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBufferD0Ev"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::~CommandBuffer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer6CreateEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::Create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::CommandBuffer()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer7ExecuteEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::Execute()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer12GetCommandFnERR10GPUCommand"><code class="docutils literal notranslate"><span class="pre">CommandBuffer::GetCommandFn()</span></code></a></li>
 </ul>
 </li>
 </ul>
