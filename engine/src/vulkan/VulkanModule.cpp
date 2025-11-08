@@ -264,4 +264,8 @@ namespace Cacao {
 		//Destroy surface
 		instance.destroySurfaceKHR(surface);
 	}
+
+	CommandBuffer VulkanModule::CreateCmdBuffer() {
+		return VulkanCommandBuffer {};
+	}
 }

@@ -14,7 +14,8 @@ namespace Cacao {
 		}
 
 		//Open-GL specific stuff needs to be on the GPU thread
-		OpenGLCommandBuffer cmd([this, &ibd, &success]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this, &ibd, &success]() {
 			//Generate buffers and vertex array
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
@@ -59,7 +60,8 @@ namespace Cacao {
 	}
 
 	void OpenGLMeshImpl::DropRealized() {
-		OpenGLCommandBuffer cmd([this]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this]() {
 			//Delete buffers and vertex array
 			glDeleteBuffers(1, &vbo);
 			glDeleteBuffers(1, &ibo);

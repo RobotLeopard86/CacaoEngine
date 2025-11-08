@@ -9,7 +9,8 @@
 namespace Cacao {
 	void OpenGLTex2DImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
-		OpenGLCommandBuffer cmd([this, &success]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this, &success]() {
 			//Flip texture
 			libcacaoimage::Image flipped = libcacaoimage::Flip(img);
 
@@ -61,7 +62,8 @@ namespace Cacao {
 	}
 
 	void OpenGLTex2DImpl::DropRealized() {
-		OpenGLCommandBuffer cmd([this]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 

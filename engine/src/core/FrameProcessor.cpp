@@ -1,12 +1,14 @@
 #include "Cacao/FrameProcessor.hpp"
-#include "Cacao/Engine.hpp"
 #include "Cacao/GPU.hpp"
+#include "Cacao/Exceptions.hpp"
 #include "Cacao/TickController.hpp"
 #include "SingletonGet.hpp"
 
-#include <array>
 #include <atomic>
 #include <thread>
+
+#include "glm/exponential.hpp"
+#include "glm/glm.hpp"
 
 namespace Cacao {
 	struct FrameProcessor::Impl {
@@ -47,6 +49,16 @@ namespace Cacao {
 		impl->thread->request_stop();
 	}
 
+	float srgbChannel2Linear(float c) {
+		//This is the sRGB -> linear conversion formula
+		if(c <= 0.04045f)
+			return c / 12.92f;
+		else {
+			const float a = (c + 0.055f) / 1.055f;
+			return static_cast<float>(std::pow(a, 2.4));
+		}
+	}
+
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		while(!stop.stop_requested()) {
 			//Request a snapshot of the world state
@@ -70,7 +82,17 @@ namespace Cacao {
 			//It has been blocking on this semaphore
 			TickController::Get().snapshotControl.done.release();
 
-			//TODO: Final command buffer setup and submission
+			//Clear color
+			constexpr glm::vec3 clearColor {0x00, 0xAC, 0xE6};
+			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
+
+			//Setup command buffer
+			std::unique_ptr<CommandBuffer> cmd = CommandBuffer::Create();
+			cmd->Add(GPUCommand::ClearScreen(clearColorLinear));
+			cmd->Add(GPUCommand::Present());
+
+			//Execute command buffer
+			GPUManager::Get().Submit(std::move(cmd)).get();
 		}
 	}
 }

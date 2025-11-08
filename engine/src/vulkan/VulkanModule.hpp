@@ -63,8 +63,8 @@ namespace Cacao {
 	class VulkanCommandBuffer : public CommandBuffer {
 	  public:
 		VulkanCommandBuffer();
-		VulkanCommandBuffer(VulkanCommandBuffer&&);
-		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
+		VulkanCommandBuffer(Vulkanstd::unique_ptr<CommandBuffer>&&);
+		VulkanCommandBuffer& operator=(Vulkanstd::unique_ptr<CommandBuffer>&&);
 
 		vk::CommandBuffer* operator->() {
 			return &imm.get().cmd;
@@ -81,7 +81,7 @@ namespace Cacao {
 
 	class VulkanGPU final : public GPUManager::Impl {
 	  public:
-		std::shared_future<void> SubmitCmdBuffer(CommandBuffer&& cmd) override;
+		std::shared_future<void> SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) override;
 		void RunloopStart() override {}
 		void RunloopStop() override {}
 		void RunloopIteration() override;
@@ -101,10 +101,13 @@ namespace Cacao {
 		void SetVSync(bool state) override;
 
 		//==================== IMPL POINTER CONFIGURATION ====================
-		virtual Mesh::Impl* ConfigureMesh() override;
-		virtual Tex2D::Impl* ConfigureTex2D() override;
-		virtual Cubemap::Impl* ConfigureCubemap() override;
-		virtual GPUManager::Impl* ConfigureGPUManager() override;
+		Mesh::Impl* ConfigureMesh() override;
+		Tex2D::Impl* ConfigureTex2D() override;
+		Cubemap::Impl* ConfigureCubemap() override;
+		GPUManager::Impl* ConfigureGPUManager() override;
+
+		//==================== GPU COMMANDS ====================
+		GPUCommand ClearScreenCmd(glm::vec3 color) override;
 
 		vk::Instance instance;
 		vk::PhysicalDevice physDev;

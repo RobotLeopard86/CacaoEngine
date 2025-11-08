@@ -88,7 +88,7 @@ namespace Cacao {
 		}
 	}
 
-	std::shared_future<void> VulkanGPU::SubmitCmdBuffer(CommandBuffer&& cmd) {
+	std::shared_future<void> VulkanGPU::SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) {
 		//Make sure this is a Vulkan buffer
 		VulkanCommandBuffer vkCmd = [&cmd]() -> VulkanCommandBuffer&& {
 			if(VulkanCommandBuffer* vcb = dynamic_cast<VulkanCommandBuffer*>(&cmd)) {

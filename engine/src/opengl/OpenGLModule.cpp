@@ -1,5 +1,6 @@
 #include "Cacao/Event.hpp"
 #include "OpenGLModule.hpp"
+#include "Cacao/GPU.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/EventManager.hpp"
@@ -56,4 +57,7 @@ namespace Cacao {
 		ctx->SetVSync(state);
 	}
 
+	std::unique_ptr<CommandBuffer> OpenGLModule::CreateCmdBuffer() {
+		return std::make_unique<OpenGLCommandBuffer>();
+	}
 }

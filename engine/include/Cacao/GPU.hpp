@@ -1,30 +1,44 @@
 #pragma once
 
 #include <future>
+#include <functional>
 #include <memory>
 
+#include "Cacao/FrameProcessor.hpp"
 #include "DllHelper.hpp"
 
+#include "glm/glm.hpp"
+
 namespace Cacao {
+	class CommandBuffer;
+
 	/**
 	 * @brief A command that can be executed in a command buffer
 	 *
 	 * @note It is not possible to create custom commands because that would require access to the underlying private graphics interface.
 	 */
-	struct CACAO_API GPUCommand {
-		public:
-			//TODO: Make the command generators
+	class CACAO_API GPUCommand {
+	  public:
+		//TODO: Make the command generators
 
-			///@cond
-			GPUCommand(const GPUCommand&) = delete;
-			GPUCommand& operator=(const GPUCommand&) = delete;
-			GPUCommand(GPUCommand&&);
-			GPUCommand& operator=(GPUCommand&&);
-			///@endcond
+		///@cond
+		GPUCommand(const GPUCommand&) = delete;
+		GPUCommand& operator=(const GPUCommand&) = delete;
+		GPUCommand(GPUCommand&&);
+		GPUCommand& operator=(GPUCommand&&);
+		///@endcond
 
-			virtual ~GPUCommand() {};
-		protected:
-			GPUCommand() {}
+	  protected:
+		GPUCommand() {}
+
+		static GPUCommand ClearScreen(glm::vec3 color);
+		static GPUCommand Present();
+
+		friend class CommandBuffer;
+		friend class FrameProcessor;
+		friend class PALModule;
+
+		std::function<void(CommandBuffer*)> apply;
 	};
 
 	/**
@@ -35,7 +49,7 @@ namespace Cacao {
 		/**
 		 * @brief Create a new empty command buffer
 		 */
-		CommandBuffer() {}
+		static std::unique_ptr<CommandBuffer> Create();
 
 		///@cond
 		CommandBuffer(const CommandBuffer&) = delete;
@@ -46,14 +60,17 @@ namespace Cacao {
 
 		/**
 		 * @brief Add a command to this command buffer
-		 * 
+		 *
 		 * @param cmd The command to add
 		 */
-		virtual void operator+=(GPUCommand&&) {};
+		virtual void Add(GPUCommand&&) {};
 
 		virtual ~CommandBuffer() {};
+
 	  protected:
-		virtual void Execute() = 0;
+		CommandBuffer() {}
+		virtual void Execute() {};
+		std::function<void(CommandBuffer*)>&& GetCommandFn(GPUCommand&&);
 	};
 
 	/**
@@ -108,7 +125,7 @@ namespace Cacao {
 		 *
 		 * @returns A future that will resolve when the task has finished executing
 		 */
-		std::shared_future<void> Submit(CommandBuffer&& cmd);
+		std::shared_future<void> Submit(std::unique_ptr<CommandBuffer> cmd);
 
 		/**
 		 * @brief Set the V-Sync state

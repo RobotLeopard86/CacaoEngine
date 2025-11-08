@@ -8,6 +8,7 @@ eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
 engine_srcs += files(
 	'OpenGLModule.cpp',
 	'GPU.cpp',
+	'Commands.cpp',
 	'impls' / 'OpenGLMesh.cpp',
 	'impls' / 'OpenGLTex2D.cpp',
 	'impls' / 'OpenGLCubemap.cpp'

@@ -63,7 +63,7 @@ namespace Cacao {
 		RunloopStop();
 	}
 
-	std::shared_future<void> GPUManager::Submit(CommandBuffer&& cmd) {
+	std::shared_future<void> GPUManager::Submit(std::unique_ptr<CommandBuffer> cmd) {
 		return impl->SubmitCmdBuffer(std::move(cmd));
 	}
 
@@ -73,5 +73,17 @@ namespace Cacao {
 		if(impl->vsreq.value == newState) return;
 		impl->vsreq.value = newState;
 		impl->vsreq.needChange = true;
+	}
+
+	std::unique_ptr<CommandBuffer> CommandBuffer::Create() {
+		return IMPL(PAL).mod->CreateCmdBuffer();
+	}
+
+	GPUCommand GPUCommand::ClearScreen(glm::vec3 color) {
+		return IMPL(PAL).mod->ClearScreenCmd(color);
+	}
+
+	GPUCommand GPUCommand::Present() {
+		return IMPL(PAL).mod->PresentCmd();
 	}
 }

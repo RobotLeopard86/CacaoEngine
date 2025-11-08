@@ -8,7 +8,8 @@
 namespace Cacao {
 	void OpenGLCubemapImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
-		OpenGLCommandBuffer cmd([this, &success]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this, &success]() {
 			//Create texture object
 			glGenTextures(1, &gpuTex);
 			GL_CHECK("Failed to create cubemap texture object!")
@@ -45,14 +46,17 @@ namespace Cacao {
 	}
 
 	void OpenGLCubemapImpl::DropRealized() {
-		OpenGLCommandBuffer cmd([this]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
-		GPUManager::Get().Submit(std::move(cmd)).get();
+		GPUManager::Get()
+			.Submit(std::move(cmd))
+			.get();
 	}
 
 	Cubemap::Impl* OpenGLModule::ConfigureCubemap() {
