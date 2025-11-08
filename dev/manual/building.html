@@ -468,7 +468,7 @@
 </section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Link to this heading"><span/></a></h2>
-<p>In the root Cacao Engine directory, run the following command to configure the build:
+<p>In the root Cacao Engine directory, run the following command to configure the build:<br />
 macOS/Linux: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span> <span class="pre">[--buildtype</span> <span class="pre">release]</span> <span class="pre">-Dbackends=&lt;graphics</span> <span class="pre">backends&gt;</span></code>.<br />
 Windows    : <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span> <span class="pre">--vsenv</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span> <span class="pre">[--buildtype</span> <span class="pre">release]</span> <span class="pre">-Dbackends=&lt;graphics</span> <span class="pre">backends&gt;</span></code>.</p>
 <p>The available backends are <code class="docutils literal notranslate"><span class="pre">opengl</span></code> and <code class="docutils literal notranslate"><span class="pre">vulkan</span></code>. See the <a class="reference internal" href="backends.html"><span class="doc std std-doc">backends info page</span></a> for more details. You can also choose to build the sandbox application by adding <code class="docutils literal notranslate"><span class="pre">-Dbuild_sandbox=true</span></code> to the command line.</p>
@@ -479,9 +479,9 @@ Windows    : <code class="docutils literal notranslate"><span class="pre">meson<
 <p>Once configuration is complete, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">compile</span> <span class="pre">-C</span> <span class="pre">&lt;build</span> <span class="pre">directory&gt;</span></code> to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the <code class="docutils literal notranslate"><span class="pre">sandbox</span></code> directory in your build directory.</p>
 <p>When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">devenv</span></code> in your build directory to set up the proper paths.</p>
 </section>
-<section id="visual-studio">
-<h2>Visual Studio<a class="headerlink" href="#visual-studio" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine has not yet been tested with Meson’s Visual Studio backend. It is not guaranteed to work, but feel free to try it out for yourself. Official guidance will be provided closer to release when testing begins.</p>
+<section id="visual-studio-and-xcode-projects">
+<h2>Visual Studio and Xcode Projects<a class="headerlink" href="#visual-studio-and-xcode-projects" title="Link to this heading"><span/></a></h2>
+<p>Cacao Engine has not yet been tested with Meson’s Visual Studio or Xcode backends. It is not guaranteed to work, but feel free to try it out for yourself. Official guidance will be provided closer to release when testing begins.</p>
 </section>
 </section>
 
@@ -544,7 +544,7 @@ Windows    : <code class="docutils literal notranslate"><span class="pre">meson<
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-support">Compiler Support</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build">Build</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-studio">Visual Studio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-studio-and-xcode-projects">Visual Studio and Xcode Projects</a></li>
 </ul>
   </nav></div>
 
