@@ -59,10 +59,6 @@ namespace Cacao {
 		//Store thread ID
 		mainThread = std::this_thread::get_id();
 
-		/* ------------------------------------- *\
-		|*      PLACEHOLDER: BUNDLE LOADING      *|
-		\* ------------------------------------- */
-
 		//Initialize audio
 		Logger::Engine(Logger::Level::Trace) << "Initializing audio system...";
 		AudioManager::Get().Initialize();

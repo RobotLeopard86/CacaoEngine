@@ -49,7 +49,7 @@ Similarly, you may not need Pipewire packages or ALSA packages if not targeting 
 Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
 
 ## Build
-In the root Cacao Engine directory, run the following command to configure the build: 
+In the root Cacao Engine directory, run the following command to configure the build:  
 macOS/Linux: `meson setup <build directory> --native-file native.ini [--buildtype release] -Dbackends=<graphics backends>`.  
 Windows    : `meson setup <build directory> --vsenv --native-file native.ini [--buildtype release] -Dbackends=<graphics backends>`.
 
@@ -67,5 +67,5 @@ Once configuration is complete, run `meson compile -C <build directory>` to buil
 
 When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run `meson devenv` in your build directory to set up the proper paths.
 
-## Visual Studio
-Cacao Engine has not yet been tested with Meson's Visual Studio backend. It is not guaranteed to work, but feel free to try it out for yourself. Official guidance will be provided closer to release when testing begins.
+## Visual Studio and Xcode Projects
+Cacao Engine has not yet been tested with Meson's Visual Studio or Xcode backends. It is not guaranteed to work, but feel free to try it out for yourself. Official guidance will be provided closer to release when testing begins.
