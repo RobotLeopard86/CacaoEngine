@@ -1,44 +1,41 @@
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "vulkan/vulkan_structs.hpp"
 
 #include <atomic>
 #include <future>
 #include <mutex>
 #include <optional>
+#include <stdexcept>
 #include <thread>
 
 namespace Cacao {
-	std::map<std::thread::id, Immediate> Immediate::immediates = {};
+	std::set<Immediate*> Immediate::imms = {};
 	std::vector<GfxHandler> GfxHandler::handlers = {};
 
 	Immediate& Immediate::Get() {
-		//Check if we have an immediate for this thread already
-		auto threadID = std::this_thread::get_id();
-		if(immediates.contains(threadID)) {
-			Immediate& ret = immediates.at(threadID);
-			ret.cmd.reset();
-			return ret;
-		}
-
-		//Make a new immediate
-		const auto& [it, success] = immediates.emplace();
-		Check<MiscException>(success, "Failed to create immediate!");
-		Immediate& imm = it->second;
-		try {
-			vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
-			imm.pool = vulkan->dev.createCommandPool(ipoolCI);
-			vk::CommandBufferAllocateInfo allocCI(imm.pool, vk::CommandBufferLevel::ePrimary, 1);
-			imm.cmd = vulkan->dev.allocateCommandBuffers(allocCI)[0];
-			imm.fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
-		} catch(...) {
-			Check<ExternalException>(false, "Failed to setup immediate object for thread!", [&imm]() {
-				vulkan->dev.freeCommandBuffers(imm.pool, imm.cmd);
-				vulkan->dev.destroyCommandPool(imm.pool);
-				vulkan->dev.destroyFence(imm.fence);
-			});
-		}
-
+		static thread_local Immediate imm = []() {
+			Immediate imm;
+			if(!imm.ready) {
+				try {
+					vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
+					imm.pool = vulkan->dev.createCommandPool(ipoolCI);
+					vk::CommandBufferAllocateInfo allocCI(imm.pool, vk::CommandBufferLevel::ePrimary, 1);
+					imm.cmd = vulkan->dev.allocateCommandBuffers(allocCI)[0];
+					imm.fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
+					imm.ready = true;
+				} catch(...) {
+					Check<ExternalException>(false, "Failed to setup immediate object for thread!", [&imm]() {
+						vulkan->dev.freeCommandBuffers(imm.pool, imm.cmd);
+						vulkan->dev.destroyCommandPool(imm.pool);
+						vulkan->dev.destroyFence(imm.fence);
+					});
+				}
+			}
+			return imm;
+		}();
+		imms.insert(&imm);
 		return imm;
 	}
 
@@ -46,12 +43,12 @@ namespace Cacao {
 		//Wait for the device to be idle
 		vulkan->dev.waitIdle();
 
-		for(auto& imm : immediates) {
-			vulkan->dev.freeCommandBuffers(imm.second.pool, imm.second.cmd);
-			vulkan->dev.destroyCommandPool(imm.second.pool);
-			vulkan->dev.destroyFence(imm.second.fence);
+		for(Immediate* imm : imms) {
+			vulkan->dev.freeCommandBuffers(imm->pool, imm->cmd);
+			vulkan->dev.destroyCommandPool(imm->pool);
+			vulkan->dev.destroyFence(imm->fence);
 		}
-		immediates.clear();
+		imms.clear();
 	}
 
 	void Immediate::SetupGfx() {
@@ -61,7 +58,8 @@ namespace Cacao {
 				//The exchange method returns the previous value of the atomic
 				//So if it returns false, we know this handler was free and we have now reserved it
 				if(!handler.inUse.exchange(true, std::memory_order_acq_rel)) {
-					gfx = std::move(handler);
+					gfx = std::make_optional<std::reference_wrapper<GfxHandler>>(handler);
+					gfx->get().Acquire();
 					return;
 				}
 			}
@@ -74,18 +72,25 @@ namespace Cacao {
 	}
 
 	VulkanCommandBuffer::VulkanCommandBuffer()
-	  : imm(Immediate::Get()), lock(imm.get().mtx), promise() {
+	  : imm(Immediate::Get()), promise() {
+		//Acquire immediate
+		imm.get().accessMgr.acquire();
+
 		//Start command buffer recording
-		vk::CommandBufferBeginInfo cbbi(vk::CommandBufferUsageFlagBits::eOneTimeSubmit | vk::CommandBufferUsageFlagBits::eSimultaneousUse);
+		vk::CommandBufferBeginInfo cbbi(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
 		imm.get().cmd.begin(cbbi);
 	}
 
+	VulkanCommandBuffer::~VulkanCommandBuffer() {
+		//Release immediate
+		imm.get().accessMgr.release();
+	}
+
 	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other)
-	  : imm(std::move(other.imm)), lock(std::move(other.lock)), promise(std::move(other.promise)) {}
+	  : imm(std::move(other.imm)), promise(std::move(other.promise)) {}
 
 	VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) {
 		imm = std::move(other.imm);
-		lock = std::move(other.lock);
 		promise = std::move(other.promise);
 		return *this;
 	}
@@ -95,13 +100,33 @@ namespace Cacao {
 		imm.get().cmd.end();
 
 		//Build submission info
+		vk::SubmitInfo2 submit;
 		vk::CommandBufferSubmitInfo cbsi(imm.get().cmd);
-		vk::SubmitInfo2 submit({}, {}, cbsi);
+		if(imm.get().gfx.has_value()) {
+			vk::SemaphoreSubmitInfo semWait(imm.get().gfx->get().acquireImage, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SemaphoreSubmitInfo semSignal(imm.get().gfx->get().doneRendering, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			submit = vk::SubmitInfo2({}, semWait, cbsi, semSignal);
+		} else {
+			submit = vk::SubmitInfo2({}, {}, cbsi);
+		}
+
+		//Reset fence if needed
+		if(vulkan->dev.getFenceStatus(imm.get().fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = vulkan->dev.waitForFences(imm.get().fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for immediate fence reset!");
+			vulkan->dev.resetFences(imm.get().fence);
+		}
 
 		//Submit buffer to queue
 		{
 			std::lock_guard lk(vulkan->queueMtx);
 			vulkan->queue.submit2(submit, imm.get().fence);
+		}
+
+		//Present if graphics is in use
+		if(imm.get().gfx.has_value()) {
+			vk::PresentInfoKHR presentInfo(imm.get().gfx->get().doneRendering, vulkan->swapchain.chain, imm.get().gfx->get().imageIdx);
+			vulkan->queue.presentKHR(presentInfo);
 		}
 	}
 
@@ -142,8 +167,10 @@ namespace Cacao {
 				vulkan->dev.resetFences(vcb->imm.get().fence);
 
 				//Release graphics handler if needed
-				vcb->imm.get().gfx->inUse.store(false);
-				vcb->imm.get().gfx = std::nullopt;
+				if(vcb->imm.get().gfx.has_value()) {
+					vcb->imm.get().gfx->get().inUse.store(false, std::memory_order_release);
+					vcb->imm.get().gfx = std::nullopt;
+				}
 
 				//Set the promise
 				vcb->promise.set_value();
@@ -155,5 +182,40 @@ namespace Cacao {
 				++it;
 			}
 		}
+	}
+
+	void GfxHandler::Acquire() {
+		if(imageIdx != UINT32_MAX) return;
+
+		//Try to acquire the next swapchain image
+		try {
+			//Reset fence
+			vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
+			vulkan->dev.resetFences(imageFence);
+
+			//Acquire image
+			vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, acquireImage, imageFence);
+			auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
+			if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Failed to acquire swapchain image for unknown reason.");
+			imageIdx = result.value;
+		} catch(vk::SystemError& err) {
+			//Is the swapchain out of date?
+			//If so, we can regenerate and try again
+			if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR) {
+				GenSwapchain();
+				imageIdx = UINT32_MAX;
+				Acquire();
+				return;
+			}
+
+			//Other error, can't proceed
+			std::stringstream msg;
+			msg << "Failed to acquire swapchain image: " << err.what();
+			Check<ExternalException>(false, msg.str());
+		}
+
+		//Wait for image acquisition to finish
+		vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
+		vulkan->dev.resetFences(imageFence);
 	}
 }

@@ -2,9 +2,12 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
-#include "impl/Window.hpp"
 #include "ImplAccessor.hpp"
 #include "vulkan/vulkan_handles.hpp"
+
+#ifdef __linux__
+#include "impl/Window.hpp"
+#endif
 
 #include <memory>
 
@@ -58,7 +61,7 @@ namespace Cacao {
 
 		//Get required layers
 		std::vector<const char*> layers = {};
-#ifdef DEBUG
+#ifdef _DEBUG
 		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
 		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
@@ -131,7 +134,7 @@ namespace Cacao {
 
 		//Create logical device
 		float priority = 1.0f;
-		vk::DeviceQueueCreateInfo queueCI({}, 0, priority);
+		vk::DeviceQueueCreateInfo queueCI({}, 0, 1, &priority);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
 		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
@@ -161,17 +164,6 @@ namespace Cacao {
 			Check<ExternalException>(false, "Could not create memory allocator!");
 		}
 
-		//Create command pool
-		vk::CommandPoolCreateInfo rpoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, 0);
-		try {
-			renderPool = dev.createCommandPool(rpoolCI);
-		} catch(vk::SystemError& err) {
-			allocator.destroy();
-			dev.destroy();
-			instance.destroy();
-			Check<ExternalException>(false, "Could not create rendering command pool!");
-		}
-
 		//Make immediate for main thread
 		Immediate::Get();
 
@@ -182,7 +174,6 @@ namespace Cacao {
 			globalsUBO = allocator.createBuffer(globalsCI, globalsAllocCI);
 		} catch(vk::SystemError& err) {
 			Immediate::Cleanup();
-			dev.destroyCommandPool(renderPool);
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -195,7 +186,6 @@ namespace Cacao {
 		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			Immediate::Cleanup();
-			dev.destroyCommandPool(renderPool);
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -217,7 +207,6 @@ namespace Cacao {
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 			Immediate::Cleanup();
-			dev.destroyCommandPool(renderPool);
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -241,9 +230,6 @@ namespace Cacao {
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 		dev.destroyImageView(depth.view);
 		allocator.destroyImage(depth.obj, depth.alloc);
-		std::vector<vk::CommandBuffer> cbufs;
-		dev.freeCommandBuffers(renderPool, cbufs);
-		dev.destroyCommandPool(renderPool);
 		allocator.destroy();
 		dev.destroy();
 		instance.destroy();

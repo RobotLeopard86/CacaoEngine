@@ -60,7 +60,7 @@ fs = import('fs')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'
-	add_project_arguments(['-DCACAO_BUILD', '-D_DLL', '-D_MT', '-DHAS_WIN32'], language: ['c', 'cpp'])
+	add_project_arguments(['-DCACAO_BUILD', '-D_DLL', '-D_MT', '-DHAS_WIN32', '-D_CRT_SECURE_NO_WARNINGS'], language: ['c', 'cpp'])
 	if bt == 'debug'
 		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2', '-fms-runtime-lib=dll_dbg'], language: ['c', 'cpp'])
 	else

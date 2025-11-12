@@ -3,8 +3,7 @@
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "Cacao/EventConsumer.hpp"
-#include <cstdint>
-#include <utility>
+#include <semaphore>
 
 #ifdef __linux__
 #ifdef HAS_X11
@@ -22,8 +21,9 @@
 #include "vk_mem_alloc.hpp" // IWYU pragma: export
 #include "glm/glm.hpp"		// IWYU pragma: export
 
-#include <map>
-#include <thread>
+#include <cstdint>
+#include <set>
+#include <utility>
 #include <mutex>
 #include <atomic>
 
@@ -88,15 +88,30 @@ namespace Cacao {
 		vk::CommandPool pool;
 		vk::CommandBuffer cmd;
 		vk::Fence fence;
-		std::mutex mtx;
-		std::optional<GfxHandler> gfx;
+		std::binary_semaphore accessMgr;
+		std::optional<std::reference_wrapper<GfxHandler>> gfx;
 
 		static void Cleanup();
 
+		Immediate(const Immediate&) = delete;
+		Immediate& operator=(const Immediate&) = delete;
+		Immediate(Immediate&& o)
+		  : pool(std::exchange(o.pool, {})), cmd(std::exchange(o.cmd, {})), fence(std::exchange(o.fence, {})), accessMgr(1), gfx(std::exchange(o.gfx, {})) {}
+		Immediate& operator=(Immediate&& o) {
+			pool = std::exchange(o.pool, {});
+			cmd = std::exchange(o.cmd, {});
+			gfx = std::exchange(o.gfx, {});
+			return *this;
+		}
+
 	  private:
-		static std::map<std::thread::id, Immediate> immediates;
+		static std::set<Immediate*> imms;
+		bool ready = false;
 
 		void SetupGfx();
+
+		Immediate()
+		  : accessMgr(1) {}
 
 		static Immediate& Get();
 		friend class VulkanCommandBuffer;
@@ -107,6 +122,7 @@ namespace Cacao {
 	class VulkanCommandBuffer : public CommandBuffer {
 	  public:
 		VulkanCommandBuffer();
+		~VulkanCommandBuffer();
 		VulkanCommandBuffer(VulkanCommandBuffer&&);
 		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
 
@@ -118,9 +134,10 @@ namespace Cacao {
 
 	  protected:
 		std::reference_wrapper<Immediate> imm;
-		std::unique_lock<std::mutex> lock;
 		std::promise<void> promise;
+
 		friend class VulkanGPU;
+		friend class VulkanModule;
 	};
 
 	class VulkanGPU final : public GPUManager::Impl {
@@ -171,7 +188,6 @@ namespace Cacao {
 		vk::Format selectedDF;
 		vk::Queue queue;
 		std::mutex queueMtx;
-		vk::CommandPool renderPool;
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
 		bool vsync;
@@ -187,7 +203,6 @@ namespace Cacao {
 	inline std::shared_ptr<VulkanModule> vulkan;
 
 	void GenSwapchain();
-	unsigned int AcquireImage(vk::Fence& fence);
 
 	constexpr glm::mat4 projectionCorrection(
 		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change

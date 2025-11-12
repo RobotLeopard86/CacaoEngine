@@ -63,7 +63,7 @@ namespace Cacao {
 		vk::SwapchainCreateInfoKHR swapchainCI(
 			{}, vulkan->surface, std::clamp((surfc.minImageCount + 1), surfc.minImageCount, (surfc.maxImageCount > 0 ? surfc.maxImageCount : UINT32_MAX)),
 			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0,
-			vk::SurfaceTransformFlagBitsKHR::eInherit, vk::CompositeAlphaFlagBitsKHR::eInherit, presentMode);
+			vk::SurfaceTransformFlagBitsKHR::eIdentity, vk::CompositeAlphaFlagBitsKHR::eInherit, presentMode);
 		try {
 			vulkan->swapchain.chain = vulkan->dev.createSwapchainKHR(swapchainCI);
 		} catch(vk::SystemError& err) {
@@ -118,9 +118,14 @@ namespace Cacao {
 		if(GfxHandler::handlers.size() > vulkan->swapchain.views.size()) {
 			//Too many handlers, remove the extras
 			unsigned int diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size();
-			auto it = GfxHandler::handlers.end();
-			while(std::distance(it, GfxHandler::handlers.end()) < diff) --it;
-			GfxHandler::handlers.erase(it, GfxHandler::handlers.end());
+			while((diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size()) > 0) {
+				for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end(); ++it) {
+					if(!it->inUse.load(std::memory_order_acquire)) {
+						GfxHandler::handlers.erase(it);
+						break;
+					}
+				}
+			}
 		} else if(GfxHandler::handlers.size() < vulkan->swapchain.views.size()) {
 			//Too few, add some
 			unsigned int diff = vulkan->swapchain.views.size() - GfxHandler::handlers.size();
@@ -128,7 +133,7 @@ namespace Cacao {
 				//Setup handler object
 				GfxHandler handler;
 				handler.imageIdx = UINT32_MAX;
-				handler.inUse.store(true);
+				handler.inUse.store(true, std::memory_order_seq_cst);
 				try {
 					handler.imageFence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 					handler.acquireImage = vulkan->dev.createSemaphore({});
@@ -151,7 +156,7 @@ namespace Cacao {
 		//Release handlers
 		//Queue lock will be released automatically by stack pop
 		for(GfxHandler& handler : GfxHandler::handlers) {
-			handler.inUse.store(false, std::memory_order_acq_rel);
+			handler.inUse.store(false, std::memory_order_release);
 		}
 	}
 }

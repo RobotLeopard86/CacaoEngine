@@ -40,12 +40,12 @@ static std::atomic_bool quitRequested;
 
 - (instancetype)init {
 	self = [super init];
-	quitRequested.store(false);
+	quitRequested.store(false, std::memory_order_release);
 	return self;
 }
 
 - (void)terminate:(id)sender {
-	quitRequested.store(true);
+	quitRequested.store(true, std::memory_order_release);
 	Engine::Get().Quit();
 }
 

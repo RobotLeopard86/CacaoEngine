@@ -63,6 +63,12 @@ namespace Cacao {
 
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		while(!stop.stop_requested()) {
+			//If the window is minimized, we can't render, so no point in working
+			while(Window::Get().IsMinimized()) {
+				std::this_thread::yield();
+				if(stop.stop_requested()) return;
+			}
+
 			//Request a snapshot of the world state
 			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
 
