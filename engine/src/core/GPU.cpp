@@ -78,12 +78,4 @@ namespace Cacao {
 	std::unique_ptr<CommandBuffer> CommandBuffer::Create() {
 		return IMPL(PAL).mod->CreateCmdBuffer();
 	}
-
-	GPUCommand GPUCommand::ClearScreen(glm::vec3 color) {
-		return IMPL(PAL).mod->ClearScreenCmd(color);
-	}
-
-	GPUCommand GPUCommand::Present() {
-		return IMPL(PAL).mod->PresentCmd();
-	}
 }

@@ -11,7 +11,7 @@ libdecor_dep = libdecor.get_variable('libdecor_dep')
 desktopsettings = libdecor.get_variable('desktop_settings_dep')
 
 # xdg-output protocol
-wl = import('unstable-wayland')
+wl = import('wayland')
 xdgoutxml = wl.find_protocol('xdg-output', state: 'unstable', version: 1)
 xdg_output = wl.scan_xml(xdgoutxml, client: true, include_core_only: false)
 xdg_output_h = xdg_output[1]

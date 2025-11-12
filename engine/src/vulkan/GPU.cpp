@@ -1,14 +1,16 @@
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "vulkan/vulkan_enums.hpp"
-#include "vulkan/vulkan_structs.hpp"
+
+#include <atomic>
 #include <future>
 #include <mutex>
+#include <optional>
 #include <thread>
 
 namespace Cacao {
 	std::map<std::thread::id, Immediate> Immediate::immediates = {};
+	std::vector<GfxHandler> GfxHandler::handlers = {};
 
 	Immediate& Immediate::Get() {
 		//Check if we have an immediate for this thread already
@@ -52,6 +54,21 @@ namespace Cacao {
 		immediates.clear();
 	}
 
+	void Immediate::SetupGfx() {
+		while(!gfx.has_value()) {
+			//Iterate over all the handlers until we find one that isn't in use
+			for(GfxHandler& handler : GfxHandler::handlers) {
+				//The exchange method returns the previous value of the atomic
+				//So if it returns false, we know this handler was free and we have now reserved it
+				if(!handler.inUse.exchange(true, std::memory_order_acq_rel)) {
+					gfx = std::move(handler);
+					return;
+				}
+			}
+			std::this_thread::yield();
+		}
+	}
+
 	GPUManager::Impl* VulkanModule::ConfigureGPUManager() {
 		return new VulkanGPU();
 	}
@@ -59,7 +76,7 @@ namespace Cacao {
 	VulkanCommandBuffer::VulkanCommandBuffer()
 	  : imm(Immediate::Get()), lock(imm.get().mtx), promise() {
 		//Start command buffer recording
-		vk::CommandBufferBeginInfo cbbi(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+		vk::CommandBufferBeginInfo cbbi(vk::CommandBufferUsageFlagBits::eOneTimeSubmit | vk::CommandBufferUsageFlagBits::eSimultaneousUse);
 		imm.get().cmd.begin(cbbi);
 	}
 
@@ -90,9 +107,9 @@ namespace Cacao {
 
 	std::shared_future<void> VulkanGPU::SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) {
 		//Make sure this is a Vulkan buffer
-		VulkanCommandBuffer vkCmd = [&cmd]() -> VulkanCommandBuffer&& {
-			if(VulkanCommandBuffer* vcb = dynamic_cast<VulkanCommandBuffer*>(&cmd)) {
-				return static_cast<VulkanCommandBuffer&&>(*vcb);
+		std::unique_ptr<VulkanCommandBuffer> vkCmd = [&cmd]() -> std::unique_ptr<VulkanCommandBuffer> {
+			if(VulkanCommandBuffer* vcb = dynamic_cast<VulkanCommandBuffer*>(cmd.release())) {
+				return std::unique_ptr<VulkanCommandBuffer>(vcb);
 			} else {
 				Check<BadTypeException>(false, "Cannot submit a non-Vulkan command buffer to the Vulkan backend!");
 				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
@@ -100,14 +117,16 @@ namespace Cacao {
 		}();
 
 		//Submit underlying commands
-		vkCmd.Execute();
+		vkCmd->Execute();
 
 		//Get a future
-		std::shared_future<void> fut = vkCmd.promise.get_future().share();
+		std::shared_future<void> fut = vkCmd->promise.get_future().share();
 
 		//Move buffer into submission list for result tracking
-		std::lock_guard lk(mutex);
-		submitted.push_back(std::move(vkCmd));
+		{
+			std::lock_guard lk(mutex);
+			submitted.push_back(std::move(vkCmd));
+		}
 
 		//Return future
 		return fut;
@@ -117,13 +136,17 @@ namespace Cacao {
 		//Go through all the submitted command buffers and see if they're done
 		std::lock_guard lk(mutex);
 		for(auto it = submitted.begin(); it != submitted.end();) {
-			VulkanCommandBuffer& vcb = *it;
-			if(vulkan->dev.getFenceStatus(vcb.imm.get().fence) == vk::Result::eSuccess) {
+			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
+			if(vulkan->dev.getFenceStatus(vcb->imm.get().fence) == vk::Result::eSuccess) {
 				//Reset the fence
-				vulkan->dev.resetFences(vcb.imm.get().fence);
+				vulkan->dev.resetFences(vcb->imm.get().fence);
+
+				//Release graphics handler if needed
+				vcb->imm.get().gfx->inUse.store(false);
+				vcb->imm.get().gfx = std::nullopt;
 
 				//Set the promise
-				vcb.promise.set_value();
+				vcb->promise.set_value();
 
 				//Erase the object and update the iterator
 				it = submitted.erase(it);

@@ -5,8 +5,8 @@
 #include "glad/gl.h"
 
 namespace Cacao {
-	GPUCommand OpenGLModule::ClearScreenCmd(glm::vec3 color) {
-		return CommandWithFn([color](CommandBuffer* cmd) {
+	GPUCommand OpenGLModule::StartRenderingCmd(glm::vec3 clearColor) {
+		return CommandWithFn([clearColor](CommandBuffer* cmd) {
 			//Make sure this is an OpenGL buffer
 			OpenGLCommandBuffer* glCmd = [&cmd]() -> OpenGLCommandBuffer* {
 				if(OpenGLCommandBuffer* glcb = dynamic_cast<OpenGLCommandBuffer*>(cmd)) {
@@ -18,11 +18,17 @@ namespace Cacao {
 			}();
 
 			//Add task to command buffer
-			glCmd->AddTask([color]() {
-				glClearColor(color.r, color.g, color.b, 1.0);
+			glCmd->AddTask([clearColor]() {
+				//Clear screen
+				glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			});
 		});
+	}
+
+	GPUCommand OpenGLModule::EndRenderingCmd() {
+		//OpenGL has no formal "end rendering" system
+		return CommandWithFn([](CommandBuffer*) {});
 	}
 
 	GPUCommand OpenGLModule::PresentCmd() {

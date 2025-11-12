@@ -33,7 +33,8 @@ namespace Cacao {
 		virtual GPUManager::Impl* ConfigureGPUManager() = 0;
 
 		//==================== GPU COMMANDS ====================
-		virtual GPUCommand ClearScreenCmd(glm::vec3 color) = 0;
+		virtual GPUCommand StartRenderingCmd(glm::vec3 clearColor) = 0;
+		virtual GPUCommand EndRenderingCmd() = 0;
 		virtual GPUCommand PresentCmd() = 0;
 
 		virtual ~PALModule() {}

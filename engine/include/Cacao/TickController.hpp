@@ -6,6 +6,7 @@
 #include <memory>
 #include <semaphore>
 #include <mutex>
+#include <atomic>
 
 namespace Cacao {
 	/**

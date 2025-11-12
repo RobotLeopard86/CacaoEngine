@@ -31,9 +31,6 @@ namespace Cacao {
 	  protected:
 		GPUCommand() {}
 
-		static GPUCommand ClearScreen(glm::vec3 color);
-		static GPUCommand Present();
-
 		friend class CommandBuffer;
 		friend class FrameProcessor;
 		friend class PALModule;

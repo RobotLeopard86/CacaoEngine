@@ -11,7 +11,7 @@
 #include <mutex>
 
 #include "eternal.hpp"
-#include "glad/gl.h"
+#include "glad/gl.h"// IWYU pragma: export
 
 constexpr const inline auto glErrors = mapbox::eternal::map<GLenum, mapbox::eternal::string>({{GL_INVALID_ENUM, "Invalid Enum"},
 	{GL_INVALID_VALUE, "Invalid Value"},
@@ -98,7 +98,8 @@ namespace Cacao {
 		GPUManager::Impl* ConfigureGPUManager() override;
 
 		//==================== GPU COMMANDS ====================
-		GPUCommand ClearScreenCmd(glm::vec3 color) override;
+		GPUCommand StartRenderingCmd(glm::vec3 clearColor) override;
+		GPUCommand EndRenderingCmd() override;
 		GPUCommand PresentCmd() override;
 
 		OpenGLModule()

@@ -265,7 +265,7 @@ namespace Cacao {
 		instance.destroySurfaceKHR(surface);
 	}
 
-	CommandBuffer VulkanModule::CreateCmdBuffer() {
-		return VulkanCommandBuffer {};
+	std::unique_ptr<CommandBuffer> VulkanModule::CreateCmdBuffer() {
+		return std::make_unique<VulkanCommandBuffer>();
 	}
 }

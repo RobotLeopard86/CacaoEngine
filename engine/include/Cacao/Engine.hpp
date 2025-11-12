@@ -141,8 +141,6 @@ namespace Cacao {
 		/**
 		 * @brief Run a task on the main thread
 		 *
-		 * @warning Since rendering happens on the main thread, excessive use of this method for other purposes may slow rendering performance
-		 *
 		 * @param func The task to execute
 		 * @param args The arguments to the task function
 		 *

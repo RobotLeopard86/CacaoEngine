@@ -12,6 +12,7 @@ engine_srcs += files(
 	'Swapchain.cpp',
 	'VulkanModule.cpp',
 	'VulkanImpl.cpp',
+	'Commands.cpp',
 	'impls' / 'VulkanMesh.cpp',
 	'impls' / 'VulkanTex2D.cpp',
 	'impls' / 'VulkanCubemap.cpp',
