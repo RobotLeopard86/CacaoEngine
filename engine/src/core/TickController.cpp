@@ -68,6 +68,7 @@ namespace Cacao {
 
 		//Signal run loop stop
 		impl->thread->request_stop();
+		impl->thread->join();
 	}
 
 	void TickController::Impl::Runloop(std::stop_token stop) {

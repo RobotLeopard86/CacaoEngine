@@ -43,6 +43,7 @@ namespace Cacao {
 
 		//Signal run loop stop
 		impl->thread->request_stop();
+		impl->thread->join();
 	}
 
 	//This just handles looping and lifecycle to avoid code duplication in the backend

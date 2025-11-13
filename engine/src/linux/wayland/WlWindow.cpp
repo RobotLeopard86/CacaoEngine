@@ -4,6 +4,7 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
+#include "xdg-output-unstable-v1-client-protocol.h"
 #include <wayland-client-protocol.h>
 
 namespace Cacao {
@@ -55,6 +56,10 @@ namespace Cacao {
 			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			self->outputSize = {lw, lh};
 		};
+		outListener.logical_position = [](void*, zxdg_output_v1*, int, int) {};
+		outListener.done = [](void*, zxdg_output_v1*) {};
+		outListener.name = [](void*, zxdg_output_v1*, const char*) {};
+		outListener.description = [](void*, zxdg_output_v1*, const char*) {};
 
 		//Create and register surface listener
 		surfListener = {};

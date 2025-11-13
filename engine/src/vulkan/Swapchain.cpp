@@ -1,6 +1,7 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "vulkan/vulkan_enums.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -62,8 +63,8 @@ namespace Cacao {
 		//Make new swapchain
 		vk::SwapchainCreateInfoKHR swapchainCI(
 			{}, vulkan->surface, std::clamp((surfc.minImageCount + 1), surfc.minImageCount, (surfc.maxImageCount > 0 ? surfc.maxImageCount : UINT32_MAX)),
-			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive, 0,
-			vk::SurfaceTransformFlagBitsKHR::eIdentity, vk::CompositeAlphaFlagBitsKHR::eInherit, presentMode);
+			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
+		swapchainCI.presentMode = presentMode;
 		try {
 			vulkan->swapchain.chain = vulkan->dev.createSwapchainKHR(swapchainCI);
 		} catch(vk::SystemError& err) {
@@ -121,6 +122,9 @@ namespace Cacao {
 			while((diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size()) > 0) {
 				for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end(); ++it) {
 					if(!it->inUse.load(std::memory_order_acquire)) {
+						vulkan->dev.destroySemaphore(it->acquireImage);
+						vulkan->dev.destroySemaphore(it->doneRendering);
+						vulkan->dev.destroyFence(it->imageFence);
 						GfxHandler::handlers.erase(it);
 						break;
 					}

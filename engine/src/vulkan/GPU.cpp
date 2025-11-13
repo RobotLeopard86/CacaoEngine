@@ -194,7 +194,7 @@ namespace Cacao {
 			vulkan->dev.resetFences(imageFence);
 
 			//Acquire image
-			vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, acquireImage, imageFence);
+			vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, acquireImage, imageFence, 1);
 			auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 			if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Failed to acquire swapchain image for unknown reason.");
 			imageIdx = result.value;

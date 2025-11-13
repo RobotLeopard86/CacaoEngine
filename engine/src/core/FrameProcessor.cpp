@@ -7,6 +7,8 @@
 #include "impl/PAL.hpp"
 
 #include <atomic>
+#include <chrono>
+#include <future>
 #include <thread>
 
 #include "glm/exponential.hpp"
@@ -49,6 +51,7 @@ namespace Cacao {
 
 		//Signal run loop stop
 		impl->thread->request_stop();
+		impl->thread->join();
 	}
 
 	float srgbChannel2Linear(float c) {
@@ -101,7 +104,11 @@ namespace Cacao {
 			cmd->Add(IMPL(PAL).mod->PresentCmd());
 
 			//Execute command buffer
-			GPUManager::Get().Submit(std::move(cmd)).get();
+			std::shared_future<void> submission = GPUManager::Get().Submit(std::move(cmd));
+			while(submission.wait_for(std::chrono::microseconds(1)) == std::future_status::timeout) {
+				std::this_thread::yield();
+				if(stop.stop_requested()) return;
+			}
 		}
 	}
 }

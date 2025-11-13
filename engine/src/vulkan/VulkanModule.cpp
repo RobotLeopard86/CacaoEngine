@@ -225,6 +225,14 @@ namespace Cacao {
 		//Clean up immediate objects
 		Immediate::Cleanup();
 
+		//Clean up graphics handlers
+		for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end(); ++it) {
+			vulkan->dev.destroySemaphore(it->acquireImage);
+			vulkan->dev.destroySemaphore(it->doneRendering);
+			vulkan->dev.destroyFence(it->imageFence);
+		}
+		GfxHandler::handlers.clear();
+
 		//Destroy Vulkan objects
 		allocator.unmapMemory(globalsUBO.alloc);
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);

@@ -80,6 +80,7 @@ namespace Cacao {
 		friend class Immediate;
 		friend class VulkanCommandBuffer;
 		friend class VulkanGPU;
+		friend class VulkanModule;
 		friend void GenSwapchain();
 	};
 
@@ -131,6 +132,10 @@ namespace Cacao {
 		}
 
 		void Execute() override;
+
+		void Add(GPUCommand&& cmd) override {
+			GetCommandFn(std::move(cmd))(this);
+		}
 
 	  protected:
 		std::reference_wrapper<Immediate> imm;
