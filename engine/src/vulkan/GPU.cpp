@@ -209,6 +209,7 @@ namespace Cacao {
 			}
 
 			//Other error, can't proceed
+			imageIdx = UINT32_MAX;
 			std::stringstream msg;
 			msg << "Failed to acquire swapchain image: " << err.what();
 			Check<ExternalException>(false, msg.str());

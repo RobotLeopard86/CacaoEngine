@@ -84,10 +84,9 @@ namespace Cacao {
 				swapchainImageViews[i] = vulkan->dev.createImageView(imageViewCI);
 			} catch(vk::SystemError& err) {
 				Check<ExternalException>(false, "Failed to create swapchain image view!", [&swapchainImageViews, &i]() {
-					for(; i > 0; --i) {
+					for(; i >= 0; --i) {
 						vulkan->dev.destroyImageView(swapchainImageViews[i]);
 					}
-					vulkan->dev.destroyImageView(swapchainImageViews[0]);
 				});
 			}
 		}
