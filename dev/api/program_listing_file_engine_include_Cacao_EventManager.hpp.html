@@ -385,7 +385,7 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_EventManager.hpp.html#file-engine-include-cacao-eventmanager-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/EventManager.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Event.hpp&quot;</span>
@@ -412,7 +412,7 @@
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="c1">//Map of event types to list of consumers</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">EventConsumer</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">consumers</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">EventConsumer</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">consumers</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">EventManager</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">        </span><span class="o">~</span><span class="n">EventManager</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
