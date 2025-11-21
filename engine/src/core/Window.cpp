@@ -12,7 +12,7 @@
 #include <cstdlib>
 
 namespace Cacao {
-	std::map<std::string, std::function<std::unique_ptr<Window::Impl>()>> Window::Impl::registry;
+	std::unordered_map<std::string, std::function<std::unique_ptr<Window::Impl>()>> Window::Impl::registry;
 
 	Window::Window() {
 		//Create implementation pointer

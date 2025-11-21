@@ -52,7 +52,7 @@ namespace Cacao {
 		vk::Semaphore acquireImage;
 		vk::Semaphore doneRendering;
 		vk::Fence imageFence;
-		unsigned int imageIdx;
+		unsignestd::unordered_mapageIdx;
 		std::atomic_bool inUse;
 
 		GfxHandler()

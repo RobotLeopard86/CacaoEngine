@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <functional>
 
 #include "Cacao/DllHelper.hpp"
@@ -62,6 +62,6 @@ namespace Cacao {
 
 	struct PAL::Impl {
 		std::shared_ptr<PALModule> mod;
-		std::map<std::string, std::function<std::shared_ptr<PALModule>()>> registry;
+		std::unordered_map<std::string, std::function<std::shared_ptr<PALModule>()>> registry;
 	};
 }

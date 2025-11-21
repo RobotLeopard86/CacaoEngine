@@ -2,7 +2,7 @@
 
 #include "Cacao/Window.hpp"
 
-#include <map>
+#include <unordered_map>
 #include <functional>
 
 #ifdef _WIN32
@@ -39,7 +39,7 @@ namespace Cacao {
 		glm::uvec2 lastSize;
 
 		// clang-format off
-		static std::map<std::string, std::function<std::unique_ptr<Impl>()>> registry;
+		static std::unordered_map<std::string, std::function<std::unique_ptr<Impl>()>> registry;
 		// clang-format on
 	};
 }

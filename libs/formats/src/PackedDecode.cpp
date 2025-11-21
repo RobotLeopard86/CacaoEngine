@@ -657,7 +657,7 @@ namespace libcacaoformats {
 		AssetPack out;
 
 		//Create check map
-		std::map<std::string, bool> check;
+		std::unordered_map<std::string, bool> check;
 
 		//Extract data
 		archive_entry* entry;

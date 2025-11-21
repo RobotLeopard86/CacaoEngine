@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <cstdint>
 #include <array>
@@ -171,7 +171,7 @@ namespace libcacaoformats {
 			Matrix<float, 3, 2>, Matrix<float, 3, 3>, Matrix<float, 3, 4>,
 			Matrix<float, 4, 2>, Matrix<float, 4, 3>, Matrix<float, 4, 4>,
 			TextureRef>;
-		std::map<std::string, ValueContainer> keys;///<Data associated with shader
+		std::unordered_map<std::string, ValueContainer> keys;///<Data associated with shader
 	};
 
 	///@brief World data, encapsulating list of assets and components used as well as initial world state
@@ -200,7 +200,7 @@ namespace libcacaoformats {
 	};
 
 	///@brief Decoded asset pack
-	using AssetPack = std::map<std::string, PackedAsset>;
+	using AssetPack = std::unordered_map<std::string, PackedAsset>;
 
 	///@brief Decoder for uncompressed packed format buffers
 	class PackedDecoder {

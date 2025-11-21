@@ -4,7 +4,7 @@
 #include "Transform.hpp"
 #include "Exceptions.hpp"
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <typeindex>
 
@@ -197,7 +197,7 @@ namespace Cacao {
 		 *
 		 * @return All actor components
 		 */
-		std::map<std::type_index, std::shared_ptr<Component>> GetAllComponents() const {
+		std::unordered_map<std::type_index, std::shared_ptr<Component>> GetAllComponents() const {
 			return components;
 		}
 
@@ -216,7 +216,7 @@ namespace Cacao {
 
 		std::weak_ptr<Actor> parentPtr;
 		std::weak_ptr<World> world;
-		std::map<std::type_index, std::shared_ptr<Component>> components;
+		std::unordered_map<std::type_index, std::shared_ptr<Component>> components;
 		std::vector<std::shared_ptr<Actor>> children;
 
 		void PostMountComponent(std::shared_ptr<Component> c);

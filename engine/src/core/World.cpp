@@ -42,8 +42,8 @@ namespace Cacao {
 		}
 
 		//Process actors and make tree
-		std::map<xg::Guid, ActorHandle> foundActors;
-		std::map<xg::Guid, std::vector<libcacaoformats::World::Actor>> awaitingParents;
+		std::unordered_map<xg::Guid, ActorHandle> foundActors;
+		std::unordered_map<xg::Guid, std::vector<libcacaoformats::World::Actor>> awaitingParents;
 		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor) {
 			auto impl = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor, auto& iref) mutable {
 				//Generate handle

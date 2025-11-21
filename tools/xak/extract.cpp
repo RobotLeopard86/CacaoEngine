@@ -100,7 +100,7 @@ void ExtractCmd::Callback() {
 	}
 
 	//Define output map
-	std::map<std::filesystem::path, std::vector<unsigned char>> out;
+	std::unordered_map<std::filesystem::path, std::vector<unsigned char>> out;
 
 	//Find the requested assets and assign their paths
 	bool hasRes = false;

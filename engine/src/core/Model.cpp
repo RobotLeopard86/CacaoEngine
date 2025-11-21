@@ -12,7 +12,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
 
-#include <map>
+#include <unordered_map>
 
 namespace Cacao {
 	struct Model::Impl {
@@ -28,8 +28,8 @@ namespace Cacao {
 			NegZ
 		} orient;
 
-		std::map<std::string, aiMesh*> meshIndex;
-		std::map<std::string, aiTexture*> textureIndex;
+		std::unordered_map<std::string, aiMesh*> meshIndex;
+		std::unordered_map<std::string, aiTexture*> textureIndex;
 	};
 
 	Model::Model(std::vector<unsigned char>&& modelBin, const std::string& addr)
@@ -248,7 +248,7 @@ namespace Cacao {
 			img.bitsPerChannel = 8;
 
 			//Parse format hint
-			std::map<char, uint8_t> channels;
+			std::unordered_map<char, uint8_t> channels;
 			for(uint8_t i = 0; i < 4; ++i) {
 				channels.insert_or_assign(texType[i], static_cast<unsigned char>(texType[i + 4] - '0'));
 			}
@@ -275,7 +275,7 @@ namespace Cacao {
 				//Calculate data shifts for data relocation
 				//English: Figure out the new index of each channel per pixel to make it RGB(A)
 				//This shift should be set to INT8_MAX to indicate that the channel should be skipped
-				std::map<uint8_t, int8_t> shifts;
+				std::unordered_map<uint8_t, int8_t> shifts;
 				std::string channelOrder = texType.substr(0, 4);
 				std::string correctOrder("rgba");
 				for(uint8_t i = 0; i < 4; ++i) {
