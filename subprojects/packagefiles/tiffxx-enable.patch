@@ -1,7 +1,16 @@
 diff --git a/libtiff/meson.build b/libtiff/meson.build
-index aa1d96d..7b8256f 100644
+index aa1d96d..697722d 100644
 --- a/libtiff/meson.build
 +++ b/libtiff/meson.build
+@@ -76,7 +76,7 @@ sources = files(
+ )
+ 
+ if host_machine.system() == 'windows'
+-  sources += import('windows').compile_resources('tif_win32_versioninfo.rc')
++  sources += import('windows').compile_resources('tif_win32_versioninfo.rc', depend_files: tiffvers_h)
+ endif
+ 
+ tiff4_lib = library(
 @@ -97,4 +97,27 @@ tiff4_lib = library(
    version: library_version,
  )
