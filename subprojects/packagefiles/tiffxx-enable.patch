@@ -1,78 +1,56 @@
 diff --git a/libtiff/meson.build b/libtiff/meson.build
-index a2aaf965..a66978c2 100644
+index aa1d96d..7b8256f 100644
 --- a/libtiff/meson.build
 +++ b/libtiff/meson.build
-@@ -80,6 +80,34 @@ tiff4_lib = library(
+@@ -97,4 +97,27 @@ tiff4_lib = library(
    version: library_version,
  )
  
-+if tiffxx
-+  add_languages('cpp')
-+
-+  defs = []
-+  if host_machine.system() == 'windows'
-+    defs += '-D_DLL'
-+    defs += '-D_MT'
-+    if get_option('buildtype') == 'debug'
-+      defs += '-D_DEBUG'
-+      defs += '-D_ITERATOR_DEBUG_LEVEL=2'
-+      defs += '-fms-runtime-lib=dll_dbg'
-+    else
-+      defs += '-fms-runtime-lib=dll'
-+    endif
++defs = []
++if host_machine.system() == 'windows'
++  defs += '-D_DLL'
++  defs += '-D_MT'
++  if get_option('buildtype') == 'debug'
++    defs += '-D_DEBUG'
++    defs += '-D_ITERATOR_DEBUG_LEVEL=2'
++    defs += '-fms-runtime-lib=dll_dbg'
++  else
++    defs += '-fms-runtime-lib=dll'
 +  endif
-+
-+  tiff4xx_lib = library(
-+    'tiffxx',
-+    'tif_stream.cxx',
-+    install: true,
-+    dependencies: [m_dep, jbig_dep, jpeg_dep, lerc_dep, lzma_dep, webp_dep, zlib_dep, zstd_dep],
-+    link_whole: tiff4_lib,
-+    cpp_args: defs
-+  )
-+
-+  install_headers('tiffio.hxx')
 +endif
 +
- install_headers(
-   'tiff.h',
-   'tiffio.h',
++tiff4xx_lib = library(
++  'tiffxx',
++  'tif_stream.cxx',
++  install: true,
++  dependencies: [m_dep, jbig_dep, jpeg_dep, lerc_dep, lzma_dep, webp_dep, zlib_dep, zstd_dep],
++  link_whole: tiff4_lib,
++  cpp_args: defs
++)
++
++install_headers('tiffio.hxx')
+ install_headers('tiff.h', 'tiffio.h', tiffconf_h, tiffvers_h)
 diff --git a/meson.build b/meson.build
-index e1538f61..7174ecf7 100644
+index f457788..541591f 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -142,6 +142,8 @@ cdata.set('TIFF_MAX_DIR_COUNT', 1048576)
- # example variable in tiffconf.h.cmake.in comment
- cdata.set('VAR', 'VAR')
+@@ -1,6 +1,7 @@
+ project(
+   'tiff',
+   'c',
++  'cpp',
+   version: files('VERSION'),
+   license: 'libtiff AND BSD-4.3TAHOE',
+   meson_version: '>=0.57.0',
+@@ -176,6 +177,11 @@ libtiff4_dep = declare_dependency(
  
-+tiffxx = get_option('tiffxx')
-+
- subdir('libtiff')
+ meson.override_dependency('libtiff-4', libtiff4_dep)
  
- libtiff4_dep = declare_dependency(
-@@ -149,6 +151,13 @@ libtiff4_dep = declare_dependency(
-   link_with: tiff4_lib,
- )
- 
-+if tiffxx
-+  libtiff4xx_dep = declare_dependency(
-+    include_directories: 'libtiff',
-+    link_with: tiff4xx_lib,
-+  )
-+endif
++libtiff4xx_dep = declare_dependency(
++  include_directories: 'libtiff',
++  link_with: tiff4xx_lib
++)
 +
  import('pkgconfig').generate(
    tiff4_lib,
    filebase: 'libtiff-4',
-diff --git a/meson_options.txt b/meson_options.txt
-index 2646f737..ea8b2a43 100644
---- a/meson_options.txt
-+++ b/meson_options.txt
-@@ -25,3 +25,7 @@ option('zlib', type: 'feature',
- option('zstd', type: 'feature',
-   description: 'Build with libzstd support'
- )
-+
-+option('tiffxx', type: 'boolean',
-+  description: 'Build libtiffxx'
-+)
