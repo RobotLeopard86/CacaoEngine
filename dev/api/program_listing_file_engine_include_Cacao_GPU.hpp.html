@@ -386,7 +386,6 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao/FrameProcessor.hpp&quot;</span>
@@ -395,44 +394,27 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/glm.hpp&quot;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CommandBuffer</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">GPUCommand</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="c1">//TODO: Make the command generators</span>
-
-<span class="w">        </span><span class="n">GPUCommand</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GPUCommand</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
-<span class="w">        </span><span class="n">GPUCommand</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GPUCommand</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
-<span class="w">        </span><span class="n">GPUCommand</span><span class="p">(</span><span class="n">GPUCommand</span><span class="o">&amp;&amp;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">GPUCommand</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">GPUCommand</span><span class="o">&amp;&amp;</span><span class="p">);</span>
-
-<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
-<span class="w">        </span><span class="n">GPUCommand</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CommandBuffer</span><span class="p">;</span>
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FrameProcessor</span><span class="p">;</span>
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PALModule</span><span class="p">;</span>
-
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">apply</span><span class="p">;</span>
-<span class="w">    </span><span class="p">};</span>
-
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">CommandBuffer</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">CommandBuffer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Create</span><span class="p">();</span>
 
 <span class="w">        </span><span class="n">CommandBuffer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CommandBuffer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
 <span class="w">        </span><span class="n">CommandBuffer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CommandBuffer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
-<span class="w">        </span><span class="n">CommandBuffer</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
-<span class="w">        </span><span class="n">CommandBuffer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
-
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Add</span><span class="p">(</span><span class="n">GPUCommand</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">CommandBuffer</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">&amp;&amp;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">CommandBuffer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">&amp;&amp;</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">CommandBuffer</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="w">      </span><span class="k">protected</span><span class="o">:</span>
 <span class="w">        </span><span class="n">CommandBuffer</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Execute</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">CommandBuffer</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">GetCommandFn</span><span class="p">(</span><span class="n">GPUCommand</span><span class="o">&amp;&amp;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FrameProcessor</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PALModule</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">StartRendering</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">clearColor</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">EndRendering</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">GPUManager</span><span class="w"> </span><span class="p">{</span>
