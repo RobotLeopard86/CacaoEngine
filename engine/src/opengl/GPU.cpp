@@ -70,8 +70,4 @@ namespace Cacao {
 	GPUManager::Impl* OpenGLModule::ConfigureGPUManager() {
 		return new OpenGLGPU();
 	}
-
-	std::function<void(CommandBuffer*)>&& CommandBuffer::GetCommandFn(GPUCommand&& cmd) {
-		return std::move(cmd.apply);
-	}
 }

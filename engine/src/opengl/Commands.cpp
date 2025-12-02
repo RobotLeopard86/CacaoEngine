@@ -5,7 +5,7 @@
 #include "glad/gl.h"
 
 namespace Cacao {
-	GPUCommand OpenGLModule::StartRenderingCmd(glm::vec3 clearColor) {
+	/*GPUCommand OpenGLModule::StartRenderingCmd(glm::vec3 clearColor) {
 		return CommandWithFn([clearColor](CommandBuffer* cmd) {
 			//Make sure this is an OpenGL buffer
 			OpenGLCommandBuffer* glCmd = [&cmd]() -> OpenGLCommandBuffer* {
@@ -48,5 +48,5 @@ namespace Cacao {
 				ctx->SwapBuffers();
 			});
 		});
-	}
+	}*/
 }

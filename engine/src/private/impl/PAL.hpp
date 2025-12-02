@@ -32,11 +32,6 @@ namespace Cacao {
 		virtual Cubemap::Impl* ConfigureCubemap() = 0;
 		virtual GPUManager::Impl* ConfigureGPUManager() = 0;
 
-		//==================== GPU COMMANDS ====================
-		virtual GPUCommand StartRenderingCmd(glm::vec3 clearColor) = 0;
-		virtual GPUCommand EndRenderingCmd() = 0;
-		virtual GPUCommand PresentCmd() = 0;
-
 		virtual ~PALModule() {}
 
 		bool Initialized() {
@@ -44,12 +39,6 @@ namespace Cacao {
 		}
 		bool Connected() {
 			return connected;
-		}
-
-		GPUCommand CommandWithFn(std::function<void(CommandBuffer*)> fn) {
-			GPUCommand cmd;
-			cmd.apply = std::move(fn);
-			return cmd;
 		}
 
 	  protected:

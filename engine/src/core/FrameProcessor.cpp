@@ -2,9 +2,8 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/TickController.hpp"
+#include "Cacao/Window.hpp"
 #include "SingletonGet.hpp"
-#include "ImplAccessor.hpp"
-#include "impl/PAL.hpp"
 
 #include <atomic>
 #include <chrono>
@@ -99,9 +98,8 @@ namespace Cacao {
 
 			//Setup command buffer
 			std::unique_ptr<CommandBuffer> cmd = CommandBuffer::Create();
-			cmd->Add(IMPL(PAL).mod->StartRenderingCmd(clearColorLinear));
-			cmd->Add(IMPL(PAL).mod->EndRenderingCmd());
-			cmd->Add(IMPL(PAL).mod->PresentCmd());
+			cmd->StartRendering(clearColorLinear);
+			cmd->EndRendering();
 
 			//Execute command buffer
 			std::shared_future<void> submission = GPUManager::Get().Submit(std::move(cmd));

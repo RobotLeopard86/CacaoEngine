@@ -50,7 +50,7 @@ namespace Cacao {
 		}
 	}
 
-	GPUCommand VulkanModule::StartRenderingCmd(glm::vec3 clearColor) {
+	/*GPUCommand VulkanModule::StartRenderingCmd(glm::vec3 clearColor) {
 		return CommandWithFn([clearColor](CommandBuffer* cmd) {
 			//Make sure this is a Vulkan buffer
 			VulkanCommandBuffer* vkCmd = [&cmd]() -> VulkanCommandBuffer* {
@@ -121,5 +121,5 @@ namespace Cacao {
 		//Presenting is implicit with Vulkan if Immediate::SetupGfx has been ccalled
 		//This is because you can't call queue.present before submitting the command buffer
 		return CommandWithFn([](CommandBuffer*) {});
-	}
+	}*/
 }

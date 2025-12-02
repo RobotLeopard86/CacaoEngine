@@ -60,10 +60,6 @@ namespace Cacao {
 			tasks.push_back(task);
 		}
 
-		void Add(GPUCommand&& cmd) override {
-			GetCommandFn(std::move(cmd))(this);
-		}
-
 	  private:
 		std::vector<std::function<void()>> tasks;
 		std::promise<void> promise;
@@ -96,11 +92,6 @@ namespace Cacao {
 		Tex2D::Impl* ConfigureTex2D() override;
 		Cubemap::Impl* ConfigureCubemap() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
-
-		//==================== GPU COMMANDS ====================
-		GPUCommand StartRenderingCmd(glm::vec3 clearColor) override;
-		GPUCommand EndRenderingCmd() override;
-		GPUCommand PresentCmd() override;
 
 		OpenGLModule()
 		  : PALModule("opengl") {}

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <future>
-#include <functional>
 #include <memory>
 
 #include "Cacao/FrameProcessor.hpp"
@@ -10,34 +9,6 @@
 #include "glm/glm.hpp"
 
 namespace Cacao {
-	class CommandBuffer;
-
-	/**
-	 * @brief A command that can be executed in a command buffer
-	 *
-	 * @note It is not possible to create custom commands because that would require access to the underlying private graphics interface.
-	 */
-	class CACAO_API GPUCommand {
-	  public:
-		//TODO: Make the command generators
-
-		///@cond
-		GPUCommand(const GPUCommand&) = delete;
-		GPUCommand& operator=(const GPUCommand&) = delete;
-		GPUCommand(GPUCommand&&);
-		GPUCommand& operator=(GPUCommand&&);
-		///@endcond
-
-	  protected:
-		GPUCommand() {}
-
-		friend class CommandBuffer;
-		friend class FrameProcessor;
-		friend class PALModule;
-
-		std::function<void(CommandBuffer*)> apply;
-	};
-
 	/**
 	 * @brief A structure for usage by the GPU manager to invoke a set of GPU commands
 	 */
@@ -51,23 +22,22 @@ namespace Cacao {
 		///@cond
 		CommandBuffer(const CommandBuffer&) = delete;
 		CommandBuffer& operator=(const CommandBuffer&) = delete;
-		CommandBuffer(CommandBuffer&&) = delete;
-		CommandBuffer& operator=(CommandBuffer&&) = delete;
+		CommandBuffer(CommandBuffer&&);
+		CommandBuffer& operator=(CommandBuffer&&);
 		///@endcond
-
-		/**
-		 * @brief Add a command to this command buffer
-		 *
-		 * @param cmd The command to add
-		 */
-		virtual void Add(GPUCommand&&) {};
 
 		virtual ~CommandBuffer() {};
 
 	  protected:
 		CommandBuffer() {}
+
 		virtual void Execute() {};
-		std::function<void(CommandBuffer*)>&& GetCommandFn(GPUCommand&&);
+
+		friend class FrameProcessor;
+		friend class PALModule;
+
+		virtual void StartRendering(glm::vec3 clearColor) {}
+		virtual void EndRendering() {}
 	};
 
 	/**

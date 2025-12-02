@@ -133,10 +133,6 @@ namespace Cacao {
 
 		void Execute() override;
 
-		void Add(GPUCommand&& cmd) override {
-			GetCommandFn(std::move(cmd))(this);
-		}
-
 	  protected:
 		std::reference_wrapper<Immediate> imm;
 		std::promise<void> promise;
@@ -172,11 +168,6 @@ namespace Cacao {
 		Cubemap::Impl* ConfigureCubemap() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
 		std::unique_ptr<CommandBuffer> CreateCmdBuffer() override;
-
-		//==================== GPU COMMANDS ====================
-		GPUCommand StartRenderingCmd(glm::vec3 clearColor) override;
-		GPUCommand EndRenderingCmd() override;
-		GPUCommand PresentCmd() override;
 
 		vk::Instance instance;
 		vk::PhysicalDevice physDev;
