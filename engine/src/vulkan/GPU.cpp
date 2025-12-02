@@ -6,13 +6,12 @@
 #include <atomic>
 #include <future>
 #include <mutex>
-#include <optional>
 #include <stdexcept>
 #include <thread>
 
 namespace Cacao {
 	std::set<Immediate*> Immediate::imms = {};
-	std::vector<GfxHandler> GfxHandler::handlers = {};
+	std::vector<std::shared_ptr<GfxHandler>> GfxHandler::handlers = {};
 
 	Immediate& Immediate::Get() {
 		static thread_local Immediate imm = []() {
@@ -52,14 +51,15 @@ namespace Cacao {
 	}
 
 	void Immediate::SetupGfx() {
-		while(!gfx.has_value()) {
+		while(!gfx) {
 			//Iterate over all the handlers until we find one that isn't in use
-			for(GfxHandler& handler : GfxHandler::handlers) {
+			for(std::shared_ptr<GfxHandler> handler : GfxHandler::handlers) {
 				//The exchange method returns the previous value of the atomic
 				//So if it returns false, we know this handler was free and we have now reserved it
-				if(!handler.inUse.exchange(true, std::memory_order_acq_rel)) {
-					gfx = std::make_optional<std::reference_wrapper<GfxHandler>>(handler);
-					gfx->get().Acquire();
+				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
+					gfx = handler;
+					gfx->imageIdx = UINT32_MAX;
+					gfx->Acquire();
 					return;
 				}
 			}
@@ -102,9 +102,9 @@ namespace Cacao {
 		//Build submission info
 		vk::SubmitInfo2 submit;
 		vk::CommandBufferSubmitInfo cbsi(imm.get().cmd);
-		if(imm.get().gfx.has_value()) {
-			vk::SemaphoreSubmitInfo semWait(imm.get().gfx->get().acquireImage, 0, vk::PipelineStageFlagBits2::eAllCommands);
-			vk::SemaphoreSubmitInfo semSignal(imm.get().gfx->get().doneRendering, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+		if(imm.get().gfx) {
+			vk::SemaphoreSubmitInfo semWait(imm.get().gfx->acquireImage, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SemaphoreSubmitInfo semSignal(imm.get().gfx->doneRendering, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 			submit = vk::SubmitInfo2({}, semWait, cbsi, semSignal);
 		} else {
 			submit = vk::SubmitInfo2({}, {}, cbsi);
@@ -124,8 +124,8 @@ namespace Cacao {
 		}
 
 		//Present if graphics is in use
-		if(imm.get().gfx.has_value()) {
-			vk::PresentInfoKHR presentInfo(imm.get().gfx->get().doneRendering, vulkan->swapchain.chain, imm.get().gfx->get().imageIdx);
+		if(imm.get().gfx) {
+			vk::PresentInfoKHR presentInfo(imm.get().gfx->doneRendering, vulkan->swapchain.chain, imm.get().gfx->imageIdx);
 			vulkan->queue.presentKHR(presentInfo);
 		}
 	}
@@ -167,9 +167,9 @@ namespace Cacao {
 				vulkan->dev.resetFences(vcb->imm.get().fence);
 
 				//Release graphics handler if needed
-				if(vcb->imm.get().gfx.has_value()) {
-					vcb->imm.get().gfx->get().inUse.store(false, std::memory_order_release);
-					vcb->imm.get().gfx = std::nullopt;
+				if(vcb->imm.get().gfx) {
+					vcb->imm.get().gfx->inUse.store(false, std::memory_order_release);
+					vcb->imm.get().gfx.reset();
 				}
 
 				//Set the promise

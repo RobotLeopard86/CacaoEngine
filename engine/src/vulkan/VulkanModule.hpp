@@ -75,7 +75,7 @@ namespace Cacao {
 		void MakePresentable(VulkanCommandBuffer*);
 
 	  private:
-		static std::vector<GfxHandler> handlers;
+		static std::vector<std::shared_ptr<GfxHandler>> handlers;
 
 		friend class Immediate;
 		friend class VulkanCommandBuffer;
@@ -90,7 +90,7 @@ namespace Cacao {
 		vk::CommandBuffer cmd;
 		vk::Fence fence;
 		std::binary_semaphore accessMgr;
-		std::optional<std::reference_wrapper<GfxHandler>> gfx;
+		std::shared_ptr<GfxHandler> gfx;
 
 		static void Cleanup();
 
@@ -136,6 +136,9 @@ namespace Cacao {
 	  protected:
 		std::reference_wrapper<Immediate> imm;
 		std::promise<void> promise;
+
+		void StartRendering(glm::vec3 clearColor) override;
+		void EndRendering() override;
 
 		friend class VulkanGPU;
 		friend class VulkanModule;

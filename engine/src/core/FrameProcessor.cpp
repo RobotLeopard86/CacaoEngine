@@ -1,6 +1,7 @@
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "SingletonGet.hpp"

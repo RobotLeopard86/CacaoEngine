@@ -60,6 +60,10 @@ namespace Cacao {
 			tasks.push_back(task);
 		}
 
+	  protected:
+		void StartRendering(glm::vec3 clearColor) override;
+		void EndRendering() override;
+
 	  private:
 		std::vector<std::function<void()>> tasks;
 		std::promise<void> promise;
