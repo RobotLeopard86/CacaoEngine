@@ -80,6 +80,7 @@ engine_srcs += files(
 	'EventManager.cpp',
 	'FrameProcessor.cpp',
 	'GPU.cpp',
+	'Input.cpp',
 	'Log.cpp',
 	'Mesh.cpp',
 	'Misc.cpp',

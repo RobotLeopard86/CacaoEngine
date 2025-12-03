@@ -241,6 +241,10 @@ namespace Cacao {
 		pool->waitIdle();
 		pool.reset();
 
+		//Unsubscribe all final event consumers
+		Logger::Engine(Logger::Level::Trace) << "Unsubscribing remaining event consumers...";
+		EventManager::Get().UnsubscribeAllConsumers();
+
 		//Final goodbye message
 		std::lock_guard lkg(stateMtx);
 		state = State::Dead;

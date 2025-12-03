@@ -81,12 +81,7 @@ namespace Cacao {
 			}
 
 			//Now we are safe to read the world state
-			{
-				//Lock the world state
-				std::unique_lock lock(TickController::Get().snapshotControl.mutex);
-
-				//TODO: World read logic
-			}
+			//TODO: World read logic
 
 			//Allow tick controller to resume
 			//It has been blocking on this semaphore

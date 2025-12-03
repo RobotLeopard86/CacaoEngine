@@ -3,7 +3,6 @@
 #include <future>
 #include <memory>
 
-#include "Cacao/FrameProcessor.hpp"
 #include "DllHelper.hpp"
 
 #include "glm/glm.hpp"

@@ -5,6 +5,7 @@
 #include "Cacao/Time.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Cacao/Script.hpp"
+#include "Cacao/Input.hpp"
 #include "SingletonGet.hpp"
 
 #include "exathread.hpp"
@@ -14,7 +15,6 @@
 #include <chrono>
 #include <array>
 #include <memory>
-#include <random>
 #include <thread>
 
 #ifdef _WIN32
@@ -83,9 +83,6 @@ namespace Cacao {
 		missedOrLateFixedTicks = 0;
 		loggedExcessiveMisses = false;
 
-		//Setup world lock
-		std::unique_lock worldLock(TickController::Get().snapshotControl.mutex);
-
 		while(!stop.stop_requested()) {
 			//Calculate some important variables
 			now = std::chrono::steady_clock::now();
@@ -95,9 +92,6 @@ namespace Cacao {
 
 			//Check for frame processor snapshot request
 			if(TickController::Get().snapshotControl.request.exchange(false, std::memory_order_acq_rel)) {
-				//Release lock
-				worldLock.unlock();
-
 				//Allow frame processor to run
 				TickController::Get().snapshotControl.grant.release();
 
@@ -107,8 +101,7 @@ namespace Cacao {
 					if(stop.stop_requested()) return;
 				}
 
-				//We're done, so relock the world state and update our variables
-				worldLock.lock();
+				//We're done, so update our variables
 				now = std::chrono::steady_clock::now();
 				while(now > nextFixedTick) nextFixedTick += fixedTickInterval;
 				untilNextFixedTick = std::chrono::duration_cast<time::dseconds>(nextFixedTick - now);
@@ -194,6 +187,9 @@ namespace Cacao {
 	}
 
 	void TickController::Impl::DynTick(time::dseconds timestep [[maybe_unused]]) {
+		//Freeze input state
+		Input::Get().FreezeInputState();
+
 		//Acquire active world
 		std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
 		if(!world) return;

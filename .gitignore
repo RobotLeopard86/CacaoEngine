@@ -3,7 +3,9 @@ cacao.log
 .ninja_log
 
 # Don't send VS Code files
-.vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/templates
 
 # Don't send Wrap-downloaded things
 subprojects/*

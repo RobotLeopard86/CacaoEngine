@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Cacao/FrameProcessor.hpp"
 #include "DllHelper.hpp"
 
 #include <memory>
 #include <semaphore>
-#include <mutex>
 #include <atomic>
 
 namespace Cacao {
@@ -58,12 +56,11 @@ namespace Cacao {
 		bool running;
 
 		struct SnapshotRequestControl {
-			SnapshotRequestControl() : request(false), grant(0), done(0), mutex() {}
+			SnapshotRequestControl() : request(false), grant(0), done(0) {}
 
 			std::atomic_bool request;
 			std::binary_semaphore grant;
 			std::binary_semaphore done;
-			std::mutex mutex;
 		} snapshotControl;
 		friend class FrameProcessor;
 
