@@ -74,6 +74,8 @@ namespace Cacao {
 		void MakeDrawable(VulkanCommandBuffer*);
 		void MakePresentable(VulkanCommandBuffer*);
 
+		int id;
+
 	  private:
 		static std::vector<std::shared_ptr<GfxHandler>> handlers;
 

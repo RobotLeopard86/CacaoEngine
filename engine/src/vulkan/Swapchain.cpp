@@ -136,6 +136,7 @@ namespace Cacao {
 				//Setup handler object
 				std::shared_ptr<GfxHandler> handler = std::make_shared<GfxHandler>();
 				handler->imageIdx = UINT32_MAX;
+				handler->id = i;
 				handler->inUse.store(true, std::memory_order_seq_cst);
 				try {
 					handler->imageFence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});

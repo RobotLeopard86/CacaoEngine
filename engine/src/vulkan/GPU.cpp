@@ -168,6 +168,7 @@ namespace Cacao {
 
 				//Release graphics handler if needed
 				if(vcb->imm.get().gfx) {
+					vcb->imm.get().gfx->imageIdx = UINT32_MAX;
 					vcb->imm.get().gfx->inUse.store(false, std::memory_order_release);
 					vcb->imm.get().gfx.reset();
 				}
