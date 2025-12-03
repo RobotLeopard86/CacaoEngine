@@ -21,6 +21,7 @@ namespace Cacao {
 		std::string provider = Engine::Get().GetInitConfig().preferredWindowProvider;
 		if(Impl::registry.contains(provider)) {
 			impl = Impl::registry[provider]();
+			Logger::Engine(Logger::Level::Info) << "Running under X11.";
 			goto create_ptr;
 		}
 

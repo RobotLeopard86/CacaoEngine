@@ -1,6 +1,7 @@
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "vulkan/vulkan_enums.hpp"
 #include "vulkan/vulkan_structs.hpp"
 
 #include <atomic>
@@ -190,14 +191,17 @@ namespace Cacao {
 
 		//Try to acquire the next swapchain image
 		try {
-			//Reset fence
-			vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
-			vulkan->dev.resetFences(imageFence);
+			//Reset fence if needed
+			if(vulkan->dev.getFenceStatus(imageFence) == vk::Result::eSuccess) {
+				vk::Result fenceWait = vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
+				Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Failed to perform swapchain acquisition fence wait operation!");
+				vulkan->dev.resetFences(imageFence);
+			}
 
 			//Acquire image
 			vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, acquireImage, imageFence, 1);
 			auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
-			if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Failed to acquire swapchain image for unknown reason.");
+			if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
 			imageIdx = result.value;
 		} catch(vk::SystemError& err) {
 			//Is the swapchain out of date?
