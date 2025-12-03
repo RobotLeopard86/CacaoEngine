@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Template Class Flushable &#8212; Cacao Engine Docs</title>
+    <title>Class Input &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Flushable';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Input';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
@@ -54,8 +54,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class FrameProcessor" href="classCacao_1_1FrameProcessor.html" />
-    <link rel="prev" title="Class EventManager" href="classCacao_1_1EventManager.html" />
+    <link rel="next" title="Class Logger" href="classCacao_1_1Logger.html" />
+    <link rel="prev" title="Class GPUManager" href="classCacao_1_1GPUManager.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -413,14 +413,14 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Class Flushable</a></li>
-</ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Input</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
@@ -558,7 +558,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Template Class Flushable</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Input</span></li>
   </ul>
 </nav>
 </div>
@@ -575,46 +575,78 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="template-class-flushable">
-<span id="exhale-class-classcacao-1-1flushable"></span><h1>Template Class Flushable<a class="headerlink" href="#template-class-flushable" title="Link to this heading"><span/></a></h1>
+  <section id="class-input">
+<span id="exhale-class-classcacao-1-1input"></span><h1>Class Input<a class="headerlink" href="#class-input" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Flushable.hpp.html#file-engine-include-cacao-flushable-hpp"><span class="std std-ref">File Flushable.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Input.hpp.html#file-engine-include-cacao-input-hpp"><span class="std std-ref">File Input.hpp</span></a></p></li>
 </ul>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao9FlushableE">
-<span id="_CPPv3I0EN5Cacao9FlushableE"></span><span id="_CPPv2I0EN5Cacao9FlushableE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Flushable"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><a class="headerlink" href="#_CPPv4I0EN5Cacao9FlushableE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Utility that caches changes to an object and applies them on command. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5InputE">
+<span id="_CPPv3N5Cacao5InputE"></span><span id="_CPPv2N5Cacao5InputE"></span><span id="Cacao::Input"></span><span class="target" id="classCacao_1_1Input"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Input</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5InputE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="#classCacao_1_1Input"><span class="std std-ref">Input</span></a> state management singleton. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable9FlushableER1T">
-<span id="_CPPv3N5Cacao9Flushable9FlushableER1T"></span><span id="_CPPv2N5Cacao9Flushable9FlushableER1T"></span><span id="Cacao::Flushable::Flushable__TR"></span><span class="target" id="classCacao_1_1Flushable_1af25c2b87ede2fa05f9f91d96674bcd82"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flushable</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Flushable9FlushableER1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new flushable. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input12GetCursorPosEv">
+<span id="_CPPv3N5Cacao5Input12GetCursorPosEv"></span><span id="_CPPv2N5Cacao5Input12GetCursorPosEv"></span><span id="Cacao::Input::GetCursorPos"></span><span class="target" id="classCacao_1_1Input_1adf0c7981b1d2b4894a0dfcc1601795c1"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetCursorPos</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Input12GetCursorPosEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the current cursor position. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>obj</strong> – The original object </p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current cursor position </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableptEv">
-<span id="_CPPv3N5Cacao9FlushableptEv"></span><span id="_CPPv2N5Cacao9FlushableptEv"></span><span id="Cacao::Flushable::pointer-operator"></span><span class="target" id="classCacao_1_1Flushable_1a1f19bc3eaf9d0e6590fbca528dbab29a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9FlushableptEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Access the object copy where changes can be made. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input12IsKeyPressedEj">
+<span id="_CPPv3N5Cacao5Input12IsKeyPressedEj"></span><span id="_CPPv2N5Cacao5Input12IsKeyPressedEj"></span><span id="Cacao::Input::IsKeyPressed__unsigned-i"></span><span class="target" id="classCacao_1_1Input_1accaf1b5c0a96559bde50cc8d841a5bf6"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsKeyPressed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Input12IsKeyPressedEj" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check whether a given key is pressed. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>View the page “Input Mappings” in the manual for the list of valid keys</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> – The key to check. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the key is pressed </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9FlushableaSE1T">
-<span id="_CPPv3N5Cacao9FlushableaSE1T"></span><span id="_CPPv2N5Cacao9FlushableaSE1T"></span><span id="Cacao::Flushable::assign-operator__T"></span><span class="target" id="classCacao_1_1Flushable_1aa954a014c290b214baed25539e1692c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5Cacao9FlushableE" title="Cacao::Flushable::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newDat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9FlushableaSE1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Overwrite the object copy with new data. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input20IsMouseButtonPressedEj">
+<span id="_CPPv3N5Cacao5Input20IsMouseButtonPressedEj"></span><span id="_CPPv2N5Cacao5Input20IsMouseButtonPressedEj"></span><span id="Cacao::Input::IsMouseButtonPressed__unsigned-i"></span><span class="target" id="classCacao_1_1Input_1adccec4079ff629636ab98b5bd25b982c"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsMouseButtonPressed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">button</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Input20IsMouseButtonPressedEj" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check whether a given mouse button is pressed. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>View the page “Input Mappings” in the manual for the list of valid buttons</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>button</strong> – The mouse button to check. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the mouse button is pressed </p>
+</dd>
+</dl>
 </dd></dl>
 
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Flushable5FlushEv">
-<span id="_CPPv3N5Cacao9Flushable5FlushEv"></span><span id="_CPPv2N5Cacao9Flushable5FlushEv"></span><span id="Cacao::Flushable::Flush"></span><span class="target" id="classCacao_1_1Flushable_1aa576d2339edc75767f5c9fb22e0cc204"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flush</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Flushable5FlushEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Write the changes back to the original object. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Input3GetEv">
+<span id="_CPPv3N5Cacao5Input3GetEv"></span><span id="_CPPv2N5Cacao5Input3GetEv"></span><span id="Cacao::Input::Get"></span><span class="target" id="classCacao_1_1Input_1a9df9d92e067fb7edf1b7c81b2b6e1bfb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao5InputE" title="Cacao::Input"><span class="n"><span class="pre">Input</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Input3GetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the instance and create one if there isn’t one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -634,20 +666,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1EventManager.html"
+       href="classCacao_1_1GPUManager.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class EventManager</p>
+        <p class="prev-next-title">Class GPUManager</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1FrameProcessor.html"
+       href="classCacao_1_1Logger.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class FrameProcessor</p>
+        <p class="prev-next-title">Class Logger</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -671,11 +703,11 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao9FlushableE"><code class="docutils literal notranslate"><span class="pre">Flushable</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Flushable9FlushableER1T"><code class="docutils literal notranslate"><span class="pre">Flushable::Flushable()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9FlushableptEv"><code class="docutils literal notranslate"><span class="pre">Flushable::operator-&gt;()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9FlushableaSE1T"><code class="docutils literal notranslate"><span class="pre">Flushable::operator=()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Flushable5FlushEv"><code class="docutils literal notranslate"><span class="pre">Flushable::Flush()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5InputE"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Input12GetCursorPosEv"><code class="docutils literal notranslate"><span class="pre">Input::GetCursorPos()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Input12IsKeyPressedEj"><code class="docutils literal notranslate"><span class="pre">Input::IsKeyPressed()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Input20IsMouseButtonPressedEj"><code class="docutils literal notranslate"><span class="pre">Input::IsMouseButtonPressed()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Input3GetEv"><code class="docutils literal notranslate"><span class="pre">Input::Get()</span></code></a></li>
 </ul>
 </li>
 </ul>
