@@ -1,6 +1,7 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
 #include "vulkan/vulkan_handles.hpp"
@@ -10,6 +11,7 @@
 #endif
 
 #include <memory>
+#include <atomic>
 
 namespace Cacao {
 	struct VulkanModuleRegistrar {
@@ -226,6 +228,16 @@ namespace Cacao {
 		Immediate::Cleanup();
 
 		//Clean up graphics handlers
+		unsigned int obtained = 0;
+		while(obtained < GfxHandler::handlers.size()) {
+			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
+				//The exchange method returns the previous value of the atomic
+				//So if it returns false, we know this handler was free and we have now reserved it
+				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
+					++obtained;
+				}
+			}
+		}
 		for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end(); ++it) {
 			vulkan->dev.destroySemaphore((*it)->acquireImage);
 			vulkan->dev.destroySemaphore((*it)->doneRendering);

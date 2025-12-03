@@ -12,7 +12,7 @@
 
 namespace Cacao {
 	std::set<Immediate*> Immediate::imms = {};
-	std::vector<std::shared_ptr<GfxHandler>> GfxHandler::handlers = {};
+	std::vector<std::unique_ptr<GfxHandler>> GfxHandler::handlers = {};
 
 	Immediate& Immediate::Get() {
 		static thread_local Immediate imm = []() {
@@ -27,9 +27,9 @@ namespace Cacao {
 					imm.ready = true;
 				} catch(...) {
 					Check<ExternalException>(false, "Failed to setup immediate object for thread!", [&imm]() {
-						vulkan->dev.freeCommandBuffers(imm.pool, imm.cmd);
-						vulkan->dev.destroyCommandPool(imm.pool);
-						vulkan->dev.destroyFence(imm.fence);
+						if(imm.cmd) vulkan->dev.freeCommandBuffers(imm.pool, imm.cmd);
+						if(imm.pool) vulkan->dev.destroyCommandPool(imm.pool);
+						if(imm.fence) vulkan->dev.destroyFence(imm.fence);
 					});
 				}
 			}
@@ -54,11 +54,11 @@ namespace Cacao {
 	void Immediate::SetupGfx() {
 		while(!gfx) {
 			//Iterate over all the handlers until we find one that isn't in use
-			for(std::shared_ptr<GfxHandler> handler : GfxHandler::handlers) {
+			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
 				//The exchange method returns the previous value of the atomic
 				//So if it returns false, we know this handler was free and we have now reserved it
 				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
-					gfx = handler;
+					gfx = handler.get();
 					gfx->imageIdx = UINT32_MAX;
 					gfx->Acquire();
 					return;
@@ -171,7 +171,7 @@ namespace Cacao {
 				if(vcb->imm.get().gfx) {
 					vcb->imm.get().gfx->imageIdx = UINT32_MAX;
 					vcb->imm.get().gfx->inUse.store(false, std::memory_order_release);
-					vcb->imm.get().gfx.reset();
+					vcb->imm.get().gfx = nullptr;
 				}
 
 				//Set the promise

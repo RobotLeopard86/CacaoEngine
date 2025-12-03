@@ -66,7 +66,7 @@ namespace Cacao {
 			doneRendering = std::exchange(o.doneRendering, {});
 			imageFence = std::exchange(o.imageFence, {});
 			imageIdx = std::exchange(o.imageIdx, UINT32_MAX);
-			inUse.store(o.inUse.load(std::memory_order_relaxed));
+			inUse.store(o.inUse.load(std::memory_order_seq_cst));
 			return *this;
 		}
 
@@ -74,10 +74,8 @@ namespace Cacao {
 		void MakeDrawable(VulkanCommandBuffer*);
 		void MakePresentable(VulkanCommandBuffer*);
 
-		int id;
-
 	  private:
-		static std::vector<std::shared_ptr<GfxHandler>> handlers;
+		static std::vector<std::unique_ptr<GfxHandler>> handlers;
 
 		friend class Immediate;
 		friend class VulkanCommandBuffer;
@@ -92,7 +90,7 @@ namespace Cacao {
 		vk::CommandBuffer cmd;
 		vk::Fence fence;
 		std::binary_semaphore accessMgr;
-		std::shared_ptr<GfxHandler> gfx;
+		GfxHandler* gfx = nullptr;
 
 		static void Cleanup();
 

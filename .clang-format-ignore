@@ -1,4 +1,6 @@
 licenses
 scripts
+subprojects
+docs
 *.vert
 *.frag

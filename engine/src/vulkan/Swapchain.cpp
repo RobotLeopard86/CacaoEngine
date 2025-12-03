@@ -15,7 +15,7 @@ namespace Cacao {
 		//Now claim all the graphics handlers so nobody can mess with them while we're working since we may need to touch them
 		unsigned int obtained = 0;
 		while(obtained < GfxHandler::handlers.size()) {
-			for(std::shared_ptr<GfxHandler> handler : GfxHandler::handlers) {
+			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
 				//The exchange method returns the previous value of the atomic
 				//So if it returns false, we know this handler was free and we have now reserved it
 				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
@@ -119,14 +119,12 @@ namespace Cacao {
 			//Too many handlers, remove the extras
 			unsigned int diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size();
 			while((diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size()) > 0) {
-				for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end(); ++it) {
-					if(!(*it)->inUse.load(std::memory_order_acquire)) {
-						vulkan->dev.destroySemaphore((*it)->acquireImage);
-						vulkan->dev.destroySemaphore((*it)->doneRendering);
-						vulkan->dev.destroyFence((*it)->imageFence);
-						GfxHandler::handlers.erase(it);
-						break;
-					}
+				for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end();) {
+					vulkan->dev.destroySemaphore((*it)->acquireImage);
+					vulkan->dev.destroySemaphore((*it)->doneRendering);
+					vulkan->dev.destroyFence((*it)->imageFence);
+					it = GfxHandler::handlers.erase(it);
+					break;
 				}
 			}
 		} else if(GfxHandler::handlers.size() < vulkan->swapchain.views.size()) {
@@ -134,9 +132,8 @@ namespace Cacao {
 			unsigned int diff = vulkan->swapchain.views.size() - GfxHandler::handlers.size();
 			for(unsigned int i = 0; i < diff; ++i) {
 				//Setup handler object
-				std::shared_ptr<GfxHandler> handler = std::make_shared<GfxHandler>();
+				std::unique_ptr<GfxHandler> handler = std::make_unique<GfxHandler>();
 				handler->imageIdx = UINT32_MAX;
-				handler->id = i;
 				handler->inUse.store(true, std::memory_order_seq_cst);
 				try {
 					handler->imageFence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
@@ -159,7 +156,7 @@ namespace Cacao {
 
 		//Release handlers
 		//Queue lock will be released automatically on stack unwind
-		for(std::shared_ptr<GfxHandler> handler : GfxHandler::handlers) {
+		for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
 			handler->inUse.store(false, std::memory_order_release);
 		}
 	}
