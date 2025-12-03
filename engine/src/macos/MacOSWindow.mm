@@ -196,4 +196,9 @@ namespace Cacao {
 			[win setFrame:frame display:YES];
 		}
 	}
+
+	unsigned int MacOSWindowImpl::ConvertKeycode(unsigned int key) {
+		//TODO
+		return key;
+	}
 }

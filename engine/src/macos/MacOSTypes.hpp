@@ -34,6 +34,8 @@ namespace Cacao {
 		void SaveWinSize() override;
 		void RestoreWin() override;
 
+		unsigned int ConvertKeycode(unsigned int key) override;
+
 		const std::string ProviderID() const override {
 			return "cocoa";
 		}

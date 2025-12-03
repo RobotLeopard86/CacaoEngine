@@ -1,11 +1,20 @@
+#include "Cacao/Event.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "WaylandTypes.hpp"
+
 #include "xdg-output-unstable-v1-client-protocol.h"
+
+#include <cstdint>
 #include <wayland-client-protocol.h>
+#include <wayland-util.h>
+#include <xkbcommon/xkbcommon-keysyms.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <xkbcommon/xkbcommon.h>
 
 namespace Cacao {
 	struct WaylandWinRegistrar {
@@ -25,13 +34,15 @@ namespace Cacao {
 
 		//Add registry listener to fetch compositor
 		wl_registry_listener listener = {};
-		listener.global = [](void* selfp, wl_registry* r, uint32_t id, const char* iface, uint32_t ver) {
+		listener.global = [](void* selfp, wl_registry* reg, uint32_t id, const char* iface, uint32_t ver) {
 			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
 			std::string interface(iface);
 			if(interface.compare(wl_compositor_interface.name) == 0) {
-				self->compositor = (wl_compositor*)wl_registry_bind(r, id, &wl_compositor_interface, ver);
+				self->compositor = (wl_compositor*)wl_registry_bind(reg, id, &wl_compositor_interface, ver);
 			} else if(interface.compare(zxdg_output_manager_v1_interface.name) == 0) {
-				self->outMgr = (zxdg_output_manager_v1*)wl_registry_bind(r, id, &zxdg_output_manager_v1_interface, ver);
+				self->outMgr = (zxdg_output_manager_v1*)wl_registry_bind(reg, id, &zxdg_output_manager_v1_interface, ver);
+			} else if(interface.compare(wl_seat_interface.name) == 0) {
+				self->seat = (wl_seat*)wl_registry_bind(reg, id, &wl_seat_interface, ver);
 			}
 		};
 		listener.global_remove = [](void*, wl_registry*, uint32_t) {};
@@ -42,6 +53,7 @@ namespace Cacao {
 		wl_display_roundtrip(display);
 		Check<ExternalException>(compositor != nullptr, "Failed to get Wayland compositor!");
 		Check<ExternalException>(outMgr != nullptr, "Failed to get Wayland output manager!");
+		Check<ExternalException>(seat != nullptr, "Failed to get Wayland input seat!");
 
 		//Create surface
 		surface = wl_compositor_create_surface(compositor);
@@ -49,6 +61,58 @@ namespace Cacao {
 
 		//Let Wayland process surface creation
 		wl_display_roundtrip(display);
+
+		//Obtain input devices
+		keyboard = wl_seat_get_keyboard(seat);
+		Check<ExternalException>(keyboard != nullptr, "Failed to obtain keyboard!");
+		mouse = wl_seat_get_pointer(seat);
+		Check<ExternalException>(keyboard != nullptr, "Failed to obtain mouse!");
+
+		//Create keyboard listener
+		keyboardListener = {};
+		keyboardListener.keymap = [](void* selfp, wl_keyboard*, uint32_t, int fd, uint32_t size) {
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
+
+			//Get keymap string
+			//We have to use memory mapping; Wayland seems to love that for some reason...
+			char* keymapStr = reinterpret_cast<char*>(mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0));
+			Check<ExternalException>(keymapStr != MAP_FAILED, "Failed to get keymap string!", [fd]() { close(fd); });
+
+			//Setup XKB context
+			self->xkb = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+			Check<ExternalException>(self->xkb, "Failed to create XKB context!", [fd, keymapStr, size]() { munmap(keymapStr, size); close(fd); });
+
+			//Create XKB keymap
+			self->keymap = xkb_keymap_new_from_string(self->xkb, keymapStr, XKB_KEYMAP_FORMAT_TEXT_V1, XKB_KEYMAP_COMPILE_NO_FLAGS);
+
+			//Clean up memory mapping stuff
+			munmap(keymapStr, size);
+			close(fd);
+
+			//Check for keymap
+			//We don't do this immediately because no matter what we want to clean up the keymap string, so no need for an unwind function and this makes it easier
+			Check<ExternalException>(self->keymap, "Failed to create XKB keymap!");
+
+			//Create XKB state
+			self->xkbState = xkb_state_new(self->keymap);
+			Check<ExternalException>(self->xkbState, "Failed to create XKB state!");
+		};
+		keyboardListener.key = [](void* selfp, wl_keyboard*, uint32_t, uint32_t, uint32_t key, uint32_t state) {
+			WaylandWindowImpl* self = reinterpret_cast<WaylandWindowImpl*>(selfp);
+
+			//Get keysym
+			//You may be wondering why we add 8 to the keysym. Apparently this is a Wayland thing. I don't know why and frankly I don't want to know why.
+			xkb_keysym_t keysym = xkb_state_key_get_one_sym(self->xkbState, key + 8);
+
+			//Dispatch event
+			DataEvent<unsigned int> event((state == WL_KEYBOARD_KEY_STATE_RELEASED ? "KeyUp" : "KeyDown"), self->ConvertKeycode(keysym));
+			EventManager::Get().Dispatch(event);
+		};
+		keyboardListener.enter = [](void*, wl_keyboard*, uint32_t, wl_surface*, wl_array*) {};
+		keyboardListener.leave = [](void*, wl_keyboard*, uint32_t, wl_surface*) {};
+		keyboardListener.modifiers = [](void*, wl_keyboard*, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t) {};
+		keyboardListener.repeat_info = [](void*, wl_keyboard*, int32_t, int32_t) {};
+		wl_keyboard_add_listener(keyboard, &keyboardListener, this);
 
 		//Create output listener
 		outListener = {};
@@ -296,5 +360,10 @@ namespace Cacao {
 		libdecor_state* state = libdecor_state_new(lastSize.x, lastSize.y);
 		libdecor_frame_commit(frame, state, nullptr);
 		libdecor_state_free(state);
+	}
+
+	unsigned int WaylandWindowImpl::ConvertKeycode(unsigned int key) {
+		//TODO
+		return key;
 	}
 }

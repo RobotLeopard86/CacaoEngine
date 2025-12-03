@@ -444,4 +444,9 @@ namespace Cacao {
 		//Send any unprocessed commands to the X server and wait
 		xcb_flush(connection);
 	}
+
+	unsigned int X11WindowImpl::ConvertKeycode(unsigned int key) {
+		//TODO
+		return key;
+	}
 }
