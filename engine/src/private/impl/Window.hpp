@@ -40,6 +40,10 @@ namespace Cacao {
 		glm::uvec2 lastPos;
 		glm::uvec2 lastSize;
 
+		//Scroll data accumulation
+		//Most OSes send a lot of intermediate events for one scroll
+		glm::dvec2 scrollAccumulator = {0, 0};
+
 		// clang-format off
 		static std::unordered_map<std::string, std::function<std::unique_ptr<Impl>()>> registry;
 		// clang-format on

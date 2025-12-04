@@ -252,7 +252,7 @@ def main():
 		else:
 			final = ext
 
-		print(f"{{{ck}, {final}}},")
+		print(f"{{{final}, {ck}}},")
 
 
 if __name__ == "__main__":

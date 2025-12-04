@@ -78,12 +78,11 @@ namespace Cacao {
 		EventManager::Get().SubscribeConsumer("KeyDown", impl->keyDown);
 
 		//Lists of all keys and buttons (important)
-		constexpr std::array<unsigned int, 104> allKeys {{CACAO_KEY_ENTER,
+		constexpr std::array<unsigned int, 103> allKeys {{CACAO_KEY_ENTER,
 			CACAO_KEY_ESCAPE,
 			CACAO_KEY_BACKSPACE,
 			CACAO_KEY_TAB,
 			CACAO_KEY_SPACE,
-			CACAO_KEY_EXCLAMATION,
 			CACAO_KEY_APOSTROPHE,
 			CACAO_KEY_COMMA,
 			CACAO_KEY_MINUS,

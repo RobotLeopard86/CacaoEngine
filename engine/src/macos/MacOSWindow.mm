@@ -112,7 +112,7 @@ namespace Cacao {
 		size = newSize;
 		[win setFrame:NSMakeRect(0, 0, newSize.x, newSize.y) display:YES];
 
-		DataEvent<glm::uvec2> wre("Window", newSize);
+		DataEvent<glm::uvec2> wre("WindowResize", newSize);
 		EventManager::Get().Dispatch(wre);
 	}
 

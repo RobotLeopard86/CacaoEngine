@@ -190,8 +190,6 @@ namespace Cacao {
 		//Freeze input state
 		Input::Get().FreezeInputState();
 
-		if(Input::Get().IsKeyPressed(CACAO_KEY_F)) Logger::Engine(Logger::Level::Trace) << "press f to pay respects";
-
 		//Acquire active world
 		std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
 		if(!world) return;

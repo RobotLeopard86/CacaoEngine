@@ -48,10 +48,6 @@ namespace Cacao {
 		wl_keyboard_listener keyboardListener = {};
 		wl_pointer_listener mouseListener = {};
 
-		//Scroll data accumulation
-		//Wayland sends a lot of intermediate events and one done event
-		glm::dvec2 scrollAccumulator = {0, 0};
-
 		void CreateWindow() override;
 		void DestroyWindow() override;
 		void HandleEvents() override;
