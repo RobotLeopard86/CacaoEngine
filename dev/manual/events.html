@@ -404,21 +404,54 @@
                   
   <section id="built-in-event-list">
 <h1>Built-In Event List<a class="headerlink" href="#built-in-event-list" title="Link to this heading"><span/></a></h1>
-<p>This is a list of all built-in events:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowClose</span></code>: The window is closing</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowFocus</span></code>: The window has gained focus</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowUnfocus</span></code>: The window has lost focus</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowResize</span></code>: The size of the window has changed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowMinimize</span></code>: The window has been minimized</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WindowRestore</span></code>: The window has been restored</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MouseMove</span></code>: The cursor has moved</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MouseScroll</span></code>: The mouse wheel has been scrolled</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MousePress</span></code>: A mouse button has been pressed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MouseRelease</span></code>: A mouse button has been released</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KeyDown</span></code>: A key has been pressed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KeyUp</span></code>: A key has been released</p></li>
-</ul>
+<aside class="topic">
+<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
+<p>The information on this page pertains to the engine post-restructuring.</p>
+</aside>
+<p>The below are all of the built-in event types in Cacao Engine.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event ID</p></th>
+<th class="head"><p>Trigger</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WindowClose</span></code></p></td>
+<td><p>The window is closing</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WindowResize</span></code></p></td>
+<td><p>The size of the window has changed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;glm::uvec2&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MouseMove</span></code></p></td>
+<td><p>The cursor has moved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;glm::dvec2&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MouseScroll</span></code></p></td>
+<td><p>The mouse wheel has been scrolled</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;glm::dvec2&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MousePress</span></code></p></td>
+<td><p>A mouse button has been pressed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;unsigned</span> <span class="pre">int&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MouseRelease</span></code></p></td>
+<td><p>A mouse button has been released</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;unsigned</span> <span class="pre">int&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">KeyDown</span></code></p></td>
+<td><p>A key has been pressed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;unsigned</span> <span class="pre">int&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">KeyUp</span></code></p></td>
+<td><p>A key has been released</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DataEvent&lt;unsigned</span> <span class="pre">int&gt;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 
 
