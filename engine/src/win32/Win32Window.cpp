@@ -186,4 +186,9 @@ namespace Cacao {
 		//TODO
 		return key;
 	}
+
+	unsigned int Win32WindowImpl::ConvertButtonCode(unsigned int button) {
+		//TODO
+		return button;
+	}
 }

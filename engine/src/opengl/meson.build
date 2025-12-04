@@ -1,9 +1,6 @@
 # Glad OpenGL loader
 gladgl_dep = subproject('glad-gl', required: true).get_variable('glad_gl_dep')
 
-# eternal (for constexpr map)
-eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
-
 # Add base OpenGL module info
 engine_srcs += files(
 	'OpenGLModule.cpp',
@@ -14,7 +11,7 @@ engine_srcs += files(
 	'impls' / 'OpenGLCubemap.cpp'
 )
 engine_inc += include_directories('.')
-engine_deps += [gladgl_dep, eternal_dep]
+engine_deps += gladgl_dep
 engine_args_objcpp += ['-Wno-deprecated-declarations', '-DGL_SILENCE_DEPRECATION']
 
 # Add platform-specific info

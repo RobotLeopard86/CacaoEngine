@@ -26,6 +26,7 @@ namespace Cacao {
 		void RestoreWin() override;
 
 		unsigned int ConvertKeycode(unsigned int key) override;
+		unsigned int ConvertButtonCode(unsigned int button) override;
 
 		const std::string ProviderID() const override {
 			return "win32";

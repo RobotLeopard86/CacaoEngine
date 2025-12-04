@@ -201,4 +201,9 @@ namespace Cacao {
 		//TODO
 		return key;
 	}
+
+	unsigned int MacOSWindowImpl::ConvertButtonCode(unsigned int button) {
+		//TODO
+		return button;
+	}
 }

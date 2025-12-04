@@ -66,3 +66,9 @@ Before submitting your changes, ensure to pull from the upstream `dev` branch an
 While generative AI is extremely useful for programming, **no AI-generated code** is allowed in Cacao Engine. It is perfectly fine to use AI for brainstorming, prototyping, debugging, and such, but no AI code may be submitted as a pull request. It is acceptable to use AI to write a concept for you, but sufficient human modification must be done to the concept if using it as a base. If you use AI in this manner, please include all prompts and the original AI code in your pull request for reference. **Any unauthorized contributions using AI-generated code will be rejected.**  
 
 The reason for this is that the legality and copyrightability of AI-generated code has not been fully tested, and many AI tools have been trained on code that may not be suitably licensed for use under Cacao Engine's license. Even if they weren't, it would be impossible to find the correct license for each generation.
+
+This policy only applies to **primary code**. This means that the `scripts` directory, for example, is not subject to this policy. Primary code directories are those listed below:
+* `engine`
+* `libs`
+* `tools`
+* `sandbox`

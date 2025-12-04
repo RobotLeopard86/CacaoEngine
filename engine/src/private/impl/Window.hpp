@@ -28,6 +28,7 @@ namespace Cacao {
 		virtual void RestoreWin() = 0;
 		virtual const std::string ProviderID() const = 0;
 		virtual unsigned int ConvertKeycode(unsigned int key) = 0;
+		virtual unsigned int ConvertButtonCode(unsigned int button) = 0;
 
 		virtual ~Impl() = default;
 

@@ -125,22 +125,6 @@ namespace Cacao {
 					break;
 				}
 
-				//Window has gained focus
-				case XCB_FOCUS_IN: {
-					//Fire an event
-					Event e("WindowFocus");
-					EventManager::Get().Dispatch(e);
-					break;
-				}
-
-				//Window has lost focus
-				case XCB_FOCUS_OUT: {
-					//Fire an event
-					Event e("WindowUnfocus");
-					EventManager::Get().Dispatch(e);
-					break;
-				}
-
 				default: break;
 			}
 
@@ -448,5 +432,10 @@ namespace Cacao {
 	unsigned int X11WindowImpl::ConvertKeycode(unsigned int key) {
 		//TODO
 		return key;
+	}
+
+	unsigned int X11WindowImpl::ConvertButtonCode(unsigned int button) {
+		//TODO
+		return button;
 	}
 }
