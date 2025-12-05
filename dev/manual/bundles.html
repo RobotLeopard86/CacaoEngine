@@ -408,6 +408,10 @@
                   
   <section id="bundles">
 <h1>Bundles<a class="headerlink" href="#bundles" title="Link to this heading"><span/></a></h1>
+<aside class="topic">
+<p class="topic-title">This page is <strong>up-to-date</strong>!</p>
+<p>The information on this page pertains to the engine post-restructuring.</p>
+</aside>
 <section id="what-are-bundles">
 <h2>What are bundles?<a class="headerlink" href="#what-are-bundles" title="Link to this heading"><span/></a></h2>
 <p>Bundles are how you ship your Cacao Engine game. They consist of the Cacao Engine library and runtime, your game binar, the specfile, dependencies, and resources, packed into a specific file structure.</p>
@@ -422,7 +426,7 @@ my_game = shared_module(&#39;game&#39;, sources: [...], dependencies: cacaort_de
 
 # Copy runtime files
 rtdata = cacao_subproject.get_variable(&#39;rtdata&#39;)
-custom_target(&#39;game_runtime&#39;, command: [python, rtdata[&#39;setup_script&#39;], rtdata[&#39;filelist&#39;], meson.current_build_dir(), &#39;@OUTPUT0@&#39;], output: [host_machine.system() == &#39;windows&#39; ? &#39;game.exe&#39; : &#39;game&#39;, rtdata[&#39;filenames&#39;]], build_by_default: true, depends: rtdata[&#39;files&#39;])
+custom_target(&#39;game_runtime&#39;, command: [rtdata[&#39;setup_script&#39;], rtdata[&#39;filelist&#39;], meson.current_build_dir(), &#39;@OUTPUT0@&#39;], output: [host_machine.system() == &#39;windows&#39; ? &#39;game.exe&#39; : &#39;game&#39;, rtdata[&#39;filenames&#39;]], build_by_default: true, depends: rtdata[&#39;files&#39;])
 
 # Specfile
 spec = configuration_data()
