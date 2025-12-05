@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import pathlib
 import shutil
 import sys
-import os
 
 # Get the list of required runtime files
 rtfiles = list(map(lambda p: pathlib.Path(p), pathlib.Path(sys.argv[1]).read_text().splitlines()))

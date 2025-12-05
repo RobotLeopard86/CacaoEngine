@@ -14,6 +14,7 @@ namespace Cacao {
 
 		//Now claim all the graphics handlers so nobody can mess with them while we're working since we may need to touch them
 		unsigned int obtained = 0;
+		unsigned int sz = GfxHandler::handlers.size();
 		while(obtained < GfxHandler::handlers.size()) {
 			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
 				//The exchange method returns the previous value of the atomic

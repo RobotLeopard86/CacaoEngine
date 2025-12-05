@@ -30,18 +30,18 @@ Install [Xcode](https://developer.apple.com/xcode) or the Command Line Tools for
 
 #### Fedora Linux and derivatives (e.g. RHEL, Nobara):
 Run the following command to install all necessary system packages (you may need `sudo` privileges):
-`dnf install wayland-devel wayland-protocols-devel libxkbcommon-devel libxcb-devel xcb-util-devel xcb-util-wm-devel xcb-util-keysyms-devel libdrm-devel libuuid-devel pipewire-devel pulseaudio-libs-devel alsa-lib alsa-lib-devel libglvnd-devel`
+`dnf install wayland-devel wayland-protocols-devel libxkbcommon-devel libxcb-devel xcb-util-devel xcb-util-wm-devel xcb-util-keysyms-devel xorg-x11-proto-devel libdrm-devel libuuid-devel pipewire-devel pulseaudio-libs-devel alsa-lib alsa-lib-devel libglvnd-devel`
 
 #### Debian GNU/Linux and derivatives (e.g. Ubuntu, Mint, Pop!_OS):
 Run the following command to install all necessary system packages (you may need `sudo` privileges):
-`apt install libwayland-dev wayland-protocols libxkbcommon-dev xorg-dev libxcb1-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-util-dev libxcb-xkb-dev libdrm-dev uuid-dev libpipewire-0.3-dev libpulse-dev libasound2-dev libglvnd-dev`
+`apt install libwayland-dev wayland-protocols libxkbcommon-dev xorg-dev libxcb1-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-util-dev libxcb-xkb-dev x11proto-dev libdrm-dev uuid-dev libpipewire-0.3-dev libpulse-dev libasound2-dev libglvnd-dev`
 
 #### Arch Linux and derivatives (e.g. Manjaro, Garuda, EndeavourOS):
 Run the following command to install all necessary system packages (you may need `sudo` privileges):
-`pacman -S libglvnd mesa libxkbcommon wayland-protocols libxcb xcb-util xcb-util-keysyms xcb-util-wm util-linux-libs libdrm libpipewire libpulse alsa-lib`
+`pacman -S libglvnd mesa libxkbcommon wayland-protocols libxcb xcb-util xcb-util-keysyms xcb-util-wm xorgproto util-linux-libs libdrm libpipewire libpulse alsa-lib`
 
 #### Linux Notes
-You may be able to use a subset of the listed packages by disabling some features. For example, the Wayland-related packages are not needed if only building for X11, and the XCB packages are not needed if only building for Wayland (though `libxkbcommon` is mandatory).  
+You may be able to use a subset of the listed packages by disabling some features. For example, the Wayland-related packages are not needed if only building for X11, and the XCB packages are not needed if only building for Wayland.
 
 Similarly, you may not need Pipewire packages or ALSA packages if not targeting those audio subsystems, though it is recommended to always include them for best compatibility.
 

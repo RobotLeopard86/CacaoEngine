@@ -1,66 +1,15 @@
 #include "Cacao/Input.hpp"
 #include "Cacao/Event.hpp"
-#include "Cacao/EventConsumer.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "SingletonGet.hpp"
+#include "ImplAccessor.hpp"
+#include "impl/Input.hpp"
 
 #include <unordered_map>
-#include <vector>
 
 namespace Cacao {
-	struct Input::Impl {
-		//Frozen state
-		//Updated via FreezeInputState, returned from query functions
-		glm::dvec2 cursorPosFrozen;
-		std::unordered_map<unsigned int, bool> keysFrozen;
-		std::unordered_map<unsigned int, bool> mouseFrozen;
-
-		//Holding state
-		//Modified by events from window, read by FreezeInputState
-		glm::dvec2 cursorPosTmp;
-		struct InputStateDelta {
-			enum class Category {
-				Keyboard,
-				Mouse
-			} category;
-			unsigned int id;
-			bool newState;
-		};
-		std::vector<InputStateDelta> deltas;
-
-		//Update functions
-		EventConsumer mouseMove;
-		EventConsumer mouseButtonPress;
-		EventConsumer mouseButtonRelease;
-		EventConsumer keyUp;
-		EventConsumer keyDown;
-
-		void SetupConsumerObjects() {
-			//Create objects
-			mouseMove = EventConsumer([this](Event& e) {
-				DataEvent<glm::dvec2>& mme = static_cast<DataEvent<glm::dvec2>&>(e);
-				cursorPosTmp = mme.GetData();
-			});
-			mouseButtonPress = EventConsumer([this](Event& e) {
-				DataEvent<unsigned int>& mbpe = static_cast<DataEvent<unsigned int>&>(e);
-				deltas.push_back(InputStateDelta {.category = InputStateDelta::Category::Mouse, .id = mbpe.GetData(), .newState = true});
-			});
-			mouseButtonRelease = EventConsumer([this](Event& e) {
-				DataEvent<unsigned int>& mbre = static_cast<DataEvent<unsigned int>&>(e);
-				deltas.push_back(InputStateDelta {.category = InputStateDelta::Category::Mouse, .id = mbre.GetData(), .newState = false});
-			});
-			keyUp = EventConsumer([this](Event& e) {
-				DataEvent<unsigned int>& kue = static_cast<DataEvent<unsigned int>&>(e);
-				deltas.push_back(InputStateDelta {.category = InputStateDelta::Category::Keyboard, .id = kue.GetData(), .newState = false});
-			});
-			keyDown = EventConsumer([this](Event& e) {
-				DataEvent<unsigned int>& kde = static_cast<DataEvent<unsigned int>&>(e);
-				deltas.push_back(InputStateDelta {.category = InputStateDelta::Category::Keyboard, .id = kde.GetData(), .newState = true});
-			});
-		}
-	};
-
 	CACAOST_GET(Input)
 
 	Input::Input() {
@@ -68,7 +17,30 @@ namespace Cacao {
 		impl = std::make_unique<Impl>();
 
 		//Setup event consumer objects
-		impl->SetupConsumerObjects();
+		impl->mouseMove = EventConsumer([](Event& e) {
+			DataEvent<glm::dvec2>& mme = static_cast<DataEvent<glm::dvec2>&>(e);
+			IMPL(Input).cursorPosLive = mme.GetData();
+		});
+		impl->mouseButtonPress = EventConsumer([](Event& e) {
+			DataEvent<unsigned int>& mbpe = static_cast<DataEvent<unsigned int>&>(e);
+			Logger::Engine(Logger::Level::Trace) << "Button " << mbpe.GetData() << " released";
+			IMPL(Input).mouseLive.at(mbpe.GetData()) = true;
+		});
+		impl->mouseButtonRelease = EventConsumer([](Event& e) {
+			DataEvent<unsigned int>& mbre = static_cast<DataEvent<unsigned int>&>(e);
+			Logger::Engine(Logger::Level::Trace) << "Button " << mbre.GetData() << " released";
+			IMPL(Input).mouseLive.at(mbre.GetData()) = false;
+		});
+		impl->keyDown = EventConsumer([](Event& e) {
+			DataEvent<unsigned int>& kde = static_cast<DataEvent<unsigned int>&>(e);
+			Logger::Engine(Logger::Level::Trace) << "Key " << kde.GetData() << " pressed";
+			IMPL(Input).keysLive.at(kde.GetData()) = true;
+		});
+		impl->keyUp = EventConsumer([](Event& e) {
+			DataEvent<unsigned int>& kue = static_cast<DataEvent<unsigned int>&>(e);
+			Logger::Engine(Logger::Level::Trace) << "Key " << kue.GetData() << " released";
+			IMPL(Input).keysLive.at(kue.GetData()) = false;
+		});
 
 		//Register consumers
 		EventManager::Get().SubscribeConsumer("MouseMove", impl->mouseMove);
@@ -186,9 +158,11 @@ namespace Cacao {
 
 		//Fill maps
 		for(unsigned int key : allKeys) {
+			impl->keysLive.insert_or_assign(key, false);
 			impl->keysFrozen.insert_or_assign(key, false);
 		}
 		for(unsigned int button : allButtons) {
+			impl->mouseLive.insert_or_assign(button, false);
 			impl->mouseFrozen.insert_or_assign(button, false);
 		}
 	}
@@ -196,26 +170,16 @@ namespace Cacao {
 	Input::~Input() {}
 
 	void Input::FreezeInputState() {
-		//Set cursor position
-		impl->cursorPosFrozen = impl->cursorPosTmp;
-
-		//Apply mouse and keyboard deltas
-		for(const Impl::InputStateDelta& delta : impl->deltas) {
-			//Select the target map
-			std::unordered_map<unsigned int, bool>* targetMap;
-			switch(delta.category) {
-				case Impl::InputStateDelta::Category::Keyboard:
-					targetMap = &impl->keysFrozen;
-					break;
-				case Impl::InputStateDelta::Category::Mouse:
-					targetMap = &impl->mouseFrozen;
-					break;
-			}
-
-			//Apply the state change
-			targetMap->at(delta.id) = delta.newState;
+		//Sync cursor position
+		if(impl->cursorPosFrozen != impl->cursorPosLive) {
+			Logger::Engine(Logger::Level::Trace) << "MOUSE @ " << impl->cursorPosLive.x << ", " << impl->cursorPosLive.y;
+			impl->cursorPosFrozen = impl->cursorPosLive;
 		}
-		impl->deltas.clear();
+
+		//Sync mouse and keyboard state
+		//We don't do a comparison here as we do above because that would be more expensive than necessary
+		impl->keysFrozen = impl->keysLive;
+		impl->mouseFrozen = impl->mouseLive;
 	}
 
 	glm::dvec2 Input::GetCursorPos() {

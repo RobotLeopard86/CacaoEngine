@@ -67,7 +67,6 @@ namespace Cacao {
 		while(!stop.stop_requested()) {
 			//If the window is minimized, we can't render, so no point in working
 			while(Window::Get().IsMinimized()) {
-				std::this_thread::yield();
 				if(stop.stop_requested()) return;
 			}
 
@@ -76,7 +75,6 @@ namespace Cacao {
 
 			//Block until the tick controller grants the request
 			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
-				std::this_thread::yield();
 				if(stop.stop_requested()) return;
 			}
 
@@ -99,8 +97,7 @@ namespace Cacao {
 			//Execute command buffer
 			std::shared_future<void> submission = GPUManager::Get().Submit(std::move(cmd));
 			while(submission.wait_for(std::chrono::microseconds(1)) == std::future_status::timeout) {
-				bool wantStop = stop.stop_requested();
-				if(wantStop) return;
+				if(stop.stop_requested()) return;
 			}
 		}
 	}

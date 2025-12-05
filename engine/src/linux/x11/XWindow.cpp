@@ -1,4 +1,5 @@
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Input.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Engine.hpp"
@@ -10,7 +11,10 @@
 
 #include <xcb/xcb_icccm.h>
 #include <xcb/xproto.h>
+#include <X11/keysym.h>
+
 #include "glm/gtc/type_ptr.hpp"
+#include "eternal.hpp"
 
 #define win Window::Get()
 
@@ -40,7 +44,8 @@ namespace Cacao {
 		uint32_t valueMask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
 		uint32_t valueList[] = {
 			screen->black_pixel,
-			XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_FOCUS_CHANGE};
+			XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_FOCUS_CHANGE | XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE |
+				XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_POINTER_MOTION};
 		xcb_create_window(connection, XCB_COPY_FROM_PARENT, window, screen->root, centered.x, centered.y, size.x,
 			size.y, 10, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual, valueMask, valueList);
 
@@ -63,6 +68,9 @@ namespace Cacao {
 		//If we should start visible, make the window visible
 		if(visible) xcb_map_window(connection, window);
 
+		//Allocate key symbols
+		keysyms = xcb_key_symbols_alloc(connection);
+
 		//Send commands to X server and wait for completion
 		xcb_flush(connection);
 
@@ -73,6 +81,9 @@ namespace Cacao {
 	void X11WindowImpl::DestroyWindow() {
 		//Disconnect graphics
 		PAL::Get().GfxDisconnect();
+
+		//Free key symbols
+		xcb_key_symbols_free(keysyms);
 
 		//Destroy window
 		xcb_destroy_window(connection, window);
@@ -123,6 +134,48 @@ namespace Cacao {
 					}
 					lastCfgEvent = cfgEvent;
 					break;
+				}
+
+				//Key pressed
+				case XCB_KEY_PRESS: {
+					//Get the key that was pressed
+					xcb_key_press_event_t* keyEvent = reinterpret_cast<xcb_key_press_event_t*>(event);
+					xcb_keysym_t keysym = xcb_key_symbols_get_keysym(keysyms, keyEvent->detail, 0);
+
+					//Dispatch event
+					DataEvent<unsigned int> event("KeyDown", ConvertKeycode(keysym));
+					EventManager::Get().Dispatch(event);
+				}
+
+				//Key released
+				case XCB_KEY_RELEASE: {
+					//Get the key that was released
+					xcb_key_press_event_t* keyEvent = reinterpret_cast<xcb_key_press_event_t*>(event);
+					xcb_keysym_t keysym = xcb_key_symbols_get_keysym(keysyms, keyEvent->detail, 0);
+
+					//Dispatch event
+					DataEvent<unsigned int> event("KeyUp", ConvertKeycode(keysym));
+					EventManager::Get().Dispatch(event);
+				}
+
+				//Mouse button pressed
+				case XCB_BUTTON_PRESS: {
+					//Get the button that was pressed
+					xcb_button_press_event_t* buttonEvent = reinterpret_cast<xcb_button_press_event_t*>(event);
+
+					//Dispatch event
+					DataEvent<unsigned int> event("MousePress", ConvertButtonCode(buttonEvent->detail));
+					EventManager::Get().Dispatch(event);
+				}
+
+				//Mouse button released
+				case XCB_BUTTON_RELEASE: {
+					//Get the button that was released
+					xcb_button_press_event_t* buttonEvent = reinterpret_cast<xcb_button_press_event_t*>(event);
+
+					//Dispatch event
+					DataEvent<unsigned int> event("MouseRelease", ConvertButtonCode(buttonEvent->detail));
+					EventManager::Get().Dispatch(event);
 				}
 
 				default: break;
@@ -430,12 +483,118 @@ namespace Cacao {
 	}
 
 	unsigned int X11WindowImpl::ConvertKeycode(unsigned int key) {
-		//TODO
-		return key;
+		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({{XK_Return, CACAO_KEY_ENTER},
+			{XK_Escape, CACAO_KEY_ESCAPE},
+			{XK_BackSpace, CACAO_KEY_BACKSPACE},
+			{XK_Tab, CACAO_KEY_TAB},
+			{XK_space, CACAO_KEY_SPACE},
+			{XK_apostrophe, CACAO_KEY_APOSTROPHE},
+			{XK_comma, CACAO_KEY_COMMA},
+			{XK_minus, CACAO_KEY_MINUS},
+			{XK_equal, CACAO_KEY_EQUALS},
+			{XK_period, CACAO_KEY_PERIOD},
+			{XK_slash, CACAO_KEY_SLASH},
+			{XK_0, CACAO_KEY_0},
+			{XK_1, CACAO_KEY_1},
+			{XK_2, CACAO_KEY_2},
+			{XK_3, CACAO_KEY_3},
+			{XK_4, CACAO_KEY_4},
+			{XK_5, CACAO_KEY_5},
+			{XK_6, CACAO_KEY_6},
+			{XK_7, CACAO_KEY_7},
+			{XK_8, CACAO_KEY_8},
+			{XK_9, CACAO_KEY_9},
+			{XK_semicolon, CACAO_KEY_SEMICOLON},
+			{XK_bracketleft, CACAO_KEY_LEFT_BRACKET},
+			{XK_bracketright, CACAO_KEY_RIGHT_BRACKET},
+			{XK_backslash, CACAO_KEY_BACKSLASH},
+			{XK_grave, CACAO_KEY_GRAVE_ACCENT},
+			{XK_a, CACAO_KEY_A},
+			{XK_b, CACAO_KEY_B},
+			{XK_c, CACAO_KEY_C},
+			{XK_d, CACAO_KEY_D},
+			{XK_e, CACAO_KEY_E},
+			{XK_f, CACAO_KEY_F},
+			{XK_g, CACAO_KEY_G},
+			{XK_h, CACAO_KEY_H},
+			{XK_i, CACAO_KEY_I},
+			{XK_j, CACAO_KEY_J},
+			{XK_k, CACAO_KEY_K},
+			{XK_l, CACAO_KEY_L},
+			{XK_m, CACAO_KEY_M},
+			{XK_n, CACAO_KEY_N},
+			{XK_o, CACAO_KEY_O},
+			{XK_p, CACAO_KEY_P},
+			{XK_q, CACAO_KEY_Q},
+			{XK_r, CACAO_KEY_R},
+			{XK_s, CACAO_KEY_S},
+			{XK_t, CACAO_KEY_T},
+			{XK_u, CACAO_KEY_U},
+			{XK_v, CACAO_KEY_V},
+			{XK_w, CACAO_KEY_W},
+			{XK_x, CACAO_KEY_X},
+			{XK_y, CACAO_KEY_Y},
+			{XK_z, CACAO_KEY_Z},
+			{XK_Caps_Lock, CACAO_KEY_CAPS_LOCK},
+			{XK_F1, CACAO_KEY_F1},
+			{XK_F2, CACAO_KEY_F2},
+			{XK_F3, CACAO_KEY_F3},
+			{XK_F4, CACAO_KEY_F4},
+			{XK_F5, CACAO_KEY_F5},
+			{XK_F6, CACAO_KEY_F6},
+			{XK_F7, CACAO_KEY_F7},
+			{XK_F8, CACAO_KEY_F8},
+			{XK_F9, CACAO_KEY_F9},
+			{XK_F10, CACAO_KEY_F10},
+			{XK_F11, CACAO_KEY_F11},
+			{XK_F12, CACAO_KEY_F12},
+			{XK_Print, CACAO_KEY_PRINT_SCREEN},
+			{XK_Scroll_Lock, CACAO_KEY_SCROLL_LOCK},
+			{XK_Pause, CACAO_KEY_PAUSE},
+			{XK_Insert, CACAO_KEY_INSERT},
+			{XK_Delete, CACAO_KEY_DELETE},
+			{XK_Home, CACAO_KEY_HOME},
+			{XK_Page_Up, CACAO_KEY_PAGE_UP},
+			{XK_End, CACAO_KEY_END},
+			{XK_Page_Down, CACAO_KEY_PAGE_DOWN},
+			{XK_Right, CACAO_KEY_RIGHT},
+			{XK_Left, CACAO_KEY_LEFT},
+			{XK_Down, CACAO_KEY_DOWN},
+			{XK_Up, CACAO_KEY_UP},
+			{XK_Num_Lock, CACAO_KEY_NUM_LOCK},
+			{XK_KP_Divide, CACAO_KEY_KP_DIVIDE},
+			{XK_KP_Multiply, CACAO_KEY_KP_MULTIPLY},
+			{XK_KP_Subtract, CACAO_KEY_KP_MINUS},
+			{XK_KP_Add, CACAO_KEY_KP_PLUS},
+			{XK_KP_Enter, CACAO_KEY_KP_ENTER},
+			{XK_KP_1, CACAO_KEY_KP_1},
+			{XK_KP_2, CACAO_KEY_KP_2},
+			{XK_KP_3, CACAO_KEY_KP_3},
+			{XK_KP_4, CACAO_KEY_KP_4},
+			{XK_KP_5, CACAO_KEY_KP_5},
+			{XK_KP_6, CACAO_KEY_KP_6},
+			{XK_KP_7, CACAO_KEY_KP_7},
+			{XK_KP_8, CACAO_KEY_KP_8},
+			{XK_KP_9, CACAO_KEY_KP_9},
+			{XK_KP_0, CACAO_KEY_KP_0},
+			{XK_KP_Decimal, CACAO_KEY_KP_PERIOD},
+			{XK_Control_L, CACAO_KEY_LEFT_CONTROL},
+			{XK_Shift_L, CACAO_KEY_LEFT_SHIFT},
+			{XK_Alt_L, CACAO_KEY_LEFT_ALT},
+			{XK_Super_L, CACAO_KEY_LEFT_SUPER},
+			{XK_Control_R, CACAO_KEY_RIGHT_CONTROL},
+			{XK_Shift_R, CACAO_KEY_RIGHT_SHIFT},
+			{XK_Alt_R, CACAO_KEY_RIGHT_ALT},
+			{XK_Super_R, CACAO_KEY_RIGHT_SUPER}});
+		if(codes.contains(key)) return codes.at(key);
+		return UINT32_MAX;
 	}
 
 	unsigned int X11WindowImpl::ConvertButtonCode(unsigned int button) {
-		//TODO
-		return button;
+		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({{1, CACAO_BUTTON_LEFT},
+			{2, CACAO_BUTTON_MIDDLE},
+			{3, CACAO_BUTTON_RIGHT}});
+		if(codes.contains(button)) return codes.at(button);
+		return UINT32_MAX;
 	}
 }

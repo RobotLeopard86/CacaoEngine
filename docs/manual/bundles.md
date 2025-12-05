@@ -1,25 +1,78 @@
 # Bundles
 
 ## What are bundles?
-The entirety of Cacao Engine is contained in the `cacaoengine(.exe)` binary. On its own, the engine will not work correctly. To make it useful, it needs to be part of a bundle. A bundle consists of the engine binary, a launch module, the launch configuration file, and any game assets.
+Bundles are how you ship your Cacao Engine game. They consist of the Cacao Engine library and runtime, your game binar, the specfile, dependencies, and resources, packed into a specific file structure.  
+```{note}
+You are not required to use the prebuilt runtime. However, the documentation here will focus on using the prebuilt runtime, which is the recommended one as the engine is designed for it. However, it is possible to build one yourself, though no explicit documentation for this will be created as this is not a principal concern of the Cacao Engine project.
+```  
+Setting up a basic bundle for just a game binary can be accomplished within the Meson build directory, and an example on how to do this can be found below:  
 
-## The Launch Module
-The launch module is a compiled binary containing the code of a Cacao Engine game. It must be named `launch.(so|dll|dylib)`, depending on what operating system is being targeted. The launch module has two primary entrypoints or hooks that Cacao Engine calls into to communicate with your game. These are `_CacaoLaunch` and `_CacaoExiting`, which are the startup and shutdown hooks respectively. The [quickstart guide](./quickstart) contains more details about these functions and when they are called.
+`meson.build`:
+```{code-block}meson
+# Game binary
+my_game = shared_module('game', sources: [...], dependencies: cacaort_dep, name_prefix: '', install: false)
 
-## The Launch Configuration File
-The launch configuration file is a YAML file named `launchconfig.cacao.yml`. It must be placed in the same directory as the Cacao Engine executable, and is loaded by the engine to tell it how to proceed with startup. It contains the following items:  
-* `launch`: The path to the launch module relative to the engine executable
-* `dynamicTPS`: The number of dynamic ticks that should happen in a second (not a hard constraint)
-* `title`: The game window title
-* `workingDir`: The working directory that the engine should change to post-launch, relative to the engine executable
-* `maxFrameLag`: The number of frames that the engine is allowed to be behind rendering  
+# Copy runtime files
+rtdata = cacao_subproject.get_variable('rtdata')
+custom_target('game_runtime', command: [python, rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'game.exe' : 'game', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
 
-## Making a Bundle
-Since bundles must be set up in a specific manner, the engine playground as well as the game template both have scripts that automatically generate the bundle. See either repo for the scripts; they are in the `scripts` directory in either repository. If you want to set up a bundle manually, though, here's a typical bundle layout as you might see it on Linux:  
-`/`  
- |_ `cacaoengine`  
- |_ `launchconfig.cacao.yml`  
- |_ `launch.so`  
- |_ `assets` (assets folder, not listing what's in there)  
+# Specfile
+spec = configuration_data()
+spec.set('BINPATH', fs.relative_to(sandbox, meson.current_build_dir()))
+spec.set('ID', 'net.rl86.CacaoSandbox')
+spec.set('TITLE', 'Cacao Engine Sandbox Application')
+spec.set('VERSION', meson.project_version())
+configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
+```  
+`cacaospec.yml.in`:
+```{code-block}yaml
+meta:
+  pkgId: @ID@
+  title: @TITLE@
+  version: @VERSION@
+binary: @BINPATH@
+```  
 
-Of course, bundles can follow other layouts. The only two requirements are having the launch configuration file and the engine executable in the same directory, and having the correct path to the launch module directory in the launch configuration file.
+An example for creating a more complex bundle layout will be available at release.
+
+## Bundle Layout (Windows/Linux)
+This layout is also used on macOS in build directories, but not in shipping.
+* `/` (game directory)
+	* `cacao.dll` | `libcacao.so` (Cacao Engine library)
+	* `openal.dll` | `libopenal.so.*` (OpenAL-Soft library, engine dependency)
+	* `yourgame.exe` | `yourgame` (Cacao Engine runtime, this is the executable you run)
+	* `yourgame.dll` | `yourgame.so` (Your game binary, loaded by runtime)
+	* `cacaospec.yml` (Cacaospec file)
+	* `cacaolicenses.txt` (Cacao Engine license and licenses of engine dependencies)
+	* `packs` (asset pack directory)
+		* `somepack.xak` (asset pack)
+		* other packs
+	* `worlds` (world directory)
+		* `someworld.xjw` (world)
+		* other worlds
+
+## Bundle Layout (macOS, shipped .app bundle)
+* `Game.app/Contents/` (app bundle root)
+	* `MacOS` (executable directory)
+		* `yourgame` (Cacao Engine runtime, this is the executable that gets run)
+	* `Frameworks` (dynamic libs directory)
+		* `libcacao.dylib` (Cacao Engine library)
+		* `libopenal.dylib` (OpenAL-Soft library, engine dependency)
+		* `yourgame.dylib` (Your game binary, loaded by runtime)
+	* `Resources` (bundle resources directory)
+		* `cacaospec.yml` (Cacaospec file)
+		* `cacaolicenses.txt` (Cacao Engine license and licenses of engine dependencies)
+		* `packs` (asset pack directory)
+			* `somepack.xak` (asset pack)
+			* other packs
+		* `worlds` (world directory)
+			* `someworld.xjw` (world)
+			* other worlds
+
+## The Cacaospec File
+The Cacaospec file defines some basic information about your game and how to launch it. The format for a template is shown above (`cacaospec.yml.in`), but here is the formal schema:
+* `meta`: Contains all the metadata about the game
+	* `pkgId`: Your game's package ID. This should be in reverse domain format (like Java packages), with the last component in PascalCase (e.g. `com.example.MyProject`)
+	* `title`: The user-facing title of your game. Shown in the window titlebar.
+	* `version`: The version number of your game build.
+* `binary`: The name of your game binary file to load.

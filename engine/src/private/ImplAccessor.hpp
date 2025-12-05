@@ -9,6 +9,7 @@
 #include "Cacao/Tex2D.hpp"
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/Model.hpp"
+#include "Cacao/Input.hpp"
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
 #define WIN_IMPL(tp) static_cast<tp##WindowImpl&>(ImplAccessor::Get().GetWindow())
@@ -38,6 +39,7 @@ namespace Cacao {
 		IA_MKGETTER_SINGLE(ResourceManager)
 		IA_MKGETTER_SINGLE(PAL)
 		IA_MKGETTER_SINGLE(GPUManager)
+		IA_MKGETTER_SINGLE(Input)
 
 		//Resources
 		IA_MKGETTER(Sound)

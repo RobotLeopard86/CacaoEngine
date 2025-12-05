@@ -4,6 +4,7 @@
 #include "impl/Window.hpp"
 
 #include <xcb/xcb.h>
+#include <xcb/xcb_keysyms.h>
 #include <xcb/randr.h>
 
 #include <string>
@@ -15,6 +16,7 @@ namespace Cacao {
 		xcb_connection_t* connection;
 		xcb_window_t window;
 		xcb_atom_t delAtom;
+		xcb_key_symbols_t* keysyms;
 
 		struct CRTCState {
 			xcb_randr_crtc_t crtc;

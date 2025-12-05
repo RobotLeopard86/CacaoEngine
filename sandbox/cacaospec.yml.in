@@ -1,5 +1,5 @@
 meta:
-  pkgId: net.rl86.CacaoSandbox
-  title: Cacao Engine Sandbox Application
-  version: 2025.1.0a-a1
+  pkgId: @ID@
+  title: @TITLE@
+  version: @VERSION@
 binary: @BINPATH@

@@ -283,7 +283,7 @@ namespace Cacao {
 	void WaylandWindowImpl::HandleEvents() {
 		//Dispatch libdecor events
 		auto ldd = libdecor_dispatch(decor, 0);
-		//Check<ExternalException>(ldd >= 0, "Failed to dispatch libdecor event!");
+		Check<ExternalException>(ldd >= 0, "Failed to dispatch libdecor event!");
 		if(ldd < 0) {
 			std::stringstream emsg;
 			if(errno == EPROTO) {
@@ -430,8 +430,7 @@ namespace Cacao {
 	}
 
 	unsigned int WaylandWindowImpl::ConvertKeycode(unsigned int key) {
-		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({{CACAO_KEY_ENTER, XKB_KEY_Return},
-			{XKB_KEY_Return, CACAO_KEY_ENTER},
+		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({{XKB_KEY_Return, CACAO_KEY_ENTER},
 			{XKB_KEY_Escape, CACAO_KEY_ESCAPE},
 			{XKB_KEY_BackSpace, CACAO_KEY_BACKSPACE},
 			{XKB_KEY_Tab, CACAO_KEY_TAB},
@@ -439,7 +438,7 @@ namespace Cacao {
 			{XKB_KEY_apostrophe, CACAO_KEY_APOSTROPHE},
 			{XKB_KEY_comma, CACAO_KEY_COMMA},
 			{XKB_KEY_minus, CACAO_KEY_MINUS},
-			{XKB_KEY_equals, CACAO_KEY_EQUALS},
+			{XKB_KEY_equal, CACAO_KEY_EQUALS},
 			{XKB_KEY_period, CACAO_KEY_PERIOD},
 			{XKB_KEY_slash, CACAO_KEY_SLASH},
 			{XKB_KEY_0, CACAO_KEY_0},
