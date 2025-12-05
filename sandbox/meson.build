@@ -2,7 +2,7 @@
 sandbox = shared_module('sandbox', sources: 'src' / 'sandbox.cpp', dependencies: cacaort_dep, name_prefix: '', install: false)
 
 # Copy runtime executable
-custom_target('sandbox_rtsetup', command: [python, rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'sandbox.exe' : 'sandbox', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
+custom_target('sandbox_rtsetup', command: [rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'sandbox.exe' : 'sandbox', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
 
 # Specfile
 spec = configuration_data()

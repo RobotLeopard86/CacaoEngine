@@ -1,5 +1,9 @@
 # Bundles
 
+```{topic} This page is **up-to-date**! 
+The information on this page pertains to the engine post-restructuring.
+```
+
 ## What are bundles?
 Bundles are how you ship your Cacao Engine game. They consist of the Cacao Engine library and runtime, your game binar, the specfile, dependencies, and resources, packed into a specific file structure.  
 ```{note}
@@ -14,7 +18,7 @@ my_game = shared_module('game', sources: [...], dependencies: cacaort_dep, name_
 
 # Copy runtime files
 rtdata = cacao_subproject.get_variable('rtdata')
-custom_target('game_runtime', command: [python, rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'game.exe' : 'game', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
+custom_target('game_runtime', command: [rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'game.exe' : 'game', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
 
 # Specfile
 spec = configuration_data()

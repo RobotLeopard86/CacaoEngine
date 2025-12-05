@@ -5,7 +5,7 @@ import shutil
 import sys
 
 # Get the list of required runtime files
-rtfiles = list(map(lambda p: pathlib.Path(p), pathlib.Path(sys.argv[1]).read_text().splitlines()))
+rtfiles = list(map(lambda p: pathlib.Path(p), pathlib.Path(sys.argv[1]).read_text(encoding='utf-8', errors='ignore').splitlines()))
 
 # The runtime executable always has to be the first file listed
 rtexe = rtfiles[0]
