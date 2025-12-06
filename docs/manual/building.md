@@ -1,9 +1,5 @@
 # Build Instructions
 
-```{topic} This page is **up-to-date**! 
-The information on this page pertains to the engine post-restructuring.
-```
-
 These instructions will guide you through the process of building Cacao Engine.  
 ```{attention}
 Before you begin, please check the [Platform Support page](./platforms) to ensure you have a compatible system!

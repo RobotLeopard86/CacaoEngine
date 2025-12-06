@@ -1,9 +1,5 @@
 # Bundles
 
-```{topic} This page is **up-to-date**! 
-The information on this page pertains to the engine post-restructuring.
-```
-
 ## What are bundles?
 Bundles are how you ship your Cacao Engine game. They consist of the Cacao Engine library and runtime, your game binary, the specfile, dependencies, and resources, packed into a specific file structure.  
 ```{note}

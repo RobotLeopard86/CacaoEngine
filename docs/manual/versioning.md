@@ -1,9 +1,5 @@
 # Versioning Scheme
 
-```{topic} This page is **up-to-date**! 
-The information on this page pertains to the engine post-restructuring.
-```
-
 ## Versioning Format
 Cacao Engine uses a custom versioning system named Evolutionary Versioning (EvoVer). This follows the format of `[Generation].[Major].[Minor][Patch](-[Stage][Build])`. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. 
 

@@ -1,9 +1,5 @@
 # Built-In Event List
 
-```{topic} This page is **up-to-date**! 
-The information on this page pertains to the engine post-restructuring.
-```
-
 The below are all of the built-in event types in Cacao Engine.
 | Event ID | Trigger | Type |
 | -------- | ------- | ---- |

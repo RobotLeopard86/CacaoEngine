@@ -1,5 +1,9 @@
 # Quickstart
 
+```{warning} **This page is not up-to-date!**.  
+The engine is currently undergoing heavy restructuring, and this guide has not yet been updated to reflect the new setup procedure. A new version will be published closer to release.
+```
+
 ## Creating a base project
 The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at `https://github.com/RobotLeopard86/CacaoEngine-Game-Template`. This repository contains an ideal setup for creating a Cacao Engine game.
 

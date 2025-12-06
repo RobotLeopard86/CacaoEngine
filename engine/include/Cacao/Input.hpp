@@ -71,7 +71,8 @@ namespace Cacao {
 
 //======================= KEYBOARD MAPPINGS =======================
 //Any printable characters use their ASCII codes
-//The other ones I just made up and their explanations will be noted
+//The other ones are just made up and their explanations will be noted
+//Any keys with "KP" are keys featured on the keypad/numpad
 //The "super" key is a Linux term; this is the Windows key or the Command key on macOS
 #define CACAO_KEY_ENTER 10
 #define CACAO_KEY_ESCAPE 27
