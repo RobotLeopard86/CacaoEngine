@@ -1,14 +1,20 @@
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Input.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/EventManager.hpp"
 #include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
+#include <CoreFoundation/CFRunLoop.h>
 
 #include <Foundation/Foundation.h>
 #include <AppKit/AppKit.h>
+
 #include <memory>
+
+#include "macos-keycodes.h"
+#include "eternal.hpp"
 
 constexpr NSWindowStyleMask windowedStyle = (NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable | NSWindowStyleMaskMiniaturizable);
 
@@ -53,10 +59,12 @@ namespace Cacao {
 
 			//Create window and delegate
 			wdel = [[CacaoWinDelegate alloc] init];
-			win = [[NSWindow alloc] initWithContentRect:frame styleMask:windowedStyle backing:NSBackingStoreBuffered defer:NO];
+			win = [[CacaoWin alloc] initWithContentRect:frame styleMask:windowedStyle backing:NSBackingStoreBuffered defer:NO];
+			win.layoutMgr = [[NSLayoutManager alloc] init];
 			[win setTitle:[[NSString alloc] initWithCString:title.c_str() encoding:[NSString defaultCStringEncoding]]];
 			[win setIsVisible:visible];
 			[win setDelegate:wdel];
+			[win setAcceptsMouseMovedEvents:YES];
 			[win makeKeyAndOrderFront:nil];
 
 			//Connect graphics
@@ -83,8 +91,10 @@ namespace Cacao {
 		@autoreleasepool {
 			NSEvent* event;
 			while((event = [app nextEventMatchingMask:NSEventMaskAny untilDate:nil inMode:NSDefaultRunLoopMode dequeue:YES])) {
+				//Handle OS stuff
 				[app sendEvent:event];
 				[app updateWindows];
+				CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.001, false);
 			}
 		}
 	}
@@ -111,9 +121,6 @@ namespace Cacao {
 
 		size = newSize;
 		[win setFrame:NSMakeRect(0, 0, newSize.x, newSize.y) display:YES];
-
-		DataEvent<glm::uvec2> wre("WindowResize", newSize);
-		EventManager::Get().Dispatch(wre);
 	}
 
 	void MacOSWindowImpl::ModeChange(Window::Mode newMode) {
@@ -198,12 +205,110 @@ namespace Cacao {
 	}
 
 	unsigned int MacOSWindowImpl::ConvertKeycode(unsigned int key) {
-		//TODO
+		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({{kVK_Return, CACAO_KEY_ENTER},
+			{kVK_Escape, CACAO_KEY_ESCAPE},
+			{kVK_Delete, CACAO_KEY_BACKSPACE},
+			{kVK_Tab, CACAO_KEY_TAB},
+			{kVK_Space, CACAO_KEY_SPACE},
+			{kVK_ANSI_Quote, CACAO_KEY_APOSTROPHE},
+			{kVK_ANSI_Comma, CACAO_KEY_COMMA},
+			{kVK_ANSI_Minus, CACAO_KEY_MINUS},
+			{kVK_ANSI_Equal, CACAO_KEY_EQUALS},
+			{kVK_ANSI_Period, CACAO_KEY_PERIOD},
+			{kVK_ANSI_Slash, CACAO_KEY_SLASH},
+			{kVK_ANSI_0, CACAO_KEY_0},
+			{kVK_ANSI_1, CACAO_KEY_1},
+			{kVK_ANSI_2, CACAO_KEY_2},
+			{kVK_ANSI_3, CACAO_KEY_3},
+			{kVK_ANSI_4, CACAO_KEY_4},
+			{kVK_ANSI_5, CACAO_KEY_5},
+			{kVK_ANSI_6, CACAO_KEY_6},
+			{kVK_ANSI_7, CACAO_KEY_7},
+			{kVK_ANSI_8, CACAO_KEY_8},
+			{kVK_ANSI_9, CACAO_KEY_9},
+			{kVK_ANSI_Semicolon, CACAO_KEY_SEMICOLON},
+			{kVK_ANSI_LeftBracket, CACAO_KEY_LEFT_BRACKET},
+			{kVK_ANSI_RightBracket, CACAO_KEY_RIGHT_BRACKET},
+			{kVK_ANSI_Backslash, CACAO_KEY_BACKSLASH},
+			{kVK_ANSI_Grave, CACAO_KEY_GRAVE_ACCENT},
+			{kVK_ANSI_A, CACAO_KEY_A},
+			{kVK_ANSI_B, CACAO_KEY_B},
+			{kVK_ANSI_C, CACAO_KEY_C},
+			{kVK_ANSI_D, CACAO_KEY_D},
+			{kVK_ANSI_E, CACAO_KEY_E},
+			{kVK_ANSI_F, CACAO_KEY_F},
+			{kVK_ANSI_G, CACAO_KEY_G},
+			{kVK_ANSI_H, CACAO_KEY_H},
+			{kVK_ANSI_I, CACAO_KEY_I},
+			{kVK_ANSI_J, CACAO_KEY_J},
+			{kVK_ANSI_K, CACAO_KEY_K},
+			{kVK_ANSI_L, CACAO_KEY_L},
+			{kVK_ANSI_M, CACAO_KEY_M},
+			{kVK_ANSI_N, CACAO_KEY_N},
+			{kVK_ANSI_O, CACAO_KEY_O},
+			{kVK_ANSI_P, CACAO_KEY_P},
+			{kVK_ANSI_Q, CACAO_KEY_Q},
+			{kVK_ANSI_R, CACAO_KEY_R},
+			{kVK_ANSI_S, CACAO_KEY_S},
+			{kVK_ANSI_T, CACAO_KEY_T},
+			{kVK_ANSI_U, CACAO_KEY_U},
+			{kVK_ANSI_V, CACAO_KEY_V},
+			{kVK_ANSI_W, CACAO_KEY_W},
+			{kVK_ANSI_X, CACAO_KEY_X},
+			{kVK_ANSI_Y, CACAO_KEY_Y},
+			{kVK_ANSI_Z, CACAO_KEY_Z},
+			{kVK_CapsLock, CACAO_KEY_CAPS_LOCK},
+			{kVK_F1, CACAO_KEY_F1},
+			{kVK_F2, CACAO_KEY_F2},
+			{kVK_F3, CACAO_KEY_F3},
+			{kVK_F4, CACAO_KEY_F4},
+			{kVK_F5, CACAO_KEY_F5},
+			{kVK_F6, CACAO_KEY_F6},
+			{kVK_F7, CACAO_KEY_F7},
+			{kVK_F8, CACAO_KEY_F8},
+			{kVK_F9, CACAO_KEY_F9},
+			{kVK_F10, CACAO_KEY_F10},
+			{kVK_F11, CACAO_KEY_F11},
+			{kVK_F12, CACAO_KEY_F12},
+			{kVK_ForwardDelete, CACAO_KEY_DELETE},
+			{kVK_Home, CACAO_KEY_HOME},
+			{kVK_PageUp, CACAO_KEY_PAGE_UP},
+			{kVK_End, CACAO_KEY_END},
+			{kVK_PageDown, CACAO_KEY_PAGE_DOWN},
+			{kVK_RightArrow, CACAO_KEY_RIGHT},
+			{kVK_LeftArrow, CACAO_KEY_LEFT},
+			{kVK_DownArrow, CACAO_KEY_DOWN},
+			{kVK_UpArrow, CACAO_KEY_UP},
+			{kVK_ANSI_KeypadDivide, CACAO_KEY_KP_DIVIDE},
+			{kVK_ANSI_KeypadMultiply, CACAO_KEY_KP_MULTIPLY},
+			{kVK_ANSI_KeypadMinus, CACAO_KEY_KP_MINUS},
+			{kVK_ANSI_KeypadPlus, CACAO_KEY_KP_PLUS},
+			{kVK_ANSI_KeypadEnter, CACAO_KEY_KP_ENTER},
+			{kVK_ANSI_Keypad1, CACAO_KEY_KP_1},
+			{kVK_ANSI_Keypad2, CACAO_KEY_KP_2},
+			{kVK_ANSI_Keypad3, CACAO_KEY_KP_3},
+			{kVK_ANSI_Keypad4, CACAO_KEY_KP_4},
+			{kVK_ANSI_Keypad5, CACAO_KEY_KP_5},
+			{kVK_ANSI_Keypad6, CACAO_KEY_KP_6},
+			{kVK_ANSI_Keypad7, CACAO_KEY_KP_7},
+			{kVK_ANSI_Keypad8, CACAO_KEY_KP_8},
+			{kVK_ANSI_Keypad9, CACAO_KEY_KP_9},
+			{kVK_ANSI_Keypad0, CACAO_KEY_KP_0},
+			{kVK_ANSI_KeypadDecimal, CACAO_KEY_KP_PERIOD},
+			{kVK_Control, CACAO_KEY_LEFT_CONTROL},
+			{kVK_Shift, CACAO_KEY_LEFT_SHIFT},
+			{kVK_Option, CACAO_KEY_LEFT_ALT},
+			{kVK_Command, CACAO_KEY_LEFT_SUPER},
+			{kVK_RightControl, CACAO_KEY_RIGHT_CONTROL},
+			{kVK_RightShift, CACAO_KEY_RIGHT_SHIFT},
+			{kVK_RightOption, CACAO_KEY_RIGHT_ALT},
+			{kVK_RightCommand, CACAO_KEY_RIGHT_SUPER}});
+		if(codes.contains(key)) return codes.at(key);
 		return key;
 	}
 
 	unsigned int MacOSWindowImpl::ConvertButtonCode(unsigned int button) {
-		//TODO
+		//macOS doesn't use this
 		return button;
 	}
 }

@@ -17,6 +17,7 @@ subprojects/*
 !subprojects/spinners-plus-plus
 !subprojects/hires_sleep
 !subprojects/eternal
+!subprojects/macos-keycodes
 subprojects/nlohmannjson.wrap
 subprojects/reflex.wrap
 subprojects/inja.wrap

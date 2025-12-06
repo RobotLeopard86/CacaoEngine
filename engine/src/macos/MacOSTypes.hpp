@@ -3,7 +3,7 @@
 #include "Cacao/Window.hpp"
 #include "impl/Window.hpp"
 
-#include <AppKit/AppKit.h>
+#import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
@@ -13,6 +13,10 @@ using namespace Cacao;
 @end
 
 @interface CacaoWinDelegate : NSObject <NSWindowDelegate>
+@end
+
+@interface CacaoWin : NSWindow
+@property (nonatomic, strong) NSLayoutManager* layoutMgr;
 @end
 
 @interface CacaoApp : NSApplication
@@ -44,7 +48,7 @@ namespace Cacao {
 		CacaoApp* app;
 		CacaoAppDelegate* del;
 		CacaoWinDelegate* wdel;
-		NSWindow* win;
+		CacaoWin* win;
 		NSApplicationPresentationOptions lastPresentOpts;
 	};
 }

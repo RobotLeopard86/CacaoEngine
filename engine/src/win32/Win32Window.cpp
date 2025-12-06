@@ -247,8 +247,7 @@ namespace Cacao {
 	}
 
 	unsigned int Win32WindowImpl::ConvertKeycode(unsigned int key) {
-		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({
-			{VK_RETURN, CACAO_KEY_ENTER},
+		constexpr const static auto codes = mapbox::eternal::map<unsigned int, unsigned int>({{VK_RETURN, CACAO_KEY_ENTER},
 			{VK_ESCAPE, CACAO_KEY_ESCAPE},
 			{VK_BACK, CACAO_KEY_BACKSPACE},
 			{VK_TAB, CACAO_KEY_TAB},
@@ -349,8 +348,7 @@ namespace Cacao {
 			{VK_RCONTROL, CACAO_KEY_RIGHT_CONTROL},
 			{VK_RSHIFT, CACAO_KEY_RIGHT_SHIFT},
 			{VK_RMENU, CACAO_KEY_RIGHT_ALT},
-			{VK_RWIN, CACAO_KEY_RIGHT_SUPER},
-		});
+			{VK_RWIN, CACAO_KEY_RIGHT_SUPER}});
 		if(codes.contains(key)) return codes.at(key);
 		return UINT32_MAX;
 	}

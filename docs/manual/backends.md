@@ -16,7 +16,7 @@ Vulkan version 1.3 or later. The `VK_KHR_swapchain` (almost universally availabl
 ## Compatibility Matrix
 | Backend | Windows | Mac | Linux* |
 | -- | ------- | --- | ------ |
-| OpenGL | 🟨 | ✅ | ✅ |
+| OpenGL | ✅ | ✅ | ✅ |
 | Vulkan | 🟨 | ❌ | 🟨  |  
 
 \* Most Linux testing occurs on Fedora Linux. Other distributions may have different compatibilities.

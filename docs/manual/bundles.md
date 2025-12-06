@@ -5,7 +5,7 @@ The information on this page pertains to the engine post-restructuring.
 ```
 
 ## What are bundles?
-Bundles are how you ship your Cacao Engine game. They consist of the Cacao Engine library and runtime, your game binar, the specfile, dependencies, and resources, packed into a specific file structure.  
+Bundles are how you ship your Cacao Engine game. They consist of the Cacao Engine library and runtime, your game binary, the specfile, dependencies, and resources, packed into a specific file structure.  
 ```{note}
 You are not required to use the prebuilt runtime. However, the documentation here will focus on using the prebuilt runtime, which is the recommended one as the engine is designed for it. However, it is possible to build one yourself, though no explicit documentation for this will be created as this is not a principal concern of the Cacao Engine project.
 ```  
