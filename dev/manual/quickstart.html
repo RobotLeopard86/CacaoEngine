@@ -335,22 +335,14 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputmappings.html">Input Mappings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
 </ul>
 </div>
 </nav></div>
@@ -408,6 +400,11 @@
                   
   <section id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"><span/></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>This page is not up-to-date!</strong>.
+The engine is currently undergoing heavy restructuring, and this guide has not yet been updated to reflect the new setup procedure. A new version will be published closer to release.</p>
+</div>
 <section id="creating-a-base-project">
 <h2>Creating a base project<a class="headerlink" href="#creating-a-base-project" title="Link to this heading"><span/></a></h2>
 <p>The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at <code class="docutils literal notranslate"><span class="pre">https://github.com/RobotLeopard86/CacaoEngine-Game-Template</span></code>. This repository contains an ideal setup for creating a Cacao Engine game.</p>
@@ -415,7 +412,7 @@
 <section id="building">
 <h2>Building<a class="headerlink" href="#building" title="Link to this heading"><span/></a></h2>
 <p>Install the dependencies as listed in the <a class="reference internal" href="building.html"><span class="doc std std-doc">build instructions</span></a>.<br />
-If you’d like to use Visual Studio, see the <a class="reference internal" href="vs.html"><span class="doc std std-doc">Visual Studio compatibility guide</span></a> for info on how to set up a Visual Studio Solution.<br />
+If you’d like to use Visual Studio, see the <a class="reference internal" href="#./vs"><span class="xref myst">Visual Studio compatibility guide</span></a> for info on how to set up a Visual Studio Solution.<br />
 Otherwise, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span></code> if on Windows or <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> if on Linux or macOS to create a build directory, then run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">-C</span> <span class="pre">build</span> <span class="pre">run</span></code> to build and run the template.
 If all goes well, you should see something like this:</p>
 <img alt="../_images/quickstart-template.png" class="dark-light p-2" src="../_images/quickstart-template.png" />

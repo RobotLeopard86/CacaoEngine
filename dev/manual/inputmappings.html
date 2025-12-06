@@ -54,7 +54,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Definition Files" href="deffiles.html" />
+    <link rel="next" title="API Reference" href="../api/root.html" />
     <link rel="prev" title="Exceptions" href="exceptions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -331,22 +331,14 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platforms.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning Scheme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backend Info</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building.html">Build Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vs.html">Visual Studio Compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bundles.html">Bundles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="env.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Built-In Event List</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Input Mappings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deffiles.html">Definition Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="addresses.html">Resource Addresses</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="shaders.html">Shader Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="shaders/glsl.html">GLSL Shaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="shaders/hlsl.html">HLSL Shaders</a></li>
-</ul>
-</details></li>
 </ul>
 </div>
 </nav></div>
@@ -404,229 +396,123 @@
                   
   <section id="input-mappings">
 <h1>Input Mappings<a class="headerlink" href="#input-mappings" title="Link to this heading"><span/></a></h1>
-<p>Below is a list of all valid key mappings in Cacao Engine.<br />
-Any key using the <code class="docutils literal notranslate"><span class="pre">KP</span></code> infix means that it refers to the keypad section of the keyboard.<br />
-The <code class="docutils literal notranslate"><span class="pre">SUPER</span></code> keys refer to what might be considered the Windows key (known as the Super key on Linux), or the Command key on macOS.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CACAO_KEY_ENTER
-CACAO_KEY_ESCAPE
-CACAO_KEY_BACKSPACE
-CACAO_KEY_TAB
-CACAO_KEY_SPACE
-CACAO_KEY_EXCLAMATION
-CACAO_KEY_DOUBLE_APOSTROPHE
-CACAO_KEY_HASH
-CACAO_KEY_DOLLAR
-CACAO_KEY_PERCENT
-CACAO_KEY_AMPERSAND
-CACAO_KEY_APOSTROPHE
-CACAO_KEY_LEFT_PARENTHESIS
-CACAO_KEY_RIGHT_PARENTHESIS
-CACAO_KEY_ASTERISK
-CACAO_KEY_PLUS
-CACAO_KEY_COMMA
-CACAO_KEY_MINUS
-CACAO_KEY_PERIOD
-CACAO_KEY_SLASH
-CACAO_KEY_0
-CACAO_KEY_1
-CACAO_KEY_2
-CACAO_KEY_3
-CACAO_KEY_4
-CACAO_KEY_5
-CACAO_KEY_6
-CACAO_KEY_7
-CACAO_KEY_8
-CACAO_KEY_9
-CACAO_KEY_COLON
-CACAO_KEY_SEMICOLON
-CACAO_KEY_LESS
-CACAO_KEY_EQUAL
-CACAO_KEY_GREATER
-CACAO_KEY_QUESTION
-CACAO_KEY_AT
-CACAO_KEY_LEFT_BRACKET
-CACAO_KEY_BACKSLASH
-CACAO_KEY_RIGHT_BRACKET
-CACAO_KEY_CARET
-CACAO_KEY_UNDERSCORE
-CACAO_KEY_GRAVE
-CACAO_KEY_A
-CACAO_KEY_B
-CACAO_KEY_C
-CACAO_KEY_D
-CACAO_KEY_E
-CACAO_KEY_F
-CACAO_KEY_G
-CACAO_KEY_H
-CACAO_KEY_I
-CACAO_KEY_J
-CACAO_KEY_K
-CACAO_KEY_L
-CACAO_KEY_M
-CACAO_KEY_N
-CACAO_KEY_O
-CACAO_KEY_P
-CACAO_KEY_Q
-CACAO_KEY_R
-CACAO_KEY_S
-CACAO_KEY_T
-CACAO_KEY_U
-CACAO_KEY_V
-CACAO_KEY_W
-CACAO_KEY_X
-CACAO_KEY_Y
-CACAO_KEY_Z
-CACAO_KEY_LEFT_BRACE
-CACAO_KEY_PIPE
-CACAO_KEY_RIGHT_BRACE
-CACAO_KEY_TILDE
-CACAO_KEY_DELETE
-CACAO_KEY_PLUS_MINUS
-CACAO_KEY_CAPS_LOCK
-CACAO_KEY_F1
-CACAO_KEY_F2
-CACAO_KEY_F3
-CACAO_KEY_F4
-CACAO_KEY_F5
-CACAO_KEY_F6
-CACAO_KEY_F7
-CACAO_KEY_F8
-CACAO_KEY_F9
-CACAO_KEY_F10
-CACAO_KEY_F11
-CACAO_KEY_F12
-CACAO_KEY_PRINT_SCREEN
-CACAO_KEY_SCROLL_LOCK
-CACAO_KEY_PAUSE
-CACAO_KEY_INSERT
-CACAO_KEY_HOME
-CACAO_KEY_PAGE_UP
-CACAO_KEY_END
-CACAO_KEY_PAGE_DOWN
-CACAO_KEY_RIGHT
-CACAO_KEY_LEFT
-CACAO_KEY_DOWN
-CACAO_KEY_UP
-CACAO_KEY_NUM_LOCK
-CACAO_KEY_KP_DIVIDE
-CACAO_KEY_KP_MULTIPLY
-CACAO_KEY_KP_MINUS
-CACAO_KEY_KP_PLUS
-CACAO_KEY_KP_ENTER
-CACAO_KEY_KP_1
-CACAO_KEY_KP_2
-CACAO_KEY_KP_3
-CACAO_KEY_KP_4
-CACAO_KEY_KP_5
-CACAO_KEY_KP_6
-CACAO_KEY_KP_7
-CACAO_KEY_KP_8
-CACAO_KEY_KP_9
-CACAO_KEY_KP_0
-CACAO_KEY_KP_PERIOD
-CACAO_KEY_APPLICATION
-CACAO_KEY_POWER
-CACAO_KEY_KP_EQUAL
-CACAO_KEY_F13
-CACAO_KEY_F14
-CACAO_KEY_F15
-CACAO_KEY_F16
-CACAO_KEY_F17
-CACAO_KEY_F18
-CACAO_KEY_F19
-CACAO_KEY_F20
-CACAO_KEY_F21
-CACAO_KEY_F22
-CACAO_KEY_F23
-CACAO_KEY_F24
-CACAO_KEY_EXECUTE
-CACAO_KEY_HELP
-CACAO_KEY_MENU
-CACAO_KEY_SELECT
-CACAO_KEY_STOP
-CACAO_KEY_AGAIN
-CACAO_KEY_UNDO
-CACAO_KEY_CUT
-CACAO_KEY_COPY
-CACAO_KEY_PASTE
-CACAO_KEY_FIND
-CACAO_KEY_MUTE
-CACAO_KEY_VOLUME_UP
-CACAO_KEY_VOLUME_DOWN
-CACAO_KEY_KP_COMMA
-CACAO_KEY_KP_EQUALSAS400
-CACAO_KEY_ALT_ERASE
-CACAO_KEY_SYSREQ
-CACAO_KEY_CANCEL
-CACAO_KEY_CLEAR
-CACAO_KEY_PRIOR
-CACAO_KEY_RETURN2
-CACAO_KEY_SEPARATOR
-CACAO_KEY_OUT
-CACAO_KEY_OPER
-CACAO_KEY_CLEAR_AGAIN
-CACAO_KEY_CRSEL
-CACAO_KEY_EXSEL
-CACAO_KEY_KP_00
-CACAO_KEY_KP_000
-CACAO_KEY_THOUSANDS_SEPARATOR
-CACAO_KEY_DECIMAL_SEPARATOR
-CACAO_KEY_CURRENCY_UNIT
-CACAO_KEY_CURRENCY_SUBUNIT
-CACAO_KEY_KP_LEFTPARENTHESIS
-CACAO_KEY_KP_RIGHTPARENTHESIS
-CACAO_KEY_KP_LEFTBRACE
-CACAO_KEY_KP_RIGHTBRACE
-CACAO_KEY_KP_TAB
-CACAO_KEY_KP_BACKSPACE
-CACAO_KEY_KP_A
-CACAO_KEY_KP_B
-CACAO_KEY_KP_C
-CACAO_KEY_KP_D
-CACAO_KEY_KP_E
-CACAO_KEY_KP_F
-CACAO_KEY_KP_XOR
-CACAO_KEY_KP_POWER
-CACAO_KEY_KP_PERCENT
-CACAO_KEY_KP_LESS
-CACAO_KEY_KP_GREATER
-CACAO_KEY_KP_AMPERSAND
-CACAO_KEY_KP_DOUBLE_AMPERSAND
-CACAO_KEY_KP_VERTICAL_BAR
-CACAO_KEY_KP_DOUBLE_VERTICAL_BAR
-CACAO_KEY_KP_COLON
-CACAO_KEY_KP_HASH
-CACAO_KEY_KP_SPACE
-CACAO_KEY_KP_AT
-CACAO_KEY_KP_EXCLAM
-CACAO_KEY_KP_MEM_STORE
-CACAO_KEY_KP_MEM_RECALL
-CACAO_KEY_KP_MEM_CLEAR
-CACAO_KEY_KP_MEM_ADD
-CACAO_KEY_KP_MEM_SUBTRACT
-CACAO_KEY_KP_MEM_MULTIPLY
-CACAO_KEY_KP_MEM_DIVIDE
-CACAO_KEY_KP_PLUS_MINUS
-CACAO_KEY_KP_CLEAR
-CACAO_KEY_KP_CLEAR_ENTRY
-CACAO_KEY_KP_BINARY
-CACAO_KEY_KP_OCTAL
-CACAO_KEY_KP_DECIMAL
-CACAO_KEY_KP_HEXADECIMAL
-CACAO_KEY_LEFT_CONTROL
-CACAO_KEY_LEFT_SHIFT
-CACAO_KEY_LEFT_ALT
-CACAO_KEY_LEFT_SUPER
-CACAO_KEY_RIGHT_CONTROL
-CACAO_KEY_RIGHT_SHIFT
-CACAO_KEY_RIGHT_ALT
-CACAO_KEY_RIGHT_SUPER
-</pre></div>
-</div>
-<p>This is a list of all valid mouse button mappings in Cacao Engine:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CACAO_MOUSE_BUTTON_LEFT
-CACAO_MOUSE_BUTTON_RIGHT
-CACAO_MOUSE_BUTTON_MIDDLE
+<p>Below is a list of all valid key and button mappings in Cacao Engine:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//======================= KEYBOARD MAPPINGS =======================</span>
+<span class="c1">//Any printable characters use their ASCII codes</span>
+<span class="c1">//The other ones are just made up and their explanations will be noted</span>
+<span class="c1">//Any keys with &quot;KP&quot; are keys featured on the keypad/numpad</span>
+<span class="c1">//The &quot;super&quot; key is a Linux term; this is the Windows key or the Command key on macOS</span>
+<span class="cp">#define CACAO_KEY_ENTER 10</span>
+<span class="cp">#define CACAO_KEY_ESCAPE 27</span>
+<span class="cp">#define CACAO_KEY_BACKSPACE 8</span>
+<span class="cp">#define CACAO_KEY_TAB 9</span>
+<span class="cp">#define CACAO_KEY_SPACE 32</span>
+<span class="cp">#define CACAO_KEY_APOSTROPHE 39</span>
+<span class="cp">#define CACAO_KEY_COMMA 44</span>
+<span class="cp">#define CACAO_KEY_MINUS 45</span>
+<span class="cp">#define CACAO_KEY_EQUALS 61</span>
+<span class="cp">#define CACAO_KEY_PERIOD 46</span>
+<span class="cp">#define CACAO_KEY_SLASH 47</span>
+<span class="cp">#define CACAO_KEY_0 48</span>
+<span class="cp">#define CACAO_KEY_1 49</span>
+<span class="cp">#define CACAO_KEY_2 50</span>
+<span class="cp">#define CACAO_KEY_3 51</span>
+<span class="cp">#define CACAO_KEY_4 52</span>
+<span class="cp">#define CACAO_KEY_5 53</span>
+<span class="cp">#define CACAO_KEY_6 54</span>
+<span class="cp">#define CACAO_KEY_7 55</span>
+<span class="cp">#define CACAO_KEY_8 56</span>
+<span class="cp">#define CACAO_KEY_9 57</span>
+<span class="cp">#define CACAO_KEY_SEMICOLON 59</span>
+<span class="cp">#define CACAO_KEY_LEFT_BRACKET 91</span>
+<span class="cp">#define CACAO_KEY_RIGHT_BRACKET 93</span>
+<span class="cp">#define CACAO_KEY_BACKSLASH 92</span>
+<span class="cp">#define CACAO_KEY_GRAVE_ACCENT 96</span>
+<span class="cp">#define CACAO_KEY_A 97</span>
+<span class="cp">#define CACAO_KEY_B 98</span>
+<span class="cp">#define CACAO_KEY_C 99</span>
+<span class="cp">#define CACAO_KEY_D 100</span>
+<span class="cp">#define CACAO_KEY_E 101</span>
+<span class="cp">#define CACAO_KEY_F 102</span>
+<span class="cp">#define CACAO_KEY_G 103</span>
+<span class="cp">#define CACAO_KEY_H 104</span>
+<span class="cp">#define CACAO_KEY_I 105</span>
+<span class="cp">#define CACAO_KEY_J 106</span>
+<span class="cp">#define CACAO_KEY_K 107</span>
+<span class="cp">#define CACAO_KEY_L 108</span>
+<span class="cp">#define CACAO_KEY_M 109</span>
+<span class="cp">#define CACAO_KEY_N 110</span>
+<span class="cp">#define CACAO_KEY_O 111</span>
+<span class="cp">#define CACAO_KEY_P 112</span>
+<span class="cp">#define CACAO_KEY_Q 113</span>
+<span class="cp">#define CACAO_KEY_R 114</span>
+<span class="cp">#define CACAO_KEY_S 115</span>
+<span class="cp">#define CACAO_KEY_T 116</span>
+<span class="cp">#define CACAO_KEY_U 117</span>
+<span class="cp">#define CACAO_KEY_V 118</span>
+<span class="cp">#define CACAO_KEY_W 119</span>
+<span class="cp">#define CACAO_KEY_X 120</span>
+<span class="cp">#define CACAO_KEY_Y 121</span>
+<span class="cp">#define CACAO_KEY_Z 122</span>
+<span class="cp">#define CACAO_KEY_CAPS_LOCK 227   </span><span class="c1">//Extended ASCII pi symbol, chosen at random</span>
+<span class="c1">//The F_ keys follow the pattern of a, e, i, o, u, each with an acute and then a grave accent.</span>
+<span class="cp">#define CACAO_KEY_F1 160</span>
+<span class="cp">#define CACAO_KEY_F2 133</span>
+<span class="cp">#define CACAO_KEY_F3 130</span>
+<span class="cp">#define CACAO_KEY_F4 138</span>
+<span class="cp">#define CACAO_KEY_F5 161</span>
+<span class="cp">#define CACAO_KEY_F6 141</span>
+<span class="cp">#define CACAO_KEY_F7 162</span>
+<span class="cp">#define CACAO_KEY_F8 149</span>
+<span class="cp">#define CACAO_KEY_F9 163</span>
+<span class="cp">#define CACAO_KEY_F10 151</span>
+<span class="cp">#define CACAO_KEY_F11 174</span>
+<span class="cp">#define CACAO_KEY_F12 175</span>
+<span class="cp">#define CACAO_KEY_PRINT_SCREEN 17 </span><span class="c1">//ASCII device control 1 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_SCROLL_LOCK 18  </span><span class="c1">//ASCII device control 2 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_PAUSE 19		  </span><span class="c1">//ASCII device control 3 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_INSERT 13		  </span><span class="c1">//ASCII carraige return, chosen because in insert mode, you overwrite things like if you kept typing after a carraige return</span>
+<span class="cp">#define CACAO_KEY_DELETE 127	  </span><span class="c1">//ASCII delete</span>
+<span class="cp">#define CACAO_KEY_HOME 60		  </span><span class="c1">//ASCII &lt;, chosen because home moves cursor to the left</span>
+<span class="cp">#define CACAO_KEY_PAGE_UP 2		  </span><span class="c1">//ASCII start of text, since text starts at the top of a page</span>
+<span class="cp">#define CACAO_KEY_END 62		  </span><span class="c1">//ASCII &gt;, chosen because end moves cursor to the right</span>
+<span class="cp">#define CACAO_KEY_PAGE_DOWN 3	  </span><span class="c1">//ASCII end of text, since text starts at the bottom of a page</span>
+<span class="cp">#define CACAO_KEY_RIGHT 175		  </span><span class="c1">//Extended ASCII right French quotation marks (since they point right)</span>
+<span class="cp">#define CACAO_KEY_LEFT 174		  </span><span class="c1">//Extended ASCII left French quotation marks (since they point left)</span>
+<span class="cp">#define CACAO_KEY_DOWN 24		  </span><span class="c1">//ASCII cancel, chosen at random</span>
+<span class="cp">#define CACAO_KEY_UP 94			  </span><span class="c1">//ASCII caret (since it points up)</span>
+<span class="cp">#define CACAO_KEY_NUM_LOCK 20	  </span><span class="c1">//ASCII device control 4 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_KP_DIVIDE 246	  </span><span class="c1">//Extended ASCII divide symbol</span>
+<span class="cp">#define CACAO_KEY_KP_MULTIPLY 42  </span><span class="c1">//ASCII asterisk, since that&#39;s the multiplication operator</span>
+<span class="cp">#define CACAO_KEY_KP_MINUS 95	  </span><span class="c1">//ASCII underscore, since it&#39;s on the minus key but minus is already taken</span>
+<span class="cp">#define CACAO_KEY_KP_PLUS 43	  </span><span class="c1">//ASCII plus</span>
+<span class="cp">#define CACAO_KEY_KP_ENTER 12	  </span><span class="c1">//ASCII new page, chosen because it&#39;s another form of moving down</span>
+<span class="c1">//The keypad numbers are uppercase letters since those aren&#39;t already taken, and we just use the ones in that range with the same ending digit</span>
+<span class="cp">#define CACAO_KEY_KP_1 71</span>
+<span class="cp">#define CACAO_KEY_KP_2 72</span>
+<span class="cp">#define CACAO_KEY_KP_3 73</span>
+<span class="cp">#define CACAO_KEY_KP_4 74</span>
+<span class="cp">#define CACAO_KEY_KP_5 75</span>
+<span class="cp">#define CACAO_KEY_KP_6 76</span>
+<span class="cp">#define CACAO_KEY_KP_7 77</span>
+<span class="cp">#define CACAO_KEY_KP_8 78</span>
+<span class="cp">#define CACAO_KEY_KP_9 79</span>
+<span class="cp">#define CACAO_KEY_KP_0 70</span>
+<span class="cp">#define CACAO_KEY_KP_PERIOD 248   </span><span class="c1">//Extended ASCII degree symbol, chosen at random</span>
+<span class="c1">//The modifier keys are just other uppercase letters that aren&#39;t taken, no reason</span>
+<span class="cp">#define CACAO_KEY_LEFT_CONTROL 80</span>
+<span class="cp">#define CACAO_KEY_LEFT_SHIFT 81</span>
+<span class="cp">#define CACAO_KEY_LEFT_ALT 82</span>
+<span class="cp">#define CACAO_KEY_LEFT_SUPER 83</span>
+<span class="cp">#define CACAO_KEY_RIGHT_CONTROL 84</span>
+<span class="cp">#define CACAO_KEY_RIGHT_SHIFT 85</span>
+<span class="cp">#define CACAO_KEY_RIGHT_ALT 86</span>
+<span class="cp">#define CACAO_KEY_RIGHT_SUPER 87</span>
+
+<span class="c1">//======================= MOUSE BUTTON MAPPINGS =======================</span>
+<span class="cp">#define CACAO_BUTTON_LEFT 0</span>
+<span class="cp">#define CACAO_BUTTON_MIDDLE 2</span>
+<span class="cp">#define CACAO_BUTTON_RIGHT 1</span>
 </pre></div>
 </div>
 </section>
@@ -651,11 +537,11 @@ CACAO_MOUSE_BUTTON_MIDDLE
       </div>
     </a>
     <a class="right-next"
-       href="deffiles.html"
+       href="../api/root.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Definition Files</p>
+        <p class="prev-next-title">API Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
