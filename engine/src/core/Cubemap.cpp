@@ -6,8 +6,6 @@
 
 #include "libcacaoimage.hpp"
 
-#include <future>
-
 namespace Cacao {
 	Cubemap::Cubemap(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr)
 	  : Asset(addr) {

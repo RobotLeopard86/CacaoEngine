@@ -118,9 +118,26 @@ namespace Targetgen {
 		//Create user module
 		ComPtr<slang::IModule> usrModule;
 		{
-			libcacaoformats::PackedDecoder pdec;
-			libcacaoformats::PackedContainer pc = libcacaoformats::PackedContainer::FromStream(in);
-			std::vector<unsigned char> irData = pdec.DecodeShader(pc);
+			//Read out input buffer
+			std::vector<unsigned char> irData = [&in]() {
+				try {
+					//Grab size
+					in.clear();
+					in.exceptions(std::ios::failbit | std::ios::badbit);
+					in.seekg(0, std::ios::end);
+					auto size = in.tellg();
+					in.seekg(0, std::ios::beg);
+
+					//Read data
+					std::vector<unsigned char> contents(size);
+					in.read(reinterpret_cast<char*>(contents.data()), size);
+
+					return contents;
+				} catch(std::ios_base::failure& ios_failure) {
+					if(errno == 0) { throw ios_failure; }
+					throw std::runtime_error("Failed to read shader bytecode stream!");
+				}
+			}();
 			ComPtr<slang::IBlob> irBlob = VecBlob::create(irData);
 
 			ComPtr<slang::IBlob> diagnosticsBlob;

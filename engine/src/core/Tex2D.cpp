@@ -5,8 +5,6 @@
 #include "PALConfigurables.hpp"
 #include "libcacaoimage.hpp"
 
-#include <future>
-
 namespace Cacao {
 	Tex2D::Tex2D(libcacaoimage::Image&& imageBuffer, const std::string& addr)
 	  : Asset(addr) {

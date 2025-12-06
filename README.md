@@ -2,7 +2,7 @@
 #### A C++ game engine  
 
 ## About
-Cacao Engine is a general-purpose 3D game engine, written in C++ and using Meson as the build system.
+Cacao Engine is a general-purpose 3D game engine, written in C++ and using Meson as the build system.  
 
 ## Building
 See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/dev/manual/building.html) for detailed instructions.
@@ -13,7 +13,6 @@ Please **do not create issues in Taiga**, as they will not be synced to GitHub (
 
 ## Contributing
 If you wish to contribute to Cacao Engine, please consult the [contribution guidelines page](CONTRIBUTING.md) for more information.
-See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/dev/manual/building.html) for detailed instructions.
 
 ## Documentation
 Documentation is built and deployed automatically to https://robotleopard86.github.io/CacaoEngine.  

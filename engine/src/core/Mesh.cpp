@@ -4,8 +4,6 @@
 #include "impl/Mesh.hpp"
 #include "PALConfigurables.hpp"
 
-#include <future>
-
 namespace Cacao {
 	Mesh::Mesh(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr)
 	  : Asset(addr) {
