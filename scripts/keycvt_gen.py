@@ -12,7 +12,7 @@ DEFINE_PREFIX = "CACAO_KEY_"
 # Capitalization utilities
 # --------------------------
 
-def apply_capitalization(word, mode):
+def apply_capitalization(word, mode, separator):
 	"""
 	Applies the selected capitalization mode:
 		- 'lower' → example → 'shift'
@@ -25,7 +25,7 @@ def apply_capitalization(word, mode):
 	if mode == "lower":
 		return word.lower()
 	elif mode == "capitalized":
-		return '_'.join([part[0].upper() + part[1:].lower() for part in word.split('_')])
+		return separator.join([part[0].upper() + part[1:].lower() for part in word.split('_')])
 	elif mode == "upper":
 		return word.upper()
 	else:
@@ -64,7 +64,7 @@ def parse_header_keys(path):
 # --------------------------
 
 def apply_direction_pattern(pattern, keyname, direction_word, direction_letter,
-							capmode):
+							capmode, separator):
 	"""
 	Replaces:
 		K → key name
@@ -76,9 +76,9 @@ def apply_direction_pattern(pattern, keyname, direction_word, direction_letter,
 
 	for ch in pattern:
 		if ch == "K":
-			out += apply_capitalization(keyname, capmode)
+			out += apply_capitalization(keyname, capmode, separator)
 		elif ch == "D":
-			out += apply_capitalization(direction_word, capmode)
+			out += apply_capitalization(direction_word, capmode, separator)
 		elif ch == "d":
 			out += apply_cap_single_letter(direction_letter, capmode)
 		else:
@@ -125,6 +125,9 @@ def main():
 
 	# External prefix
 	ext_prefix = input("External key prefix (e.g. KEY, XKB_KEY, ImGuiKey): ").strip()
+
+	# Separator
+	separator = input("External key section separator: ").strip()
 
 	# Capitalization style
 	print("\nCapitalization options: lower, capitalized, upper")
@@ -199,7 +202,7 @@ def main():
 			# Letter keys (single letters)
 			# ----------------------------------------
 			elif len(base) == 1 and base.isalpha():
-				ext = apply_capitalization(base, capmode)
+				ext = apply_capitalization(base, capmode, separator)
 
 			# ----------------------------------------
 			# Modifier keys with left/right
@@ -220,16 +223,17 @@ def main():
 					keyname,
 					direction_word,
 					direction_letter,
-					ctrl_capmode
+					ctrl_capmode,
+					separator
 				)
 
 			# ----------------------------------------
 			# Keypad keys
 			# ----------------------------------------
 			elif base.startswith("KP_"):
-				suffix = apply_capitalization(base[3:], ctrl_capmode)
+				suffix = apply_capitalization(base[3:], ctrl_capmode, separator)
 				if kp_prefix:
-					ext = f"{kp_prefix}_{suffix}"
+					ext = f"{kp_prefix}{separator}{suffix}"
 				else:
 					ext = suffix
 
@@ -240,15 +244,15 @@ def main():
 			# ----------------------------------------
 			elif base in control_keys:
 				# Control key, apply capitalization with special mode
-				ext = apply_capitalization(ext, ctrl_capmode)
+				ext = apply_capitalization(ext, ctrl_capmode, separator)
 
 			else:
 				# Basic key, apply capitalization normally
-				ext = apply_capitalization(ext, capmode)
+				ext = apply_capitalization(ext, capmode, separator)
 
 		# Prepend external prefix
 		if ext_prefix:
-			final = f"{ext_prefix}_{ext}"
+			final = f"{ext_prefix}{separator}{ext}"
 		else:
 			final = ext
 

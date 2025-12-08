@@ -1,10 +1,7 @@
 # Frameworks
-apple = dependency('appleframeworks', modules : ['Cocoa', 'IOKit', 'CoreFoundation'])
-
-# Keycodes
-macos_keycodes_dep = subproject('macos-keycodes', required: true).get_variable('macos_keycodes_dep')
+apple = dependency('appleframeworks', modules : ['Cocoa', 'IOKit', 'CoreFoundation', 'GameController'])
 
 # macOS module
-engine_srcs += files('AppleClasses.mm', 'MacOSWindow.mm')
+engine_srcs += files('MacOSTypes.hpp', 'MacOSWindow.mm')
 engine_inc += include_directories('.')
-engine_deps += [apple, macos_keycodes_dep]
+engine_deps += apple

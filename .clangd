@@ -17,7 +17,7 @@ If:
     - engine/src/macos/.*\.hpp
     - engine/src/macos/.*\.mm
 CompileFlags:
-   Add: [-x, objective-c++]
+   Add: [-x, objective-c++, -D__OBJC__, -D__OBJC2__, -ObjC++]
 ---
 If:
   PathMatch: engine/src/vulkan/.*

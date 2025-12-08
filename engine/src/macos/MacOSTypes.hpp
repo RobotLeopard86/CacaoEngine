@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Cacao/Window.hpp"
-#include "impl/Window.hpp"
-
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+#import <GameController/GameController.h>
+
+#include "Cacao/Window.hpp"
+#include "impl/Window.hpp"
 
 using namespace Cacao;
 
@@ -16,7 +17,6 @@ using namespace Cacao;
 @end
 
 @interface CacaoWin : NSWindow
-@property (nonatomic, strong) NSLayoutManager* layoutMgr;
 @end
 
 @interface CacaoApp : NSApplication
@@ -45,10 +45,19 @@ namespace Cacao {
 			return "cocoa";
 		}
 
+		//macOS objects
 		CacaoApp* app;
 		CacaoAppDelegate* del;
 		CacaoWinDelegate* wdel;
 		CacaoWin* win;
+
+		//Stored presentation options for mode transitions
 		NSApplicationPresentationOptions lastPresentOpts;
+
+		//Keyboard stuff
+		//Keyboard
+		GCKeyboard* keyboard;
+		GCKeyboardInput* keyInput;
+		void ConfigureKeyboard(GCKeyboard* kb);
 	};
 }
