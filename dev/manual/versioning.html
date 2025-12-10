@@ -402,27 +402,31 @@
 <h1>Versioning Scheme<a class="headerlink" href="#versioning-scheme" title="Link to this heading"><span/></a></h1>
 <section id="versioning-format">
 <h2>Versioning Format<a class="headerlink" href="#versioning-format" title="Link to this heading"><span/></a></h2>
-<p>Cacao Engine uses a custom versioning system named Evolutionary Versioning (EvoVer). This follows the format of <code class="docutils literal notranslate"><span class="pre">[Generation].[Major].[Minor][Patch](-[Stage][Build])</span></code>. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules.</p>
+<p>Cacao Engine uses a custom versioning system named Evolutionary Versioning (EvoVer). This follows the format of <code class="docutils literal notranslate"><span class="pre">[Year].[Major].[Minor][Patch](-[Series][Build])</span></code>. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules.</p>
 </section>
-<section id="stages">
-<h2>Stages<a class="headerlink" href="#stages" title="Link to this heading"><span/></a></h2>
+<section id="series">
+<h2>Series<a class="headerlink" href="#series" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> - Alpha/nightly releases. Likely very unstable.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> - Beta releases. Still possibly unstable.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rc</span></code> - Release candidates. Should be almost entirely stable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> - Alpha releases, likely very unstable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> - Beta releases, still somewhat unstable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rc</span></code> - Release candidates, should be fully stable.</p></li>
 </ul>
 </section>
 <section id="number-incrementing">
 <h2>Number Incrementing<a class="headerlink" href="#number-incrementing" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p>Generation - Year during which work on the release began (so if the year rolls over during development, nothing changes until the next release), should not be incremented until the next major release after rollover to avoid confusion</p></li>
-<li><p>Major - Incremented for large new feature additions or any breaking changes, API or behavioral.</p></li>
-<li><p>Minor - Incremented for non-breaking changes or when the Patch rolls over.</p></li>
-<li><p>Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there’s probably been enough changed to warrant a new minor release).</p></li>
-<li><p>Build - Stage-dependent:</p>
+<li><p>Year - Year during which release preparation began, not incremented until the next major release after rollover to avoid confusion.</p>
 <ul>
-<li><p>Stages <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.</p></li>
-<li><p>Stage <code class="docutils literal notranslate"><span class="pre">rc</span></code> - Monotonic increases with numbers not shared between stages or patch versions.</p></li>
+<li><p>If rollover occurs before the first alpha release, then the year will be incremented.</p></li>
+<li></li>
+</ul>
+</li>
+<li><p>Major - Incremented for feature additions or any breaking changes, API or behavioral, starting from 1.</p></li>
+<li><p>Minor - Incremented for non-breaking changes or when the Patch rolls over, starting from 0.</p></li>
+<li><p>Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there’s probably been enough changed to warrant a new minor release).</p></li>
+<li><p>Build - Incremented for each release in a series, starting from 0 and resetting when the series progresses.</p>
+<ul>
+<li><p>The series may not progress until all work for the previous series is done (i.e. no alpha releases may be made once the beta series starts).</p></li>
 </ul>
 </li>
 </ul>
@@ -486,7 +490,7 @@ All full release versions are stable and verified to work correctly on all platf
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versioning-format">Versioning Format</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stages">Stages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#series">Series</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#number-incrementing">Number Incrementing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nicknames">Nicknames</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">Stability</a></li>
