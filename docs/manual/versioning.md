@@ -1,21 +1,22 @@
 # Versioning Scheme
 
 ## Versioning Format
-Cacao Engine uses a custom versioning system named Evolutionary Versioning (EvoVer). This follows the format of `[Generation].[Major].[Minor][Patch](-[Stage][Build])`. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. 
+Cacao Engine uses a custom versioning system named Evolutionary Versioning (EvoVer). This follows the format of `[Year].[Major].[Minor][Patch](-[Series][Build])`. The suffix is in parentheses because it only appears for prereleases of the engine. Each release also has an associated nickname, see below for its rules. 
 
-## Stages
-* `a` - Alpha/nightly releases. Likely very unstable.
-* `b` - Beta releases. Still possibly unstable.
-* `rc` - Release candidates. Should be almost entirely stable.
+## Series
+* `a` - Alpha releases, likely very unstable.
+* `b` - Beta releases, still somewhat unstable.
+* `rc` - Release candidates, should be fully stable.
 
 ## Number Incrementing
-* Generation - Year during which work on the release began (so if the year rolls over during development, nothing changes until the next release), should not be incremented until the next major release after rollover to avoid confusion
-* Major - Incremented for large new feature additions or any breaking changes, API or behavioral.
-* Minor - Incremented for non-breaking changes or when the Patch rolls over.
+* Year - Year during which release preparation began, not incremented until the next major release after rollover to avoid confusion.
+	* If rollover occurs before the first alpha release, then the year will be incremented.
+	* 
+* Major - Incremented for feature additions or any breaking changes, API or behavioral, starting from 1.
+* Minor - Incremented for non-breaking changes or when the Patch rolls over, starting from 0.
 * Patch - A lowercase letter, incremented from A to Z (the thinking is that after 26 patches, there's probably been enough changed to warrant a new minor release).
-* Build - Stage-dependent:
-	* Stages `a` and `b` - Monotonic increases with numbers shared between the two stages so as to identify where betas fall in the development cycle (e.g. a1, a2, b3, a4, b5, etc.) These numbers do not change when the Patch changes.
-	* Stage `rc` - Monotonic increases with numbers not shared between stages or patch versions.
+* Build - Incremented for each release in a series, starting from 0 and resetting when the series progresses.
+	* The series may not progress until all work for the previous series is done (i.e. no alpha releases may be made once the beta series starts).
 
 ## Nicknames
 Each new minor release of Cacao Engine is given a new nickname. The first letter of a nickname starts as A and will change every major release, cycling through to Z and then back to A. All minor releases are given a new nickname with the same first letter. Nicknames may not repeat. There is no rule on what must constitute a nickname.

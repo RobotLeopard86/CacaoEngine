@@ -10,7 +10,7 @@ When submitting code, it must be formatted using [`clang-format`](https://clang.
 * Member fields and variables should be named in camelCase
 * Do not use Hungarian notation
 
-For consistency, please use American English spellings in interface naming.  
+For consistency, please use American English spellings in interface naming (class, method, and field names). 
   
 Please also avoid the use of `auto`, except for the below cases:  
 * Iterators
@@ -53,14 +53,16 @@ The only exceptions to the code-commenting rule in function implementations are:
 ## Branching Scheme
 Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all core development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  
 
-During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All alpha and beta testing should continue in the staging branch until the stable release is completed. When a release is finished, the staging branch should be squash-merged back into `dev` and `main`, with release tags being made from `main`. Once the release's lifecycle is complete (i.e. no more patch releases will be made and the next release will be a minor release instead), the staging branch should be squash-merged back into `dev` and `main` once more and deleted.
+During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All pre-release development and testing should continue in the staging branch until the stable release is completed. At that time, the staging branch should be squash-merged back into `dev` and `main`.  
+
+Release tags should be made for all releases, regardless of status (alpha, beta, RC, stable), and created from the staging branch, being named exactly the same as the version number (see the [versioning info page on the documentation site](https://robotleopard86.github.io/CacaoEngine/dev/manual/versioning.html) for further information); no prefix or suffix should be used.
 
 ## Contributing Your Changes
 All code contributions must be submitted as GitHub pull requests; standalone patches will not be accepted.  
 
 Before making changes, make a fork of the repository on GitHub. Ensure that the "Copy the `main` branch only" option is unchecked. Please make all changes in your copy of the `dev` branch.  
 
-Before submitting your changes, ensure to pull from the upstream `dev` branch and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Only pull requests in English will be accepted.
+Before submitting your changes, ensure to pull from the upstream `dev` branch and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Only pull requests in English will be accepted (though use of translation tools is, of course, perfectly acceptable).
 
 ## AI Policy
 While generative AI is extremely useful for programming, **no AI-generated code** is allowed in Cacao Engine. It is perfectly fine to use AI for brainstorming, prototyping, debugging, and such, but no AI code may be submitted as a pull request. It is acceptable to use AI to write a concept for you, but sufficient human modification must be done to the concept if using it as a base. If you use AI in this manner, please include all prompts and the original AI code in your pull request for reference. **Any unauthorized contributions using AI-generated code will be rejected.**  
