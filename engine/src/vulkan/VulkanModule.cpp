@@ -4,7 +4,6 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
-#include "vulkan/vulkan_handles.hpp"
 
 #ifdef __linux__
 #include "impl/Window.hpp"
@@ -27,7 +26,9 @@ namespace Cacao {
 
 	void VulkanModule::SetVSync(bool state) {
 		vsync = state;
+		swapchain.regen.store(true, std::memory_order_seq_cst);
 		GenSwapchain();
+		swapchain.regen.store(false, std::memory_order_release);
 	}
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies

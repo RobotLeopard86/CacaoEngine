@@ -225,6 +225,10 @@ namespace Cacao {
 			//Fire an event
 			DataEvent<glm::uvec2> wre("WindowResize", size);
 			EventManager::Get().Dispatch(wre);
+
+			//Free and reset
+			free(lastCfgEvent);
+			lastCfgEvent = nullptr;
 		}
 
 		//Apply scroll events if needed

@@ -51,6 +51,9 @@ namespace Cacao {
 	}
 
 	void Immediate::SetupGfx() {
+		while(vulkan->swapchain.regen.load(std::memory_order_relaxed)) {
+			std::this_thread::yield();
+		}
 		while(!gfx) {
 			//Iterate over all the handlers until we find one that isn't in use
 			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
@@ -114,7 +117,7 @@ namespace Cacao {
 
 		//Reset fence if needed
 		if(vulkan->dev.getFenceStatus(imm.get().fence) == vk::Result::eSuccess) {
-			vk::Result fenceWait = vulkan->dev.waitForFences(imm.get().fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count());
+			vk::Result fenceWait = vulkan->dev.waitForFences(imm.get().fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
 			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for immediate fence reset!");
 			vulkan->dev.resetFences(imm.get().fence);
 		}
@@ -126,7 +129,7 @@ namespace Cacao {
 			//This is to allow for swapchain regen
 			while(!lk.try_lock_for(time::fmilliseconds(1))) {
 				//Let's see if we're trying to regenerate the swapchain
-				if(vulkan->swapchain.regenAck.load(std::memory_order_relaxed)) {
+				if(vulkan->swapchain.regen.load(std::memory_order_relaxed)) {
 					//Swapchain regen cannot take place because we're blocked
 					//So we'll have to give up this frame
 					//Unfortuanately, that happens sometimes
@@ -135,6 +138,7 @@ namespace Cacao {
 					imm.get().gfx->tid = 0;
 					imm.get().gfx->inUse.store(false, std::memory_order_release);
 					imm.get().gfx = nullptr;
+					promise.set_value();
 					return;
 				}
 			}
@@ -185,14 +189,21 @@ namespace Cacao {
 	}
 
 	void VulkanGPU::RunloopIteration() {
+		//Lock queue
+		std::unique_lock lk(mutex, std::defer_lock_t {});
+
 		//Regenerate swapchain if needed
-		if(vulkan->swapchain.regen.exchange(false)) {
-			vulkan->dev.waitIdle();
-			GenSwapchain();
+		if(vulkan->swapchain.regen.load(std::memory_order_relaxed)) {
+			lk.lock();
+			if(submitted.empty()) {
+				lk.unlock();
+				GenSwapchain();
+				vulkan->swapchain.regen.store(false, std::memory_order_release);
+			}
 		}
 
 		//Go through all the submitted command buffers and see if they're done
-		std::lock_guard lk(mutex);
+		if(!lk.owns_lock()) lk.lock();
 		for(auto it = submitted.begin(); it != submitted.end();) {
 			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
 			if(vulkan->dev.getFenceStatus(vcb->imm.get().fence) == vk::Result::eSuccess) {
@@ -218,6 +229,7 @@ namespace Cacao {
 				++it;
 			}
 		}
+		lk.unlock();
 	}
 
 	void GfxHandler::Acquire() {
@@ -240,8 +252,10 @@ namespace Cacao {
 		} catch(vk::SystemError& err) {
 			//Is the swapchain out of date?
 			//If so, we can regenerate and try again
-			if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR) {
+			if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout) {
+				vulkan->swapchain.regen.store(true, std::memory_order_seq_cst);
 				GenSwapchain();
+				vulkan->swapchain.regen.store(false, std::memory_order_release);
 				imageIdx = UINT32_MAX;
 				Acquire();
 				return;

@@ -16,23 +16,7 @@ namespace Cacao {
 		//Wait for device to be idle
 		vulkan->dev.waitIdle();
 
-		vulkan->swapchain.regenAck.store(true, std::memory_order_release);
-
 		ook = &GfxHandler::handlers;
-
-		//Now claim all the graphics handlers so nobody can mess with them while we're working since we may need to touch them
-		unsigned int obtained = 0;
-		while(obtained < GfxHandler::handlers.size()) {
-			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
-				//The exchange method returns the previous value of the atomic
-				//So if it returns false, we know this handler was free and we have now reserved it
-				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
-					handler->own = "swaprg";
-					handler->tid = ::syscall(SYS_gettid);
-					++obtained;
-				}
-			}
-		}
 
 		//Delete the old swapchain images if they existed
 		if(vulkan->swapchain.chain) {
@@ -123,6 +107,20 @@ namespace Cacao {
 
 		//Update graphics handlers
 		if(GfxHandler::handlers.size() > vulkan->swapchain.views.size()) {
+			//Now claim all the graphics handlers so nobody can mess with them
+			unsigned int obtained = 0;
+			while(obtained < GfxHandler::handlers.size()) {
+				for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
+					//The exchange method returns the previous value of the atomic
+					//So if it returns false, we know this handler was free and we have now reserved it
+					if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
+						handler->own = "swaprg";
+						handler->tid = ::syscall(SYS_gettid);
+						++obtained;
+					}
+				}
+			}
+
 			//Too many handlers, remove the extras
 			unsigned int diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size();
 			while((diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size()) > 0) {
@@ -134,6 +132,13 @@ namespace Cacao {
 					break;
 				}
 			}
+
+			//Release handlers
+			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
+				handler->own = "";
+				handler->tid = 0;
+				handler->inUse.store(false, std::memory_order_release);
+			}
 		} else if(GfxHandler::handlers.size() < vulkan->swapchain.views.size()) {
 			//Too few, add some
 			unsigned int diff = vulkan->swapchain.views.size() - GfxHandler::handlers.size();
@@ -141,9 +146,7 @@ namespace Cacao {
 				//Setup handler object
 				std::unique_ptr<GfxHandler> handler = std::make_unique<GfxHandler>();
 				handler->imageIdx = UINT32_MAX;
-				handler->inUse.store(true, std::memory_order_seq_cst);
-				handler->own = "swaprg";
-				handler->tid = ::syscall(SYS_gettid);
+				handler->inUse.store(false, std::memory_order_seq_cst);
 				try {
 					handler->imageFence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 					handler->acquireImage = vulkan->dev.createSemaphore({});
@@ -162,15 +165,5 @@ namespace Cacao {
 				GfxHandler::handlers.push_back(std::move(handler));
 			}
 		}
-
-		//Release handlers
-		//Queue lock will be released automatically on stack unwind
-		for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
-			handler->own = "";
-			handler->tid = 0;
-			handler->inUse.store(false, std::memory_order_release);
-		}
-
-		vulkan->swapchain.regenAck.store(true, std::memory_order_release);
 	}
 }

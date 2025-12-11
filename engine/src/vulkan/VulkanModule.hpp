@@ -186,7 +186,6 @@ namespace Cacao {
 			std::vector<vk::ImageView> views;
 			vk::Extent2D extent;
 			std::atomic_bool regen;
-			std::atomic_bool regenAck;
 		} swapchain;
 		vma::Allocator allocator;
 		ViewImage depth;
@@ -196,6 +195,7 @@ namespace Cacao {
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
 		bool vsync;
+		const uint64_t fenceCheckWaitTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count();
 
 		VulkanModule()
 		  : PALModule("vulkan") {
