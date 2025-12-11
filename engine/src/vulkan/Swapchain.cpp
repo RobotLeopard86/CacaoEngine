@@ -2,6 +2,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "vulkan/vulkan_enums.hpp"
+#include "vulkan/vulkan_structs.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -15,6 +16,10 @@ namespace Cacao {
 		//Wait for device to be idle
 		vulkan->dev.waitIdle();
 
+		vulkan->swapchain.regenAck.store(true, std::memory_order_release);
+
+		ook = &GfxHandler::handlers;
+
 		//Now claim all the graphics handlers so nobody can mess with them while we're working since we may need to touch them
 		unsigned int obtained = 0;
 		while(obtained < GfxHandler::handlers.size()) {
@@ -22,6 +27,8 @@ namespace Cacao {
 				//The exchange method returns the previous value of the atomic
 				//So if it returns false, we know this handler was free and we have now reserved it
 				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
+					handler->own = "swaprg";
+					handler->tid = ::syscall(SYS_gettid);
 					++obtained;
 				}
 			}
@@ -38,13 +45,13 @@ namespace Cacao {
 		}
 
 		//Get surface capabilities
-		auto surfc = vulkan->physDev.getSurfaceCapabilitiesKHR(vulkan->surface);
+		vk::SurfaceCapabilitiesKHR surfc = vulkan->physDev.getSurfaceCapabilitiesKHR(vulkan->surface);
 
 		//Calculate extent
-		auto caSize = Window::Get().GetContentAreaSize();
-		vk::Extent2D extent(caSize.x, caSize.y);
-		extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
-		extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
+		glm::uvec2 caSize = Window::Get().GetContentAreaSize();
+		vulkan->swapchain.extent = vk::Extent2D {caSize.x, caSize.y};
+		vulkan->swapchain.extent.width = std::clamp(vulkan->swapchain.extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
+		vulkan->swapchain.extent.height = std::clamp(vulkan->swapchain.extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
 
 		//Decide present mode
 		auto pmodes = vulkan->physDev.getSurfacePresentModesKHR(vulkan->surface);
@@ -63,7 +70,7 @@ namespace Cacao {
 		//Make new swapchain
 		vk::SwapchainCreateInfoKHR swapchainCI(
 			{}, vulkan->surface, std::clamp((surfc.minImageCount + 1), surfc.minImageCount, (surfc.maxImageCount > 0 ? surfc.maxImageCount : UINT32_MAX)),
-			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
+			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, vulkan->swapchain.extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
 		swapchainCI.presentMode = presentMode;
 		try {
 			vulkan->swapchain.chain = vulkan->dev.createSwapchainKHR(swapchainCI);
@@ -93,7 +100,7 @@ namespace Cacao {
 		vulkan->swapchain.views = swapchainImageViews;
 
 		//Create new depth image and view
-		vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {extent.width, extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+		vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {vulkan->swapchain.extent.width, vulkan->swapchain.extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
 			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo depthAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
 		{
@@ -135,6 +142,8 @@ namespace Cacao {
 				std::unique_ptr<GfxHandler> handler = std::make_unique<GfxHandler>();
 				handler->imageIdx = UINT32_MAX;
 				handler->inUse.store(true, std::memory_order_seq_cst);
+				handler->own = "swaprg";
+				handler->tid = ::syscall(SYS_gettid);
 				try {
 					handler->imageFence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 					handler->acquireImage = vulkan->dev.createSemaphore({});
@@ -157,7 +166,11 @@ namespace Cacao {
 		//Release handlers
 		//Queue lock will be released automatically on stack unwind
 		for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
+			handler->own = "";
+			handler->tid = 0;
 			handler->inUse.store(false, std::memory_order_release);
 		}
+
+		vulkan->swapchain.regenAck.store(true, std::memory_order_release);
 	}
 }

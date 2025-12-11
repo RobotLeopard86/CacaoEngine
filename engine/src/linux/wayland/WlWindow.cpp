@@ -233,6 +233,9 @@ namespace Cacao {
 				self->size = newSize;
 			}
 
+			//Save size
+			self->lastKnownContentSize = newSize;
+
 			//Fire a window resize event
 			DataEvent<glm::uvec2> wre("WindowResize", self->size);
 			EventManager::Get().Dispatch(wre);
@@ -244,9 +247,6 @@ namespace Cacao {
 
 			//Mark us as configured
 			self->configured = true;
-
-			//Save size
-			self->lastKnownContentSize = newSize;
 		};
 	}
 

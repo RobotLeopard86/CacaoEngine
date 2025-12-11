@@ -23,21 +23,25 @@ namespace Cacao {
 		});
 		impl->mouseButtonPress = EventConsumer([](Event& e) {
 			DataEvent<unsigned int>& mbpe = static_cast<DataEvent<unsigned int>&>(e);
+			if(mbpe.GetData() == UINT32_MAX) return;
 			Logger::Engine(Logger::Level::Trace) << "Button " << mbpe.GetData() << " pressed";
 			IMPL(Input).mouseLive.at(mbpe.GetData()) = true;
 		});
 		impl->mouseButtonRelease = EventConsumer([](Event& e) {
 			DataEvent<unsigned int>& mbre = static_cast<DataEvent<unsigned int>&>(e);
+			if(mbre.GetData() == UINT32_MAX) return;
 			Logger::Engine(Logger::Level::Trace) << "Button " << mbre.GetData() << " released";
 			IMPL(Input).mouseLive.at(mbre.GetData()) = false;
 		});
 		impl->keyDown = EventConsumer([](Event& e) {
 			DataEvent<unsigned int>& kde = static_cast<DataEvent<unsigned int>&>(e);
+			if(kde.GetData() == UINT32_MAX) return;
 			Logger::Engine(Logger::Level::Trace) << "Key " << kde.GetData() << " pressed";
 			IMPL(Input).keysLive.at(kde.GetData()) = true;
 		});
 		impl->keyUp = EventConsumer([](Event& e) {
 			DataEvent<unsigned int>& kue = static_cast<DataEvent<unsigned int>&>(e);
+			if(kue.GetData() == UINT32_MAX) return;
 			Logger::Engine(Logger::Level::Trace) << "Key " << kue.GetData() << " released";
 			IMPL(Input).keysLive.at(kue.GetData()) = false;
 		});

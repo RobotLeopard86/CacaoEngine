@@ -1,8 +1,7 @@
 #include "Cacao/GPU.hpp"
-#include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "vulkan/vulkan_enums.hpp"
-#include "vulkan/vulkan_structs.hpp"
+#include "Cacao/Time.hpp"
+#include "VulkanModule.hpp"
 
 #include <atomic>
 #include <future>
@@ -59,6 +58,8 @@ namespace Cacao {
 				//So if it returns false, we know this handler was free and we have now reserved it
 				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
 					gfx = handler.get();
+					gfx->own = "gfx";
+					gfx->tid = ::syscall(SYS_gettid);
 					gfx->imageIdx = UINT32_MAX;
 					gfx->Acquire();
 					return;
@@ -118,16 +119,41 @@ namespace Cacao {
 			vulkan->dev.resetFences(imm.get().fence);
 		}
 
-		//Submit buffer to queue
-		{
-			std::lock_guard lk(vulkan->queueMtx);
-			vulkan->queue.submit2(submit, imm.get().fence);
+		//Obtain queue lock
+		std::unique_lock<std::timed_mutex> lk(vulkan->queueMtx, std::defer_lock_t {});
+		if(imm.get().gfx) {
+			//If we have graphics, try to lock for a bit at a time
+			//This is to allow for swapchain regen
+			while(!lk.try_lock_for(time::fmilliseconds(1))) {
+				//Let's see if we're trying to regenerate the swapchain
+				if(vulkan->swapchain.regenAck.load(std::memory_order_relaxed)) {
+					//Swapchain regen cannot take place because we're blocked
+					//So we'll have to give up this frame
+					//Unfortuanately, that happens sometimes
+					imm.get().gfx->imageIdx = UINT32_MAX;
+					imm.get().gfx->own = "";
+					imm.get().gfx->tid = 0;
+					imm.get().gfx->inUse.store(false, std::memory_order_release);
+					imm.get().gfx = nullptr;
+					return;
+				}
+			}
+		} else {
+			//No graphics, can block as long as needed
+			lk.lock();
 		}
+
+		//Submit buffer to queue
+		vulkan->queue.submit2(submit, imm.get().fence);
 
 		//Present if graphics is in use
 		if(imm.get().gfx) {
 			vk::PresentInfoKHR presentInfo(imm.get().gfx->doneRendering, vulkan->swapchain.chain, imm.get().gfx->imageIdx);
-			vulkan->queue.presentKHR(presentInfo);
+			try {
+				vulkan->queue.presentKHR(presentInfo);
+			} catch(vk::OutOfDateKHRError& outOfDate) {
+				vulkan->swapchain.regen.store(true);
+			}
 		}
 	}
 
@@ -159,6 +185,12 @@ namespace Cacao {
 	}
 
 	void VulkanGPU::RunloopIteration() {
+		//Regenerate swapchain if needed
+		if(vulkan->swapchain.regen.exchange(false)) {
+			vulkan->dev.waitIdle();
+			GenSwapchain();
+		}
+
 		//Go through all the submitted command buffers and see if they're done
 		std::lock_guard lk(mutex);
 		for(auto it = submitted.begin(); it != submitted.end();) {
@@ -170,6 +202,8 @@ namespace Cacao {
 				//Release graphics handler if needed
 				if(vcb->imm.get().gfx) {
 					vcb->imm.get().gfx->imageIdx = UINT32_MAX;
+					vcb->imm.get().gfx->own = "";
+					vcb->imm.get().gfx->tid = 0;
 					vcb->imm.get().gfx->inUse.store(false, std::memory_order_release);
 					vcb->imm.get().gfx = nullptr;
 				}

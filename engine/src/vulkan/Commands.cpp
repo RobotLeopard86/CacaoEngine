@@ -1,4 +1,3 @@
-#include "Cacao/Window.hpp"
 #include "VulkanModule.hpp"
 
 namespace Cacao {
@@ -51,21 +50,14 @@ namespace Cacao {
 		if(!imm.get().gfx) imm.get().SetupGfx();
 		GfxHandler& gfx = *(imm.get().gfx);
 
-		//Calculate window extent
-		auto caSize = Window::Get().GetContentAreaSize();
-		vk::Extent2D extent(caSize.x, caSize.y);
-		auto surfc = vulkan->physDev.getSurfaceCapabilitiesKHR(vulkan->surface);
-		extent.width = std::clamp(extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
-		extent.height = std::clamp(extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
-
 		//Setup rendering info
-		vk::Viewport viewport(0.0f, 0.0f, float(extent.width), float(extent.height), 0.0f, 1.0f);
-		vk::Rect2D scissor({0, 0}, extent);
+		vk::Viewport viewport(0.0f, 0.0f, float(vulkan->swapchain.extent.width), float(vulkan->swapchain.extent.height), 0.0f, 1.0f);
+		vk::Rect2D scissor({0, 0}, vulkan->swapchain.extent);
 		vk::RenderingAttachmentInfo colorAttachment(vulkan->swapchain.views[gfx.imageIdx], vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {},
 			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {clearColor.r, clearColor.g, clearColor.b, 1.0f}));
 		vk::RenderingAttachmentInfo depthAttachment(vulkan->depth.view, vk::ImageLayout::eDepthAttachmentOptimal, {}, {}, {},
 			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::ClearDepthStencilValue(1.0f, 0.0f));
-		vk::RenderingInfo renderInfo({}, vk::Rect2D({0, 0}, extent), 1, 0, colorAttachment, &depthAttachment);
+		vk::RenderingInfo renderInfo({}, vk::Rect2D({0, 0}, vulkan->swapchain.extent), 1, 0, colorAttachment, &depthAttachment);
 
 		//Make image drawable
 		gfx.MakeDrawable(this);

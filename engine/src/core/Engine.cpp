@@ -161,7 +161,7 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
 
 		//Start the frame processor if doing so at this time
-		if(icfg.startFrameProcessorWithGfxSystem) {
+		if(!icfg.startFrameProcessorWithGfxSystem) {
 			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
 			FrameProcessor::Get().Start();
 		}
@@ -204,7 +204,7 @@ namespace Cacao {
 		TickController::Get().Stop();
 
 		//Stop the frame processor if doing so at this time
-		if(icfg.startFrameProcessorWithGfxSystem) {
+		if(!icfg.startFrameProcessorWithGfxSystem) {
 			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
 			FrameProcessor::Get().Stop();
 		}

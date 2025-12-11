@@ -77,6 +77,7 @@ int main(int argc, char* argv[]) {
 	//Configure CLI
 	CLI::App app(specRoot["meta"]["title"].as<std::string>(), std::filesystem::path(argv[0]).filename().string());
 	rt.icfg.standalone = true;
+	rt.icfg.startFrameProcessorWithGfxSystem = false;
 	rt.icfg.initialRequestedBackend = "vulkan";
 	rt.icfg.clientID = Cacao::ClientIdentity {.id = specRoot["meta"]["pkgId"].as<std::string>(), .displayName = specRoot["meta"]["title"].as<std::string>()};
 
@@ -88,7 +89,7 @@ int main(int argc, char* argv[]) {
 
 #ifdef __linux__
 	//X11 option
-	app.add_flag_callback("--x11-only,-x", [&rt.icfg]() { rt.icfg.preferredWindowProvider = "x11"; }, "Force the usage of X11 for windowing.")->default_val(false);
+	app.add_flag_callback("--x11-only,-x", []() { rt.icfg.preferredWindowProvider = "x11"; }, "Force the usage of X11 for windowing.")->default_val(false);
 #endif
 
 	//Logging options

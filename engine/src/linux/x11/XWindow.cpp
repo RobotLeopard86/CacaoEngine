@@ -99,6 +99,7 @@ namespace Cacao {
 	void X11WindowImpl::HandleEvents() {
 		//We store this so we don't get flooded with intermediate configures and only respond to the last one
 		xcb_configure_notify_event_t* lastCfgEvent = nullptr;
+		scrollAccumulator = {0, 0};
 
 		//Process events
 		xcb_generic_event_t* event;
@@ -158,14 +159,35 @@ namespace Cacao {
 					EventManager::Get().Dispatch(event);
 				}
 
-				//Mouse button pressed
+				//Mouse button pressed / scroll wheel
 				case XCB_BUTTON_PRESS: {
 					//Get the button that was pressed
 					xcb_button_press_event_t* buttonEvent = reinterpret_cast<xcb_button_press_event_t*>(event);
 
+					Logger::Engine(Logger::Level::Trace) << "btn " << int(buttonEvent->detail);
+
 					//Dispatch event
-					DataEvent<unsigned int> event("MousePress", ConvertButtonCode(buttonEvent->detail));
-					EventManager::Get().Dispatch(event);
+					if(buttonEvent->detail <= 3) {
+						//Mouse press
+						DataEvent<unsigned int> event("MousePress", ConvertButtonCode(buttonEvent->detail));
+						EventManager::Get().Dispatch(event);
+					} else if(buttonEvent->detail <= 7) {
+						//Scroll events are sent as buttons for some strange reason
+						switch(buttonEvent->detail) {
+							case 4:
+								++scrollAccumulator.y;
+								break;
+							case 5:
+								--scrollAccumulator.y;
+								break;
+							case 6:
+								--scrollAccumulator.x;
+								break;
+							case 7:
+								++scrollAccumulator.x;
+								break;
+						};
+					}
 				}
 
 				//Mouse button released
@@ -176,6 +198,16 @@ namespace Cacao {
 					//Dispatch event
 					DataEvent<unsigned int> event("MouseRelease", ConvertButtonCode(buttonEvent->detail));
 					EventManager::Get().Dispatch(event);
+				}
+
+				//Mouse movement
+				case XCB_MOTION_NOTIFY: {
+					//Get the data
+					xcb_motion_notify_event_t* motionEvent = reinterpret_cast<xcb_motion_notify_event_t*>(event);
+
+					//Dispatch event
+					DataEvent<glm::dvec2> mme("MouseMove", glm::dvec2 {motionEvent->event_x, motionEvent->event_y});
+					EventManager::Get().Dispatch(mme);
 				}
 
 				default: break;
@@ -193,6 +225,13 @@ namespace Cacao {
 			//Fire an event
 			DataEvent<glm::uvec2> wre("WindowResize", size);
 			EventManager::Get().Dispatch(wre);
+		}
+
+		//Apply scroll events if needed
+		if(scrollAccumulator.x != 0 || scrollAccumulator.y != 0) {
+			DataEvent<glm::dvec2> mse("MouseScroll", scrollAccumulator);
+			EventManager::Get().Dispatch(mse);
+			scrollAccumulator = {0, 0};
 		}
 	}
 

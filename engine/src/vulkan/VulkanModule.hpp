@@ -74,6 +74,9 @@ namespace Cacao {
 		void MakeDrawable(VulkanCommandBuffer*);
 		void MakePresentable(VulkanCommandBuffer*);
 
+		std::string own = "";
+		long tid;
+
 	  private:
 		static std::vector<std::unique_ptr<GfxHandler>> handlers;
 
@@ -181,18 +184,23 @@ namespace Cacao {
 			vk::SwapchainKHR chain;
 			std::vector<vk::Image> images;
 			std::vector<vk::ImageView> views;
+			vk::Extent2D extent;
+			std::atomic_bool regen;
+			std::atomic_bool regenAck;
 		} swapchain;
 		vma::Allocator allocator;
 		ViewImage depth;
 		vk::Format selectedDF;
 		vk::Queue queue;
-		std::mutex queueMtx;
+		std::timed_mutex queueMtx;
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
 		bool vsync;
 
 		VulkanModule()
-		  : PALModule("vulkan") {}
+		  : PALModule("vulkan") {
+			swapchain.regen.store(false);
+		}
 		~VulkanModule() {}
 
 	  private:
@@ -200,6 +208,7 @@ namespace Cacao {
 	};
 
 	inline std::shared_ptr<VulkanModule> vulkan;
+	inline std::vector<std::unique_ptr<GfxHandler>>* ook;
 
 	void GenSwapchain();
 
