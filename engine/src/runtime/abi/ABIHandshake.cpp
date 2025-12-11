@@ -18,14 +18,14 @@ EXPORT ABIHandshakeInfo __CacaoAbiInfoHandshake() {
 	abi.maxAlign = alignof(std::max_align_t);
 
 	//Compiler + version
-#if defined(_MSC_VER)
-	abi.compiler = "msvc";
-	abi.compilerVer = _MSC_VER;
-#elif defined(__clang__)
+#if defined(__clang__)
 	abi.compiler = "clang";
 	abi.compilerVer = (__clang_major__ * 10000) +
 					  (__clang_minor__ * 100) +
 					  (__clang_patchlevel__);
+#elif defined(_MSC_VER)
+	abi.compiler = "msvc";
+	abi.compilerVer = _MSC_VER;
 #elif defined(__GNUC__)
 	abi.compiler = "gcc";
 	abi.compilerVer = (__GNUC__ * 10000) +

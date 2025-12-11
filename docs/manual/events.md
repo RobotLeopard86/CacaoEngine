@@ -3,6 +3,7 @@
 The below are all of the built-in event types in Cacao Engine.
 | Event ID | Trigger | Type |
 | -------- | ------- | ---- |
+| `EngineShutdown` | The engine is shutting down | `Event` |
 | `WindowClose` | The window is closing | `Event` |
 | `WindowResize` | The size of the window has changed | `DataEvent<glm::uvec2>` |
 | `MouseMove` | The cursor has moved | `DataEvent<glm::dvec2>` |

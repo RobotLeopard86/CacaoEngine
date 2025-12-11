@@ -13,6 +13,7 @@
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Identity.hpp"
+#include "Time.hpp"// IWYU pragma: keep
 
 #include "exathread.hpp"
 
@@ -102,9 +103,17 @@ namespace Cacao {
 			bool suppressFileLogging = false;
 
 			/**
-			 * @brief ID of the client application. This should be in reverse-domain format (e.g. com.example.MyGame), but this is not enforced
+			 * @brief ID of the client application. This should be in reverse-domain format with a PascalCase final segment (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
+
+			/**
+			 * @brief Whether to start the frame processor with the graphics system or to start it when the engine starts running
+			 *
+			 * This is set to @c false by default, which is best for games. However, other users may want to continue rendering
+			 * without an active gameloop, thus this option exists.
+			 */
+			bool startFrameProcessorWithGfxSystem = false;
 		};
 
 		/**

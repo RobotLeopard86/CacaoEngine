@@ -6,7 +6,7 @@
 #include <functional>
 #include <stdexcept>// IWYU pragma: keep
 
-//This contains ABI info that we can verify to ensure that the code is even compatible
+//This contains ABI info that we can verify to ensure that the game binary is compatible with the engine binary before continuing
 struct ABIHandshakeInfo {
 	uint32_t pointerSz;	 //sizeof(void*)
 	uint32_t sizetSz;	 //sizeof(size_t)

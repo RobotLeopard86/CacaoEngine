@@ -1,22 +1,36 @@
-#include "Cacao/Engine.hpp"
-#include "Cacao/Identity.hpp"
-
 #include "CLI11.hpp"
+#include "Cacao/Identity.hpp"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
 
 #include <filesystem>
 #include <string>
 
-#ifndef CACAO_VER
-#define CACAO_VER "unknown"
-#endif
+#include "Runtime.hpp"
 
 void panic(const std::string& err, const std::string& hint) {
 	std::cerr << "ERROR: " << err << "!\n"
 			  << (!hint.empty() ? std::string("Hint: ") + hint + ".\n" : "")
 			  << "If you are an end user seeing this error, please report this to the developer of the application." << std::endl;
 	exit(-1);
+}
+
+void Specparse(YAML::Node root, [[maybe_unused]] bool macOSApp = false) {
+	try {
+		rt.cacaospec = {};
+		rt.cacaospec.meta = {};
+		rt.cacaospec.meta.pkgId = root["meta"]["pkgId"].as<std::string>();
+		rt.cacaospec.meta.title = root["meta"]["title"].as<std::string>();
+		rt.cacaospec.meta.version = root["meta"]["version"].as<std::string>();
+		rt.cacaospec.binary = root["binary"].as<std::string>();
+#ifdef __APPLE__
+		if(macOSApp) rt.cacaospec.binary = "../Frameworks/" + rt.cacaospec.binary;
+#endif
+		if(!std::filesystem::exists(rt.cacaospec.binary)) panic("Game binary does not exist",
+			std::string("This usually means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
+	} catch(...) {
+		panic("Cacaospec file is improperly formatted", "");
+	}
 }
 
 int main(int argc, char* argv[]) {
@@ -48,34 +62,38 @@ int main(int argc, char* argv[]) {
 
 	//Validate that required spec file exists
 	if(!std::filesystem::exists("cacaospec.yml")) {
-		panic("Cacao Engine game specification file not found",
-			std::string("This means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
+		panic("Cacaospec file not found",
+			std::string("This usually means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
 	}
 
-	//Read the spec file
+	//Read and parse the spec file
 	YAML::Node specRoot = YAML::LoadFile("cacaospec.yml");
+#ifdef __APPLE__
+	Specparse(specRoot, inAppBundle);
+#else
+	Specparse(specRoot, false);
+#endif
 
 	//Configure CLI
 	CLI::App app(specRoot["meta"]["title"].as<std::string>(), std::filesystem::path(argv[0]).filename().string());
-	Cacao::Engine::InitConfig icfg = {};
-	icfg.standalone = true;
-	icfg.initialRequestedBackend = "vulkan";
-	icfg.clientID = {.id = specRoot["meta"]["pkgId"].as<std::string>(), .displayName = specRoot["meta"]["title"].as<std::string>()};
+	rt.icfg.standalone = true;
+	rt.icfg.initialRequestedBackend = "vulkan";
+	rt.icfg.clientID = Cacao::ClientIdentity {.id = specRoot["meta"]["pkgId"].as<std::string>(), .displayName = specRoot["meta"]["title"].as<std::string>()};
 
 	//Backend option
-	app.add_option("--backend,-B", icfg.initialRequestedBackend, "The preferred backend to use. One of ['opengl', 'vulkan'];")->default_val("vulkan")->check([](const std::string& v) {
+	app.add_option("--backend,-B", rt.icfg.initialRequestedBackend, "The preferred backend to use. One of ['opengl', 'vulkan'];")->default_val("vulkan")->check([](const std::string& v) {
 		const std::array<std::string, 2> okBackends = {"opengl", "vulkan"};
 		return (std::find(okBackends.cbegin(), okBackends.cend(), v) != okBackends.cend() ? "" : "The provided value is not valid!");
 	});
 
 #ifdef __linux__
 	//X11 option
-	app.add_flag_callback("--x11-only,-x", [&icfg]() { icfg.preferredWindowProvider = "x11"; }, "Force the usage of X11 for windowing.")->default_val(false);
+	app.add_flag_callback("--x11-only,-x", [&rt.icfg]() { rt.icfg.preferredWindowProvider = "x11"; }, "Force the usage of X11 for windowing.")->default_val(false);
 #endif
 
 	//Logging options
-	app.add_flag_callback("--quiet,-q", [&icfg]() { icfg.suppressConsoleLogging = true; }, "Suppress all console logging output.")->default_val(false);
-	app.add_flag_callback("--no-file-log,-N", [&icfg]() { icfg.suppressFileLogging = true; }, "Suppress creation and use of logfile.")->default_val(false);
+	app.add_flag_callback("--quiet,-q", []() { rt.icfg.suppressConsoleLogging = true; }, "Suppress all console logging output.")->default_val(false);
+	app.add_flag_callback("--no-file-log,-N", []() { rt.icfg.suppressFileLogging = true; }, "Suppress creation and use of logfile.")->default_val(false);
 
 #ifdef __APPLE__
 	//macOS chatter
@@ -90,15 +108,24 @@ int main(int argc, char* argv[]) {
 	if(!macChatter) setenv("OS_ACTIVITY_MODE", "disable", 1);
 #endif
 
-	//Engine initialization
-	Cacao::Engine::Get().CoreInit(icfg);
-	Cacao::Engine::Get().GfxInit();
+	//Engine setup
+	rt.SetupEngine();
 
-	//Run
+	//Prepare game to run
+	//This is where we load initial resources and whatnot
+	rt.LoadGame();
+
+	//Run (blocks)
 	Cacao::Engine::Get().Run();
 
-	//Engine shutdown
+	//Game has stopped now, destroy graphics objects before shutting down that part of the engine
+	rt.DestroyGfxObjects();
 	Cacao::Engine::Get().GfxShutdown();
+
+	//Run cleanup tasks (unload game data)
+	rt.Cleanup();
+
+	//Stop the engine fully
 	Cacao::Engine::Get().CoreShutdown();
 }
 

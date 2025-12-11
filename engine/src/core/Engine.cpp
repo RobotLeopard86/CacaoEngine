@@ -11,23 +11,24 @@
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
-#include "SafeGetenv.hpp"
 #include "exathread.hpp"
 #include "impl/PAL.hpp"
-#include <memory>
-#include <thread>
+
+#ifdef _WIN32
+#include <Windows.h>
+#include <shlobj.h>
+#else
+#include "SafeGetenv.hpp"
+#endif
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
 
-#ifdef _WIN32
-#include <Windows.h>
-#include <shlobj.h>
-#endif
-
 #include <vector>
 #include <filesystem>
+#include <memory>
+#include <thread>
 
 namespace Cacao {
 	Engine::Engine()
@@ -138,9 +139,11 @@ namespace Cacao {
 		//Enable V-Sync by default
 		GPUManager::Get().SetVSync(true);
 
-		//Start the frame processor
-		Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
-		FrameProcessor::Get().Start();
+		//Start the frame processor if doing so at this time
+		if(icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
+			FrameProcessor::Get().Start();
+		}
 
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
@@ -156,6 +159,12 @@ namespace Cacao {
 		}
 
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
+
+		//Start the frame processor if doing so at this time
+		if(icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
+			FrameProcessor::Get().Start();
+		}
 
 		//Start the tick controller
 		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
@@ -194,6 +203,12 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Stopping tick controller...";
 		TickController::Get().Stop();
 
+		//Stop the frame processor if doing so at this time
+		if(icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
+			FrameProcessor::Get().Stop();
+		}
+
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");
 		EventManager::Get().Dispatch(e);
@@ -202,9 +217,11 @@ namespace Cacao {
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
 
-		//Stop the frame processor
-		Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
-		FrameProcessor::Get().Stop();
+		//Stop the frame processor if doing so at this time
+		if(icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
+			FrameProcessor::Get().Stop();
+		}
 
 		//Stop the GPU manager
 		Logger::Engine(Logger::Level::Trace) << "Stopping GPU manager...";
@@ -280,7 +297,7 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<exathread::Pool> Engine::GetThreadPool() {
-		Check<exathread::Pool, BadStateException>(pool, "Engine must be in the Running state to use the thread pool!");
+		Check<exathread::Pool, BadStateException>(pool, "Engine must be in the Alive state to use the thread pool!");
 
 		return pool;
 	}
