@@ -859,7 +859,14 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig8clientIDE">
 <span id="_CPPv3N5Cacao6Engine10InitConfig8clientIDE"></span><span id="_CPPv2N5Cacao6Engine10InitConfig8clientIDE"></span><span id="Cacao::Engine::InitConfig::clientID__ClientIdentity"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1a6d3029d3c0fbae0145088c584556e88d"></span><a class="reference internal" href="structCacao_1_1ClientIdentity.html#_CPPv4N5Cacao14ClientIdentityE" title="Cacao::ClientIdentity"><span class="n"><span class="pre">ClientIdentity</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clientID</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig8clientIDE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>ID of the client application. This should be in reverse-domain format (e.g. com.example.MyGame), but this is not enforced. </p>
+<dd><p>ID of the client application. This should be in reverse-domain format with a PascalCase final segment (e.g. com.example.MyGame), but this is not enforced. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Engine10InitConfig32startFrameProcessorWithGfxSystemE">
+<span id="_CPPv3N5Cacao6Engine10InitConfig32startFrameProcessorWithGfxSystemE"></span><span id="_CPPv2N5Cacao6Engine10InitConfig32startFrameProcessorWithGfxSystemE"></span><span id="Cacao::Engine::InitConfig::startFrameProcessorWithGfxSystem__b"></span><span class="target" id="structCacao_1_1Engine_1_1InitConfig_1a132d1f847a987a73b2f18f523d709a6a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">startFrameProcessorWithGfxSystem</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Engine10InitConfig32startFrameProcessorWithGfxSystemE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Whether to start the frame processor with the graphics system or to start it when the engine starts running. </p>
+<p>This is set to <code class="docutils literal notranslate"><span class="pre">false</span></code> by default, which is best for games. However, other users may want to continue rendering without an active gameloop, thus this option exists. </p>
 </dd></dl>
 
 </div>
@@ -956,6 +963,7 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig22suppressConsoleLoggingE"><code class="docutils literal notranslate"><span class="pre">Engine::InitConfig::suppressConsoleLogging</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig19suppressFileLoggingE"><code class="docutils literal notranslate"><span class="pre">Engine::InitConfig::suppressFileLogging</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig8clientIDE"><code class="docutils literal notranslate"><span class="pre">Engine::InitConfig::clientID</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Engine10InitConfig32startFrameProcessorWithGfxSystemE"><code class="docutils literal notranslate"><span class="pre">Engine::InitConfig::startFrameProcessorWithGfxSystem</span></code></a></li>
 </ul>
 </li>
 </ul>

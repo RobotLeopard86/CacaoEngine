@@ -398,6 +398,7 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Exceptions.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Identity.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Time.hpp&quot;</span><span class="c1">// IWYU pragma: keep</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;exathread.hpp&quot;</span>
 
@@ -435,6 +436,8 @@
 <span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">suppressFileLogging</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 
 <span class="w">            </span><span class="n">ClientIdentity</span><span class="w"> </span><span class="n">clientID</span><span class="p">;</span>
+
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">startFrameProcessorWithGfxSystem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">InitConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetInitConfig</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
