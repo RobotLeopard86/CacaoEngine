@@ -9,7 +9,7 @@ namespace Cacao {
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, 0, 0, vulkan->swapchain.images[imageIdx],
 				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 			vk::DependencyInfo transition({}, {}, {}, barrier);
-			cmd->vk().pipelineBarrier2(transition);
+			cmd->cmd.pipelineBarrier2(transition);
 		}
 
 		//Make the depth image drawable
@@ -19,7 +19,7 @@ namespace Cacao {
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthAttachmentOptimal, 0, 0, vulkan->depth.obj,
 				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 			vk::DependencyInfo transition({}, {}, {}, barrier);
-			cmd->vk().pipelineBarrier2(transition);
+			cmd->cmd.pipelineBarrier2(transition);
 		}
 	}
 
@@ -31,7 +31,7 @@ namespace Cacao {
 				vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[imageIdx],
 				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 			vk::DependencyInfo transition({}, {}, {}, barrier);
-			cmd->vk().pipelineBarrier2(transition);
+			cmd->cmd.pipelineBarrier2(transition);
 		}
 
 		//Put the depth image into a read-only format to not leave it in a rendering state
@@ -41,14 +41,14 @@ namespace Cacao {
 				vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->depth.obj,
 				vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 			vk::DependencyInfo transition({}, {}, {}, barrier);
-			cmd->vk().pipelineBarrier2(transition);
+			cmd->cmd.pipelineBarrier2(transition);
 		}
 	}
 
 	void VulkanCommandBuffer::StartRendering(glm::vec3 clearColor) {
 		//Setup graphics
-		if(!imm.get().gfx) imm.get().SetupGfx();
-		GfxHandler& gfx = *(imm.get().gfx);
+		if(!ctx.get().gfx) ctx.get().SetupGfx();
+		GfxHandler& gfx = *(ctx.get().gfx);
 
 		//Setup rendering info
 		vk::Viewport viewport(0.0f, 0.0f, float(vulkan->swapchain.extent.width), float(vulkan->swapchain.extent.height), 0.0f, 1.0f);
@@ -63,19 +63,19 @@ namespace Cacao {
 		gfx.MakeDrawable(this);
 
 		//Configure output region
-		vk().setViewport(0, viewport);
-		vk().setScissor(0, scissor);
+		cmd.setViewport(0, viewport);
+		cmd.setScissor(0, scissor);
 
 		//Begin rendering (this will clear the screen due to values set above)
-		vk().beginRendering(renderInfo);
+		cmd.beginRendering(renderInfo);
 	}
 
 	void VulkanCommandBuffer::EndRendering() {
 		//Obtain graphics handler
-		GfxHandler& gfx = *(imm.get().gfx);
+		GfxHandler& gfx = *(ctx.get().gfx);
 
 		//End rendering
-		vk().endRendering();
+		cmd.endRendering();
 
 		//Make image presentable
 		gfx.MakePresentable(this);

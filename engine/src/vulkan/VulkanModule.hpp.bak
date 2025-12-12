@@ -3,6 +3,7 @@
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "Cacao/EventConsumer.hpp"
+#include <semaphore>
 
 #ifdef __linux__
 #ifdef HAS_X11
@@ -44,74 +45,100 @@ namespace Cacao {
 		ViewImage(std::pair<vk::Image, vma::Allocation> p) : Allocated<vk::Image>(p) {}
 	};
 
-	class TransientCommandContext {
+	class VulkanCommandBuffer;
+
+	class GfxHandler {
+	  public:
+		vk::Semaphore acquireImage;
+		vk::Semaphore doneRendering;
+		vk::Fence imageFence;
+		unsigned int imageIdx;
+		std::atomic_bool inUse;
+
+		GfxHandler()
+		  : imageIdx(UINT32_MAX), inUse(false) {}
+		GfxHandler(const GfxHandler&) = delete;
+		GfxHandler& operator=(const GfxHandler&) = delete;
+		GfxHandler(GfxHandler&& o)
+		  : acquireImage(std::exchange(o.acquireImage, {})), doneRendering(std::exchange(o.doneRendering, {})), imageFence(std::exchange(o.imageFence, {})), imageIdx(std::exchange(o.imageIdx, UINT32_MAX)), inUse(o.inUse.load(std::memory_order_relaxed)) {}
+		GfxHandler& operator=(GfxHandler&& o) {
+			acquireImage = std::exchange(o.acquireImage, {});
+			doneRendering = std::exchange(o.doneRendering, {});
+			imageFence = std::exchange(o.imageFence, {});
+			imageIdx = std::exchange(o.imageIdx, UINT32_MAX);
+			inUse.store(o.inUse.load(std::memory_order_seq_cst));
+			return *this;
+		}
+
+		void Acquire();
+		void MakeDrawable(VulkanCommandBuffer*);
+		void MakePresentable(VulkanCommandBuffer*);
+
+		std::string own = "";
+		long tid;
+
+	  private:
+		static std::vector<std::unique_ptr<GfxHandler>> handlers;
+
+		friend class Immediate;
+		friend class VulkanCommandBuffer;
+		friend class VulkanGPU;
+		friend class VulkanModule;
+		friend void GenSwapchain();
+	};
+
+	class Immediate {
 	  public:
 		vk::CommandPool pool;
+		vk::CommandBuffer cmd;
 		vk::Fence fence;
+		std::binary_semaphore accessMgr;
+		GfxHandler* gfx = nullptr;
 
-		static TransientCommandContext* Get();
 		static void Cleanup();
 
-		TransientCommandContext(const TransientCommandContext&) = delete;
-		TransientCommandContext& operator=(const TransientCommandContext&) = delete;
-		TransientCommandContext(TransientCommandContext&& o)
-		  : pool(std::exchange(o.pool, {})), fence(std::exchange(o.fence, {})) {}
-		TransientCommandContext& operator=(TransientCommandContext&& o) {
+		Immediate(const Immediate&) = delete;
+		Immediate& operator=(const Immediate&) = delete;
+		Immediate(Immediate&& o)
+		  : pool(std::exchange(o.pool, {})), cmd(std::exchange(o.cmd, {})), fence(std::exchange(o.fence, {})), accessMgr(1), gfx(std::exchange(o.gfx, {})) {}
+		Immediate& operator=(Immediate&& o) {
 			pool = std::exchange(o.pool, {});
-			fence = std::exchange(o.fence, {});
+			cmd = std::exchange(o.cmd, {});
+			gfx = std::exchange(o.gfx, {});
 			return *this;
 		}
 
 	  private:
-		static std::set<std::unique_ptr<TransientCommandContext>> contexts;
+		static std::set<Immediate*> imms;
 		bool ready = false;
 
-		TransientCommandContext() {}
+		void SetupGfx();
 
+		Immediate()
+		  : accessMgr(1) {}
+
+		static Immediate& Get();
 		friend class VulkanCommandBuffer;
 		friend class VulkanModule;
-	};
-
-	class RenderCommandContext {
-	  public:
-		vk::Semaphore acquire, render;
-		vk::Fence fence;
-		uint32_t imageIndex = UINT32_MAX;
-
-		RenderCommandContext(const RenderCommandContext&) = delete;
-		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
-		RenderCommandContext(RenderCommandContext&& o)
-		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)) {}
-		RenderCommandContext& operator=(RenderCommandContext&& o) {
-			acquire = std::exchange(o.acquire, {});
-			render = std::exchange(o.render, {});
-			fence = std::exchange(o.fence, {});
-			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
-			return *this;
-		}
 	};
 
 	//THIS IS NOT THREAD-SAFE
 	class VulkanCommandBuffer : public CommandBuffer {
 	  public:
-		VulkanCommandBuffer() {}
+		VulkanCommandBuffer();
 		~VulkanCommandBuffer();
 		VulkanCommandBuffer(VulkanCommandBuffer&&);
 		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
 
+		vk::CommandBuffer& cmd {
+			return imm.get().cmd;
+		}
+
 		void Execute() override;
 
-		vk::Fence& GetFence();
-
-		vk::CommandBuffer cmd;
-
 	  protected:
-		TransientCommandContext* transient = nullptr;
-		RenderCommandContext* render = nullptr;
-
-		vk::CommandPool* poolPtr = nullptr;
+		std::reference_wrapper<Immediate> imm;
 		std::promise<void> promise;
-		std::vector<vk::CommandBuffer> secondaries;
 
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
@@ -148,38 +175,31 @@ namespace Cacao {
 		GPUManager::Impl* ConfigureGPUManager() override;
 		std::unique_ptr<CommandBuffer> CreateCmdBuffer() override;
 
-		//==================== CORE VULKAN OBJECTS ====================
 		vk::Instance instance;
 		vk::PhysicalDevice physDev;
 		vk::Device dev;
-		vk::Queue queue;
-		vma::Allocator allocator;
-
-		//==================== PRESENTATION SUPPORT ====================
 		vk::SurfaceKHR surface;
 		vk::SurfaceFormatKHR surfaceFormat;
-		struct SwapchainData {
+		struct Swapchain {
 			vk::SwapchainKHR chain;
-			vk::Extent2D extent;
 			std::vector<vk::Image> images;
 			std::vector<vk::ImageView> views;
-			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
-			std::atomic_bool regenRequested;
-			std::atomic_bool regenInProgress;
+			vk::Extent2D extent;
+			std::atomic_bool regen;
 		} swapchain;
-
-		//==================== MISCELLANEOUS FIELDS ====================
+		vma::Allocator allocator;
 		ViewImage depth;
 		vk::Format selectedDF;
+		vk::Queue queue;
+		std::timed_mutex queueMtx;
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
 		bool vsync;
-		std::timed_mutex queueMtx;
+		const uint64_t fenceCheckWaitTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::milliseconds(1000)).count();
 
 		VulkanModule()
 		  : PALModule("vulkan") {
-			swapchain.regenRequested.store(false);
-			swapchain.regenInProgress.store(false);
+			swapchain.regen.store(false);
 		}
 		~VulkanModule() {}
 
@@ -188,6 +208,7 @@ namespace Cacao {
 	};
 
 	inline std::shared_ptr<VulkanModule> vulkan;
+	inline std::vector<std::unique_ptr<GfxHandler>>* ook;
 
 	void GenSwapchain();
 

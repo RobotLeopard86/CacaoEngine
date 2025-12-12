@@ -44,7 +44,7 @@ namespace Cacao {
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			vcb->vk().pipelineBarrier2(cdDI);
+			vcb->cmd.pipelineBarrier2(cdDI);
 		}
 		{
 			std::vector<vk::BufferImageCopy2> copies;
@@ -53,14 +53,14 @@ namespace Cacao {
 				copies.push_back(copy);
 			}
 			vk::CopyBufferToImageInfo2 copyInfo(up.obj, vi.obj, vk::ImageLayout::eTransferDstOptimal, copies);
-			vcb->vk().copyBufferToImage2(copyInfo);
+			vcb->cmd.copyBufferToImage2(copyInfo);
 		}
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			vcb->vk().pipelineBarrier2(cdDI);
+			vcb->cmd.pipelineBarrier2(cdDI);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 

@@ -61,12 +61,12 @@ namespace Cacao {
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, sizeof(Vertex) * vertices.size());
 			vk::CopyBufferInfo2 copyInfo(vboUp.obj, vbo.obj, copy);
-			vcb->vk().copyBuffer2(copyInfo);
+			vcb->cmd.copyBuffer2(copyInfo);
 		}
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, sizeof(unsigned int) * ibd.size());
 			vk::CopyBufferInfo2 copyInfo(iboUp.obj, ibo.obj, copy);
-			vcb->vk().copyBuffer2(copyInfo);
+			vcb->cmd.copyBuffer2(copyInfo);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 

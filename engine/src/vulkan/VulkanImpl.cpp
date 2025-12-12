@@ -14,6 +14,6 @@
 #include "vulkan/vulkan.hpp"
 
 #define VMA_IMPLEMENTATION
-#include "vk_mem_alloc.hpp"
+#include "vk_mem_alloc.hpp"// IWYU pragma: keep
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE

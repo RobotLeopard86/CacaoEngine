@@ -47,14 +47,12 @@ namespace Cacao {
 		}
 
 		//Create initial swapchain
-		vulkan->swapchain.regen.store(true, std::memory_order_seq_cst);
 		GenSwapchain();
-		vulkan->swapchain.regen.store(false, std::memory_order_release);
 
 		//Register swapchain regeneration consumer
 		vulkan->resizer = EventConsumer([](Event&) {
 			Logger::Engine(Logger::Level::Trace) << "RESIZE";
-			vulkan->swapchain.regen.store(true);
+			vulkan->swapchain.regenRequested.store(true);
 		});
 		EventManager::Get().SubscribeConsumer("WindowResize", vulkan->resizer);
 

@@ -1,130 +1,94 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/Time.hpp"
 #include "VulkanModule.hpp"
 
 #include <atomic>
 #include <future>
 #include <mutex>
 #include <stdexcept>
-#include <thread>
 
 namespace Cacao {
-	std::set<Immediate*> Immediate::imms = {};
-	std::vector<std::unique_ptr<GfxHandler>> GfxHandler::handlers = {};
+	std::set<std::unique_ptr<TransientCommandContext>> TransientCommandContext::contexts = {};
 
-	Immediate& Immediate::Get() {
-		static thread_local Immediate imm = []() {
-			Immediate imm;
-			if(!imm.ready) {
+	TransientCommandContext* TransientCommandContext::Get() {
+		static thread_local std::unique_ptr<TransientCommandContext> ctx = []() {
+			std::unique_ptr<TransientCommandContext> ctx(new TransientCommandContext());
+			if(!ctx->ready) {
 				try {
 					vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
-					imm.pool = vulkan->dev.createCommandPool(ipoolCI);
-					vk::CommandBufferAllocateInfo allocCI(imm.pool, vk::CommandBufferLevel::ePrimary, 1);
-					imm.cmd = vulkan->dev.allocateCommandBuffers(allocCI)[0];
-					imm.fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
-					imm.ready = true;
+					ctx->pool = vulkan->dev.createCommandPool(ipoolCI);
+					vk::CommandBufferAllocateInfo allocCI(ctx->pool, vk::CommandBufferLevel::ePrimary, 1);
+					ctx->fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
+					ctx->ready = true;
 				} catch(...) {
-					Check<ExternalException>(false, "Failed to setup immediate object for thread!", [&imm]() {
-						if(imm.cmd) vulkan->dev.freeCommandBuffers(imm.pool, imm.cmd);
-						if(imm.pool) vulkan->dev.destroyCommandPool(imm.pool);
-						if(imm.fence) vulkan->dev.destroyFence(imm.fence);
+					Check<ExternalException>(false, "Failed to setup transient command object object for thread!", [&ctx]() {
+						if(ctx->pool) vulkan->dev.destroyCommandPool(ctx->pool);
+						if(ctx->fence) vulkan->dev.destroyFence(ctx->fence);
 					});
 				}
 			}
-			return imm;
+			return ctx;
 		}();
-		imms.insert(&imm);
-		return imm;
+		contexts.insert(ctx);
+		return ctx.get();
 	}
 
-	void Immediate::Cleanup() {
+	void TransientCommandContext::Cleanup() {
 		//Wait for the device to be idle
 		vulkan->dev.waitIdle();
 
-		for(Immediate* imm : imms) {
-			vulkan->dev.freeCommandBuffers(imm->pool, imm->cmd);
-			vulkan->dev.destroyCommandPool(imm->pool);
-			vulkan->dev.destroyFence(imm->fence);
+		for(const std::unique_ptr<TransientCommandContext>& ctx : contexts) {
+			vulkan->dev.destroyCommandPool(ctx->pool);
+			vulkan->dev.destroyFence(ctx->fence);
 		}
-		imms.clear();
-	}
-
-	void Immediate::SetupGfx() {
-		while(vulkan->swapchain.regen.load(std::memory_order_relaxed)) {
-			std::this_thread::yield();
-		}
-		while(!gfx) {
-			//Iterate over all the handlers until we find one that isn't in use
-			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
-				//The exchange method returns the previous value of the atomic
-				//So if it returns false, we know this handler was free and we have now reserved it
-				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
-					gfx = handler.get();
-					gfx->own = "gfx";
-					gfx->tid = ::syscall(SYS_gettid);
-					gfx->imageIdx = UINT32_MAX;
-					gfx->Acquire();
-					return;
-				}
-			}
-			std::this_thread::yield();
-		}
+		contexts.clear();
 	}
 
 	GPUManager::Impl* VulkanModule::ConfigureGPUManager() {
 		return new VulkanGPU();
 	}
 
-	VulkanCommandBuffer::VulkanCommandBuffer()
-	  : imm(Immediate::Get()), promise() {
-		//Acquire immediate
-		imm.get().accessMgr.acquire();
-
-		//Start command buffer recording
-		vk::CommandBufferBeginInfo cbbi(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
-		imm.get().cmd.begin(cbbi);
-	}
-
 	VulkanCommandBuffer::~VulkanCommandBuffer() {
-		//Release immediate
-		imm.get().accessMgr.release();
+		//Free command buffer
+		vulkan->dev.freeCommandBuffers(*poolPtr, cmd);
+		poolPtr = nullptr;
 	}
 
 	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other)
-	  : imm(std::move(other.imm)), promise(std::move(other.promise)) {}
+	  : transient(std::move(other.transient)), render(std::move(other.render)), promise(std::move(other.promise)) {}
 
 	VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) {
-		imm = std::move(other.imm);
+		transient = std::move(other.transient);
+		render = std::move(other.render);
 		promise = std::move(other.promise);
 		return *this;
 	}
 
 	void VulkanCommandBuffer::Execute() {
-		//End recording
-		imm.get().cmd.end();
+		/*//End recording
+		ctx.get().cmd.end();
 
 		//Build submission info
 		vk::SubmitInfo2 submit;
-		vk::CommandBufferSubmitInfo cbsi(imm.get().cmd);
-		if(imm.get().gfx) {
-			vk::SemaphoreSubmitInfo semWait(imm.get().gfx->acquireImage, 0, vk::PipelineStageFlagBits2::eAllCommands);
-			vk::SemaphoreSubmitInfo semSignal(imm.get().gfx->doneRendering, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+		vk::CommandBufferSubmitInfo cbsi(ctx.get().cmd);
+		if(ctx.get().gfx) {
+			vk::SemaphoreSubmitInfo semWait(ctx.get().gfx->acquireImage, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SemaphoreSubmitInfo semSignal(ctx.get().gfx->doneRendering, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 			submit = vk::SubmitInfo2({}, semWait, cbsi, semSignal);
 		} else {
 			submit = vk::SubmitInfo2({}, {}, cbsi);
 		}
 
 		//Reset fence if needed
-		if(vulkan->dev.getFenceStatus(imm.get().fence) == vk::Result::eSuccess) {
-			vk::Result fenceWait = vulkan->dev.waitForFences(imm.get().fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
-			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for immediate fence reset!");
-			vulkan->dev.resetFences(imm.get().fence);
+		if(vulkan->dev.getFenceStatus(ctx.get().fence) == vk::Result::eSuccess) {
+			vk::Result fenceWait = vulkan->dev.waitForFences(ctx.get().fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
+			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for ctxediate fence reset!");
+			vulkan->dev.resetFences(ctx.get().fence);
 		}
 
 		//Obtain queue lock
 		std::unique_lock<std::timed_mutex> lk(vulkan->queueMtx, std::defer_lock_t {});
-		if(imm.get().gfx) {
+		if(ctx.get().gfx) {
 			//If we have graphics, try to lock for a bit at a time
 			//This is to allow for swapchain regen
 			while(!lk.try_lock_for(time::fmilliseconds(1))) {
@@ -133,11 +97,11 @@ namespace Cacao {
 					//Swapchain regen cannot take place because we're blocked
 					//So we'll have to give up this frame
 					//Unfortuanately, that happens sometimes
-					imm.get().gfx->imageIdx = UINT32_MAX;
-					imm.get().gfx->own = "";
-					imm.get().gfx->tid = 0;
-					imm.get().gfx->inUse.store(false, std::memory_order_release);
-					imm.get().gfx = nullptr;
+					ctx.get().gfx->imageIdx = UINT32_MAX;
+					ctx.get().gfx->own = "";
+					ctx.get().gfx->tid = 0;
+					ctx.get().gfx->inUse.store(false, std::memory_order_release);
+					ctx.get().gfx = nullptr;
 					promise.set_value();
 					return;
 				}
@@ -148,17 +112,17 @@ namespace Cacao {
 		}
 
 		//Submit buffer to queue
-		vulkan->queue.submit2(submit, imm.get().fence);
+		vulkan->queue.submit2(submit, ctx.get().fence);
 
 		//Present if graphics is in use
-		if(imm.get().gfx) {
-			vk::PresentInfoKHR presentInfo(imm.get().gfx->doneRendering, vulkan->swapchain.chain, imm.get().gfx->imageIdx);
+		if(ctx.get().gfx) {
+			vk::PresentInfoKHR presentInfo(ctx.get().gfx->doneRendering, vulkan->swapchain.chain, ctx.get().gfx->imageIdx);
 			try {
 				vulkan->queue.presentKHR(presentInfo);
 			} catch(vk::OutOfDateKHRError& outOfDate) {
 				vulkan->swapchain.regen.store(true);
 			}
-		}
+		}*/
 	}
 
 	std::shared_future<void> VulkanGPU::SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) {
@@ -190,34 +154,14 @@ namespace Cacao {
 
 	void VulkanGPU::RunloopIteration() {
 		//Lock queue
-		std::unique_lock lk(mutex, std::defer_lock_t {});
-
-		//Regenerate swapchain if needed
-		if(vulkan->swapchain.regen.load(std::memory_order_relaxed)) {
-			lk.lock();
-			if(submitted.empty()) {
-				lk.unlock();
-				GenSwapchain();
-				vulkan->swapchain.regen.store(false, std::memory_order_release);
-			}
-		}
+		std::lock_guard lk(mutex);
 
 		//Go through all the submitted command buffers and see if they're done
-		if(!lk.owns_lock()) lk.lock();
 		for(auto it = submitted.begin(); it != submitted.end();) {
 			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
-			if(vulkan->dev.getFenceStatus(vcb->imm.get().fence) == vk::Result::eSuccess) {
+			if(vulkan->dev.getFenceStatus(vcb->GetFence()) == vk::Result::eSuccess) {
 				//Reset the fence
-				vulkan->dev.resetFences(vcb->imm.get().fence);
-
-				//Release graphics handler if needed
-				if(vcb->imm.get().gfx) {
-					vcb->imm.get().gfx->imageIdx = UINT32_MAX;
-					vcb->imm.get().gfx->own = "";
-					vcb->imm.get().gfx->tid = 0;
-					vcb->imm.get().gfx->inUse.store(false, std::memory_order_release);
-					vcb->imm.get().gfx = nullptr;
-				}
+				vulkan->dev.resetFences(vcb->GetFence());
 
 				//Set the promise
 				vcb->promise.set_value();
@@ -229,10 +173,9 @@ namespace Cacao {
 				++it;
 			}
 		}
-		lk.unlock();
 	}
 
-	void GfxHandler::Acquire() {
+	/*void GfxHandler::Acquire() {
 		if(imageIdx != UINT32_MAX) return;
 
 		//Try to acquire the next swapchain image
@@ -271,5 +214,5 @@ namespace Cacao {
 		//Wait for image acquisition to finish
 		vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
 		vulkan->dev.resetFences(imageFence);
-	}
+	}*/
 }

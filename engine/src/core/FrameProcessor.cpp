@@ -6,8 +6,6 @@
 #include "SingletonGet.hpp"
 
 #include <atomic>
-#include <chrono>
-#include <future>
 #include <thread>
 
 #include "glm/exponential.hpp"
@@ -95,10 +93,7 @@ namespace Cacao {
 			cmd->EndRendering();
 
 			//Execute command buffer
-			std::shared_future<void> submission = GPUManager::Get().Submit(std::move(cmd));
-			while(submission.wait_for(std::chrono::microseconds(1)) == std::future_status::timeout) {
-				if(stop.stop_requested()) return;
-			}
+			GPUManager::Get().Submit(std::move(cmd));
 		}
 	}
 }

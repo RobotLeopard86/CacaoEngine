@@ -4,7 +4,6 @@
 #include "vulkan/vulkan_enums.hpp"
 #include "vulkan/vulkan_structs.hpp"
 
-#include <atomic>
 #include <cstdint>
 
 namespace Cacao {
@@ -15,18 +14,6 @@ namespace Cacao {
 
 		//Wait for device to be idle
 		vulkan->dev.waitIdle();
-
-		ook = &GfxHandler::handlers;
-
-		//Delete the old swapchain images if they existed
-		if(vulkan->swapchain.chain) {
-			vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
-			vulkan->dev.destroyImageView(vulkan->depth.view);
-			vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
-			for(auto iv : vulkan->swapchain.views) {
-				vulkan->dev.destroyImageView(iv);
-			}
-		}
 
 		//Get surface capabilities
 		vk::SurfaceCapabilitiesKHR surfc = vulkan->physDev.getSurfaceCapabilitiesKHR(vulkan->surface);
@@ -55,9 +42,19 @@ namespace Cacao {
 		vk::SwapchainCreateInfoKHR swapchainCI(
 			{}, vulkan->surface, std::clamp((surfc.minImageCount + 1), surfc.minImageCount, (surfc.maxImageCount > 0 ? surfc.maxImageCount : UINT32_MAX)),
 			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, vulkan->swapchain.extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
-		swapchainCI.presentMode = presentMode;
+		swapchainCI.setPresentMode(presentMode);
+		if(vulkan->swapchain.chain) swapchainCI.setOldSwapchain(vulkan->swapchain.chain);
+		swapchainCI.setClipped(VK_TRUE);
 		try {
-			vulkan->swapchain.chain = vulkan->dev.createSwapchainKHR(swapchainCI);
+			vk::SwapchainKHR newSwapchain = vulkan->dev.createSwapchainKHR(swapchainCI);
+			if(vulkan->swapchain.chain) {
+				for(vk::ImageView& view : vulkan->swapchain.views) {
+					vulkan->dev.destroyImageView(view);
+				}
+				vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
+			}
+			vulkan->swapchain.views.clear();
+			vulkan->swapchain.chain = newSwapchain;
 		} catch(vk::SystemError& err) {
 			Check<ExternalException>(false, "Failed to create swapchain!");
 		}
@@ -66,22 +63,22 @@ namespace Cacao {
 		vulkan->swapchain.images = vulkan->dev.getSwapchainImagesKHR(vulkan->swapchain.chain);
 
 		//Create new swapchain image views
-		std::vector<vk::ImageView> swapchainImageViews(vulkan->swapchain.images.size());
+		vulkan->swapchain.views = std::vector<vk::ImageView>(vulkan->swapchain.images.size());
 		for(std::size_t i = 0; i < vulkan->swapchain.images.size(); ++i) {
 			vk::ImageViewCreateInfo imageViewCI(
 				{}, vulkan->swapchain.images[i], vk::ImageViewType::e2D, vulkan->surfaceFormat.format, {},
 				vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
 			try {
-				swapchainImageViews[i] = vulkan->dev.createImageView(imageViewCI);
+				vulkan->swapchain.views[i] = vulkan->dev.createImageView(imageViewCI);
 			} catch(vk::SystemError& err) {
-				Check<ExternalException>(false, "Failed to create swapchain image view!", [&swapchainImageViews, &i]() {
+				Check<ExternalException>(false, "Failed to create swapchain image view!", [&i]() {
 					for(; i >= 0; --i) {
-						vulkan->dev.destroyImageView(swapchainImageViews[i]);
+						vulkan->dev.destroyImageView(vulkan->swapchain.views[i]);
 					}
+					vulkan->swapchain.views.clear();
 				});
 			}
 		}
-		vulkan->swapchain.views = swapchainImageViews;
 
 		//Create new depth image and view
 		vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {vulkan->swapchain.extent.width, vulkan->swapchain.extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
@@ -98,72 +95,12 @@ namespace Cacao {
 		try {
 			vulkan->depth.view = vulkan->dev.createImageView(depthViewCI);
 		} catch(vk::SystemError& err) {
-			Check<ExternalException>(false, "Failed to create depth image view!", [&swapchainImageViews]() {
-				for(std::size_t i = 0; i < swapchainImageViews.size(); ++i) {
-					vulkan->dev.destroyImageView(swapchainImageViews[i]);
+			Check<ExternalException>(false, "Failed to create depth image view!", []() {
+				for(std::size_t i = 0; i < vulkan->swapchain.views.size(); ++i) {
+					vulkan->dev.destroyImageView(vulkan->swapchain.views[i]);
 				}
+				vulkan->swapchain.views.clear();
 			});
-		}
-
-		//Update graphics handlers
-		if(GfxHandler::handlers.size() > vulkan->swapchain.views.size()) {
-			//Now claim all the graphics handlers so nobody can mess with them
-			unsigned int obtained = 0;
-			while(obtained < GfxHandler::handlers.size()) {
-				for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
-					//The exchange method returns the previous value of the atomic
-					//So if it returns false, we know this handler was free and we have now reserved it
-					if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
-						handler->own = "swaprg";
-						handler->tid = ::syscall(SYS_gettid);
-						++obtained;
-					}
-				}
-			}
-
-			//Too many handlers, remove the extras
-			unsigned int diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size();
-			while((diff = GfxHandler::handlers.size() - vulkan->swapchain.views.size()) > 0) {
-				for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end();) {
-					vulkan->dev.destroySemaphore((*it)->acquireImage);
-					vulkan->dev.destroySemaphore((*it)->doneRendering);
-					vulkan->dev.destroyFence((*it)->imageFence);
-					it = GfxHandler::handlers.erase(it);
-					break;
-				}
-			}
-
-			//Release handlers
-			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
-				handler->own = "";
-				handler->tid = 0;
-				handler->inUse.store(false, std::memory_order_release);
-			}
-		} else if(GfxHandler::handlers.size() < vulkan->swapchain.views.size()) {
-			//Too few, add some
-			unsigned int diff = vulkan->swapchain.views.size() - GfxHandler::handlers.size();
-			for(unsigned int i = 0; i < diff; ++i) {
-				//Setup handler object
-				std::unique_ptr<GfxHandler> handler = std::make_unique<GfxHandler>();
-				handler->imageIdx = UINT32_MAX;
-				handler->inUse.store(false, std::memory_order_seq_cst);
-				try {
-					handler->imageFence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
-					handler->acquireImage = vulkan->dev.createSemaphore({});
-					handler->doneRendering = vulkan->dev.createSemaphore({});
-				} catch(vk::SystemError& err) {
-					Check<ExternalException>(false, "Failed to setup Vulkan graphics handler object!", [&swapchainImageViews]() {
-						vulkan->dev.destroyImageView(vulkan->depth.view);
-						vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
-						for(std::size_t i = 0; i < swapchainImageViews.size(); ++i) {
-							vulkan->dev.destroyImageView(swapchainImageViews[i]);
-						}
-					});
-				}
-
-				//Add to map
-				GfxHandler::handlers.push_back(std::move(handler));
-			}
 		}
 	}
 }

@@ -10,7 +10,6 @@
 #endif
 
 #include <memory>
-#include <atomic>
 
 namespace Cacao {
 	struct VulkanModuleRegistrar {
@@ -26,9 +25,7 @@ namespace Cacao {
 
 	void VulkanModule::SetVSync(bool state) {
 		vsync = state;
-		swapchain.regen.store(true, std::memory_order_seq_cst);
 		GenSwapchain();
-		swapchain.regen.store(false, std::memory_order_release);
 	}
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
@@ -167,8 +164,8 @@ namespace Cacao {
 			Check<ExternalException>(false, "Could not create memory allocator!");
 		}
 
-		//Make immediate for main thread
-		Immediate::Get();
+		//Make transient command context for main thread
+		TransientCommandContext::Get();
 
 		//Create globals UBO
 		vk::BufferCreateInfo globalsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
@@ -176,7 +173,7 @@ namespace Cacao {
 		try {
 			globalsUBO = allocator.createBuffer(globalsCI, globalsAllocCI);
 		} catch(vk::SystemError& err) {
-			Immediate::Cleanup();
+			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -188,7 +185,7 @@ namespace Cacao {
 		//Map globals UBO
 		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-			Immediate::Cleanup();
+			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -209,7 +206,7 @@ namespace Cacao {
 		if(selectedDF == vk::Format::eUndefined) {
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-			Immediate::Cleanup();
+			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -225,26 +222,8 @@ namespace Cacao {
 		//Wait for the device to be idle so it's safe to destroy things
 		dev.waitIdle();
 
-		//Clean up immediate objects
-		Immediate::Cleanup();
-
-		//Clean up graphics handlers
-		unsigned int obtained = 0;
-		while(obtained < GfxHandler::handlers.size()) {
-			for(std::unique_ptr<GfxHandler>& handler : GfxHandler::handlers) {
-				//The exchange method returns the previous value of the atomic
-				//So if it returns false, we know this handler was free and we have now reserved it
-				if(!handler->inUse.exchange(true, std::memory_order_acq_rel)) {
-					++obtained;
-				}
-			}
-		}
-		for(auto it = GfxHandler::handlers.begin(); it != GfxHandler::handlers.end(); ++it) {
-			vulkan->dev.destroySemaphore((*it)->acquireImage);
-			vulkan->dev.destroySemaphore((*it)->doneRendering);
-			vulkan->dev.destroyFence((*it)->imageFence);
-		}
-		GfxHandler::handlers.clear();
+		//Clean up transient command context objects
+		TransientCommandContext::Cleanup();
 
 		//Destroy Vulkan objects
 		allocator.unmapMemory(globalsUBO.alloc);
