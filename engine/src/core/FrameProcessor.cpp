@@ -4,6 +4,8 @@
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "SingletonGet.hpp"
+#include "ImplAccessor.hpp"
+#include "impl/PAL.hpp"
 
 #include <atomic>
 #include <thread>
@@ -63,8 +65,8 @@ namespace Cacao {
 
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		while(!stop.stop_requested()) {
-			//If the window is minimized, we can't render, so no point in working
-			while(Window::Get().IsMinimized()) {
+			//If the window is minimized or the swapchain is regenerating, we can't render, so no point in working
+			while(Window::Get().IsMinimized() || IMPL(GPUManager).IsRegenerating()) {
 				if(stop.stop_requested()) return;
 			}
 
@@ -88,7 +90,11 @@ namespace Cacao {
 			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
 
 			//Setup command buffer
-			std::unique_ptr<CommandBuffer> cmd = CommandBuffer::Create();
+			//We use the internal API so we can do rendering setup
+			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
+			cmd->SetupContext(true);
+
+			//Record commands
 			cmd->StartRendering(clearColorLinear);
 			cmd->EndRendering();
 

@@ -63,7 +63,7 @@ namespace Cacao {
 		}
 
 	  private:
-		static std::set<std::unique_ptr<TransientCommandContext>> contexts;
+		static std::set<TransientCommandContext*> contexts;
 		bool ready = false;
 
 		TransientCommandContext() {}
@@ -101,7 +101,7 @@ namespace Cacao {
 
 		void Execute() override;
 
-		vk::Fence& GetFence();
+		vk::Fence GetFence();
 
 		vk::CommandBuffer cmd;
 
@@ -113,6 +113,7 @@ namespace Cacao {
 		std::promise<void> promise;
 		std::vector<vk::CommandBuffer> secondaries;
 
+		void SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
 
@@ -126,6 +127,8 @@ namespace Cacao {
 		void RunloopStart() override {}
 		void RunloopStop() override {}
 		void RunloopIteration() override;
+
+		bool IsRegenerating() override;
 
 	  private:
 		std::vector<std::unique_ptr<VulkanCommandBuffer>> submitted;
@@ -164,6 +167,7 @@ namespace Cacao {
 			std::vector<vk::Image> images;
 			std::vector<vk::ImageView> views;
 			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
+			uint16_t cycle = 0;
 			std::atomic_bool regenRequested;
 			std::atomic_bool regenInProgress;
 		} swapchain;

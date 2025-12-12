@@ -35,6 +35,7 @@ namespace Cacao {
 		friend class FrameProcessor;
 		friend class PALModule;
 
+		virtual void SetupContext(bool rendering = false) {}
 		virtual void StartRendering(glm::vec3 clearColor) {}
 		virtual void EndRendering() {}
 	};

@@ -77,6 +77,8 @@ namespace Cacao {
 	}
 
 	std::unique_ptr<CommandBuffer> CommandBuffer::Create() {
-		return IMPL(PAL).mod->CreateCmdBuffer();
+		std::unique_ptr<CommandBuffer> cb = IMPL(PAL).mod->CreateCmdBuffer();
+		cb->SetupContext();
+		return cb;
 	}
 }

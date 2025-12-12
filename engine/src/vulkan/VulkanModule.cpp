@@ -25,7 +25,7 @@ namespace Cacao {
 
 	void VulkanModule::SetVSync(bool state) {
 		vsync = state;
-		GenSwapchain();
+		vulkan->swapchain.regenRequested.store(true);
 	}
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies

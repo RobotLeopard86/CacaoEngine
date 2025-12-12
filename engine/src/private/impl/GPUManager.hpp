@@ -17,6 +17,8 @@ namespace Cacao {
 		void Runloop(std::stop_token stop);
 		std::unique_ptr<std::jthread> thread;
 
+		virtual bool IsRegenerating() = 0;
+
 		struct VSyncRequest {
 			bool needChange;
 			bool value;

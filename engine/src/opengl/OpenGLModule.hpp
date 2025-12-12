@@ -75,6 +75,9 @@ namespace Cacao {
 		void RunloopStart() override;
 		void RunloopStop() override;
 		void RunloopIteration() override;
+		bool IsRegenerating() override {
+			return false;
+		}
 
 	  private:
 		std::queue<std::unique_ptr<OpenGLCommandBuffer>> commands;

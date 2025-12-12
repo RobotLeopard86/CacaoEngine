@@ -1,6 +1,7 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "VulkanModule.hpp"
+#include "vulkan/vulkan_enums.hpp"
 
 #include <atomic>
 #include <future>
@@ -8,7 +9,7 @@
 #include <stdexcept>
 
 namespace Cacao {
-	std::set<std::unique_ptr<TransientCommandContext>> TransientCommandContext::contexts = {};
+	std::set<TransientCommandContext*> TransientCommandContext::contexts = {};
 
 	TransientCommandContext* TransientCommandContext::Get() {
 		static thread_local std::unique_ptr<TransientCommandContext> ctx = []() {
@@ -29,7 +30,7 @@ namespace Cacao {
 			}
 			return ctx;
 		}();
-		contexts.insert(ctx);
+		contexts.insert(ctx.get());
 		return ctx.get();
 	}
 
@@ -37,7 +38,7 @@ namespace Cacao {
 		//Wait for the device to be idle
 		vulkan->dev.waitIdle();
 
-		for(const std::unique_ptr<TransientCommandContext>& ctx : contexts) {
+		for(TransientCommandContext* ctx : contexts) {
 			vulkan->dev.destroyCommandPool(ctx->pool);
 			vulkan->dev.destroyFence(ctx->fence);
 		}
@@ -62,6 +63,30 @@ namespace Cacao {
 		render = std::move(other.render);
 		promise = std::move(other.promise);
 		return *this;
+	}
+
+	void VulkanCommandBuffer::SetupContext(bool rendering) {
+		if(rendering) {
+			//Get the next context and advance the cycle
+			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
+			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
+
+			//Wait until our context is available
+			if(vulkan->dev.getFenceStatus(render->fence) != vk::Result::eSuccess) {
+				//Not available yet, so wait and then reset fence
+				//Wait a max of one second
+				Check<ExternalException>(vulkan->dev.waitForFences(render->fence, VK_TRUE, std::pow(10, 9)) == vk::Result::eSuccess, "Waited too long to obtain render context! This may indicate a hang in the graphics system.");
+				vulkan->dev.resetFences(render->fence);
+			}
+		} else {
+			transient = TransientCommandContext::Get();
+		}
+	}
+
+	vk::Fence VulkanCommandBuffer::GetFence() {
+		if(render) return render->fence;
+		if(transient) return transient->fence;
+		return {};
 	}
 
 	void VulkanCommandBuffer::Execute() {
@@ -173,6 +198,10 @@ namespace Cacao {
 				++it;
 			}
 		}
+	}
+
+	bool VulkanGPU::IsRegenerating() {
+		return vulkan->swapchain.regenInProgress.load(std::memory_order_relaxed);
 	}
 
 	/*void GfxHandler::Acquire() {
