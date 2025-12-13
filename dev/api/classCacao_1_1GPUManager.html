@@ -658,6 +658,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager8SetVSyncEb">
 <span id="_CPPv3N5Cacao10GPUManager8SetVSyncEb"></span><span id="_CPPv2N5Cacao10GPUManager8SetVSyncEb"></span><span id="Cacao::GPUManager::SetVSync__b"></span><span class="target" id="classCacao_1_1GPUManager_1abd370beceea11374c6d3b8e34987ad0d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetVSync</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager8SetVSyncEb" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the V-Sync state. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on what rendering API is in use, the change may not take effect instantly. However, it is guaranteed to take effect.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>newState</strong> – Whether V-Sync should be enabled</p>
