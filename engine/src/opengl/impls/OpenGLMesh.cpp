@@ -1,6 +1,7 @@
 #include "OpenGLMesh.hpp"
 #include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
+#include "CommandBufferCast.hpp"
 
 namespace Cacao {
 	void OpenGLMeshImpl::Realize(bool& success) {
@@ -14,7 +15,7 @@ namespace Cacao {
 		}
 
 		//Open-GL specific stuff needs to be on the GPU thread
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &ibd, &success]() {
 			//Generate buffers and vertex array
 			glGenVertexArrays(1, &vao);

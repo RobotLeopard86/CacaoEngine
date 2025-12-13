@@ -1,7 +1,10 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
-#include "vulkan/vulkan_enums.hpp"
+#include "ImplAccessor.hpp"
+#include "impl/GPUManager.hpp"
+#include "vulkan/vulkan_handles.hpp"
 
 #include <atomic>
 #include <future>
@@ -16,8 +19,8 @@ namespace Cacao {
 			std::unique_ptr<TransientCommandContext> ctx(new TransientCommandContext());
 			if(!ctx->ready) {
 				try {
-					vk::CommandPoolCreateInfo ipoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer | vk::CommandPoolCreateFlagBits::eTransient, 0);
-					ctx->pool = vulkan->dev.createCommandPool(ipoolCI);
+					vk::CommandPoolCreateInfo poolCI(vk::CommandPoolCreateFlagBits::eTransient, 0);
+					ctx->pool = vulkan->dev.createCommandPool(poolCI);
 					vk::CommandBufferAllocateInfo allocCI(ctx->pool, vk::CommandBufferLevel::ePrimary, 1);
 					ctx->fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
 					ctx->ready = true;
@@ -38,6 +41,7 @@ namespace Cacao {
 		//Wait for the device to be idle
 		vulkan->dev.waitIdle();
 
+		//Destroy all context objects
 		for(TransientCommandContext* ctx : contexts) {
 			vulkan->dev.destroyCommandPool(ctx->pool);
 			vulkan->dev.destroyFence(ctx->fence);
@@ -49,38 +53,135 @@ namespace Cacao {
 		return new VulkanGPU();
 	}
 
-	VulkanCommandBuffer::~VulkanCommandBuffer() {
-		//Free command buffer
-		vulkan->dev.freeCommandBuffers(*poolPtr, cmd);
-		poolPtr = nullptr;
-	}
-
 	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other)
-	  : transient(std::move(other.transient)), render(std::move(other.render)), promise(std::move(other.promise)) {}
+	  : transient(std::move(other.transient)), render(std::move(other.render)), promise(std::move(other.promise)), primary(std::move(other.primary)), secondaries(std::move(other.secondaries)) {}
 
 	VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) {
 		transient = std::move(other.transient);
 		render = std::move(other.render);
 		promise = std::move(other.promise);
+		primary = std::move(other.primary);
+		secondaries = std::move(other.secondaries);
 		return *this;
 	}
 
-	void VulkanCommandBuffer::SetupContext(bool rendering) {
+	VulkanCommandBuffer::~VulkanCommandBuffer() {
+		if(poolPtr == nullptr) return;
+
+		//Free secondary command buffers
+		for(vk::CommandBuffer& secondary : secondaries) {
+			vulkan->dev.freeCommandBuffers(*poolPtr, secondary);
+		}
+
+		//Free primary command buffer
+		vulkan->dev.freeCommandBuffers(*poolPtr, primary);
+		poolPtr = nullptr;
+	}
+
+	vk::CommandBuffer& VulkanCommandBuffer::vk() {
+		if(render) {
+			//If rendering, allocate a new secondary command buffer
+			//This makes the command recording system more modular
+			try {
+				//Create buffer
+				vk::CommandBufferAllocateInfo allocInfo(*poolPtr, vk::CommandBufferLevel::eSecondary, 1);
+				vk::CommandBuffer secondary = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
+
+				//Begin recording
+				vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit | vk::CommandBufferUsageFlagBits::eRenderPassContinue, &vulkan->cbInheritance);
+				secondary.begin(beginInfo);
+
+				//Add to secondaries list
+				secondaries.push_back(std::move(secondary));
+				return secondaries[secondaries.size() - 1];
+			} catch(...) {
+				Check<ExternalException>(false, "Failed to allocate secondary command buffer!");
+				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's a toddler
+			}
+		} else {
+			//Otherwise, return the primary buffer
+			return primary;
+		}
+	}
+
+	bool VulkanCommandBuffer::SetupContext(bool rendering) {
+		//Obtain context object
 		if(rendering) {
 			//Get the next context and advance the cycle
 			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
 			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 
-			//Wait until our context is available
+			//Is the context available?
 			if(vulkan->dev.getFenceStatus(render->fence) != vk::Result::eSuccess) {
-				//Not available yet, so wait and then reset fence
-				//Wait a max of one second
-				Check<ExternalException>(vulkan->dev.waitForFences(render->fence, VK_TRUE, std::pow(10, 9)) == vk::Result::eSuccess, "Waited too long to obtain render context! This may indicate a hang in the graphics system.");
-				vulkan->dev.resetFences(render->fence);
+				//No, skip frame
+				render = nullptr;
+				return false;
 			}
+			vulkan->dev.resetFences(render->fence);
+
+			//Set command pool pointer
+			poolPtr = &vulkan->renderingPool;
+
+			//Acquire image
+			try {
+				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render->acquire, render->fence, 1);
+				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
+				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
+				render->imageIndex = result.value;
+			} catch(vk::SystemError& err) {
+				//Is the swapchain out of date?
+				//If so, we can regenerate and try again
+				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout) {
+					poolPtr = nullptr;
+					render = nullptr;
+					GenSwapchain();
+					return SetupContext(true);
+				}
+
+				//Other error, can't proceed
+				render->imageIndex = UINT32_MAX;
+				poolPtr = nullptr;
+				render = nullptr;
+				std::stringstream msg;
+				msg << "Failed to acquire swapchain image: " << err.what();
+				Check<ExternalException>(false, msg.str());
+			}
+
+			//Wait for image acquisition to finish
+			vulkan->dev.waitForFences(render->fence, VK_TRUE, UINT64_MAX);
+			vulkan->dev.resetFences(render->fence);
 		} else {
+			//Get context and set pool pointer
 			transient = TransientCommandContext::Get();
+			poolPtr = &transient->pool;
+
+			//Reset fence if needed
+			if(vulkan->dev.getFenceStatus(transient->fence) == vk::Result::eSuccess) {
+				vk::Result fenceWait = vulkan->dev.waitForFences(GetFence(), VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
+				Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for transient command context fence reset!", [this]() {
+					poolPtr = nullptr;
+					transient = nullptr;
+				});
+				vulkan->dev.resetFences(transient->fence);
+			}
 		}
+
+		//Create command buffer from pool
+		try {
+			vk::CommandBufferAllocateInfo allocInfo(*poolPtr, vk::CommandBufferLevel::ePrimary, 1);
+			primary = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
+		} catch(...) {
+			poolPtr = nullptr;
+			render = nullptr;
+			transient = nullptr;
+			return false;
+		}
+
+		//Begin primary command buffer recording
+		vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+		primary.begin(beginInfo);
+
+		return true;
 	}
 
 	vk::Fence VulkanCommandBuffer::GetFence() {
@@ -90,64 +191,78 @@ namespace Cacao {
 	}
 
 	void VulkanCommandBuffer::Execute() {
-		/*//End recording
-		ctx.get().cmd.end();
+		//If rendering, we use secondary command buffers for each command; we need to execute those within the primary command buffer
+		if(render) {
+			if(secondaries.size() > 0) primary.executeCommands(secondaries);
+			if(didStartRender) {
+				//Now we end rendering on the primary
+				//This is in the if-clause as a fail-safe in case StartRendering didn't work or something
+				//Realistically this check will be meaningless usually
 
-		//Build submission info
-		vk::SubmitInfo2 submit;
-		vk::CommandBufferSubmitInfo cbsi(ctx.get().cmd);
-		if(ctx.get().gfx) {
-			vk::SemaphoreSubmitInfo semWait(ctx.get().gfx->acquireImage, 0, vk::PipelineStageFlagBits2::eAllCommands);
-			vk::SemaphoreSubmitInfo semSignal(ctx.get().gfx->doneRendering, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			submit = vk::SubmitInfo2({}, semWait, cbsi, semSignal);
-		} else {
-			submit = vk::SubmitInfo2({}, {}, cbsi);
+				//End rendering
+				primary.endRendering();
+
+				//Make our image presentable
+				{
+					vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryWrite,
+						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
+						vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[render->imageIndex],
+						vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
+					vk::DependencyInfo transition({}, {}, {}, barrier);
+					primary.pipelineBarrier2(transition);
+				}
+
+				//Put the depth image into a read-only format to not leave it in a rendering state
+				{
+					vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryWrite,
+						vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eMemoryRead | vk::AccessFlagBits2::eMemoryWrite,
+						vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->depth.obj,
+						vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
+					vk::DependencyInfo transition({}, {}, {}, barrier);
+					primary.pipelineBarrier2(transition);
+				}
+			}
 		}
 
+		//End primary command buffer recording
+		primary.end();
+
+		//Build submission info
+		vk::CommandBufferSubmitInfo cbSubmit(primary);
+		vk::SemaphoreSubmitInfo wait = {}, signal = {};
+		if(render) {
+			wait = vk::SemaphoreSubmitInfo(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			signal = vk::SemaphoreSubmitInfo(render->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+		}
+		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signal);
+
 		//Reset fence if needed
-		if(vulkan->dev.getFenceStatus(ctx.get().fence) == vk::Result::eSuccess) {
-			vk::Result fenceWait = vulkan->dev.waitForFences(ctx.get().fence, VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
-			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for ctxediate fence reset!");
-			vulkan->dev.resetFences(ctx.get().fence);
+		if(vulkan->dev.getFenceStatus(GetFence()) == vk::Result::eSuccess) {
+			vk::Result fenceWait = vulkan->dev.waitForFences(GetFence(), VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
+			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for pre-submission command buffer fence reset!");
+			vulkan->dev.resetFences(GetFence());
+		}
+
+		//If rendering and the swapchain is regenerating, this frame won't be valid, so we have to discard everything (unfortunately)
+		if(render && IMPL(GPUManager).IsRegenerating()) {
+			render->imageIndex = UINT32_MAX;
+			poolPtr = nullptr;
+			render = nullptr;
+			promise.set_value();
+
+			//We don't use Check() here because we don't need a message; this just bails us out of Submit and back to the frame processor without putting stuff in the submitted queue
+			throw MiscException("Frame skip - regen in progress");
 		}
 
 		//Obtain queue lock
-		std::unique_lock<std::timed_mutex> lk(vulkan->queueMtx, std::defer_lock_t {});
-		if(ctx.get().gfx) {
-			//If we have graphics, try to lock for a bit at a time
-			//This is to allow for swapchain regen
-			while(!lk.try_lock_for(time::fmilliseconds(1))) {
-				//Let's see if we're trying to regenerate the swapchain
-				if(vulkan->swapchain.regen.load(std::memory_order_relaxed)) {
-					//Swapchain regen cannot take place because we're blocked
-					//So we'll have to give up this frame
-					//Unfortuanately, that happens sometimes
-					ctx.get().gfx->imageIdx = UINT32_MAX;
-					ctx.get().gfx->own = "";
-					ctx.get().gfx->tid = 0;
-					ctx.get().gfx->inUse.store(false, std::memory_order_release);
-					ctx.get().gfx = nullptr;
-					promise.set_value();
-					return;
-				}
-			}
-		} else {
-			//No graphics, can block as long as needed
-			lk.lock();
+		std::lock_guard lk(vulkan->queueMtx);
+
+		//Submit (and present if rendering)
+		vulkan->queue.submit2(submitInfo, GetFence());
+		if(render) {
+			vk::PresentInfoKHR presentInfo(render->render, vulkan->swapchain.chain, render->imageIndex);
+			vulkan->queue.presentKHR(presentInfo);
 		}
-
-		//Submit buffer to queue
-		vulkan->queue.submit2(submit, ctx.get().fence);
-
-		//Present if graphics is in use
-		if(ctx.get().gfx) {
-			vk::PresentInfoKHR presentInfo(ctx.get().gfx->doneRendering, vulkan->swapchain.chain, ctx.get().gfx->imageIdx);
-			try {
-				vulkan->queue.presentKHR(presentInfo);
-			} catch(vk::OutOfDateKHRError& outOfDate) {
-				vulkan->swapchain.regen.store(true);
-			}
-		}*/
 	}
 
 	std::shared_future<void> VulkanGPU::SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) {
@@ -157,7 +272,7 @@ namespace Cacao {
 				return std::unique_ptr<VulkanCommandBuffer>(vcb);
 			} else {
 				Check<BadTypeException>(false, "Cannot submit a non-Vulkan command buffer to the Vulkan backend!");
-				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
+				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's a toddler
 			}
 		}();
 
@@ -185,11 +300,26 @@ namespace Cacao {
 		for(auto it = submitted.begin(); it != submitted.end();) {
 			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
 			if(vulkan->dev.getFenceStatus(vcb->GetFence()) == vk::Result::eSuccess) {
-				//Reset the fence
-				vulkan->dev.resetFences(vcb->GetFence());
+				//Free secondary command buffers
+				for(vk::CommandBuffer& secondary : vcb->secondaries) {
+					vulkan->dev.freeCommandBuffers(*vcb->poolPtr, secondary);
+				}
+
+				//Get the fence
+				vk::Fence fence = vcb->GetFence();
+
+				//Release context
+				vcb->poolPtr = nullptr;
+				vcb->render = nullptr;
+				vcb->transient = nullptr;
 
 				//Set the promise
 				vcb->promise.set_value();
+
+				//Reset the fence
+				//We do this later because as soon as we do, the rendering context becomes up for grabs
+				//We don't want that to happen until the command buffer is fully reset
+				vulkan->dev.resetFences(fence);
 
 				//Erase the object and update the iterator
 				it = submitted.erase(it);
@@ -198,6 +328,16 @@ namespace Cacao {
 				++it;
 			}
 		}
+	}
+
+	void VulkanGPU::RunloopStop() {
+		//Wait until all jobs are done and clean them up
+		//To avoid code duplication, we just call Iteration over and over
+		while(submitted.size() > 0) {
+			RunloopIteration();
+			Logger::Engine(Logger::Level::Trace) << submitted.size() << " jobs remain";
+		}
+		vulkan->dev.waitIdle();
 	}
 
 	bool VulkanGPU::IsRegenerating() {

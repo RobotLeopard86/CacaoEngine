@@ -1,6 +1,8 @@
 #include "VulkanCubemap.hpp"
-#include "Cacao/Engine.hpp"
+#include "Cacao/Exceptions.hpp"
+#include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
+#include "CommandBufferCast.hpp"
 
 namespace Cacao {
 	void VulkanCubemapImpl::Realize(bool& success) {
@@ -38,13 +40,14 @@ namespace Cacao {
 		vulkan->allocator.unmapMemory(up.alloc);
 
 		//Transfer data from upload buffer to real texture memory
-		std::unique_ptr<VulkanCommandBuffer> vcb = std::make_unique<VulkanCommandBuffer>();
+		std::unique_ptr<VulkanCommandBuffer> vcb = CBCast<VulkanCommandBuffer>(CommandBuffer::Create());
+		vk::CommandBuffer& cmd = vcb->vk();
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			vcb->cmd.pipelineBarrier2(cdDI);
+			cmd.pipelineBarrier2(cdDI);
 		}
 		{
 			std::vector<vk::BufferImageCopy2> copies;
@@ -53,14 +56,14 @@ namespace Cacao {
 				copies.push_back(copy);
 			}
 			vk::CopyBufferToImageInfo2 copyInfo(up.obj, vi.obj, vk::ImageLayout::eTransferDstOptimal, copies);
-			vcb->cmd.copyBufferToImage2(copyInfo);
+			cmd.copyBufferToImage2(copyInfo);
 		}
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			vcb->cmd.pipelineBarrier2(cdDI);
+			cmd.pipelineBarrier2(cdDI);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 

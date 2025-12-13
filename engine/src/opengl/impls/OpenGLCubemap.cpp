@@ -1,6 +1,7 @@
 #include "OpenGLCubemap.hpp"
 #include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
+#include "CommandBufferCast.hpp"
 
 #include "glad/gl.h"
 #include "libcacaoimage.hpp"
@@ -8,7 +9,7 @@
 namespace Cacao {
 	void OpenGLCubemapImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
 			//Create texture object
 			glGenTextures(1, &gpuTex);

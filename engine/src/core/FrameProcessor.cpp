@@ -70,12 +70,22 @@ namespace Cacao {
 				if(stop.stop_requested()) return;
 			}
 
+			//Setup command buffer
+			//We use the internal API so we can do rendering setup
+			//This is done before getting the world state so that if setup fails we can skip a frame
+			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
+			while(!cmd->SetupContext(true)) {
+				if(stop.stop_requested()) return;
+				if(IMPL(GPUManager).IsRegenerating()) continue;
+			}
+
 			//Request a snapshot of the world state
 			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
 
 			//Block until the tick controller grants the request
 			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
 				if(stop.stop_requested()) return;
+				if(IMPL(GPUManager).IsRegenerating()) continue;
 			}
 
 			//Now we are safe to read the world state
@@ -89,17 +99,14 @@ namespace Cacao {
 			constexpr glm::vec3 clearColor {0x00, 0xAC, 0xE6};
 			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
 
-			//Setup command buffer
-			//We use the internal API so we can do rendering setup
-			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
-			cmd->SetupContext(true);
-
 			//Record commands
 			cmd->StartRendering(clearColorLinear);
 			cmd->EndRendering();
 
 			//Execute command buffer
-			GPUManager::Get().Submit(std::move(cmd));
+			try {
+				GPUManager::Get().Submit(std::move(cmd));
+			} catch(const MiscException&) {}
 		}
 	}
 }

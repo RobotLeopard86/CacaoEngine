@@ -1,6 +1,7 @@
 #include "OpenGLTex2D.hpp"
 #include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
+#include "CommandBufferCast.hpp"
 
 #include "glad/gl.h"
 
@@ -9,7 +10,7 @@
 namespace Cacao {
 	void OpenGLTex2DImpl::Realize(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
 			//Flip texture
 			libcacaoimage::Image flipped = libcacaoimage::Flip(img);

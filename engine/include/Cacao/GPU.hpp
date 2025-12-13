@@ -35,7 +35,9 @@ namespace Cacao {
 		friend class FrameProcessor;
 		friend class PALModule;
 
-		virtual void SetupContext(bool rendering = false) {}
+		virtual bool SetupContext(bool rendering = false) {
+			return true;
+		}
 		virtual void StartRendering(glm::vec3 clearColor) {}
 		virtual void EndRendering() {}
 	};
@@ -96,6 +98,8 @@ namespace Cacao {
 
 		/**
 		 * @brief Set the V-Sync state
+		 *
+		 * @note Depending on what rendering API is in use, the change may not take effect instantly. However, it is guaranteed to take effect.
 		 *
 		 * @param newState Whether V-Sync should be enabled
 		 *

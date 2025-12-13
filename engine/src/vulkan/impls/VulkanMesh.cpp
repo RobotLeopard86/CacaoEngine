@@ -2,7 +2,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
-#include "vulkan/vulkan_structs.hpp"
+#include "CommandBufferCast.hpp"
 
 namespace Cacao {
 	void VulkanMeshImpl::Realize(bool& success) {
@@ -57,16 +57,17 @@ namespace Cacao {
 		vulkan->allocator.unmapMemory(iboUp.alloc);
 
 		//Transfer data from upload buffers to real buffers
-		std::unique_ptr<VulkanCommandBuffer> vcb = std::make_unique<VulkanCommandBuffer>();
+		std::unique_ptr<VulkanCommandBuffer> vcb = CBCast<VulkanCommandBuffer>(CommandBuffer::Create());
+		vk::CommandBuffer& cmd = vcb->vk();
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, sizeof(Vertex) * vertices.size());
 			vk::CopyBufferInfo2 copyInfo(vboUp.obj, vbo.obj, copy);
-			vcb->cmd.copyBuffer2(copyInfo);
+			cmd.copyBuffer2(copyInfo);
 		}
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, sizeof(unsigned int) * ibd.size());
 			vk::CopyBufferInfo2 copyInfo(iboUp.obj, ibo.obj, copy);
-			vcb->cmd.copyBuffer2(copyInfo);
+			cmd.copyBuffer2(copyInfo);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 

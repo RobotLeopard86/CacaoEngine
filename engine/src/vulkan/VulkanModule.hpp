@@ -78,6 +78,7 @@ namespace Cacao {
 		vk::Fence fence;
 		uint32_t imageIndex = UINT32_MAX;
 
+		RenderCommandContext() {}
 		RenderCommandContext(const RenderCommandContext&) = delete;
 		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
 		RenderCommandContext(RenderCommandContext&& o)
@@ -103,17 +104,19 @@ namespace Cacao {
 
 		vk::Fence GetFence();
 
-		vk::CommandBuffer cmd;
+		vk::CommandBuffer& vk();
 
 	  protected:
 		TransientCommandContext* transient = nullptr;
 		RenderCommandContext* render = nullptr;
+		bool didStartRender = false;
 
 		vk::CommandPool* poolPtr = nullptr;
 		std::promise<void> promise;
+		vk::CommandBuffer primary;
 		std::vector<vk::CommandBuffer> secondaries;
 
-		void SetupContext(bool rendering) override;
+		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
 
@@ -125,7 +128,7 @@ namespace Cacao {
 	  public:
 		std::shared_future<void> SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) override;
 		void RunloopStart() override {}
-		void RunloopStop() override {}
+		void RunloopStop() override;
 		void RunloopIteration() override;
 
 		bool IsRegenerating() override;
@@ -171,14 +174,23 @@ namespace Cacao {
 			std::atomic_bool regenRequested;
 			std::atomic_bool regenInProgress;
 		} swapchain;
+		vk::CommandPool renderingPool;
 
-		//==================== MISCELLANEOUS FIELDS ====================
+		//==================== SECONDARY COMMAND BUFFER SUPPORT ====================
+		vk::CommandBufferInheritanceRenderingInfo cbRenderingInheritance;
+		vk::CommandBufferInheritanceInfo cbInheritance;
+
+		//==================== DEPTH BUFFER ====================
 		ViewImage depth;
 		vk::Format selectedDF;
+
+		//==================== GLOBALS UBO AND MEMORY ====================
 		Allocated<vk::Buffer> globalsUBO;
 		void* globalsMem;
+
+		//==================== MISCELLANEOUS FIELDS ====================
 		bool vsync;
-		std::timed_mutex queueMtx;
+		std::mutex queueMtx;
 
 		VulkanModule()
 		  : PALModule("vulkan") {

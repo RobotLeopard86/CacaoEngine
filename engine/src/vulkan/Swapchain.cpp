@@ -4,10 +4,30 @@
 #include "vulkan/vulkan_enums.hpp"
 #include "vulkan/vulkan_structs.hpp"
 
+#include <atomic>
 #include <cstdint>
 
 namespace Cacao {
+	void SetupRenderingContext(std::unique_ptr<RenderCommandContext>& rcc) {
+		rcc->imageIndex = UINT32_MAX;
+		vk::SemaphoreCreateInfo semCreate {};
+		vk::FenceCreateInfo fenceCreate(vk::FenceCreateFlagBits::eSignaled);
+		try {
+			rcc->fence = vulkan->dev.createFence(fenceCreate);
+			rcc->acquire = vulkan->dev.createSemaphore(semCreate);
+			rcc->render = vulkan->dev.createSemaphore(semCreate);
+		} catch(vk::SystemError& err) {
+			if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
+			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
+			Check<ExternalException>(false, "Failed to create synchronization objects for rendering command context!");
+		}
+	}
+
 	void GenSwapchain() {
+		//Set regen flags
+		vulkan->swapchain.regenInProgress.store(true, std::memory_order_seq_cst);
+		vulkan->swapchain.regenRequested.store(false, std::memory_order_seq_cst);
+
 		//Lock the command buffer queue mutex
 		//This will block the GPU thread from running more commands until we're done (that would be bad)
 		std::lock_guard lk(vulkan->queueMtx);
@@ -102,5 +122,36 @@ namespace Cacao {
 				vulkan->swapchain.views.clear();
 			});
 		}
+
+		//Setup render contexts (number of contexts always needs to match number of image views)
+		std::size_t numContexts = vulkan->swapchain.renderContexts.size();
+		std::size_t numImages = vulkan->swapchain.images.size();
+		if(numContexts != numImages) {
+			if(numImages > numContexts) {
+				//Create, setup, and add new contexts
+				for(unsigned int i = 0; i < (numImages - numContexts); ++i) {
+					std::unique_ptr<RenderCommandContext> newCtx = std::make_unique<RenderCommandContext>();
+					SetupRenderingContext(newCtx);
+					vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
+				}
+			} else {
+				//We have too many contexts, so we'll reuse what we can and delete the rest by RAII
+				std::vector<std::unique_ptr<RenderCommandContext>> oldContexts = std::exchange(vulkan->swapchain.renderContexts, {});
+				vulkan->swapchain.renderContexts.resize(numImages);
+				unsigned int i = 0;
+				for(; i < numImages; ++i) {
+					vulkan->swapchain.renderContexts[i] = std::move(oldContexts[i]);
+				}
+				for(; i < numContexts; ++i) {
+					std::unique_ptr<RenderCommandContext>& rcc = oldContexts[i];
+					if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
+					if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
+					if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
+				}
+			}
+		}
+
+		//Regen done
+		vulkan->swapchain.regenInProgress.store(false);
 	}
 }
