@@ -9,6 +9,7 @@
 #include "impl/PAL.hpp"
 
 #include <atomic>
+#include <mutex>
 #include <thread>
 
 #include "glm/exponential.hpp"
@@ -108,6 +109,10 @@ namespace Cacao {
 			//Clear color
 			constexpr glm::vec3 clearColor {0x00, 0xAC, 0xE6};
 			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
+
+			//Check one last time to see if the swapchain is regenerating (after this we won't let it do that until we loop back around)
+			if(IMPL(GPUManager).IsRegenerating()) continue;
+			std::lock_guard lk(IMPL(GPUManager).regenLock);
 
 			//Record commands
 			cmd->StartRendering(clearColorLinear);

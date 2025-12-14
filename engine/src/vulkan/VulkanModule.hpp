@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Cacao/GPU.hpp"
-#include "Cacao/Log.hpp"
 #include "impl/PAL.hpp"
 #include "Cacao/EventConsumer.hpp"
 
@@ -98,7 +97,6 @@ namespace Cacao {
 			fence = std::exchange(o.fence, {});
 			sync = std::exchange(o.sync, {});
 			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
-			Logger::Engine(Logger::Level::Trace) << (o.available.load(std::memory_order_relaxed) ? "truey" : "falso") << " (move)";
 			available.store(o.available.load(std::memory_order_relaxed), std::memory_order_release);
 			return *this;
 		}
@@ -130,6 +128,8 @@ namespace Cacao {
 		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
+
+		static unsigned int acquireCount;
 
 		friend class VulkanGPU;
 		friend class VulkanModule;
@@ -178,6 +178,7 @@ namespace Cacao {
 		//==================== PRESENTATION SUPPORT ====================
 		vk::SurfaceKHR surface;
 		vk::SurfaceFormatKHR surfaceFormat;
+		vk::SurfaceCapabilitiesKHR capabilities;
 		struct SwapchainData {
 			vk::SwapchainKHR chain;
 			vk::Extent2D extent;
@@ -220,6 +221,7 @@ namespace Cacao {
 	inline std::shared_ptr<VulkanModule> vulkan;
 
 	void GenSwapchain();
+	void postswapgen();
 
 	constexpr glm::mat4 projectionCorrection(
 		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change

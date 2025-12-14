@@ -1,6 +1,8 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "ImplAccessor.hpp"
+#include "impl/GPUManager.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -8,7 +10,6 @@
 namespace Cacao {
 	void SetupRenderingContext(std::unique_ptr<RenderCommandContext>& rcc) {
 		rcc->imageIndex = UINT32_MAX;
-		Logger::Engine(Logger::Level::Trace) << "truey (maker)";
 		rcc->available.store(true);
 		vk::SemaphoreCreateInfo semCreate {};
 		vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
@@ -31,21 +32,22 @@ namespace Cacao {
 		vulkan->swapchain.regenInProgress.store(true, std::memory_order_seq_cst);
 		vulkan->swapchain.regenRequested.store(false, std::memory_order_seq_cst);
 
-		//Lock the command buffer queue mutex
+		//Lock the command buffer queue mutex and regen lock
 		//This will block the GPU thread from running more commands until we're done (that would be bad)
-		std::lock_guard lk(vulkan->queueMtx);
+		std::lock_guard lk(IMPL(GPUManager).regenLock);
+		std::lock_guard lk2(vulkan->queueMtx);
 
 		//Wait for device to be idle
 		vulkan->dev.waitIdle();
 
 		//Get surface capabilities
-		vk::SurfaceCapabilitiesKHR surfc = vulkan->physDev.getSurfaceCapabilitiesKHR(vulkan->surface);
+		vulkan->capabilities = vulkan->physDev.getSurfaceCapabilitiesKHR(vulkan->surface);
 
 		//Calculate extent
 		glm::uvec2 caSize = Window::Get().GetContentAreaSize();
-		vulkan->swapchain.extent = vk::Extent2D {caSize.x, caSize.y};
-		vulkan->swapchain.extent.width = std::clamp(vulkan->swapchain.extent.width, surfc.minImageExtent.width, surfc.maxImageExtent.width);
-		vulkan->swapchain.extent.height = std::clamp(vulkan->swapchain.extent.height, surfc.minImageExtent.height, surfc.maxImageExtent.height);
+		vk::Extent2D extent {caSize.x, caSize.y};
+		extent.width = std::clamp(extent.width, vulkan->capabilities.minImageExtent.width, vulkan->capabilities.maxImageExtent.width);
+		extent.height = std::clamp(extent.height, vulkan->capabilities.minImageExtent.height, vulkan->capabilities.maxImageExtent.height);
 
 		//Decide present mode
 		auto pmodes = vulkan->physDev.getSurfacePresentModesKHR(vulkan->surface);
@@ -63,8 +65,8 @@ namespace Cacao {
 
 		//Make new swapchain
 		vk::SwapchainCreateInfoKHR swapchainCI(
-			{}, vulkan->surface, std::clamp((surfc.minImageCount + 1), surfc.minImageCount, (surfc.maxImageCount > 0 ? surfc.maxImageCount : UINT32_MAX)),
-			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, vulkan->swapchain.extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
+			{}, vulkan->surface, std::clamp((vulkan->capabilities.minImageCount + 2), vulkan->capabilities.minImageCount, (vulkan->capabilities.maxImageCount > 0 ? vulkan->capabilities.maxImageCount : UINT32_MAX)),
+			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
 		swapchainCI.setPresentMode(presentMode);
 		if(vulkan->swapchain.chain) swapchainCI.setOldSwapchain(vulkan->swapchain.chain);
 		try {
@@ -80,6 +82,10 @@ namespace Cacao {
 		} catch(vk::SystemError& err) {
 			Check<ExternalException>(false, "Failed to create swapchain!");
 		}
+
+		//Set extent now that swapchain is created
+		vulkan->swapchain.extent = extent;
+		postswapgen();
 
 		//Get new swapchain images
 		vulkan->swapchain.images = vulkan->dev.getSwapchainImagesKHR(vulkan->swapchain.chain);
@@ -148,8 +154,6 @@ namespace Cacao {
 				for(; i < numImages; ++i) {
 					vulkan->swapchain.renderContexts[i] = std::move(oldContexts[i]);
 					vulkan->swapchain.renderContexts[i]->imageIndex = UINT32_MAX;
-					Logger::Engine(Logger::Level::Trace) << "truey (available reset)";
-					vulkan->swapchain.renderContexts[i]->available.store(true);
 				}
 				for(; i < numContexts; ++i) {
 					std::unique_ptr<RenderCommandContext>& rcc = oldContexts[i];
@@ -160,8 +164,12 @@ namespace Cacao {
 				}
 			}
 		}
+		for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
+			rcc->available.store(true);
+		}
 
 		//Regen done
+		//Locks will be released by stack unwind
 		vulkan->swapchain.regenInProgress.store(false);
 	}
 }

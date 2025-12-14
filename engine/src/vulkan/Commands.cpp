@@ -8,7 +8,6 @@ namespace Cacao {
 
 		//Setup rendering info
 		vk::Viewport viewport(0.0f, 0.0f, float(vulkan->swapchain.extent.width), float(vulkan->swapchain.extent.height), 0.0f, 1.0f);
-		Logger::Engine(Logger::Level::Trace) << "VP @ " << viewport.width << ", " << viewport.height;
 		vk::Rect2D scissor({0, 0}, vulkan->swapchain.extent);
 		vk::RenderingAttachmentInfo colorAttachment(vulkan->swapchain.views[render->imageIndex], vk::ImageLayout::eColorAttachmentOptimal, {}, {}, {},
 			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {clearColor.r, clearColor.g, clearColor.b, 1.0f}));

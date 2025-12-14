@@ -12,6 +12,7 @@
 
 namespace Cacao {
 	std::set<TransientCommandContext*> TransientCommandContext::contexts = {};
+	unsigned int VulkanCommandBuffer::acquireCount = 0;
 
 	TransientCommandContext* TransientCommandContext::Get() {
 		static thread_local std::unique_ptr<TransientCommandContext> ctx = []() {
@@ -55,19 +56,34 @@ namespace Cacao {
 	}
 
 	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other)
-	  : transient(std::move(other.transient)), render(std::move(other.render)), promise(std::move(other.promise)), primary(std::move(other.primary)), secondaries(std::move(other.secondaries)) {}
+	  : transient(std::exchange(other.transient, nullptr)), render(std::exchange(other.render, nullptr)), didStartRender(std::exchange(other.didStartRender, false)), poolPtr(std::exchange(other.poolPtr, nullptr)), promise(std::move(other.promise)), primary(std::move(other.primary)), secondaries(std::move(other.secondaries)) {}
 
 	VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) {
-		transient = std::move(other.transient);
-		render = std::move(other.render);
+		if(this == &other) return *this;
+
+		transient = std::exchange(other.transient, nullptr);
+		render = std::exchange(other.render, nullptr);
+		if(render) Logger::Engine(Logger::Level::Trace) << render->id << " movey";
 		promise = std::move(other.promise);
 		primary = std::move(other.primary);
 		secondaries = std::move(other.secondaries);
+		didStartRender = std::exchange(other.didStartRender, false);
+		poolPtr = std::exchange(other.poolPtr, nullptr);
+
 		return *this;
 	}
 
 	VulkanCommandBuffer::~VulkanCommandBuffer() {
 		if(poolPtr == nullptr) return;
+
+		//If this was a rendering context, mark it available and adjust counter
+		if(render) {
+			render->available.store(true);
+			Logger::Engine(Logger::Level::Trace) << "-ACQ " << acquireCount << " -> " << (acquireCount - 1);
+			if(acquireCount != 0) --(acquireCount);
+			render = nullptr;
+		}
+		if(transient) transient = nullptr;
 
 		//Free secondary command buffers
 		for(vk::CommandBuffer& secondary : secondaries) {
@@ -108,6 +124,12 @@ namespace Cacao {
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
+			//Ensure "forward progress" is being made (https://docs.vulkan.org/spec/latest/chapters/VK_KHR_surface/wsi.html#swapchain-acquire-forward-progress)
+			if(acquireCount > (vulkan->swapchain.images.size() - vulkan->capabilities.minImageCount)) {
+				//Forward progress requirement not satisifed, skip
+				return false;
+			}
+
 			//Get the next context and advance the cycle
 			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
 			render->id = vulkan->swapchain.cycle;
@@ -121,7 +143,6 @@ namespace Cacao {
 			}
 
 			//Claim context
-			Logger::Engine(Logger::Level::Trace) << render->id << " falso (claim)";
 			render->available.store(false);
 
 			//Set semaphore done value
@@ -136,12 +157,13 @@ namespace Cacao {
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
 				render->imageIndex = result.value;
+				Logger::Engine(Logger::Level::Trace) << "+ACQ " << acquireCount << " -> " << (acquireCount + 1);
+				++acquireCount;
 			} catch(vk::SystemError& err) {
 				//Is the swapchain out of date?
 				//If so, we can regenerate and try again
 				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout || err.code() == vk::Result::eNotReady) {
 					poolPtr = nullptr;
-					Logger::Engine(Logger::Level::Trace) << render->id << " truey (try again)";
 					render->available.store(true);
 					render = nullptr;
 					GenSwapchain();
@@ -151,7 +173,6 @@ namespace Cacao {
 				//Other error, can't proceed
 				render->imageIndex = UINT32_MAX;
 				poolPtr = nullptr;
-				Logger::Engine(Logger::Level::Trace) << render->id << " truey (oh fork)";
 				render->available.store(true);
 				render = nullptr;
 				std::stringstream msg;
@@ -177,10 +198,14 @@ namespace Cacao {
 			primary = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
 		} catch(...) {
 			poolPtr = nullptr;
-			Logger::Engine(Logger::Level::Trace) << render->id << " truey (no cmd)";
-			render->available.store(true);
-			render = nullptr;
-			transient = nullptr;
+			if(render) {
+				render->available.store(true);
+				Logger::Engine(Logger::Level::Trace) << "-ACQ " << VulkanCommandBuffer::acquireCount << " -> " << (VulkanCommandBuffer::acquireCount - 1);
+				if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
+				render = nullptr;
+			} else {
+				transient = nullptr;
+			}
 			return false;
 		}
 
@@ -248,7 +273,8 @@ namespace Cacao {
 		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
 		if(render && (vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) || IMPL(GPUManager).IsRegenerating())) {
 			render->imageIndex = UINT32_MAX;
-			Logger::Engine(Logger::Level::Trace) << render->id << " truey (gonna give you up)";
+			Logger::Engine(Logger::Level::Trace) << "-ACQ " << acquireCount << " -> " << (acquireCount - 1);
+			if(acquireCount != 0) --(acquireCount);
 			render->available.store(true);
 			poolPtr = nullptr;
 			render = nullptr;
@@ -302,11 +328,13 @@ namespace Cacao {
 
 	void VulkanGPU::RunloopIteration() {
 		//Lock queue
-		std::lock_guard lk(mutex);
+		std::unique_lock lk(mutex);
 
 		//If queue empty and swapchain regen requested, regenerate
 		if(vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) && submitted.empty()) {
+			lk.unlock();
 			GenSwapchain();
+			lk.lock();
 		}
 
 		//Go through all the submitted command buffers and see if they're done
@@ -314,18 +342,23 @@ namespace Cacao {
 			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
 			Sync sync = vcb->GetSync();
 			if(vulkan->dev.getSemaphoreCounterValue(sync.semaphore) >= sync.doneValue) {
-				//Free secondary command buffers
-				for(vk::CommandBuffer& secondary : vcb->secondaries) {
-					vulkan->dev.freeCommandBuffers(*vcb->poolPtr, secondary);
+				//Free secondary command buffers if we have a valid pool
+				if(vcb->poolPtr) {
+					for(vk::CommandBuffer& secondary : vcb->secondaries) {
+						vulkan->dev.freeCommandBuffers(*vcb->poolPtr, secondary);
+					}
 				}
 
-				//Mark context as available
-				Logger::Engine(Logger::Level::Trace) << vcb->render->id << " truey (dun)";
-				vcb->render->available.store(true);
+				//If this was a rendering context, mark it available and adjust counter
+				if(vcb->render) {
+					vcb->render->available.store(true);
+					Logger::Engine(Logger::Level::Trace) << "-ACQ " << VulkanCommandBuffer::acquireCount << " -> " << (VulkanCommandBuffer::acquireCount - 1);
+					if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
+					vcb->render = nullptr;
+				}
 
-				//Release context
+				//Release context pointers
 				vcb->poolPtr = nullptr;
-				vcb->render = nullptr;
 				vcb->transient = nullptr;
 
 				//Set the promise

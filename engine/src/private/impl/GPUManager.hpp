@@ -16,6 +16,7 @@ namespace Cacao {
 
 		void Runloop(std::stop_token stop);
 		std::unique_ptr<std::jthread> thread;
+		std::mutex regenLock;
 
 		virtual bool IsRegenerating() = 0;
 		virtual bool UsesImmediateExecution() = 0;

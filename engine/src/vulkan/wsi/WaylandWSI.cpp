@@ -10,4 +10,8 @@ namespace Cacao {
 		vk::WaylandSurfaceCreateInfoKHR wci({}, WIN_IMPL(Wayland).display, WIN_IMPL(Wayland).surface);
 		vulkan->surface = vulkan->instance.createWaylandSurfaceKHR(wci);
 	}
+
+	void postswapgen() {
+		if(IMPL(Window).ProviderID().compare("wayland") == 0) wl_surface_commit(WIN_IMPL(Wayland).surface);
+	}
 }
