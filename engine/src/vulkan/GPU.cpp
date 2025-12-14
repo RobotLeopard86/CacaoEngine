@@ -79,7 +79,6 @@ namespace Cacao {
 		//If this was a rendering context, mark it available and adjust counter
 		if(render) {
 			render->available.store(true);
-			Logger::Engine(Logger::Level::Trace) << "-ACQ " << acquireCount << " -> " << (acquireCount - 1);
 			if(acquireCount != 0) --(acquireCount);
 			render = nullptr;
 		}
@@ -157,7 +156,6 @@ namespace Cacao {
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
 				render->imageIndex = result.value;
-				Logger::Engine(Logger::Level::Trace) << "+ACQ " << acquireCount << " -> " << (acquireCount + 1);
 				++acquireCount;
 			} catch(vk::SystemError& err) {
 				//Is the swapchain out of date?
@@ -200,7 +198,6 @@ namespace Cacao {
 			poolPtr = nullptr;
 			if(render) {
 				render->available.store(true);
-				Logger::Engine(Logger::Level::Trace) << "-ACQ " << VulkanCommandBuffer::acquireCount << " -> " << (VulkanCommandBuffer::acquireCount - 1);
 				if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
 				render = nullptr;
 			} else {
@@ -273,7 +270,6 @@ namespace Cacao {
 		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
 		if(render && (vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) || IMPL(GPUManager).IsRegenerating())) {
 			render->imageIndex = UINT32_MAX;
-			Logger::Engine(Logger::Level::Trace) << "-ACQ " << acquireCount << " -> " << (acquireCount - 1);
 			if(acquireCount != 0) --(acquireCount);
 			render->available.store(true);
 			poolPtr = nullptr;
@@ -352,7 +348,6 @@ namespace Cacao {
 				//If this was a rendering context, mark it available and adjust counter
 				if(vcb->render) {
 					vcb->render->available.store(true);
-					Logger::Engine(Logger::Level::Trace) << "-ACQ " << VulkanCommandBuffer::acquireCount << " -> " << (VulkanCommandBuffer::acquireCount - 1);
 					if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
 					vcb->render = nullptr;
 				}
