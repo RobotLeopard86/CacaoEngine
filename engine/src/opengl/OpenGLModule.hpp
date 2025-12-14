@@ -78,6 +78,9 @@ namespace Cacao {
 		bool IsRegenerating() override {
 			return false;
 		}
+		bool UsesImmediateExecution() override {
+			return true;
+		}
 
 	  private:
 		std::queue<std::unique_ptr<OpenGLCommandBuffer>> commands;

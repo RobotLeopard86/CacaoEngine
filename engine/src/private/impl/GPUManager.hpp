@@ -18,6 +18,7 @@ namespace Cacao {
 		std::unique_ptr<std::jthread> thread;
 
 		virtual bool IsRegenerating() = 0;
+		virtual bool UsesImmediateExecution() = 0;
 
 		struct VSyncRequest {
 			bool needChange;

@@ -108,7 +108,8 @@ namespace Cacao {
 
 			//Execute command buffer
 			try {
-				GPUManager::Get().Submit(std::move(cmd));
+				std::shared_future<void> fut = GPUManager::Get().Submit(std::move(cmd));
+				if(IMPL(GPUManager).UsesImmediateExecution()) fut.get();
 			} catch(const MiscException&) {}
 		}
 	}

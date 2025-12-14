@@ -140,6 +140,9 @@ namespace Cacao {
 		void RunloopIteration() override;
 
 		bool IsRegenerating() override;
+		bool UsesImmediateExecution() override {
+			return false;
+		}
 
 	  private:
 		std::vector<std::unique_ptr<VulkanCommandBuffer>> submitted;
