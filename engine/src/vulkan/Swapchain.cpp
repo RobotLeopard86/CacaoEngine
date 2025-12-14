@@ -8,6 +8,7 @@
 namespace Cacao {
 	void SetupRenderingContext(std::unique_ptr<RenderCommandContext>& rcc) {
 		rcc->imageIndex = UINT32_MAX;
+		Logger::Engine(Logger::Level::Trace) << "truey (maker)";
 		rcc->available.store(true);
 		vk::SemaphoreCreateInfo semCreate {};
 		vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
@@ -147,6 +148,7 @@ namespace Cacao {
 				for(; i < numImages; ++i) {
 					vulkan->swapchain.renderContexts[i] = std::move(oldContexts[i]);
 					vulkan->swapchain.renderContexts[i]->imageIndex = UINT32_MAX;
+					Logger::Engine(Logger::Level::Trace) << "truey (available reset)";
 					vulkan->swapchain.renderContexts[i]->available.store(true);
 				}
 				for(; i < numContexts; ++i) {

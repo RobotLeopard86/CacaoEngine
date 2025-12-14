@@ -74,12 +74,16 @@ namespace Cacao {
 			//Setup command buffer
 			//We use the internal API so we can do rendering setup
 			//This is done before getting the world state so that if setup fails we can skip a frame
+			bool breakContinue = false;
 			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
 			while(!cmd->SetupContext(true)) {
 				if(stop.stop_requested()) return;
-				if(IMPL(GPUManager).IsRegenerating()) break;
+				if(IMPL(GPUManager).IsRegenerating()) {
+					breakContinue = true;
+					break;
+				}
 			}
-			if(IMPL(GPUManager).IsRegenerating()) continue;
+			if(breakContinue) continue;
 
 			//Request a snapshot of the world state
 			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
@@ -87,9 +91,12 @@ namespace Cacao {
 			//Block until the tick controller grants the request
 			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
 				if(stop.stop_requested()) return;
-				if(IMPL(GPUManager).IsRegenerating()) break;
+				if(IMPL(GPUManager).IsRegenerating()) {
+					breakContinue = true;
+					break;
+				}
 			}
-			if(IMPL(GPUManager).IsRegenerating()) continue;
+			if(breakContinue) continue;
 
 			//Now we are safe to read the world state
 			//TODO: World read logic

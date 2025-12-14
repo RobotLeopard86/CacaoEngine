@@ -1,5 +1,6 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
@@ -109,6 +110,7 @@ namespace Cacao {
 		if(rendering) {
 			//Get the next context and advance the cycle
 			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
+			render->id = vulkan->swapchain.cycle;
 			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 
 			//Is the context available?
@@ -119,6 +121,7 @@ namespace Cacao {
 			}
 
 			//Claim context
+			Logger::Engine(Logger::Level::Trace) << render->id << " falso (claim)";
 			render->available.store(false);
 
 			//Set semaphore done value
@@ -136,8 +139,9 @@ namespace Cacao {
 			} catch(vk::SystemError& err) {
 				//Is the swapchain out of date?
 				//If so, we can regenerate and try again
-				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout) {
+				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout || err.code() == vk::Result::eNotReady) {
 					poolPtr = nullptr;
+					Logger::Engine(Logger::Level::Trace) << render->id << " truey (try again)";
 					render->available.store(true);
 					render = nullptr;
 					GenSwapchain();
@@ -147,6 +151,7 @@ namespace Cacao {
 				//Other error, can't proceed
 				render->imageIndex = UINT32_MAX;
 				poolPtr = nullptr;
+				Logger::Engine(Logger::Level::Trace) << render->id << " truey (oh fork)";
 				render->available.store(true);
 				render = nullptr;
 				std::stringstream msg;
@@ -172,6 +177,7 @@ namespace Cacao {
 			primary = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
 		} catch(...) {
 			poolPtr = nullptr;
+			Logger::Engine(Logger::Level::Trace) << render->id << " truey (no cmd)";
 			render->available.store(true);
 			render = nullptr;
 			transient = nullptr;
@@ -242,6 +248,7 @@ namespace Cacao {
 		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
 		if(render && (vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) || IMPL(GPUManager).IsRegenerating())) {
 			render->imageIndex = UINT32_MAX;
+			Logger::Engine(Logger::Level::Trace) << render->id << " truey (gonna give you up)";
 			render->available.store(true);
 			poolPtr = nullptr;
 			render = nullptr;
@@ -313,6 +320,7 @@ namespace Cacao {
 				}
 
 				//Mark context as available
+				Logger::Engine(Logger::Level::Trace) << vcb->render->id << " truey (dun)";
 				vcb->render->available.store(true);
 
 				//Release context

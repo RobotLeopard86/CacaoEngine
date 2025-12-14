@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cacao/GPU.hpp"
+#include "Cacao/Log.hpp"
 #include "impl/PAL.hpp"
 #include "Cacao/EventConsumer.hpp"
 
@@ -84,6 +85,7 @@ namespace Cacao {
 		Sync sync;
 		uint32_t imageIndex = UINT32_MAX;
 		std::atomic_bool available;
+		int id;
 
 		RenderCommandContext() {}
 		RenderCommandContext(const RenderCommandContext&) = delete;
@@ -96,6 +98,7 @@ namespace Cacao {
 			fence = std::exchange(o.fence, {});
 			sync = std::exchange(o.sync, {});
 			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
+			Logger::Engine(Logger::Level::Trace) << (o.available.load(std::memory_order_relaxed) ? "truey" : "falso") << " (move)";
 			available.store(o.available.load(std::memory_order_relaxed), std::memory_order_release);
 			return *this;
 		}
