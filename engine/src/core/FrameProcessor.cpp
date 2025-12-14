@@ -1,6 +1,7 @@
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "SingletonGet.hpp"
@@ -76,8 +77,9 @@ namespace Cacao {
 			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
 			while(!cmd->SetupContext(true)) {
 				if(stop.stop_requested()) return;
-				if(IMPL(GPUManager).IsRegenerating()) continue;
+				if(IMPL(GPUManager).IsRegenerating()) break;
 			}
+			if(IMPL(GPUManager).IsRegenerating()) continue;
 
 			//Request a snapshot of the world state
 			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
@@ -85,8 +87,9 @@ namespace Cacao {
 			//Block until the tick controller grants the request
 			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
 				if(stop.stop_requested()) return;
-				if(IMPL(GPUManager).IsRegenerating()) continue;
+				if(IMPL(GPUManager).IsRegenerating()) break;
 			}
+			if(IMPL(GPUManager).IsRegenerating()) continue;
 
 			//Now we are safe to read the world state
 			//TODO: World read logic

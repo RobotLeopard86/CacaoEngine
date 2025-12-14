@@ -1,10 +1,8 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
-#include "vulkan/vulkan_handles.hpp"
 
 #include <atomic>
 #include <future>
@@ -22,12 +20,14 @@ namespace Cacao {
 					vk::CommandPoolCreateInfo poolCI(vk::CommandPoolCreateFlagBits::eTransient, 0);
 					ctx->pool = vulkan->dev.createCommandPool(poolCI);
 					vk::CommandBufferAllocateInfo allocCI(ctx->pool, vk::CommandBufferLevel::ePrimary, 1);
-					ctx->fence = vulkan->dev.createFence({vk::FenceCreateFlagBits::eSignaled});
+					ctx->sync = {};
+					vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
+					ctx->sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
 					ctx->ready = true;
 				} catch(...) {
 					Check<ExternalException>(false, "Failed to setup transient command object object for thread!", [&ctx]() {
 						if(ctx->pool) vulkan->dev.destroyCommandPool(ctx->pool);
-						if(ctx->fence) vulkan->dev.destroyFence(ctx->fence);
+						if(ctx->sync.semaphore) vulkan->dev.destroySemaphore(ctx->sync.semaphore);
 					});
 				}
 			}
@@ -44,7 +44,7 @@ namespace Cacao {
 		//Destroy all context objects
 		for(TransientCommandContext* ctx : contexts) {
 			vulkan->dev.destroyCommandPool(ctx->pool);
-			vulkan->dev.destroyFence(ctx->fence);
+			vulkan->dev.destroySemaphore(ctx->sync.semaphore);
 		}
 		contexts.clear();
 	}
@@ -112,12 +112,17 @@ namespace Cacao {
 			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 
 			//Is the context available?
-			if(vulkan->dev.getFenceStatus(render->fence) != vk::Result::eSuccess) {
+			if(!render->available.load()) {
 				//No, skip frame
 				render = nullptr;
 				return false;
 			}
-			vulkan->dev.resetFences(render->fence);
+
+			//Claim context
+			render->available.store(false);
+
+			//Set semaphore done value
+			render->sync.doneValue = vulkan->dev.getSemaphoreCounterValue(render->sync.semaphore) + 1;
 
 			//Set command pool pointer
 			poolPtr = &vulkan->renderingPool;
@@ -133,6 +138,7 @@ namespace Cacao {
 				//If so, we can regenerate and try again
 				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout) {
 					poolPtr = nullptr;
+					render->available.store(true);
 					render = nullptr;
 					GenSwapchain();
 					return SetupContext(true);
@@ -141,6 +147,7 @@ namespace Cacao {
 				//Other error, can't proceed
 				render->imageIndex = UINT32_MAX;
 				poolPtr = nullptr;
+				render->available.store(true);
 				render = nullptr;
 				std::stringstream msg;
 				msg << "Failed to acquire swapchain image: " << err.what();
@@ -155,15 +162,8 @@ namespace Cacao {
 			transient = TransientCommandContext::Get();
 			poolPtr = &transient->pool;
 
-			//Reset fence if needed
-			if(vulkan->dev.getFenceStatus(transient->fence) == vk::Result::eSuccess) {
-				vk::Result fenceWait = vulkan->dev.waitForFences(GetFence(), VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
-				Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for transient command context fence reset!", [this]() {
-					poolPtr = nullptr;
-					transient = nullptr;
-				});
-				vulkan->dev.resetFences(transient->fence);
-			}
+			//Set semaphore done value
+			transient->sync.doneValue = vulkan->dev.getSemaphoreCounterValue(transient->sync.semaphore) + 1;
 		}
 
 		//Create command buffer from pool
@@ -172,6 +172,7 @@ namespace Cacao {
 			primary = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
 		} catch(...) {
 			poolPtr = nullptr;
+			render->available.store(true);
 			render = nullptr;
 			transient = nullptr;
 			return false;
@@ -184,9 +185,9 @@ namespace Cacao {
 		return true;
 	}
 
-	vk::Fence VulkanCommandBuffer::GetFence() {
-		if(render) return render->fence;
-		if(transient) return transient->fence;
+	Sync VulkanCommandBuffer::GetSync() {
+		if(render) return render->sync;
+		if(transient) return transient->sync;
 		return {};
 	}
 
@@ -229,23 +230,19 @@ namespace Cacao {
 
 		//Build submission info
 		vk::CommandBufferSubmitInfo cbSubmit(primary);
-		vk::SemaphoreSubmitInfo wait = {}, signal = {};
+		vk::SemaphoreSubmitInfo wait = {};
+		std::array<vk::SemaphoreSubmitInfoKHR, 2> signals = {};
 		if(render) {
 			wait = vk::SemaphoreSubmitInfo(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
-			signal = vk::SemaphoreSubmitInfo(render->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			signals[0] = vk::SemaphoreSubmitInfo(render->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 		}
-		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signal);
+		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
-		//Reset fence if needed
-		if(vulkan->dev.getFenceStatus(GetFence()) == vk::Result::eSuccess) {
-			vk::Result fenceWait = vulkan->dev.waitForFences(GetFence(), VK_TRUE, std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)).count());
-			Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Waited too long for pre-submission command buffer fence reset!");
-			vulkan->dev.resetFences(GetFence());
-		}
-
-		//If rendering and the swapchain is regenerating, this frame won't be valid, so we have to discard everything (unfortunately)
-		if(render && IMPL(GPUManager).IsRegenerating()) {
+		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
+		if(render && (vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) || IMPL(GPUManager).IsRegenerating())) {
 			render->imageIndex = UINT32_MAX;
+			render->available.store(true);
 			poolPtr = nullptr;
 			render = nullptr;
 			promise.set_value();
@@ -258,10 +255,14 @@ namespace Cacao {
 		std::lock_guard lk(vulkan->queueMtx);
 
 		//Submit (and present if rendering)
-		vulkan->queue.submit2(submitInfo, GetFence());
+		vulkan->queue.submit2(submitInfo);
 		if(render) {
 			vk::PresentInfoKHR presentInfo(render->render, vulkan->swapchain.chain, render->imageIndex);
-			vulkan->queue.presentKHR(presentInfo);
+			try {
+				vulkan->queue.presentKHR(presentInfo);
+			} catch(vk::OutOfDateKHRError&) {
+				vulkan->swapchain.regenRequested.store(true);
+			}
 		}
 	}
 
@@ -296,17 +297,23 @@ namespace Cacao {
 		//Lock queue
 		std::lock_guard lk(mutex);
 
+		//If queue empty and swapchain regen requested, regenerate
+		if(vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) && submitted.empty()) {
+			GenSwapchain();
+		}
+
 		//Go through all the submitted command buffers and see if they're done
 		for(auto it = submitted.begin(); it != submitted.end();) {
 			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
-			if(vulkan->dev.getFenceStatus(vcb->GetFence()) == vk::Result::eSuccess) {
+			Sync sync = vcb->GetSync();
+			if(vulkan->dev.getSemaphoreCounterValue(sync.semaphore) >= sync.doneValue) {
 				//Free secondary command buffers
 				for(vk::CommandBuffer& secondary : vcb->secondaries) {
 					vulkan->dev.freeCommandBuffers(*vcb->poolPtr, secondary);
 				}
 
-				//Get the fence
-				vk::Fence fence = vcb->GetFence();
+				//Mark context as available
+				vcb->render->available.store(true);
 
 				//Release context
 				vcb->poolPtr = nullptr;
@@ -315,11 +322,6 @@ namespace Cacao {
 
 				//Set the promise
 				vcb->promise.set_value();
-
-				//Reset the fence
-				//We do this later because as soon as we do, the rendering context becomes up for grabs
-				//We don't want that to happen until the command buffer is fully reset
-				vulkan->dev.resetFences(fence);
 
 				//Erase the object and update the iterator
 				it = submitted.erase(it);
@@ -335,7 +337,6 @@ namespace Cacao {
 		//To avoid code duplication, we just call Iteration over and over
 		while(submitted.size() > 0) {
 			RunloopIteration();
-			Logger::Engine(Logger::Level::Trace) << submitted.size() << " jobs remain";
 		}
 		vulkan->dev.waitIdle();
 	}
@@ -343,45 +344,4 @@ namespace Cacao {
 	bool VulkanGPU::IsRegenerating() {
 		return vulkan->swapchain.regenInProgress.load(std::memory_order_relaxed);
 	}
-
-	/*void GfxHandler::Acquire() {
-		if(imageIdx != UINT32_MAX) return;
-
-		//Try to acquire the next swapchain image
-		try {
-			//Reset fence if needed
-			if(vulkan->dev.getFenceStatus(imageFence) == vk::Result::eSuccess) {
-				vk::Result fenceWait = vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
-				Check<ExternalException>(fenceWait == vk::Result::eSuccess, "Failed to perform swapchain acquisition fence wait operation!");
-				vulkan->dev.resetFences(imageFence);
-			}
-
-			//Acquire image
-			vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, acquireImage, imageFence, 1);
-			auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
-			if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
-			imageIdx = result.value;
-		} catch(vk::SystemError& err) {
-			//Is the swapchain out of date?
-			//If so, we can regenerate and try again
-			if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout) {
-				vulkan->swapchain.regen.store(true, std::memory_order_seq_cst);
-				GenSwapchain();
-				vulkan->swapchain.regen.store(false, std::memory_order_release);
-				imageIdx = UINT32_MAX;
-				Acquire();
-				return;
-			}
-
-			//Other error, can't proceed
-			imageIdx = UINT32_MAX;
-			std::stringstream msg;
-			msg << "Failed to acquire swapchain image: " << err.what();
-			Check<ExternalException>(false, msg.str());
-		}
-
-		//Wait for image acquisition to finish
-		vulkan->dev.waitForFences(imageFence, VK_TRUE, UINT64_MAX);
-		vulkan->dev.resetFences(imageFence);
-	}*/
 }

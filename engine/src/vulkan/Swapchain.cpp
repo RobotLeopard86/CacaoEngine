@@ -1,8 +1,6 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "vulkan/vulkan_enums.hpp"
-#include "vulkan/vulkan_structs.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -10,15 +8,19 @@
 namespace Cacao {
 	void SetupRenderingContext(std::unique_ptr<RenderCommandContext>& rcc) {
 		rcc->imageIndex = UINT32_MAX;
+		rcc->available.store(true);
 		vk::SemaphoreCreateInfo semCreate {};
-		vk::FenceCreateInfo fenceCreate(vk::FenceCreateFlagBits::eSignaled);
+		vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
 		try {
-			rcc->fence = vulkan->dev.createFence(fenceCreate);
+			rcc->fence = vulkan->dev.createFence({});
 			rcc->acquire = vulkan->dev.createSemaphore(semCreate);
 			rcc->render = vulkan->dev.createSemaphore(semCreate);
+			rcc->sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
+			rcc->sync.doneValue = 0;
 		} catch(vk::SystemError& err) {
 			if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
 			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
+			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
 			Check<ExternalException>(false, "Failed to create synchronization objects for rendering command context!");
 		}
 	}
@@ -64,7 +66,6 @@ namespace Cacao {
 			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, vulkan->swapchain.extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
 		swapchainCI.setPresentMode(presentMode);
 		if(vulkan->swapchain.chain) swapchainCI.setOldSwapchain(vulkan->swapchain.chain);
-		swapchainCI.setClipped(VK_TRUE);
 		try {
 			vk::SwapchainKHR newSwapchain = vulkan->dev.createSwapchainKHR(swapchainCI);
 			if(vulkan->swapchain.chain) {
@@ -99,6 +100,10 @@ namespace Cacao {
 				});
 			}
 		}
+
+		//Destroy old depth objects
+		vulkan->dev.destroyImageView(vulkan->depth.view);
+		vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
 
 		//Create new depth image and view
 		vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {vulkan->swapchain.extent.width, vulkan->swapchain.extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
@@ -141,12 +146,15 @@ namespace Cacao {
 				unsigned int i = 0;
 				for(; i < numImages; ++i) {
 					vulkan->swapchain.renderContexts[i] = std::move(oldContexts[i]);
+					vulkan->swapchain.renderContexts[i]->imageIndex = UINT32_MAX;
+					vulkan->swapchain.renderContexts[i]->available.store(true);
 				}
 				for(; i < numContexts; ++i) {
 					std::unique_ptr<RenderCommandContext>& rcc = oldContexts[i];
 					if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
 					if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
 					if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
+					if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
 				}
 			}
 		}

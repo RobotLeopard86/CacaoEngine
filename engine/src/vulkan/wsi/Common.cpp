@@ -50,8 +50,9 @@ namespace Cacao {
 		GenSwapchain();
 
 		//Register swapchain regeneration consumer
-		vulkan->resizer = EventConsumer([](Event&) {
-			Logger::Engine(Logger::Level::Trace) << "RESIZE";
+		vulkan->resizer = EventConsumer([](Event& e) {
+			DataEvent<glm::uvec2>& wre = static_cast<DataEvent<glm::uvec2>&>(e);
+			Logger::Engine(Logger::Level::Trace) << "RESIZE " << wre.GetData().x << ", " << wre.GetData().y;
 			vulkan->swapchain.regenRequested.store(true);
 		});
 		EventManager::Get().SubscribeConsumer("WindowResize", vulkan->resizer);

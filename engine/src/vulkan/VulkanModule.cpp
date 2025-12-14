@@ -4,8 +4,6 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
-#include "vulkan/vulkan_enums.hpp"
-#include "vulkan/vulkan_structs.hpp"
 
 #ifdef __linux__
 #include "impl/Window.hpp"
@@ -140,7 +138,10 @@ namespace Cacao {
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
 		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
-		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &sync2Features);
+		vk::PhysicalDeviceVulkan12Features vulkan12Features {};
+		vulkan12Features.setTimelineSemaphore(VK_TRUE);
+		vulkan12Features.setPNext(&sync2Features);
+		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &vulkan12Features);
 		deviceFeatures2.features.setInheritedQueries(VK_TRUE);
 		deviceFeatures2.features.setRobustBufferAccess(VK_TRUE);
 		deviceFeatures2.features.setIndependentBlend(VK_TRUE);
@@ -260,6 +261,7 @@ namespace Cacao {
 			if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
 			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
 			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
+			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
 		}
 
 		//Clean up transient command context objects

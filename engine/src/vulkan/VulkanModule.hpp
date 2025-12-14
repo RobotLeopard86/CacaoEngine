@@ -44,10 +44,15 @@ namespace Cacao {
 		ViewImage(std::pair<vk::Image, vma::Allocation> p) : Allocated<vk::Image>(p) {}
 	};
 
+	struct Sync {
+		vk::Semaphore semaphore;
+		uint64_t doneValue = 0;
+	};
+
 	class TransientCommandContext {
 	  public:
 		vk::CommandPool pool;
-		vk::Fence fence;
+		Sync sync;
 
 		static TransientCommandContext* Get();
 		static void Cleanup();
@@ -55,10 +60,10 @@ namespace Cacao {
 		TransientCommandContext(const TransientCommandContext&) = delete;
 		TransientCommandContext& operator=(const TransientCommandContext&) = delete;
 		TransientCommandContext(TransientCommandContext&& o)
-		  : pool(std::exchange(o.pool, {})), fence(std::exchange(o.fence, {})) {}
+		  : pool(std::exchange(o.pool, {})), sync(std::exchange(o.sync, {})) {}
 		TransientCommandContext& operator=(TransientCommandContext&& o) {
 			pool = std::exchange(o.pool, {});
-			fence = std::exchange(o.fence, {});
+			sync = std::exchange(o.sync, {});
 			return *this;
 		}
 
@@ -76,18 +81,22 @@ namespace Cacao {
 	  public:
 		vk::Semaphore acquire, render;
 		vk::Fence fence;
+		Sync sync;
 		uint32_t imageIndex = UINT32_MAX;
+		std::atomic_bool available;
 
 		RenderCommandContext() {}
 		RenderCommandContext(const RenderCommandContext&) = delete;
 		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
 		RenderCommandContext(RenderCommandContext&& o)
-		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)) {}
+		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), fence(std::exchange(o.fence, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)), available(o.available.load(std::memory_order_relaxed)) {}
 		RenderCommandContext& operator=(RenderCommandContext&& o) {
 			acquire = std::exchange(o.acquire, {});
 			render = std::exchange(o.render, {});
 			fence = std::exchange(o.fence, {});
+			sync = std::exchange(o.sync, {});
 			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
+			available.store(o.available.load(std::memory_order_relaxed), std::memory_order_release);
 			return *this;
 		}
 	};
@@ -102,8 +111,7 @@ namespace Cacao {
 
 		void Execute() override;
 
-		vk::Fence GetFence();
-
+		Sync GetSync();
 		vk::CommandBuffer& vk();
 
 	  protected:
