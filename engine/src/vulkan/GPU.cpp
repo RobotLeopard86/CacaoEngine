@@ -78,6 +78,19 @@ namespace Cacao {
 
 		//If this was a rendering context, mark it available and adjust counter
 		if(render) {
+			//Submit empty work to unsignal acquire semaphore
+			Sync sync = GetSync();
+			vk::SemaphoreSubmitInfo wait(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SemaphoreSubmitInfo signal(GetSync().semaphore, sync.doneValue, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SubmitInfo2 emptySubmit({}, wait, {}, signal);
+			{
+				std::lock_guard lk(vulkan->queueMtx);
+				vulkan->queue.submit2(emptySubmit);
+			}
+			vk::SemaphoreWaitInfo emptyWait({}, sync.semaphore, sync.doneValue);
+			vulkan->dev.waitSemaphores(emptyWait, UINT64_MAX);
+
+			//Release context
 			render->available.store(true);
 			if(acquireCount != 0) --(acquireCount);
 			render = nullptr;
@@ -263,12 +276,23 @@ namespace Cacao {
 		if(render) {
 			wait = vk::SemaphoreSubmitInfo(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
 			signals[0] = vk::SemaphoreSubmitInfo(render->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
 		}
 		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
 		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
 		if(render && (vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) || IMPL(GPUManager).IsRegenerating())) {
+			//Submit empty work to unsignal acquire semaphore
+			vk::SubmitInfo2 emptySubmit({}, wait, {}, signals[1]);
+			{
+				std::lock_guard lk(vulkan->queueMtx);
+				vulkan->queue.submit2(emptySubmit);
+			}
+			Sync sync = GetSync();
+			vk::SemaphoreWaitInfo emptyWait({}, sync.semaphore, sync.doneValue);
+			vulkan->dev.waitSemaphores(emptyWait, UINT64_MAX);
+
+			//Reset data
 			render->imageIndex = UINT32_MAX;
 			if(acquireCount != 0) --(acquireCount);
 			render->available.store(true);
