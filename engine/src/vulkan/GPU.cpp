@@ -78,17 +78,8 @@ namespace Cacao {
 
 		//If this was a rendering context, mark it available and adjust counter
 		if(render) {
-			//Submit empty work to unsignal acquire semaphore
-			Sync sync = GetSync();
-			vk::SemaphoreSubmitInfo wait(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
-			vk::SemaphoreSubmitInfo signal(GetSync().semaphore, sync.doneValue, vk::PipelineStageFlagBits2::eAllCommands);
-			vk::SubmitInfo2 emptySubmit({}, wait, {}, signal);
-			{
-				std::lock_guard lk(vulkan->queueMtx);
-				vulkan->queue.submit2(emptySubmit);
-			}
-			vk::SemaphoreWaitInfo emptyWait({}, sync.semaphore, sync.doneValue);
-			vulkan->dev.waitSemaphores(emptyWait, UINT64_MAX);
+			//Unsignal acquire semaphore
+			UnsignalAcquire();
 
 			//Release context
 			render->available.store(true);
@@ -105,6 +96,19 @@ namespace Cacao {
 		//Free primary command buffer
 		vulkan->dev.freeCommandBuffers(*poolPtr, primary);
 		poolPtr = nullptr;
+	}
+
+	void VulkanCommandBuffer::UnsignalAcquire() {
+		Sync sync = GetSync();
+		vk::SemaphoreSubmitInfo wait(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
+		vk::SemaphoreSubmitInfo signal(GetSync().semaphore, sync.doneValue, vk::PipelineStageFlagBits2::eAllCommands);
+		vk::SubmitInfo2 emptySubmit({}, wait, {}, signal);
+		{
+			std::lock_guard lk(vulkan->queueMtx);
+			vulkan->queue.submit2(emptySubmit);
+		}
+		vk::SemaphoreWaitInfo emptyWait({}, sync.semaphore, sync.doneValue);
+		vulkan->dev.waitSemaphores(emptyWait, UINT64_MAX);
 	}
 
 	vk::CommandBuffer& VulkanCommandBuffer::vk() {
@@ -165,7 +169,7 @@ namespace Cacao {
 
 			//Acquire image
 			try {
-				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render->acquire, render->fence, 1);
+				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render->acquire, VK_NULL_HANDLE, 1);
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
 				render->imageIndex = result.value;
@@ -174,6 +178,11 @@ namespace Cacao {
 				//Is the swapchain out of date?
 				//If so, we can regenerate and try again
 				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout || err.code() == vk::Result::eNotReady) {
+					//Unsignal acquire semaphore if we got suboptimal result
+					//This is because suboptimal means we still got an image
+					if(err.code() == vk::Result::eSuboptimalKHR) UnsignalAcquire();
+
+					//Reset data members, regen swapchain, and try again
 					poolPtr = nullptr;
 					render->available.store(true);
 					render = nullptr;
@@ -190,10 +199,6 @@ namespace Cacao {
 				msg << "Failed to acquire swapchain image: " << err.what();
 				Check<ExternalException>(false, msg.str());
 			}
-
-			//Wait for image acquisition to finish
-			vulkan->dev.waitForFences(render->fence, VK_TRUE, UINT64_MAX);
-			vulkan->dev.resetFences(render->fence);
 		} else {
 			//Get context and set pool pointer
 			transient = TransientCommandContext::Get();
@@ -210,6 +215,8 @@ namespace Cacao {
 		} catch(...) {
 			poolPtr = nullptr;
 			if(render) {
+				UnsignalAcquire();
+				render->imageIndex = UINT32_MAX;
 				render->available.store(true);
 				if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
 				render = nullptr;

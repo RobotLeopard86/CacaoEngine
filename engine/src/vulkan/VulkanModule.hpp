@@ -129,6 +129,8 @@ namespace Cacao {
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
 
+		void UnsignalAcquire();
+
 		static unsigned int acquireCount;
 
 		friend class VulkanGPU;
