@@ -87,9 +87,9 @@ void Runtime::LoadGame() {
 	if(gameABI.cppStd < ourABI.cppStd) binpanic("Game binary uses outdated C++ standard");
 	if(std::string(ourABI.stlLib).compare(gameABI.stlLib) != 0) binpanic("STL provider library mismatch");
 	if(gameABI.stlVer != ourABI.stlVer) binpanic("STL version mismatch");
+#ifdef _WIN32
 	std::string ourCompiler(ourABI.compiler);
 	std::string gameCompiler(gameABI.compiler);
-#ifdef _WIN32
 	if(ourCompiler.compare(gameCompiler) != 0) {
 		if(ourCompiler.compare("clang") == 0) {
 			if(gameCompiler.compare("msvc") != 0) binpanic("Compiler mismatch");
