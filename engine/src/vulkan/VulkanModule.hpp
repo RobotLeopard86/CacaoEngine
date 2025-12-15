@@ -221,7 +221,10 @@ namespace Cacao {
 	inline std::shared_ptr<VulkanModule> vulkan;
 
 	void GenSwapchain();
-	void postswapgen();
+
+#ifdef HAS_WAYLAND
+	void CommitAfterRegen();
+#endif
 
 	constexpr glm::mat4 projectionCorrection(
 		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change

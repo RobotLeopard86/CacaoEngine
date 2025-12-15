@@ -85,7 +85,9 @@ namespace Cacao {
 
 		//Set extent now that swapchain is created
 		vulkan->swapchain.extent = extent;
-		postswapgen();
+#ifdef HAS_WAYLAND
+		CommitAfterRegen();
+#endif
 
 		//Get new swapchain images
 		vulkan->swapchain.images = vulkan->dev.getSwapchainImagesKHR(vulkan->swapchain.chain);
@@ -136,36 +138,22 @@ namespace Cacao {
 		}
 
 		//Setup render contexts (number of contexts always needs to match number of image views)
-		std::size_t numContexts = vulkan->swapchain.renderContexts.size();
-		std::size_t numImages = vulkan->swapchain.images.size();
-		if(numContexts != numImages) {
-			if(numImages > numContexts) {
-				//Create, setup, and add new contexts
-				for(unsigned int i = 0; i < (numImages - numContexts); ++i) {
-					std::unique_ptr<RenderCommandContext> newCtx = std::make_unique<RenderCommandContext>();
-					SetupRenderingContext(newCtx);
-					vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
-				}
-			} else {
-				//We have too many contexts, so we'll reuse what we can and delete the rest by RAII
-				std::vector<std::unique_ptr<RenderCommandContext>> oldContexts = std::exchange(vulkan->swapchain.renderContexts, {});
-				vulkan->swapchain.renderContexts.resize(numImages);
-				unsigned int i = 0;
-				for(; i < numImages; ++i) {
-					vulkan->swapchain.renderContexts[i] = std::move(oldContexts[i]);
-					vulkan->swapchain.renderContexts[i]->imageIndex = UINT32_MAX;
-				}
-				for(; i < numContexts; ++i) {
-					std::unique_ptr<RenderCommandContext>& rcc = oldContexts[i];
-					if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
-					if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
-					if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
-					if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
-				}
+		if(vulkan->swapchain.renderContexts.size() != vulkan->swapchain.images.size()) {
+			//Destroy old contexts
+			for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
+				if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
+				if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
+				if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
+				if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
 			}
-		}
-		for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
-			rcc->available.store(true);
+			vulkan->swapchain.renderContexts.clear();
+
+			//Create and setup new contexts
+			for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
+				std::unique_ptr<RenderCommandContext> newCtx = std::make_unique<RenderCommandContext>();
+				SetupRenderingContext(newCtx);
+				vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
+			}
 		}
 
 		//Regen done

@@ -11,7 +11,7 @@ namespace Cacao {
 		vulkan->surface = vulkan->instance.createWaylandSurfaceKHR(wci);
 	}
 
-	void postswapgen() {
+	void CommitAfterRegen() {
 		if(IMPL(Window).ProviderID().compare("wayland") == 0) wl_surface_commit(WIN_IMPL(Wayland).surface);
 	}
 }
