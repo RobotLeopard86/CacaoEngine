@@ -258,7 +258,6 @@ namespace Cacao {
 
 		//Clean up rendering command context objects
 		for(std::unique_ptr<RenderCommandContext>& rcc : swapchain.renderContexts) {
-			if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
 			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
 			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
 			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);

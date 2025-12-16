@@ -80,7 +80,6 @@ namespace Cacao {
 	class RenderCommandContext {
 	  public:
 		vk::Semaphore acquire, render;
-		vk::Fence fence;
 		Sync sync;
 		uint32_t imageIndex = UINT32_MAX;
 		std::atomic_bool available;
@@ -90,11 +89,10 @@ namespace Cacao {
 		RenderCommandContext(const RenderCommandContext&) = delete;
 		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
 		RenderCommandContext(RenderCommandContext&& o)
-		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), fence(std::exchange(o.fence, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)), available(o.available.load(std::memory_order_relaxed)) {}
+		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)), available(o.available.load(std::memory_order_relaxed)) {}
 		RenderCommandContext& operator=(RenderCommandContext&& o) {
 			acquire = std::exchange(o.acquire, {});
 			render = std::exchange(o.render, {});
-			fence = std::exchange(o.fence, {});
 			sync = std::exchange(o.sync, {});
 			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
 			available.store(o.available.load(std::memory_order_relaxed), std::memory_order_release);

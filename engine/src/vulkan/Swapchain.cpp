@@ -14,13 +14,11 @@ namespace Cacao {
 		vk::SemaphoreCreateInfo semCreate {};
 		vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
 		try {
-			rcc->fence = vulkan->dev.createFence({});
 			rcc->acquire = vulkan->dev.createSemaphore(semCreate);
 			rcc->render = vulkan->dev.createSemaphore(semCreate);
 			rcc->sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
 			rcc->sync.doneValue = 0;
 		} catch(vk::SystemError& err) {
-			if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
 			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
 			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
 			Check<ExternalException>(false, "Failed to create synchronization objects for rendering command context!");
@@ -141,7 +139,6 @@ namespace Cacao {
 		if(vulkan->swapchain.renderContexts.size() != vulkan->swapchain.images.size()) {
 			//Destroy old contexts
 			for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
-				if(rcc->fence) vulkan->dev.destroyFence(rcc->fence);
 				if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
 				if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
 				if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);

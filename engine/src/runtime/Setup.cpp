@@ -78,7 +78,7 @@ void Runtime::LoadGame() {
 	//Perform ABI checks
 	ABIHandshakeInfo gameABI = gameBinary->get_function<ABIHandshakeInfo()>("__CacaoAbiInfoHandshake")();
 	ABIHandshakeInfo ourABI = GetRuntimeABIInfo();
-#define binpanic(msg) panic(msg, "This usually means the game binary is not compiled with the correct settings to match the runtime.")
+#define binpanic(msg) panic(msg, "This usually means the game binary is not compiled with the correct settings to match the runtime")
 	if(gameABI.dbg != ourABI.dbg) binpanic("Debug mode mismatch");
 	if(gameABI.pointerSz != ourABI.pointerSz) binpanic("Pointer size mismatch");
 	if(gameABI.sizetSz != ourABI.sizetSz) binpanic("size_t size mismatch");
