@@ -407,7 +407,9 @@
 <span class="w">      </span><span class="k">protected</span><span class="o">:</span>
 <span class="w">        </span><span class="n">CommandBuffer</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Execute</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">token</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Execute</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FrameProcessor</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PALModule</span><span class="p">;</span>
