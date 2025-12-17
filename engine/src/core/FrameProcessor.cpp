@@ -1,7 +1,6 @@
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/Log.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "SingletonGet.hpp"
@@ -9,7 +8,6 @@
 #include "impl/PAL.hpp"
 
 #include <atomic>
-#include <mutex>
 #include <thread>
 
 #include "glm/exponential.hpp"
@@ -67,24 +65,10 @@ namespace Cacao {
 
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		while(!stop.stop_requested()) {
-			//If the window is minimized or the swapchain is regenerating, we can't render, so no point in working
-			while(Window::Get().IsMinimized() || IMPL(GPUManager).IsRegenerating()) {
+			//If the window is minimized, we can't render, so no point in working
+			while(Window::Get().IsMinimized()) {
 				if(stop.stop_requested()) return;
 			}
-
-			//Setup command buffer
-			//We use the internal API so we can do rendering setup
-			//This is done before getting the world state so that if setup fails we can skip a frame
-			bool breakContinue = false;
-			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
-			while(!cmd->SetupContext(true)) {
-				if(stop.stop_requested()) return;
-				if(IMPL(GPUManager).IsRegenerating()) {
-					breakContinue = true;
-					break;
-				}
-			}
-			if(breakContinue) continue;
 
 			//Request a snapshot of the world state
 			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
@@ -92,12 +76,7 @@ namespace Cacao {
 			//Block until the tick controller grants the request
 			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
 				if(stop.stop_requested()) return;
-				if(IMPL(GPUManager).IsRegenerating()) {
-					breakContinue = true;
-					break;
-				}
 			}
-			if(breakContinue) continue;
 
 			//Now we are safe to read the world state
 			//TODO: World read logic
@@ -106,17 +85,23 @@ namespace Cacao {
 			//It has been blocking on this semaphore
 			TickController::Get().snapshotControl.done.release();
 
+			//Setup command buffer
+			//We use the internal API so we can do rendering setup
+			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
+			cmd->token = IMPL(GPUManager).IssueCmdToken();
+			if(!cmd->SetupContext(true)) continue;
+
 			//Clear color
 			constexpr glm::vec3 clearColor {0x00, 0xAC, 0xE6};
 			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
 
-			//Check one last time to see if the swapchain is regenerating (after this we won't let it do that until we loop back around)
-			if(IMPL(GPUManager).IsRegenerating()) continue;
-			std::lock_guard lk(IMPL(GPUManager).regenLock);
-
 			//Record commands
 			cmd->StartRendering(clearColorLinear);
 			cmd->EndRendering();
+
+			//Make sure our frame is alive before submitting
+			//Cleanup via RAII will occur if not
+			if(!IMPL(GPUManager).FrameAlive(cmd->token)) continue;
 
 			//Execute command buffer
 			try {

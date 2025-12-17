@@ -1,8 +1,6 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "ImplAccessor.hpp"
-#include "impl/GPUManager.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -27,13 +25,12 @@ namespace Cacao {
 
 	void GenSwapchain() {
 		//Set regen flags
-		vulkan->swapchain.regenInProgress.store(true, std::memory_order_seq_cst);
+		vulkan->swapchain.epoch.fetch_add(1);
 		vulkan->swapchain.regenRequested.store(false, std::memory_order_seq_cst);
 
-		//Lock the command buffer queue mutex and regen lock
+		//Lock the command buffer queue mutex
 		//This will block the GPU thread from running more commands until we're done (that would be bad)
-		std::lock_guard lk(IMPL(GPUManager).regenLock);
-		std::lock_guard lk2(vulkan->queueMtx);
+		std::lock_guard lk(vulkan->queueMtx);
 
 		//Wait for device to be idle
 		vulkan->dev.waitIdle();
@@ -135,26 +132,23 @@ namespace Cacao {
 			});
 		}
 
-		//Setup render contexts (number of contexts always needs to match number of image views)
-		if(vulkan->swapchain.renderContexts.size() != vulkan->swapchain.images.size()) {
-			//Destroy old contexts
-			for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
-				if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
-				if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
-				if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
-			}
-			vulkan->swapchain.renderContexts.clear();
+		//Destroy old render contexts
+		for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
+			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
+			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
+			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
+		}
+		vulkan->swapchain.renderContexts.clear();
 
-			//Create and setup new contexts
-			for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
-				std::unique_ptr<RenderCommandContext> newCtx = std::make_unique<RenderCommandContext>();
-				SetupRenderingContext(newCtx);
-				vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
-			}
+		//Create and setup new render contexts
+		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
+			std::unique_ptr<RenderCommandContext> newCtx = std::make_unique<RenderCommandContext>();
+			SetupRenderingContext(newCtx);
+			vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
 		}
 
 		//Regen done
-		//Locks will be released by stack unwind
-		vulkan->swapchain.regenInProgress.store(false);
+		//Lock will be released by stack unwind
+		vulkan->swapchain.epoch.fetch_add(1);
 	}
 }

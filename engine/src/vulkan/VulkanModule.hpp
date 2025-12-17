@@ -142,14 +142,17 @@ namespace Cacao {
 		void RunloopStop() override;
 		void RunloopIteration() override;
 
-		bool IsRegenerating() override;
 		bool UsesImmediateExecution() override {
 			return false;
 		}
+		uint64_t IssueCmdToken() override;
+		bool FrameAlive(uint64_t token) override;
 
 	  private:
 		std::vector<std::unique_ptr<VulkanCommandBuffer>> submitted;
 		std::mutex mutex;
+
+		friend void GenSwapchain();
 	};
 
 	class VulkanModule final : public PALModule {
@@ -187,7 +190,7 @@ namespace Cacao {
 			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
 			uint16_t cycle = 0;
 			std::atomic_bool regenRequested;
-			std::atomic_bool regenInProgress;
+			std::atomic_uint64_t epoch;//Even epochs are stable, odd epochs are regenerating
 		} swapchain;
 		vk::CommandPool renderingPool;
 
@@ -210,7 +213,7 @@ namespace Cacao {
 		VulkanModule()
 		  : PALModule("vulkan") {
 			swapchain.regenRequested.store(false);
-			swapchain.regenInProgress.store(false);
+			swapchain.epoch.store(0);
 		}
 		~VulkanModule() {}
 

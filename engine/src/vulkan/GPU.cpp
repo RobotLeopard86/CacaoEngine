@@ -2,7 +2,6 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
-#include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
 
 #include <atomic>
@@ -140,6 +139,9 @@ namespace Cacao {
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
+			//If a regen has been requested, it's imminent and we shouldn't try to proceed
+			if(vulkan->swapchain.regenRequested.load(std::memory_order_relaxed)) return false;
+
 			//Ensure "forward progress" is being made (https://docs.vulkan.org/spec/latest/chapters/VK_KHR_surface/wsi.html#swapchain-acquire-forward-progress)
 			if(acquireCount > (vulkan->swapchain.images.size() - vulkan->capabilities.minImageCount)) {
 				//Forward progress requirement not satisifed, skip
@@ -186,8 +188,8 @@ namespace Cacao {
 					poolPtr = nullptr;
 					render->available.store(true);
 					render = nullptr;
-					GenSwapchain();
-					return SetupContext(true);
+					vulkan->swapchain.regenRequested.store(true);
+					return false;
 				}
 
 				//Other error, can't proceed
@@ -288,7 +290,7 @@ namespace Cacao {
 		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
 		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
-		if(render && (vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) || IMPL(GPUManager).IsRegenerating())) {
+		if(render && vulkan->swapchain.regenRequested.load(std::memory_order_relaxed)) {
 			//Submit empty work to unsignal acquire semaphore
 			vk::SubmitInfo2 emptySubmit({}, wait, {}, signals[1]);
 			{
@@ -337,6 +339,9 @@ namespace Cacao {
 			}
 		}();
 
+		//Lock queue
+		std::lock_guard lk(mutex);
+
 		//Submit underlying commands
 		vkCmd->Execute();
 
@@ -344,10 +349,7 @@ namespace Cacao {
 		std::shared_future<void> fut = vkCmd->promise.get_future().share();
 
 		//Move buffer into submission list for result tracking
-		{
-			std::lock_guard lk(mutex);
-			submitted.push_back(std::move(vkCmd));
-		}
+		submitted.push_back(std::move(vkCmd));
 
 		//Return future
 		return fut;
@@ -355,14 +357,7 @@ namespace Cacao {
 
 	void VulkanGPU::RunloopIteration() {
 		//Lock queue
-		std::unique_lock lk(mutex);
-
-		//If queue empty and swapchain regen requested, regenerate
-		if(vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) && submitted.empty()) {
-			lk.unlock();
-			GenSwapchain();
-			lk.lock();
-		}
+		std::lock_guard lk(mutex);
 
 		//Go through all the submitted command buffers and see if they're done
 		for(auto it = submitted.begin(); it != submitted.end();) {
@@ -397,6 +392,11 @@ namespace Cacao {
 				++it;
 			}
 		}
+
+		//If queue empty and swapchain regen requested, regenerate
+		if(vulkan->swapchain.regenRequested.load(std::memory_order_relaxed) && submitted.empty()) {
+			GenSwapchain();
+		}
 	}
 
 	void VulkanGPU::RunloopStop() {
@@ -408,7 +408,11 @@ namespace Cacao {
 		vulkan->dev.waitIdle();
 	}
 
-	bool VulkanGPU::IsRegenerating() {
-		return vulkan->swapchain.regenInProgress.load(std::memory_order_relaxed);
+	uint64_t VulkanGPU::IssueCmdToken() {
+		return vulkan->swapchain.epoch.load(std::memory_order_relaxed);
+	}
+
+	bool FrameAlive(uint64_t token) {
+		return token == vulkan->swapchain.epoch.load(std::memory_order_relaxed);
 	}
 }

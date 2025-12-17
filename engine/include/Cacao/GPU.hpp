@@ -30,6 +30,8 @@ namespace Cacao {
 	  protected:
 		CommandBuffer() {}
 
+		uint64_t token;
+
 		virtual void Execute() {};
 
 		friend class FrameProcessor;

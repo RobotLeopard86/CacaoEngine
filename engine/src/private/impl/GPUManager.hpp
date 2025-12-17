@@ -16,10 +16,14 @@ namespace Cacao {
 
 		void Runloop(std::stop_token stop);
 		std::unique_ptr<std::jthread> thread;
-		std::mutex regenLock;
 
-		virtual bool IsRegenerating() = 0;
 		virtual bool UsesImmediateExecution() = 0;
+		virtual uint64_t IssueCmdToken() {
+			return 0;
+		}
+		virtual bool FrameAlive(uint64_t) {
+			return true;
+		}
 
 		struct VSyncRequest {
 			bool needChange;
