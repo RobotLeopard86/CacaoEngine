@@ -1,10 +1,13 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
-#include "impl/Window.hpp"
 #include "ImplAccessor.hpp"
-#include "vulkan/vulkan_handles.hpp"
+
+#ifdef __linux__
+#include "impl/Window.hpp"
+#endif
 
 #include <memory>
 
@@ -22,7 +25,7 @@ namespace Cacao {
 
 	void VulkanModule::SetVSync(bool state) {
 		vsync = state;
-		GenSwapchain();
+		vulkan->swapchain.regenRequested.store(true);
 	}
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
@@ -58,7 +61,7 @@ namespace Cacao {
 
 		//Get required layers
 		std::vector<const char*> layers = {};
-#ifdef DEBUG
+#ifdef _DEBUG
 		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
 		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
@@ -94,7 +97,7 @@ namespace Cacao {
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
 #endif
 		auto physicalDevices = instance.enumeratePhysicalDevices();
-		Check<ExternalException>(!physicalDevices.empty(), "There are no Vulkan-compatible devices!");
+		Check<ExternalException>(!physicalDevices.empty(), "There are no Vulkan-compatible devices!", [this]() { instance.destroy(); });
 		std::vector<vk::PhysicalDevice> okDevs;
 		for(vk::PhysicalDevice& pdev : physicalDevices) {
 			std::vector<vk::ExtensionProperties> availableExts = pdev.enumerateDeviceExtensionProperties();
@@ -131,11 +134,19 @@ namespace Cacao {
 
 		//Create logical device
 		float priority = 1.0f;
-		vk::DeviceQueueCreateInfo queueCI({}, 0, priority);
+		vk::DeviceQueueCreateInfo queueCI({}, 0, 1, &priority);
 		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
 		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
 		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
-		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &sync2Features);
+		vk::PhysicalDeviceVulkan12Features vulkan12Features {};
+		vulkan12Features.setTimelineSemaphore(VK_TRUE);
+		vulkan12Features.setPNext(&sync2Features);
+		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &vulkan12Features);
+		deviceFeatures2.features.setInheritedQueries(VK_TRUE);
+		deviceFeatures2.features.setRobustBufferAccess(VK_TRUE);
+		deviceFeatures2.features.setIndependentBlend(VK_TRUE);
+		deviceFeatures2.features.setOcclusionQueryPrecise(VK_TRUE);
+		deviceFeatures2.features.setPipelineStatisticsQuery(VK_TRUE);
 		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts, nullptr, &deviceFeatures2);
 		try {
 			dev = physDev.createDevice(deviceCI);
@@ -161,29 +172,26 @@ namespace Cacao {
 			Check<ExternalException>(false, "Could not create memory allocator!");
 		}
 
-		//Create command pool
-		vk::CommandPoolCreateInfo rpoolCI(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, 0);
-		try {
-			renderPool = dev.createCommandPool(rpoolCI);
-		} catch(vk::SystemError& err) {
-			allocator.destroy();
-			dev.destroy();
-			instance.destroy();
-			Check<ExternalException>(false, "Could not create rendering command pool!");
-		}
+		//Setup secondary command buffer inheritance data
+		cbRenderingInheritance = vk::CommandBufferInheritanceRenderingInfoKHR({}, 0, vulkan->surfaceFormat.format, vulkan->selectedDF,
+			vk::Format::eUndefined, vk::SampleCountFlagBits::e1);
 
-		//Make immediate for main thread
-		Immediate::Get();
+		cbInheritance = vk::CommandBufferInheritanceInfo({}, 0, {}, VK_TRUE, vk::QueryControlFlagBits::ePrecise,
+			vk::QueryPipelineStatisticFlagBits::eInputAssemblyPrimitives | vk::QueryPipelineStatisticFlagBits::eInputAssemblyVertices | vk::QueryPipelineStatisticFlagBits::eVertexShaderInvocations |
+				vk::QueryPipelineStatisticFlagBits::eClippingInvocations | vk::QueryPipelineStatisticFlagBits::eClippingPrimitives | vk::QueryPipelineStatisticFlagBits::eFragmentShaderInvocations |
+				vk::QueryPipelineStatisticFlagBits::eTessellationControlShaderPatches | vk::QueryPipelineStatisticFlagBits::eTessellationEvaluationShaderInvocations,
+			&cbRenderingInheritance);
+
+		//Make transient command context for main thread
+		TransientCommandContext::Get();
 
 		//Create globals UBO
 		vk::BufferCreateInfo globalsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo globalsAllocCI({}, vma::MemoryUsage::eCpuToGpu);
 		try {
-			auto [globals, alloc] = allocator.createBuffer(globalsCI, globalsAllocCI);
-			globalsUBO = {.alloc = alloc, .obj = globals};
+			globalsUBO = allocator.createBuffer(globalsCI, globalsAllocCI);
 		} catch(vk::SystemError& err) {
-			Immediate::Cleanup();
-			dev.destroyCommandPool(renderPool);
+			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -195,8 +203,7 @@ namespace Cacao {
 		//Map globals UBO
 		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-			Immediate::Cleanup();
-			dev.destroyCommandPool(renderPool);
+			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
@@ -217,13 +224,28 @@ namespace Cacao {
 		if(selectedDF == vk::Format::eUndefined) {
 			allocator.unmapMemory(globalsUBO.alloc);
 			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-			Immediate::Cleanup();
-			dev.destroyCommandPool(renderPool);
+			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
 			Check<ExternalException>(false, "Could not find any valid depth formats!");
 		}
+
+		//Create rendering command pool
+		vk::CommandPoolCreateInfo renderPoolCI({}, 0);
+		try {
+			renderingPool = vulkan->dev.createCommandPool(renderPoolCI);
+		} catch(vk::SystemError& err) {
+			selectedDF = vk::Format::eUndefined;
+			allocator.unmapMemory(globalsUBO.alloc);
+			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			TransientCommandContext::Cleanup();
+			allocator.destroy();
+			dev.destroy();
+			instance.destroy();
+			Check<ExternalException>(false, "Could not create rendering command pool!");
+		}
+
 
 		didInit = true;
 	}
@@ -234,17 +256,22 @@ namespace Cacao {
 		//Wait for the device to be idle so it's safe to destroy things
 		dev.waitIdle();
 
-		//Clean up immediate objects
-		Immediate::Cleanup();
+		//Clean up rendering command context objects
+		for(std::unique_ptr<RenderCommandContext>& rcc : swapchain.renderContexts) {
+			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
+			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
+			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
+		}
+
+		//Clean up transient command context objects
+		TransientCommandContext::Cleanup();
 
 		//Destroy Vulkan objects
+		dev.destroyCommandPool(renderingPool);
 		allocator.unmapMemory(globalsUBO.alloc);
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
 		dev.destroyImageView(depth.view);
 		allocator.destroyImage(depth.obj, depth.alloc);
-		std::vector<vk::CommandBuffer> cbufs;
-		dev.freeCommandBuffers(renderPool, cbufs);
-		dev.destroyCommandPool(renderPool);
 		allocator.destroy();
 		dev.destroy();
 		instance.destroy();
@@ -264,5 +291,9 @@ namespace Cacao {
 
 		//Destroy surface
 		instance.destroySurfaceKHR(surface);
+	}
+
+	std::unique_ptr<CommandBuffer> VulkanModule::CreateCmdBuffer() {
+		return std::make_unique<VulkanCommandBuffer>();
 	}
 }

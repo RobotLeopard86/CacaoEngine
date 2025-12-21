@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <functional>
 
 #include "Cacao/DllHelper.hpp"
+#include "Cacao/GPU.hpp"
 #include "Cacao/PAL.hpp"
 
 #include "Mesh.hpp"
@@ -23,6 +24,7 @@ namespace Cacao {
 		virtual void Disconnect() = 0;
 		virtual void Destroy() = 0;
 		virtual void SetVSync(bool state) = 0;
+		virtual std::unique_ptr<CommandBuffer> CreateCmdBuffer() = 0;
 
 		//==================== IMPL POINTER CONFIGURATION ====================
 		virtual Mesh::Impl* ConfigureMesh() = 0;
@@ -49,6 +51,6 @@ namespace Cacao {
 
 	struct PAL::Impl {
 		std::shared_ptr<PALModule> mod;
-		std::map<std::string, std::function<std::shared_ptr<PALModule>()>> registry;
+		std::unordered_map<std::string, std::function<std::shared_ptr<PALModule>()>> registry;
 	};
 }

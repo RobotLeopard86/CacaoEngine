@@ -4,14 +4,14 @@
 #include "impl/PAL.hpp"
 #include "impl/GPUManager.hpp"
 #include "Cacao/EventConsumer.hpp"
-#include "Cacao/Exceptions.hpp"
+#include "Cacao/Exceptions.hpp"// IWYU pragma: keep
 
 #include <queue>
 #include <future>
 #include <mutex>
 
 #include "eternal.hpp"
-#include "glad/gl.h"
+#include "glad/gl.h"// IWYU pragma: export
 
 constexpr const inline auto glErrors = mapbox::eternal::map<GLenum, mapbox::eternal::string>({{GL_INVALID_ENUM, "Invalid Enum"},
 	{GL_INVALID_VALUE, "Invalid Value"},
@@ -31,39 +31,56 @@ constexpr const inline auto glErrors = mapbox::eternal::map<GLenum, mapbox::eter
 namespace Cacao {
 	class OpenGLCommandBuffer final : public CommandBuffer {
 	  public:
-		OpenGLCommandBuffer(std::function<void()> task)
-		  : task(task), promise() {}
+		OpenGLCommandBuffer()
+		  : tasks(), promise() {}
 
 		void Execute() override {
 			try {
-				task();
+				for(auto& task : tasks) task();
 				promise.set_value();
 			} catch(...) {
 				promise.set_exception(std::current_exception());
 			}
 		}
 
-		OpenGLCommandBuffer(const OpenGLCommandBuffer& other)
-		  : task(other.task), promise() {}
+		OpenGLCommandBuffer(OpenGLCommandBuffer&& other)
+		  : tasks(std::exchange(other.tasks, {})), promise(std::exchange(other.promise, {})) {}
+
+		OpenGLCommandBuffer& operator=(OpenGLCommandBuffer&& other) {
+			tasks = std::exchange(other.tasks, {});
+			promise = std::exchange(other.promise, {});
+			return *this;
+		}
 
 		std::shared_future<void> GetFuture() {
 			return promise.get_future().share();
 		}
 
+		void AddTask(std::function<void()> task) {
+			tasks.push_back(task);
+		}
+
+	  protected:
+		void StartRendering(glm::vec3 clearColor) override;
+		void EndRendering() override;
+
 	  private:
-		std::function<void()> task;
+		std::vector<std::function<void()>> tasks;
 		std::promise<void> promise;
 	};
 
 	class OpenGLGPU final : public GPUManager::Impl {
 	  public:
-		std::shared_future<void> SubmitCmdBuffer(CommandBuffer&& cmd) override;
+		std::shared_future<void> SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) override;
 		void RunloopStart() override;
 		void RunloopStop() override;
 		void RunloopIteration() override;
+		bool UsesImmediateExecution() override {
+			return true;
+		}
 
 	  private:
-		std::queue<OpenGLCommandBuffer> commands;
+		std::queue<std::unique_ptr<OpenGLCommandBuffer>> commands;
 		std::mutex queueMtx;
 	};
 
@@ -75,12 +92,13 @@ namespace Cacao {
 		void Disconnect() override;
 		void Destroy() override;
 		void SetVSync(bool state) override;
+		std::unique_ptr<CommandBuffer> CreateCmdBuffer() override;
 
 		//==================== IMPL POINTER CONFIGURATION ====================
-		virtual Mesh::Impl* ConfigureMesh() override;
-		virtual Tex2D::Impl* ConfigureTex2D() override;
-		virtual Cubemap::Impl* ConfigureCubemap() override;
-		virtual GPUManager::Impl* ConfigureGPUManager() override;
+		Mesh::Impl* ConfigureMesh() override;
+		Tex2D::Impl* ConfigureTex2D() override;
+		Cubemap::Impl* ConfigureCubemap() override;
+		GPUManager::Impl* ConfigureGPUManager() override;
 
 		OpenGLModule()
 		  : PALModule("opengl") {}

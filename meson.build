@@ -1,4 +1,4 @@
-project('cacaoengine', 'c', 'cpp', 'objcpp', meson_version: '>=1.2.0', version: '2025.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype', 'default_library=static' ])
+project('cacaoengine', 'c', 'cpp', 'objcpp', meson_version: '>=1.9.0', version: '2026.1.0a-a1', license: 'Apache-2.0', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype', 'default_library=static' ])
 
 # We are Ninja-only
 if get_option('backend') != 'ninja'
@@ -56,10 +56,11 @@ cmake_msvc_lib += 'DLL'
 
 # Import CMake and filesystem modules
 cmake = import('cmake')
+fs = import('fs')
 
 # Set some Windows-specific options
 if host_machine.system() == 'windows'
-	add_project_arguments(['-DCACAO_BUILD', '-D_DLL', '-D_MT', '-DHAS_WIN32'], language: ['c', 'cpp'])
+	add_project_arguments(['-DCACAO_BUILD', '-D_DLL', '-D_MT', '-DHAS_WIN32', '-D_CRT_SECURE_NO_WARNINGS'], language: ['c', 'cpp'])
 	if bt == 'debug'
 		add_project_arguments(['-D_ITERATOR_DEBUG_LEVEL=2', '-fms-runtime-lib=dll_dbg'], language: ['c', 'cpp'])
 	else
@@ -85,7 +86,7 @@ endif
 
 # Get graphics backends
 backends = get_option('backends')
-if backends.length() == 0
+if build_engine and backends.length() <= 0
     error('At least one graphics backend must be selected!')
 endif
 backend_keymap = {
@@ -101,51 +102,9 @@ if bt.contains('debug')
 	add_project_arguments(['-D_DEBUG'], language: 'cpp')
 endif
 
-# Slang compiler
-slang_opts = cmake.subproject_options()
-slang_opts.add_cmake_defines({
-	'SLANG_ENABLE_DXIL': 'FALSE',
-	'SLANG_ENABLE_GFX': 'FALSE',
-	'SLANG_ENABLE_SLANGC': 'FALSE',
-	'SLANG_ENABLE_SLANGD': 'FALSE',
-	'SLANG_ENABLE_SLANG_GLSLANG': 'FALSE',
-	'SLANG_ENABLE_TESTS': 'FALSE',
-	'SLANG_ENABLE_EXAMPLES': 'OFF',
-	'SLANG_LIB_TYPE': 'STATIC',
-	'SLANG_ENABLE_RELEASE_DEBUG_INFO': 'FALSE',
-	'SLANG_ENABLE_CUDA': 'FALSE',
-	'SLANG_ENABLE_OPTIX': 'FALSE',
-	'SLANG_ENABLE_NVAPI': 'FALSE',
-	'SLANG_ENABLE_AFTERMATH': 'FALSE',
-	'SLANG_ENABLE_XLIB': 'FALSE',
-	'SLANG_ENABLE_SLANG_RHI': 'FALSE',
-	'SLANG_EXCLUDE_DAWN': 'TRUE',
-	'SLANG_EXCLUDE_TINT': 'TRUE',
-	'SLANG_SLANG_LLVM_FLAVOR': 'DISABLE',
-	'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-if host_machine.system() == 'darwin'
-	slang_opts.append_compile_args('cpp', '-Wno-#warnings')
-endif
-slang_opts.set_install(false)
-slang_sp = cmake.subproject('slang', options: slang_opts, required: true)
-slang_core = slang_sp.dependency('core')
-slang_compiler_core = slang_sp.dependency('compiler_core')
-slang_lz4 = slang_sp.dependency('lz4_static')
-slang_miniz = slang_sp.dependency('miniz')
-slang_prelude = slang_sp.dependency('prelude')
-slang_rt = slang_sp.dependency('slang_rt')
-slang_embedded_core_module_source = slang_sp.dependency('slang_embedded_core_module_source')
-slang_embedded_core_module = slang_sp.dependency('slang_embedded_core_module')
-slang_common_objects = slang_sp.dependency('slang_common_objects')
-slang_capability_lookup = slang_sp.dependency('slang_capability_lookup')
-slang_lookup_tables = slang_sp.dependency('slang_lookup_tables')
-slang = slang_sp.dependency('slang')
-slang_dep = declare_dependency(dependencies: [slang_core, slang_compiler_core, slang_lz4, slang_miniz, slang_prelude, slang_rt, 
-	slang_embedded_core_module_source, slang_embedded_core_module, slang_common_objects, slang_capability_lookup, slang_lookup_tables, slang])
+# Slang compiler and libraries
+slang = subproject('slang', required: true)
+slang_dep = slang.get_variable('slang_dep')
 
 # Process shader base module file
 shaderbasemod = custom_target('cacaoshaderbase', input: meson.project_source_root() / 'tools' / 'shaderc' / 'cacaoshaderbase.slang', output: 'cacaoshaderbase.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])

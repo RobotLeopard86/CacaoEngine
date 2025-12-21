@@ -1,6 +1,4 @@
 #include "../Context.hpp"
-#include "Cacao/EventConsumer.hpp"
-#include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Log.hpp"
 #include "ImplAccessor.hpp"
@@ -8,13 +6,6 @@
 
 #include "glad/gl.h"
 #include "glad/wgl.h"
-
-#include <errhandlingapi.h>
-#include <libloaderapi.h>
-#include <minwindef.h>
-#include <wingdi.h>
-#include <winuser.h>
-#undef Yield
 
 namespace Cacao {
 	struct Context::Impl {

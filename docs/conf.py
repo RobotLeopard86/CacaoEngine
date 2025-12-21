@@ -45,7 +45,7 @@ def exhale_environment_ready(app):
 exhale.environment_ready = exhale_environment_ready
 # End sphinx-contrib-exhale-multiproject code
 
-version = os.environ.get("GITHUB_RELEASE", default="dev")
+version = os.environ.get("BUILDVER", default="dev")
 project = 'Cacao Engine'
 copyright = '2025 RobotLeopard86'
 author = 'RobotLeopard86'
@@ -58,7 +58,7 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md', '.venv']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md', '.venv', 'myexhale']
 
 html_theme = 'pydata_sphinx_theme'
 html_title = "Cacao Engine Docs"
@@ -166,7 +166,7 @@ html_theme_options = {
             "type": "fontawesome",
         }
    ],
-   "navbar_start": ["navbar-logo", "version-switcher"],
+   "navbar_end": ["navbar-icon-links", "version-switcher"],
    "switcher": {
         "version_match": version,
         "json_url": "https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json"

@@ -2,7 +2,6 @@
 
 #include "DllHelper.hpp"
 #include "Component.hpp"
-#include "Script.hpp"
 
 #include <functional>
 #include <memory>
@@ -45,8 +44,20 @@ namespace Cacao {
 		 * @throws ExistingValueException If another factory of the same base type already has the provided ID
 		 */
 		template<typename T>
-			requires std::is_same_v<Component, T> || std::is_same_v<Script, T>
-		void RegisterFactory(const std::string& id, std::function<T*()> factory, std::type_index type) = delete;
+			requires std::is_same_v<Component, T>
+		void RegisterFactory(const std::string& id, std::function<T*()> factory, std::type_index type);
+
+		/**
+		 * @brief Check if a factory for a given type of code object has been registered
+		 *
+		 * @param id
+		 * @param factory
+		 * @param type
+		 * @return requires
+		 */
+		template<typename T>
+			requires std::is_same_v<Component, T>
+		bool HasFactory(const std::string& id);
 
 		/**
 		 * @brief Create an object instance using a registered factory
@@ -60,8 +71,8 @@ namespace Cacao {
 		 * @throws NonexistentValueException If no factory has been registered with the provided ID for the provided base type
 		 */
 		template<typename T>
-			requires std::is_same_v<Component, T> || std::is_same_v<Script, T>
-		std::pair<std::shared_ptr<T>, std::type_index> Instantiate(const std::string& id) = delete;
+			requires std::is_same_v<Component, T>
+		std::pair<std::shared_ptr<T>, std::type_index> Instantiate(const std::string& id);
 
 	  private:
 		std::unique_ptr<Impl> impl;
@@ -77,12 +88,6 @@ namespace Cacao {
 	void CodeRegistry::RegisterFactory<Component>(const std::string& id, std::function<Component*()> factory, std::type_index type);
 
 	template<>
-	void CodeRegistry::RegisterFactory<Script>(const std::string& id, std::function<Script*()> factory, std::type_index type);
-
-	template<>
 	std::pair<std::shared_ptr<Component>, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
-
-	template<>
-	std::pair<std::shared_ptr<Script>, std::type_index> CodeRegistry::Instantiate<Script>(const std::string& id);
 	///@endcond
 }

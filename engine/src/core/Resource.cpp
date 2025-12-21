@@ -8,6 +8,7 @@
 #include "SingletonGet.hpp"
 
 #include <memory>
+#include <typeindex>
 
 namespace Cacao {
 	bool BaseResAddrCheck(std::string check, std::string specialAllow = "") {
@@ -89,8 +90,17 @@ namespace Cacao {
 
 	ResourceManager::~ResourceManager() {}
 
+	bool ResourceManager::IsLoaderRegistered(std::type_index tp) {
+		return impl->loaders.contains(tp);
+	}
+
 	std::shared_ptr<Resource> ResourceManager::CheckCache(const std::string& addr) {
 		return impl->cache.contains(addr) ? impl->cache[addr].lock() : std::shared_ptr<Resource>();
+	}
+
+	std::shared_ptr<Resource> ResourceManager::InvokeLoader(std::type_index tp, const std::string& addr) {
+		Check<BadStateException>(IsLoaderRegistered(tp), "A loader has not been configured for this type!");
+		return impl->loaders[tp].load(addr);
 	}
 
 	BinaryBlobResource::BinaryBlobResource(std::vector<unsigned char>&& data, const std::string& addr)

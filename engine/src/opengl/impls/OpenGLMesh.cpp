@@ -1,9 +1,10 @@
 #include "OpenGLMesh.hpp"
-#include "Cacao/Engine.hpp"
+#include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
+#include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLMeshImpl::Realize(bool& success) {
+	void OpenGLMeshImpl::Realize(bool& success) {
 		//Unpack index buffer data
 		std::vector<unsigned int> ibd(indices.size() * 3);
 		for(unsigned int i = 0; i < indices.size(); ++i) {
@@ -13,8 +14,9 @@ namespace Cacao {
 			ibd[(i * 3) + 2] = idx.z;
 		}
 
-		//Open-GL specific stuff needs to be on the main thread
-		return Engine::Get().RunTaskOnMainThread([this, &ibd, &success]() {
+		//Open-GL specific stuff needs to be on the GPU thread
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
+		cmd->AddTask([this, &ibd, &success]() {
 			//Generate buffers and vertex array
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
@@ -25,8 +27,10 @@ namespace Cacao {
 
 			//Bind vertex buffer
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
 			//Load vertex buffer with data
 			glBufferData(GL_ARRAY_BUFFER, (vertices.size() * sizeof(Vertex)), &vertices[0], GL_STATIC_DRAW);
+			GL_CHECK("Failed to upload vertex buffer data!")
 
 			//Configure vertex buffer layout
 			glEnableVertexAttribArray(0);
@@ -42,8 +46,10 @@ namespace Cacao {
 
 			//Bind index buffer
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
 			//Load index buffer with data
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() * 3 * sizeof(unsigned int)), &ibd[0], GL_STATIC_DRAW);
+			GL_CHECK("Failed to upload index buffer data!")
 
 			//Save vertex array state
 			glBindVertexArray(vao);
@@ -51,10 +57,12 @@ namespace Cacao {
 
 			success = true;
 		});
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	void OpenGLMeshImpl::DropRealized() {
-		Engine::Get().RunTaskOnMainThread([this]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this]() {
 			//Delete buffers and vertex array
 			glDeleteBuffers(1, &vbo);
 			glDeleteBuffers(1, &ibo);
@@ -65,6 +73,7 @@ namespace Cacao {
 			ibo = 0;
 			vao = 0;
 		});
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	Mesh::Impl* OpenGLModule::ConfigureMesh() {

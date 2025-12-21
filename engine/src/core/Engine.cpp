@@ -1,7 +1,7 @@
 #include "Cacao/Engine.hpp"
+#include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Log.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
@@ -11,21 +11,24 @@
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
-#include "SafeGetenv.hpp"
+#include "exathread.hpp"
 #include "impl/PAL.hpp"
-#include <thread>
+
+#ifdef _WIN32
+#include <Windows.h>
+#include <shlobj.h>
+#else
+#include "SafeGetenv.hpp"
+#endif
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
 
-#ifdef _WIN32
-#include <Windows.h>
-#include <shlobj.h>
-#endif
-
 #include <vector>
 #include <filesystem>
+#include <memory>
+#include <thread>
 
 namespace Cacao {
 	Engine::Engine()
@@ -45,23 +48,17 @@ namespace Cacao {
 
 		//Store config
 		icfg = initCfg;
-		constexpr unsigned int coreServiceCount = 2;//Tick controller, GPU manager
-		if(icfg.ioPoolThreads <= 0 || icfg.ioPoolThreads >= std::thread::hardware_concurrency() - coreServiceCount) icfg.ioPoolThreads = (std::thread::hardware_concurrency() - coreServiceCount) / 4;
-		if(icfg.ioPoolThreads == 0) icfg.ioPoolThreads = 1;
 
 		//Say hello (this will also trigger logging initialization)
 		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << "!";
 
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
-		ThreadPool::Get().Start();
+		constexpr unsigned int coreServiceCount = 3;//Tick controller, GPU manager, frame processor
+		pool = exathread::Pool::Create(std::clamp<std::size_t>(std::thread::hardware_concurrency() - coreServiceCount, 2, SIZE_MAX));
 
 		//Store thread ID
 		mainThread = std::this_thread::get_id();
-
-		/* ------------------------------------- *\
-		|*      PLACEHOLDER: BUNDLE LOADING      *|
-		\* ------------------------------------- */
 
 		//Initialize audio
 		Logger::Engine(Logger::Level::Trace) << "Initializing audio system...";
@@ -142,6 +139,12 @@ namespace Cacao {
 		//Enable V-Sync by default
 		GPUManager::Get().SetVSync(true);
 
+		//Start the frame processor if doing so at this time
+		if(icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
+			FrameProcessor::Get().Start();
+		}
+
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
 		std::lock_guard lkg(stateMtx);
@@ -157,7 +160,13 @@ namespace Cacao {
 
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
 
-		//Start the tick controller on the thread pool
+		//Start the frame processor if doing so at this time
+		if(!icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
+			FrameProcessor::Get().Start();
+		}
+
+		//Start the tick controller
 		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
 		TickController::Get().Start();
 
@@ -194,6 +203,12 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Stopping tick controller...";
 		TickController::Get().Stop();
 
+		//Stop the frame processor if doing so at this time
+		if(!icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
+			FrameProcessor::Get().Stop();
+		}
+
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");
 		EventManager::Get().Dispatch(e);
@@ -201,6 +216,12 @@ namespace Cacao {
 
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
+
+		//Stop the frame processor if doing so at this time
+		if(icfg.startFrameProcessorWithGfxSystem) {
+			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
+			FrameProcessor::Get().Stop();
+		}
 
 		//Stop the GPU manager
 		Logger::Engine(Logger::Level::Trace) << "Stopping GPU manager...";
@@ -234,12 +255,17 @@ namespace Cacao {
 
 		//Stop thread pool
 		Logger::Engine(Logger::Level::Trace) << "Stopping thread pool...";
-		ThreadPool::Get().Stop();
+		pool->waitIdle();
+		pool.reset();
+
+		//Unsubscribe all final event consumers
+		Logger::Engine(Logger::Level::Trace) << "Unsubscribing remaining event consumers...";
+		EventManager::Get().UnsubscribeAllConsumers();
 
 		//Final goodbye message
 		std::lock_guard lkg(stateMtx);
 		state = State::Dead;
-		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete.";
+		Logger::Engine(Logger::Level::Info) << "Engine shutdown complete. Goodbye.";
 	}
 
 	const std::filesystem::path Engine::GetDataDirectory() {
@@ -268,5 +294,11 @@ namespace Cacao {
 		if(!std::filesystem::exists(p)) std::filesystem::create_directories(p);
 
 		return p;
+	}
+
+	std::shared_ptr<exathread::Pool> Engine::GetThreadPool() {
+		Check<exathread::Pool, BadStateException>(pool, "Engine must be in the Alive state to use the thread pool!");
+
+		return pool;
 	}
 }

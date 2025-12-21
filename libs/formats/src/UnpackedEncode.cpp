@@ -353,8 +353,8 @@ namespace libcacaoformats {
 		yml << YAML::EndMap;
 
 		//Write actor data
-		yml << YAML::Key << "entities" << YAML::BeginSeq;
-		for(const World::Actor& e : world.entities) {
+		yml << YAML::Key << "actors" << YAML::BeginSeq;
+		for(const World::Actor& e : world.actors) {
 			yml << YAML::BeginMap;
 
 			//Write GUIDs

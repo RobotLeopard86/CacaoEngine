@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "Event.hpp"
@@ -60,7 +60,7 @@ namespace Cacao {
 
 	  private:
 		//Map of event types to list of consumers
-		std::map<std::string, std::vector<EventConsumer>> consumers;
+		std::unordered_map<std::string, std::vector<EventConsumer>> consumers;
 
 		EventManager() {}
 		~EventManager() {

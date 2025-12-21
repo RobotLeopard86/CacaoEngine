@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <cstdint>
 #include <array>
@@ -171,7 +171,7 @@ namespace libcacaoformats {
 			Matrix<float, 3, 2>, Matrix<float, 3, 3>, Matrix<float, 3, 4>,
 			Matrix<float, 4, 2>, Matrix<float, 4, 3>, Matrix<float, 4, 4>,
 			TextureRef>;
-		std::map<std::string, ValueContainer> keys;///<Data associated with shader
+		std::unordered_map<std::string, ValueContainer> keys;///<Data associated with shader
 	};
 
 	///@brief World data, encapsulating list of assets and components used as well as initial world state
@@ -180,13 +180,13 @@ namespace libcacaoformats {
 		Vec3<float> initialCamPos;///<Initial camera position
 		Vec3<float> initialCamRot;///<Initial camera rotation
 
-		///@brief Type for components on entities
+		///@brief Type for components on actors
 		struct Component {
 			std::string typeID;	   ///<ID of component type to instantiate
 			std::string reflection;///<YAML-encoded component reflection data (for use with Silica)
 		};
 
-		///@brief Type for entities in the world
+		///@brief Type for actors in the world
 		struct Actor {
 			xg::Guid guid;					  ///<Actor GUID
 			xg::Guid parentGUID;			  ///<GUID of parent actor or all zeroes if this is a top-level actor
@@ -196,11 +196,11 @@ namespace libcacaoformats {
 			Vec3<float> initialScale;		  ///<Initial scale
 			std::vector<Component> components;///<Components mounted on this actor initially
 		};
-		std::vector<Actor> entities;///<Entities in the world
+		std::vector<Actor> actors;///<Entities in the world
 	};
 
 	///@brief Decoded asset pack
-	using AssetPack = std::map<std::string, PackedAsset>;
+	using AssetPack = std::unordered_map<std::string, PackedAsset>;
 
 	///@brief Decoder for uncompressed packed format buffers
 	class PackedDecoder {

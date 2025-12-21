@@ -1,0 +1,55 @@
+diff --git a/tools/slang-fiddle/slang-fiddle-lua.cpp b/tools/slang-fiddle/slang-fiddle-lua.cpp
+index adebf55..0d5f04e 100644
+--- a/tools/slang-fiddle/slang-fiddle-lua.cpp
++++ b/tools/slang-fiddle/slang-fiddle-lua.cpp
+@@ -2,4 +2,4 @@
+ 
+ 
+ #define MAKE_LIB 1
+-#include "lua/onelua.c"
++#include "onelua.c"
+diff --git a/tools/slang-fiddle/slang-fiddle-scrape.h b/tools/slang-fiddle/slang-fiddle-scrape.h
+index 098c11a..557e0e7 100644
+--- a/tools/slang-fiddle/slang-fiddle-scrape.h
++++ b/tools/slang-fiddle/slang-fiddle-scrape.h
+@@ -2,7 +2,7 @@
+ #pragma once
+ 
+ #include "compiler-core/slang-lexer.h"
+-#include "lua/lauxlib.h"
++#include "lauxlib.h"
+ #include "slang-fiddle-diagnostics.h"
+ 
+ namespace fiddle
+diff --git a/tools/slang-fiddle/slang-fiddle-script.cpp b/tools/slang-fiddle/slang-fiddle-script.cpp
+index e713a37..e179e33 100644
+--- a/tools/slang-fiddle/slang-fiddle-script.cpp
++++ b/tools/slang-fiddle/slang-fiddle-script.cpp
+@@ -2,9 +2,9 @@
+ #include "slang-fiddle-script.h"
+ 
+ #include "compiler-core/slang-diagnostic-sink.h"
+-#include "lua/lapi.h"
+-#include "lua/lauxlib.h"
+-#include "lua/lualib.h"
++#include "lapi.h"
++#include "lauxlib.h"
++#include "lualib.h"
+ 
+ #include <cstdio>
+ 
+diff --git a/tools/slang-fiddle/slang-fiddle-script.h b/tools/slang-fiddle/slang-fiddle-script.h
+index 94bda45..4432fe0 100644
+--- a/tools/slang-fiddle/slang-fiddle-script.h
++++ b/tools/slang-fiddle/slang-fiddle-script.h
+@@ -4,8 +4,8 @@
+ #include "compiler-core/slang-source-loc.h"
+ #include "core/slang-list.h"
+ #include "core/slang-string.h"
+-#include "lua/lapi.h"
+-#include "lua/lauxlib.h"
++#include "lapi.h"
++#include "lauxlib.h"
+ #include "slang-fiddle-diagnostics.h"
+ #include "slang-fiddle-scrape.h"
+ 

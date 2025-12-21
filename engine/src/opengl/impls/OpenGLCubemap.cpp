@@ -1,14 +1,16 @@
 #include "OpenGLCubemap.hpp"
-#include "Cacao/Engine.hpp"
+#include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
+#include "CommandBufferCast.hpp"
 
 #include "glad/gl.h"
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLCubemapImpl::Realize(bool& success) {
-		//Open-GL specific stuff needs to be on the main thread
-		return Engine::Get().RunTaskOnMainThread([this, &success]() {
+	void OpenGLCubemapImpl::Realize(bool& success) {
+		//Open-GL specific stuff needs to be on the GPU thread
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
+		cmd->AddTask([this, &success]() {
 			//Create texture object
 			glGenTextures(1, &gpuTex);
 			GL_CHECK("Failed to create cubemap texture object!")
@@ -24,6 +26,7 @@ namespace Cacao {
 
 				//Copy image data to GPU and adjust increment
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8, flipped.w, flipped.h, 0, GL_RGB, GL_UNSIGNED_BYTE, flipped.data.data());
+				GL_CHECK("Failed to upload cubemap face texture data!")
 			}
 
 			//Apply cubemap filtering
@@ -40,16 +43,21 @@ namespace Cacao {
 
 			success = true;
 		});
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	void OpenGLCubemapImpl::DropRealized() {
-		Engine::Get().RunTaskOnMainThread([this]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
+		GPUManager::Get()
+			.Submit(std::move(cmd))
+			.get();
 	}
 
 	Cubemap::Impl* OpenGLModule::ConfigureCubemap() {

@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		"vadimcn.vscode-lldb",
+		"llvm-vs-code-extensions.vscode-clangd",
+		"twxs.cmake",
+		"ms-vscode.hexeditor",
+		"mesonbuild.mesonbuild",
+		"executablebookproject.myst-highlight",
+		"shader-slang.slang-language-extension",
+		"bam.vscode-file-templates",
+		"xaver.clang-format"
+	]
+}

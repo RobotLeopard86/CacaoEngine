@@ -1,7 +1,7 @@
 # Frameworks
-apple = dependency('appleframeworks', modules: ['Cocoa', 'IOKit', 'CoreFoundation'])
+apple = dependency('appleframeworks', modules : ['Cocoa', 'IOKit', 'CoreFoundation', 'GameController'])
 
 # macOS module
-engine_srcs += files('AppDelegate.mm', 'MacOSWindow.mm')
+engine_srcs += files('MacOSTypes.hpp', 'MacOSWindow.mm')
 engine_inc += include_directories('.')
-engine_deps += [apple]
+engine_deps += apple

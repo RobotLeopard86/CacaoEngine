@@ -5,19 +5,43 @@
 
 #include "DllHelper.hpp"
 
+#include "glm/glm.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief A structure for usage by the GPU manager to invoke a set of GPU commands
-	 *
-	 * @note Only the subclasses of this are recognized by the GPUManager implementations; for that reason it is not currently possible to create custom jobs except through the designated interfaces
 	 */
 	class CACAO_API CommandBuffer {
 	  public:
-		//Preset command buffer generators will exist here eventually
+		/**
+		 * @brief Create a new empty command buffer
+		 */
+		static std::unique_ptr<CommandBuffer> Create();
+
+		///@cond
+		CommandBuffer(const CommandBuffer&) = delete;
+		CommandBuffer& operator=(const CommandBuffer&) = delete;
+		CommandBuffer(CommandBuffer&&);
+		CommandBuffer& operator=(CommandBuffer&&);
+		///@endcond
+
+		virtual ~CommandBuffer() {};
+
 	  protected:
 		CommandBuffer() {}
-		virtual void Execute() = 0;
-		virtual ~CommandBuffer() = default;
+
+		uint64_t token;
+
+		virtual void Execute() {};
+
+		friend class FrameProcessor;
+		friend class PALModule;
+
+		virtual bool SetupContext(bool rendering = false) {
+			return true;
+		}
+		virtual void StartRendering(glm::vec3 clearColor) {}
+		virtual void EndRendering() {}
 	};
 
 	/**
@@ -45,7 +69,6 @@ namespace Cacao {
 		 * @brief Start the GPU manager
 		 *
 		 * @throws BadInitStateException If the GPU manager is already running
-		 * @throws BadInitStateException If the thread pool is not running
 		 * @throws BadStateException If the graphics backend and window are not connected
 		 */
 		void Start();
@@ -73,10 +96,12 @@ namespace Cacao {
 		 *
 		 * @returns A future that will resolve when the task has finished executing
 		 */
-		std::shared_future<void> Submit(CommandBuffer&& cmd);
+		std::shared_future<void> Submit(std::unique_ptr<CommandBuffer> cmd);
 
 		/**
 		 * @brief Set the V-Sync state
+		 *
+		 * @note Depending on what rendering API is in use, the change may not take effect instantly. However, it is guaranteed to take effect.
 		 *
 		 * @param newState Whether V-Sync should be enabled
 		 *

@@ -1,15 +1,17 @@
 #include "OpenGLTex2D.hpp"
-#include "Cacao/Engine.hpp"
+#include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
+#include "CommandBufferCast.hpp"
 
 #include "glad/gl.h"
 
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	std::optional<std::shared_future<void>> OpenGLTex2DImpl::Realize(bool& success) {
-		//Open-GL specific stuff needs to be on the main thread
-		return Engine::Get().RunTaskOnMainThread([this, &success]() {
+	void OpenGLTex2DImpl::Realize(bool& success) {
+		//Open-GL specific stuff needs to be on the GPU thread
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
+		cmd->AddTask([this, &success]() {
 			//Flip texture
 			libcacaoimage::Image flipped = libcacaoimage::Flip(img);
 
@@ -57,16 +59,19 @@ namespace Cacao {
 
 			success = true;
 		});
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	void OpenGLTex2DImpl::DropRealized() {
-		Engine::Get().RunTaskOnMainThread([this]() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);
 
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	Tex2D::Impl* OpenGLModule::ConfigureTex2D() {

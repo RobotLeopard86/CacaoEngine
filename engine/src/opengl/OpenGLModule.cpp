@@ -1,5 +1,6 @@
 #include "Cacao/Event.hpp"
 #include "OpenGLModule.hpp"
+#include "Cacao/GPU.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/EventManager.hpp"
@@ -35,6 +36,14 @@ namespace Cacao {
 		});
 		EventManager::Get().SubscribeConsumer("WindowResize", resizer);
 
+		//Print OpenGL info
+		ctx->MakeCurrent();
+		const char* version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+		const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+		const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+		Logger::Engine(Logger::Level::Trace) << "OpenGL v" << version << ", using " << renderer << " (" << vendor << ")";
+		ctx->Yield();
+
 		connected = true;
 	}
 
@@ -56,4 +65,7 @@ namespace Cacao {
 		ctx->SetVSync(state);
 	}
 
+	std::unique_ptr<CommandBuffer> OpenGLModule::CreateCmdBuffer() {
+		return std::make_unique<OpenGLCommandBuffer>();
+	}
 }

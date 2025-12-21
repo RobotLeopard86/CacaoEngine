@@ -3,7 +3,9 @@ cacao.log
 .ninja_log
 
 # Don't send VS Code files
-.vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/templates
 
 # Don't send Wrap-downloaded things
 subprojects/*
@@ -38,6 +40,8 @@ docs/*
 !docs/README.md
 !docs/requirements.txt
 !docs/switcher.json
+!docs/myexhale
+docs/myexhale/build
 
 # Don't send macOS .DS_Store files
 .DS_Store

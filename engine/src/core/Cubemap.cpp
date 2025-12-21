@@ -1,13 +1,10 @@
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "impl/Cubemap.hpp"
 #include "PALConfigurables.hpp"
 
 #include "libcacaoimage.hpp"
-
-#include <future>
 
 namespace Cacao {
 	Cubemap::Cubemap(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr)
@@ -19,7 +16,14 @@ namespace Cacao {
 
 		//Validate images and do conversion if needed
 		std::array<libcacaoimage::Image, 6> images = std::move(faces);
+		glm::uvec2 refSz = {0, 0};
 		for(uint8_t i = 0; i < 6; ++i) {
+			//Ensure same sizes
+			if(refSz.x == 0 && refSz.y == 0)
+				refSz = {images[i].w, images[i].h};
+			else
+				Check<BadValueException>(images[i].w == refSz.x && images[i].h == refSz.y, "Not all cubemap faces are the same size!");
+
 			//Convert to 8-bit
 			if(images[i].bitsPerChannel == 16) images[i] = libcacaoimage::Convert16To8BitColor(images[i]);
 
@@ -66,21 +70,7 @@ namespace Cacao {
 	void Cubemap::Realize() {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
 
-		if(impl->DoWaitAsyncForSync()) {
-			impl->Realize(realized).value().get();
-		} else {
-			impl->Realize(realized);
-		}
-	}
-
-	std::shared_future<void> Cubemap::RealizeAsync() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
-
-		if(impl->DoWaitAsyncForSync()) {
-			return impl->Realize(realized).value();
-		} else {
-			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(realized); });
-		}
+		impl->Realize(realized);
 	}
 
 	void Cubemap::DropRealized() {

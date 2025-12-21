@@ -1,6 +1,7 @@
 #pragma once
 
 #include <future>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <chrono>
@@ -12,6 +13,9 @@
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Identity.hpp"
+#include "Time.hpp"// IWYU pragma: keep
+
+#include "exathread.hpp"
 
 using namespace std::chrono_literals;
 
@@ -42,14 +46,14 @@ namespace Cacao {
 		 */
 		struct CACAO_API Config {
 			/**
-			 * @brief The rate at which fixed ticks should occur, specified as the amount of time between fixed ticks in milliseconds
+			 * @brief The amount of time that should pass between fixed ticks, in milliseconds
 			 */
-			std::chrono::milliseconds fixedTickRate = 20ms;
+			std::chrono::milliseconds fixedTickInterval = 20ms;
 
 			/**
 			 * @brief The number of frames the renderer can be behind before skipping some to catch up
 			 */
-			int maxFrameLag;
+			int maxFrameLag = 2;
 
 			/**
 			 * @brief Whether or not to always re-render the UI every frame. Useful for inspecting UI graphics calls in RenderDoc or similar
@@ -65,8 +69,8 @@ namespace Cacao {
 			 * @brief Whether the engine is running outside of a bundle
 			 *
 			 * @details If this flag is set, the engine will not attempt to validate that it is in a game bundle on startup.
-			 * This will also disable all systems related to the default asset loader and bundle systems.
-			 * Assets, worlds, and game modules will need to be manually loaded and configured in this mode.
+			 * This will also disable anything related to the default resource loader and bundle systems.
+			 * Assets, worlds, and game binaries will need to be manually loaded and configured in this mode.
 			 */
 			bool standalone = false;
 
@@ -99,14 +103,17 @@ namespace Cacao {
 			bool suppressFileLogging = false;
 
 			/**
-			 * @brief ID of the client application. This should be in reverse-domain format (e.g. com.example.MyGame), but this is not enforced
+			 * @brief ID of the client application. This should be in reverse-domain format with a PascalCase final segment (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
 
 			/**
-			 * @brief The number of threads to use for the IO thread pool. Will be overridden to a value of engine's choice if set to 0.
+			 * @brief Whether to start the frame processor with the graphics system or to start it when the engine starts running
+			 *
+			 * This is set to @c false by default, which is best for games. However, other users may want to continue rendering
+			 * without an active gameloop, thus this option exists.
 			 */
-			unsigned int ioPoolThreads;
+			bool startFrameProcessorWithGfxSystem = false;
 		};
 
 		/**
@@ -130,9 +137,18 @@ namespace Cacao {
 		const std::filesystem::path GetDataDirectory();
 
 		/**
-		 * @brief Run a task on the main thread
+		 * @brief Get access to the engine thread pool
 		 *
-		 * @warning Since rendering happens on the main thread, excessive use of this method for other purposes may slow rendering performance
+		 * @see https://robotleopard86.github.io/Exathread/2.0.0 for the documentation on how to use the pool
+		 *
+		 * @return A handle to the pool
+		 *
+		 * @throws BadStateException If the thread pool is not running
+		 */
+		std::shared_ptr<exathread::Pool> GetThreadPool();
+
+		/**
+		 * @brief Run a task on the main thread
 		 *
 		 * @param func The task to execute
 		 * @param args The arguments to the task function
@@ -251,6 +267,8 @@ namespace Cacao {
 		std::queue<std::function<void()>> mainThreadTasksQueue;
 		std::mutex mttQueueMtx;
 		std::thread::id mainThread;
+
+		std::shared_ptr<exathread::Pool> pool;
 
 		Engine();
 		~Engine();

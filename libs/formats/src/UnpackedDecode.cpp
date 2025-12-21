@@ -459,8 +459,8 @@ namespace libcacaoformats {
 				return "Non-float value found in camera initial state";
 			}
 			return ""; }, "unpacked world data", "initial camera state");
-		ValidateYAMLNode(root["entities"], YAML::NodeType::value::Sequence, "unpacked world data", "entities list");
-		for(const YAML::Node& e : root["entities"]) {
+		ValidateYAMLNode(root["actors"], YAML::NodeType::value::Sequence, "unpacked world data", "actors list");
+		for(const YAML::Node& e : root["actors"]) {
 			World::Actor actor;
 
 			YAML::Node name = e["name"];
@@ -546,7 +546,7 @@ namespace libcacaoformats {
 				actor.components.push_back(component);
 			}
 
-			out.entities.push_back(actor);
+			out.actors.push_back(actor);
 		}
 
 		//Return result

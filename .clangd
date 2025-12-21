@@ -2,9 +2,8 @@ If:
   PathMatch: 
     - .*\.hpp
     - .*\.cpp
-    - .*\.mm
 CompileFlags:
-  Add: [-std=c++20, -Wall, -Wextra]
+  Add: [-std=c++20, -Wall, -Wextra, -fexperimental-library]
 Diagnostics:
   UnusedIncludes: None
   Includes:
@@ -14,9 +13,11 @@ Diagnostics:
       - yaml-cpp/yaml\.h
 ---
 If:
-  PathMatch: engine/src/macos/.*
+  PathMatch:
+    - engine/src/macos/.*\.hpp
+    - engine/src/macos/.*\.mm
 CompileFlags:
-   Add: [-x, objective-c++]
+   Add: [-x, objective-c++, -D__OBJC__, -D__OBJC2__, -ObjC++]
 ---
 If:
   PathMatch: engine/src/vulkan/.*

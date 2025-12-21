@@ -4,6 +4,7 @@
 #include "Context.hpp"
 
 #include <future>
+#include <memory>
 #include <stdexcept>
 #include <optional>
 
@@ -20,7 +21,7 @@ namespace Cacao {
 
 	void OpenGLGPU::RunloopIteration() {
 		//Pop the next task off the queue
-		std::optional<OpenGLCommandBuffer> cmd = [this]() -> std::optional<OpenGLCommandBuffer> {
+		std::optional<std::unique_ptr<OpenGLCommandBuffer>> cmd = [this]() -> std::optional<std::unique_ptr<OpenGLCommandBuffer>> {
 			//Lock the queue
 			std::lock_guard lk(queueMtx);
 
@@ -28,7 +29,7 @@ namespace Cacao {
 			if(commands.empty()) return std::nullopt;
 
 			//Pop the item
-			OpenGLCommandBuffer& cb = commands.front();
+			std::unique_ptr<OpenGLCommandBuffer> cb = std::move(commands.front());
 			commands.pop();
 
 			//Return the buffer
@@ -39,14 +40,14 @@ namespace Cacao {
 		if(!cmd.has_value()) return;
 
 		//Run it
-		cmd.value().Execute();
+		cmd.value()->Execute();
 	}
 
-	std::shared_future<void> OpenGLGPU::SubmitCmdBuffer(CommandBuffer&& cmd) {
+	std::shared_future<void> OpenGLGPU::SubmitCmdBuffer(std::unique_ptr<CommandBuffer>&& cmd) {
 		//Make sure this is an OpenGL buffer
-		OpenGLCommandBuffer glCmd = [&cmd]() -> OpenGLCommandBuffer&& {
-			if(OpenGLCommandBuffer* glcb = dynamic_cast<OpenGLCommandBuffer*>(&cmd)) {
-				return static_cast<OpenGLCommandBuffer&&>(*glcb);
+		std::unique_ptr<OpenGLCommandBuffer> glCmd = [&cmd]() -> std::unique_ptr<OpenGLCommandBuffer> {
+			if(OpenGLCommandBuffer* glcb = dynamic_cast<OpenGLCommandBuffer*>(cmd.release())) {
+				return std::unique_ptr<OpenGLCommandBuffer>(glcb);
 			} else {
 				Check<BadTypeException>(false, "Cannot submit a non-OpenGL command buffer to the OpenGL backend!");
 				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
@@ -54,12 +55,12 @@ namespace Cacao {
 		}();
 
 		//Get the future
-		std::shared_future<void> fut = glCmd.GetFuture();
+		std::shared_future<void> fut = glCmd->GetFuture();
 
 		//Add the command to the queue
 		{
 			std::lock_guard lk(queueMtx);
-			commands.push(glCmd);
+			commands.push(std::move(glCmd));
 		}
 
 		//Return the future

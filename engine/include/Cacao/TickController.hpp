@@ -3,6 +3,8 @@
 #include "DllHelper.hpp"
 
 #include <memory>
+#include <semaphore>
+#include <atomic>
 
 namespace Cacao {
 	/**
@@ -28,7 +30,6 @@ namespace Cacao {
 		 * @brief Start the controller
 		 *
 		 * @throws BadInitStateException If the controller is already running
-		 * @throws BadInitStateException If the thread pool is not running
 		 */
 		void Start();
 
@@ -53,6 +54,15 @@ namespace Cacao {
 		std::unique_ptr<Impl> impl;
 
 		bool running;
+
+		struct SnapshotRequestControl {
+			SnapshotRequestControl() : request(false), grant(0), done(0) {}
+
+			std::atomic_bool request;
+			std::binary_semaphore grant;
+			std::binary_semaphore done;
+		} snapshotControl;
+		friend class FrameProcessor;
 
 		TickController();
 		~TickController();
