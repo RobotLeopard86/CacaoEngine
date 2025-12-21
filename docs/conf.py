@@ -166,7 +166,7 @@ html_theme_options = {
             "type": "fontawesome",
         }
    ],
-   "navbar_start": ["navbar-logo", "version-switcher"],
+   "navbar_end": ["navbar-icon-links", "version-switcher"],
    "switcher": {
         "version_match": version,
         "json_url": "https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json"
