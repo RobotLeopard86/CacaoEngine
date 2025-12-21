@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -39,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/documentation_options.js?v=7b6b01ca"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
@@ -48,16 +49,16 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class SignalEventConsumer" href="classCacao_1_1SignalEventConsumer.html" />
+    <link rel="next" title="Class Sound" href="classCacao_1_1Sound.html" />
     <link rel="prev" title="Class Script" href="classCacao_1_1Script.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="dev" />
+  <meta name="docsearch:version" content="main" />
   </head>
   
   
@@ -129,26 +130,6 @@
   
 </a></div>
     
-      <div class="navbar-item">
-<div class="version-switcher__container dropdown pst-js-only">
-  <button id="pst-version-switcher-button-2"
-    type="button"
-    class="version-switcher__button btn btn-sm dropdown-toggle"
-    data-bs-toggle="dropdown"
-    aria-haspopup="listbox"
-    aria-controls="pst-version-switcher-list-2"
-    aria-label="Version switcher list"
-  >
-    Choose version  <!-- this text may get changed later by javascript -->
-    <span class="caret"></span>
-  </button>
-  <div id="pst-version-switcher-list-2"
-    class="version-switcher__menu dropdown-menu list-group-flush py-0"
-    role="listbox" aria-labelledby="pst-version-switcher-button-2">
-    <!-- dropdown will be populated by javascript on page load -->
-  </div>
-</div></div>
-    
   </div>
   
   <div class="col-lg-9 navbar-header-items">
@@ -167,8 +148,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="library_root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -191,14 +179,6 @@
         </div>
       
       
-        <div class="navbar-item">
-
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
-      
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
@@ -214,6 +194,26 @@
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
       
     </div>
     
@@ -269,8 +269,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="library_root.html">
+  <a class="nav-link nav-internal" href="root.html">
     API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
   </a>
 </li>
 
@@ -283,14 +290,6 @@
     
     
       <div class="sidebar-header-items__end">
-        
-          <div class="navbar-item">
-
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -308,6 +307,26 @@
         </li>
 </ul></div>
         
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
       </div>
     
   </div>
@@ -321,58 +340,61 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_dp.html">Namespace dp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1EngineConfig.html">Struct EngineConfig</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1Loader.html">Concept Loader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Frame.html">Struct Frame</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Material_1_1ShaderWrapper.html">Struct Material::ShaderWrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RawTexture.html">Struct RawTexture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1RenderObject.html">Struct RenderObject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderItemInfo.html">Struct ShaderItemInfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Task.html">Struct Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1UIRenderable.html">Struct UIRenderable</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vectors.html">Struct Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html">Struct TickController::SnapshotRequestControl</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structdp_1_1thread__pool_1_1task__item.html">Struct thread_pool::task_item</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AssetHandle.html">Template Class AssetHandle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AssetManager.html">Class AssetManager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html">Class BinaryBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioSystem.html">Class AudioSystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CodeRegistry.html">Class CodeRegistry</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CommandBuffer.html">Class CommandBuffer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
@@ -384,13 +406,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DynTickController.html">Class DynTickController</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Entity.html">Class Entity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
@@ -402,34 +418,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Exception.html">Class Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Flushable.html">Template Class Flushable</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Font.html">Class Font</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FreetypeOwner.html">Class FreetypeOwner</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Image.html">Class Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logging.html">Class Logging</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MeshComponent.html">Class MeshComponent</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
@@ -438,13 +439,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1RenderController.html">Class RenderController</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Screen.html">Class Screen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
@@ -453,31 +457,19 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SignalEventConsumer.html">Class SignalEventConsumer</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Skybox.html">Class Skybox</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Text.html">Class Text</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Texture.html">Class Texture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Texture2D.html">Class Texture2D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1UIElement.html">Class UIElement</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1UIView.html">Class UIView</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
@@ -489,49 +481,61 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classdp_1_1thread__pool.html">Template Class thread_pool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_UIElement_8hpp_1a296fd00db4719e1729878907c7553fd2.html">Enum AnchorPoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Log_8hpp_1a4109bf5e930b4737aeee9931d7f7f63c.html">Enum LogLevel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a84c94062bde3ff0017ddd31071e14aba.html">Define CACAO_BUTTON_LEFT</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1a4397bdc408de84b43f00c55cb3f1fae3.html">Enum SpvType</a></li>
+<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a12adf0581ae42b9dc1a456cdd9ca8665.html">Define CACAO_BUTTON_MIDDLE</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Text_8hpp_1af970ec1fd000c6348d399ead3d51a182.html">Enum TextAlign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a23268cda20903e8f077f54db28e88a63.html">Define CACAO_BUTTON_RIGHT</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Window_8hpp_1ac48a20552e4bd016df4a0e0e5ffd3a39.html">Enum WindowMode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_MiscUtils_8hpp_1aebf35ae1f04fd32abee91ac5684771ff.html">Function Cacao::Calculate3DVectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a4256b4ea68f7b83b0580b492975fac45.html">Typedef Cacao::time::dmicroseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a1cca20bcfea3fba6bfee5a5a5088da23.html">Function Cacao::CheckException(bool, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a2ee627f4843f0e647748a3a58f6c71f4.html">Typedef Cacao::time::dmilliseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1ad6fd7d6489952d1cc5c82366b1c5d8ac.html">Function Cacao::CheckException(YAML::Node, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a089ce274eb27ed22b7ca888179c98e2b.html">Typedef Cacao::time::dminutes</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exception_8hpp_1a57be1cbc39b44a600c6c880e32a8cd40.html">Template Function Cacao::CheckException(std::shared_ptr&lt;T&gt;, unsigned int, std::string)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a800ee6ea4ace65d56fb0c7e101360bf1.html">Typedef Cacao::time::dnanoseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1ab361a391361004fd908b40bf76bed8f1.html">Function Cacao::ClientAssert</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ad9a328df46a51d0139cc2dd628e23ec5.html">Typedef Cacao::time::dseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Assert_8hpp_1aa3b81b1988010641719f6034606dde2d.html">Function Cacao::EngineAssert</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a89899dad0df62386aa6ae0d32ce1df57.html">Typedef Cacao::time::dtime_point</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_MiscUtils_8hpp_1ace4fa65b562acff27fa7da6abb1c8832.html">Define BIND_MEMBER_FUNC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ac2772804de41ed7618f06a957f6dfc34.html">Typedef Cacao::time::fhours</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html">Typedef Cacao::ShaderSpec</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a99ed33722b9c7d1e9f110dd54a613754.html">Typedef Cacao::time::fmicroseconds</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Engine_8hpp_1a474d6c68174ccc2db37b2a678e9fcbf5.html">Typedef thread_pool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a00caf7e10b43f1e73a1bf6b077913b18.html">Typedef Cacao::time::fmilliseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1afb37cc2f7ae22667aeb1e88f14783b60.html">Typedef Cacao::time::fminutes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a1ff9460947063ee5392a99a01c732d22.html">Typedef Cacao::time::fnanoseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ae763516073d03facfe9c309bb88a3248.html">Typedef Cacao::time::fseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1abba9b591cb84f1b4b24065abbdecd1b4.html">Typedef Cacao::time::ftime_point</a></li>
 </ul>
 </div>
 </nav></div>
@@ -568,7 +572,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="library_root.html" class="nav-link">API Reference</a></li>
+    <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Shader</span></li>
   </ul>
@@ -590,7 +594,7 @@
   <section id="class-shader">
 <span id="exhale-class-classcacao-1-1shader"></span><h1>Class Shader<a class="headerlink" href="#class-shader" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_cacao_include_Graphics_Shader.hpp.html#file-cacao-include-graphics-shader-hpp"><span class="std std-ref">File Shader.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Shader.hpp.html#file-engine-include-cacao-shader-hpp"><span class="std std-ref">File Shader.hpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
@@ -606,177 +610,60 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ShaderE">
 <span id="_CPPv3N5Cacao6ShaderE"></span><span id="_CPPv2N5Cacao6ShaderE"></span><span id="Cacao::Shader"></span><span class="target" id="classCacao_1_1Shader"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Asset.html#_CPPv4N5Cacao5AssetE" title="Cacao::Asset"><span class="n"><span class="pre">Asset</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao6ShaderE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>A shader program. Implementation is backend-dependent. </p>
+<dd><p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> type for GPU shaders. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec">
-<span id="_CPPv3N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"></span><span id="Cacao::Shader::Shader__std::vector:uint32_t:R.std::vector:uint32_t:R.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1afb3b3f58133dd846e105905dcc8be964"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a shader from SPIR-V code. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Not recommended for use by games, but if it’s necessary to embed SPIR-V in code, go ahead… </p>
-</div>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7RealizeEv">
+<span id="_CPPv3N5Cacao6Shader7RealizeEv"></span><span id="_CPPv2N5Cacao6Shader7RealizeEv"></span><span id="Cacao::Shader::Realize"></span><span class="target" id="classCacao_1_1Shader_1ae6e1b4c1884cae3cf819af5ec3384b0d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Convert the shader data into a form suitable for rendering. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertex</strong> – SPIR-V code for the vertex shader </p></li>
-<li><p><strong>fragment</strong> – SPIR-V code for the vertex shader </p></li>
-<li><p><strong>spec</strong> – The shader specification</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the shader is already realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec">
-<span id="_CPPv3N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="_CPPv2N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"></span><span id="Cacao::Shader::Shader__ss.ss.ShaderSpec"></span><span class="target" id="classCacao_1_1Shader_1aeccce1eef2b41dfc5637c4d2370f340e"></span><span class="sig-name descname"><span class="n"><span class="pre">Shader</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertex</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fragment</span></span>, <a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a shader from files. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Prefer to use <a class="reference internal" href="classCacao_1_1AssetManager.html#classCacao_1_1AssetManager_1ad7ce521b379127135f311bd29ef34165"><span class="std std-ref">AssetManager::LoadShader</span></a> over direct construction</p>
-</div>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader12DropRealizedEv">
+<span id="_CPPv3N5Cacao6Shader12DropRealizedEv"></span><span id="_CPPv2N5Cacao6Shader12DropRealizedEv"></span><span id="Cacao::Shader::DropRealized"></span><span class="target" id="classCacao_1_1Shader_1a11fe867b13310d9665accfaf84c5d448"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DropRealized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader12DropRealizedEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Destroy the realized representation of the asset. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertex</strong> – Path to SPIR-V code for the vertex shader </p></li>
-<li><p><strong>fragment</strong> – Path to SPIR-V code for the fragment shader </p></li>
-<li><p><strong>spec</strong> – The shader specification</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the shader is not realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the files don’t exist or could not be opened </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6ShaderD0Ev">
-<span id="_CPPv3N5Cacao6ShaderD0Ev"></span><span id="_CPPv2N5Cacao6ShaderD0Ev"></span><span id="Cacao::Shader::~Shader"></span><span class="target" id="classCacao_1_1Shader_1a6c6895b14a3230b42ec7c09bec5eb9b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Shader</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a class="headerlink" href="#_CPPv4N5Cacao6ShaderD0Ev" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Delete the shader and its compiled data. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader4BindEv">
-<span id="_CPPv3N5Cacao6Shader4BindEv"></span><span id="_CPPv2N5Cacao6Shader4BindEv"></span><span id="Cacao::Shader::Bind"></span><span class="target" id="classCacao_1_1Shader_1a6f8ab4a018e284a2cbe3a8cde5957121"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader4BindEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Activate this shader for drawing. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For use by the engine only</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader is already bound, not compiled, or if not called on the engine thread </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6UnbindEv">
-<span id="_CPPv3N5Cacao6Shader6UnbindEv"></span><span id="_CPPv2N5Cacao6Shader6UnbindEv"></span><span id="Cacao::Shader::Unbind"></span><span class="target" id="classCacao_1_1Shader_1a591304e3bb057cab116536e074fd6596"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unbind</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6UnbindEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Deactivate this shader for drawing. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For use by the engine only</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader is not bound, not compiled, or if not called on the engine thread </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader12CompileAsyncEv">
-<span id="_CPPv3N5Cacao6Shader12CompileAsyncEv"></span><span id="_CPPv2N5Cacao6Shader12CompileAsyncEv"></span><span id="Cacao::Shader::CompileAsync"></span><span class="target" id="classCacao_1_1Shader_1a8cfbc6b96a2940ad3fe131b124e73ec4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompileAsync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Shader12CompileAsyncEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Compile the raw SPIR-V code into a format that can be run by the GPU asynchronously. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was already compiled or the SPIR-V is invalid </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A future that will resolve when compilation is done</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader11CompileSyncEv">
-<span id="_CPPv3N5Cacao6Shader11CompileSyncEv"></span><span id="_CPPv2N5Cacao6Shader11CompileSyncEv"></span><span id="Cacao::Shader::CompileSync"></span><span class="target" id="classCacao_1_1Shader_1ae5f295f35e335e4645d856eea640e5b6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompileSync</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Shader11CompileSyncEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Compile the raw SPIR-V code into a format that can be run by the GPU synchronously. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was already compiled or the SPIR-V is invalid </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader7ReleaseEv">
-<span id="_CPPv3N5Cacao6Shader7ReleaseEv"></span><span id="_CPPv2N5Cacao6Shader7ReleaseEv"></span><span id="Cacao::Shader::Release"></span><span class="target" id="classCacao_1_1Shader_1aee8a912518f69692ede8d945ee81ec28"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Shader7ReleaseEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Delete the compiled data. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classCacao_1_1Exception.html#_CPPv4N5Cacao9ExceptionE" title="Cacao::Exception"><span class="n">Exception</span></a></span></span> – If the shader was not compiled or is bound </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Shader7IsBoundEv">
-<span id="_CPPv3NK5Cacao6Shader7IsBoundEv"></span><span id="_CPPv2NK5Cacao6Shader7IsBoundEv"></span><span id="Cacao::Shader::IsBoundC"></span><span class="target" id="classCacao_1_1Shader_1a69e45773708cc699d4982e052c71ecdb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsBound</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Shader7IsBoundEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Check if the shader is bound. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If the shader is bound </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Shader7GetSpecEv">
-<span id="_CPPv3NK5Cacao6Shader7GetSpecEv"></span><span id="_CPPv2NK5Cacao6Shader7GetSpecEv"></span><span id="Cacao::Shader::GetSpecC"></span><span class="target" id="classCacao_1_1Shader_1af9c895b0d8a14cd673b21c3d20a73d2a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_Shader_8hpp_1a07dbc3646ae4c7e07bf5fdd6b73f8133.html#_CPPv4N5Cacao10ShaderSpecE" title="Cacao::ShaderSpec"><span class="n"><span class="pre">ShaderSpec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetSpec</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Shader7GetSpecEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get the shader spec. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>An immutable reference to the shader specification </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Shader7GetTypeEv">
-<span id="_CPPv3NK5Cacao6Shader7GetTypeEv"></span><span id="_CPPv2NK5Cacao6Shader7GetTypeEv"></span><span id="Cacao::Shader::GetTypeC"></span><span class="target" id="classCacao_1_1Shader_1af37d31368f59ee1dc80d2f730caf31b4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Shader7GetTypeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Gets the type of this asset. Needed for safe downcasting from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a>. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader14CreateMaterialEv">
-<span id="_CPPv3N5Cacao6Shader14CreateMaterialEv"></span><span id="_CPPv2N5Cacao6Shader14CreateMaterialEv"></span><span id="Cacao::Shader::CreateMaterial"></span><span class="target" id="classCacao_1_1Shader_1af0848dc5a00bbea63f5cdf3874a67ed4"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CreateMaterial</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader14CreateMaterialEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new material from this shader. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new material that can be used for drawing </p>
-</dd>
-</dl>
-</dd></dl>
+<span id="_CPPv3N5Cacao6ShaderD0Ev"></span><span id="_CPPv2N5Cacao6ShaderD0Ev"></span><span id="Cacao::Shader::~Shader"></span><span class="target" id="classCacao_1_1Shader_1a3330fc1e334efdf126a7de9d8a94b787"></span><span class="sig-name descname"><span class="n"><span class="pre">~Shader</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6ShaderD0Ev" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E">
-<span id="_CPPv3N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"></span><span id="_CPPv2N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"></span><span id="Cacao::Shader::UploadCacaoGlobals__glm::mat4.glm::mat4"></span><span class="target" id="classCacao_1_1Shader_1a4f787fe85e838bcfc917ba31c0cf7d06"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UploadCacaoGlobals</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">projection</span></span>, <span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">view</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Upload engine global data. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For use by the engine only </p>
-</div>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEERKNSt6stringE">
+<span id="_CPPv3N5Cacao6Shader6CreateERRNSt6vectorIhEERKNSt6stringE"></span><span id="_CPPv2N5Cacao6Shader6CreateERRNSt6vectorIhEERKNSt6stringE"></span><span id="Cacao::Shader::Create__std::vector:unsigned-c:RR.ssCR"></span><span class="target" id="classCacao_1_1Shader_1a83962e8c8d5801f12a0b3ec3a0bd83dd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shaderIR</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new shader from IR code. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>projection</strong> – The projection matrix </p></li>
-<li><p><strong>view</strong> – The view matrix</p></li>
+<li><p><strong>shaderIR</strong> – The Slang IR code to create the shader with </p></li>
+<li><p><strong>addr</strong> – The resource address to associate with the shader</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the IR code buffer is empty </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the address is malformed </p></li>
 </ul>
 </dd>
 </dl>
@@ -808,11 +695,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1SignalEventConsumer.html"
+       href="classCacao_1_1Sound.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class SignalEventConsumer</p>
+        <p class="prev-next-title">Class Sound</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -841,19 +728,10 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6ShaderE"><code class="docutils literal notranslate"><span class="pre">Shader</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6ShaderERNSt6vectorI8uint32_tEERNSt6vectorI8uint32_tEE10ShaderSpec"><code class="docutils literal notranslate"><span class="pre">Shader::Shader()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6ShaderENSt6stringENSt6stringE10ShaderSpec"><code class="docutils literal notranslate"><span class="pre">Shader::Shader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Shader::Realize()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">Shader::DropRealized()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6ShaderD0Ev"><code class="docutils literal notranslate"><span class="pre">Shader::~Shader()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader4BindEv"><code class="docutils literal notranslate"><span class="pre">Shader::Bind()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6UnbindEv"><code class="docutils literal notranslate"><span class="pre">Shader::Unbind()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader12CompileAsyncEv"><code class="docutils literal notranslate"><span class="pre">Shader::CompileAsync()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader11CompileSyncEv"><code class="docutils literal notranslate"><span class="pre">Shader::CompileSync()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader7ReleaseEv"><code class="docutils literal notranslate"><span class="pre">Shader::Release()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7IsBoundEv"><code class="docutils literal notranslate"><span class="pre">Shader::IsBound()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7GetSpecEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetSpec()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Shader7GetTypeEv"><code class="docutils literal notranslate"><span class="pre">Shader::GetType()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader14CreateMaterialEv"><code class="docutils literal notranslate"><span class="pre">Shader::CreateMaterial()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader18UploadCacaoGlobalsEN3glm4mat4EN3glm4mat4E"><code class="docutils literal notranslate"><span class="pre">Shader::UploadCacaoGlobals()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Shader::Create()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -886,7 +764,7 @@
 
   <p class="copyright">
     
-      © Copyright 2024, RobotLeopard86.
+      © Copyright 2025 RobotLeopard86.
       <br/>
     
   </p>

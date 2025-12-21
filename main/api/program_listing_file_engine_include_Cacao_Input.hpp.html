@@ -1,0 +1,619 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Program Listing for File Input.hpp &#8212; Cacao Engine Docs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=7b6b01ca"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_engine_include_Cacao_Input.hpp';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/cacaologo.png"/>
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="main" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
+    <img src="../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Cacao Engine Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="root.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="root.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Program Listing for File Input.hpp</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Program Listing for File Input.hpp</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="program-listing-for-file-input-hpp">
+<span id="program-listing-file-engine-include-cacao-input-hpp"></span><h1>Program Listing for File Input.hpp<a class="headerlink" href="#program-listing-for-file-input-hpp" title="Link to this heading"><span/></a></h1>
+<p>↰ <a class="reference internal" href="file_engine_include_Cacao_Input.hpp.html#file-engine-include-cacao-input-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Input.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/glm.hpp&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">Input</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Get</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">Input</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Input</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Input</span><span class="p">(</span><span class="n">Input</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Input</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Input</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Input</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Input</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">dvec2</span><span class="w"> </span><span class="nf">GetCursorPos</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsKeyPressed</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsMouseButtonPressed</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ImplAccessor</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Input</span><span class="p">();</span>
+<span class="w">        </span><span class="o">~</span><span class="n">Input</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TickController</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">FreezeInputState</span><span class="p">();</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="c1">//======================= KEYBOARD MAPPINGS =======================</span>
+<span class="c1">//Any printable characters use their ASCII codes</span>
+<span class="c1">//The other ones are just made up and their explanations will be noted</span>
+<span class="c1">//Any keys with &quot;KP&quot; are keys featured on the keypad/numpad</span>
+<span class="c1">//The &quot;super&quot; key is a Linux term; this is the Windows key or the Command key on macOS</span>
+<span class="cp">#define CACAO_KEY_ENTER 10</span>
+<span class="cp">#define CACAO_KEY_ESCAPE 27</span>
+<span class="cp">#define CACAO_KEY_BACKSPACE 8</span>
+<span class="cp">#define CACAO_KEY_TAB 9</span>
+<span class="cp">#define CACAO_KEY_SPACE 32</span>
+<span class="cp">#define CACAO_KEY_APOSTROPHE 39</span>
+<span class="cp">#define CACAO_KEY_COMMA 44</span>
+<span class="cp">#define CACAO_KEY_MINUS 45</span>
+<span class="cp">#define CACAO_KEY_EQUALS 61</span>
+<span class="cp">#define CACAO_KEY_PERIOD 46</span>
+<span class="cp">#define CACAO_KEY_SLASH 47</span>
+<span class="cp">#define CACAO_KEY_0 48</span>
+<span class="cp">#define CACAO_KEY_1 49</span>
+<span class="cp">#define CACAO_KEY_2 50</span>
+<span class="cp">#define CACAO_KEY_3 51</span>
+<span class="cp">#define CACAO_KEY_4 52</span>
+<span class="cp">#define CACAO_KEY_5 53</span>
+<span class="cp">#define CACAO_KEY_6 54</span>
+<span class="cp">#define CACAO_KEY_7 55</span>
+<span class="cp">#define CACAO_KEY_8 56</span>
+<span class="cp">#define CACAO_KEY_9 57</span>
+<span class="cp">#define CACAO_KEY_SEMICOLON 59</span>
+<span class="cp">#define CACAO_KEY_LEFT_BRACKET 91</span>
+<span class="cp">#define CACAO_KEY_RIGHT_BRACKET 93</span>
+<span class="cp">#define CACAO_KEY_BACKSLASH 92</span>
+<span class="cp">#define CACAO_KEY_GRAVE_ACCENT 96</span>
+<span class="cp">#define CACAO_KEY_A 97</span>
+<span class="cp">#define CACAO_KEY_B 98</span>
+<span class="cp">#define CACAO_KEY_C 99</span>
+<span class="cp">#define CACAO_KEY_D 100</span>
+<span class="cp">#define CACAO_KEY_E 101</span>
+<span class="cp">#define CACAO_KEY_F 102</span>
+<span class="cp">#define CACAO_KEY_G 103</span>
+<span class="cp">#define CACAO_KEY_H 104</span>
+<span class="cp">#define CACAO_KEY_I 105</span>
+<span class="cp">#define CACAO_KEY_J 106</span>
+<span class="cp">#define CACAO_KEY_K 107</span>
+<span class="cp">#define CACAO_KEY_L 108</span>
+<span class="cp">#define CACAO_KEY_M 109</span>
+<span class="cp">#define CACAO_KEY_N 110</span>
+<span class="cp">#define CACAO_KEY_O 111</span>
+<span class="cp">#define CACAO_KEY_P 112</span>
+<span class="cp">#define CACAO_KEY_Q 113</span>
+<span class="cp">#define CACAO_KEY_R 114</span>
+<span class="cp">#define CACAO_KEY_S 115</span>
+<span class="cp">#define CACAO_KEY_T 116</span>
+<span class="cp">#define CACAO_KEY_U 117</span>
+<span class="cp">#define CACAO_KEY_V 118</span>
+<span class="cp">#define CACAO_KEY_W 119</span>
+<span class="cp">#define CACAO_KEY_X 120</span>
+<span class="cp">#define CACAO_KEY_Y 121</span>
+<span class="cp">#define CACAO_KEY_Z 122</span>
+<span class="cp">#define CACAO_KEY_CAPS_LOCK 227</span><span class="c1">//Extended ASCII pi symbol, chosen at random</span>
+<span class="c1">//The F_ keys follow the pattern of a, e, i, o, u, each with an acute and then a grave accent.</span>
+<span class="cp">#define CACAO_KEY_F1 160</span>
+<span class="cp">#define CACAO_KEY_F2 133</span>
+<span class="cp">#define CACAO_KEY_F3 130</span>
+<span class="cp">#define CACAO_KEY_F4 138</span>
+<span class="cp">#define CACAO_KEY_F5 161</span>
+<span class="cp">#define CACAO_KEY_F6 141</span>
+<span class="cp">#define CACAO_KEY_F7 162</span>
+<span class="cp">#define CACAO_KEY_F8 149</span>
+<span class="cp">#define CACAO_KEY_F9 163</span>
+<span class="cp">#define CACAO_KEY_F10 151</span>
+<span class="cp">#define CACAO_KEY_F11 174</span>
+<span class="cp">#define CACAO_KEY_F12 175</span>
+<span class="cp">#define CACAO_KEY_PRINT_SCREEN 17</span><span class="c1">//ASCII device control 1 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_SCROLL_LOCK 18 </span><span class="c1">//ASCII device control 2 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_PAUSE 19       </span><span class="c1">//ASCII device control 3 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_INSERT 13      </span><span class="c1">//ASCII carraige return, chosen because in insert mode, you overwrite things like if you kept typing after a carraige return</span>
+<span class="cp">#define CACAO_KEY_DELETE 127     </span><span class="c1">//ASCII delete</span>
+<span class="cp">#define CACAO_KEY_HOME 60        </span><span class="c1">//ASCII &lt;, chosen because home moves cursor to the left</span>
+<span class="cp">#define CACAO_KEY_PAGE_UP 2      </span><span class="c1">//ASCII start of text, since text starts at the top of a page</span>
+<span class="cp">#define CACAO_KEY_END 62         </span><span class="c1">//ASCII &gt;, chosen because end moves cursor to the right</span>
+<span class="cp">#define CACAO_KEY_PAGE_DOWN 3    </span><span class="c1">//ASCII end of text, since text starts at the bottom of a page</span>
+<span class="cp">#define CACAO_KEY_RIGHT 175      </span><span class="c1">//Extended ASCII right French quotation marks (since they point right)</span>
+<span class="cp">#define CACAO_KEY_LEFT 174       </span><span class="c1">//Extended ASCII left French quotation marks (since they point left)</span>
+<span class="cp">#define CACAO_KEY_DOWN 24        </span><span class="c1">//ASCII cancel, chosen at random</span>
+<span class="cp">#define CACAO_KEY_UP 94          </span><span class="c1">//ASCII caret (since it points up)</span>
+<span class="cp">#define CACAO_KEY_NUM_LOCK 20    </span><span class="c1">//ASCII device control 4 (since this is a kind of device function)</span>
+<span class="cp">#define CACAO_KEY_KP_DIVIDE 246  </span><span class="c1">//Extended ASCII divide symbol</span>
+<span class="cp">#define CACAO_KEY_KP_MULTIPLY 42 </span><span class="c1">//ASCII asterisk, since that&#39;s the multiplication operator</span>
+<span class="cp">#define CACAO_KEY_KP_MINUS 95    </span><span class="c1">//ASCII underscore, since it&#39;s on the minus key but minus is already taken</span>
+<span class="cp">#define CACAO_KEY_KP_PLUS 43     </span><span class="c1">//ASCII plus</span>
+<span class="cp">#define CACAO_KEY_KP_ENTER 12    </span><span class="c1">//ASCII new page, chosen because it&#39;s another form of moving down</span>
+<span class="c1">//The keypad numbers are uppercase letters since those aren&#39;t already taken, and we just use the ones in that range with the same ending digit</span>
+<span class="cp">#define CACAO_KEY_KP_1 71</span>
+<span class="cp">#define CACAO_KEY_KP_2 72</span>
+<span class="cp">#define CACAO_KEY_KP_3 73</span>
+<span class="cp">#define CACAO_KEY_KP_4 74</span>
+<span class="cp">#define CACAO_KEY_KP_5 75</span>
+<span class="cp">#define CACAO_KEY_KP_6 76</span>
+<span class="cp">#define CACAO_KEY_KP_7 77</span>
+<span class="cp">#define CACAO_KEY_KP_8 78</span>
+<span class="cp">#define CACAO_KEY_KP_9 79</span>
+<span class="cp">#define CACAO_KEY_KP_0 70</span>
+<span class="cp">#define CACAO_KEY_KP_PERIOD 248</span><span class="c1">//Extended ASCII degree symbol, chosen at random</span>
+<span class="c1">//The modifier keys are just other uppercase letters that aren&#39;t taken, no reason</span>
+<span class="cp">#define CACAO_KEY_LEFT_CONTROL 80</span>
+<span class="cp">#define CACAO_KEY_LEFT_SHIFT 81</span>
+<span class="cp">#define CACAO_KEY_LEFT_ALT 82</span>
+<span class="cp">#define CACAO_KEY_LEFT_SUPER 83</span>
+<span class="cp">#define CACAO_KEY_RIGHT_CONTROL 84</span>
+<span class="cp">#define CACAO_KEY_RIGHT_SHIFT 85</span>
+<span class="cp">#define CACAO_KEY_RIGHT_ALT 86</span>
+<span class="cp">#define CACAO_KEY_RIGHT_SUPER 87</span>
+
+<span class="c1">//======================= MOUSE BUTTON MAPPINGS =======================</span>
+<span class="cp">#define CACAO_BUTTON_LEFT 0</span>
+<span class="cp">#define CACAO_BUTTON_MIDDLE 2</span>
+<span class="cp">#define CACAO_BUTTON_RIGHT 1</span>
+</pre></div>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025 RobotLeopard86.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
