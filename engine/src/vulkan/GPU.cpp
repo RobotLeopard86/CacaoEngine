@@ -406,4 +406,17 @@ namespace Cacao {
 	unsigned int VulkanGPU::MaxFramesInFlight() {
 		return vulkan->swapchain.renderContexts.size();
 	}
+
+	void VulkanGPU::RunloopStop() {
+		//Wait until all jobs are done and clean them up
+		//To avoid code duplication, we just call Iteration over and over
+		while(submitted.size() > 0) {
+			RunloopIteration();
+		}
+		vulkan->dev.waitIdle();
+	}
+
+	unsigned int VulkanGPU::MaxFramesInFlight() {
+		return vulkan->swapchain.renderContexts.size();
+	}
 }

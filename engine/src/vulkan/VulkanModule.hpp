@@ -221,10 +221,6 @@ namespace Cacao {
 	void CommitAfterRegen();
 #endif
 
-#ifdef HAS_WAYLAND
-	void CommitAfterRegen();
-#endif
-
 	constexpr glm::mat4 projectionCorrection(
 		{1.0f, 0.0f, 0.0f, 0.0f}, //No X change
 		{0.0f, -1.0f, 0.0f, 0.0f},//Invert Y

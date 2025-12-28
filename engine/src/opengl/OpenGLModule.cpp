@@ -37,14 +37,6 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "OpenGL v" << version << ", using " << renderer << " (" << vendor << ")";
 		ctx->Yield();
 
-		//Print OpenGL info
-		ctx->MakeCurrent();
-		const char* version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
-		const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-		const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
-		Logger::Engine(Logger::Level::Trace) << "OpenGL v" << version << ", using " << renderer << " (" << vendor << ")";
-		ctx->Yield();
-
 		connected = true;
 	}
 
