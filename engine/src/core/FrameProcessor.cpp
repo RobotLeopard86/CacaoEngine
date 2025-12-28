@@ -1,4 +1,7 @@
 #include "Cacao/FrameProcessor.hpp"
+#include "Cacao/Event.hpp"
+#include "Cacao/EventConsumer.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/TickController.hpp"
@@ -6,6 +9,7 @@
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/PAL.hpp"
+#include "impl/FrameProcessor.hpp"
 
 #include <atomic>
 #include <thread>
@@ -14,16 +18,12 @@
 #include "glm/glm.hpp"
 
 namespace Cacao {
-	struct FrameProcessor::Impl {
-		void Runloop(std::stop_token stop);
-
-		std::unique_ptr<std::jthread> thread;
-	};
-
 	FrameProcessor::FrameProcessor()
 	  : running(false) {
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
+		impl->numFramesInFlight.store(0);
+		impl->swapchainRegen.store(false);
 	}
 
 	FrameProcessor::~FrameProcessor() {
@@ -40,6 +40,13 @@ namespace Cacao {
 		auto runloop = [this](std::stop_token stop) { impl->Runloop(stop); };
 		impl->thread = std::make_unique<std::jthread>(runloop);
 
+		//Subscribe swapchain recreation event consumer
+		impl->resizeConsumer = EventConsumer([this](Event&) {
+			impl->swapchainRegen.store(true);
+		});
+		EventManager::Get().SubscribeConsumer("WindowResize", impl->resizeConsumer);
+		EventManager::Get().SubscribeConsumer("INTERNAL-RegenSwapchain", impl->resizeConsumer);
+
 		running = true;
 	}
 
@@ -47,6 +54,10 @@ namespace Cacao {
 		Check<BadInitStateException>(running, "The frame processor must be running when Stop is called!");
 
 		running = false;
+
+		//Unsubscribe event consumer
+		EventManager::Get().UnsubscribeConsumer("WindowResize", impl->resizeConsumer);
+		EventManager::Get().UnsubscribeConsumer("INTERNAL-RegenSwapchain", impl->resizeConsumer);
 
 		//Signal run loop stop
 		impl->thread->request_stop();
@@ -66,7 +77,8 @@ namespace Cacao {
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		while(!stop.stop_requested()) {
 			//If the window is minimized, we can't render, so no point in working
-			while(Window::Get().IsMinimized()) {
+			//Same for if there are too many frames in flight
+			while(Window::Get().IsMinimized() || numFramesInFlight > IMPL(GPUManager).MaxFramesInFlight()) {
 				if(stop.stop_requested()) return;
 			}
 
@@ -85,10 +97,19 @@ namespace Cacao {
 			//It has been blocking on this semaphore
 			TickController::Get().snapshotControl.done.release();
 
+			//If needed, regenerate swapchain
+			if(swapchainRegen.load(std::memory_order_relaxed)) {
+				if(numFramesInFlight == 0) {
+					swapchainRegen.store(false);
+					IMPL(GPUManager).GenSwapchain();
+				} else {
+					continue;
+				}
+			}
+
 			//Setup command buffer
 			//We use the internal API so we can do rendering setup
 			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
-			cmd->token = IMPL(GPUManager).IssueCmdToken();
 			if(!cmd->SetupContext(true)) continue;
 
 			//Clear color
@@ -99,14 +120,14 @@ namespace Cacao {
 			cmd->StartRendering(clearColorLinear);
 			cmd->EndRendering();
 
-			//Make sure our frame is alive before submitting
-			//Cleanup via RAII will occur if not
-			if(!IMPL(GPUManager).FrameAlive(cmd->token)) continue;
-
 			//Execute command buffer
 			try {
+				++numFramesInFlight;
 				std::shared_future<void> fut = GPUManager::Get().Submit(std::move(cmd));
-				if(IMPL(GPUManager).UsesImmediateExecution()) fut.get();
+				if(IMPL(GPUManager).UsesImmediateExecution()) {
+					fut.get();
+					if(numFramesInFlight > 0) --numFramesInFlight;
+				}
 			} catch(const MiscException&) {}
 		}
 	}

@@ -1,10 +1,13 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Window.hpp"
 #include "OpenGLModule.hpp"
 #include "Context.hpp"
+#include "glad/gl.h"
 
 #include <future>
 #include <memory>
+#include <mutex>
 #include <stdexcept>
 #include <optional>
 
@@ -69,5 +72,17 @@ namespace Cacao {
 
 	GPUManager::Impl* OpenGLModule::ConfigureGPUManager() {
 		return new OpenGLGPU();
+	}
+
+	void OpenGLGPU::GenSwapchain() {
+		//Get window content area size
+		glm::uvec2 caSize = Window::Get().GetContentAreaSize();
+
+		//Set viewport
+		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		cmd->AddTask([caSize]() {
+			glViewport(0, 0, caSize.x, caSize.y);
+		});
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 }

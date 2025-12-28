@@ -1,6 +1,6 @@
 #include "VulkanModule.hpp"
-#include "Cacao/Exceptions.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/Exceptions.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
@@ -25,7 +25,8 @@ namespace Cacao {
 
 	void VulkanModule::SetVSync(bool state) {
 		vsync = state;
-		vulkan->swapchain.regenRequested.store(true);
+		Event e("INTERNAL-RegenSwapchain");
+		EventManager::Get().Dispatch(e);
 	}
 
 	//Sorts the list Vulkan physical devices by how many conditions each one satisfies
@@ -279,9 +280,6 @@ namespace Cacao {
 
 	void VulkanModule::Disconnect() {
 		connected = false;
-
-		//Unsubscribe swapchain regeneration consumer
-		EventManager::Get().UnsubscribeConsumer("WindowResize", resizer);
 
 		//Destroy swapchain
 		for(const vk::ImageView& view : swapchain.views) {

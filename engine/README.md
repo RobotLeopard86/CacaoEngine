@@ -4,7 +4,7 @@
 Welcome to the engine source code! This is the code that is actually part of the engine and is used for making games.  
 This has a few components, so this is a guide to help break them down.  
 
-As a note, the engine is currently undergoing heavy restructuring. Any directories with `OLD` in them contain code that is now not in use and will eventually be deleted.  
+As a note, the engine is currently undergoing heavy restructuring. Any directories with `OLD` in their names contain code that is now not in use and will eventually be deleted.  
 
 This code will be undergoing active maintennance, updates, and potentially large changes. Do not expect anything in this folder to remain consistent until this notice is removed.  
 
@@ -42,7 +42,7 @@ This also contains the context management code for each of the supported platfor
 ## Private Headers (`src/private`)
 All engine source components have access to these private headers, but they should not be accessible publicly.  
 
-These contain important internal systems; for example the `ImplAccessor`, which grants access to the underlying PIMPL pointers from outside of the class, as well as the implementations of said pointer's classes. They also contain helpful macros, such as a safer `getenv` wrapper, a generator for singleton constructors, a 3D vector calculator (front, right, and up vectors).
+These contain important internal systems; for example the `ImplAccessor`, which grants access to the underlying PIMPL pointers from outside of the class, as well as the implementations of said pointer's classes. For more complete information about the tools found in the private headers, view the [private headers guide](src/private/README.md).
 
 ## Game Runtime (`src/runtime`)
 The prebuilt game runtime is contained here, and is an executable that handles launching games and loading content from the standard bundle structure. This is the executable that is invoked when a game is launched.  
@@ -52,7 +52,7 @@ It is possible to build other runtimes based on the Cacao Engine shared library,
 ## Targetgen Library (`src/shader-tgtgen`)
 This is a lightweight library used by the engine core for converting Slang IR into the final shader code to be given to the graphics APIs. It should not use any Cacao Engine APIs.  
 
-The reason is not in `libs` is because it is a tiny component that has no use outside of the engine, but has a distinct enough purpose to be separated from the engine.
+The reason is not in `libs` is because it is a tiny component that has no use outside of the engine, but has a distinct enough purpose to be separated from the engine core.
 
 ## Vulkan Backend (`src/vulkan`)
 The Vulkan backend uses Vulkan 1.3+ with widely-available extensions, as described in the backends page in the [manual](https://robotleopard86.github.io/CacaoEngine/dev/manual). It works on both Windows and Linux and (for now) is the primary backend for implementation and use, except on macOS as only OpenGL is supported there at present.

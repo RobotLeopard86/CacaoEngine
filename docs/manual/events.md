@@ -11,4 +11,6 @@ The below are all of the built-in event types in Cacao Engine.
 | `MousePress` | A mouse button has been pressed | `DataEvent<unsigned int>` |
 | `MouseRelease` | A mouse button has been released | `DataEvent<unsigned int>` |
 | `KeyDown` | A key has been pressed | `DataEvent<unsigned int>` |
-| `KeyUp` | A key has been released | `DataEvent<unsigned int>` |
+| `KeyUp` | A key has been released | `DataEvent<unsigned int>` |  
+
+There are also certain internal event types that are used for communication within the engine but should not be used by external code. These types are thus not documented here, but may be found in the private headers document in the engine source tree.

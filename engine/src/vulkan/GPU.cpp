@@ -1,8 +1,12 @@
 #include "Cacao/GPU.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/FrameProcessor.hpp"
 #include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
+#include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
+#include "impl/FrameProcessor.hpp"
 
 #include <atomic>
 #include <future>
@@ -139,9 +143,6 @@ namespace Cacao {
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
-			//If a regen has been requested, it's imminent and we shouldn't try to proceed
-			if(vulkan->swapchain.regenRequested.load(std::memory_order_relaxed)) return false;
-
 			//Ensure "forward progress" is being made (https://docs.vulkan.org/spec/latest/chapters/VK_KHR_surface/wsi.html#swapchain-acquire-forward-progress)
 			if(acquireCount > (vulkan->swapchain.images.size() - vulkan->capabilities.minImageCount)) {
 				//Forward progress requirement not satisifed, skip
@@ -188,7 +189,6 @@ namespace Cacao {
 					poolPtr = nullptr;
 					render->available.store(true);
 					render = nullptr;
-					vulkan->swapchain.regenRequested.store(true);
 					return false;
 				}
 
@@ -289,30 +289,6 @@ namespace Cacao {
 		}
 		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
-		//If rendering and the swapchain is regenerating or about to be, this frame won't be valid, so we have to discard everything (unfortunately)
-		if(render && vulkan->swapchain.regenRequested.load(std::memory_order_relaxed)) {
-			//Submit empty work to unsignal acquire semaphore
-			vk::SubmitInfo2 emptySubmit({}, wait, {}, signals[1]);
-			{
-				std::lock_guard lk(vulkan->queueMtx);
-				vulkan->queue.submit2(emptySubmit);
-			}
-			Sync sync = GetSync();
-			vk::SemaphoreWaitInfo emptyWait({}, sync.semaphore, sync.doneValue);
-			vulkan->dev.waitSemaphores(emptyWait, UINT64_MAX);
-
-			//Reset data
-			render->imageIndex = UINT32_MAX;
-			if(acquireCount != 0) --(acquireCount);
-			render->available.store(true);
-			poolPtr = nullptr;
-			render = nullptr;
-			promise.set_value();
-
-			//We don't use Check() here because we don't need a message; this just bails us out of Submit and back to the frame processor without putting stuff in the submitted queue
-			throw MiscException("Frame skip - regen in progress");
-		}
-
 		//Obtain queue lock
 		std::lock_guard lk(vulkan->queueMtx);
 
@@ -323,7 +299,8 @@ namespace Cacao {
 			try {
 				vulkan->queue.presentKHR(presentInfo);
 			} catch(vk::OutOfDateKHRError&) {
-				vulkan->swapchain.regenRequested.store(true);
+				Event e("INTERNAL-RegenSwapchain");
+				EventManager::Get().Dispatch(e);
 			}
 		}
 	}
@@ -373,6 +350,7 @@ namespace Cacao {
 
 				//If this was a rendering context, mark it available and adjust counter
 				if(vcb->render) {
+					--(IMPL(FrameProcessor).numFramesInFlight);
 					vcb->render->available.store(true);
 					if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
 					vcb->render = nullptr;
@@ -414,5 +392,18 @@ namespace Cacao {
 
 	bool FrameAlive(uint64_t token) {
 		return token == vulkan->swapchain.epoch.load(std::memory_order_relaxed);
+	}
+
+	void VulkanGPU::RunloopStop() {
+		//Wait until all jobs are done and clean them up
+		//To avoid code duplication, we just call Iteration over and over
+		while(submitted.size() > 0) {
+			RunloopIteration();
+		}
+		vulkan->dev.waitIdle();
+	}
+
+	unsigned int VulkanGPU::MaxFramesInFlight() {
+		return vulkan->swapchain.renderContexts.size();
 	}
 }

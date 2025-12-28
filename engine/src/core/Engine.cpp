@@ -119,6 +119,7 @@ namespace Cacao {
 					chosen = backend;
 					break;
 				}
+				PAL::Get().TerminateModule();
 			} catch(...) {}
 		}
 		if(!found) {

@@ -11,4 +11,4 @@ The license is compatible and it's right here in the directory.
 Maybe at some point in the future I can go back to using an official release, but as of writing this the author appears to be on hiatus.  
 Anyways, that's my spiel. Hope this clears at least a few things up.  
 
--RobotLeopard86
+-Owen (RobotLeopard86)
