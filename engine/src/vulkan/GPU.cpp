@@ -1,9 +1,12 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/FrameProcessor.hpp"
 #include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
+#include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
+#include "impl/FrameProcessor.hpp"
 
 #include <atomic>
 #include <future>
@@ -347,6 +350,7 @@ namespace Cacao {
 
 				//If this was a rendering context, mark it available and adjust counter
 				if(vcb->render) {
+					--(IMPL(FrameProcessor).numFramesInFlight);
 					vcb->render->available.store(true);
 					if(VulkanCommandBuffer::acquireCount != 0) --(VulkanCommandBuffer::acquireCount);
 					vcb->render = nullptr;

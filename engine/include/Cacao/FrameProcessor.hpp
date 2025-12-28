@@ -48,9 +48,13 @@ namespace Cacao {
 			return running;
 		}
 
-	  private:
+		///@cond
 		struct Impl;
+		///@endcond
+
+	  private:
 		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
 
 		bool running;
 

@@ -9,6 +9,7 @@
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/PAL.hpp"
+#include "impl/FrameProcessor.hpp"
 
 #include <atomic>
 #include <thread>
@@ -17,16 +18,6 @@
 #include "glm/glm.hpp"
 
 namespace Cacao {
-	struct FrameProcessor::Impl {
-		void Runloop(std::stop_token stop);
-
-		std::unique_ptr<std::jthread> thread;
-		std::atomic<unsigned int> numFramesInFlight;
-
-		std::atomic_bool swapchainRegen;
-		EventConsumer resizeConsumer;
-	};
-
 	FrameProcessor::FrameProcessor()
 	  : running(false) {
 		//Create implementation pointer
@@ -131,16 +122,11 @@ namespace Cacao {
 
 			//Execute command buffer
 			try {
-				exathread::Future<void> fut = Engine::Get().GetThreadPool()->submit([](std::atomic<unsigned int>* inFlight, CommandBuffer* cmdPtr) {
-					std::unique_ptr<CommandBuffer> cmd(cmdPtr);
-					inFlight->store(inFlight->load() + 1);
-					std::shared_future<void> fut = GPUManager::Get().Submit(std::move(cmd));
-					fut.get();
-					inFlight->store(inFlight->load() - 1);
-				},
-					&numFramesInFlight, cmd.release());
+				++numFramesInFlight;
+				std::shared_future<void> fut = GPUManager::Get().Submit(std::move(cmd));
 				if(IMPL(GPUManager).UsesImmediateExecution()) {
-					fut.await();
+					fut.get();
+					if(numFramesInFlight > 0) --numFramesInFlight;
 				}
 			} catch(const MiscException&) {}
 		}

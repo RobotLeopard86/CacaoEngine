@@ -28,6 +28,7 @@ void Specparse(YAML::Node root, [[maybe_unused]] bool macOSApp = false) {
 #endif
 		if(!std::filesystem::exists(rt.cacaospec.binary)) panic("Game binary does not exist",
 			std::string("This usually means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
+		rt.cacaospec.binary = std::filesystem::absolute(rt.cacaospec.binary).string();
 	} catch(...) {
 		panic("Cacaospec file is improperly formatted", "");
 	}
