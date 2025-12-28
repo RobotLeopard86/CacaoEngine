@@ -47,8 +47,8 @@ exhale.environment_ready = exhale_environment_ready
 
 version = os.environ.get("BUILDVER", default="dev")
 project = 'Cacao Engine'
-copyright = '2025 RobotLeopard86'
-author = 'RobotLeopard86'
+copyright = '2025 Owen Z. Siebers'
+author = 'Owen Z. Siebers (RobotLeopard86)'
 release = version
 
 extensions = [
@@ -169,6 +169,6 @@ html_theme_options = {
    "navbar_end": ["navbar-icon-links", "version-switcher"],
    "switcher": {
         "version_match": version,
-        "json_url": "https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json"
+        "json_url": "https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json"
     }
 }

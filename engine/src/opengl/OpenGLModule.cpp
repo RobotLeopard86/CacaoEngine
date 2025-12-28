@@ -29,13 +29,6 @@ namespace Cacao {
 		glm::uvec2 contentSize = Window::Get().GetContentAreaSize();
 		glViewport(0, 0, contentSize.x, contentSize.y);
 
-		//Register viewport resize consumer
-		resizer = EventConsumer([](Event& e) {
-			DataEvent<glm::uvec2>& wre = static_cast<DataEvent<glm::uvec2>&>(e);
-			glViewport(0, 0, wre.GetData().x, wre.GetData().x);
-		});
-		EventManager::Get().SubscribeConsumer("WindowResize", resizer);
-
 		//Print OpenGL info
 		ctx->MakeCurrent();
 		const char* version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
@@ -49,9 +42,6 @@ namespace Cacao {
 
 	void OpenGLModule::Disconnect() {
 		connected = false;
-
-		//Unsubscribe viewport resize consumer
-		EventManager::Get().UnsubscribeConsumer("WindowResize", resizer);
 
 		//Destroy context
 		ctx.reset();

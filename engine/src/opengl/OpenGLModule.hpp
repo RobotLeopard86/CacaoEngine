@@ -3,7 +3,6 @@
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "impl/GPUManager.hpp"
-#include "Cacao/EventConsumer.hpp"
 #include "Cacao/Exceptions.hpp"// IWYU pragma: keep
 
 #include <queue>
@@ -78,6 +77,7 @@ namespace Cacao {
 		bool UsesImmediateExecution() override {
 			return true;
 		}
+		void GenSwapchain() override;
 
 	  private:
 		std::queue<std::unique_ptr<OpenGLCommandBuffer>> commands;
@@ -103,9 +103,6 @@ namespace Cacao {
 		OpenGLModule()
 		  : PALModule("opengl") {}
 		~OpenGLModule() {}
-
-	  private:
-		EventConsumer resizer;
 	};
 
 	inline std::shared_ptr<OpenGLModule> gl;

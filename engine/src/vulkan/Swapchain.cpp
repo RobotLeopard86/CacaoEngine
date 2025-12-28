@@ -23,11 +23,7 @@ namespace Cacao {
 		}
 	}
 
-	void GenSwapchain() {
-		//Set regen flags
-		vulkan->swapchain.epoch.fetch_add(1);
-		vulkan->swapchain.regenRequested.store(false, std::memory_order_seq_cst);
-
+	void VulkanGPU::GenSwapchain() {
 		//Lock the command buffer queue mutex
 		//This will block the GPU thread from running more commands until we're done (that would be bad)
 		std::lock_guard lk(vulkan->queueMtx);
@@ -146,9 +142,5 @@ namespace Cacao {
 			SetupRenderingContext(newCtx);
 			vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
 		}
-
-		//Regen done
-		//Lock will be released by stack unwind
-		vulkan->swapchain.epoch.fetch_add(1);
 	}
 }

@@ -2,7 +2,6 @@
 
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
-#include "Cacao/EventConsumer.hpp"
 
 #ifdef __linux__
 #ifdef HAS_X11
@@ -145,14 +144,12 @@ namespace Cacao {
 		bool UsesImmediateExecution() override {
 			return false;
 		}
-		uint64_t IssueCmdToken() override;
-		bool FrameAlive(uint64_t token) override;
+		unsigned int MaxFramesInFlight() override;
+		void GenSwapchain() override;
 
 	  private:
 		std::vector<std::unique_ptr<VulkanCommandBuffer>> submitted;
 		std::mutex mutex;
-
-		friend void GenSwapchain();
 	};
 
 	class VulkanModule final : public PALModule {
@@ -189,8 +186,6 @@ namespace Cacao {
 			std::vector<vk::ImageView> views;
 			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
 			uint16_t cycle = 0;
-			std::atomic_bool regenRequested;
-			std::atomic_uint64_t epoch;//Even epochs are stable, odd epochs are regenerating
 		} swapchain;
 		vk::CommandPool renderingPool;
 
@@ -211,19 +206,11 @@ namespace Cacao {
 		std::mutex queueMtx;
 
 		VulkanModule()
-		  : PALModule("vulkan") {
-			swapchain.regenRequested.store(false);
-			swapchain.epoch.store(0);
-		}
+		  : PALModule("vulkan") {}
 		~VulkanModule() {}
-
-	  private:
-		EventConsumer resizer;
 	};
 
 	inline std::shared_ptr<VulkanModule> vulkan;
-
-	void GenSwapchain();
 
 #ifdef HAS_WAYLAND
 	void CommitAfterRegen();

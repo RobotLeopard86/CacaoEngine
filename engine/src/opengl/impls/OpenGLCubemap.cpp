@@ -55,9 +55,7 @@ namespace Cacao {
 			//Zero object name to avoid confusion
 			gpuTex = 0;
 		});
-		GPUManager::Get()
-			.Submit(std::move(cmd))
-			.get();
+		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
 	Cubemap::Impl* OpenGLModule::ConfigureCubemap() {

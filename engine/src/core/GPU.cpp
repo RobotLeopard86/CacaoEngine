@@ -6,6 +6,7 @@
 #include "SingletonGet.hpp"
 #include "impl/PAL.hpp"
 #include "ImplAccessor.hpp"
+#include <atomic>
 #include <thread>
 
 namespace Cacao {
@@ -26,7 +27,7 @@ namespace Cacao {
 		Check<BadStateException>(!running, "The graphics backend and window must be connected to start the GPU manager!");
 
 		//Setup
-		impl->vsreq.needChange = false;
+		impl->vsreq.needChange.store(false);
 		impl->vsreq.value = true;
 
 		//Start runloop on background thread
@@ -51,14 +52,12 @@ namespace Cacao {
 		RunloopStart();
 		while(!stop.stop_requested()) {
 			//Check if we need to update V-Sync
-			{
-				std::lock_guard lk(vsreq.mtx);
-				if(vsreq.needChange) {
-					IMPL(PAL).mod->SetVSync(vsreq.value);
-					vsreq.needChange = false;
-				}
+			if(vsreq.needChange) {
+				IMPL(PAL).mod->SetVSync(vsreq.value);
+				vsreq.needChange.store(false);
 			}
 
+			//Run backend iteration
 			RunloopIteration();
 		}
 		RunloopStop();
@@ -70,10 +69,9 @@ namespace Cacao {
 
 	void GPUManager::SetVSync(bool newState) {
 		Check<BadInitStateException>(running, "Cannot set V-Sync state when the GPU manager isn't running!");
-		std::lock_guard lk(impl->vsreq.mtx);
 		if(impl->vsreq.value == newState) return;
 		impl->vsreq.value = newState;
-		impl->vsreq.needChange = true;
+		impl->vsreq.needChange.store(true);
 	}
 
 	std::unique_ptr<CommandBuffer> CommandBuffer::Create() {

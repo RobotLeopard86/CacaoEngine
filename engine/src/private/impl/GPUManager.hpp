@@ -3,6 +3,7 @@
 #include "Cacao/GPU.hpp"
 
 #include <thread>
+#include <atomic>
 
 namespace Cacao {
 	class GPUManager::Impl {
@@ -18,17 +19,14 @@ namespace Cacao {
 		std::unique_ptr<std::jthread> thread;
 
 		virtual bool UsesImmediateExecution() = 0;
-		virtual uint64_t IssueCmdToken() {
-			return 0;
+		virtual unsigned int MaxFramesInFlight() {
+			return UINT32_MAX;
 		}
-		virtual bool FrameAlive(uint64_t) {
-			return true;
-		}
+		virtual void GenSwapchain() = 0;
 
 		struct VSyncRequest {
-			bool needChange;
+			std::atomic_bool needChange;
 			bool value;
-			std::mutex mtx;
 		} vsreq;
 	};
 }

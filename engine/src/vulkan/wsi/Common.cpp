@@ -1,12 +1,10 @@
 #include "VulkanModule.hpp"
-#include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/Window.hpp"
 #include "WSI.hpp"
 
 #include <array>
-#include <atomic>
 
 constexpr std::array<vk::Format, 2> acceptableFormats {{vk::Format::eB8G8R8A8Srgb, vk::Format::eR8G8B8A8Srgb}};
 
@@ -47,13 +45,7 @@ namespace Cacao {
 		}
 
 		//Create initial swapchain
-		GenSwapchain();
-
-		//Register swapchain regeneration consumer
-		vulkan->resizer = EventConsumer([](Event&) {
-			vulkan->swapchain.regenRequested.store(true);
-		});
-		EventManager::Get().SubscribeConsumer("WindowResize", vulkan->resizer);
+		GPU_IMPL(Vulkan).GenSwapchain();
 
 		connected = true;
 	}
