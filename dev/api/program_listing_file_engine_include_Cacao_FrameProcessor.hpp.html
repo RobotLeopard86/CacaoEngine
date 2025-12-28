@@ -411,9 +411,11 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">running</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ImplAccessor</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">running</span><span class="p">;</span>
 
