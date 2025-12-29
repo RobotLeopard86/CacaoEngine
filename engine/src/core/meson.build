@@ -88,6 +88,7 @@ engine_srcs += files(
 	'PAL.cpp',
 	'PerspectiveCamera.cpp',
 	'Resource.cpp',
+	'Shader.cpp',
 	'Sound.cpp',
 	'Tex2D.cpp',
 	'TickController.cpp',

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Cacao/Tex2D.hpp"
+#include "Cacao/Shader.hpp"
 
 namespace Cacao {
-	class Tex2D::Impl {
+	class Shader::Impl {
 	  public:
 		virtual void Realize(bool& success) = 0;
 		virtual void DropRealized() = 0;
 
-		libcacaoimage::Image img;
+		std::vector<unsigned char> irBuffer;
 
 		virtual ~Impl() = default;
 	};

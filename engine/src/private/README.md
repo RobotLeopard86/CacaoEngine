@@ -19,7 +19,9 @@ The `ImplAccessor` itself is a singleton containing a variety of methods to acce
 
 To actually use the returned objects, you will need to include the appropriate header from the `impl` directory, which contains the class definitions of the PIMPL types for supported classes.  
 
-Additionally, there are two helper macros `WIN_IMPL` and `GPU_IMPL` that provide casted access to the appropriate subclass of the `Window` and `GPUManager` PIMPL class respectively. As an example, `GPU_IMPL(Vulkan)` will return a `VulkanGPU` object. The same logic follows for `WIN_IMPL`.  
+There are two helper macros `WIN_IMPL` and `GPU_IMPL` that provide casted access to the appropriate subclass of the `Window` and `GPUManager` PIMPL class respectively. As an example, `GPU_IMPL(Vulkan)` will return a `VulkanGPU` object. The same logic follows for `WIN_IMPL`.  
+
+Likewise, the `RES_IMPL` macro does the same for resource objects that have backend subclasses of their PIMPL objects (such as a `Mesh`). This follows the structure `RES_IMPL(basetype, backendname, varname)`. As an example, `RES_IMPL(Mesh, Vulkan, mymesh)` will return the `VulkanMeshImpl&` backing the `mymesh` object.
 
 ## `PALConfigurables.hpp`
 This header contains template specialization declarations for types supported by `PAL::ConfigureImplPtr`, so that we can restrict what types may be used to call this method.  

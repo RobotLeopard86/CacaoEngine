@@ -5,6 +5,7 @@
 #include "Cacao/Tex2D.hpp"
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/GPU.hpp"
+#include "Cacao/Shader.hpp"
 
 namespace Cacao {
 	template<>
@@ -18,4 +19,7 @@ namespace Cacao {
 
 	template<>
 	void PAL::ConfigureImplPtr<Cubemap>(Cubemap&);
+
+	template<>
+	void PAL::ConfigureImplPtr<Shader>(Shader&);
 }
