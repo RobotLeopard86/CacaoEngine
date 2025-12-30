@@ -10,4 +10,4 @@ struct CacaoGlobalData {
     float4x4 projection;
     float4x4 view;
 };
-ConstantBuffer<CacaoGlobalData> cacao;
+ParameterBlock<CacaoGlobalData> cacao;

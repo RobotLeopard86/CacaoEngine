@@ -5,6 +5,13 @@
 
 namespace Cacao {
 	/**
+	 * @brief Shader flags bitmask
+	 */
+	enum class ShaderFlagBits : uint8_t {
+		NonOpaque = 0b1
+	};
+
+	/**
 	 * @brief Asset type for GPU shaders
 	 */
 	class CACAO_API Shader : public Asset {
@@ -13,13 +20,14 @@ namespace Cacao {
 		 * @brief Create a new shader from IR code
 		 *
 		 * @param shaderIR The Slang IR code to create the shader with
+		 * @param flags Flags conveying shader metadata
 		 * @param addr The resource address to associate with the shader
 		 *
 		 * @throws BadValueException If the IR code buffer is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Shader> Create(std::vector<unsigned char>&& shaderIR, const std::string& addr) {
-			return std::shared_ptr<Shader>(new Shader(std::move(shaderIR), addr));
+		static std::shared_ptr<Shader> Create(std::vector<unsigned char>&& shaderIR, uint8_t flags, const std::string& addr) {
+			return std::shared_ptr<Shader>(new Shader(std::move(shaderIR), flags, addr));
 		}
 
 		///@cond
@@ -52,7 +60,7 @@ namespace Cacao {
 		~Shader();
 
 	  private:
-		Shader(std::vector<unsigned char>&& shaderIR, const std::string& addr);
+		Shader(std::vector<unsigned char>&& shaderIR, uint8_t flags, const std::string& addr);
 		friend class ResourceManager;
 		friend class PAL;
 

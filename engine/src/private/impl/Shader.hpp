@@ -9,6 +9,7 @@ namespace Cacao {
 		virtual void DropRealized() = 0;
 
 		std::vector<unsigned char> irBuffer;
+		uint8_t flags;
 
 		virtual ~Impl() = default;
 	};

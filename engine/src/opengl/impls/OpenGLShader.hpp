@@ -10,6 +10,9 @@ namespace Cacao {
 		void Realize(bool& success) override;
 		void DropRealized() override;
 
+		//GLSL shader source code (generated from IR)
+		std::string vertexGLSL, fragmentGLSL;
+
 		//Shader program object
 		GLuint program;
 	};
