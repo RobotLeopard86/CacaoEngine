@@ -361,10 +361,10 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderDescription.html">Struct ShaderDescription</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html">Struct TickController::SnapshotRequestControl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html">Struct ShaderDescription::MaterialParamInfo</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
@@ -481,22 +481,10 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1aec4e560439d12bc0c484a9dedc653c24.html">Enum ShaderFlagBits</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a84c94062bde3ff0017ddd31071e14aba.html">Define CACAO_BUTTON_LEFT</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a12adf0581ae42b9dc1a456cdd9ca8665.html">Define CACAO_BUTTON_MIDDLE</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a23268cda20903e8f077f54db28e88a63.html">Define CACAO_BUTTON_RIGHT</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
@@ -653,20 +641,21 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEE7uint8_tRKNSt6stringE">
-<span id="_CPPv3N5Cacao6Shader6CreateERRNSt6vectorIhEE7uint8_tRKNSt6stringE"></span><span id="_CPPv2N5Cacao6Shader6CreateERRNSt6vectorIhEE7uint8_tRKNSt6stringE"></span><span id="Cacao::Shader::Create__std::vector:unsigned-c:RR.uint8_t.ssCR"></span><span class="target" id="classCacao_1_1Shader_1ae5f34d84b1c554fdda5d9c8e6b900819"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shaderIR</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEE7uint8_tRKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEE17ShaderDescriptionRKNSt6stringE">
+<span id="_CPPv3N5Cacao6Shader6CreateERRNSt6vectorIhEE17ShaderDescriptionRKNSt6stringE"></span><span id="_CPPv2N5Cacao6Shader6CreateERRNSt6vectorIhEE17ShaderDescriptionRKNSt6stringE"></span><span id="Cacao::Shader::Create__std::vector:unsigned-c:RR.ShaderDescription.ssCR"></span><span class="target" id="classCacao_1_1Shader_1a6fe5f4a0411e2af130e7267c9bc88d32"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shaderIR</span></span>, <a class="reference internal" href="structCacao_1_1ShaderDescription.html#_CPPv4N5Cacao17ShaderDescriptionE" title="Cacao::ShaderDescription"><span class="n"><span class="pre">ShaderDescription</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEE17ShaderDescriptionRKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a new shader from IR code. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>shaderIR</strong> – The Slang IR code to create the shader with </p></li>
-<li><p><strong>flags</strong> – Flags conveying shader metadata </p></li>
+<li><p><strong>desc</strong> – <a class="reference internal" href="#classCacao_1_1Shader"><span class="std std-ref">Shader</span></a> behavior and input information </p></li>
 <li><p><strong>addr</strong> – The resource address to associate with the shader</p></li>
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the IR code buffer is empty </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the shader description contains invalid data </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the address is malformed </p></li>
 </ul>
 </dd>
@@ -735,7 +724,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Shader::Realize()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">Shader::DropRealized()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6ShaderD0Ev"><code class="docutils literal notranslate"><span class="pre">Shader::~Shader()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEE7uint8_tRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Shader::Create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Shader6CreateERRNSt6vectorIhEE17ShaderDescriptionRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Shader::Create()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -1,0 +1,1032 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Struct ShaderDescription &#8212; Cacao Engine Docs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+    <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=81f007b9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/structCacao_1_1ShaderDescription';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/cacaologo.png"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Struct ShaderDescription::MaterialParamInfo" href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html" />
+    <link rel="prev" title="Struct Logger::LogToken" href="structCacao_1_1Logger_1_1LogToken.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo_dark.png" class="logo__image only-dark" alt=""/>
+    <img src="../_static/logo_light.png" class="logo__image only-light pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Cacao Engine Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="root.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../manual.html">
+    Manual
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="root.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../libapis.html">
+    Library API References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/RobotLeopard86/CacaoEngine" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1Loader.html">Concept Loader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Struct ShaderDescription</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html">Struct ShaderDescription::MaterialParamInfo</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html">Class BinaryBlobResource</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Camera.html">Class Camera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CodeRegistry.html">Class CodeRegistry</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1CommandBuffer.html">Class CommandBuffer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Event.html">Class Event</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventConsumer.html">Class EventConsumer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Input.html">Class Input</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Transform.html">Class Transform</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Window.html">Class Window</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1World.html">Class World</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a4256b4ea68f7b83b0580b492975fac45.html">Typedef Cacao::time::dmicroseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a2ee627f4843f0e647748a3a58f6c71f4.html">Typedef Cacao::time::dmilliseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a089ce274eb27ed22b7ca888179c98e2b.html">Typedef Cacao::time::dminutes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a800ee6ea4ace65d56fb0c7e101360bf1.html">Typedef Cacao::time::dnanoseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ad9a328df46a51d0139cc2dd628e23ec5.html">Typedef Cacao::time::dseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a89899dad0df62386aa6ae0d32ce1df57.html">Typedef Cacao::time::dtime_point</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ac2772804de41ed7618f06a957f6dfc34.html">Typedef Cacao::time::fhours</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a99ed33722b9c7d1e9f110dd54a613754.html">Typedef Cacao::time::fmicroseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a00caf7e10b43f1e73a1bf6b077913b18.html">Typedef Cacao::time::fmilliseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1afb37cc2f7ae22667aeb1e88f14783b60.html">Typedef Cacao::time::fminutes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a1ff9460947063ee5392a99a01c732d22.html">Typedef Cacao::time::fnanoseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ae763516073d03facfe9c309bb88a3248.html">Typedef Cacao::time::fseconds</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1abba9b591cb84f1b4b24065abbdecd1b4.html">Typedef Cacao::time::ftime_point</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Struct ShaderDescription</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="struct-shaderdescription">
+<span id="exhale-struct-structcacao-1-1shaderdescription"></span><h1>Struct ShaderDescription<a class="headerlink" href="#struct-shaderdescription" title="Link to this heading"><span/></a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Shader.hpp.html#file-engine-include-cacao-shader-hpp"><span class="std std-ref">File Shader.hpp</span></a></p></li>
+</ul>
+<section id="nested-relationships">
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Link to this heading"><span/></a></h2>
+<section id="nested-types">
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html#exhale-struct-structcacao-1-1shaderdescription-1-1materialparaminfo"><span class="std std-ref">Struct ShaderDescription::MaterialParamInfo</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescriptionE">
+<span id="_CPPv3N5Cacao17ShaderDescriptionE"></span><span id="_CPPv2N5Cacao17ShaderDescriptionE"></span><span id="Cacao::ShaderDescription"></span><span class="target" id="structCacao_1_1ShaderDescription"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ShaderDescription</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescriptionE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="classCacao_1_1Shader.html#classCacao_1_1Shader"><span class="std std-ref">Shader</span></a> inputs and behavior description. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription4TypeE">
+<span id="_CPPv3N5Cacao17ShaderDescription4TypeE"></span><span id="_CPPv2N5Cacao17ShaderDescription4TypeE"></span><span class="target" id="structCacao_1_1ShaderDescription_1ae366446a4fe1b2de796673d963b98f6e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription4TypeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>The type of object a shader is for. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription4Type8Opaque3DE">
+<span id="_CPPv3N5Cacao17ShaderDescription4Type8Opaque3DE"></span><span id="_CPPv2N5Cacao17ShaderDescription4Type8Opaque3DE"></span><span class="target" id="structCacao_1_1ShaderDescription_1ae366446a4fe1b2de796673d963b98f6ea4c5718a38f9387b7f18e87a2b88bc4a5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Opaque3D</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription4Type8Opaque3DE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>3D opaque geometry in the world </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription4Type11NonOpaque3DE">
+<span id="_CPPv3N5Cacao17ShaderDescription4Type11NonOpaque3DE"></span><span id="_CPPv2N5Cacao17ShaderDescription4Type11NonOpaque3DE"></span><span class="target" id="structCacao_1_1ShaderDescription_1ae366446a4fe1b2de796673d963b98f6eab1caf7226f368bc1a7f7c47b2b6a0a4b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NonOpaque3D</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription4Type11NonOpaque3DE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>3D potentially non-opaque geometry in the world </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription4Type9Surface2DE">
+<span id="_CPPv3N5Cacao17ShaderDescription4Type9Surface2DE"></span><span id="_CPPv2N5Cacao17ShaderDescription4Type9Surface2DE"></span><span class="target" id="structCacao_1_1ShaderDescription_1ae366446a4fe1b2de796673d963b98f6ea045dc9b8775dafbfdfed809db36f94ac"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Surface2D</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription4Type9Surface2DE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>2D object rendered on a surface </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription15VertexInputBitsE">
+<span id="_CPPv3N5Cacao17ShaderDescription15VertexInputBitsE"></span><span id="_CPPv2N5Cacao17ShaderDescription15VertexInputBitsE"></span><span class="target" id="structCacao_1_1ShaderDescription_1a6a7272abd6dd60d9a9bdc3b90690649c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VertexInputBits</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBitsE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Bits of used vertex input attributes. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription15VertexInputBits8PositionE">
+<span id="_CPPv3N5Cacao17ShaderDescription15VertexInputBits8PositionE"></span><span id="_CPPv2N5Cacao17ShaderDescription15VertexInputBits8PositionE"></span><span class="target" id="structCacao_1_1ShaderDescription_1a6a7272abd6dd60d9a9bdc3b90690649ca52f5e0bc3859bc5f5e25130b6c7e8881"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Position</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits8PositionE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Position in local space. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription15VertexInputBits9TexCoordsE">
+<span id="_CPPv3N5Cacao17ShaderDescription15VertexInputBits9TexCoordsE"></span><span id="_CPPv2N5Cacao17ShaderDescription15VertexInputBits9TexCoordsE"></span><span class="target" id="structCacao_1_1ShaderDescription_1a6a7272abd6dd60d9a9bdc3b90690649caf960d67a26c7fc9a8427dba5b1563ce0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TexCoords</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits9TexCoordsE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Texture coordinates. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription15VertexInputBits6NormalE">
+<span id="_CPPv3N5Cacao17ShaderDescription15VertexInputBits6NormalE"></span><span id="_CPPv2N5Cacao17ShaderDescription15VertexInputBits6NormalE"></span><span class="target" id="structCacao_1_1ShaderDescription_1a6a7272abd6dd60d9a9bdc3b90690649ca960b44c579bc2f6818d2daaf9e4c16f0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Normal</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits6NormalE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Surface normal vector. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription15VertexInputBits7TangentE">
+<span id="_CPPv3N5Cacao17ShaderDescription15VertexInputBits7TangentE"></span><span id="_CPPv2N5Cacao17ShaderDescription15VertexInputBits7TangentE"></span><span class="target" id="structCacao_1_1ShaderDescription_1a6a7272abd6dd60d9a9bdc3b90690649ca541671cb1be09d76a84ba1a873ec3fc8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Tangent</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits7TangentE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Surface tangent vector. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription15VertexInputBits9BitangentE">
+<span id="_CPPv3N5Cacao17ShaderDescription15VertexInputBits9BitangentE"></span><span id="_CPPv2N5Cacao17ShaderDescription15VertexInputBits9BitangentE"></span><span class="target" id="structCacao_1_1ShaderDescription_1a6a7272abd6dd60d9a9bdc3b90690649cae3e73a4b6e7cfd12008a35f6a051b319"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bitangent</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits9BitangentE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Surface bitangent vector. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription4typeE">
+<span id="_CPPv3N5Cacao17ShaderDescription4typeE"></span><span id="_CPPv2N5Cacao17ShaderDescription4typeE"></span><span id="Cacao::ShaderDescription::type__Cacao::ShaderDescription::Type"></span><span class="target" id="structCacao_1_1ShaderDescription_1a921477fd41e2b67cbbd48772f89b9ba4"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescriptionE" title="Cacao::ShaderDescription"><span class="n"><span class="pre">ShaderDescription</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescription4TypeE" title="Cacao::ShaderDescription::Type"><span class="n"><span class="pre">Type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription4typeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of this shader. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription12vertexInputsE">
+<span id="_CPPv3N5Cacao17ShaderDescription12vertexInputsE"></span><span id="_CPPv2N5Cacao17ShaderDescription12vertexInputsE"></span><span id="Cacao::ShaderDescription::vertexInputs__VertexInputBits"></span><span class="target" id="structCacao_1_1ShaderDescription_1aea604912ec919d2b1ea19586c0d8322c"></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBitsE" title="Cacao::ShaderDescription::VertexInputBits"><span class="n"><span class="pre">VertexInputBits</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertexInputs</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription12vertexInputsE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="structCacao_1_1Vertex.html#structCacao_1_1Vertex"><span class="std std-ref">Vertex</span></a> input values used by the shader, represented as a bitmask of VertexInputBits. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription13transformUsedE">
+<span id="_CPPv3N5Cacao17ShaderDescription13transformUsedE"></span><span id="_CPPv2N5Cacao17ShaderDescription13transformUsedE"></span><span id="Cacao::ShaderDescription::transformUsed__b"></span><span class="target" id="structCacao_1_1ShaderDescription_1ae7c3c136a22b550ff18ec115da5be941"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transformUsed</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription13transformUsedE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>If the shader uses the transformation matrix. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription11globalsUsedE">
+<span id="_CPPv3N5Cacao17ShaderDescription11globalsUsedE"></span><span id="_CPPv2N5Cacao17ShaderDescription11globalsUsedE"></span><span id="Cacao::ShaderDescription::globalsUsed__b"></span><span class="target" id="structCacao_1_1ShaderDescription_1aa0d576abb6e40c5c76363e2bc9adda8c"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">globalsUsed</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription11globalsUsedE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>If the shader uses the globals buffer. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription14materialParamsE">
+<span id="_CPPv3N5Cacao17ShaderDescription14materialParamsE"></span><span id="_CPPv2N5Cacao17ShaderDescription14materialParamsE"></span><span id="Cacao::ShaderDescription::materialParams__std::vector:MaterialParamInfo:"></span><span class="target" id="structCacao_1_1ShaderDescription_1ae28c836ac6029c35ed370ad4c2e65366"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfoE" title="Cacao::ShaderDescription::MaterialParamInfo"><span class="n"><span class="pre">MaterialParamInfo</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">materialParams</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription14materialParamsE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Material parameters list. </p>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfoE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfoE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfoE"></span><span id="Cacao::ShaderDescription::MaterialParamInfo"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MaterialParamInfo</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfoE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Info about a material parameter. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataTypeE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataTypeE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataTypeE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataType</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataTypeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of data. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca8512a16cdd64960795640e8e32606695"></span><span class="sig-name descname"><span class="pre">Non-opaque</span> <span class="pre">types:</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType3IntE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType3IntE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType3IntE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca1686a6c336b71b36d77354cea19a8b52"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType3IntE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>32-bit signed integer </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4UIntE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType4UIntE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType4UIntE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca0b1291eded63143ac04709711274785a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UInt</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4UIntE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>32-bit unsigned integer </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5FloatE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType5FloatE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType5FloatE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca22ae0e2b89e5e3d477f988cc36d3272b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5FloatE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Single-precision floating point number (32-bit) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4BoolE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType4BoolE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType4BoolE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705cac26f15e86e3de4c398a8273272aba034"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bool</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4BoolE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Boolean. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float2E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float2E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float2E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca6694430a2b471b5d2de071f2ef1fdc57"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float2</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float2E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>2-component float vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float3E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float3E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float3E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca8a8a1d211464d4bdee46db3c75bfa121"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float3</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>3-component float vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float4E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float4E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float4E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca33116adc6690289da9b82ea736864eeb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float4</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float4E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>4-component float vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int2E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int2E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int2E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca4c6bc90f2bbdf35523e29c414a57bad3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int2</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int2E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>2-component int vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int3E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int3E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int3E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca56bf1b0e694b442bf4145a04b82ea943"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int3</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>3-component int vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int4E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int4E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int4E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca1a44f12c3427b3e11c171d09632bad8d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int4</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int4E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>4-component int vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt2E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt2E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt2E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca003b50e47c23c2f841dd2b21452f7ec4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UInt2</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt2E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>2-component unsigned int vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt3E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt3E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt3E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca424aaa556a2950e0b98713136b7e6439"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UInt3</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>3-component unsigned int vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt4E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt4E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt4E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca146988b242dbb9ed1e323e309789115a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UInt4</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt4E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>4-component unsigned int vector </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float2x2E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float2x2E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float2x2E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca9f4dc4fb244389452dff9e690c546af8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float2x2</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float2x2E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>2x2 matrix of floats </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float3x3E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float3x3E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float3x3E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca06e4e253924cfabbd8ab02820b9fff78"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float3x3</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float3x3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>3x3 matrix of floats </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float4x4E">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float4x4E"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float4x4E"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705caca838ad43525783bcc106c5c9d49df67"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float4x4</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float4x4E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>4x4 matrix of floats </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca3232ea3adeeab1fdcb1c251dc17a0675"></span><span class="sig-name descname"><span class="pre">Opaque</span> <span class="pre">types:</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5Tex2DE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType5Tex2DE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType5Tex2DE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705cafc2321331d63bfe17f44c7b06ff47a17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Tex2D</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5Tex2DE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="classCacao_1_1Tex2D.html#classCacao_1_1Tex2D"><span class="std std-ref">Tex2D</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType7TexCubeE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo8DataType7TexCubeE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo8DataType7TexCubeE"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a7f10e43b8098f983b62ac9d0a019705ca86c2c27ecbdd32f18ed89c95a7c9bf02"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TexCube</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType7TexCubeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="classCacao_1_1Cubemap.html#classCacao_1_1Cubemap"><span class="std std-ref">Cubemap</span></a>. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo4typeE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo4typeE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo4typeE"></span><span id="Cacao::ShaderDescription::MaterialParamInfo::type__Cacao::ShaderDescription::MaterialParamInfo::DataType"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a3de277379311e10d94ee50c4b1170032"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescriptionE" title="Cacao::ShaderDescription"><span class="n"><span class="pre">ShaderDescription</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfoE" title="Cacao::ShaderDescription::MaterialParamInfo"><span class="n"><span class="pre">MaterialParamInfo</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataTypeE" title="Cacao::ShaderDescription::MaterialParamInfo::DataType"><span class="n"><span class="pre">DataType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo4typeE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Type of stored data. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo4nameE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo4nameE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo4nameE"></span><span id="Cacao::ShaderDescription::MaterialParamInfo::name__ss"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1ad02c2ce2859db88b4784ae9702646132"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo4nameE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Parameter name. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo12bufferOffsetE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo12bufferOffsetE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo12bufferOffsetE"></span><span id="Cacao::ShaderDescription::MaterialParamInfo::bufferOffset__unsigned-i"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1aa5d04f8df4c472ece37a9ff01b956b5b"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bufferOffset</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo12bufferOffsetE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><strong>For non-opaque types:</strong> offset into the parameters constant buffer </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo7bindingE">
+<span id="_CPPv3N5Cacao17ShaderDescription17MaterialParamInfo7bindingE"></span><span id="_CPPv2N5Cacao17ShaderDescription17MaterialParamInfo7bindingE"></span><span id="Cacao::ShaderDescription::MaterialParamInfo::binding__unsigned-i"></span><span class="target" id="structCacao_1_1ShaderDescription_1_1MaterialParamInfo_1a92f8b704423b93b69de7ade3ded7f9fa"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">binding</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo7bindingE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><strong>For opaque types:</strong> descriptor binding number </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="structCacao_1_1Logger_1_1LogToken.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Struct Logger::LogToken</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Struct ShaderDescription::MaterialParamInfo</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-relationships">Nested Relationships</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-types">Nested Types</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-documentation">Struct Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescriptionE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription4TypeE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::Type</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription4Type8Opaque3DE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::Type::Opaque3D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription4Type11NonOpaque3DE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::Type::NonOpaque3D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription4Type9Surface2DE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::Type::Surface2D</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBitsE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::VertexInputBits</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits8PositionE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::VertexInputBits::Position</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits9TexCoordsE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::VertexInputBits::TexCoords</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits6NormalE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::VertexInputBits::Normal</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits7TangentE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::VertexInputBits::Tangent</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription15VertexInputBits9BitangentE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::VertexInputBits::Bitangent</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription4typeE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription12vertexInputsE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::vertexInputs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription13transformUsedE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::transformUsed</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription11globalsUsedE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::globalsUsed</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription14materialParamsE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::materialParams</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfoE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataTypeE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType3IntE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Int</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4UIntE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::UInt</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5FloatE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4BoolE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Bool</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float2E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float2</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float3E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float3</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType6Float4E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float4</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int2E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Int2</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int3E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Int3</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType4Int4E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Int4</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt2E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::UInt2</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt3E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::UInt3</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5UInt4E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::UInt4</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float2x2E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float2x2</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float3x3E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float3x3</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType8Float4x4E"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Float4x4</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType5Tex2DE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::Tex2D</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo8DataType7TexCubeE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::DataType::TexCube</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo4typeE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo4nameE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo12bufferOffsetE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::bufferOffset</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17ShaderDescription17MaterialParamInfo7bindingE"><code class="docutils literal notranslate"><span class="pre">ShaderDescription::MaterialParamInfo::binding</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025 Owen Z. Siebers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

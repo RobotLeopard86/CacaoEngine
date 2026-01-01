@@ -413,28 +413,28 @@
 </div>
 <p>Setting up a basic bundle for just a game binary can be accomplished within the Meson build directory, and an example on how to do this can be found below:</p>
 <p><code class="docutils literal notranslate"><span class="pre">meson.build</span></code>:</p>
-<div class="highlight-{code-block}meson notranslate"><div class="highlight"><pre><span></span># Game binary
-my_game = shared_module(&#39;game&#39;, sources: [...], dependencies: cacaort_dep, name_prefix: &#39;&#39;, install: false)
+<div class="highlight-Meson notranslate"><div class="highlight"><pre><span></span><span class="c"># Game binary</span>
+<span class="n">my_game</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">shared_module</span><span class="p">(</span><span class="s">&#39;game&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">sources</span><span class="p">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"> </span><span class="n">dependencies</span><span class="p">:</span><span class="w"> </span><span class="n">cacaort_dep</span><span class="p">,</span><span class="w"> </span><span class="n">name_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">install</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span>
 
-# Copy runtime files
-rtdata = cacao_subproject.get_variable(&#39;rtdata&#39;)
-custom_target(&#39;game_runtime&#39;, command: [rtdata[&#39;setup_script&#39;], rtdata[&#39;filelist&#39;], meson.current_build_dir(), &#39;@OUTPUT0@&#39;], output: [host_machine.system() == &#39;windows&#39; ? &#39;game.exe&#39; : &#39;game&#39;, rtdata[&#39;filenames&#39;]], build_by_default: true, depends: rtdata[&#39;files&#39;])
+<span class="c"># Copy runtime files</span>
+<span class="n">rtdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cacao_subproject</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">&#39;rtdata&#39;</span><span class="p">)</span>
+<span class="nb">custom_target</span><span class="p">(</span><span class="s">&#39;game_runtime&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">rtdata</span><span class="p">[</span><span class="s">&#39;setup_script&#39;</span><span class="p">],</span><span class="w"> </span><span class="n">rtdata</span><span class="p">[</span><span class="s">&#39;filelist&#39;</span><span class="p">],</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">current_build_dir</span><span class="p">(),</span><span class="w"> </span><span class="s">&#39;@OUTPUT0@&#39;</span><span class="p">],</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="vm">host_machine</span><span class="p">.</span><span class="n">system</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;windows&#39;</span><span class="w"> </span><span class="p">?</span><span class="w"> </span><span class="s">&#39;game.exe&#39;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&#39;game&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">rtdata</span><span class="p">[</span><span class="s">&#39;filenames&#39;</span><span class="p">]],</span><span class="w"> </span><span class="n">build_by_default</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">depends</span><span class="p">:</span><span class="w"> </span><span class="n">rtdata</span><span class="p">[</span><span class="s">&#39;files&#39;</span><span class="p">])</span>
 
-# Specfile
-spec = configuration_data()
-spec.set(&#39;BINPATH&#39;, fs.relative_to(sandbox, meson.current_build_dir()))
-spec.set(&#39;ID&#39;, &#39;net.rl86.CacaoSandbox&#39;)
-spec.set(&#39;TITLE&#39;, &#39;Cacao Engine Sandbox Application&#39;)
-spec.set(&#39;VERSION&#39;, meson.project_version())
-configure_file(input: &#39;cacaospec.yml.in&#39;, output: &#39;cacaospec.yml&#39;, configuration: spec)
+<span class="c"># Specfile</span>
+<span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">configuration_data</span><span class="p">()</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;BINPATH&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">fs</span><span class="p">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">sandbox</span><span class="p">,</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">current_build_dir</span><span class="p">()))</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;ID&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;net.rl86.CacaoSandbox&#39;</span><span class="p">)</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;TITLE&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Cacao Engine Sandbox Application&#39;</span><span class="p">)</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;VERSION&#39;</span><span class="p">,</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">project_version</span><span class="p">())</span>
+<span class="nb">configure_file</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cacaospec.yml.in&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cacaospec.yml&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">configuration</span><span class="p">:</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">cacaospec.yml.in</span></code>:</p>
-<div class="highlight-{code-block}yaml notranslate"><div class="highlight"><pre><span></span>meta:
-  pkgId: @ID@
-  title: @TITLE@
-  version: @VERSION@
-binary: @BINPATH@
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkgId</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">ID@</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">TITLE@</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">VERSION@</span>
+<span class="nt">binary</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">BINPATH@</span>
 </pre></div>
 </div>
 <p>An example for creating a more complex bundle layout will be available at release.</p>

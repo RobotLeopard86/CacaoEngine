@@ -361,10 +361,10 @@
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderDescription.html">Struct ShaderDescription</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html">Struct TickController::SnapshotRequestControl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html">Struct ShaderDescription::MaterialParamInfo</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
@@ -481,22 +481,10 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="enum_Shader_8hpp_1aec4e560439d12bc0c484a9dedc653c24.html">Enum ShaderFlagBits</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a84c94062bde3ff0017ddd31071e14aba.html">Define CACAO_BUTTON_LEFT</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a12adf0581ae42b9dc1a456cdd9ca8665.html">Define CACAO_BUTTON_MIDDLE</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a23268cda20903e8f077f54db28e88a63.html">Define CACAO_BUTTON_RIGHT</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
@@ -601,8 +589,7 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#namespaces" id="id2">Namespaces</a></p></li>
 <li><p><a class="reference internal" href="#classes" id="id3">Classes</a></p></li>
-<li><p><a class="reference internal" href="#enums" id="id4">Enums</a></p></li>
-<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
 </ul>
 </nav>
 <section id="namespaces">
@@ -618,8 +605,8 @@
 <li><p><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html#exhale-struct-structcacao-1-1engine-1-1config"><span class="std std-ref">Struct Engine::Config</span></a></p></li>
 <li><p><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html#exhale-struct-structcacao-1-1engine-1-1initconfig"><span class="std std-ref">Struct Engine::InitConfig</span></a></p></li>
 <li><p><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html#exhale-struct-structcacao-1-1logger-1-1logtoken"><span class="std std-ref">Struct Logger::LogToken</span></a></p></li>
-<li><p><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html#exhale-struct-structcacao-1-1resourcemanager-1-1erasedloader"><span class="std std-ref">Struct ResourceManager::ErasedLoader</span></a></p></li>
-<li><p><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html#exhale-struct-structcacao-1-1tickcontroller-1-1snapshotrequestcontrol"><span class="std std-ref">Struct TickController::SnapshotRequestControl</span></a></p></li>
+<li><p><a class="reference internal" href="structCacao_1_1ShaderDescription.html#exhale-struct-structcacao-1-1shaderdescription"><span class="std std-ref">Struct ShaderDescription</span></a></p></li>
+<li><p><a class="reference internal" href="structCacao_1_1ShaderDescription_1_1MaterialParamInfo.html#exhale-struct-structcacao-1-1shaderdescription-1-1materialparaminfo"><span class="std std-ref">Struct ShaderDescription::MaterialParamInfo</span></a></p></li>
 <li><p><a class="reference internal" href="structCacao_1_1Vertex.html#exhale-struct-structcacao-1-1vertex"><span class="std std-ref">Struct Vertex</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Actor.html#exhale-class-classcacao-1-1actor"><span class="std std-ref">Class Actor</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1ActorHandle.html#exhale-class-classcacao-1-1actorhandle"><span class="std std-ref">Class ActorHandle</span></a></p></li>
@@ -658,12 +645,6 @@
 <li><p><a class="reference internal" href="classCacao_1_1Window.html#exhale-class-classcacao-1-1window"><span class="std std-ref">Class Window</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1World.html#exhale-class-classcacao-1-1world"><span class="std std-ref">Class World</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1WorldManager.html#exhale-class-classcacao-1-1worldmanager"><span class="std std-ref">Class WorldManager</span></a></p></li>
-</ul>
-</section>
-<section id="enums">
-<h2>Enums<a class="headerlink" href="#enums" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="enum_Shader_8hpp_1aec4e560439d12bc0c484a9dedc653c24.html#exhale-enum-shader-8hpp-1aec4e560439d12bc0c484a9dedc653c24"><span class="std std-ref">Enum ShaderFlagBits</span></a></p></li>
 </ul>
 </section>
 <section id="functions">
@@ -724,7 +705,6 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enums">Enums</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 </ul>
   </nav></div>
