@@ -50,10 +50,9 @@ namespace Cacao {
 		/**
 		 * @brief Check if a factory for a given type of code object has been registered
 		 *
-		 * @param id
-		 * @param factory
-		 * @param type
-		 * @return requires
+		 * @param id The ID of the object factory
+		 *
+		 * @return If the factory has been registered
 		 */
 		template<typename T>
 			requires std::is_same_v<Component, T>

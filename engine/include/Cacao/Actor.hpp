@@ -69,6 +69,7 @@ namespace Cacao {
 		 *
 		 * @param name The initial name of the actor
 		 * @param parent The initial actor parent
+		 * @param guid An optional GUID to provide the actor with
 		 *
 		 * @return A handle to the new actor
 		 *

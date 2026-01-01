@@ -153,6 +153,7 @@ namespace Cacao {
 		bool IsLoaderRegistered(std::type_index tp);
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
 
+		///@cond
 		struct ErasedLoader {
 			std::any loaderObj;
 			std::function<std::shared_ptr<Resource>(const std::string&)> load;
@@ -171,5 +172,6 @@ namespace Cacao {
 				return std::static_pointer_cast<Resource>(loader.template CreateResource<R>(std::move(intermediate)));
 			};
 		}
+		///@endcond
 	};
 }

@@ -54,6 +54,11 @@ namespace Cacao {
 	}
 
 	template<>
+	bool Resource::ValidateResourceAddr<Shader>(const std::string& addr) {
+		return BaseResAddrCheck(addr) && addr[0] == 'a';
+	}
+
+	template<>
 	bool Resource::ValidateResourceAddr<World>(const std::string& addr) {
 		return BaseResAddrCheck(addr) && addr[0] == 'w';
 	}

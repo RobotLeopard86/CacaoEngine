@@ -16,6 +16,7 @@ engine_srcs += files(
 	'impls' / 'VulkanMesh.cpp',
 	'impls' / 'VulkanTex2D.cpp',
 	'impls' / 'VulkanCubemap.cpp',
+	'impls' / 'VulkanShader.cpp',
 	'wsi' / 'Common.cpp'
 )
 engine_inc += include_directories('.')

@@ -8,7 +8,7 @@ You are not required to use the prebuilt runtime. However, the documentation her
 Setting up a basic bundle for just a game binary can be accomplished within the Meson build directory, and an example on how to do this can be found below:  
 
 `meson.build`:
-```{code-block}meson
+```{code-block} Meson
 # Game binary
 my_game = shared_module('game', sources: [...], dependencies: cacaort_dep, name_prefix: '', install: false)
 
@@ -25,7 +25,7 @@ spec.set('VERSION', meson.project_version())
 configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
 ```  
 `cacaospec.yml.in`:
-```{code-block}yaml
+```{code-block} YAML
 meta:
   pkgId: @ID@
   title: @TITLE@

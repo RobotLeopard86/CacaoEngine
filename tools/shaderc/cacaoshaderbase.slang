@@ -7,7 +7,8 @@ struct VSIn {
 };
 
 struct CacaoGlobalData {
-    float4x4 projection;
-    float4x4 view;
+    float4x4 viewProjection;
 };
 ParameterBlock<CacaoGlobalData> cacao;
+
+[vk::push_constant] ConstantBuffer<float4x4> transform;

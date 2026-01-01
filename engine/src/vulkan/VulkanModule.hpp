@@ -165,6 +165,7 @@ namespace Cacao {
 		Mesh::Impl* ConfigureMesh() override;
 		Tex2D::Impl* ConfigureTex2D() override;
 		Cubemap::Impl* ConfigureCubemap() override;
+		Shader::Impl* ConfigureShader() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
 		std::unique_ptr<CommandBuffer> CreateCmdBuffer() override;
 

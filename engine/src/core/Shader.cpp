@@ -5,7 +5,7 @@
 #include "PALConfigurables.hpp"
 
 namespace Cacao {
-	Shader::Shader(std::vector<unsigned char>&& shaderIR, uint8_t flags, const std::string& addr)
+	Shader::Shader(std::vector<unsigned char>&& shaderIR, ShaderDescription desc, const std::string& addr)
 	  : Asset(addr) {
 		Check<BadValueException>(ValidateResourceAddr<Shader>(addr), "Resource address is malformed!");
 		Check<BadValueException>(!shaderIR.empty(), "Cannot construct a shader with empty data!");
@@ -15,7 +15,7 @@ namespace Cacao {
 
 		//Fill data
 		impl->irBuffer = std::move(shaderIR);
-		impl->flags = flags;
+		impl->description = desc;
 	}
 
 	Shader::~Shader() {

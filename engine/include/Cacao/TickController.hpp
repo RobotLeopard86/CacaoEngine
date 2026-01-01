@@ -55,6 +55,7 @@ namespace Cacao {
 
 		bool running;
 
+		///@cond
 		struct SnapshotRequestControl {
 			SnapshotRequestControl() : request(false), grant(0), done(0) {}
 
@@ -63,6 +64,7 @@ namespace Cacao {
 			std::binary_semaphore done;
 		} snapshotControl;
 		friend class FrameProcessor;
+		///@endcond
 
 		TickController();
 		~TickController();
