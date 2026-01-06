@@ -127,4 +127,3 @@ engine_deps += [
 	setupapi,
 	apple_audio
 ]
-engine_args += '-DCACAO_VER="' + meson.project_version() + '"'

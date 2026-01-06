@@ -8,6 +8,10 @@
 #define CACAO_VER "unknown"
 #endif
 
+#ifndef CACAO_RELEASE_NICKNAME
+#define CACAO_RELEASE_NICKNAME "Name TBD"
+#endif
+
 void panic(const std::string& err, const std::string& hint);
 
 inline class Runtime {

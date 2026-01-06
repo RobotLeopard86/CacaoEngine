@@ -1,5 +1,5 @@
-# Extra args for Windows
-cppargs = ['-DCACAO_VER="' + meson.project_version() + '"']
+# Extra arguments for Windows
+cppargs = []
 if host_machine.system() == 'windows' and get_option('windows_noconsole') == true
 	cppargs += '-DWIN_NOCONSOLE'
 endif

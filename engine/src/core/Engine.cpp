@@ -25,6 +25,10 @@
 #define CACAO_VER "unknown"
 #endif
 
+#ifndef CACAO_RELEASE_NICKNAME
+#define CACAO_RELEASE_NICKNAME "Name TBD"
+#endif
+
 #include <vector>
 #include <filesystem>
 #include <memory>
@@ -50,7 +54,7 @@ namespace Cacao {
 		icfg = initCfg;
 
 		//Say hello (this will also trigger logging initialization)
-		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << "!";
+		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")!";
 
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";

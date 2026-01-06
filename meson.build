@@ -102,6 +102,10 @@ if bt.contains('debug')
 	add_project_arguments(['-D_DEBUG'], language: 'cpp')
 endif
 
+# Define version macros
+release_nickname = 'Astoria'
+add_project_arguments(['-DCACAO_VER="' + meson.project_version() + '"', '-DCACAO_RELEASE_NICKNAME="' + release_nickname + '"'], language: 'cpp')
+
 # Slang compiler and libraries
 slang = subproject('slang', required: true)
 slang_dep = slang.get_variable('slang_dep')

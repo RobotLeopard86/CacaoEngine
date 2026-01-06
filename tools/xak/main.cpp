@@ -8,6 +8,11 @@
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
+
+#ifndef CACAO_RELEASE_NICKNAME
+#define CACAO_RELEASE_NICKNAME "Name TBD"
+#endif
+
 #ifndef XAK_VER
 #define XAK_VER "unknown"
 #endif
@@ -25,7 +30,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Asset pack tool v" << XAK_VER << "\nFor Cacao Engine v" << CACAO_VER;
+        ss << "Asset pack tool v" << XAK_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Configure commands
