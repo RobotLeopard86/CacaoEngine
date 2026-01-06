@@ -25,9 +25,6 @@ subprojects/llvm.wrap
 # Don't send Python crap from utility scripts
 scripts/__pycache__
 
-# Don't send local scripts
-scripts/local
-
 # Don't send Meson subproject download hash
 .meson-subproject-wrap-hash.txt
 
