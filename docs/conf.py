@@ -45,10 +45,10 @@ def exhale_environment_ready(app):
 exhale.environment_ready = exhale_environment_ready
 # End sphinx-contrib-exhale-multiproject code
 
-version = os.environ.get("GITHUB_RELEASE", default="dev")
+version = os.environ.get("BUILDVER", default="dev")
 project = 'Cacao Engine'
-copyright = '2025 RobotLeopard86'
-author = 'RobotLeopard86'
+copyright = '2025 Owen Z. Siebers'
+author = 'Owen Z. Siebers (RobotLeopard86)'
 release = version
 
 extensions = [
@@ -58,7 +58,7 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md', '.venv']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md', '.venv', 'myexhale']
 
 html_theme = 'pydata_sphinx_theme'
 html_title = "Cacao Engine Docs"
@@ -95,7 +95,7 @@ exhale_projects_args = {
 									INPUT = ../engine/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,std*,CACAO_API
+									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_BUTTON*,GLM*,std*,CACAO_API
                                     ENABLE_PREPROCESSING = YES
 									MACRO_EXPANSION = YES
 									EXPAND_ONLY_PREDEF = YES
@@ -166,9 +166,9 @@ html_theme_options = {
             "type": "fontawesome",
         }
    ],
-   "navbar_start": ["navbar-logo", "version-switcher"],
+   "navbar_end": ["navbar-icon-links", "version-switcher"],
    "switcher": {
         "version_match": version,
-        "json_url": "https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/dev/docs/switcher.json"
+        "json_url": "https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json"
     }
 }

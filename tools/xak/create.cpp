@@ -86,7 +86,7 @@ void CreateCmd::Callback() {
 
 	//Define asset table
 	libcacaoformats::AssetPack assetTable;
-	std::map<std::filesystem::path, std::string> assets;
+	std::unordered_map<std::filesystem::path, std::string> assets;
 	std::vector<std::filesystem::path> resources;
 	YAML::Node addrMap;
 	if(noAsset) goto res_begin;
@@ -118,8 +118,8 @@ void CreateCmd::Callback() {
 	{
 		std::vector<std::string> foundAddrs;
 
-		//Convert to a std::map for simpler iteration
-		const std::map<std::string, std::string> addrMapAsMap = addrMap.as<std::map<std::string, std::string>>();
+		//Convert to a std::unordered_map for simpler iteration
+		const std::unordered_map<std::string, std::string> addrMapAsMap = addrMap.as<std::unordered_map<std::string, std::string>>();
 		for(const auto& [_, v] : addrMapAsMap) {
 			if(std::find(foundAddrs.cbegin(), foundAddrs.cend(), v) != foundAddrs.cend()) {
 				XAK_ERROR("Asset address map contains duplicate addresses!")

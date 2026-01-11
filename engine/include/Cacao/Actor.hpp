@@ -3,10 +3,10 @@
 #include "DllHelper.hpp"
 #include "Transform.hpp"
 #include "Exceptions.hpp"
-#include "ComponentExporter.hpp"
 
-#include <map>
+#include <unordered_map>
 #include <memory>
+#include <typeindex>
 
 #include "crossguid/guid.hpp"
 
@@ -69,12 +69,13 @@ namespace Cacao {
 		 *
 		 * @param name The initial name of the actor
 		 * @param parent The initial actor parent
+		 * @param guid An optional GUID to provide the actor with
 		 *
 		 * @return A handle to the new actor
 		 *
 		 * @throws NonexistentValueException If the provided parent is a null handle
 		 */
-		static ActorHandle Create(const std::string& name, ActorHandle parent);
+		static ActorHandle Create(const std::string& name, ActorHandle parent, xg::Guid guid = {});
 
 		/**
 		 * @brief Create a new actor attached to the world root
@@ -84,7 +85,7 @@ namespace Cacao {
 		 *
 		 * @return A handle to the new actor
 		 */
-		static ActorHandle Create(const std::string& name, std::shared_ptr<World> world);
+		static ActorHandle Create(const std::string& name, std::shared_ptr<World> world, xg::Guid guid = {});
 
 		std::string name;	///<The human-readable name of the actor
 		const xg::Guid guid;///<Actor ID, unique
@@ -146,22 +147,19 @@ namespace Cacao {
 		/**
 		 * @brief Create a new component and add it to this actor
 		 *
-		 * @param exporter The handle to the ComponentExporter from which to construct the component
+		 * @param factoryID The ID of the Component factory in with the CodeRegistry to create the component
 		 *
 		 * @throws ExistingValueException If a component of this type already exists on the actor
+		 * @throws NonexistentValueException If the CodeRegistry does not have a Component actory registered for the provided ID
 		 */
-		void MountComponent(std::shared_ptr<ComponentExporter> exporter) {
-			Check<ExistingValueException>(!components.contains(std::type_index(exporter->type)), "A component of the type specified already exists on the actor!");
-			components.insert_or_assign(std::type_index(std::type_index(exporter->type)), exporter->Instantiate());
-			PostMountComponent(components[std::type_index(std::type_index(exporter->type))]);
-		}
+		void MountComponent(const std::string& factoryID);
 
 		/**
 		 * @brief Check if a component is on an actor
 		 *
 		 * @return Whether a component of the type is on the actor
 		 */
-		template<typename T, typename... Args>
+		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		bool HasComponent() const {
 			return components.contains(std::type_index(typeid(T)));
@@ -174,7 +172,7 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
-		template<typename T, typename... Args>
+		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		std::shared_ptr<T> GetComponent() const {
 			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
@@ -186,7 +184,7 @@ namespace Cacao {
 		 *
 		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
-		template<typename T, typename... Args>
+		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		void DeleteComponent() {
 			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
@@ -200,7 +198,7 @@ namespace Cacao {
 		 *
 		 * @return All actor components
 		 */
-		std::map<std::type_index, std::shared_ptr<Component>> GetAllComponents() const {
+		std::unordered_map<std::type_index, std::shared_ptr<Component>> GetAllComponents() const {
 			return components;
 		}
 
@@ -209,20 +207,18 @@ namespace Cacao {
 		 *
 		 * @return All child entities
 		 */
-		std::vector<ActorHandle> GetAllChildren() const {
-			return children;
-		}
+		std::vector<ActorHandle> GetAllChildren() const;
 
 		~Actor();
 
 	  private:
-		Actor(const std::string& name, ActorHandle parent);
+		Actor(const std::string& name, ActorHandle parent, xg::Guid);
 		friend class World;
 
 		std::weak_ptr<Actor> parentPtr;
 		std::weak_ptr<World> world;
-		std::map<std::type_index, std::shared_ptr<Component>> components;
-		std::vector<ActorHandle> children;
+		std::unordered_map<std::type_index, std::shared_ptr<Component>> components;
+		std::vector<std::shared_ptr<Actor>> children;
 
 		void PostMountComponent(std::shared_ptr<Component> c);
 		void NotifyFunctionallyActiveStateChanged();

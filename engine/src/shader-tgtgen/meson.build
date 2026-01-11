@@ -14,3 +14,4 @@ endif
 targetgen = static_library('cacaotgtgen', include_directories: 'include', sources: tgtgen_src, dependencies: tgtgen_deps, cpp_args: tgtgen_args)
 
 targetgen_dep = declare_dependency(link_whole: targetgen, include_directories: 'include', dependencies: commonlib_dep)
+engine_deps += targetgen_dep

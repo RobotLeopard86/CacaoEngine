@@ -2,7 +2,7 @@
 
 #include "Cacao/Window.hpp"
 
-#include <map>
+#include <unordered_map>
 #include <functional>
 
 #ifdef _WIN32
@@ -27,6 +27,8 @@ namespace Cacao {
 		virtual void SaveWinSize() = 0;
 		virtual void RestoreWin() = 0;
 		virtual const std::string ProviderID() const = 0;
+		virtual unsigned int ConvertKeycode(unsigned int key) = 0;
+		virtual unsigned int ConvertButtonCode(unsigned int button) = 0;
 
 		virtual ~Impl() = default;
 
@@ -38,8 +40,12 @@ namespace Cacao {
 		glm::uvec2 lastPos;
 		glm::uvec2 lastSize;
 
+		//Scroll data accumulation
+		//Most OSes send a lot of intermediate events for one scroll
+		glm::dvec2 scrollAccumulator = {0, 0};
+
 		// clang-format off
-		static std::map<std::string, std::function<std::unique_ptr<Impl>()>> registry;
+		static std::unordered_map<std::string, std::function<std::unique_ptr<Impl>()>> registry;
 		// clang-format on
 	};
 }

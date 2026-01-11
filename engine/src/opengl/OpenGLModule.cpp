@@ -1,5 +1,6 @@
 #include "Cacao/Event.hpp"
-#include "Module.hpp"
+#include "OpenGLModule.hpp"
+#include "Cacao/GPU.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/EventManager.hpp"
@@ -28,21 +29,19 @@ namespace Cacao {
 		glm::uvec2 contentSize = Window::Get().GetContentAreaSize();
 		glViewport(0, 0, contentSize.x, contentSize.y);
 
-		//Register viewport resize consumer
-		resizer = EventConsumer([](Event& e) {
-			DataEvent<glm::uvec2>& wre = static_cast<DataEvent<glm::uvec2>&>(e);
-			glViewport(0, 0, wre.GetData().x, wre.GetData().x);
-		});
-		EventManager::Get().SubscribeConsumer("WindowResize", resizer);
+		//Print OpenGL info
+		ctx->MakeCurrent();
+		const char* version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+		const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+		const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+		Logger::Engine(Logger::Level::Trace) << "OpenGL v" << version << ", using " << renderer << " (" << vendor << ")";
+		ctx->Yield();
 
 		connected = true;
 	}
 
 	void OpenGLModule::Disconnect() {
 		connected = false;
-
-		//Unsubscribe viewport resize consumer
-		EventManager::Get().UnsubscribeConsumer("WindowResize", resizer);
 
 		//Destroy context
 		ctx.reset();
@@ -56,4 +55,7 @@ namespace Cacao {
 		ctx->SetVSync(state);
 	}
 
+	std::unique_ptr<CommandBuffer> OpenGLModule::CreateCmdBuffer() {
+		return std::make_unique<OpenGLCommandBuffer>();
+	}
 }

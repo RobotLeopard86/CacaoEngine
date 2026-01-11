@@ -4,7 +4,7 @@
 #include <vector>
 #include <filesystem>
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #define SHADER_FILE_EXTENSION ".xjs"
@@ -12,6 +12,11 @@
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
+
+#ifndef CACAO_RELEASE_NICKNAME
+#define CACAO_RELEASE_NICKNAME "Name TBD"
+#endif
+
 #ifndef COMPILER_VER
 #define COMPILER_VER "unknown"
 #endif
@@ -54,7 +59,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER;
+        ss << "Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Parse the CLI
@@ -82,7 +87,7 @@ int main(int argc, char* argv[]) {
 
 	//Merge input and output vectors
 	VLOG_NONL("Preparing tasks list... ")
-	std::map<std::filesystem::path, std::filesystem::path> tasks;
+	std::unordered_map<std::filesystem::path, std::filesystem::path> tasks;
 	for(unsigned int i = 0; i < input.size(); ++i) {
 		if(!std::filesystem::exists(output[i].parent_path())) {
 			std::filesystem::create_directories(output[i].parent_path());

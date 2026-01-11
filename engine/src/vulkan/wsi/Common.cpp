@@ -1,5 +1,4 @@
-#include "../Module.hpp"
-#include "Cacao/EventManager.hpp"
+#include "VulkanModule.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/Window.hpp"
@@ -46,13 +45,7 @@ namespace Cacao {
 		}
 
 		//Create initial swapchain
-		GenSwapchain();
-
-		//Register swapchain regeneration consumer
-		vulkan->resizer = EventConsumer([](Event&) {
-			GenSwapchain();
-		});
-		EventManager::Get().SubscribeConsumer("WindowResize", vulkan->resizer);
+		GPU_IMPL(Vulkan).GenSwapchain();
 
 		connected = true;
 	}

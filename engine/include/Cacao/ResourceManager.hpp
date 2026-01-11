@@ -4,37 +4,56 @@
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
+#include "Engine.hpp"
 
-#include <exception>
 #include <memory>
-#include <future>
-#include <optional>
+#include <type_traits>
+#include <string>
 #include <typeindex>
-#include <functional>
-#include <typeinfo>
 
 namespace Cacao {
+	//This is a helper type typedef because fully written out it's super long and nonsensical
+	//To explain: This is the contained type of the returned unique_ptr type of a raw T (deref-ed for consistency)'s FetchData function
+	///@cond
+	template<typename T, typename R>
+	using LoaderIntermediate = decltype(std::declval<std::remove_reference_t<T>>().template FetchData<R>(std::declval<std::string>()))::element_type;
+	///@endcond
+
 	/**
-	 * @brief A structure describing a request for a resource load from the ResourceManager
+	 * @brief A concept that defines what a conforming resource loader looks like
+	 *
+	 * @tparam T The type of the loader object
+	 * @tparam R A Resource type produced by the loader
+	 *
+	 * Concept Definition:
+	 * @code {.cpp}
+	 * template<typename T, typename R>
+	 * concept Loader = std::is_base_of_v<Resource, R> && requires(T obj, const std::string& addr) {
+	 * 		{ obj.template FetchData<R>(addr) } -> std::same_as<std::unique_ptr<LoaderIntermediate<T, R>>>;
+	 * 		{ obj.template CreateResource<R>(std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
+	 * };
+	 * @endcode
+	 *
+	 * These functions should expect to be invoked in the thread pool
 	 */
-	struct ResourceQuery {
-	  public:
-		const std::string addr;										///<A well-formatted resource address (this does not mean the resource actually exists, just that the address is correctly formatted)
-		const std::type_index type;									///<The requested resource type
-		const std::function<void(std::shared_ptr<Resource>)> submit;///<The submission hook for successful load
-		const std::function<void(std::exception_ptr ex)> fail;		///<The submission hook for a failed load
-
-	  private:
-		ResourceQuery(decltype(submit) submitFn, decltype(fail) failFn, std::type_index ti, const std::string& addr) : addr(addr), type(ti), submit(submitFn), fail(failFn) {}
-
-		friend class ResourceManager;
+	template<typename T, typename R>
+	concept Loader = std::is_base_of_v<Resource, R> && requires(T obj, const std::string& addr) {
+		{ obj.template FetchData<R>(addr) } -> std::same_as<std::unique_ptr<LoaderIntermediate<T, R>>>;
+		{ obj.template CreateResource<R>(std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
 	};
 
-	///@brief A function that takes in a ResourceQuery and provides the appropriate resource
-	using ResourceLoader = std::function<void(ResourceQuery&&)>;
+	/**
+	 * @brief A concept that describes a loader object that can handle a set of different resource types
+	 *
+	 * @tparam T The type of the loader object
+	 * @tparam Rs... The types of Resources that can be handled
+	 */
+	template<typename T, typename... Rs>
+	concept MultiLoader = (Loader<T, Rs> && ...);
 
 	/**
 	 * @brief Singleton for handling the loading of resources from a game bundle
+	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
 	 */
 	class CACAO_API ResourceManager {
 	  public:
@@ -66,72 +85,58 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && (!std::is_same_v<Asset, T>)
-		std::shared_future<std::shared_ptr<T>> Load(const std::string& address) {
+		exathread::Future<std::shared_ptr<T>> Load(const std::string& address) {
 			//Validate the address
 			Check<BadValueException>(Resource::ValidateResourceAddr<T>(address), "Cannot load a resource from a malformed address string!");
 
-			//Check cache
-			std::shared_ptr<Resource> maybeCached = CheckCache(address);
-			if(maybeCached) {
-				//There is a cached resource
-				try {
-					//Try to cast the resource to the correct type and return it
-					std::promise<std::shared_ptr<T>> p;
-					std::shared_ptr<T> cached = std::dynamic_pointer_cast<T>(maybeCached);
-					p.set_value(cached);
-					return p.get_future().share();
-				} catch(const std::bad_cast&) {
-					Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
-					return {};
-				}
-			}
-
-			//Resource was not in cache, we need to load it
-			//Check for a valid loader
-			Check<BadStateException>(loader.has_value(), "No resource loader configured!");
-
-			//Set up submission hooks
-			std::promise<std::shared_ptr<T>> output;
-			const auto submitFn = [&output](std::shared_ptr<Resource> r) {
-				//Type-check the result
-				if(std::shared_ptr<T> value = std::dynamic_pointer_cast<T>(std::move(r))) {
-					//Set the result
-					output.set_value(value);
-				} else {
-					//Make exception pointer to set for failure
+			//Run load operation asynchronously
+			return Engine::Get().GetThreadPool()->submit([this, address]() -> std::shared_ptr<T> {
+				//Check cache
+				std::shared_ptr<Resource> maybeCached = CheckCache(address);
+				if(maybeCached) {
+					//There is a cached resource
 					try {
-						Check<BadTypeException>(false, "Resource loader returned improperly-typed result!");
-					} catch(...) {
-						output.set_exception(std::current_exception());
+						//Try to cast the resource to the correct type and return it
+						return std::dynamic_pointer_cast<T>(maybeCached);
+					} catch(const std::bad_cast&) {
+						Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
+						return {};
 					}
 				}
-			};
-			const auto failFn = [&output](std::exception_ptr ex) {
-				output.set_exception(ex);
-			};
 
-			//Create resource query
-			ResourceQuery query(submitFn, failFn, typeid(T), address);
+				//Resource was not in cache, we need to load it
+				//Check for a valid loader
+				Check<BadStateException>(IsLoaderRegistered(typeid(T)), "No resource loader configured for the requested type!");
 
-			//Load resource
-			loader.value()(std::move(query));
+				//Try to load the asset
+				std::shared_ptr<Resource> res = InvokeLoader(typeid(T), address);
+				try {
+					//Try to cast the resource to the correct type and return it
+					return std::dynamic_pointer_cast<T>(res);
+				} catch(const std::bad_cast&) {
+					Check<BadTypeException>(false, "Resource was loade but the returned object is not of the requested type!");
+					return {};
+				}
 
-			//Return future
-			return output.get_future().share();
+				return {};
+			});
 		}
 
 		/**
-		 * @brief Set the resource loader
+		 * @brief Set the resource loader for a given set of types
 		 *
-		 * @warning This function may only be called once. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader.
+		 * @warning This function may only be called once per type. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader for the default resource types.
 		 *
 		 * @param loader The resource loader to use
 		 *
 		 * @throws BadStateException If a loader has already been configured
 		 */
-		void ConfigureResourceLoader(ResourceLoader loader) {
-			Check<BadStateException>(!this->loader.has_value(), "A loader has already been configured!");
-			this->loader = loader;
+		template<typename T, typename... Types>
+			requires MultiLoader<std::remove_reference_t<T>, Types...>
+		void ConfigureResourceLoader(T&& loader) {
+			//For those unaware, this is a fold expression
+			//What this does is it will run _ConfigureResourceLoader for each type in the Types pack
+			((_ConfigureResourceLoader<T, Types>(std::move(loader))), ...);
 		}
 
 		///@cond
@@ -145,7 +150,28 @@ namespace Cacao {
 		~ResourceManager();
 
 		std::shared_ptr<Resource> CheckCache(const std::string& addr);
+		bool IsLoaderRegistered(std::type_index tp);
+		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
 
-		std::optional<ResourceLoader> loader;
+		///@cond
+		struct ErasedLoader {
+			std::any loaderObj;
+			std::function<std::shared_ptr<Resource>(const std::string&)> load;
+		};
+
+		template<typename T, typename R>
+			requires Loader<std::remove_reference_t<T>, R>
+		void _ConfigureResourceLoader(const T& loader) {
+			Check<BadStateException>(!IsLoaderRegistered(typeid(R)), "A loader has already been configured for this type!");
+
+			//Create erased loader object
+			ErasedLoader el;
+			el.loaderObj = loader;
+			el.load = [loader](const std::string& addr) {
+				std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader.template FetchData<R>(addr);
+				return std::static_pointer_cast<Resource>(loader.template CreateResource<R>(std::move(intermediate)));
+			};
+		}
+		///@endcond
 	};
 }

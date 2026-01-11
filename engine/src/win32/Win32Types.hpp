@@ -2,6 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#undef Yield
 
 #include <string>
 
@@ -23,6 +24,9 @@ namespace Cacao {
 		void SaveWinPos() override;
 		void SaveWinSize() override;
 		void RestoreWin() override;
+
+		unsigned int ConvertKeycode(unsigned int key) override;
+		unsigned int ConvertButtonCode(unsigned int button) override;
 
 		const std::string ProviderID() const override {
 			return "win32";

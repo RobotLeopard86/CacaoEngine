@@ -365,11 +365,11 @@ namespace libcacaoformats {
 		out.write(reinterpret_cast<char*>(&initialCamData), sizeof(initialCamData));
 
 		//Write actor count
-		uint64_t actorCount = world.entities.size();
+		uint64_t actorCount = world.actors.size();
 		out.write(reinterpret_cast<char*>(&actorCount), 8);
 
-		//Write entities
-		for(const World::Actor& actor : world.entities) {
+		//Write actors
+		for(const World::Actor& actor : world.actors) {
 			//Write actor and parent GUIDs
 			out.write(reinterpret_cast<const char*>(actor.guid.bytes().data()), 16);
 			out.write(reinterpret_cast<const char*>(actor.parentGUID.bytes().data()), 16);

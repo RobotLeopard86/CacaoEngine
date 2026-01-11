@@ -3,17 +3,10 @@
 #include "glm/glm.hpp"
 
 namespace Cacao {
-	/**
-	 * @brief Result from Calculate3DVectors
-	 */
 	struct Vectors {
 		glm::vec3 front, right, up;
 	};
 
-	/**
-	 * @brief Calculate a front vector pointing away from the origin at the given rotation and its accompanying right and up vectors
-	 * @details The rotation values must be in degrees
-	 */
 	inline Vectors Calculate3DVectors(glm::vec3 rotation) {
 		//Get our X and Y rotation in radians
 		float tilt = glm::radians(rotation.x);

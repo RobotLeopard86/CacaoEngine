@@ -1,9 +1,5 @@
 # Exceptions
 
-```{topic} This page is **up-to-date**! 
-The information on this page pertains to the engine post-restructuring.
-```
-
 Cacao Engine exceptions come in a variety of different classes (though they are functionally identical) to give further context about what has happened. Each exception also has an associated message. 
 
 ## Built-In Exceptions

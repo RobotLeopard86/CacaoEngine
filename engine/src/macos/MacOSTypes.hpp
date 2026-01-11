@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Cacao/Window.hpp"
-#include "impl/Window.hpp"
-
-#include <AppKit/AppKit.h>
+#import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+#import <GameController/GameController.h>
+
+#include "Cacao/Window.hpp"
+#include "impl/Window.hpp"
 
 using namespace Cacao;
 
@@ -13,6 +14,9 @@ using namespace Cacao;
 @end
 
 @interface CacaoWinDelegate : NSObject <NSWindowDelegate>
+@end
+
+@interface CacaoWin : NSWindow
 @end
 
 @interface CacaoApp : NSApplication
@@ -34,14 +38,26 @@ namespace Cacao {
 		void SaveWinSize() override;
 		void RestoreWin() override;
 
+		unsigned int ConvertKeycode(unsigned int key) override;
+		unsigned int ConvertButtonCode(unsigned int button) override;
+
 		const std::string ProviderID() const override {
 			return "cocoa";
 		}
 
+		//macOS objects
 		CacaoApp* app;
 		CacaoAppDelegate* del;
 		CacaoWinDelegate* wdel;
-		NSWindow* win;
+		CacaoWin* win;
+
+		//Stored presentation options for mode transitions
 		NSApplicationPresentationOptions lastPresentOpts;
+
+		//Keyboard stuff
+		//Keyboard
+		GCKeyboard* keyboard;
+		GCKeyboardInput* keyInput;
+		void ConfigureKeyboard(GCKeyboard* kb);
 	};
 }

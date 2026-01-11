@@ -1,11 +1,15 @@
 # Quickstart
 
+```{warning} **This page is not up-to-date!**.  
+The engine is currently undergoing heavy restructuring, and this guide has not yet been updated to reflect the new setup procedure. A new version will be published closer to release.
+```
+
 ## Creating a base project
 The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at `https://github.com/RobotLeopard86/CacaoEngine-Game-Template`. This repository contains an ideal setup for creating a Cacao Engine game.
 
 ## Building
 Install the dependencies as listed in the [build instructions](./building).  
-If you'd like to use Visual Studio, see the [Visual Studio compatibility guide](./vs) for info on how to set up a Visual Studio Solution.  
+If you'd like to use Visual Studio, see the Visual Studio compatibility guide for info on how to set up a Visual Studio Solution.  
 Otherwise, run `meson setup build` if on Windows or `meson setup build --native-file posix_native.ini` if on Linux or macOS to create a build directory, then run `ninja -C build run` to build and run the template.
 If all goes well, you should see something like this:  
 ```{image} ../assets/quickstart-template.png

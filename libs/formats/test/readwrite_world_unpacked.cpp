@@ -11,7 +11,7 @@ int main() {
 			w.skyboxRef = "aSkybox";
 			w.initialCamPos = libcacaoformats::Vec3<float> {.x = 7.0f, .y = 5.9f, .z = -1.1234f};
 			w.initialCamRot = libcacaoformats::Vec3<float> {.x = 0.0f, .y = -45.0f, .z = 0.0f};
-			libcacaoformats::World::Actor& e = w.entities.emplace_back();
+			libcacaoformats::World::Actor& e = w.actors.emplace_back();
 			e.name = "Honk";
 			e.parentGUID = xg::Guid("00000000-0000-0000-0000-000000000000");
 			e.guid = xg::Guid("36f595e7-e072-4219-bd0d-7db2d9260eea");
@@ -39,8 +39,8 @@ int main() {
 			if(w.skyboxRef.compare("aSkybox") != 0) throw std::runtime_error("Wrong skybox reference!");
 			if(w.initialCamPos.x != 7.0f || w.initialCamPos.y != 5.9f || w.initialCamPos.z != -1.1234f) throw std::runtime_error("Wrong initial camera position!");
 			if(w.initialCamRot.x != 0.0f || w.initialCamRot.y != -45.0f || w.initialCamRot.z != 0.0f) throw std::runtime_error("Wrong initial camera rotation!");
-			if(w.entities.size() != 1) throw std::runtime_error("Wrong amount of entities!");
-			libcacaoformats::World::Actor& e = w.entities[0];
+			if(w.actors.size() != 1) throw std::runtime_error("Wrong amount of actors!");
+			libcacaoformats::World::Actor& e = w.actors[0];
 			if(e.name.compare("Honk") != 0) throw std::runtime_error("Wrong actor name!");
 			if(e.guid != xg::Guid("36f595e7-e072-4219-bd0d-7db2d9260eea")) throw std::runtime_error("Wrong actor GUID!");
 			if(e.parentGUID != xg::Guid("00000000-0000-0000-0000-000000000000")) throw std::runtime_error("Wrong actor parent GUID!");

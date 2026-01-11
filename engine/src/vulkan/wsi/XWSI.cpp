@@ -1,5 +1,5 @@
-#include "Module.hpp"
-#include "x11/X11Types.hpp"
+#include "VulkanModule.hpp"
+#include "X11Types.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
 #include "WSI.hpp"

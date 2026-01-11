@@ -2,6 +2,7 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Mesh.hpp"
+#include "Cacao/Shader.hpp"
 #include "impl/PAL.hpp"
 #include "SingletonGet.hpp"
 #include "PALConfigurables.hpp"
@@ -63,6 +64,7 @@ namespace Cacao {
 	CONFIGURE_IMPLPTR(Tex2D)
 	CONFIGURE_IMPLPTR(Cubemap)
 	CONFIGURE_IMPLPTR(GPUManager)
+	CONFIGURE_IMPLPTR(Shader)
 #undef CONFIGURE_IMPLPTR
 
 	CACAOST_GET(PAL)

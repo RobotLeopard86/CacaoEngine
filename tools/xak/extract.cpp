@@ -100,9 +100,10 @@ void ExtractCmd::Callback() {
 	}
 
 	//Define output map
-	std::map<std::filesystem::path, std::vector<unsigned char>> out;
+	std::unordered_map<std::filesystem::path, std::vector<unsigned char>> out;
 
 	//Find the requested assets and assign their paths
+	bool hasRes = false;
 	for(const std::string& asset : toExtract) {
 		CVLOG_NONL("Checking for asset \"" << asset << "\"... ")
 		if(!pak.contains(asset)) {
@@ -115,6 +116,7 @@ void ExtractCmd::Callback() {
 		std::filesystem::path oasset = outDir;
 		if(pa.kind == libcacaoformats::PackedAsset::Kind::Resource) {
 			(oasset /= "res") /= asset;
+			hasRes = true;
 		} else {
 			oasset /= asset;
 			switch(pa.kind) {
@@ -181,6 +183,7 @@ void ExtractCmd::Callback() {
 		std::filesystem::remove_all(outDir);
 	}
 	std::filesystem::create_directories(outDir);
+	if(hasRes) std::filesystem::create_directories(outDir / "res");
 	CVLOG("Done.")
 
 	//Write files

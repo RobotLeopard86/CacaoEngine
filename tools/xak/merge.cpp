@@ -53,7 +53,7 @@ MergeCmd::MergeCmd(CLI::App& app) {
 }
 
 void MergeCmd::Callback() {
-	std::map<std::string, std::filesystem::path> origins;
+	std::unordered_map<std::string, std::filesystem::path> origins;
 	libcacaoformats::AssetPack work;
 
 	//Load each pack

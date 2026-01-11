@@ -1,5 +1,5 @@
 [wrap-git]
 url = https://github.com/harfbuzz/harfbuzz
 depth = 1
-revision = 8.5.0
-diff_files = hb-cppstd.patch
+revision = 11.4.3
+diff_files = hb-buildfix.patch

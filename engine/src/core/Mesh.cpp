@@ -1,11 +1,8 @@
 #include "Cacao/Mesh.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "impl/Mesh.hpp"
 #include "PALConfigurables.hpp"
-
-#include <future>
 
 namespace Cacao {
 	Mesh::Mesh(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr)
@@ -56,21 +53,7 @@ namespace Cacao {
 	void Mesh::Realize() {
 		Check<BadRealizeStateException>(!realized, "Cannot realize a realized mesh!");
 
-		if(impl->DoWaitAsyncForSync()) {
-			impl->Realize(realized).value().get();
-		} else {
-			impl->Realize(realized);
-		}
-	}
-
-	std::shared_future<void> Mesh::RealizeAsync() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized mesh!");
-
-		if(impl->DoWaitAsyncForSync()) {
-			return impl->Realize(realized).value();
-		} else {
-			return ThreadPool::Get().Exec([this](void) { this->impl->Realize(realized); });
-		}
+		impl->Realize(realized);
 	}
 
 	void Mesh::DropRealized() {

@@ -12,7 +12,7 @@
 #include <cstdlib>
 
 namespace Cacao {
-	std::map<std::string, std::function<std::unique_ptr<Window::Impl>()>> Window::Impl::registry;
+	std::unordered_map<std::string, std::function<std::unique_ptr<Window::Impl>()>> Window::Impl::registry;
 
 	Window::Window() {
 		//Create implementation pointer
@@ -21,6 +21,7 @@ namespace Cacao {
 		std::string provider = Engine::Get().GetInitConfig().preferredWindowProvider;
 		if(Impl::registry.contains(provider)) {
 			impl = Impl::registry[provider]();
+			Logger::Engine(Logger::Level::Info) << "Running under X11.";
 			goto create_ptr;
 		}
 

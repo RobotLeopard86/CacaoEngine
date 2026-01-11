@@ -1,5 +1,4 @@
 #include "Cacao/Sound.hpp"
-#include "Cacao/ThreadPool.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "impl/Sound.hpp"
@@ -72,14 +71,6 @@ namespace Cacao {
 		Check<ExternalException>(alGetError() == AL_NO_ERROR, "Failed to load data into OpenAL buffer!");
 
 		realized = true;
-	}
-
-	std::shared_future<void> Sound::RealizeAsync() {
-		Check<BadRealizeStateException>(!realized, "Sound must not be realized when RealizeAsync is called!");
-		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to realize a sound!");
-
-		//Put task in pool
-		return ThreadPool::Get().Exec(std::bind(&Sound::Realize, this));
 	}
 
 	void Sound::DropRealized() {

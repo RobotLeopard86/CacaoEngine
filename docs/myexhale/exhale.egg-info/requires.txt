@@ -1,0 +1,5 @@
+breathe>=4.33.1
+Sphinx>=4.3.2
+beautifulsoup4
+lxml
+six

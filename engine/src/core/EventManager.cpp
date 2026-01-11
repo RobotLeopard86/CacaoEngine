@@ -8,7 +8,7 @@ namespace Cacao {
 	CACAOST_GET(EventManager)
 
 	void EventManager::UnsubscribeAllConsumers() {
-		std::map<std::string, std::vector<EventConsumer>> consumersCopy;
+		std::unordered_map<std::string, std::vector<EventConsumer>> consumersCopy;
 
 		//Copy all consumer data to a map to avoid modifying the original map during unsubscription
 		for(auto it = consumers.begin(); it != consumers.end(); it++) {

@@ -22,13 +22,14 @@ assimp_dep = assimp_sp.dependency('assimp')
 zlib_dep = assimp_sp.dependency('zlibstatic')
 
 # Configure OpenAL-Soft
-alsoft_dep = subproject('openal-soft', required: true, default_options: {
+alsoft_sp = subproject('openal-soft', required: true, default_options: {
 	'default_library': 'shared',
 	'utils': false,
 	'rtkit': 'disabled',
 	'sdl2': 'disabled',
 	'winmm': 'disabled'
-}).get_variable('openal_dep')
+})
+alsoft_dep = alsoft_sp.get_variable('openal_dep')
 
 # Configure spdlog
 spdlog_dep = subproject('spdlog', required: true, default_options: {
@@ -38,18 +39,18 @@ spdlog_dep = subproject('spdlog', required: true, default_options: {
 	'std_format': 'disabled'
 }).get_variable('spdlog_dep')
 
-# glm, dynalo, thread-pool, and high_resolution_sleep
+# Exathread, glm, high_resolution_sleep, and eternal
+exathread_dep = subproject('exathread', required: true).get_variable('exathread_dep')
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
-dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
-thread_pool_dep = subproject('thread-pool', required: true).get_variable('thread_pool_dep')
 hires_sleep_dep = subproject('hires_sleep', required: true).get_variable('hires_sleep_dep')
+eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
 
 # Configure icu
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
 icu_dep = icu_sp.get_variable('icuuc_dep')
 
 # Configure FreeType
-freetype_sp = subproject('freetype', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
+freetype_sp = subproject('freetype2', required: true, default_options: ['default_library=static', 'png=disabled', 'zlib=disabled', 'brotli=disabled', 'bzip2=disabled', 'harfbuzz=disabled'])
 freetype_dep = freetype_sp.get_variable('freetype_dep')
 
 # Configure Harfbuzz
@@ -68,8 +69,34 @@ versionlib = cpp.find_library('version', required: host_machine.system() == 'win
 setupapi = cpp.find_library('setupapi', required: host_machine.system() == 'windows')
 apple_audio = dependency('appleframeworks', modules: ['CoreAudio', 'AudioToolbox'], required: host_machine.system() == 'darwin')
 
-# Dependencies list
-core_deps = [
+# Add core module data
+engine_srcs += files(
+	'expf.c',
+	'Actor.cpp',
+	'AudioManager.cpp',
+	'CodeRegistry.cpp',
+	'Cubemap.cpp',
+	'Engine.cpp',	
+	'EventManager.cpp',
+	'FrameProcessor.cpp',
+	'GPU.cpp',
+	'Input.cpp',
+	'Log.cpp',
+	'Mesh.cpp',
+	'Misc.cpp',
+	'Model.cpp',
+	'PAL.cpp',
+	'PerspectiveCamera.cpp',
+	'Resource.cpp',
+	'Shader.cpp',
+	'Sound.cpp',
+	'Tex2D.cpp',
+	'TickController.cpp',
+	'Transform.cpp',
+	'Window.cpp',
+	'World.cpp'
+)
+engine_deps += [
 	yaml_cpp,
 	silica_dep,
 	crossguid,
@@ -83,9 +110,9 @@ core_deps = [
 	alsoft_dep,
 	glm_dep,
 	spdlog_dep,
-	dynalo_dep,
-	thread_pool_dep,
+	exathread_dep,
 	hires_sleep_dep,
+	eternal_dep,
 	icu_dep,
 	freetype_dep,
 	harfbuzz_dep,
@@ -100,30 +127,3 @@ core_deps = [
 	setupapi,
 	apple_audio
 ]
-
-# Core library
-libcore = static_library('cacaocore', sources: [
-	'expf.c',
-	'Actor.cpp',
-	'AudioManager.cpp',
-	'Cubemap.cpp',
-	'Engine.cpp',	
-	'EventManager.cpp',
-	'GPUManager.cpp',
-	'Log.cpp',
-	'Mesh.cpp',
-	'Misc.cpp',
-	'Model.cpp',
-	'PAL.cpp',
-	'PerspectiveCamera.cpp',
-	'Resource.cpp',
-	'Sound.cpp',
-	'Tex2D.cpp',
-	'ThreadPool.cpp',
-	'TickController.cpp',
-	'Transform.cpp',
-	'Window.cpp',
-	'World.cpp'
-], dependencies: core_deps, include_directories: [engine_headers, module_private_headers], install: true, install_tag: 'cacao',
-cpp_args: '-DCACAO_VER="' + meson.project_version() + '"', pic: true)
-core_dep = declare_dependency(link_whole: libcore, dependencies: core_deps)

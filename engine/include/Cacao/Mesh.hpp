@@ -59,22 +59,12 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Synchronously convert the mesh data into a form suitable for rendering
+		 * @brief Convert the mesh data into a form suitable for rendering
 		 *
 		 * @throws BadRealizeStateException If the mesh is already realized
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
 		void Realize();
-
-		/**
-		 * @brief Asynchronously convert the mesh data into a form suitable for rendering
-		 *
-		 * @return A future that will resolve when realization is complete or fails
-		 *
-		 * @throws BadRealizeStateException If the mesh is already realized
-		 * @throws BadInitStateException If the graphics backend is not initialized or connected
-		 */
-		std::shared_future<void> RealizeAsync();
 
 		/**
 		 * @brief Destroy the realized representation of the asset

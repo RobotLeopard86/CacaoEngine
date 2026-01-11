@@ -5,20 +5,21 @@
 #include "ImplAccessor.hpp"
 
 #ifdef HAS_X11
-#include "x11/X11Types.hpp"
+#include "X11Types.hpp"
 #endif
 
 #ifdef HAS_WAYLAND
-#include "wayland/WaylandTypes.hpp"
-
-#include <wayland-egl.h>
-#include <wayland-client-core.h>
+#include "WaylandTypes.hpp"
 #endif
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <KHR/khrplatform.h>
 #include <EGL/eglplatform.h>
+#ifdef HAS_WAYLAND
+#include <wayland-egl.h>
+#include <wayland-client-core.h>
+#endif
 
 #include <sstream>
 

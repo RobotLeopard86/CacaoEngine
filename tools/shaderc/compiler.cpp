@@ -49,6 +49,12 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 			opt.value = slang::CompilerOptionValue {slang::CompilerOptionValueKind::Int, true, 0, nullptr, nullptr};
 			entries.push_back(opt);
 		}
+		{
+			slang::CompilerOptionEntry opt = {};
+			opt.name = slang::CompilerOptionName::VulkanUseEntryPointName;
+			opt.value = slang::CompilerOptionValue {slang::CompilerOptionValueKind::Int, true, 0, nullptr, nullptr};
+			entries.push_back(opt);
+		}
 		tgtDesc.format = SLANG_SPIRV;
 		tgtDesc.profile = gSession->findProfile("spirv_1_5");
 		sessionDesc.targets = &tgtDesc;
