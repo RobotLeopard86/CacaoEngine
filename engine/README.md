@@ -4,9 +4,10 @@
 Welcome to the engine source code! This is the code that is actually part of the engine and is used for making games.  
 This has a few components, so this is a guide to help break them down.  
 
-As a note, the engine is currently undergoing heavy restructuring. Any directories with `OLD` in their names contain code that is now not in use and will eventually be deleted.  
-
-This code will be undergoing active maintennance, updates, and potentially large changes. Do not expect anything in this folder to remain consistent until this notice is removed.  
+> [!WARNING]
+> As a note, the engine is currently undergoing heavy restructuring. Any directories with `OLD` in their names contain code that is now not in use and will eventually be deleted.  
+>
+> This code will be undergoing active maintennance, updates, and potentially large changes. Do not expect anything in this folder to remain consistent until this notice is removed.  
 
 ## Public Headers (`include`)
 The public headers are the interface to the engine. They are to be kept commented and clean as described in the [contributing guide](../CONTRIBUTING.md).  
