@@ -12,6 +12,7 @@
 #include "Cacao/Input.hpp"
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/Shader.hpp"
+#include "Cacao/World.hpp"
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
 #define RES_IMPL(tp, backend, var) static_cast<backend##tp##Impl&>(IMPL(tp, var))
@@ -52,6 +53,7 @@ namespace Cacao {
 		IA_MKGETTER(Cubemap)
 		IA_MKGETTER(Model)
 		IA_MKGETTER(Shader)
+		IA_MKGETTER(World)
 
 	  private:
 		ImplAccessor();

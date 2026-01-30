@@ -1,6 +1,5 @@
 #include "Cacao/Actor.hpp"
 #include "Cacao/CodeRegistry.hpp"
-#include "Cacao/Component.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/World.hpp"
 #include "crossguid/guid.hpp"
@@ -26,7 +25,7 @@ namespace Cacao {
 	glm::mat4 Actor::GetWorldTransformMatrix() const {
 		//Calculate the transformation matrix
 		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
-		ActorHandle current = [this]() {ActorHandle h; h.actor = std::const_pointer_cast<Actor>(shared_from_this()); h.world = world.lock(); return h; }();
+		ActorRef current = [this]() {ActorRef h; h.actor = std::const_pointer_cast<Actor>(shared_from_this()); h.world = world.lock(); return h; }();
 		glm::mat4 transMat = transform.GetTransformationMatrix();
 		while(!(current = current->GetParent()).IsNull()) {
 			//Apply this transformation
@@ -36,15 +35,15 @@ namespace Cacao {
 		return transMat;
 	}
 
-	ActorHandle Actor::GetParent() const {
-		ActorHandle hnd;
+	ActorRef Actor::GetParent() const {
+		ActorRef hnd;
 		if(isRoot || parentPtr.lock()->isRoot) return hnd;
 		hnd.actor = parentPtr.lock();
 		hnd.world = world.lock();
 		return hnd;
 	}
 
-	void Actor::Reparent(ActorHandle newParent) {
+	void Actor::Reparent(ActorRef newParent) {
 		//Remove ourselves from the current parent
 		std::shared_ptr<Actor> selfPtr = shared_from_this();
 		std::shared_ptr<Actor> parent = parentPtr.lock();
@@ -104,21 +103,21 @@ namespace Cacao {
 		NotifyFunctionallyActiveStateChanged();
 	}
 
-	std::vector<ActorHandle> Actor::GetAllChildren() const {
-		std::vector<ActorHandle> handles;
+	std::vector<ActorRef> Actor::GetAllChildren() const {
+		std::vector<ActorRef> handles;
 		for(std::shared_ptr<Actor> child : children) {
-			ActorHandle& ah = handles.emplace_back();
+			ActorRef& ah = handles.emplace_back();
 			ah.actor = child;
 			ah.world = world.lock();
 		}
 		return handles;
 	}
 
-	ActorHandle Actor::Create(const std::string& name, ActorHandle parent, xg::Guid guid) {
+	ActorRef Actor::Create(const std::string& name, ActorRef parent, xg::Guid guid) {
 		Check<NonexistentValueException>(!parent.IsNull(), "Cannot make an actor with a null handle for a parent!");
 
 		//Make actor
-		ActorHandle hnd;
+		ActorRef hnd;
 		hnd.actor = std::shared_ptr<Actor>(new Actor(name, parent, (guid == xg::Guid {} ? xg::newGuid() : guid)));
 		hnd.world = parent.world;
 
@@ -126,9 +125,9 @@ namespace Cacao {
 		return hnd;
 	}
 
-	ActorHandle Actor::Create(const std::string& name, std::shared_ptr<World> world, xg::Guid guid) {
+	ActorRef Actor::Create(const std::string& name, std::shared_ptr<World> world, xg::Guid guid) {
 		//Make actor
-		ActorHandle hnd;
+		ActorRef hnd;
 		hnd.actor = std::shared_ptr<Actor>(new Actor(name, world->root, (guid == xg::Guid {} ? xg::newGuid() : guid)));
 		hnd.world = world;
 
@@ -136,7 +135,7 @@ namespace Cacao {
 		return hnd;
 	}
 
-	Actor::Actor(const std::string& name, ActorHandle parent, xg::Guid guid)
+	Actor::Actor(const std::string& name, ActorRef parent, xg::Guid guid)
 	  : name(name), guid(guid), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parentPtr(parent.actor), world(parent->world), active(true), functionallyActive(true) {
 		NotifyFunctionallyActiveStateChanged();
 	}

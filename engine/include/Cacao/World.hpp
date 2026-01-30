@@ -45,16 +45,18 @@ namespace Cacao {
 		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
 
 		/**
-		 * @brief Set an actor's parent to the root actor (adding it to the world if it wasn't already)
+		 * @brief Make an Actor a toplevel (no parent, at root of world tree)
 		 *
-		 * @param actor The actor to reparent
+		 * @param actor The actor to make toplevel
+		 *
+		 * @throws BadValueException If the actor does not belong to this world
 		 */
-		void ReparentToRoot(ActorHandle actor);
+		void MakeToplevel(ActorRef actor);
 
 		/**
-		 * @brief Get all entities that are direct children of the root actor
+		 * @brief Get a list of actors that are toplevel (have no parent)
 		 */
-		std::vector<ActorHandle> GetRootChildren() const;
+		std::vector<ActorRef> GetToplevelActors() const;
 
 		/**
 		 * @brief Find an Actor by some arbitrary condition
@@ -64,40 +66,26 @@ namespace Cacao {
 		 * @return An optional that contains the actor if it was found
 		 */
 		template<typename P>
-			requires std::is_invocable_r_v<bool, P, ActorHandle>
-		std::optional<ActorHandle> FindActor(P predicate) const {
-			//Search for the object
-			return actorSearchRunner(root->GetAllChildren(), predicate);
+			requires std::is_invocable_r_v<bool, P, ActorRef>
+		std::optional<ActorRef> FindActor(P predicate) const {
+			//Invoke internal search function with wrapped predicate
+			return actorSearchRunner([&predicate](ActorRef ref) { return predicate(ref); });
 		}
 
 		~World();
 
+		///@cond
+		struct Impl;
+		///@endcond
+
 	  private:
 		World(const std::string& addr);
-
-		ActorHandle root;
-
-		//Recursive function for actually running a actor search
-		template<typename P>
-		std::optional<ActorHandle> actorSearchRunner(std::vector<ActorHandle> target, P predicate) const {
-			//Iterate through all children
-			for(auto child : target) {
-				//Does this child pass the predicate?
-				if(predicate(child)) {
-					return std::optional<ActorHandle>(child);
-				}
-
-				//Search through children
-				std::optional<ActorHandle> found = actorSearchRunner(child->GetAllChildren(), predicate);
-				if(found.has_value()) {
-					return found;
-				}
-			}
-			//Nothing was found, return null option
-			return std::nullopt;
-		}
-
 		friend class ResourceManager;
-		friend class Actor;
+
+		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
+
+		//Internal function for actually running a actor search
+		std::optional<ActorRef> _FindActor(std::function<bool(ActorRef)> predicate) const;
 	};
 }

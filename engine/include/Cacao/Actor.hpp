@@ -4,89 +4,144 @@
 #include "Transform.hpp"
 #include "Exceptions.hpp"
 
-#include <unordered_map>
+#include <cstdint>
 #include <memory>
+#include <string>
 #include <typeindex>
 
 #include "crossguid/guid.hpp"
 
 namespace Cacao {
-	class Component;
 	class Actor;
 	class World;
 
 	/**
-	 * @brief An ownership-management handle for Actors to maintain the actor tree
+	 * @brief An handle for Actors to control world tree ownership
 	 */
-	class ActorHandle {
+	class ActorRef {
 	  public:
 		/**
-		 * @brief Create a new "null" ActorHandle pointing to nothing
+		 * @brief Create a new "null" ActorRef that is invalid
 		 */
-		ActorHandle() {}
+		ActorRef() {}
 
 		/**
 		 * @brief Access the underlying Actor
 		 */
-		Actor* operator->() {
-			return actor.get();
-		}
+		Actor* operator->();
 
 		/**
 		 * @brief Access the underlying Actor, but constant
 		 */
-		const Actor* operator->() const {
-			return actor.get();
-		}
+		const Actor* operator->() const;
 
 		/**
-		 * @brief Check if this is a "null" handle
+		 * @brief Check if this handle is valid
 		 *
-		 * @return Whether this handle is managing an Actor or not
+		 * @return Whether this handle is managing a living Actor or not (null handle or destroyed actor)
 		 */
-		bool IsNull() {
-			return (bool)actor;
-		}
+		operator bool() const noexcept;
+
+		/**
+		 * @brief Check if two handles are equal (that is, they reference the same Actor)
+		 *
+		 * @return If the handles are equal
+		 */
+		bool operator==(const ActorRef& rhs) const noexcept;
 
 	  private:
 		friend class Actor;
 		friend class World;
 
-		//Owning reference to actor
-		std::shared_ptr<Actor> actor;
+		//Non-owning World pointer
+		World* world = nullptr;
 
-		//Owning reference to actor world
-		std::shared_ptr<World> world;
+		//Actor slot access information
+		uint64_t slotID;
+		uint64_t generation;
+
+		//Hidden valid handle constructor
+		ActorRef(World* world, uint64_t slot, uint64_t generation) : world(world), slotID(slot), generation(generation) {}
+	};
+
+	/**
+	 * @brief An object attached to an Actor that performs tasks on its behalf
+	 */
+	class CACAO_API Component {
+	  public:
+		/**
+		 * @brief Check if the component is enabled
+		 * @details This takes into account both if the component itself is enabled and its owning Actor is active
+		 *
+		 * @note This will return false if the owning Actor is inactive
+		 */
+		bool IsEnabled() const;
+
+		/**
+		 * @brief Activate or deactivate the component
+		 *
+		 * @param state The new activation state
+		 */
+		void SetEnabled(bool state) {
+			enabled = state;
+			if(IsEnabled()) {
+				OnEnable();
+			}
+		}
+
+		/**
+		 * @brief Get the owning actor of this component
+		 *
+		 * @return A reference to the owning actor
+		 *
+		 * @throws NonexistentValueException If the actor no longer exists
+		 */
+		ActorRef GetOwner() const {
+			Check<NonexistentValueException>((bool)owner, "Cannot access the invalid owner of a component!");
+			return owner;
+		}
+
+		virtual ~Component() {}
+
+	  protected:
+		Component();
+
+		/**
+		 * @brief Runs when the component is first mounted on an Actor
+		 *
+		 * @note All setup should be performed here, @b NOT in the constructor. Only when this function is called is the component properly configured.
+		 */
+		virtual void OnMount() {};
+
+		/**
+		 * @brief Runs when the component is deleted from an Actor
+		 *
+		 * @note All teardown should be performed here, @b NOT in the destructor. After this function is called, the component may be in an invalid state.
+		 */
+		virtual void OnDelete() {};
+
+		/**
+		 * @brief Runs when the component is enabled or when the owning Actor becomes active if the component was already enabled
+		 */
+		virtual void OnEnable() {};
+
+		/**
+		 * @brief Runs when the component is disabled or when the owning Actor becomes inactive if the component was already enabled
+		 */
+		virtual void OnDisable() {};
+
+		friend class Actor;
+
+	  private:
+		bool enabled;
+		ActorRef owner;
 	};
 
 	/**
 	 * @brief An object that exists within a World
 	 */
-	class CACAO_API Actor : public std::enable_shared_from_this<Actor> {
+	class CACAO_API Actor {
 	  public:
-		/**
-		 * @brief Create a new actor
-		 *
-		 * @param name The initial name of the actor
-		 * @param parent The initial actor parent
-		 * @param guid An optional GUID to provide the actor with
-		 *
-		 * @return A handle to the new actor
-		 *
-		 * @throws NonexistentValueException If the provided parent is a null handle
-		 */
-		static ActorHandle Create(const std::string& name, ActorHandle parent, xg::Guid guid = {});
-
-		/**
-		 * @brief Create a new actor attached to the world root
-		 *
-		 * @param name The initial name of the actor
-		 * @param world The world to place the actor in
-		 *
-		 * @return A handle to the new actor
-		 */
-		static ActorHandle Create(const std::string& name, std::shared_ptr<World> world, xg::Guid guid = {});
-
 		std::string name;	///<The human-readable name of the actor
 		const xg::Guid guid;///<Actor ID, unique
 		Transform transform;///<Actor transform relative to parent
@@ -103,7 +158,7 @@ namespace Cacao {
 		 *
 		 * @return The parent actor, or a null handle if the parent is the world root
 		 */
-		ActorHandle GetParent() const;
+		ActorRef GetParent() const;
 
 		/**
 		 * @brief Check if the actor is active
@@ -111,9 +166,7 @@ namespace Cacao {
 		 *
 		 * @note This will return false if the parent Actor is inactive
 		 */
-		bool IsActive() const {
-			return functionallyActive;
-		}
+		bool IsActive() const;
 
 		/**
 		 * @brief Activate or deactivate the actor
@@ -127,7 +180,18 @@ namespace Cacao {
 		 *
 		 * @param newParent The new parent of this actor
 		 */
-		void Reparent(ActorHandle newParent);
+		void Reparent(ActorRef newParent);
+
+		/**
+		 * @brief Check if a component is on an actor
+		 *
+		 * @return Whether a component of the type is on the actor
+		 */
+		template<typename T>
+			requires std::is_base_of_v<Component, T>
+		bool HasComponent() const {
+			return components.contains(std::type_index(typeid(T))) && components.at(std::type_index(typeid(T))).component;
+		}
 
 		/**
 		 * @brief Create a new component and add it to this actor
@@ -139,9 +203,14 @@ namespace Cacao {
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T> && std::is_constructible_v<T, Args&&...>
 		void MountComponent(Args&&... args) {
-			Check<ExistingValueException>(!components.contains(std::type_index(typeid(T))), "A component of the type specified already exists on the actor!");
-			components.insert_or_assign(std::type_index(typeid(T)), std::make_shared<T>(std::forward<Args...>(args...)));
-			PostMountComponent(components[std::type_index(typeid(T))]);
+			Check<ExistingValueException>(!HasComponent<T>(), "A component of the type specified already exists on the actor!");
+
+			//Prepare objects
+			std::type_index type(typeid(T));
+			std::unique_ptr<T> component = std::make_unique<T>(std::forward<Args...>(args...));
+
+			//Call-down to internal function
+			ComponentSetup(type, std::move(component));
 		}
 
 		/**
@@ -155,17 +224,6 @@ namespace Cacao {
 		void MountComponent(const std::string& factoryID);
 
 		/**
-		 * @brief Check if a component is on an actor
-		 *
-		 * @return Whether a component of the type is on the actor
-		 */
-		template<typename T>
-			requires std::is_base_of_v<Component, T>
-		bool HasComponent() const {
-			return components.contains(std::type_index(typeid(T)));
-		}
-
-		/**
 		 * @brief Access a component on the actor
 		 *
 		 * @return The component
@@ -175,7 +233,7 @@ namespace Cacao {
 		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		std::shared_ptr<T> GetComponent() const {
-			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
+			Check<NonexistentValueException>(HasComponent<T>(), "A component of the type specified does not exist on the actor!");
 			return std::dynamic_pointer_cast<T>(components.at(std::type_index(typeid(T))));
 		}
 
@@ -187,7 +245,7 @@ namespace Cacao {
 		template<typename T>
 			requires std::is_base_of_v<Component, T>
 		void DeleteComponent() {
-			Check<NonexistentValueException>(components.contains(std::type_index(typeid(T))), "A component of the type specified does not exist on the actor!");
+			Check<NonexistentValueException>(HasComponent<T>(), "A component of the type specified does not exist on the actor!");
 			components.erase(std::type_index(typeid(T)));
 		}
 
@@ -198,32 +256,35 @@ namespace Cacao {
 		 *
 		 * @return All actor components
 		 */
-		std::unordered_map<std::type_index, std::shared_ptr<Component>> GetAllComponents() const {
-			return components;
-		}
+		std::unordered_map<std::type_index, Component*> GetAllComponents();
 
 		/**
 		 * @brief Get all the children of the actor
 		 *
 		 * @return All child entities
 		 */
-		std::vector<ActorHandle> GetAllChildren() const;
+		std::vector<ActorRef> GetAllChildren() const {
+			return children;
+		}
 
 		~Actor();
 
 	  private:
-		Actor(const std::string& name, ActorHandle parent, xg::Guid);
+		Actor(const std::string& name, ActorRef parent, xg::Guid);
 		friend class World;
+		friend class Component;
 
-		std::weak_ptr<Actor> parentPtr;
-		std::weak_ptr<World> world;
-		std::unordered_map<std::type_index, std::shared_ptr<Component>> components;
-		std::vector<std::shared_ptr<Actor>> children;
+		struct ComponentSlot {
+			std::unique_ptr<Component> component;
+			uint64_t generation = 1;
+		};
 
-		void PostMountComponent(std::shared_ptr<Component> c);
-		void NotifyFunctionallyActiveStateChanged();
+		ActorRef parent;
+		std::vector<ActorRef> children;
+		std::unordered_map<std::type_index, ComponentSlot> components;
 
-		bool active, functionallyActive;
-		bool isRoot = false;
+		void ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
+
+		bool active;
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DllHelper.hpp"
-#include "Component.hpp"
+#include "Actor.hpp"
 
 #include <functional>
 #include <memory>

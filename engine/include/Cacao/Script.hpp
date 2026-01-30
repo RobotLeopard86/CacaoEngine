@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Component.hpp"
+#include "Actor.hpp"
 #include "Time.hpp"
 
 namespace Cacao {

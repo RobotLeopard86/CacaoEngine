@@ -21,7 +21,7 @@ namespace Cacao {
 		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
 
 		//Create root actor
-		root.actor = std::shared_ptr<Actor>(new Actor("__WORLDROOT__", ActorHandle {}, xg::Guid {}));
+		root.actor = std::shared_ptr<Actor>(new Actor("__WORLDROOT__", ActorRef {}, xg::Guid {}));
 		root->isRoot = true;
 
 		//Create camera
@@ -42,12 +42,12 @@ namespace Cacao {
 		}
 
 		//Process actors and make tree
-		std::unordered_map<xg::Guid, ActorHandle> foundActors;
+		std::unordered_map<xg::Guid, ActorRef> foundActors;
 		std::unordered_map<xg::Guid, std::vector<libcacaoformats::World::Actor>> awaitingParents;
 		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor) {
 			auto impl = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
-				ActorHandle hnd;
+				ActorRef hnd;
 				if(actor.parentGUID == xg::Guid {}) {
 					//Top-level actor
 					hnd = Actor::Create(actor.name, w, actor.guid);
@@ -93,11 +93,11 @@ namespace Cacao {
 
 	World::~World() {}
 
-	void World::ReparentToRoot(ActorHandle actor) {
+	void World::ReparentToRoot(ActorRef actor) {
 		actor->Reparent(root);
 	}
 
-	std::vector<ActorHandle> World::GetRootChildren() const {
+	std::vector<ActorRef> World::GetRootChildren() const {
 		return root->GetAllChildren();
 	}
 

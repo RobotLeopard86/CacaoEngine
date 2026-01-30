@@ -197,8 +197,8 @@ namespace Cacao {
 		//Find scripts
 		std::vector<std::shared_ptr<Script>> scripts;
 		std::mutex scriptsMtx;
-		const auto scriptFinder = [world, &scripts, &scriptsMtx](ActorHandle ah) -> exathread::VoidTask {
-			auto impl = [world, &scripts, &scriptsMtx](ActorHandle ah, auto& iref) -> exathread::VoidTask {
+		const auto scriptFinder = [world, &scripts, &scriptsMtx](ActorRef ah) -> exathread::VoidTask {
+			auto impl = [world, &scripts, &scriptsMtx](ActorRef ah, auto& iref) -> exathread::VoidTask {
 				//Inactive stop
 				if(!ah->IsActive()) co_return;
 
