@@ -57,6 +57,22 @@ namespace Cacao {
 		active = state;
 	}
 
+	void Actor::ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr) {
+		//Get or create new slot
+		ComponentSlot& slot = components[type];
+
+		//Update generation number to invalidate old references
+		++(slot.generation);
+
+		//Store component pointer
+		slot.component = std::move(ptr);
+
+		//Set up component object
+		slot.component->owner = self;
+		slot.component->OnMount();
+		slot.component->SetEnabled(true);
+	}
+
 	Actor::Actor(const std::string& name, ActorRef parent, xg::Guid guid)
 	  : name(name), guid(guid), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parent(parent), world(parent->world), active(true) {}
 }

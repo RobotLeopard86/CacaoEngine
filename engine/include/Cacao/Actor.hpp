@@ -31,7 +31,7 @@ namespace Cacao {
 		Actor* operator->();
 
 		/**
-		 * @brief Access the underlying Actor, but constant
+		 * @brief Access the underlying Actor constly
 		 */
 		const Actor* operator->() const;
 
@@ -276,10 +276,11 @@ namespace Cacao {
 
 		struct ComponentSlot {
 			std::unique_ptr<Component> component;
-			uint64_t generation = 1;
+			uint64_t generation = 0;
 		};
 
 		ActorRef parent;
+		ActorRef self;
 		std::vector<ActorRef> children;
 		std::unordered_map<std::type_index, ComponentSlot> components;
 		World* world;
