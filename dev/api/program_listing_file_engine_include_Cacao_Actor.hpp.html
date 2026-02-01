@@ -481,7 +481,9 @@
 
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="nf">GetWorldTransformMatrix</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="nf">GetParent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="nf">GetParent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsActive</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
@@ -524,13 +526,11 @@
 <span class="w">            </span><span class="n">components</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">)));</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span><span class="w"> </span><span class="n">Component</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">GetAllComponents</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&amp;&gt;</span><span class="w"> </span><span class="n">GetAllComponents</span><span class="p">();</span>
 
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ActorRef</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetAllChildren</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="o">~</span><span class="n">Actor</span><span class="p">();</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">Actor</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">);</span>
@@ -545,6 +545,7 @@
 <span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ActorRef</span><span class="o">&gt;</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span><span class="w"> </span><span class="n">ComponentSlot</span><span class="o">&gt;</span><span class="w"> </span><span class="n">components</span><span class="p">;</span>
+<span class="w">        </span><span class="n">World</span><span class="o">*</span><span class="w"> </span><span class="n">world</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ComponentSetup</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;&amp;&amp;</span><span class="w"> </span><span class="n">ptr</span><span class="p">);</span>
 
