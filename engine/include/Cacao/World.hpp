@@ -69,7 +69,7 @@ namespace Cacao {
 			requires std::is_invocable_r_v<bool, P, ActorRef>
 		std::optional<ActorRef> FindActor(P predicate) const {
 			//Invoke internal search function with wrapped predicate
-			return actorSearchRunner([&predicate](ActorRef ref) { return predicate(ref); });
+			return _FindActor([&predicate](ActorRef ref) { return predicate(ref); });
 		}
 
 		~World();

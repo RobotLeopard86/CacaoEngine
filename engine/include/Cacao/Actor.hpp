@@ -156,9 +156,11 @@ namespace Cacao {
 		/**
 		 * @brief Access the parent of this actor
 		 *
-		 * @return The parent actor, or a null handle if the parent is the world root
+		 * @return The parent actor, or a null handle if this actor is toplevel
 		 */
-		ActorRef GetParent() const;
+		ActorRef GetParent() const {
+			return parent;
+		}
 
 		/**
 		 * @brief Check if the actor is active
@@ -256,7 +258,7 @@ namespace Cacao {
 		 *
 		 * @return All actor components
 		 */
-		std::unordered_map<std::type_index, Component*> GetAllComponents();
+		std::unordered_map<std::type_index, std::unique_ptr<Component>&> GetAllComponents();
 
 		/**
 		 * @brief Get all the children of the actor
@@ -266,8 +268,6 @@ namespace Cacao {
 		std::vector<ActorRef> GetAllChildren() const {
 			return children;
 		}
-
-		~Actor();
 
 	  private:
 		Actor(const std::string& name, ActorRef parent, xg::Guid);
@@ -282,6 +282,7 @@ namespace Cacao {
 		ActorRef parent;
 		std::vector<ActorRef> children;
 		std::unordered_map<std::type_index, ComponentSlot> components;
+		World* world;
 
 		void ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
 

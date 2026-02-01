@@ -71,7 +71,7 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_same_v<Component, T>
-		std::pair<std::shared_ptr<T>, std::type_index> Instantiate(const std::string& id);
+		std::pair<T*, std::type_index> Instantiate(const std::string& id);
 
 	  private:
 		std::unique_ptr<Impl> impl;
@@ -87,6 +87,6 @@ namespace Cacao {
 	void CodeRegistry::RegisterFactory<Component>(const std::string& id, std::function<Component*()> factory, std::type_index type);
 
 	template<>
-	std::pair<std::shared_ptr<Component>, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
+	std::pair<Component*, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
 	///@endcond
 }

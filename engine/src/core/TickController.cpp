@@ -195,30 +195,30 @@ namespace Cacao {
 		if(!world) return;
 
 		//Find scripts
-		std::vector<std::shared_ptr<Script>> scripts;
+		std::vector<Script*> scripts;
 		std::mutex scriptsMtx;
-		const auto scriptFinder = [world, &scripts, &scriptsMtx](ActorRef ah) -> exathread::VoidTask {
-			auto impl = [world, &scripts, &scriptsMtx](ActorRef ah, auto& iref) -> exathread::VoidTask {
+		const auto scriptFinder = [world, &scripts, &scriptsMtx](ActorRef actor) -> exathread::VoidTask {
+			auto impl = [world, &scripts, &scriptsMtx](ActorRef actor, auto& iref) -> exathread::VoidTask {
 				//Inactive stop
-				if(!ah->IsActive()) co_return;
+				if(!actor->IsActive()) co_return;
 
 				//Process components
-				for(auto& [ctype, cptr] : ah->GetAllComponents()) {
+				for(auto& [ctype, cptr] : actor->GetAllComponents()) {
 					//Is this a script?
-					if(auto sptr = std::dynamic_pointer_cast<Script>(cptr)) {
+					if(Script* sptr = dynamic_cast<Script*>(cptr.get())) {
 						std::lock_guard lk(scriptsMtx);
 						scripts.push_back(sptr);
 					}
 				}
 
 				//Handle children
-				exathread::MultiFuture<void> childrenFut = Engine::Get().GetThreadPool()->batch(world->GetRootChildren(), iref, iref);
+				exathread::MultiFuture<void> childrenFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), iref, iref);
 				co_await exathread::yieldUntilComplete(childrenFut);
 			};
-			impl(ah, impl);
+			impl(actor, impl);
 			co_return;
 		};
-		exathread::MultiFuture<void> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetRootChildren(), scriptFinder);
+		exathread::MultiFuture<void> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), scriptFinder);
 		scriptsFut.await();
 	}
 

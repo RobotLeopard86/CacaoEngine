@@ -1,13 +1,13 @@
 #include "Cacao/World.hpp"
 #include "Cacao/Actor.hpp"
 #include "Cacao/CodeRegistry.hpp"
-#include "Cacao/Component.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/PerspectiveCamera.hpp"
 #include "Cacao/Resource.hpp"
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "impl/ResourceManager.hpp"
+#include "impl/World.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 
@@ -20,9 +20,7 @@ namespace Cacao {
 	  : Resource(addr) {
 		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
 
-		//Create root actor
-		root.actor = std::shared_ptr<Actor>(new Actor("__WORLDROOT__", ActorRef {}, xg::Guid {}));
-		root->isRoot = true;
+		//TODO: Set up actor slot table
 
 		//Create camera
 		cam = std::make_shared<PerspectiveCamera>();
@@ -31,6 +29,8 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<World> World::Create(const std::string& addr, const libcacaoformats::World& world) {
+		//TODO: Update to new actor reference model
+
 		//Create base world
 		std::shared_ptr<World> w = Create(addr);
 
@@ -47,13 +47,13 @@ namespace Cacao {
 		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor) {
 			auto impl = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
-				ActorRef hnd;
+				ActorRef ref;
 				if(actor.parentGUID == xg::Guid {}) {
 					//Top-level actor
-					hnd = Actor::Create(actor.name, w, actor.guid);
+					//ref = Actor::Create(actor.name, w, actor.guid);
 				} else if(foundActors.contains(actor.parentGUID)) {
 					//The parent has been added to the tree
-					hnd = Actor::Create(actor.name, foundActors[actor.parentGUID], actor.guid);
+					//ref = Actor::Create(actor.name, foundActors[actor.parentGUID], actor.guid);
 				} else {
 					//The parent has not been added to the tree but we'll save this for when it is
 					awaitingParents[actor.parentGUID].push_back(actor);
@@ -61,12 +61,12 @@ namespace Cacao {
 				}
 
 				//Register actor object
-				foundActors.insert_or_assign(hnd->guid, hnd);
+				foundActors.insert_or_assign(ref->guid, ref);
 
 				//Setup transform
-				hnd->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
-				hnd->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z});
-				hnd->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
+				ref->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
+				ref->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z});
+				ref->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
 
 				//Mount components
 				for(const libcacaoformats::World::Component& comp : actor.components) {
@@ -74,7 +74,7 @@ namespace Cacao {
 					Check<NonexistentValueException>(CodeRegistry::Get().HasFactory<Component>(comp.typeID), "World contains component of an unknown type! Hint: all component types must be registered in the CodeRegistry.");
 
 					//Create the component
-					hnd->MountComponent(comp.typeID);
+					ref->MountComponent(comp.typeID);
 
 					//TODO: Add the reflection data back in somehow
 				}
@@ -93,12 +93,13 @@ namespace Cacao {
 
 	World::~World() {}
 
-	void World::ReparentToRoot(ActorRef actor) {
-		actor->Reparent(root);
+	void World::MakeToplevel(ActorRef actor) {
+		//TODO
 	}
 
-	std::vector<ActorRef> World::GetRootChildren() const {
-		return root->GetAllChildren();
+	std::vector<ActorRef> World::GetToplevelActors() const {
+		//TODO
+		return {};
 	}
 
 	struct WorldManager::Impl {
