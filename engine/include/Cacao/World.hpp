@@ -59,7 +59,7 @@ namespace Cacao {
 		std::vector<ActorRef> GetToplevelActors() const;
 
 		/**
-		 * @brief Find an Actor by some arbitrary condition
+		 * @brief Find an Actor according to some arbitrary condition
 		 *
 		 * @param predicate The predicate to check each actor against
 		 *

@@ -202,12 +202,14 @@ namespace Cacao {
 				//Inactive stop
 				if(!actor->IsActive()) co_return;
 
-				//Process components
-				for(auto& [ctype, cptr] : actor->GetAllComponents()) {
-					//Is this a script?
-					if(Script* sptr = dynamic_cast<Script*>(cptr.get())) {
-						std::lock_guard lk(scriptsMtx);
-						scripts.push_back(sptr);
+				//Get all scripts and add them to the list
+				auto actorScripts = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
+					return (dynamic_cast<Script*>(component.get()));
+				});
+				{
+					std::lock_guard lk(scriptsMtx);
+					for(auto& [_, cptr] : actorScripts) {
+						scripts.push_back(static_cast<Script*>(cptr));
 					}
 				}
 

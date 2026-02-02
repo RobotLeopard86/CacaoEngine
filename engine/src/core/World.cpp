@@ -7,7 +7,7 @@
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "impl/ResourceManager.hpp"
-#include "impl/World.hpp"
+#include "impl/World.hpp"// IWYU pragma: keep
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 

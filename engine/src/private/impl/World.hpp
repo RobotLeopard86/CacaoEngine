@@ -2,6 +2,7 @@
 
 #include "Cacao/World.hpp"
 
+#include <set>
 #include <vector>
 
 namespace Cacao {
@@ -12,6 +13,6 @@ namespace Cacao {
 		};
 
 		std::vector<ActorSlot> slotTable;
-		std::vector<uint64_t> freeList;
+		std::set<uint64_t> freeList;
 	};
 }

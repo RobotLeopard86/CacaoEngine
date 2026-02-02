@@ -27,11 +27,15 @@ namespace Cacao {
 
 		/**
 		 * @brief Access the underlying Actor
+		 *
+		 * @throws NonexistentValueException If this handle is invalid
 		 */
 		Actor* operator->();
 
 		/**
 		 * @brief Access the underlying Actor constly
+		 *
+		 * @throws NonexistentValueException If this handle is invalid
 		 */
 		const Actor* operator->() const;
 
@@ -43,7 +47,7 @@ namespace Cacao {
 		operator bool() const noexcept;
 
 		/**
-		 * @brief Check if two handles are equal (that is, they reference the same Actor)
+		 * @brief Check if two handles are equal (that is, they reference the same Actor or are both null)
 		 *
 		 * @return If the handles are equal
 		 */
@@ -54,14 +58,20 @@ namespace Cacao {
 		friend class World;
 
 		//Non-owning World pointer
-		World* world = nullptr;
+		std::weak_ptr<World> world;
 
 		//Actor slot access information
 		uint64_t slotID;
 		uint64_t generation;
 
+		//Null state
+		bool null = true;
+
 		//Hidden valid handle constructor
-		ActorRef(World* world, uint64_t slot, uint64_t generation) : world(world), slotID(slot), generation(generation) {}
+		ActorRef(std::weak_ptr<World> world, uint64_t slot, uint64_t generation) : world(world), slotID(slot), generation(generation), null(false) {}
+
+		//Hidden resolver function
+		void* Resolve() const noexcept;
 	};
 
 	/**
@@ -212,7 +222,7 @@ namespace Cacao {
 			std::unique_ptr<T> component = std::make_unique<T>(std::forward<Args...>(args...));
 
 			//Call-down to internal function
-			ComponentSetup(type, std::move(component));
+			_ComponentSetup(type, std::move(component));
 		}
 
 		/**
@@ -252,13 +262,26 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Get a copy of all the components on the actor
+		 * @brief Get a list of all the components on the actor
 		 *
-		 * @note This doesn't actually copy the components, just their pointers, but this does increment the reference count
-		 *
-		 * @return All actor components
+		 * @return References to all actor components
 		 */
-		std::unordered_map<std::type_index, std::unique_ptr<Component>&> GetAllComponents();
+		std::unordered_map<std::type_index, Component*> GetAllComponents() const {
+			return _ComponentGet([](const std::unique_ptr<Component>&) { return true; });
+		}
+
+		/**
+		 * @brief Get a filtered list of all the components on the actor
+		 *
+		 * @param filter The filter function to check each component against, returning true for matching components
+		 *
+		 * @return References to all matching actor components
+		 */
+		template<typename F>
+			requires std::is_invocable_r_v<bool, F, const std::unique_ptr<Component>&>
+		std::unordered_map<std::type_index, Component*> GetComponentsFiltered(F filter) const {
+			return _ComponentGet([&filter](const std::unique_ptr<Component>& c) { return filter(c); });
+		}
 
 		/**
 		 * @brief Get all the children of the actor
@@ -285,7 +308,8 @@ namespace Cacao {
 		std::unordered_map<std::type_index, ComponentSlot> components;
 		World* world;
 
-		void ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
+		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
+		std::unordered_map<std::type_index, Component*> _ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const;
 
 		bool active;
 	};
