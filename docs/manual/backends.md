@@ -16,7 +16,7 @@ In debug builds, you can set the following environment variables when using the 
 | Backend | Windows | Mac | Linux* |
 | -- | ------- | --- | ------ |
 | OpenGL | ✅ | ✅ | ✅ |
-| Vulkan | 🟨 | ❌ | 🟨  |  
+| Vulkan | ✅ | ❌ | ✅  |  
 
 \* Most Linux testing occurs on Fedora Linux. Other distributions may have different compatibilities.
 
