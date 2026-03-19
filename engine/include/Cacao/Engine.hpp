@@ -66,15 +66,6 @@ namespace Cacao {
 		 */
 		struct CACAO_API InitConfig {
 			/**
-			 * @brief Whether the engine is running outside of a bundle
-			 *
-			 * @details If this flag is set, the engine will not attempt to validate that it is in a game bundle on startup.
-			 * This will also disable anything related to the default resource loader and bundle systems.
-			 * Assets, worlds, and game binaries will need to be manually loaded and configured in this mode.
-			 */
-			bool standalone = false;
-
-			/**
 			 * @brief The requested backend to try to initialize first, overriding the default setting.
 			 */
 			std::string initialRequestedBackend;
@@ -203,8 +194,6 @@ namespace Cacao {
 
 		/**
 		 * @brief Initialize all engine systems that don't require graphics or windowing
-		 *
-		 * @details If the engine is not in standalone mode, this will also trigger bundle loading.
 		 *
 		 * The engine must be in the Dead state when this method is called
 		 */

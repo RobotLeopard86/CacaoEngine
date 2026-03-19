@@ -13,7 +13,7 @@
 namespace Cacao {
 	bool BaseResAddrCheck(std::string check, std::string specialAllow = "") {
 		//Restrict character set
-		std::string allowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_:" + specialAllow;
+		std::string allowed = specialAllow + "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_:";
 		if(check.find_first_not_of(allowed) != std::string::npos) return false;
 
 		//Ensure type prefix is alphabetical (ASCII magic)
@@ -22,8 +22,10 @@ namespace Cacao {
 		//Ensure type and identifier separator exists
 		if(check[1] != ':') return false;
 
-		//Ensure there isn't a second identifier separator
-		if(check.find_first_of(':', 2) != std::string::npos) return false;
+		//Check for excess separators (first part removes colon)
+		allowed.pop_back();
+		allowed.shrink_to_fit();
+		if(check.substr(2).find_first_not_of(allowed) != std::string::npos) return false;
 
 		return true;
 	}

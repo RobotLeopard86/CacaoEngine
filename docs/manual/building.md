@@ -9,7 +9,7 @@ Before you begin, please check the [Platform Support page](./platforms) to ensur
 
 #### All Platforms
 * Git
-* Meson (version `1.9.0` or newer)
+* Meson (version `1.10.2` or newer)
 * Ninja
 * Python 3
 * CMake

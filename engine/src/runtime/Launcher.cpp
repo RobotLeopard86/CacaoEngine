@@ -77,7 +77,6 @@ int main(int argc, char* argv[]) {
 
 	//Configure CLI
 	CLI::App app(specRoot["meta"]["title"].as<std::string>(), std::filesystem::path(argv[0]).filename().string());
-	rt.icfg.standalone = true;
 	rt.icfg.startFrameProcessorWithGfxSystem = false;
 	rt.icfg.initialRequestedBackend = "vulkan";
 	rt.icfg.clientID = Cacao::ClientIdentity {.id = specRoot["meta"]["pkgId"].as<std::string>(), .displayName = specRoot["meta"]["title"].as<std::string>()};

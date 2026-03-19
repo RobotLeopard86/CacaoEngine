@@ -125,7 +125,7 @@ namespace Cacao {
 		/**
 		 * @brief Set the resource loader for a given set of types
 		 *
-		 * @warning This function may only be called once per type. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader for the default resource types.
+		 * @warning This function may only be called once per type. This is usually performed by the runtime.
 		 *
 		 * @param loader The resource loader to use
 		 *

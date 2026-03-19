@@ -277,9 +277,6 @@ namespace Cacao {
 		//Start with a fallback
 		std::filesystem::path p = std::filesystem::current_path();
 
-		//If we're standalone, you're on your own
-		if(icfg.standalone) return p;
-
 		//Platform-specific detection
 #ifdef _WIN32
 		PWSTR path = nullptr;

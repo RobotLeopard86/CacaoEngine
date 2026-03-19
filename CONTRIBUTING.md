@@ -65,12 +65,16 @@ Before making changes, make a fork of the repository on GitHub. Ensure that the 
 Before submitting your changes, ensure to pull from the upstream `dev` branch and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Only pull requests in English will be accepted (though use of translation tools is, of course, perfectly acceptable).
 
 ## AI Policy
-While generative AI is extremely useful for programming, **no AI-generated code** is allowed in Cacao Engine. It is perfectly fine to use AI for brainstorming, prototyping, debugging, and such, but no AI code may be submitted as a pull request. It is acceptable to use AI to write a concept for you, but sufficient human modification must be done to the concept if using it as a base. If you use AI in this manner, please include all prompts and the original AI code in your pull request for reference. **Any unauthorized contributions using AI-generated code will be rejected.**  
-
-The reason for this is that the legality and copyrightability of AI-generated code has not been fully tested, and many AI tools have been trained on code that may not be suitably licensed for use under Cacao Engine's license. Even if they weren't, it would be impossible to find the correct license for each generation.
-
-This policy only applies to **primary code**. This means that the `scripts` directory, for example, is not subject to this policy. Primary code directories are those listed below:
+While generative AI is extremely useful for programming, **no AI-generated code** is allowed in Cacao Engine **primary code**. This policy only applies to **primary code**. This means that the `scripts` directory, for example, is not subject to this policy. The primary code directories are those listed below:
 * `engine`
 * `libs`
 * `tools`
 * `sandbox`
+
+It is perfectly fine to use AI for brainstorming, prototyping, debugging, and such, but no AI code may be submitted as a pull request directly. **Any contributions consisting of purely AI-generated code without prior approval will be rejected.**  
+
+It is acceptable to use AI as a starting point, but sufficient human modification and effort is expected; you should be able to explain **in detail** what your code is doing and are responsible for the patches you submit.  
+
+If you use AI in this manner, please include the **unedited** chat log for your change (although it's fine to censor stuff like personal information).
+
+The reason for this is that the legality and copyrightability of AI-generated code has not been fully tested, and many AI tools have been trained on code that may not be suitably licensed for use under Cacao Engine's license. Furthermore, even in the case that they weren't, it would be infeasible to find the correct licenses required for the generated code.
