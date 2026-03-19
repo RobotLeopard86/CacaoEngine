@@ -114,7 +114,7 @@ namespace Cacao {
 		virtual ~Component() {}
 
 	  protected:
-		Component();
+		Component() {}
 
 		/**
 		 * @brief Runs when the component is first mounted on an Actor
@@ -244,9 +244,9 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Component, T>
-		std::shared_ptr<T> GetComponent() const {
+		T& GetComponent() const {
 			Check<NonexistentValueException>(HasComponent<T>(), "A component of the type specified does not exist on the actor!");
-			return std::dynamic_pointer_cast<T>(components.at(std::type_index(typeid(T))));
+			return dynamic_cast<T&>(*components.at(typeid(T)).component);
 		}
 
 		/**
@@ -297,16 +297,31 @@ namespace Cacao {
 		friend class World;
 		friend class Component;
 
-		struct ComponentSlot {
+		///@cond
+		struct ComponentHandle {
 			std::unique_ptr<Component> component;
 			uint64_t generation = 0;
+
+			ComponentHandle() = default;
+			ComponentHandle(ComponentHandle&&) = default;
+			ComponentHandle& operator=(ComponentHandle&&) = default;
+			ComponentHandle(const ComponentHandle& o)
+			  : component(std::make_unique<Component>(*o.component)), generation(0) {}
+			ComponentHandle& operator=(const ComponentHandle& o) {
+				if(this != &o) {
+					component = std::make_unique<Component>(*o.component);
+					generation = 0;
+				}
+				return *this;
+			}
 		};
+		///@endcond
 
 		ActorRef parent;
 		ActorRef self;
 		std::vector<ActorRef> children;
-		std::unordered_map<std::type_index, ComponentSlot> components;
-		World* world;
+		std::unordered_map<std::type_index, ComponentHandle> components;
+		World* world;//NON-OWNING --- DO NOT FREE THIS
 
 		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
 		std::unordered_map<std::type_index, Component*> _ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const;

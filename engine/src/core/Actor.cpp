@@ -63,19 +63,19 @@ namespace Cacao {
 	}
 
 	void Actor::_ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr) {
-		//Get or create new slot
-		ComponentSlot& slot = components[type];
+		//Get or create new handle
+		ComponentHandle& handle = components[type];
 
 		//Update generation number to invalidate old references
-		++(slot.generation);
+		++(handle.generation);
 
 		//Store component pointer
-		slot.component = std::move(ptr);
+		handle.component = std::move(ptr);
 
 		//Set up component object
-		slot.component->owner = self;
-		slot.component->OnMount();
-		slot.component->SetEnabled(true);
+		handle.component->owner = self;
+		handle.component->OnMount();
+		handle.component->SetEnabled(true);
 	}
 
 	std::unordered_map<std::type_index, Component*> Actor::_ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const {
