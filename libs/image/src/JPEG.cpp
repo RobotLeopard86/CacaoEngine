@@ -56,7 +56,7 @@ namespace libcacaoimage {
 		img.layout = (colorspace == TJCS_GRAY ? Image::Layout::Grayscale : Image::Layout::RGB);
 
 		//Bits-per-channel normalization
-		img.bitsPerChannel = (bitdepth >= 9) ? 16 : 8;
+		img.bitsPerChannel = (bitdepth > 8) ? 16 : 8;
 		img.quality = 80;
 		img.lossy = img.bitsPerChannel == 8;
 
@@ -69,7 +69,7 @@ namespace libcacaoimage {
 			CheckException(tj3Decompress8(tj, buffer.data(), buffer.size(), img.data.data(), img.w * pxSize, (img.layout == Image::Layout::RGB ? TJPF_RGB : TJPF_GRAY)) == 0,
 				"Failed to decode JPEG!", [&tj]() { tj3Destroy(tj); });
 		} else {
-			if(bitdepth > 12) {
+			if(bitdepth < 16) {
 				//Create temporary buffer for 12-bit data
 				std::vector<int16_t> twelveBit(img.w * img.h * (pxSize / 2));
 				CheckException(tj3Decompress12(tj, buffer.data(), buffer.size(), twelveBit.data(), img.w * pxSize, (img.layout == Image::Layout::RGB ? TJPF_RGB : TJPF_GRAY)) == 0,

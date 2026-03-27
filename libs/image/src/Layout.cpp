@@ -35,8 +35,7 @@ namespace libcacaoimage {
 					uint8_t g = (0.7152 * *srcp++);
 					uint8_t b = (0.0722 * *srcp++);
 					if(src.layout == Image::Layout::RGBA) ++srcp;
-					uint16_t sum = r + g + b;
-					*dstp++ = static_cast<uint8_t>(std::clamp<uint16_t>(sum, 0, 255));
+					*dstp++ = (r + g + b) & 0xFF;
 					continue;
 				}
 
@@ -71,8 +70,7 @@ namespace libcacaoimage {
 					uint16_t g = (0.7152 * *srcp++);
 					uint16_t b = (0.0722 * *srcp++);
 					if(src.layout == Image::Layout::RGBA) ++srcp;
-					uint32_t sum = r + g + b;
-					*dstp++ = static_cast<uint16_t>(std::clamp<uint32_t>(sum, 0, 255));
+					*dstp++ = (r + g + b) & 0xFFFF;
 					continue;
 				}
 

@@ -120,6 +120,8 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		std::size_t Reencode(const Image& src, std::ostream& out);
@@ -129,6 +131,8 @@ namespace libcacaoimage {
 		 *
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
+		 *
+		 * @return The number of written encoded bytes
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
@@ -140,6 +144,8 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		std::size_t EncodeJPEG(const Image& src, std::ostream& out);
@@ -149,6 +155,8 @@ namespace libcacaoimage {
 		 *
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
+		 *
+		 * @return The number of written encoded bytes
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
@@ -160,6 +168,8 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
 		std::size_t EncodeTGA(const Image& src, std::ostream& out);
@@ -169,6 +179,8 @@ namespace libcacaoimage {
 		 *
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
+		 *
+		 * @return The number of written encoded bytes
 		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */

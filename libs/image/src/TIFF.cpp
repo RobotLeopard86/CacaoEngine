@@ -45,9 +45,9 @@ namespace libcacaoimage {
 		img.layout = Image::Layout(static_cast<uint8_t>(samplesPerPixel));
 
 		//Calculate data for read
-		const uint8_t bytesPerChnl = (bitsPerSample / 8);
-		const std::size_t bytesPerPxl = samplesPerPixel * bytesPerChnl;
-		const std::size_t pitch = bytesPerPxl * width;
+		const uint8_t bytesPerChannel = (bitsPerSample / 8);
+		const std::size_t bytesPerPixel = samplesPerPixel * bytesPerChannel;
+		const std::size_t pitch = bytesPerPixel * width;
 		img.data.resize(pitch * height);
 
 		//Tiled or scanlines?
@@ -74,9 +74,9 @@ namespace libcacaoimage {
 
 					//Copy each tile row into the output buffer
 					for(unsigned int r = 0; r < hcpy; ++r) {
-						unsigned char* destination = img.data.data() + ((y + r) * pitch) + (x * bytesPerPxl);
-						const unsigned char* source = tile.data() + (r * wtile * bytesPerPxl);
-						std::memcpy(destination, source, wcpy * bytesPerPxl);
+						unsigned char* destination = img.data.data() + ((y + r) * pitch) + (x * bytesPerPixel);
+						const unsigned char* source = tile.data() + (r * wtile * bytesPerPixel);
+						std::memcpy(destination, source, wcpy * bytesPerPixel);
 					}
 				}
 			}
@@ -88,7 +88,7 @@ namespace libcacaoimage {
 			}
 		}
 
-		//Return result (TIFF will be automatically cleaned up because RAII and unique_ptr)
+		//Return result (TIFF will be automatically cleaned up thanks to RAII and unique_ptr)
 		return img;
 	}
 
@@ -136,9 +136,9 @@ namespace libcacaoimage {
 		CheckException(TIFFSetField(tiff.get(), TIFFTAG_ROWSPERSTRIP, 1) == 1, "Failed to set image strip size property!");
 
 		//Calculate helper constants for encoding
-		const std::size_t bytesPerChnl = (src.bitsPerChannel / 8);
-		const std::size_t bytesPerPxl = bytesPerChnl * samplesPerPixel;
-		const std::size_t pitch = bytesPerPxl * src.w;
+		const std::size_t bytesPerChannel = (src.bitsPerChannel / 8);
+		const std::size_t bytesPerPixel = bytesPerChannel * samplesPerPixel;
+		const std::size_t pitch = bytesPerPixel * src.w;
 
 		//Encode image data
 		for(unsigned int y = 0; y < src.h; ++y) {

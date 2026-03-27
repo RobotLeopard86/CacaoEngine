@@ -5,7 +5,7 @@
 #include "tga.h"
 
 namespace libcacaoimage {
-	//Inerface for TGA library to read/write with streams
+	//Interface for TGA library to read/write with streams
 	class StreamFileInterface : public tga::FileInterface {
 	  public:
 		StreamFileInterface(std::istream& stream)
@@ -35,14 +35,12 @@ namespace libcacaoimage {
 
 		uint8_t read8() override {
 			if(mode == Mode::Out) return 0;
-			uint8_t out;
-			str.read(reinterpret_cast<char*>(&out), 1);
-			return out;
+			return str.get();
 		}
 
 		void write8(uint8_t value) override {
 			if(mode == Mode::In) return;
-			str.write(reinterpret_cast<char*>(&value), 1);
+			str.put(value);
 			++written;
 		}
 

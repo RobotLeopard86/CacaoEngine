@@ -21,7 +21,7 @@ namespace libcacaoimage {
 		png_infop info = png_create_info_struct(png);
 		CheckException(info, "Failed to set up libpng information!", [&png]() { png_destroy_read_struct(&png, nullptr, nullptr); });
 
-		//Configure libpng longjmp
+		//Configure libpng longjmp (if there's an error, libpng will jump back here and setjmp will "return" the error code, triggering the exception)
 		int sj = setjmp(png_jmpbuf(png));
 		CheckException(sj == 0, "libpng read error!", [&png, &info]() { png_destroy_read_struct(&png, &info, nullptr); });
 
@@ -66,14 +66,14 @@ namespace libcacaoimage {
 		png_set_add_alpha(png, bitdepth == 8 ? 0xFF : 0xFFFF, PNG_FILLER_AFTER);
 
 		//Swap byte order for endianness if necessary
-		if(bitdepth == 16) {
-			if constexpr(std::endian::native == std::endian::big) png_set_swap(png);
+		if constexpr(std::endian::native == std::endian::big) {
+			if(bitdepth == 16) png_set_swap(png);
 		}
 
 		//Process transformation data
 		png_read_update_info(png, info);
 		png_get_IHDR(png, info, &img.w, &img.h, &bitdepth, &colortype, nullptr, nullptr, nullptr);
-		img.bitsPerChannel = bitdepth == 16 ? 16 : 8;
+		img.bitsPerChannel = (bitdepth == 16 ? 16 : 8);
 
 		//Get channel layout
 		uint8_t channels = png_get_channels(png, info);
