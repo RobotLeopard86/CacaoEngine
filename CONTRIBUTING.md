@@ -11,13 +11,17 @@ When submitting code, it must be formatted using [`clang-format`](https://clang.
 * Do not use Hungarian notation
 
 For consistency, please use American English spellings in interface naming (class, method, and field names). 
-  
-Please also avoid the use of `auto`, except for the below cases:  
-* Iterators
-* Map iteration destructuring (`auto& [one, two] : someMap`)
-* Lambda functions/`std::bind`
 
-In addition, `#include` directives must be grouped (one for Cacao Engine includes, one for STL types and system headers, and one for external libraries). Do not use angle-bracketed includes except for system and STL headers.
+All `#include` directives must be grouped (one for Cacao Engine includes, one for STL types and system headers, and one for external libraries) with full blank lines between groups. Only use angle-bracketed includes for system and STL headers, **not** external libraries. Example:
+```cpp
+#include "Cacao/SomeHeader.hpp"
+#include "Cacao/AnotherHeader.hpp"
+
+#include <unistd.h>
+#include <string>
+
+#include "externallib/externallib.h"
+```
 
 All code **must** include clear comments in English with a brief summary of what the particular section of code is doing. All declarations in the public header files (see below) must also have Doxygen annotations as shown here:
 ```cpp
@@ -25,7 +29,7 @@ All code **must** include clear comments in English with a brief summary of what
  * @brief The description...
  * @details (optional)
  *
- * [random notes]
+ * [any other information]
  *
  * [ @note | @warning ]
  *
@@ -51,30 +55,26 @@ The only exceptions to the code-commenting rule in function implementations are:
 2. Small functions whose effect is self-descriptive in what methods are called
 
 ## Branching Scheme
-Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all core development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  
+Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  
 
 During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All pre-release development and testing should continue in the staging branch until the stable release is completed. At that time, the staging branch should be squash-merged back into `dev` and `main`.  
 
-Release tags should be made for all releases, regardless of status (alpha, beta, RC, stable), and created from the staging branch, being named exactly the same as the version number (see the [versioning info page on the documentation site](https://robotleopard86.github.io/CacaoEngine/dev/manual/versioning.html) for further information); no prefix or suffix should be used.
+Release tags should be made for all releases, regardless of status (alpha, beta, RC, stable), and created from the staging branch, being named exactly the same as the version number (see the [versioning info page on the documentation site](https://robotleopard86.github.io/CacaoEngine/dev/manual/versioning.html) for further information); no prefix or suffix should be used (`2026.1.0a`, not `v2026.1.0a`)
+
+## AI Policy
+While generative AI is extremely useful for programming, we have certain rules regarding how generative AI may be used in Cacao Engine.  
+
+It is perfectly acceptable to use AI for brainstorming, prototyping, debugging, and code generation (provided you actually engage in the design process and review the code prior to submission). However, you **must be able to explain _in detail_ what your code is doing** without the AI's help and are wholly responsible for the code you submit.  
+
+If you use AI in this manner, please include the **unedited** chat log for your change (although it's fine to censor stuff like personal information) as an attachment on your PR. You must show that sufficient human effort was put into the PR. If you cannot explain your patch without the AI's help or cannot demonstrate that you involved yourself in the development process (aside from tiny, self-explanatory patches), your PR **will be rejected**.  
+
+As for what counts as sufficient human involvement, we would look to see things such as involved planning and design conversation, multiple rounds of iteration and feedback, and/or manual edits. For the most part, you should be fine as long as you don't just tell the AI "fix this bug" or "implement this feature" and leave it at that.
+
+More scrutiny will be applied to AI-generated changes to more important components, and less for smaller pieces like scripts/Meson files. Sweeping AI-generated changes to the codebase will generally be rejected, especially if no clear or satisfactory reason can be provided.
 
 ## Contributing Your Changes
 All code contributions must be submitted as GitHub pull requests; standalone patches will not be accepted.  
 
-Before making changes, make a fork of the repository on GitHub. Ensure that the "Copy the `main` branch only" option is unchecked. Please make all changes in your copy of the `dev` branch.  
+Before making changes, make a fork of the repository on GitHub. **Ensure that the "Copy the `main` branch only" option is unchecked**. Please make all changes in your copy of the `dev` branch.  
 
-Before submitting your changes, ensure to pull from the upstream `dev` branch and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Only pull requests in English will be accepted (though use of translation tools is, of course, perfectly acceptable).
-
-## AI Policy
-While generative AI is extremely useful for programming, **no AI-generated code** is allowed in Cacao Engine **primary code**. This policy only applies to **primary code**. This means that the `scripts` directory, for example, is not subject to this policy. The primary code directories are those listed below:
-* `engine`
-* `libs`
-* `tools`
-* `sandbox`
-
-It is perfectly fine to use AI for brainstorming, prototyping, debugging, and such, but no AI code may be submitted as a pull request directly. **Any contributions consisting of purely AI-generated code without prior approval will be rejected.**  
-
-It is acceptable to use AI as a starting point, but sufficient human modification and effort is expected; you should be able to explain **in detail** what your code is doing and are responsible for the patches you submit.  
-
-If you use AI in this manner, please include the **unedited** chat log for your change (although it's fine to censor stuff like personal information).
-
-The reason for this is that the legality and copyrightability of AI-generated code has not been fully tested, and many AI tools have been trained on code that may not be suitably licensed for use under Cacao Engine's license. Furthermore, even in the case that they weren't, it would be infeasible to find the correct licenses required for the generated code.
+Before submitting your changes, ensure to rebase your branch onto the upstream `dev` branch (`git pull --rebase`) and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Only pull requests in English will be accepted (though use of translation tools is, of course, perfectly acceptable).
