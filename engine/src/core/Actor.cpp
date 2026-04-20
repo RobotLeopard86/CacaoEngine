@@ -11,40 +11,39 @@
 
 namespace Cacao {
 	Actor::Actor(const std::string& name, ActorRef parent, xg::Guid guid)
-	  : name(name), guid(guid), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parent(parent), world(parent->world), active(true) {}
+	  : name(name), guid(guid), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parent(parent), world(parent->world), active(true) {
+		const World::Impl::ActorSlot& ourSlot = *std::find_if(IMPL(World, *world).slotTable.begin(), IMPL(World, *world).slotTable.end(), [&guid](const World::Impl::ActorSlot& slot) {
+			return slot.actor->guid == guid;
+		});
+		self = ActorRef(std::static_pointer_cast<World>(world->shared_from_this()), ourSlot.id, ourSlot.generation);
+	}
 
 	glm::mat4 Actor::GetWorldTransformMatrix() const {
 		//Calculate the transformation matrix
 		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
-		ActorRef current = parent;
+		ActorRef current = self;
 		glm::mat4 transMat = transform.GetTransformationMatrix();
 		do {
 			//Apply transformation
 			transMat = current->transform.GetTransformationMatrix() * transMat;
-		} while(!(current = current->GetParent()));
+		} while((current = current->GetParent()));
 
 		return transMat;
 	}
 
 	void Actor::Reparent(ActorRef newParent) {
-		//TODO: Update to new system
+		Check<BadValueException>((bool)newParent, "Cannot reparent an actor to a null reference!");
+		Check<BadValueException>(newParent->guid != guid, "Cannot reparent an actor to itself!");
 
-		/*//Remove ourselves from the current parent
-		std::shared_ptr<Actor> selfPtr = shared_from_this();
-		std::shared_ptr<Actor> parent = parentPtr.lock();
-		auto it = std::find_if(parent->children.begin(), parent->children.end(), [&selfPtr](std::shared_ptr<Actor> a) {
-			return a == selfPtr;
-		});
-		if(it != parent->children.end()) parent->children.erase(it);
+		//Remove ourselves from the current parent
+		auto common = parent->children | std::views::filter([this](const ActorRef& ref) {
+			return ref != self;
+		}) | std::views::common;
+		parent->children = std::vector<ActorRef>(common.begin(), common.end());
 
-		//Make sure we aren't parenting to ourselves
-		Check<BadValueException>(newParent.actor != selfPtr, "Cannot parent an Actor to itself!");
-
-		//Add ourselves as a child to the new parent
-		newParent->children.push_back(shared_from_this());
-
-		//Set parent pointer
-		parentPtr = newParent.actor;*/
+		//Add ourselves to new parent
+		parent = newParent;
+		parent->children.push_back(self);
 	}
 
 	void Actor::MountComponent(const std::string& factoryID) {
@@ -79,16 +78,13 @@ namespace Cacao {
 	}
 
 	std::unordered_map<std::type_index, Component*> Actor::_ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const {
-		std::unordered_map<std::type_index, Component*> out;
-		for(const auto& [type, slot] : components) {
-			//Ensure this slot is valid
-			if(!slot.component) continue;
-
-			//Run the filter function
-			if(filter(slot.component)) out.insert_or_assign(type, slot.component.get());
-		}
-
-		return out;
+		auto common = (components | std::views::filter([&filter](const typename decltype(components)::value_type& component) {
+			if(!component.second.component) return false;
+			return filter(component.second.component);
+		}) | std::views::transform([](const typename decltype(components)::value_type& component) {
+			return std::make_pair<std::type_index, Component*>(std::type_index(component.first), component.second.component.get());
+		}) | std::views::common);
+		return std::unordered_map<std::type_index, Component*>(common.begin(), common.end());
 	}
 
 	bool Component::IsEnabled() const {

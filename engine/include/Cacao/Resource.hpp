@@ -13,7 +13,7 @@ namespace Cacao {
 	/**
 	 * @brief Base class for any game-related resource (world, asset, arbitrary blob, etc.)
 	 */
-	class CACAO_API Resource : std::enable_shared_from_this<Resource> {
+	class CACAO_API Resource : public std::enable_shared_from_this<Resource> {
 	  public:
 		/**
 		 * @brief Get the resource's address (used to reference it)

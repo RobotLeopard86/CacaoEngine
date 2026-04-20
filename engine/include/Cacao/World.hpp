@@ -59,6 +59,16 @@ namespace Cacao {
 		std::vector<ActorRef> GetToplevelActors() const;
 
 		/**
+		 * @brief Create a new Actor in the world
+		 *
+		 * @param name The name for this new actor
+		 * @param parent The parent for this new actor (leave as a null ref to make toplevel)
+		 *
+		 * @throws NonexistentValueException If the ref references a nonexistent actor or is out-of-date
+		 */
+		ActorRef CreateActor(const std::string& name, ActorRef parent = {});
+
+		/**
 		 * @brief Find an Actor according to some arbitrary condition
 		 *
 		 * @param predicate The predicate to check each actor against

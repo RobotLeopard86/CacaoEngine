@@ -6,21 +6,24 @@
 #include "Cacao/Resource.hpp"
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
+#include "crossguid/guid.hpp"
 #include "impl/ResourceManager.hpp"
-#include "impl/World.hpp"// IWYU pragma: keep
+#include "impl/World.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 
 #include "libcacaoformats.hpp"
 
 #include <memory>
+#include <ranges>
 
 namespace Cacao {
 	World::World(const std::string& addr)
 	  : Resource(addr) {
 		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
 
-		//TODO: Set up actor slot table
+		//Create implementation pointer
+		impl = std::make_unique<Impl>();
 
 		//Create camera
 		cam = std::make_shared<PerspectiveCamera>();
@@ -29,8 +32,6 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<World> World::Create(const std::string& addr, const libcacaoformats::World& world) {
-		//TODO: Update to new actor reference model
-
 		//Create base world
 		std::shared_ptr<World> w = Create(addr);
 
@@ -50,10 +51,14 @@ namespace Cacao {
 				ActorRef ref;
 				if(actor.parentGUID == xg::Guid {}) {
 					//Top-level actor
-					//ref = Actor::Create(actor.name, w, actor.guid);
+					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, ActorRef {}, actor.guid))};
+					w->impl->slotTable.push_back(std::move(slot));
+					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
 				} else if(foundActors.contains(actor.parentGUID)) {
 					//The parent has been added to the tree
-					//ref = Actor::Create(actor.name, foundActors[actor.parentGUID], actor.guid);
+					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, foundActors[actor.parentGUID], actor.guid))};
+					w->impl->slotTable.push_back(std::move(slot));
+					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
 				} else {
 					//The parent has not been added to the tree but we'll save this for when it is
 					awaitingParents[actor.parentGUID].push_back(actor);
@@ -94,12 +99,25 @@ namespace Cacao {
 	World::~World() {}
 
 	void World::MakeToplevel(ActorRef actor) {
-		//TODO
+		Check<BadValueException>(actor->world != this, "Cannot make an actor that does not belong to this world toplevel!");
+
+		//Remove actor from its current parent
+		auto common = actor->parent->children | std::views::filter([&actor](const ActorRef& ref) {
+			return ref == actor;
+		}) | std::views::common;
+		actor->parent->children = std::vector<ActorRef>(common.begin(), common.end());
+
+		//Set parent to null (marks it as toplevel)
+		actor->parent = ActorRef {};
 	}
 
 	std::vector<ActorRef> World::GetToplevelActors() const {
-		//TODO
-		return {};
+		auto common = impl->slotTable | std::views::transform([this](const Impl::ActorSlot& slot) {
+			return ActorRef(std::const_pointer_cast<World>(std::static_pointer_cast<const World>(shared_from_this())), slot.id, slot.generation);
+		}) | std::views::filter([](const ActorRef& ref) {
+			return !((bool)ref->parent);
+		}) | std::views::common;
+		return std::vector<ActorRef>(common.begin(), common.end());
 	}
 
 	struct WorldManager::Impl {
@@ -136,5 +154,28 @@ namespace Cacao {
 			impl->active = *ResourceManager::Get().Load<World>(addr);
 		}
 		impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
+	}
+
+	ActorRef World::CreateActor(const std::string& name, ActorRef parent) {
+		Check<NonexistentValueException>(!parent.null && parent, "Cannot create an actor under a nonexistent or expired parent!");
+
+		//Obtain slot for actor creation
+		Impl::ActorSlot& slot = [this]() -> Impl::ActorSlot& {
+			if(impl->freeList.empty()) {
+				Impl::ActorSlot& s = impl->slotTable.emplace_back();
+				s.generation = 1;
+				s.id = impl->slotTable.size() - 1;
+				return s;
+			} else {
+				Impl::ActorSlot& s = impl->slotTable[*impl->freeList.begin()];
+				impl->freeList.erase(impl->freeList.begin());
+				++(s.generation);
+				return s;
+			}
+		}();
+
+		//Create actor in slot
+		slot.actor = std::unique_ptr<Actor>(new Actor(name, parent, xg::newGuid()));
+		return slot.actor->self;
 	}
 }

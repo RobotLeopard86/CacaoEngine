@@ -191,6 +191,9 @@ namespace Cacao {
 		 * @brief Change the parent of this actor
 		 *
 		 * @param newParent The new parent of this actor
+		 *
+		 * @throws BadValueException If a null ref is provided
+		 * @throws BadValueException If a ref to the same actor being reparented is provided
 		 */
 		void Reparent(ActorRef newParent);
 
@@ -321,7 +324,7 @@ namespace Cacao {
 		ActorRef self;
 		std::vector<ActorRef> children;
 		std::unordered_map<std::type_index, ComponentHandle> components;
-		World* world;//NON-OWNING --- DO NOT FREE THIS
+		World* world;//NON-OWNING --- DO NOT FREE THIS!!!
 
 		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
 		std::unordered_map<std::type_index, Component*> _ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const;
