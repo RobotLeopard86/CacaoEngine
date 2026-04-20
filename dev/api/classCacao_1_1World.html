@@ -635,6 +635,23 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World11CreateActorERKNSt6stringE8ActorRef">
+<span id="_CPPv3N5Cacao5World11CreateActorERKNSt6stringE8ActorRef"></span><span id="_CPPv2N5Cacao5World11CreateActorERKNSt6stringE8ActorRef"></span><span id="Cacao::World::CreateActor__ssCR.ActorRef"></span><span class="target" id="classCacao_1_1World_1a44c50996ffbc853e012e01e877f543ba"></span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CreateActor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">parent</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World11CreateActorERKNSt6stringE8ActorRef" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> in the world. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name for this new actor </p></li>
+<li><p><strong>parent</strong> – The parent for this new actor (leave as a null ref to make toplevel)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the ref references a nonexistent actor or is out-of-date </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P">
 <span id="_CPPv3I0ENK5Cacao5World9FindActorE1P"></span><span id="_CPPv2I0ENK5Cacao5World9FindActorE1P"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">P</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1World_1a5ed3fa353b4160373ec76c7653bd4323"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindActor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P" title="Cacao::World::FindActor::P"><span class="n"><span class="pre">P</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">predicate</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Find an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> according to some arbitrary condition. </p>
@@ -763,6 +780,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5WorldE"><code class="docutils literal notranslate"><span class="pre">Cacao::World</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World12MakeToplevelE8ActorRef"><code class="docutils literal notranslate"><span class="pre">MakeToplevel()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5World17GetToplevelActorsEv"><code class="docutils literal notranslate"><span class="pre">GetToplevelActors()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World11CreateActorERKNSt6stringE8ActorRef"><code class="docutils literal notranslate"><span class="pre">CreateActor()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P"><code class="docutils literal notranslate"><span class="pre">FindActor()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5WorldD0Ev"><code class="docutils literal notranslate"><span class="pre">~World()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World3camE"><code class="docutils literal notranslate"><span class="pre">cam</span></code></a></li>

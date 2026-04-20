@@ -651,7 +651,13 @@
 <dd><p>Change the parent of this actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>newParent</strong> – The new parent of this actor </p>
+<dd class="field-odd"><p><strong>newParent</strong> – The new parent of this actor</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If a null ref is provided </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If a ref to the same actor being reparented is provided </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
