@@ -5,6 +5,10 @@ formats_deps = [yaml_cpp, crossguid, image_dep]
 bz2_sp = subproject('bzip2', required: true, default_options: ['default_library=static'])
 formats_deps += bz2_sp.get_variable('bzip2_dep')
 
+# libjaguar
+jaguar_sp = subproject('jaguar', required: true, default_options: ['default_library=static'])
+formats_deps += jaguar_sp.get_variable('libjaguar_dep')
+
 # libarchive
 libarchive_sp = subproject('libarchive', required: true, default_options: {
     'default_library': 'static',
