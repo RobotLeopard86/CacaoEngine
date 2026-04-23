@@ -12,6 +12,7 @@
 #include "impl/FrameProcessor.hpp"
 
 #include <atomic>
+#include <numeric>
 #include <thread>
 
 #include "glm/exponential.hpp"
@@ -74,12 +75,29 @@ namespace Cacao {
 		}
 	}
 
+	unsigned int FrameProcessor::GetCurrentFPS() {
+		return std::accumulate(impl->fpsMeasures.begin(), impl->fpsMeasures.end(), 0) / FPS_AVG_WINDOW;
+	}
+
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
+		//Setup variables
+		counter = 0;
+		lastSecond = clock::now();
+
+		//Runloop
 		while(!stop.stop_requested()) {
 			//If the window is minimized, we can't render, so no point in working
 			//Same for if there are too many frames in flight
 			while(Window::Get().IsMinimized() || numFramesInFlight > IMPL(GPUManager).MaxFramesInFlight()) {
 				if(stop.stop_requested()) return;
+			}
+
+			//FPS window check
+			if(clock::time_point now = clock::now(); (now - lastSecond) >= 1s) {
+				lastSecond = now;
+				for(unsigned int i = fpsMeasures.size(); i > 0; --i) fpsMeasures[i] = fpsMeasures[i - 1];
+				fpsMeasures[0] = counter;
+				counter = 0;
 			}
 
 			//Request a snapshot of the world state
@@ -123,6 +141,7 @@ namespace Cacao {
 			//Execute command buffer
 			try {
 				++numFramesInFlight;
+				++counter;
 				std::shared_future<void> fut = GPUManager::Get().Submit(std::move(cmd));
 				if(IMPL(GPUManager).UsesImmediateExecution()) {
 					fut.get();

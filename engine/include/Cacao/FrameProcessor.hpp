@@ -48,6 +48,13 @@ namespace Cacao {
 			return running;
 		}
 
+		/**
+		 * @brief Check the current FPS (frames per second) of the engine
+		 *
+		 * @return The FPS
+		 */
+		unsigned int GetCurrentFPS();
+
 		///@cond
 		struct Impl;
 		///@endcond

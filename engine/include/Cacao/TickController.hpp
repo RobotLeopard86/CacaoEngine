@@ -49,6 +49,13 @@ namespace Cacao {
 			return running;
 		}
 
+		/**
+		 * @brief Check the current TPS (ticks per second) of the engine
+		 *
+		 * @return The TPS
+		 */
+		unsigned int GetCurrentTPS();
+
 	  private:
 		struct Impl;
 		std::unique_ptr<Impl> impl;

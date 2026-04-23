@@ -119,7 +119,7 @@ yaml_cpp = subproject('yaml-cpp', required: true).get_variable('yaml_dep')
 # Configure Silica
 silica = subproject('silica', required: true, default_options: {
 	'example': false,
-	'generator': true
+	'generator': false
 })
 silica_dep = silica.get_variable('silica_dep')
 

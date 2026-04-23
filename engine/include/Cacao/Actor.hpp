@@ -128,7 +128,7 @@ namespace Cacao {
 		 *
 		 * @note All teardown should be performed here, @b NOT in the destructor. After this function is called, the component may be in an invalid state.
 		 */
-		virtual void OnDelete() {};
+		virtual void OnUnmount() {};
 
 		/**
 		 * @brief Runs when the component is enabled or when the owning Actor becomes active if the component was already enabled
@@ -253,13 +253,13 @@ namespace Cacao {
 		}
 
 		/**
-		 * @brief Delete a component from the actor
+		 * @brief Remove a component from the actor
 		 *
 		 * @throws NonexistentValueException If a component of this type does not exist on the actor
 		 */
 		template<typename T>
 			requires std::is_base_of_v<Component, T>
-		void DeleteComponent() {
+		void UnmountComponent() {
 			Check<NonexistentValueException>(HasComponent<T>(), "A component of the type specified does not exist on the actor!");
 			components.erase(std::type_index(typeid(T)));
 		}

@@ -4,7 +4,6 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <chrono>
 #include <filesystem>
 #include <thread>
 #include <queue>
@@ -13,7 +12,6 @@
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Identity.hpp"
-#include "Time.hpp"// IWYU pragma: keep
 
 #include "exathread.hpp"
 
@@ -44,22 +42,17 @@ namespace Cacao {
 		/**
 		 * @brief Configuration values for the engine that may change at runtime
 		 */
-		struct CACAO_API Config {
-			/**
-			 * @brief The amount of time that should pass between fixed ticks, in milliseconds
-			 */
-			std::chrono::milliseconds fixedTickInterval = 20ms;
-
-			/**
-			 * @brief The number of frames the renderer can be behind before skipping some to catch up
-			 */
-			int maxFrameLag = 2;
-
+		struct CACAO_API RuntimeConfig {
 			/**
 			 * @brief Whether or not to always re-render the UI every frame. Useful for inspecting UI graphics calls in RenderDoc or similar
 			 */
 			bool alwaysRerenderUI = false;
-		} config;
+
+			/**
+			 * @brief The maximum allowed number of ticks per second; use this to throttle updates or set to UINT32_MAX for unlimited
+			 */
+			unsigned int maxTPS = UINT32_MAX;
+		};
 
 		/**
 		 * @brief Configuration values that are set for startup and cannot be modified afterwards
@@ -114,6 +107,15 @@ namespace Cacao {
 		 */
 		const InitConfig& GetInitConfig() const {
 			return icfg;
+		}
+
+		/**
+		 * @brief Get a mutable reference to the runtime config values
+		 *
+		 * @return The runtime config values
+		 */
+		RuntimeConfig& GetRuntimeConfig() {
+			return rcfg;
 		}
 
 		//===================== UTILITY FUNCTIONS =====================
@@ -250,6 +252,7 @@ namespace Cacao {
 
 	  private:
 		InitConfig icfg;
+		RuntimeConfig rcfg;
 		State state;
 		std::mutex stateMtx;
 

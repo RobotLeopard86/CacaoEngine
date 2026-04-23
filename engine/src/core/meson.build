@@ -42,7 +42,6 @@ spdlog_dep = subproject('spdlog', required: true, default_options: {
 # Exathread, glm, high_resolution_sleep, and eternal
 exathread_dep = subproject('exathread', required: true).get_variable('exathread_dep')
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
-hires_sleep_dep = subproject('hires_sleep', required: true).get_variable('hires_sleep_dep')
 eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
 
 # Configure icu
@@ -111,7 +110,6 @@ engine_deps += [
 	glm_dep,
 	spdlog_dep,
 	exathread_dep,
-	hires_sleep_dep,
 	eternal_dep,
 	icu_dep,
 	freetype_dep,

@@ -77,7 +77,7 @@ namespace Cacao {
 			 * @param args The arguments to the format string
 			 */
 			template<typename... Args>
-			void LogFormatted(std::format_string<Args...> fmtstr, Args&&... args) {
+			void LogFormatted(const std::format_string<Args&...>& fmtstr, Args... args) {
 				oss << std::format(fmtstr, args...);
 			}
 
@@ -89,7 +89,7 @@ namespace Cacao {
 			 * @param args The arguments to the format string
 			 */
 			template<typename... Args>
-			void LogFormatted(const std::locale& locale, std::format_string<Args...> fmtstr, Args&&... args) {
+			void LogFormatted(const std::locale& locale, const std::format_string<Args...>& fmtstr, Args... args) {
 				oss << std::format(locale, fmtstr, args...);
 			}
 
