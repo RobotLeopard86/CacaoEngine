@@ -399,7 +399,6 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;filesystem&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
@@ -408,7 +407,6 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Exceptions.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Identity.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Time.hpp&quot;</span><span class="c1">// IWYU pragma: keep</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;exathread.hpp&quot;</span>
 
@@ -426,13 +424,11 @@
 
 <span class="w">        </span><span class="c1">//======================= CONFIGURATION =======================</span>
 
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Config</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="n">fixedTickInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="n">ms</span><span class="p">;</span>
-
-<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">maxFrameLag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">RuntimeConfig</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">alwaysRerenderUI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
+
+<span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxTPS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UINT32_MAX</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">InitConfig</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">initialRequestedBackend</span><span class="p">;</span>
@@ -450,6 +446,10 @@
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">InitConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetInitConfig</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">icfg</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">RuntimeConfig</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetRuntimeConfig</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">rcfg</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="c1">//===================== UTILITY FUNCTIONS =====================</span>
@@ -518,6 +518,7 @@
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">InitConfig</span><span class="w"> </span><span class="n">icfg</span><span class="p">;</span>
+<span class="w">        </span><span class="n">RuntimeConfig</span><span class="w"> </span><span class="n">rcfg</span><span class="p">;</span>
 <span class="w">        </span><span class="n">State</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">stateMtx</span><span class="p">;</span>
 
