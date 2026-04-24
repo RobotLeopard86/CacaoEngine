@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 1c8be23..21fad9d 100644
+index 1c8be23..15f8184 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -4,7 +4,7 @@ project('harfbuzz', ['c', 'cpp'],
@@ -11,3 +11,12 @@ index 1c8be23..21fad9d 100644
      'wrap_mode=nofallback', # Use --wrap-mode=default to revert, https://github.com/harfbuzz/harfbuzz/pull/2548
      'buildtype=debugoptimized',
    ],
+@@ -154,7 +154,7 @@ wasm_dep = cpp.find_library('iwasm', required: get_option('wasm'))
+ # pkg-config: icu-uc, cmake: ICU but with components
+ icu_dep = dependency('icu-uc', 'ICU',
+                           version: icu_min_version,
+-                          components: 'uc',
++                          #components: 'uc',
+                           required: get_option('icu'),
+                           allow_fallback: true)
+ 
