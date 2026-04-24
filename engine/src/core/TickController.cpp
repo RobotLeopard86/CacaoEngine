@@ -93,7 +93,7 @@ namespace Cacao {
 			clock::time_point now = clock::now();
 			if((now - lastSecond) >= 1s) {
 				lastSecond = now;
-				for(unsigned int i = tpsMeasures.size(); i > 0; --i) tpsMeasures[i] = tpsMeasures[i - 1];
+				for(unsigned int i = tpsMeasures.size() - 1; i > 0; --i) tpsMeasures[i] = tpsMeasures[i - 1];
 				tpsMeasures[0] = counter;
 				counter = 0;
 			}

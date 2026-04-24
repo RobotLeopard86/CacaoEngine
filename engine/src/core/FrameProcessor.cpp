@@ -95,7 +95,7 @@ namespace Cacao {
 			//FPS window check
 			if(clock::time_point now = clock::now(); (now - lastSecond) >= 1s) {
 				lastSecond = now;
-				for(unsigned int i = fpsMeasures.size(); i > 0; --i) fpsMeasures[i] = fpsMeasures[i - 1];
+				for(unsigned int i = fpsMeasures.size() - 1; i > 0; --i) fpsMeasures[i] = fpsMeasures[i - 1];
 				fpsMeasures[0] = counter;
 				counter = 0;
 			}

@@ -1,8 +1,8 @@
 diff --git a/simd/meson.build b/simd/meson.build
-index c5c642e..eee9076 100644
+index a870493..7b07d10 100644
 --- a/simd/meson.build
 +++ b/simd/meson.build
-@@ -125,7 +125,7 @@ if host_cpu in ['x86', 'x86_64']
+@@ -148,7 +148,7 @@ if host_cpu in ['x86', 'x86_64']
        dir / 'jsimd.c',
        simd_src,
        include_directories: [incdir, 'nasm', dir],
@@ -11,7 +11,7 @@ index c5c642e..eee9076 100644
      )
    endif
  elif host_cpu in ['arm', 'aarch64']
-@@ -328,7 +328,7 @@ elif host_cpu in ['arm', 'aarch64']
+@@ -352,7 +352,7 @@ elif host_cpu in ['arm', 'aarch64']
      simd = static_library(
        'simd',
        simd_src_arm + files(dir / 'jsimd.c'),
@@ -20,58 +20,32 @@ index c5c642e..eee9076 100644
        include_directories: [incdir, 'arm', dir],
        c_args: neon_flags,
      )
+@@ -377,7 +377,7 @@ elif host_cpu in ['ppc', 'ppc64']
+       dir / 'jsimd.c',
+       simd_src_ppc,
+       include_directories: [incdir, dir],
+-      pic: get_option('default_library') != 'static',
++      pic: true,
+       c_args: '-maltivec',
+     )
+   endif
 diff --git a/src/meson.build b/src/meson.build
-index f1c7457..f6e90fb 100644
+index ad228f8..968b392 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -95,13 +95,13 @@ jpeg12 = static_library(
-   'jpeg12',
-   jpeg12_sources,
-   c_args: ['-DBITS_IN_JSAMPLE=12'],
--  pic: get_option('default_library') != 'static',
-+  pic: true
- )
- jpeg16 = static_library(
-   'jpeg16',
-   jpeg16_sources,
-   c_args: ['-DBITS_IN_JSAMPLE=16'],
--  pic: get_option('default_library') != 'static',
-+  pic: true
- )
- jpeg = library(
-   'jpeg',
-@@ -109,6 +109,7 @@ jpeg = library(
-   link_whole: [jpeg12, jpeg16, simd],
+@@ -138,6 +138,7 @@ jpeg = library(
    soversion: so_version,
    vs_module_defs: vs_defs,
-+  pic: true,
    install: true,
++  pic: true
  )
  
-@@ -133,14 +134,14 @@ if get_option('jpeg-turbo').allowed()
-     'turbojpeg12',
-     ['rdppm.c', 'wrppm.c'],
-     c_args: ['-DBITS_IN_JSAMPLE=12', '-DPPM_SUPPORTED'],
--    pic: get_option('default_library') != 'static',
-+    pic: true,
-   )
- 
-   turbojpeg16 = static_library(
-     'turbojpeg16',
-     ['rdppm.c', 'wrppm.c'],
-     c_args: ['-DBITS_IN_JSAMPLE=16', '-DPPM_SUPPORTED'],
--    pic: get_option('default_library') != 'static',
-+    pic: true,
-   )
- 
-   turbojpeg = library(
-@@ -157,7 +158,8 @@ if get_option('jpeg-turbo').allowed()
-     ],
-     c_args: ['-DBMP_SUPPORTED', '-DPPM_SUPPORTED'],
+ pkg.generate(
+@@ -176,6 +177,7 @@ if get_option('turbojpeg').allowed()
      install: true,
--    link_with: [jpeg12, jpeg16, simd, turbojpeg12, turbojpeg16],
-+    link_whole: [jpeg12, jpeg16, simd, turbojpeg12, turbojpeg16],
-+	pic: true,
+     link_whole: simd,
      soversion: '0.4.0',
++    pic: true
    )
  
+   pkg.generate(

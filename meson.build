@@ -103,7 +103,7 @@ if bt.contains('debug')
 endif
 
 # Define version macros
-release_nickname = 'Astoria'
+release_nickname = 'Auckland'
 add_project_arguments(['-DCACAO_VER="' + meson.project_version() + '"', '-DCACAO_RELEASE_NICKNAME="' + release_nickname + '"'], language: 'cpp')
 
 # Slang compiler and libraries
@@ -114,7 +114,11 @@ slang_dep = slang.get_variable('slang_dep')
 shaderbasemod = custom_target('cacaoshaderbase', input: meson.project_source_root() / 'tools' / 'shaderc' / 'cacaoshaderbase.slang', output: 'cacaoshaderbase.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
 
 # Configure yaml-cpp
-yaml_cpp = subproject('yaml-cpp', required: true).get_variable('yaml_dep')
+yaml_cpp = subproject('yaml-cpp', required: true, default_options: {
+	'contrib': true,
+	'tools': false,
+	'tests': 'disabled'
+}).get_variable('yaml_cpp_dep')
 
 # Configure Silica
 silica = subproject('silica', required: true, default_options: {
