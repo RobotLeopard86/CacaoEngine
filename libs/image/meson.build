@@ -13,7 +13,7 @@ image_deps += subproject('libpng', required: true, default_options: ['default_li
 image_deps += subproject('libjpeg-turbo', required: true, default_options: {
 	'default_library': 'static',
 	'force_inline': false,
-	'jpeg-turbo': 'enabled',
+	'turbojpeg': 'enabled',
 	'simd': 'auto',
 	'tests': 'disabled',
 	'neon-intrinsics': 'auto'
