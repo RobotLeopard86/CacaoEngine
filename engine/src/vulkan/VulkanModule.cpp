@@ -173,16 +173,6 @@ namespace Cacao {
 			Check<ExternalException>(false, "Could not create memory allocator!");
 		}
 
-		//Setup secondary command buffer inheritance data
-		cbRenderingInheritance = vk::CommandBufferInheritanceRenderingInfoKHR({}, 0, vulkan->surfaceFormat.format, vulkan->selectedDF,
-			vk::Format::eUndefined, vk::SampleCountFlagBits::e1);
-
-		cbInheritance = vk::CommandBufferInheritanceInfo({}, 0, {}, VK_TRUE, vk::QueryControlFlagBits::ePrecise,
-			vk::QueryPipelineStatisticFlagBits::eInputAssemblyPrimitives | vk::QueryPipelineStatisticFlagBits::eInputAssemblyVertices | vk::QueryPipelineStatisticFlagBits::eVertexShaderInvocations |
-				vk::QueryPipelineStatisticFlagBits::eClippingInvocations | vk::QueryPipelineStatisticFlagBits::eClippingPrimitives | vk::QueryPipelineStatisticFlagBits::eFragmentShaderInvocations |
-				vk::QueryPipelineStatisticFlagBits::eTessellationControlShaderPatches | vk::QueryPipelineStatisticFlagBits::eTessellationEvaluationShaderInvocations,
-			&cbRenderingInheritance);
-
 		//Make transient command context for main thread
 		TransientCommandContext::Get();
 

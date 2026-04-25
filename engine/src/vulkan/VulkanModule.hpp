@@ -81,20 +81,18 @@ namespace Cacao {
 		vk::Semaphore acquire, render;
 		Sync sync;
 		uint32_t imageIndex = UINT32_MAX;
-		std::atomic_bool available;
 		int id;
 
 		RenderCommandContext() {}
 		RenderCommandContext(const RenderCommandContext&) = delete;
 		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
 		RenderCommandContext(RenderCommandContext&& o)
-		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)), available(o.available.load(std::memory_order_relaxed)) {}
+		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)) {}
 		RenderCommandContext& operator=(RenderCommandContext&& o) {
 			acquire = std::exchange(o.acquire, {});
 			render = std::exchange(o.render, {});
 			sync = std::exchange(o.sync, {});
 			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
-			available.store(o.available.load(std::memory_order_relaxed), std::memory_order_release);
 			return *this;
 		}
 	};
@@ -110,25 +108,21 @@ namespace Cacao {
 		void Execute() override;
 
 		Sync GetSync();
-		vk::CommandBuffer& vk();
+
+		vk::CommandBuffer cmd;
 
 	  protected:
 		TransientCommandContext* transient = nullptr;
 		RenderCommandContext* render = nullptr;
-		bool didStartRender = false;
 
 		vk::CommandPool* poolPtr = nullptr;
 		std::promise<void> promise;
-		vk::CommandBuffer primary;
-		std::vector<vk::CommandBuffer> secondaries;
 
 		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
 
 		void UnsignalAcquire();
-
-		static unsigned int acquireCount;
 
 		friend class VulkanGPU;
 		friend class VulkanModule;
@@ -189,10 +183,6 @@ namespace Cacao {
 			uint16_t cycle = 0;
 		} swapchain;
 		vk::CommandPool renderingPool;
-
-		//==================== SECONDARY COMMAND BUFFER SUPPORT ====================
-		vk::CommandBufferInheritanceRenderingInfo cbRenderingInheritance;
-		vk::CommandBufferInheritanceInfo cbInheritance;
 
 		//==================== DEPTH BUFFER ====================
 		ViewImage depth;

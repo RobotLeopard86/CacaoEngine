@@ -2,13 +2,11 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
 
-#include <atomic>
 #include <cstdint>
 
 namespace Cacao {
 	void SetupRenderingContext(std::unique_ptr<RenderCommandContext>& rcc) {
 		rcc->imageIndex = UINT32_MAX;
-		rcc->available.store(true);
 		vk::SemaphoreCreateInfo semCreate {};
 		vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
 		try {
@@ -59,6 +57,7 @@ namespace Cacao {
 			{}, vulkan->surface, std::clamp((vulkan->capabilities.minImageCount + 2), vulkan->capabilities.minImageCount, (vulkan->capabilities.maxImageCount > 0 ? vulkan->capabilities.maxImageCount : UINT32_MAX)),
 			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
 		swapchainCI.setPresentMode(presentMode);
+		swapchainCI.setClipped(VK_TRUE);
 		if(vulkan->swapchain.chain) swapchainCI.setOldSwapchain(vulkan->swapchain.chain);
 		try {
 			vk::SwapchainKHR newSwapchain = vulkan->dev.createSwapchainKHR(swapchainCI);
