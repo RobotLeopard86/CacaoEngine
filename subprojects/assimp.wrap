@@ -1,5 +1,5 @@
 [wrap-git]
 url = https://github.com/assimp/assimp
 depth = 1
-revision = v6.0.2
-diff_files = assimp-maczlibfix.patch
+revision = v6.0.4
+patch_directory = assimp

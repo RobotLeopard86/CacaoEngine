@@ -12,7 +12,6 @@ Before you begin, please check the [Platform Support page](./platforms) to ensur
 * Meson (version `1.10.2` or newer)
 * Ninja
 * Python 3
-* CMake
 
 ```{note}
 Some Linux distros may not have the requisite Meson version available in their repositories. Follow [the instructions here](https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip) to install via `pip` instead, which always has the latest versions.

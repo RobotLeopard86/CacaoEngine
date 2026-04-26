@@ -35,27 +35,7 @@ if not build_libs and not build_engine and not build_sandbox and not build_tools
 	error('You have not selected anything to build.')
 endif
 
-# Generate some variables necessary for CMake to work correctly
-cmake_build_type = ''
-cmake_msvc_lib = 'MultiThreaded'
-if bt.contains('debug')
-	if bt == 'debug'
-		cmake_build_type = 'Debug'
-		cmake_msvc_lib += 'Debug'
-	else
-		cmake_build_type = 'RelWithDebInfo'
-	endif
-elif bt == 'plain' or bt == 'minsize'
-	cmake_build_type = 'MinSizeRel'
-elif bt == 'release'
-	cmake_build_type = 'Release'
-else
-	error('Unsupported build type!')
-endif
-cmake_msvc_lib += 'DLL'
-
-# Import CMake and filesystem modules
-cmake = import('cmake')
+# Import filesystem module
 fs = import('fs')
 
 # Set some Windows-specific options
@@ -130,7 +110,7 @@ silica_dep = silica.get_variable('silica_dep')
 # Configure crossguid
 crossguid_sp = subproject('crossguid', required: true)
 crossguid = crossguid_sp.get_variable('crossguid_dep')
-xg_headers_dep = crossguid_sp.get_variable('crossguid_headers_dep')
+crossguid_headers = crossguid_sp.get_variable('crossguid_headers_dep')
 
 # Configure SPIRV-Cross
 spv_cross_sp = subproject('spirv-cross', required: true)

@@ -1,25 +1,6 @@
 # Configure assimp
-assimp_opts = cmake.subproject_options()
-assimp_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'ASSIMP_BUILD_ZLIB': 'ON',
-	'ASSIMP_NO_EXPORT': 'ON',
-	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'OFF',
-	'ASSIMP_BUILD_FBX_IMPORTER': 'ON',
-	'ASSIMP_BUILD_GLTF_IMPORTER': 'ON',
-	'ASSIMP_BUILD_COLLADA_IMPORTER': 'ON',
-	'ASSIMP_BUILD_OBJ_IMPORTER': 'ON',
-	'ASSIMP_BUILD_SAMPLES': 'OFF',
-	'ASSIMP_BUILD_TESTS': 'OFF',
-    'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-assimp_opts.set_install(false)
-assimp_sp = cmake.subproject('assimp', options: assimp_opts, required: true)
-assimp_dep = assimp_sp.dependency('assimp')
-zlib_dep = assimp_sp.dependency('zlibstatic')
+assimp_sp = subproject('assimp', required: true)
+assimp_dep = assimp_sp.get_variable('assimp_dep')
 
 # Configure OpenAL-Soft
 alsoft_sp = subproject('openal-soft', required: true, default_options: {
@@ -105,7 +86,6 @@ engine_deps += [
 	image_dep,
 	commonlib_dep,
 	assimp_dep,
-	zlib_dep,
 	alsoft_dep,
 	glm_dep,
 	spdlog_dep,
