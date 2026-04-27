@@ -92,7 +92,7 @@ endforeach
 ###################################
 
 zlib_dep = dependency('zlib', static: true, required: true)
-rt_dep = cpp.find_library('rt', static: true, required: true)
+rt_dep = cpp.find_library('rt', static: true, required: host_machine.system() != 'windows')
 
 pugixml = static_library('pugixml', sources: [
 	'contrib' / 'pugixml' / 'src' / 'pugiconfig.hpp',
@@ -130,7 +130,7 @@ minzip = static_library('minzip', sources: [
 	'contrib' / 'unzip' / 'ioapi.h',
 	'contrib' / 'unzip' / 'ioapi.c',
 	'contrib' / 'unzip' / 'crypt.h'
-], include_directories: 'contrib' / 'unzip')
+], include_directories: 'contrib' / 'unzip', dependencies: zlib_dep)
 minzip_dep = declare_dependency(include_directories: 'contrib' / 'unzip', link_whole: minzip)
 
 openddlparser = static_library('openddlparser', sources: [
@@ -180,7 +180,7 @@ open3dgc = static_library('open3dgc', sources: [
     #'contrib' / 'Open3DGC' / 'o3dgcTriangleListEncoder.inl',
     'contrib' / 'Open3DGC' / 'o3dgcVector.h',
     #'contrib' / 'Open3DGC' / 'o3dgcVector.inl'
-], include_directories: 'contrib' / 'Open3DGC')
+], include_directories: ['contrib' / 'Open3DGC', 'include'])
 open3dgc_dep = declare_dependency(include_directories: 'contrib' / 'Open3DGC', link_whole: open3dgc)
 
 rapidjson_dep = declare_dependency(include_directories: 'contrib' / 'rapidjson' / 'include')
@@ -214,15 +214,6 @@ rev_data.set('CMAKE_SHARED_LIBRARY_PREFIX', host_machine.system() == 'windows' ?
 rev_data.set('LIBRARY_SUFFIX', '')
 rev_data.set('CMAKE_DEBUG_POSTFIX', '')
 revision_h = configure_file(input: 'include' / 'assimp' / 'revision.h.in', output: 'revision.h', format: 'cmake@', configuration: rev_data, build_subdir: 'assimp')
-
-###################################
-# WINDOWS RESOURCE FILE
-###################################
-
-if host_machine.system() == 'windows'
-	winmod = import('windows')
-	assimp_rc = winmod.compile_resources('code' / 'res' / 'assimp.rc', include_directories: includes)
-endif
 
 ###################################
 # SOURCE GROUPINGS
@@ -330,9 +321,6 @@ public_headers = [
 core_src = [
 	source_path / 'Common' / 'Assimp.cpp',
 ]
-if host_machine.system() == 'windows'
-	core_src += assimp_rc
-endif
 
 logging_src = [
 	header_path / 'DefaultLogger.hpp',

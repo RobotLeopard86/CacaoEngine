@@ -1,6 +1,5 @@
-# Obtain compilers
+# Obtain compiler
 cpp = meson.get_compiler('cpp')
-objcpp = meson.get_compiler('objcpp')
 
 # Engine headers
 engine_headers = include_directories('include', '..' / 'libs' / 'formats' / 'include', '..' / 'libs' / 'image' / 'include')
@@ -31,6 +30,10 @@ elif host_machine.system() == 'linux'
 else
     error('Unsupported platform!')
 endif
+
+# Merge Objective-C++ args
+engine_args_objcpp += engine_args
+engine_args_objcpp = engine_args_objcpp.flatten()
 
 # Graphics backends
 gfx_deps = []
