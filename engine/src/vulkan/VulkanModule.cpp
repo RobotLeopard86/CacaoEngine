@@ -249,20 +249,32 @@ namespace Cacao {
 
 		//Clean up rendering command context objects
 		for(std::unique_ptr<RenderCommandContext>& rcc : swapchain.renderContexts) {
-			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
-			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
 			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
+		}
+
+		//Clean up image context objects
+		for(std::unique_ptr<ImageContext>& ic : swapchain.imageContexts) {
+			if(ic->acquire) vulkan->dev.destroySemaphore(ic->acquire);
+			if(ic->render) vulkan->dev.destroySemaphore(ic->render);
 		}
 
 		//Clean up transient command context objects
 		TransientCommandContext::Cleanup();
 
+		//Destroy depth images
+		for(std::size_t i = 0; i < vulkan->swapchain.depthImages.size(); ++i) {
+			//Get slot reference
+			ViewImage& vi = vulkan->swapchain.depthImages[i];
+
+			//Destroy old objects
+			vulkan->dev.destroyImageView(vi.view);
+			vulkan->allocator.destroyImage(vi.obj, vi.alloc);
+		}
+
 		//Destroy Vulkan objects
 		dev.destroyCommandPool(renderingPool);
 		allocator.unmapMemory(globalsUBO.alloc);
 		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
-		dev.destroyImageView(depth.view);
-		allocator.destroyImage(depth.obj, depth.alloc);
 		allocator.destroy();
 		dev.destroy();
 		instance.destroy();

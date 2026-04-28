@@ -147,7 +147,7 @@ namespace Cacao {
 					fut.get();
 					if(numFramesInFlight > 0) --numFramesInFlight;
 				}
-			} catch(const MiscException&) {}
+			} catch(...) {}
 		}
 	}
 }

@@ -23,7 +23,6 @@
 #include <set>
 #include <utility>
 #include <mutex>
-#include <atomic>
 
 namespace Cacao {
 	template<typename T>
@@ -46,6 +45,12 @@ namespace Cacao {
 	struct Sync {
 		vk::Semaphore semaphore;
 		uint64_t doneValue = 0;
+	};
+
+	struct ImageContext {
+		//For synchronization
+		vk::Semaphore acquire;
+		vk::Semaphore render;
 	};
 
 	class TransientCommandContext {
@@ -78,19 +83,15 @@ namespace Cacao {
 
 	class RenderCommandContext {
 	  public:
-		vk::Semaphore acquire, render;
 		Sync sync;
 		uint32_t imageIndex = UINT32_MAX;
-		int id;
 
 		RenderCommandContext() {}
 		RenderCommandContext(const RenderCommandContext&) = delete;
 		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
 		RenderCommandContext(RenderCommandContext&& o)
-		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)) {}
+		  : sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)) {}
 		RenderCommandContext& operator=(RenderCommandContext&& o) {
-			acquire = std::exchange(o.acquire, {});
-			render = std::exchange(o.render, {});
 			sync = std::exchange(o.sync, {});
 			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
 			return *this;
@@ -114,6 +115,7 @@ namespace Cacao {
 	  protected:
 		TransientCommandContext* transient = nullptr;
 		RenderCommandContext* render = nullptr;
+		ImageContext* imageCtx = nullptr;
 
 		vk::CommandPool* poolPtr = nullptr;
 		std::promise<void> promise;
@@ -121,8 +123,6 @@ namespace Cacao {
 		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
-
-		void UnsignalAcquire();
 
 		friend class VulkanGPU;
 		friend class VulkanModule;
@@ -177,16 +177,15 @@ namespace Cacao {
 		struct SwapchainData {
 			vk::SwapchainKHR chain;
 			vk::Extent2D extent;
+			uint16_t cycle = 0;
+
 			std::vector<vk::Image> images;
 			std::vector<vk::ImageView> views;
+			std::vector<std::unique_ptr<ImageContext>> imageContexts;
 			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
-			uint16_t cycle = 0;
+			std::vector<ViewImage> depthImages;
 		} swapchain;
 		vk::CommandPool renderingPool;
-
-		//==================== DEPTH BUFFER ====================
-		ViewImage depth;
-		vk::Format selectedDF;
 
 		//==================== GLOBALS UBO AND MEMORY ====================
 		Allocated<vk::Buffer> globalsUBO;
@@ -195,6 +194,7 @@ namespace Cacao {
 		//==================== MISCELLANEOUS FIELDS ====================
 		bool vsync;
 		std::mutex queueMtx;
+		vk::Format selectedDF;
 
 		VulkanModule()
 		  : PALModule("vulkan") {}

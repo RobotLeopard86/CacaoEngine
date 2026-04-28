@@ -2,7 +2,6 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/FrameProcessor.hpp"
-#include "Cacao/Log.hpp"
 #include "VulkanModule.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
@@ -60,7 +59,7 @@ namespace Cacao {
 	}
 
 	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other)
-	  : cmd(std::move(other.cmd)), transient(std::exchange(other.transient, nullptr)), render(std::exchange(other.render, nullptr)), poolPtr(std::exchange(other.poolPtr, nullptr)), promise(std::move(other.promise)) {}
+	  : cmd(std::move(other.cmd)), transient(std::exchange(other.transient, nullptr)), render(std::exchange(other.render, nullptr)), imageCtx(std::exchange(other.imageCtx, nullptr)), poolPtr(std::exchange(other.poolPtr, nullptr)), promise(std::move(other.promise)) {}
 
 	VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) {
 		if(this == &other) return *this;
@@ -68,7 +67,7 @@ namespace Cacao {
 		cmd = std::move(other.cmd);
 		transient = std::exchange(other.transient, nullptr);
 		render = std::exchange(other.render, nullptr);
-		if(render) Logger::Engine(Logger::Level::Trace) << render->id << " movey";
+		imageCtx = std::exchange(other.imageCtx, nullptr);
 		promise = std::move(other.promise);
 		poolPtr = std::exchange(other.poolPtr, nullptr);
 
@@ -78,14 +77,8 @@ namespace Cacao {
 	VulkanCommandBuffer::~VulkanCommandBuffer() {
 		if(poolPtr == nullptr) return;
 
-		//If this was a rendering context, mark it available
-		if(render) {
-			//Unsignal acquire semaphore
-			UnsignalAcquire();
-
-			//Release context
-			render = nullptr;
-		}
+		//If this was a rendering context, release context
+		if(render) render = nullptr;
 		if(transient) transient = nullptr;
 
 		//Free command buffer
@@ -93,73 +86,60 @@ namespace Cacao {
 		poolPtr = nullptr;
 	}
 
-	void VulkanCommandBuffer::UnsignalAcquire() {
-		Sync sync = GetSync();
-		vk::SemaphoreSubmitInfo wait(render->acquire, 0, vk::PipelineStageFlagBits2::eAllCommands);
-		vk::SemaphoreSubmitInfo signal(GetSync().semaphore, sync.doneValue, vk::PipelineStageFlagBits2::eAllCommands);
-		vk::SubmitInfo2 emptySubmit({}, wait, {}, signal);
-		{
-			std::lock_guard lk(vulkan->queueMtx);
-			vulkan->queue.submit2(emptySubmit);
-		}
-		vk::SemaphoreWaitInfo emptyWait({}, sync.semaphore, sync.doneValue);
-		vulkan->dev.waitSemaphores(emptyWait, UINT64_MAX);
-	}
-
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
-			//Get the next context and advance the cycle
+			//Get the next contexts and advance the cycle
 			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
-			render->id = vulkan->swapchain.cycle;
+			imageCtx = vulkan->swapchain.imageContexts[vulkan->swapchain.cycle].get();
 			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 
 			//Set command pool pointer
 			poolPtr = &vulkan->renderingPool;
 
-			//Wait until render context is available
-			vk::SemaphoreWaitInfo waitInfo({}, render->sync.semaphore, render->sync.doneValue);
-			vulkan->dev.waitSemaphores(waitInfo, UINT64_MAX);
-
-			//Set semaphore done value
-			render->sync.doneValue = vulkan->dev.getSemaphoreCounterValue(render->sync.semaphore) + 1;
-
 			//Acquire image
+			uint32_t imageIndex = UINT32_MAX;
 			try {
-				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render->acquire, VK_NULL_HANDLE, 1);
+				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, imageCtx->acquire, VK_NULL_HANDLE, 1);
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
-				render->imageIndex = result.value;
+				imageIndex = result.value;
 			} catch(vk::SystemError& err) {
+				//Reset data members
+				poolPtr = nullptr;
+				render = nullptr;
+				imageCtx = nullptr;
+
 				//Is the swapchain out of date?
 				//If so, we can regenerate and try again
 				if(err.code() == vk::Result::eSuboptimalKHR || err.code() == vk::Result::eErrorOutOfDateKHR || err.code() == vk::Result::eTimeout || err.code() == vk::Result::eNotReady) {
-					//Unsignal acquire semaphore if we got suboptimal result
-					//This is because suboptimal means we still got an image
-					if(err.code() == vk::Result::eSuboptimalKHR) UnsignalAcquire();
-
-					//Reset data members, regen swapchain, and try again
-					poolPtr = nullptr;
-					render = nullptr;
-					Logger::Engine(Logger::Level::Warn) << "Out of date!";
+					Event e("INTERNAL-RegenSwapchain");
+					EventManager::Get().Dispatch(e);
 					return false;
 				}
 
-				//Other error, can't proceed
-				render->imageIndex = UINT32_MAX;
-				poolPtr = nullptr;
-				render = nullptr;
+				//Other error, can't proceed safely
 				std::stringstream msg;
 				msg << "Failed to acquire swapchain image: " << err.what();
 				Check<ExternalException>(false, msg.str());
 			}
+
+			//Wait until render context is available
+			vk::SemaphoreWaitInfo waitInfo({}, render->sync.semaphore, render->sync.doneValue);
+			vulkan->dev.waitSemaphores(waitInfo, UINT64_MAX);
+
+			//Increment semaphore done value
+			++(render->sync.doneValue);
+
+			//Set image index
+			render->imageIndex = imageIndex;
 		} else {
 			//Get context and set pool pointer
 			transient = TransientCommandContext::Get();
 			poolPtr = &transient->pool;
 
 			//Set semaphore done value
-			transient->sync.doneValue = vulkan->dev.getSemaphoreCounterValue(transient->sync.semaphore) + 1;
+			++(transient->sync.doneValue);
 		}
 
 		//Create command buffer from pool
@@ -169,13 +149,11 @@ namespace Cacao {
 		} catch(...) {
 			poolPtr = nullptr;
 			if(render) {
-				UnsignalAcquire();
 				render->imageIndex = UINT32_MAX;
 				render = nullptr;
 			} else {
 				transient = nullptr;
 			}
-			Logger::Engine(Logger::Level::Warn) << "Buffer allocation problemos!";
 			return false;
 		}
 
@@ -209,7 +187,7 @@ namespace Cacao {
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllGraphics, vk::AccessFlagBits2::eDepthStencilAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
-					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->depth.obj,
+					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->swapchain.depthImages[render->imageIndex].obj,
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 				vk::DependencyInfo transition({}, {}, {}, barrier);
 				cmd.pipelineBarrier2(transition);
@@ -224,8 +202,8 @@ namespace Cacao {
 		vk::SemaphoreSubmitInfo wait = {};
 		std::array<vk::SemaphoreSubmitInfoKHR, 2> signals = {};
 		if(render) {
-			wait = vk::SemaphoreSubmitInfo(render->acquire, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			signals[0] = vk::SemaphoreSubmitInfo(render->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			wait = vk::SemaphoreSubmitInfo(imageCtx->acquire, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			signals[0] = vk::SemaphoreSubmitInfo(imageCtx->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 		}
 		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
@@ -236,7 +214,7 @@ namespace Cacao {
 		//Submit (and present if rendering)
 		vulkan->queue.submit2(submitInfo);
 		if(render) {
-			vk::PresentInfoKHR presentInfo(render->render, vulkan->swapchain.chain, render->imageIndex);
+			vk::PresentInfoKHR presentInfo(imageCtx->render, vulkan->swapchain.chain, render->imageIndex);
 			try {
 				vulkan->queue.presentKHR(presentInfo);
 			} catch(vk::OutOfDateKHRError&) {
@@ -286,6 +264,7 @@ namespace Cacao {
 				if(vcb->render) {
 					--(IMPL(FrameProcessor).numFramesInFlight);
 					vcb->render = nullptr;
+					vcb->imageCtx = nullptr;
 				}
 
 				//Release context pointers
