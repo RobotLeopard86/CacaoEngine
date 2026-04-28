@@ -1,6 +1,9 @@
 # libcacaoformats  
 ## The library for Cacao Engine file formats
 
+> [!WARNING]  
+> This library is being superseded by the new [libcacaoasset](../asset/README.md), and will be **removed** once that transition is complete.
+
 ## About
 libcacaoformats is the library for encoding and decoding the file formats specific to Cacao Engine.
 

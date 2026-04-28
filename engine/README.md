@@ -1,4 +1,4 @@
-# Engine Source Code
+# Cacao Engine Source Code
 
 ## Welcome!
 Welcome to the engine source code! This is the code that is actually part of the engine and is used for making games.  
@@ -38,7 +38,7 @@ This is the windowing integration for macOS using the Cocoa API. This is written
 ## OpenGL Backend (`src/opengl`)
 The OpenGL backend uses OpenGL 4.1 (no GLES) Core Profile, as described in the backends page in the [manual](https://robotleopard86.github.io/CacaoEngine/dev/manual). It is the only common backend across all three major supported platforms, but may in the future lack more advanced features should they be added, simply due to age.  
 
-This also contains the context management code for each of the supported platforms (with the macOS portion also being written in Objective-C++). EGL is used on both X11 and Wayland.
+This also contains the context management code for each of the supported platforms (with the macOS portion being written in Objective-C++). EGL is used on both X11 and Wayland.
 
 ## Private Headers (`src/private`)
 All engine source components have access to these private headers, but they should not be accessible publicly.  

@@ -11,6 +11,9 @@ See the [build instructions page](https://robotleopard86.github.io/CacaoEngine/d
 Cacao Engine project management happens on [Taiga](https://tree.taiga.io/project/robotleopard86-cacao-engine). Issues created in GitHub will be automatically synced to Taiga for tracking purposes.  
 Please **do not create issues in Taiga**, as they will not be synced to GitHub (a limitation of Taiga's GitHub integration).
 
+## Repository Structure
+This monorepo for Cacao Engine contains the engine itself, a suite of command-line tools for working with the engine, and the auxiliary libraries used by the enginea and tooling. These may be found in the `engine`, `tools`, and `libs` directories respectively, which each contain their own README files.
+
 ## Contributing
 If you wish to contribute to Cacao Engine, please consult the [contribution guidelines page](CONTRIBUTING.md) for more information.
 
