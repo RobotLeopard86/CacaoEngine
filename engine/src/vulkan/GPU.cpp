@@ -94,6 +94,13 @@ namespace Cacao {
 			imageCtx = vulkan->swapchain.imageContexts[vulkan->swapchain.cycle].get();
 			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 
+			//Wait until render context is available
+			vk::SemaphoreWaitInfo waitInfo({}, render->sync.semaphore, render->sync.doneValue);
+			vulkan->dev.waitSemaphores(waitInfo, UINT64_MAX);
+
+			//Increment semaphore done value
+			++(render->sync.doneValue);
+
 			//Set command pool pointer
 			poolPtr = &vulkan->renderingPool;
 
@@ -123,13 +130,6 @@ namespace Cacao {
 				msg << "Failed to acquire swapchain image: " << err.what();
 				Check<ExternalException>(false, msg.str());
 			}
-
-			//Wait until render context is available
-			vk::SemaphoreWaitInfo waitInfo({}, render->sync.semaphore, render->sync.doneValue);
-			vulkan->dev.waitSemaphores(waitInfo, UINT64_MAX);
-
-			//Increment semaphore done value
-			++(render->sync.doneValue);
 
 			//Set image index
 			render->imageIndex = imageIndex;
@@ -203,8 +203,8 @@ namespace Cacao {
 		std::array<vk::SemaphoreSubmitInfoKHR, 2> signals = {};
 		if(render) {
 			wait = vk::SemaphoreSubmitInfo(imageCtx->acquire, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			signals[0] = vk::SemaphoreSubmitInfo(imageCtx->render, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			signals[0] = vk::SemaphoreSubmitInfo(imageCtx->render, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
 		}
 		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
