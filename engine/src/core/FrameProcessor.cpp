@@ -89,6 +89,7 @@ namespace Cacao {
 			//If the window is minimized, we can't render, so no point in working
 			//Same for if there are too many frames in flight
 			while(Window::Get().IsMinimized() || numFramesInFlight > IMPL(GPUManager).MaxFramesInFlight()) {
+				std::this_thread::yield();
 				if(stop.stop_requested()) return;
 			}
 

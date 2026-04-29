@@ -89,10 +89,9 @@ namespace Cacao {
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
-			//Get the next contexts and advance the cycle
+			//Get the next contexts
 			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
 			imageCtx = vulkan->swapchain.imageContexts[vulkan->swapchain.cycle].get();
-			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 
 			//Wait until render context is available
 			vk::SemaphoreWaitInfo waitInfo({}, render->sync.semaphore, render->sync.doneValue);
@@ -214,6 +213,7 @@ namespace Cacao {
 		//Submit (and present if rendering)
 		vulkan->queue.submit2(submitInfo);
 		if(render) {
+			//Present
 			vk::PresentInfoKHR presentInfo(imageCtx->render, vulkan->swapchain.chain, render->imageIndex);
 			try {
 				vulkan->queue.presentKHR(presentInfo);
@@ -221,6 +221,9 @@ namespace Cacao {
 				Event e("INTERNAL-RegenSwapchain");
 				EventManager::Get().Dispatch(e);
 			}
+
+			//Advance swapchain cycle
+			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
 		}
 	}
 
