@@ -20,6 +20,7 @@ namespace libcacaoasset {
 		 * @return The opened pack
 		 *
 		 * @throws std::runtime_error If the file does not exist or is not an asset pack
+		 * @throws std::runtime_error If the pack is of an incompatible revision
 		 * @throws std::runtime_error If decoding fails
 		 */
 		static AssetPack OpenFromFile(const std::string& filePath);
@@ -27,7 +28,7 @@ namespace libcacaoasset {
 		/**
 		 * @brief Open an asset pack file from an input stream
 		 *
-		 * @warning The new asset pack will <b>control the stream exclusively</b>, and it is not recoverable from the object.
+		 * @warning The new asset pack will <b>control the stream exclusively</b>, and it is not recoverable from the object. <b>Do not perform further operations on the stream after calling this!</b>
 		 *
 		 * @param stream The stream from which to load the pack
 		 *
