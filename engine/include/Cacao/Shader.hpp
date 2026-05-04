@@ -3,6 +3,8 @@
 #include "DllHelper.hpp"
 #include "Asset.hpp"
 
+#include <cstdint>
+
 namespace Cacao {
 	/**
 	 * @brief Shader inputs and behavior description

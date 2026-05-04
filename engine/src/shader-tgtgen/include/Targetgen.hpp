@@ -2,8 +2,8 @@
 
 #include "libcacaocommon.hpp"
 
-#include <memory>
 #include <vector>
+#include <cstdint>
 
 namespace Targetgen {
 
