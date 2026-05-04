@@ -98,6 +98,14 @@ namespace Cacao {
 		}
 	};
 
+	class RenderCommandContext2 {
+	  public:
+		vk::Fence inFlight;
+		vk::Semaphore acquired, rendered;
+		uint32_t frameIndex, imageIndex;
+		bool inUse;
+	};
+
 	//THIS IS NOT THREAD-SAFE
 	class VulkanCommandBuffer : public CommandBuffer {
 	  public:
@@ -113,13 +121,19 @@ namespace Cacao {
 		vk::CommandBuffer cmd;
 
 	  protected:
+		//Contexts
 		TransientCommandContext* transient = nullptr;
 		RenderCommandContext* render = nullptr;
 		ImageContext* imageCtx = nullptr;
+		RenderCommandContext2* render2 = nullptr;
 
+		//Command buffer pool
 		vk::CommandPool* poolPtr = nullptr;
+
+		//Promise
 		std::promise<void> promise;
 
+		//Commands
 		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
@@ -175,15 +189,20 @@ namespace Cacao {
 		vk::SurfaceFormatKHR surfaceFormat;
 		vk::SurfaceCapabilitiesKHR capabilities;
 		struct SwapchainData {
+			//Swapchain and data
 			vk::SwapchainKHR chain;
 			vk::Extent2D extent;
 			uint16_t cycle = 0;
 
+			//Images
 			std::vector<vk::Image> images;
 			std::vector<vk::ImageView> views;
+			std::vector<ViewImage> depthImages;
+
+			//Contexts
 			std::vector<std::unique_ptr<ImageContext>> imageContexts;
 			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
-			std::vector<ViewImage> depthImages;
+			std::vector<RenderCommandContext2> contexts;
 		} swapchain;
 		vk::CommandPool renderingPool;
 

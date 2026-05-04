@@ -135,8 +135,14 @@ namespace Cacao {
 			if(ic->acquire) vulkan->dev.destroySemaphore(ic->acquire);
 			if(ic->render) vulkan->dev.destroySemaphore(ic->render);
 		}
+		for(RenderCommandContext2& rc : vulkan->swapchain.contexts) {
+			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
+			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
+			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
+		}
 		vulkan->swapchain.renderContexts.clear();
 		vulkan->swapchain.imageContexts.clear();
+		vulkan->swapchain.contexts.resize(vulkan->swapchain.images.size());
 
 		//Create and setup new contexts
 		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
@@ -162,6 +168,18 @@ namespace Cacao {
 				Check<ExternalException>(false, "Failed to create synchronization objects for image context!");
 			}
 			vulkan->swapchain.imageContexts.push_back(std::move(ic));
+
+			//Render context 2
+			RenderCommandContext2& rc = vulkan->swapchain.contexts[i];
+			vk::SemaphoreCreateInfo semaphoreCI {};
+			vk::FenceCreateInfo fenceCI {vk::FenceCreateFlagBits::eSignaled};
+			try {
+				rc.acquired = vulkan->dev.createSemaphore(semaphoreCI);
+				rc.rendered = vulkan->dev.createSemaphore(semaphoreCI);
+				rc.inFlight = vulkan->dev.createFence(fenceCI);
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to create synchronization objects for rendering context!");
+			}
 		}
 	}
 }
