@@ -174,7 +174,7 @@ namespace Cacao {
 		if(render) {
 			//Make our image presentable
 			{
-				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eColorAttachmentOutput, vk::AccessFlagBits2::eColorAttachmentWrite,
+				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eColorAttachmentOutput, vk::AccessFlagBits2::eColorAttachmentRead | vk::AccessFlagBits2::eColorAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
 					vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[render->imageIndex],
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
@@ -184,7 +184,7 @@ namespace Cacao {
 
 			//Put the depth image into a read-only format to not leave it in a rendering state
 			{
-				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllGraphics, vk::AccessFlagBits2::eDepthStencilAttachmentWrite,
+				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllGraphics, vk::AccessFlagBits2::eDepthStencilAttachmentRead | vk::AccessFlagBits2::eDepthStencilAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
 					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->swapchain.depthImages[render->imageIndex].obj,
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
@@ -202,8 +202,8 @@ namespace Cacao {
 		std::array<vk::SemaphoreSubmitInfoKHR, 2> signals = {};
 		if(render) {
 			wait = vk::SemaphoreSubmitInfo(imageCtx->acquire, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			signals[0] = vk::SemaphoreSubmitInfo(imageCtx->render, 0, vk::PipelineStageFlagBits2::eAllCommands);
-			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
+			signals[0] = vk::SemaphoreSubmitInfo(imageCtx->render, 0, vk::PipelineStageFlagBits2::eAllGraphics);
+			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllGraphics);
 		}
 		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
