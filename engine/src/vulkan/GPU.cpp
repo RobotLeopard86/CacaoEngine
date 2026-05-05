@@ -79,6 +79,7 @@ namespace Cacao {
 
 		//If this was a rendering context, release context
 		if(render) render = nullptr;
+		if(render2) render2 = nullptr;
 		if(transient) transient = nullptr;
 
 		//Free command buffer
@@ -89,32 +90,22 @@ namespace Cacao {
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
-			//Get the next contexts
-			render = vulkan->swapchain.renderContexts[vulkan->swapchain.cycle].get();
-			imageCtx = vulkan->swapchain.imageContexts[vulkan->swapchain.cycle].get();
+			//Try get next context
+			render2 = &vulkan->swapchain.contexts[vulkan->swapchain.cycle];
 
-			//Wait until render context is available
-			vk::SemaphoreWaitInfo waitInfo({}, render->sync.semaphore, render->sync.doneValue);
-			vulkan->dev.waitSemaphores(waitInfo, UINT64_MAX);
+			//Wait for it to be ready
+			vulkan->dev.waitForFences(render2->inFlight, VK_TRUE, UINT64_MAX);
+			vulkan->dev.resetFences(render2->inFlight);
 
-			//Increment semaphore done value
-			++(render->sync.doneValue);
-
-			//Set command pool pointer
-			poolPtr = &vulkan->renderingPool;
-
-			//Acquire image
-			uint32_t imageIndex = UINT32_MAX;
+			//Acquire next swapchain image
 			try {
-				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, imageCtx->acquire, VK_NULL_HANDLE, 1);
+				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render2->acquired, VK_NULL_HANDLE, 1);
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
-				imageIndex = result.value;
+				render2->imageIndex = result.value;
 			} catch(vk::SystemError& err) {
 				//Reset data members
-				poolPtr = nullptr;
-				render = nullptr;
-				imageCtx = nullptr;
+				render2 = nullptr;
 
 				//Is the swapchain out of date?
 				//If so, we can regenerate and try again
@@ -130,16 +121,16 @@ namespace Cacao {
 				Check<ExternalException>(false, msg.str());
 			}
 
-			//Set image index
-			render->imageIndex = imageIndex;
+			//Set command buffer pool pointer
+			poolPtr = &vulkan->renderingPool;
 		} else {
 			//Get context and set pool pointer
 			transient = TransientCommandContext::Get();
 			poolPtr = &transient->pool;
-
-			//Set semaphore done value
-			++(transient->sync.doneValue);
 		}
+
+		//Set semaphore done value
+		++(GetSync().doneValue);
 
 		//Create command buffer from pool
 		try {
@@ -147,9 +138,9 @@ namespace Cacao {
 			cmd = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
 		} catch(...) {
 			poolPtr = nullptr;
-			if(render) {
-				render->imageIndex = UINT32_MAX;
-				render = nullptr;
+			if(rendering) {
+				render2->imageIndex = UINT32_MAX;
+				render2 = nullptr;
 			} else {
 				transient = nullptr;
 			}
@@ -163,20 +154,24 @@ namespace Cacao {
 		return true;
 	}
 
-	Sync VulkanCommandBuffer::GetSync() {
-		if(render) return render->sync;
-		if(transient) return transient->sync;
-		return {};
+	Sync& VulkanCommandBuffer::GetSync() {
+		if(render2)
+			return render2->sync;
+		else
+			return transient->sync;
 	}
 
 	void VulkanCommandBuffer::Execute() {
-		//If rendering, we use secondary command buffers for each command; we need to execute those within the primary command buffer
-		if(render) {
+		//Obtain queue lock
+		std::lock_guard lk(vulkan->queueMtx);
+
+		//Do submission
+		if(render2) {
 			//Make our image presentable
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eColorAttachmentOutput, vk::AccessFlagBits2::eColorAttachmentRead | vk::AccessFlagBits2::eColorAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
-					vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[render->imageIndex],
+					vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[render2->imageIndex],
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 				vk::DependencyInfo transition({}, {}, {}, barrier);
 				cmd.pipelineBarrier2(transition);
@@ -186,35 +181,28 @@ namespace Cacao {
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllGraphics, vk::AccessFlagBits2::eDepthStencilAttachmentRead | vk::AccessFlagBits2::eDepthStencilAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
-					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->swapchain.depthImages[render->imageIndex].obj,
+					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->swapchain.depthImages[render2->imageIndex].obj,
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 				vk::DependencyInfo transition({}, {}, {}, barrier);
 				cmd.pipelineBarrier2(transition);
 			}
-		}
 
-		//End primary command buffer recording
-		cmd.end();
+			//End primary command buffer recording
+			cmd.end();
 
-		//Build submission info
-		vk::CommandBufferSubmitInfo cbSubmit(cmd);
-		vk::SemaphoreSubmitInfo wait = {};
-		std::array<vk::SemaphoreSubmitInfoKHR, 2> signals = {};
-		if(render) {
-			wait = vk::SemaphoreSubmitInfo(imageCtx->acquire, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
-			signals[0] = vk::SemaphoreSubmitInfo(imageCtx->render, 0, vk::PipelineStageFlagBits2::eAllGraphics);
-			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllGraphics);
-		}
-		vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
+			//Build submission info
+			vk::CommandBufferSubmitInfo cbSubmit(cmd);
+			vk::SemaphoreSubmitInfo wait(render2->acquired, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			std::array<vk::SemaphoreSubmitInfo, 2> signals;
+			signals[0] = vk::SemaphoreSubmitInfo(render2->rendered, 0, vk::PipelineStageFlagBits2::eAllGraphics);
+			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
-		//Obtain queue lock
-		std::lock_guard lk(vulkan->queueMtx);
+			//Submit
+			vulkan->queue.submit2(submitInfo);
 
-		//Submit (and present if rendering)
-		vulkan->queue.submit2(submitInfo);
-		if(render) {
 			//Present
-			vk::PresentInfoKHR presentInfo(imageCtx->render, vulkan->swapchain.chain, render->imageIndex);
+			vk::PresentInfoKHR presentInfo(render2->rendered, vulkan->swapchain.chain, render2->imageIndex);
 			try {
 				vulkan->queue.presentKHR(presentInfo);
 			} catch(vk::OutOfDateKHRError&) {
@@ -223,7 +211,18 @@ namespace Cacao {
 			}
 
 			//Advance swapchain cycle
-			vulkan->swapchain.cycle = ++vulkan->swapchain.cycle % vulkan->swapchain.renderContexts.size();
+			vulkan->swapchain.cycle = (vulkan->swapchain.cycle + 1) % vulkan->swapchain.renderContexts.size();
+		} else {
+			//End primary command buffer recording
+			cmd.end();
+
+			//Build submission info
+			vk::CommandBufferSubmitInfo cbSubmit(cmd);
+			vk::SemaphoreSubmitInfo signal(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
+			vk::SubmitInfo2 submitInfo({}, {}, cbSubmit, signal);
+
+			//Submit
+			vulkan->queue.submit2(submitInfo);
 		}
 	}
 
@@ -264,7 +263,7 @@ namespace Cacao {
 			Sync sync = vcb->GetSync();
 			if(vulkan->dev.getSemaphoreCounterValue(sync.semaphore) >= sync.doneValue) {
 				//If this was a rendering context, mark it available and adjust counter
-				if(vcb->render) {
+				if(vcb->render2) {
 					--(IMPL(FrameProcessor).numFramesInFlight);
 					vcb->render = nullptr;
 					vcb->imageCtx = nullptr;

@@ -2,7 +2,6 @@
 	"recommendations": [
 		"vadimcn.vscode-lldb",
 		"llvm-vs-code-extensions.vscode-clangd",
-		"twxs.cmake",
 		"ms-vscode.hexeditor",
 		"mesonbuild.mesonbuild",
 		"executablebookproject.myst-highlight",

@@ -101,6 +101,16 @@ namespace Cacao {
 				counter = 0;
 			}
 
+			//If needed, regenerate swapchain
+			if(swapchainRegen.load(std::memory_order_relaxed)) {
+				if(numFramesInFlight == 0) {
+					swapchainRegen.store(false);
+					IMPL(GPUManager).GenSwapchain();
+				} else {
+					continue;
+				}
+			}
+
 			//Request a snapshot of the world state
 			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
 
@@ -116,24 +126,22 @@ namespace Cacao {
 			//It has been blocking on this semaphore
 			TickController::Get().snapshotControl.done.release();
 
-			//If needed, regenerate swapchain
-			if(swapchainRegen.load(std::memory_order_relaxed)) {
-				if(numFramesInFlight == 0) {
-					swapchainRegen.store(false);
-					IMPL(GPUManager).GenSwapchain();
-				} else {
-					continue;
-				}
-			}
-
 			//Setup command buffer
 			//We use the internal API so we can do rendering setup
 			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
 			if(!cmd->SetupContext(true)) continue;
 
 			//Clear color
-			constexpr glm::vec3 clearColor {0x00, 0xAC, 0xE6};
-			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
+			static glm::vec3 clearColor {0x00, 0xAC, 0xE6};
+			static bool up = true;
+			if(up) {
+				clearColor.r += 4;
+				if(clearColor.r >= 0xFF) up = false;
+			} else {
+				clearColor.r -= 4;
+				if(clearColor.r <= 0) up = true;
+			}
+			glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
 
 			//Record commands
 			cmd->StartRendering(clearColorLinear);

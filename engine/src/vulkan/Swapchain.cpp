@@ -139,6 +139,7 @@ namespace Cacao {
 			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
 			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
+			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
 		}
 		vulkan->swapchain.renderContexts.clear();
 		vulkan->swapchain.imageContexts.clear();
@@ -177,6 +178,8 @@ namespace Cacao {
 				rc.acquired = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.rendered = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.inFlight = vulkan->dev.createFence(fenceCI);
+				rc.sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
+				rc.sync.doneValue = 0;
 			} catch(vk::SystemError& err) {
 				Check<ExternalException>(false, "Failed to create synchronization objects for rendering context!");
 			}

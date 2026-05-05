@@ -252,6 +252,7 @@ namespace Cacao {
 			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
 			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
+			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
 		}
 
 		//Clean up rendering command context objects

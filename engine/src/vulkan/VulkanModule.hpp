@@ -102,8 +102,8 @@ namespace Cacao {
 	  public:
 		vk::Fence inFlight;
 		vk::Semaphore acquired, rendered;
-		uint32_t frameIndex, imageIndex;
-		bool inUse;
+		uint32_t imageIndex;
+		Sync sync;
 	};
 
 	//THIS IS NOT THREAD-SAFE
@@ -116,7 +116,7 @@ namespace Cacao {
 
 		void Execute() override;
 
-		Sync GetSync();
+		Sync& GetSync();
 
 		vk::CommandBuffer cmd;
 
