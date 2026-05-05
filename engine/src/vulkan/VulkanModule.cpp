@@ -247,6 +247,13 @@ namespace Cacao {
 		//Wait for the device to be idle so it's safe to destroy things
 		dev.waitIdle();
 
+		//Clean up rendering context objects
+		for(RenderCommandContext2& rc : swapchain.contexts) {
+			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
+			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
+			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
+		}
+
 		//Clean up rendering command context objects
 		for(std::unique_ptr<RenderCommandContext>& rcc : swapchain.renderContexts) {
 			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
