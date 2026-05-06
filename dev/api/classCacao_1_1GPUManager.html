@@ -628,6 +628,24 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager9IsVSyncedEv">
+<span id="_CPPv3N5Cacao10GPUManager9IsVSyncedEv"></span><span id="_CPPv2N5Cacao10GPUManager9IsVSyncedEv"></span><span id="Cacao::GPUManager::IsVSynced"></span><span class="target" id="classCacao_1_1GPUManager_1aaf8c96294c5d00885437eacd6cdae07a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsVSynced</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager9IsVSyncedEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check the V-Sync state. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">SetVSync</span></code> has just been called, this function will return the new value, even if it has not yet taken effect on the GPU</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the GPU manager is not running</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If V-Sync is currently enabled </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
@@ -702,6 +720,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao10GPUManager9IsRunningEv"><code class="docutils literal notranslate"><span class="pre">IsRunning()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"><code class="docutils literal notranslate"><span class="pre">Submit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager8SetVSyncEb"><code class="docutils literal notranslate"><span class="pre">SetVSync()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager9IsVSyncedEv"><code class="docutils literal notranslate"><span class="pre">IsVSynced()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager3GetEv"><code class="docutils literal notranslate"><span class="pre">Get()</span></code></a></li>
 </ul>
 </li>
