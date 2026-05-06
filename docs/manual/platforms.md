@@ -24,10 +24,10 @@ Cacao Engine aims to support computers running any OS version listed below or a 
 * Debian 12 and later, plus derivatives
     * Ubuntu 22.04 and later, plus derivatives, while based on Debian 11, have supplementary packages that work
 * Fedora 37 and later, plus derivatives
-* As Arch and derivatives are based on rolling releases, there are no defined versions. For best compatibility, always target the latest packages, but Cacao Engine should work on most systems that have been updated since 2024.
+* As Arch and derivatives are based on rolling releases, there are no defined versions. For best compatibility, always target the latest packages, but Cacao Engine should work on most systems that have been updated within the last few years
 
 If any issues are encountered in these versions, they should be supported to the extent that it is possible. Any issues in versions before these are **not supported**.  
 
 ## Notes
-Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 15.1 should be supported as long any 15.x release is), but this is not guaranteed, especially if said minor release introduces major changes.
+Cacao Engine is a very small project; as such it is impossible to guarantee support for specific versions of operating systems. Generally, most up-to-date systems should work and be supported, but this is not a hard rule. Typically, minor releases of an operating system will be supported as long as their respective major version is (for example, macOS 26.1 should be supported as long any 26.x release is), but this is not guaranteed, especially if said minor release introduces major changes.
 **In general, most up-to-date systems should be supported.**

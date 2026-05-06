@@ -41,7 +41,7 @@ You may be able to use a subset of the listed packages by disabling some feature
 Similarly, you may not need Pipewire packages or ALSA packages if not targeting those audio subsystems, though it is recommended to always include them for best compatibility.
 
 ## Compiler Support
-Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
+Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, Fedora, and Arch Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
 
 ## Build
 In the root Cacao Engine directory, run the following command to configure the build:  
