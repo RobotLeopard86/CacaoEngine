@@ -59,7 +59,7 @@ namespace Cacao {
 	}
 
 	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other)
-	  : cmd(std::move(other.cmd)), transient(std::exchange(other.transient, nullptr)), render(std::exchange(other.render, nullptr)), imageCtx(std::exchange(other.imageCtx, nullptr)), poolPtr(std::exchange(other.poolPtr, nullptr)), promise(std::move(other.promise)) {}
+	  : cmd(std::move(other.cmd)), transient(std::exchange(other.transient, nullptr)), render(std::exchange(other.render, nullptr)), poolPtr(std::exchange(other.poolPtr, nullptr)), promise(std::move(other.promise)) {}
 
 	VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) {
 		if(this == &other) return *this;
@@ -67,7 +67,6 @@ namespace Cacao {
 		cmd = std::move(other.cmd);
 		transient = std::exchange(other.transient, nullptr);
 		render = std::exchange(other.render, nullptr);
-		imageCtx = std::exchange(other.imageCtx, nullptr);
 		promise = std::move(other.promise);
 		poolPtr = std::exchange(other.poolPtr, nullptr);
 
@@ -79,7 +78,7 @@ namespace Cacao {
 
 		//If this was a rendering context, release context
 		if(render) render = nullptr;
-		if(render2) render2 = nullptr;
+		if(render) render = nullptr;
 		if(transient) transient = nullptr;
 
 		//Free command buffer
@@ -91,21 +90,24 @@ namespace Cacao {
 		//Obtain context object
 		if(rendering) {
 			//Try get next context
-			render2 = &vulkan->swapchain.contexts[vulkan->swapchain.cycle];
+			render = &vulkan->swapchain.contexts[vulkan->swapchain.cycle];
+
+			//Advance swapchain cycle
+			vulkan->swapchain.cycle = (vulkan->swapchain.cycle + 1) % vulkan->swapchain.contexts.size();
 
 			//Wait for it to be ready
-			vulkan->dev.waitForFences(render2->inFlight, VK_TRUE, UINT64_MAX);
-			vulkan->dev.resetFences(render2->inFlight);
+			vulkan->dev.waitForFences(render->inFlight, VK_TRUE, UINT64_MAX);
+			vulkan->dev.resetFences(render->inFlight);
 
 			//Acquire next swapchain image
 			try {
-				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render2->acquired, VK_NULL_HANDLE, 1);
+				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render->acquired, VK_NULL_HANDLE, 1);
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
-				render2->imageIndex = result.value;
+				render->imageIndex = result.value;
 			} catch(vk::SystemError& err) {
 				//Reset data members
-				render2 = nullptr;
+				render = nullptr;
 
 				//Is the swapchain out of date?
 				//If so, we can regenerate and try again
@@ -139,8 +141,8 @@ namespace Cacao {
 		} catch(...) {
 			poolPtr = nullptr;
 			if(rendering) {
-				render2->imageIndex = UINT32_MAX;
-				render2 = nullptr;
+				render->imageIndex = UINT32_MAX;
+				render = nullptr;
 			} else {
 				transient = nullptr;
 			}
@@ -155,8 +157,8 @@ namespace Cacao {
 	}
 
 	Sync& VulkanCommandBuffer::GetSync() {
-		if(render2)
-			return render2->sync;
+		if(render)
+			return render->sync;
 		else
 			return transient->sync;
 	}
@@ -166,12 +168,12 @@ namespace Cacao {
 		std::lock_guard lk(vulkan->queueMtx);
 
 		//Do submission
-		if(render2) {
+		if(render) {
 			//Make our image presentable
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eColorAttachmentOutput, vk::AccessFlagBits2::eColorAttachmentRead | vk::AccessFlagBits2::eColorAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
-					vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[render2->imageIndex],
+					vk::ImageLayout::eColorAttachmentOptimal, vk::ImageLayout::ePresentSrcKHR, 0, 0, vulkan->swapchain.images[render->imageIndex],
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eColor, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 				vk::DependencyInfo transition({}, {}, {}, barrier);
 				cmd.pipelineBarrier2(transition);
@@ -181,7 +183,7 @@ namespace Cacao {
 			{
 				vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllGraphics, vk::AccessFlagBits2::eDepthStencilAttachmentRead | vk::AccessFlagBits2::eDepthStencilAttachmentWrite,
 					vk::PipelineStageFlagBits2::eBottomOfPipe, vk::AccessFlagBits2::eNone,
-					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->swapchain.depthImages[render2->imageIndex].obj,
+					vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageLayout::eDepthReadOnlyOptimal, 0, 0, vulkan->swapchain.depthImages[render->imageIndex].obj,
 					vk::ImageSubresourceRange {vk::ImageAspectFlagBits::eDepth, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS});
 				vk::DependencyInfo transition({}, {}, {}, barrier);
 				cmd.pipelineBarrier2(transition);
@@ -192,26 +194,23 @@ namespace Cacao {
 
 			//Build submission info
 			vk::CommandBufferSubmitInfo cbSubmit(cmd);
-			vk::SemaphoreSubmitInfo wait(render2->acquired, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			vk::SemaphoreSubmitInfo wait(render->acquired, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 			std::array<vk::SemaphoreSubmitInfo, 2> signals;
-			signals[0] = vk::SemaphoreSubmitInfo(render2->rendered, 0, vk::PipelineStageFlagBits2::eAllGraphics);
+			signals[0] = vk::SemaphoreSubmitInfo(render->rendered, 0, vk::PipelineStageFlagBits2::eAllCommands);
 			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
 			vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
 			//Submit
-			vulkan->queue.submit2(submitInfo);
+			vulkan->queue.submit2(submitInfo, render->inFlight);
 
 			//Present
-			vk::PresentInfoKHR presentInfo(render2->rendered, vulkan->swapchain.chain, render2->imageIndex);
+			vk::PresentInfoKHR presentInfo(render->rendered, vulkan->swapchain.chain, render->imageIndex);
 			try {
 				vulkan->queue.presentKHR(presentInfo);
 			} catch(vk::OutOfDateKHRError&) {
 				Event e("INTERNAL-RegenSwapchain");
 				EventManager::Get().Dispatch(e);
 			}
-
-			//Advance swapchain cycle
-			vulkan->swapchain.cycle = (vulkan->swapchain.cycle + 1) % vulkan->swapchain.renderContexts.size();
 		} else {
 			//End primary command buffer recording
 			cmd.end();
@@ -263,10 +262,9 @@ namespace Cacao {
 			Sync sync = vcb->GetSync();
 			if(vulkan->dev.getSemaphoreCounterValue(sync.semaphore) >= sync.doneValue) {
 				//If this was a rendering context, mark it available and adjust counter
-				if(vcb->render2) {
+				if(vcb->render) {
 					--(IMPL(FrameProcessor).numFramesInFlight);
 					vcb->render = nullptr;
-					vcb->imageCtx = nullptr;
 				}
 
 				//Release context pointers
@@ -295,6 +293,6 @@ namespace Cacao {
 	}
 
 	unsigned int VulkanGPU::MaxFramesInFlight() {
-		return vulkan->swapchain.renderContexts.size();
+		return vulkan->swapchain.contexts.size();
 	}
 }

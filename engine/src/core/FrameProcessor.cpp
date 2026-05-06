@@ -4,6 +4,7 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Log.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "SingletonGet.hpp"
@@ -116,6 +117,7 @@ namespace Cacao {
 
 			//Block until the tick controller grants the request
 			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
+				std::this_thread::yield();
 				if(stop.stop_requested()) return;
 			}
 
@@ -132,16 +134,8 @@ namespace Cacao {
 			if(!cmd->SetupContext(true)) continue;
 
 			//Clear color
-			static glm::vec3 clearColor {0x00, 0xAC, 0xE6};
-			static bool up = true;
-			if(up) {
-				clearColor.r += 4;
-				if(clearColor.r >= 0xFF) up = false;
-			} else {
-				clearColor.r -= 4;
-				if(clearColor.r <= 0) up = true;
-			}
-			glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
+			constexpr glm::vec3 clearColor {0x00, 0xAC, 0xE6};
+			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
 
 			//Record commands
 			cmd->StartRendering(clearColorLinear);

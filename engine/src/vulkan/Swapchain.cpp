@@ -2,6 +2,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "vulkan/vulkan_enums.hpp"
+#include "vulkan/vulkan_structs.hpp"
 
 #include <cstdint>
 
@@ -128,57 +129,27 @@ namespace Cacao {
 		}
 
 		//Destroy old contexts
-		for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
-			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
-		}
-		for(std::unique_ptr<ImageContext>& ic : vulkan->swapchain.imageContexts) {
-			if(ic->acquire) vulkan->dev.destroySemaphore(ic->acquire);
-			if(ic->render) vulkan->dev.destroySemaphore(ic->render);
-		}
-		for(RenderCommandContext2& rc : vulkan->swapchain.contexts) {
+		for(RenderCommandContext& rc : vulkan->swapchain.contexts) {
 			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
 			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
 			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
 		}
-		vulkan->swapchain.renderContexts.clear();
-		vulkan->swapchain.imageContexts.clear();
 		vulkan->swapchain.contexts.resize(vulkan->swapchain.images.size());
 
 		//Create and setup new contexts
+		vk::SemaphoreTypeCreateInfo semTypeCI(vk::SemaphoreType::eTimeline);
+		vk::SemaphoreCreateInfo semaphoreCI {};
+		vk::SemaphoreCreateInfo timelineCI({}, &semTypeCI);
+		vk::FenceCreateInfo fenceCI(vk::FenceCreateFlagBits::eSignaled);
 		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
-			//Render context
-			std::unique_ptr<RenderCommandContext> rcc = std::make_unique<RenderCommandContext>();
-			rcc->imageIndex = UINT32_MAX;
-			vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
-			try {
-				rcc->sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
-				rcc->sync.doneValue = 0;
-			} catch(vk::SystemError& err) {
-				Check<ExternalException>(false, "Failed to create synchronization objects for rendering command context!");
-			}
-			vulkan->swapchain.renderContexts.push_back(std::move(rcc));
-
-			//Image context
-			std::unique_ptr<ImageContext> ic = std::make_unique<ImageContext>();
-			vk::SemaphoreCreateInfo semCI {};
-			try {
-				ic->acquire = vulkan->dev.createSemaphore(semCI);
-				ic->render = vulkan->dev.createSemaphore(semCI);
-			} catch(vk::SystemError& err) {
-				Check<ExternalException>(false, "Failed to create synchronization objects for image context!");
-			}
-			vulkan->swapchain.imageContexts.push_back(std::move(ic));
-
 			//Render context 2
-			RenderCommandContext2& rc = vulkan->swapchain.contexts[i];
-			vk::SemaphoreCreateInfo semaphoreCI {};
-			vk::FenceCreateInfo fenceCI {vk::FenceCreateFlagBits::eSignaled};
+			RenderCommandContext& rc = vulkan->swapchain.contexts[i];
 			try {
 				rc.acquired = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.rendered = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.inFlight = vulkan->dev.createFence(fenceCI);
-				rc.sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
+				rc.sync.semaphore = vulkan->dev.createSemaphore(timelineCI);
 				rc.sync.doneValue = 0;
 			} catch(vk::SystemError& err) {
 				Check<ExternalException>(false, "Failed to create synchronization objects for rendering context!");

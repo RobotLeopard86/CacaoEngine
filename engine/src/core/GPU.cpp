@@ -58,6 +58,7 @@ namespace Cacao {
 			}
 
 			//Run backend iteration
+			std::this_thread::yield();
 			RunloopIteration();
 		}
 		RunloopStop();

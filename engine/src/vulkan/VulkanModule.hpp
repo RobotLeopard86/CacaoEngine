@@ -47,12 +47,6 @@ namespace Cacao {
 		uint64_t doneValue = 0;
 	};
 
-	struct ImageContext {
-		//For synchronization
-		vk::Semaphore acquire;
-		vk::Semaphore render;
-	};
-
 	class TransientCommandContext {
 	  public:
 		vk::CommandPool pool;
@@ -83,23 +77,6 @@ namespace Cacao {
 
 	class RenderCommandContext {
 	  public:
-		Sync sync;
-		uint32_t imageIndex = UINT32_MAX;
-
-		RenderCommandContext() {}
-		RenderCommandContext(const RenderCommandContext&) = delete;
-		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
-		RenderCommandContext(RenderCommandContext&& o)
-		  : sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)) {}
-		RenderCommandContext& operator=(RenderCommandContext&& o) {
-			sync = std::exchange(o.sync, {});
-			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
-			return *this;
-		}
-	};
-
-	class RenderCommandContext2 {
-	  public:
 		vk::Fence inFlight;
 		vk::Semaphore acquired, rendered;
 		uint32_t imageIndex;
@@ -124,8 +101,6 @@ namespace Cacao {
 		//Contexts
 		TransientCommandContext* transient = nullptr;
 		RenderCommandContext* render = nullptr;
-		ImageContext* imageCtx = nullptr;
-		RenderCommandContext2* render2 = nullptr;
 
 		//Command buffer pool
 		vk::CommandPool* poolPtr = nullptr;
@@ -200,9 +175,7 @@ namespace Cacao {
 			std::vector<ViewImage> depthImages;
 
 			//Contexts
-			std::vector<std::unique_ptr<ImageContext>> imageContexts;
-			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
-			std::vector<RenderCommandContext2> contexts;
+			std::vector<RenderCommandContext> contexts;
 		} swapchain;
 		vk::CommandPool renderingPool;
 
