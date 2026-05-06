@@ -2,6 +2,7 @@
 #include "Cacao/Actor.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/FrameProcessor.hpp"
+#include "Cacao/GPU.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Cacao/Script.hpp"
 #include "Cacao/Input.hpp"
@@ -114,6 +115,13 @@ namespace Cacao {
 
 		//Check TPS and FPS
 		if(Input::Get().IsKeyPressed(CACAO_KEY_P)) Logger::Engine(Logger::Level::Trace).LogFormatted("{} TPS, {} FPS", TickController::Get().GetCurrentTPS(), FrameProcessor::Get().GetCurrentFPS());
+		static bool vUp = true;
+		if(Input::Get().IsKeyPressed(CACAO_KEY_V)) {
+			if(vUp) GPUManager::Get().SetVSync(!GPUManager::Get().IsVSynced());
+			vUp = false;
+		} else {
+			vUp = true;
+		}
 
 		//Acquire active world
 		std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();

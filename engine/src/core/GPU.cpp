@@ -75,6 +75,11 @@ namespace Cacao {
 		impl->vsreq.needChange.store(true);
 	}
 
+	bool GPUManager::IsVSynced() {
+		Check<BadInitStateException>(running, "Cannot get V-Sync state when the GPU manager isn't running!");
+		return impl->vsreq.value;
+	}
+
 	std::unique_ptr<CommandBuffer> CommandBuffer::Create() {
 		std::unique_ptr<CommandBuffer> cb = IMPL(PAL).mod->CreateCmdBuffer();
 		cb->SetupContext();

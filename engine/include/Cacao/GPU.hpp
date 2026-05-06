@@ -107,6 +107,17 @@ namespace Cacao {
 		 */
 		void SetVSync(bool newState);
 
+		/**
+		 * @brief Check the V-Sync state
+		 *
+		 * @note If @c SetVSync has just been called, this function will return the new value, even if it has not yet taken effect on the GPU
+		 *
+		 * @throws BadInitStateException If the GPU manager is not running
+		 *
+		 * @return If V-Sync is currently enabled
+		 */
+		bool IsVSynced();
+
 		///@cond
 		class Impl;
 		///@endcond
