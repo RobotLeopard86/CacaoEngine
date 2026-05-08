@@ -421,7 +421,7 @@
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">transformUsed</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">globalsUsed</span><span class="p">;</span>
 
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">MaterialParamInfo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">UniformParameter</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DataType</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">Int</span><span class="p">,</span>
 <span class="w">                </span><span class="n">UInt</span><span class="p">,</span>
@@ -439,18 +439,20 @@
 <span class="w">                </span><span class="n">Float2x2</span><span class="p">,</span>
 <span class="w">                </span><span class="n">Float3x3</span><span class="p">,</span>
 <span class="w">                </span><span class="n">Float4x4</span><span class="p">,</span>
-
-<span class="w">                </span><span class="n">Tex2D</span><span class="p">,</span>
-<span class="w">                </span><span class="n">TexCube</span><span class="p">,</span>
 <span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
 
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-
 <span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">bufferOffset</span><span class="p">;</span>
-<span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">binding</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
 
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MaterialParamInfo</span><span class="o">&gt;</span><span class="w"> </span><span class="n">materialParams</span><span class="p">;</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">TextureParameter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">binding</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">isCubemap</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">UniformParameter</span><span class="o">&gt;</span><span class="w"> </span><span class="n">uniformParams</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">TextureParameter</span><span class="o">&gt;</span><span class="w"> </span><span class="n">texParams</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="c1">//This is to allow for VertexInputBits to work as a bitmask</span>
