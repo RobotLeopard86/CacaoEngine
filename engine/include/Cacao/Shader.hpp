@@ -36,15 +36,10 @@ namespace Cacao {
 		bool globalsUsed;  ///<If the shader uses the globals buffer
 
 		/**
-		 * @brief Info about a material parameter
+		 * @brief Info about a uniform parameter
 		 */
-		struct CACAO_API MaterialParamInfo {
-			/**
-			 * @brief Type of data
-			 */
+		struct CACAO_API UniformParameter {
 			enum class DataType {
-				///@name Non-opaque types:
-				///@{
 				Int,	 ///<32-bit signed integer
 				UInt,	 ///<32-bit unsigned integer
 				Float,	 ///<Single-precision floating point number (32-bit)
@@ -61,22 +56,23 @@ namespace Cacao {
 				Float2x2,///<2x2 matrix of floats
 				Float3x3,///<3x3 matrix of floats
 				Float4x4,///<4x4 matrix of floats
-				///@}
+			} type;		 ///<Type of stored data
 
-				///@name Opaque types:
-				///@{
-				Tex2D,	///<Tex2D
-				TexCube,///<Cubemap
-						///@}
-			} type;		///<Type of stored data
-
-			std::string name;///<Parameter name
-
-			unsigned int bufferOffset;///<<b>For non-opaque types:</b> offset into the parameters constant buffer
-			unsigned int binding;	  ///<<b>For opaque types:</b> descriptor binding number
+			std::string name;		  ///<Parameter name
+			unsigned int bufferOffset;///<Offset into the parameters constant buffer at which to write the data
 		};
 
-		std::vector<MaterialParamInfo> materialParams;///<Material parameters list
+		/**
+		 * @brief Information about a texture parameter
+		 */
+		struct CACAO_API TextureParameter {
+			std::string name;	 ///<Parameter name
+			unsigned int binding;///<Descriptor binding index
+			bool isCubemap;		 ///<If the texture is a Cubemap or a Tex2D
+		};
+
+		std::vector<UniformParameter> uniformParams;///<Uniform parameters list
+		std::vector<TextureParameter> texParams;	///<Texture parameters list
 	};
 
 	//This is to allow for VertexInputBits to work as a bitmask
