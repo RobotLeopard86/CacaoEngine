@@ -82,6 +82,7 @@ engine_deps += [
 	crossguid,
 	spirv_cross,
 	audiodecode_dep,
+	asset_dep,
 	formats_dep,
 	image_dep,
 	commonlib_dep,

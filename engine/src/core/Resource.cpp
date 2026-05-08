@@ -7,72 +7,55 @@
 #include "impl/ResourceManager.hpp"
 #include "SingletonGet.hpp"
 
+#include "libcacaoasset.hpp"
+
 #include <memory>
 #include <typeindex>
 
 namespace Cacao {
-	bool BaseResAddrCheck(std::string check, std::string specialAllow = "") {
-		//Restrict character set
-		std::string allowed = specialAllow + "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_:";
-		if(check.find_first_not_of(allowed) != std::string::npos) return false;
-
-		//Ensure type prefix is alphabetical (ASCII magic)
-		if(check[0] == '_' || check[0] <= 58) return false;
-
-		//Ensure type and identifier separator exists
-		if(check[1] != ':') return false;
-
-		//Check for excess separators (first part removes colon)
-		allowed.pop_back();
-		allowed.shrink_to_fit();
-		if(check.substr(2).find_first_not_of(allowed) != std::string::npos) return false;
-
-		return true;
-	}
-
 	template<>
 	bool Resource::ValidateResourceAddr<Tex2D>(const std::string& addr) {
-		return BaseResAddrCheck(addr, addr[0] == 'm' ? "%" : "") && (addr[0] == 'a' || (addr[0] == 'm' && addr.find_first_of('%') != std::string::npos)) && addr.find_first_of('%') == addr.find_last_of('%');
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Tex2D);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<Mesh>(const std::string& addr) {
-		return BaseResAddrCheck(addr, addr[0] == 'm' ? "/" : "") && (addr[0] == 'a' || (addr[0] == 'm' && addr.find_first_of('/') != std::string::npos)) && addr.find_first_of('/') == addr.find_last_of('/');
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Mesh);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<Model>(const std::string& addr) {
-		return BaseResAddrCheck(addr) && addr[0] == 'a';
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Model);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<Cubemap>(const std::string& addr) {
-		return BaseResAddrCheck(addr) && addr[0] == 'a';
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Cubemap);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<Sound>(const std::string& addr) {
-		return BaseResAddrCheck(addr) && addr[0] == 'a';
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Audio);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<Shader>(const std::string& addr) {
-		return BaseResAddrCheck(addr) && addr[0] == 'a';
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Shader);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<World>(const std::string& addr) {
-		return BaseResAddrCheck(addr) && addr[0] == 'w';
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::World);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<TextBlobResource>(const std::string& addr) {
-		return BaseResAddrCheck(addr, "./") && addr[0] == 'r' && addr.find("..") == std::string::npos && addr.find("//") == std::string::npos && addr.find("./") == std::string::npos;
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Blob);
 	}
 
 	template<>
 	bool Resource::ValidateResourceAddr<BinaryBlobResource>(const std::string& addr) {
-		return BaseResAddrCheck(addr, "./") && addr[0] == 'r' && addr.find("..") == std::string::npos && addr.find("//") == std::string::npos && addr.find("./") == std::string::npos;
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Blob);
 	}
 
 	Resource::~Resource() {

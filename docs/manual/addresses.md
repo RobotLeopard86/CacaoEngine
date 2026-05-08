@@ -29,7 +29,7 @@ If you use auto-generated asset addresses for your packs and don't recall the as
 ## Models
 Models are also stored in asset packs just like assets. However, their main use comes from the meshes and textures that they contain. While models themselves may be loaded by directly using their address, often you will want to specifically refer to the contained assets.
 
-To access these, you use a special address. These address use the type prefix `m`, and the identifier is the model asset address followed by either a `/` for models or a `%` for textures, and then the mesh/texture name within the model. You do not need these special addresses when working with the `Model` class API, but the resource manager will accept them and cache the model for future requests.
+To access these, you use a special address. These address use the type prefix `m`, and the identifier is the the model asset address followed by the type of subasset (`msh` for a mesh or `tex` for a texture), a `/`, and then the mesh/texture name within the model. You cannot use need these special addresses when working with the `Model` class API, but the resource manager will accept them and cache the model for future requests.
 
 ## Worlds
 Worlds are where your game takes place. They are stored separately from assets, but may reference them. Loading a world will often trigger asset loading as well. World discovery will fail if the world is not in the proper location.  

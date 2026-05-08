@@ -6,11 +6,8 @@
 #include <cstdint>
 
 namespace libcacaoasset {
-	//This is all TODO but I had to make the file so
-
 	/**
 	 * @brief Representation of an asset in an asset pack
-	 *
 	 */
 	struct Resource {
 		/**
@@ -20,16 +17,29 @@ namespace libcacaoasset {
 			Blob = 0,
 			Shader = 1,
 			Material = 2,
-			Cubemap = 3,
-			Audio = 4,
-			Font = 5,
-			Model = 6
+			Tex2D = 3,
+			Cubemap = 4,
+			Audio = 5,
+			Font = 6,
+			Model = 7,
+			Mesh = 8,///<This type is used @b only for resource address validation mode selection; using it with other parts of this library will error!
+			World = 9///<This type is used @b only for resource address validation mode selection; using it with other parts of this library will error!
 		};
 
 		std::string id;					 ///<Asset ID or resource path
 		std::vector<unsigned char> bytes;///<Asset data encoded as bytes; use @c Decode* functions to parse
 		Type type;						 ///<Resource type
 	};
+
+	/**
+	 * @brief Validate a resource address
+	 *
+	 * @param address The address to validate
+	 * @param type The resource type to use for checking (since they have different requirements)
+	 *
+	 * @return If the address is valid
+	 */
+	bool ValidateResourceAddress(const std::string& address, Resource::Type type);
 
 	/**
 	 * @brief Interface for lazy access to an asset pack file
@@ -63,6 +73,13 @@ namespace libcacaoasset {
 		 * @throws std::runtime_error If decoding fails
 		 */
 		static AssetPack OpenFromStream(std::istream* stream);
+
+		/**
+		 * @brief Create an empty asset pack`
+		 *
+		 * @return The new pack
+		 */
+		static AssetPack CreateEmpty();
 
 		/**
 		 * @brief Access a resource
