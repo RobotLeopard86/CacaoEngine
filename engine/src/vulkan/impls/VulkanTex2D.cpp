@@ -3,6 +3,9 @@
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
 #include "CommandBufferCast.hpp"
+#include "vulkan/vulkan_core.h"
+#include "vulkan/vulkan_enums.hpp"
+#include "vulkan/vulkan_structs.hpp"
 
 namespace Cacao {
 	void VulkanTex2DImpl::Realize(bool& success) {
@@ -11,12 +14,12 @@ namespace Cacao {
 			case libcacaoimage::Image::Layout::Grayscale:
 				format = vk::Format::eR8Srgb;
 				break;
-			case libcacaoimage::Image::Layout::RGB:
-				format = vk::Format::eR8G8B8Srgb;
-				break;
 			case libcacaoimage::Image::Layout::RGBA:
 				format = vk::Format::eR8G8B8A8Srgb;
 				break;
+			default:
+				Check<MiscException>(false, "UNREACHABLE CODE!!!! HOW DID YOU GET HERE!!!!");
+				throw 0;
 		}
 
 		//Allocate GPU texture & data upload buffers
@@ -74,10 +77,16 @@ namespace Cacao {
 			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 		vi.view = vulkan->dev.createImageView(viewCI);
 
+		//Create sampler
+		vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
+			vk::SamplerAddressMode::eRepeat, 0.0f, VK_TRUE, 8.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, (float)VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+		sampler = vulkan->dev.createSampler(samplerCI);
+
 		success = true;
 	}
 
 	void VulkanTex2DImpl::DropRealized() {
+		vulkan->dev.destroySampler(sampler);
 		vulkan->dev.destroyImageView(vi.view);
 		vulkan->allocator.destroyImage(vi.obj, vi.alloc);
 	}

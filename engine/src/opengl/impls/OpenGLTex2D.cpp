@@ -1,4 +1,5 @@
 #include "OpenGLTex2D.hpp"
+#include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
 #include "CommandBufferCast.hpp"
@@ -22,13 +23,13 @@ namespace Cacao {
 					format = GL_RED;
 					internalFormat = GL_RED;
 					break;
-				case libcacaoimage::Image::Layout::RGB:
-					format = GL_RGB;
-					internalFormat = GL_SRGB8;
-					break;
 				case libcacaoimage::Image::Layout::RGBA:
 					format = GL_RGBA;
 					internalFormat = GL_SRGB8_ALPHA8;
+					break;
+				default:
+					Check<MiscException>(false, "UNREACHABLE CODE!!!! HOW DID YOU GET HERE!!!!");
+					throw 0;
 					break;
 			}
 

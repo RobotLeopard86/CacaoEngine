@@ -12,5 +12,8 @@ namespace Cacao {
 
 		//Image memory and view
 		ViewImage vi;
+
+		//Sampler
+		vk::Sampler sampler;
 	};
 }

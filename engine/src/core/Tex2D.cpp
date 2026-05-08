@@ -16,6 +16,7 @@ namespace Cacao {
 
 		//Fill data
 		impl->img = (imageBuffer.bitsPerChannel == 16 ? libcacaoimage::Convert16To8BitColor(imageBuffer) : std::move(imageBuffer));
+		if(impl->img.layout == libcacaoimage::Image::Layout::RGB) impl->img = libcacaoimage::ChangeChannelLayout(impl->img, libcacaoimage::Image::Layout::RGBA);
 	}
 
 	Tex2D::~Tex2D() {

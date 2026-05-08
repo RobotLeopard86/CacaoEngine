@@ -15,5 +15,8 @@ namespace Cacao {
 
 		//Image format
 		vk::Format format;
+
+		//Sampler
+		vk::Sampler sampler;
 	};
 }

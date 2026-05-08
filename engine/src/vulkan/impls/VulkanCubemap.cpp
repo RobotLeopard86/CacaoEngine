@@ -75,10 +75,17 @@ namespace Cacao {
 			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 		vi.view = vulkan->dev.createImageView(viewCI);
 
+		//Create sampler
+		vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge,
+			vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f,
+			vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+		sampler = vulkan->dev.createSampler(samplerCI);
+
 		success = true;
 	}
 
 	void VulkanCubemapImpl::DropRealized() {
+		vulkan->dev.destroySampler(sampler);
 		vulkan->dev.destroyImageView(vi.view);
 		vulkan->allocator.destroyImage(vi.obj, vi.alloc);
 	}
