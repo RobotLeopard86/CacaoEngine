@@ -40,18 +40,7 @@ namespace libcacaoasset {
 		return OpenFromStream(filestream);
 	}
 
-	AssetPack AssetPack::OpenFromStream(std::istream* stream) {
-		CheckException(stream, "Invalid stream pointer!");
-		CheckException(stream->good(), "Stream is broken!");
-
-		//Wrap in unique_ptr
-		std::unique_ptr<std::istream> ptr(stream);
-
-		//Create object and document
-		AssetPack pak;
-		pak.doc = libjaguar::Document(std::move(ptr));
-
-		//Register resource type (will also trigger implicit document parsing)
+	void AssetPack::RegisterResourceType() {
 		libjaguar::StructuredTypeLayout resourceLayout = {};
 		{
 			libjaguar::StructuredTypeLayout::Field& id = resourceLayout.fields.emplace_back();
@@ -68,7 +57,22 @@ namespace libcacaoasset {
 			bytes.name = "bytes";
 			bytes.type = libjaguar::TypeTag::ByteBuffer;
 		}
-		pak.doc.RegisterStructuredObjConverter<Resource>("Resource", resourceLayout, _DecResource, _EncResource);
+		doc.RegisterStructuredObjConverter<Resource>("Resource", resourceLayout, _DecResource, _EncResource);
+	}
+
+	AssetPack AssetPack::OpenFromStream(std::istream* stream) {
+		CheckException(stream, "Invalid stream pointer!");
+		CheckException(stream->good(), "Stream is broken!");
+
+		//Wrap in unique_ptr
+		std::unique_ptr<std::istream> ptr(stream);
+
+		//Create object and document
+		AssetPack pak;
+		pak.doc = libjaguar::Document(std::move(ptr));
+
+		//Register resource type (will also trigger implicit document parsing)
+		pak.RegisterResourceType();
 
 		//Verify root structure
 		CheckException(pak.doc.HasValue("root"), "Asset pack is malformed; does not have root section!");
@@ -79,12 +83,42 @@ namespace libcacaoasset {
 		return pak;
 	}
 
+	AssetPack AssetPack::CreateEmpty() {
+		//Create base object and document
+		AssetPack pak;
+		pak.doc = libjaguar::Document();
+
+		//Register resource type
+		pak.RegisterResourceType();
+
+		//Create empty root structure
+		pak.doc.CreateValue<std::vector<Resource>>("root");
+
+		return pak;
+	}
+
 	Resource AssetPack::GetResource(const std::string& address) {
 		CheckException(address.starts_with("a:") || address.starts_with("r:"), "Invalid resource address!");
 		std::string realpath = std::format("root.{}", address.substr(2));
 		CheckException(doc.HasValue(realpath), "Asset pack does not contain requested resource!");
 
-		return doc.QueryValue<Resource>(realpath);
+		//Fetch real output
+		Resource ret = doc.QueryValue<Resource>(realpath);
+
+		//Validate address is actually correct
+		//It feels weird to do this after fetching but we need to know the type to validate so
+		CheckException(ValidateResourceAddress(address, ret.type), "Invalid resource address!");
+
+		return ret;
+	}
+
+	void AssetPack::PutResource(const std::string& address, Resource&& resource) {
+		CheckException(ValidateResourceAddress(address, resource.type), "Invalid resource address!");
+		CheckException(resource.type != Resource::Type::World && resource.type != Resource::Type::Mesh, "Invalid resource type!");
+		if(resource.type == Resource::Type::Tex2D) CheckException(address[0] != 'm', "Cannot use model address format for direct texture resource address!");
+
+		//Set value in the document
+		doc.SetOrCreateValue<Resource>(std::format("root.{}", address.substr(2)), resource);
 	}
 
 	void AssetPack::Export(std::ostream* stream) {
