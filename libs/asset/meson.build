@@ -7,7 +7,9 @@ asset_deps += jaguar_sp.get_variable('libjaguar_dep')
 # The library itself
 asset_lib = static_library('cacaoasset', sources: [
 	'src' / 'AssetPack.cpp',
+	'src' / 'Cubemap.cpp',
 	'src' / 'Resource.cpp',
+	'src' / 'Shader.cpp',
 	'src' / 'World.cpp'
 ], include_directories: ['include', 'src'], pic: true, dependencies: asset_deps, install: true)
 

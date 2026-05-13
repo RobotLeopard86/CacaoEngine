@@ -76,20 +76,19 @@ namespace libcacaoasset {
 			} type;			///<Type of this shader
 
 			/**
-			 * @brief Bits of used vertex input attributes
+			 * @brief Bits of used input data fields
 			 */
-			enum class VertexInputBits : uint32_t {
-				Position = 1 << 0, ///<Position in local space
-				TexCoords = 1 << 1,///<Texture coordinates
-				Normal = 1 << 2,   ///<Surface normal vector
-				Tangent = 1 << 3,  ///<Surface tangent vector
-				Bitangent = 1 << 4,///<Surface bitangent vector
+			enum class InputBits : uint8_t {
+				Position = 1 << 0, ///<Shader uses position in local space
+				TexCoords = 1 << 1,///<Shader uses texture coordinates
+				Normal = 1 << 2,   ///<Shader uses surface normal vector
+				Tangent = 1 << 3,  ///<Shader uses surface tangent vector
+				Bitangent = 1 << 4,///<Shader uses surface bitangent vector
+				Transform = 1 << 5,///<Shader uses transform matrix
+				Globals = 1 << 6,  ///<Shader iuses globals matrix
 			};
 
-			VertexInputBits vertexInputs;///<Vertex input values used by the shader, represented as a bitmask of VertexInputBits
-
-			bool transformUsed;///<If the shader uses the transformation matrix
-			bool globalsUsed;  ///<If the shader uses the globals buffer
+			InputBits inputs;///<Input values used by the shader, represented as a bitmask of InputBits
 
 			/**
 			 * @brief Info about a uniform parameter
@@ -170,29 +169,29 @@ namespace libcacaoasset {
 	};
 
 	///@cond
-	constexpr Shader::Descriptor::VertexInputBits operator|(Shader::Descriptor::VertexInputBits a, Shader::Descriptor::VertexInputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::VertexInputBits>;
-		return static_cast<Shader::Descriptor::VertexInputBits>(
+	constexpr Shader::Descriptor::InputBits operator|(Shader::Descriptor::InputBits a, Shader::Descriptor::InputBits b) noexcept {
+		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
+		return static_cast<Shader::Descriptor::InputBits>(
 			static_cast<U>(a) | static_cast<U>(b));
 	}
 
-	constexpr Shader::Descriptor::VertexInputBits operator&(Shader::Descriptor::VertexInputBits a, Shader::Descriptor::VertexInputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::VertexInputBits>;
-		return static_cast<Shader::Descriptor::VertexInputBits>(
+	constexpr Shader::Descriptor::InputBits operator&(Shader::Descriptor::InputBits a, Shader::Descriptor::InputBits b) noexcept {
+		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
+		return static_cast<Shader::Descriptor::InputBits>(
 			static_cast<U>(a) & static_cast<U>(b));
 	}
 
-	constexpr Shader::Descriptor::VertexInputBits operator~(Shader::Descriptor::VertexInputBits a) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::VertexInputBits>;
-		return static_cast<Shader::Descriptor::VertexInputBits>(
+	constexpr Shader::Descriptor::InputBits operator~(Shader::Descriptor::InputBits a) noexcept {
+		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
+		return static_cast<Shader::Descriptor::InputBits>(
 			static_cast<U>(~static_cast<U>(a)));
 	}
 
-	constexpr Shader::Descriptor::VertexInputBits& operator|=(Shader::Descriptor::VertexInputBits& a, Shader::Descriptor::VertexInputBits b) noexcept {
+	constexpr Shader::Descriptor::InputBits& operator|=(Shader::Descriptor::InputBits& a, Shader::Descriptor::InputBits b) noexcept {
 		return a = a | b;
 	}
 
-	constexpr Shader::Descriptor::VertexInputBits& operator&=(Shader::Descriptor::VertexInputBits& a, Shader::Descriptor::VertexInputBits b) noexcept {
+	constexpr Shader::Descriptor::InputBits& operator&=(Shader::Descriptor::InputBits& a, Shader::Descriptor::InputBits b) noexcept {
 		return a = a & b;
 	}
 	///@endcond
