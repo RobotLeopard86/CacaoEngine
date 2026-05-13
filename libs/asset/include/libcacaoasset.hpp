@@ -1,9 +1,11 @@
 #pragma once
 
 #include "libjaguar/Document.hpp"
+#include "libjaguar/Traits.hpp"
 
 #include <string>
 #include <cstdint>
+#include <variant>
 
 namespace libcacaoasset {
 	/**
@@ -128,6 +130,43 @@ namespace libcacaoasset {
 			std::vector<UniformParameter> uniformParams;///<Uniform parameters list
 			std::vector<TextureParameter> texParams;	///<Texture parameters list
 		} descriptor;									///<Shader information descriptor
+	};
+
+	/**
+	 * @brief Representation of a cubemap resource
+	 */
+	struct Cubemap {
+		std::vector<unsigned char> left;  ///<Image data for left face
+		std::vector<unsigned char> right; ///<Image data for right face
+		std::vector<unsigned char> top;	  ///<Image data for top face
+		std::vector<unsigned char> bottom;///<Image data for bottom face
+		std::vector<unsigned char> front; ///<Image data for front face
+		std::vector<unsigned char> back;  ///<Image data for back face
+	};
+
+	/**
+	 * @brief Representation of a material resource
+	 */
+	struct Material {
+		/**
+		 * @brief A special object to refer to textures in material data storage
+		 */
+		struct TexRef {
+			std::string address;///<The resource address of the target texture
+			bool cubemap;		///<If the address refers to a cubemap or not
+		};
+
+		using Storage = std::variant<int, unsigned int, bool, libjaguar::Vector<float, 2>, libjaguar::Vector<float, 3>, libjaguar::Vector<float, 4>,
+			TexRef, libjaguar::Vector<int, 2>, libjaguar::Vector<int, 3>, libjaguar::Vector<int, 4>, libjaguar::Vector<unsigned int, 2>,
+			libjaguar::Vector<unsigned int, 3>, libjaguar::Vector<unsigned int, 4>, libjaguar::Matrix<float, 2, 2>, libjaguar::Matrix<float, 3, 3>, libjaguar::Matrix<float, 4, 4>>;
+
+		struct Param {
+			std::string target;///<The shader parameter that receives the stored data
+			Storage storage;   ///<The data storage for the parameter value
+		};
+
+		std::string shaderAddress;	  ///<Resource address of the base shader
+		std::vector<Param> parameters;///<Data to apply to the shader
 	};
 
 	///@cond
@@ -273,4 +312,76 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If encoding fails
 	 */
 	void EncodeWorld(const World& world, std::ostream* stream);
+
+	/**
+	 * @brief Decode a shader object from the stream data
+	 *
+	 * @param stream The stream to read data from
+	 *
+	 * @return The resulting shader object
+	 *
+	 * @throws std::runtime_error If the stream pointer is invalid
+	 * @throws std::runtime_error If the stream is not a valid shader
+	 * @throws std::runtime_error If decoding fails
+	 */
+	Shader DecodeShader(std::istream* stream);
+
+	/**
+	 * @brief Export a shader object to a stream
+	 *
+	 * @param shader The Shader to export
+	 * @param stream The stream to write to
+	 *
+	 * @throws std::runtime_error If the stream pointer is invalid
+	 * @throws std::runtime_error If encoding fails
+	 */
+	void EncodeShader(const Shader& shader, std::ostream* stream);
+
+	/**
+	 * @brief Decode a material object from the stream data
+	 *
+	 * @param stream The stream to read data from
+	 *
+	 * @return The resulting material object
+	 *
+	 * @throws std::runtime_error If the stream pointer is invalid
+	 * @throws std::runtime_error If the stream is not a valid material
+	 * @throws std::runtime_error If decoding fails
+	 */
+	Material DecodeMaterial(std::istream* stream);
+
+	/**
+	 * @brief Export a material object to a stream
+	 *
+	 * @param material The Material to export
+	 * @param stream The stream to write to
+	 *
+	 * @throws std::runtime_error If the stream pointer is invalid
+	 * @throws std::runtime_error If encoding fails
+	 */
+	void EncodeMaterial(const Material& material, std::ostream* stream);
+
+	/**
+	 * @brief Decode a cubemap object from the stream data
+	 *
+	 * @param stream The stream to read data from
+	 *
+	 * @return The resulting cubemap object
+	 *
+	 * @throws std::runtime_error If the stream pointer is invalid
+	 * @throws std::runtime_error If the stream is not a valid cubemap
+	 * @throws std::runtime_error If decoding fails
+	 */
+	Cubemap DecodeCubemap(std::istream* stream);
+
+	/**
+	 * @brief Export a cubemap object to a stream
+	 *
+	 * @param cubemap The Cubemap to export
+	 * @param stream The stream to write to
+	 *
+	 * @throws std::runtime_error If the stream pointer is invalid
+	 * @throws std::runtime_error If encoding fails
+	 */
+	void EncodeCubemap(const Cubemap& cubemap, std::ostream* stream);
 }

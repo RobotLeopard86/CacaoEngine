@@ -13,5 +13,6 @@ Table of Contents:
 
     libapis/common/root
     libapis/formats/root
+    libapis/asset/root
     libapis/audiodecoder/root
     libapis/image/root
