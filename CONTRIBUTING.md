@@ -48,6 +48,7 @@ The public header files are those located in the following locations:
 * `libs/audiodecoder/include`
 * `libs/common/include`
 * `libs/formats/include`
+* `libs/asset/include`
 * `libs/image/include`
 
 The only exceptions to the code-commenting rule in function implementations are:
@@ -57,7 +58,7 @@ The only exceptions to the code-commenting rule in function implementations are:
 ## Branching Scheme
 Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  
 
-During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All pre-release development and testing should continue in the staging branch until the stable release is completed. At that time, the staging branch should be squash-merged back into `dev` and `main`.  
+During release preparation, a branch should be made from `main` named `staging/<nickname of release>`. All pre-release development and testing should continue in the staging branch until the stable release is completed. No work for any release should take place in `dev` during staging, `dev` should be devoted only to work on the next release. Once the stable release is complete, the staging branch should be squash-merged back into `main`, and `dev` should be rebased on top of the new changes, resolving any and all merge conflicts if necessary.
 
 Release tags should be made for all releases, regardless of status (alpha, beta, RC, stable), and created from the staging branch, being named exactly the same as the version number (see the [versioning info page on the documentation site](https://robotleopard86.github.io/CacaoEngine/dev/manual/versioning.html) for further information); no prefix or suffix should be used (`2026.1.0a`, not `v2026.1.0a`)
 
@@ -66,7 +67,7 @@ While generative AI is extremely useful for programming, we have certain rules r
 
 It is perfectly acceptable to use AI for brainstorming, prototyping, debugging, and code generation (provided you actually engage in the design process and review the code prior to submission). However, you **must be able to explain _in detail_ what your code is doing** without the AI's help and are wholly responsible for the code you submit.  
 
-If you use AI in this manner, please include the **unedited** chat log for your change (although it's fine to censor stuff like personal information) as an attachment on your PR. You must show that sufficient human effort was put into the PR. If you cannot explain your patch without the AI's help or cannot demonstrate that you involved yourself in the development process (aside from tiny, self-explanatory patches), your PR **will be rejected**.  
+If you use AI in this manner, please include the **unedited** chat log for your change (although it's fine to censor stuff like personal information) as an attachment on your PR. You must show that sufficient human effort was put into the PR. If you cannot explain your patch without the AI's help or cannot demonstrate that you involved yourself in the development process (aside from tiny, self-explanatory patches), **your PR will be rejected**.  
 
 As for what counts as sufficient human involvement, we would look to see things such as involved planning and design conversation, multiple rounds of iteration and feedback, and/or manual edits. For the most part, you should be fine as long as you don't just tell the AI "fix this bug" or "implement this feature" and leave it at that.
 
@@ -77,4 +78,4 @@ All code contributions must be submitted as GitHub pull requests; standalone pat
 
 Before making changes, make a fork of the repository on GitHub. **Ensure that the "Copy the `main` branch only" option is unchecked**. Please make all changes in your copy of the `dev` branch.  
 
-Before submitting your changes, ensure to rebase your branch onto the upstream `dev` branch (`git pull --rebase`) and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Only pull requests in English will be accepted (though use of translation tools is, of course, perfectly acceptable).
+Before submitting your changes, ensure to rebase your branch onto the upstream `dev` branch (`git pull --rebase`) and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Pull requests should be made in English, but the use of translation tools (including AI translation) is perfectly acceptable and encouraged for non-fluent speakers.

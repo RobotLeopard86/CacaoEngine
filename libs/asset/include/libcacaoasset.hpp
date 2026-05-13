@@ -250,6 +250,22 @@ namespace libcacaoasset {
 		Resource GetResource(const std::string& address);
 
 		/**
+		 * @brief Get a list of resources in the pack
+		 *
+		 * @return A list of all resource addresses
+		 */
+		std::vector<std::string> ListResources();
+
+		/**
+		 * @brief Get a list of resources of a certain type in the pack
+		 *
+		 * @return A list of all matchingresource addresses
+		 *
+		 * @throws std::runtime_error If the provided type is a type of resource that cannot be embedded in a pack
+		 */
+		std::vector<std::string> ListResourcesOfType(Resource::Type type);
+
+		/**
 		 * @brief Insert a resource into the pack, replacing any previous resources at its address
 		 *
 		 * @param address The resource's address
