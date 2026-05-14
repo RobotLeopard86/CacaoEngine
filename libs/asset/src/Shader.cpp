@@ -4,7 +4,10 @@
 #include "libjaguar/Document.hpp"
 #include "libjaguar/StructuredTypeLayout.hpp"
 #include "libjaguar/TypeTags.hpp"
+
 #include <vector>
+
+#define SHADER_REVISION uint16_t(1)
 
 namespace libcacaoasset {
 	Shader::Descriptor::UniformParameter _DecUniformParameter(libjaguar::Document::ObjReader& rd) {
@@ -136,6 +139,20 @@ namespace libcacaoasset {
 		CheckException(stream, "Invalid stream pointer!");
 		CheckException(stream->good(), "Stream is broken!");
 
+		//Check for header
+		std::array<char, 6> headerChk;
+		stream->read(headerChk.data(), headerChk.size());
+		CheckException(stream->good(), "Failed to read shader header!");
+		CheckException(headerChk[0] == 'c' && headerChk[1] == 'e' && headerChk[2] == 's' && headerChk[3] == 'h' && headerChk[4] == 'd' && headerChk[5] == 'r', "Invalid shader header!");
+
+		//Check file revision
+		uint16_t revision = 0;
+		revision |= stream->get();
+		CheckException(stream->good(), "Failed to read shader version stamp!");
+		revision |= (stream->get() << 8);
+		CheckException(stream->good(), "Failed to read shader version stamp!");
+		CheckException(revision <= SHADER_REVISION, "Shader is of incompatible revision!");
+
 		//Make objects
 		std::unique_ptr<std::istream> ptr(stream);
 		libjaguar::Document doc(std::move(ptr));
@@ -152,6 +169,11 @@ namespace libcacaoasset {
 	void EncodeShader(const Shader& shader, std::ostream* stream) {
 		CheckException(stream, "Invalid stream pointer!");
 		CheckException(stream->good(), "Stream is broken!");
+
+		//Write header
+		stream->write("ceshdr", 6);
+		stream->put(SHADER_REVISION & 0xF);
+		stream->put(SHADER_REVISION >> 8);
 
 		//Create output document
 		libjaguar::Document doc;

@@ -55,7 +55,7 @@ namespace libcacaoasset {
 		std::array<char, 6> headerChk;
 		stream->read(headerChk.data(), headerChk.size());
 		CheckException(stream->good(), "Failed to read asset pack header!");
-		CheckException(headerChk[0] == 'x' && headerChk[1] == 'a' && headerChk[2] == 'k' && headerChk[3] == 'f' && headerChk[4] == 'i' && headerChk[5] == 'l', "Invalid asset pack header");
+		CheckException(headerChk[0] == 'x' && headerChk[1] == 'a' && headerChk[2] == 'k' && headerChk[3] == 'f' && headerChk[4] == 'i' && headerChk[5] == 'l', "Invalid asset pack header!");
 
 		//Check file revision
 		uint16_t revision = 0;

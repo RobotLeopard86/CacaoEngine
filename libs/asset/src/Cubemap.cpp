@@ -3,6 +3,8 @@
 
 #include "libjaguar/Document.hpp"
 
+#define CMAP_REVISION uint16_t(1)
+
 namespace libcacaoasset {
 	Cubemap _DecCubemap(libjaguar::Document::ObjReader& rd) {
 		Cubemap cmap = {};
@@ -63,6 +65,20 @@ namespace libcacaoasset {
 		CheckException(stream, "Invalid stream pointer!");
 		CheckException(stream->good(), "Stream is broken!");
 
+		//Check for header
+		std::array<char, 6> headerChk;
+		stream->read(headerChk.data(), headerChk.size());
+		CheckException(stream->good(), "Failed to read cubemap header!");
+		CheckException(headerChk[0] == 'c' && headerChk[1] == 'e' && headerChk[2] == 'c' && headerChk[3] == 'm' && headerChk[4] == 'a' && headerChk[5] == 'p', "Invalid cubemap header!");
+
+		//Check file revision
+		uint16_t revision = 0;
+		revision |= stream->get();
+		CheckException(stream->good(), "Failed to read cubemap version stamp!");
+		revision |= (stream->get() << 8);
+		CheckException(stream->good(), "Failed to read cubemap version stamp!");
+		CheckException(revision <= CMAP_REVISION, "Cubemap is of incompatible revision!");
+
 		//Make objects
 		std::unique_ptr<std::istream> ptr(stream);
 		libjaguar::Document doc(std::move(ptr));
@@ -79,6 +95,11 @@ namespace libcacaoasset {
 	void EncodeCubemap(const Cubemap& cubemap, std::ostream* stream) {
 		CheckException(stream, "Invalid stream pointer!");
 		CheckException(stream->good(), "Stream is broken!");
+
+		//Write header
+		stream->write("cecmap", 6);
+		stream->put(CMAP_REVISION & 0xF);
+		stream->put(CMAP_REVISION >> 8);
 
 		//Create output document
 		libjaguar::Document doc;

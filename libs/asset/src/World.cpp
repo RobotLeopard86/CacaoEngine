@@ -6,6 +6,8 @@
 #include "libjaguar/Traits.hpp"
 #include "libjaguar/TypeTags.hpp"
 
+#define WORLD_REVISION uint16_t(1)
+
 namespace libcacaoasset {
 	World::Component _DecComponent(libjaguar::Document::ObjReader& rd) {
 		World::Component component;
@@ -156,6 +158,20 @@ namespace libcacaoasset {
 		CheckException(stream, "Invalid stream pointer!");
 		CheckException(stream->good(), "Stream is broken!");
 
+		//Check for header
+		std::array<char, 6> headerChk;
+		stream->read(headerChk.data(), headerChk.size());
+		CheckException(stream->good(), "Failed to read world header!");
+		CheckException(headerChk[0] == 'c' && headerChk[1] == 'e' && headerChk[2] == 'w' && headerChk[3] == 'r' && headerChk[4] == 'l' && headerChk[5] == 'd', "Invalid world header!");
+
+		//Check file revision
+		uint16_t revision = 0;
+		revision |= stream->get();
+		CheckException(stream->good(), "Failed to read world version stamp!");
+		revision |= (stream->get() << 8);
+		CheckException(stream->good(), "Failed to read world version stamp!");
+		CheckException(revision <= WORLD_REVISION, "World is of incompatible revision!");
+
 		//Make objects
 		std::unique_ptr<std::istream> ptr(stream);
 		libjaguar::Document doc(std::move(ptr));
@@ -179,6 +195,11 @@ namespace libcacaoasset {
 
 		//Write root field
 		doc.SetOrCreateValue<World>("__WORLD__", world);
+
+		//Write header
+		stream->write("cewrld", 6);
+		stream->put(WORLD_REVISION & 0xF);
+		stream->put(WORLD_REVISION >> 8);
 
 		//Export
 		doc.ExportTo(*stream);
