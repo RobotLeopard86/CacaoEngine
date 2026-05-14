@@ -4,24 +4,57 @@
 #include "libjaguar/Document.hpp"
 #include "libjaguar/StructuredTypeLayout.hpp"
 #include "libjaguar/TypeTags.hpp"
+#include <vector>
 
 namespace libcacaoasset {
 	Shader::Descriptor::UniformParameter _DecUniformParameter(libjaguar::Document::ObjReader& rd) {
+		Shader::Descriptor::UniformParameter uparam;
+		uparam.name = rd.Get<std::string>("name");
+		uint8_t typeByte = rd.Get<uint8_t>("type");
+		CheckException(typeByte == 0x22 || typeByte == 0x33 || typeByte == 0x44 || typeByte == 0xB1 || ((typeByte >> 8) >= 0xD && (typeByte & 0xF) >= 1 && (typeByte & 0xF) <= 4), "Bad type byte!");
+		uparam.type = static_cast<Shader::Descriptor::UniformParameter::DataType>(typeByte);
+		uparam.bufferOffset = rd.Get<unsigned int>("uboOff");
+		return uparam;
 	}
 
 	Shader::Descriptor::TextureParameter _DecTextureParameter(libjaguar::Document::ObjReader& rd) {
+		Shader::Descriptor::TextureParameter tparam;
+		tparam.name = rd.Get<std::string>("name");
+		tparam.isCubemap = rd.Get<bool>("cube");
+		tparam.binding = rd.Get<unsigned int>("binding");
+		return tparam;
 	}
 
 	Shader _DecShader(libjaguar::Document::ObjReader& rd) {
+		Shader shader;
+		shader.irCode = rd.Get<std::vector<unsigned char>>("code");
+		shader.descriptor.inputs = static_cast<Shader::Descriptor::InputBits>(rd.Get<uint8_t>("inputs"));
+		uint8_t typeByte = rd.Get<uint8_t>("type");
+		CheckException(typeByte == 0xA || typeByte == 0xD || typeByte == 0xE, "Bad type byte!");
+		shader.descriptor.type = static_cast<Shader::Descriptor::Type>(typeByte);
+		shader.descriptor.uniformParams = rd.Get<std::vector<Shader::Descriptor::UniformParameter>>("uparams");
+		shader.descriptor.texParams = rd.Get<std::vector<Shader::Descriptor::TextureParameter>>("tparams");
+		return shader;
 	}
 
 	void _EncUniformParameter(const Shader::Descriptor::UniformParameter& u, libjaguar::Document::ObjWriter& ow) {
+		ow.SetOrCreate<std::string>("name", u.name);
+		ow.SetOrCreate<unsigned int>("uboOff", u.bufferOffset);
+		ow.SetOrCreate<uint8_t>("type", static_cast<uint8_t>(u.type));
 	}
 
 	void _EncTextureParameter(const Shader::Descriptor::TextureParameter& t, libjaguar::Document::ObjWriter& ow) {
+		ow.SetOrCreate<std::string>("name", t.name);
+		ow.SetOrCreate<unsigned int>("binding", t.binding);
+		ow.SetOrCreate<bool>("cube", t.isCubemap);
 	}
 
 	void _EncShader(const Shader& s, libjaguar::Document::ObjWriter& ow) {
+		ow.SetOrCreate<std::vector<unsigned char>>("code", false, s.irCode);
+		ow.SetOrCreate<uint8_t>("type", static_cast<uint8_t>(s.descriptor.type));
+		ow.SetOrCreate<uint8_t>("inputs", static_cast<uint8_t>(s.descriptor.inputs));
+		ow.SetOrCreate<std::vector<Shader::Descriptor::UniformParameter>>("uparams", s.descriptor.uniformParams);
+		ow.SetOrCreate<std::vector<Shader::Descriptor::TextureParameter>>("tparams", s.descriptor.texParams);
 	}
 
 	void _RegisterShaderTypes(libjaguar::Document& doc) {

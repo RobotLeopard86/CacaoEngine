@@ -3,25 +3,58 @@
 
 #include "libjaguar/Document.hpp"
 #include "libjaguar/StructuredTypeLayout.hpp"
+#include "libjaguar/Traits.hpp"
 #include "libjaguar/TypeTags.hpp"
 
 namespace libcacaoasset {
 	World::Component _DecComponent(libjaguar::Document::ObjReader& rd) {
+		World::Component component;
+		component.typeID = rd.Get<std::string>("typeid");
+		component.reflection = rd.Get<std::vector<unsigned char>>("rfl");
+		return component;
 	}
 
 	World::Actor _DecActor(libjaguar::Document::ObjReader& rd) {
+		World::Actor actor;
+		actor.name = rd.Get<std::string>("name");
+		actor.guid = rd.Get<std::array<unsigned char, 16>>("guid");
+		actor.parentGUID = rd.Get<std::array<unsigned char, 16>>("pguid");
+		actor.initialPos = rd.Get<libjaguar::Vector<float, 3>>("initPos");
+		actor.initialRot = rd.Get<libjaguar::Vector<float, 3>>("initRot");
+		actor.initialScale = rd.Get<libjaguar::Vector<float, 3>>("initScl");
+		actor.components = rd.Get<std::vector<World::Component>>("components");
+		return actor;
 	}
 
 	World _DecWorld(libjaguar::Document::ObjReader& rd) {
+		World world;
+		world.initialCamPos = rd.Get<libjaguar::Vector<float, 3>>("camPos");
+		world.initialCamRot = rd.Get<libjaguar::Vector<float, 3>>("camRot");
+		world.skybox = rd.Get<std::string>("skybox");
+		world.actors = rd.Get<std::vector<World::Actor>>("actors");
+		return world;
 	}
 
 	void _EncComponent(const World::Component& c, libjaguar::Document::ObjWriter& ow) {
+		ow.SetOrCreate<std::string>("typeid", c.typeID);
+		ow.SetOrCreate<std::vector<unsigned char>>("typeid", false, c.reflection);
 	}
 
 	void _EncActor(const World::Actor& a, libjaguar::Document::ObjWriter& ow) {
+		ow.SetOrCreate<std::string>("name", a.name);
+		ow.SetOrCreate<std::array<unsigned char, 16>>("guid", false, a.guid);
+		ow.SetOrCreate<std::array<unsigned char, 16>>("pguid", false, a.parentGUID);
+		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initPos", a.initialPos);
+		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initRot", a.initialRot);
+		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initScl", a.initialScale);
+		ow.SetOrCreate<std::vector<World::Component>>("components", a.components);
 	}
 
 	void _EncWorld(const World& w, libjaguar::Document::ObjWriter& ow) {
+		ow.SetOrCreate<libjaguar::Vector<float, 3>>("camPos", w.initialCamPos);
+		ow.SetOrCreate<libjaguar::Vector<float, 3>>("camRot", w.initialCamRot);
+		ow.SetOrCreate<std::string>("skybox", w.skybox);
+		ow.SetOrCreate<std::vector<World::Actor>>("actors", w.actors);
 	}
 
 	void _RegisterWorldTypes(libjaguar::Document& doc) {

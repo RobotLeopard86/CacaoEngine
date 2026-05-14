@@ -69,11 +69,11 @@ namespace libcacaoasset {
 			/**
 			 * @brief The type of object a shader is for
 			 */
-			enum class Type {
-				Opaque3D,	///<3D opaque geometry in the world
-				NonOpaque3D,///<3D potentially non-opaque geometry in the world
-				Surface2D	///<2D object rendered on a surface
-			} type;			///<Type of this shader
+			enum class Type : uint8_t {
+				Opaque3D = 0xA,	  ///<3D opaque geometry in the world
+				NonOpaque3D = 0xD,///<3D potentially non-opaque geometry in the world
+				Surface2D = 0xE	  ///<2D object rendered on a surface
+			} type;				  ///<Type of this shader
 
 			/**
 			 * @brief Bits of used input data fields
@@ -85,7 +85,8 @@ namespace libcacaoasset {
 				Tangent = 1 << 3,  ///<Shader uses surface tangent vector
 				Bitangent = 1 << 4,///<Shader uses surface bitangent vector
 				Transform = 1 << 5,///<Shader uses transform matrix
-				Globals = 1 << 6,  ///<Shader iuses globals matrix
+				Globals = 1 << 6,  ///<Shader uses globals matrix
+				RESERVED = 1 << 7, ///<Reserved for later use
 			};
 
 			InputBits inputs;///<Input values used by the shader, represented as a bitmask of InputBits
@@ -94,24 +95,24 @@ namespace libcacaoasset {
 			 * @brief Info about a uniform parameter
 			 */
 			struct UniformParameter {
-				enum class DataType {
-					Int,	 ///<32-bit signed integer
-					UInt,	 ///<32-bit unsigned integer
-					Float,	 ///<Single-precision floating point number (32-bit)
-					Bool,	 ///<Boolean
-					Float2,	 ///<2-component float vector
-					Float3,	 ///<3-component float vector
-					Float4,	 ///<4-component float vector
-					Int2,	 ///<2-component int vector
-					Int3,	 ///<3-component int vector
-					Int4,	 ///<4-component int vector
-					UInt2,	 ///<2-component unsigned int vector
-					UInt3,	 ///<3-component unsigned int vector
-					UInt4,	 ///<4-component unsigned int vector
-					Float2x2,///<2x2 matrix of floats
-					Float3x3,///<3x3 matrix of floats
-					Float4x4,///<4x4 matrix of floats
-				} type;		 ///<Type of stored data
+				enum class DataType : uint8_t {
+					Int = 0xD1,		///<32-bit signed integer
+					UInt = 0xE1,	///<32-bit unsigned integer
+					Float = 0xF1,	///<Single-precision floating point number (32-bit)
+					Bool = 0xB1,	///<Boolean
+					Int2 = 0xD2,	///<2-component int vector
+					Int3 = 0xD3,	///<3-component int vector
+					Int4 = 0xD4,	///<4-component int vector
+					UInt2 = 0xE2,	///<2-component unsigned int vector
+					UInt3 = 0xE3,	///<3-component unsigned int vector
+					UInt4 = 0xE4,	///<4-component unsigned int vector
+					Float2 = 0xF2,	///<2-component float vector
+					Float3 = 0xF3,	///<3-component float vector
+					Float4 = 0xF4,	///<4-component float vector
+					Float2x2 = 0x22,///<2x2 matrix of floats
+					Float3x3 = 0x33,///<3x3 matrix of floats
+					Float4x4 = 0x44,///<4x4 matrix of floats
+				} type;				///<Type of stored data
 
 				std::string name;		  ///<Parameter name
 				unsigned int bufferOffset;///<Offset into the parameters constant buffer at which to write the data
