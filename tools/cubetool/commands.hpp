@@ -14,6 +14,7 @@ class CreateCmd {
   public:
 	CreateCmd(CLI::App&);
 	void Callback();
+	std::ifstream OpenFile(const std::string& pathStr);
 
   private:
 	CLI::App* cmd;
@@ -29,8 +30,10 @@ class ExtractCmd {
   private:
 	CLI::App* cmd;
 	bool doAll;
-	const std::array<const char*, 6> validFaces = {"right", "left", "up", "down", "front", "back"};
+	const std::array<const char*, 6> validFaces = {"front", "back", "top", "bottom", "left", "right"};
+	const std::array<const char*, 5> validFormats = {"png", "jpeg", "webp", "tga", "tiff"};
 	std::vector<uint8_t> faces;
+	uint8_t format = 0;
 	std::filesystem::path inPath;
 	std::filesystem::path out;
 };

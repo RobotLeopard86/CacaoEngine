@@ -1,4 +1,4 @@
-asset_deps = [commonlib_dep]
+asset_deps = [commonlib_dep, image_dep]
 
 # libjaguar
 jaguar_sp = subproject('jaguar', required: true, default_options: ['default_library=static'])

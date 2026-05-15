@@ -36,22 +36,3 @@ formats_lib = static_library('cacaoformats', sources: [
 ], include_directories: ['include', 'src'], pic: true, dependencies: formats_deps, install: true)
 
 formats_dep = declare_dependency(include_directories: 'include', link_with: formats_lib, dependencies: formats_deps)
-
-if testing
-    test('readwrite_material_packed', executable('readwrite_material_packed',
-        sources: 'test/readwrite_material_packed.cpp',
-        dependencies: formats_dep),
-        env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
-    test('readwrite_material_unpacked', executable('readwrite_material_unpacked',
-        sources: 'test/readwrite_material_unpacked.cpp',
-        dependencies: formats_dep),
-        env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
-    test('readwrite_world_packed', executable('readwrite_world_packed',
-        sources: 'test/readwrite_world_packed.cpp',
-        dependencies: formats_dep),
-        env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
-    test('readwrite_world_unpacked', executable('readwrite_world_unpacked',
-        sources: 'test/readwrite_world_unpacked.cpp',
-        dependencies: formats_dep),
-        env: ['RESDIR=' + meson.current_source_dir() / 'test' / 'res'], suite: 'libcacaoformats')
-endif

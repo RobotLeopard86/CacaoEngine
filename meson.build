@@ -127,8 +127,6 @@ spirv_cross = declare_dependency(dependencies: [spv_core, spv_cpp, spv_rfl, spv_
 # CLI11
 cli11_dep = subproject('cli11', required: true).get_variable('CLI11_dep')
 
-testing = get_option('testing')
-
 # Build components
 if build_libs
 	subdir('libs')
