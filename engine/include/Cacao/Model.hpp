@@ -45,7 +45,7 @@ namespace Cacao {
 		 *
 		 * @return A handle to the mesh resource
 		 *
-		 * @throws NonexistentValueException If the provided ID is not found in meshList
+		 * @throws NonexistentValueException If the provided ID is not found in the mesh list
 		 */
 		std::shared_ptr<Mesh> GetMesh(const std::string& id);
 
@@ -56,7 +56,8 @@ namespace Cacao {
 		 *
 		 * @return A handle to the texture resource
 		 *
-		 * @throws NonexistentValueException If the provided ID is not found in texList
+		 * @throws NonexistentValueException If the provided ID is not found in the texture list
+		 * @throws MiscException If texture processing fails
 		 */
 		std::shared_ptr<Tex2D> GetTexture(const std::string& id);
 

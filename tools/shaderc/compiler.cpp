@@ -1,7 +1,7 @@
 #include "compiler.hpp"
 #include "toolutil.hpp"
 
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 #include "libcacaoformats.hpp"
 
 #include <sstream>

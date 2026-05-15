@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <functional>
 
-#include "Cacao/DllHelper.hpp"
+#include "DllHelper.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/PAL.hpp"
 

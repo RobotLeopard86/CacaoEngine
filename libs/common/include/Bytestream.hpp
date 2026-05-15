@@ -1,41 +1,16 @@
-/*
-IMPORTANT!!!!!
-
-THIS FILE IS ONLY HERE TO MAINTAIN COMPATIBILITY DURING THE NEW COMMONLIB TRANSITION!!!
-
-IT WILL BE DELETED ONCE THAT'S DONE!!!
-*/
-
 #pragma once
 
 #include <vector>
 #include <istream>
 #include <ostream>
-#include <string>
 #include <cstring>
-#include <functional>
-#include <stdexcept>
 
-/**
- * @brief Quick utility to throw an exception on an error condition
- *
- * The exception will be thrown if the condition evaluates to false
- *
- * @param cond The condition to evaluate
- * @param msg The message for the exception thrown
- * @param unwindFn A function to clean up state before exception throwing should the condition be false
- */
-inline void CheckException(bool cond, std::string msg, std::function<void()> unwindFn = []() {}) {
-	if(!cond) {
-		unwindFn();
-		throw std::runtime_error(msg);
-	}
-}
+#include "DllHelper.hpp"
 
 /**
  * @brief Byte stream buffer supporting both input and output, with auto-resizing
  */
-class bytestreambuf : public std::streambuf {
+class CACAO_API bytestreambuf : public std::streambuf {
   public:
 	/**
 	 * @brief Create a bytestreambuf from a vector of data
@@ -163,7 +138,7 @@ class bytestreambuf : public std::streambuf {
 /**
  * @brief Byte input stream utility
  */
-class ibytestream : public std::istream {
+class CACAO_API ibytestream : public std::istream {
   public:
 	ibytestream(std::vector<char>& data)
 	  : std::istream(bufInit(data)) {
@@ -187,7 +162,7 @@ class ibytestream : public std::istream {
 /**
  * @brief Byte output stream utility
  */
-class obytestream : public std::ostream {
+class CACAO_API obytestream : public std::ostream {
   public:
 	obytestream(std::vector<char>& data)
 	  : std::ostream(bufInit(data)) {

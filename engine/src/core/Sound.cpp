@@ -3,7 +3,7 @@
 #include "Cacao/AudioManager.hpp"
 #include "impl/Sound.hpp"
 
-#include "libcacaocommon.hpp"
+#include "Bytestream.hpp"
 
 namespace Cacao {
 	Sound::Sound(std::vector<char>&& encodedAudio, const std::string& addr)

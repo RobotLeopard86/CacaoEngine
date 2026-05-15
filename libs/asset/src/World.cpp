@@ -1,5 +1,5 @@
 #include "libcacaoasset.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 
 #include "libjaguar/Document.hpp"
 #include "libjaguar/StructuredTypeLayout.hpp"
@@ -11,29 +11,29 @@
 namespace libcacaoasset {
 	World::Component _DecComponent(libjaguar::Document::ObjReader& rd) {
 		World::Component component;
-		component.typeID = rd.Get<std::string>("typeid");
-		component.reflection = rd.Get<std::vector<unsigned char>>("rfl");
+		component.typeID = rd.Query<std::string>("typeid");
+		component.reflection = rd.Query<std::vector<unsigned char>>("rfl");
 		return component;
 	}
 
 	World::Actor _DecActor(libjaguar::Document::ObjReader& rd) {
 		World::Actor actor;
-		actor.name = rd.Get<std::string>("name");
-		actor.guid = rd.Get<std::array<unsigned char, 16>>("guid");
-		actor.parentGUID = rd.Get<std::array<unsigned char, 16>>("pguid");
-		actor.initialPos = rd.Get<libjaguar::Vector<float, 3>>("initPos");
-		actor.initialRot = rd.Get<libjaguar::Vector<float, 3>>("initRot");
-		actor.initialScale = rd.Get<libjaguar::Vector<float, 3>>("initScl");
-		actor.components = rd.Get<std::vector<World::Component>>("components");
+		actor.name = rd.Query<std::string>("name");
+		actor.guid = rd.Query<std::array<unsigned char, 16>>("guid");
+		actor.parentGUID = rd.Query<std::array<unsigned char, 16>>("pguid");
+		actor.initialPos = rd.Query<libjaguar::Vector<float, 3>>("initPos");
+		actor.initialRot = rd.Query<libjaguar::Vector<float, 3>>("initRot");
+		actor.initialScale = rd.Query<libjaguar::Vector<float, 3>>("initScl");
+		actor.components = rd.Query<std::vector<World::Component>>("components");
 		return actor;
 	}
 
 	World _DecWorld(libjaguar::Document::ObjReader& rd) {
 		World world;
-		world.initialCamPos = rd.Get<libjaguar::Vector<float, 3>>("camPos");
-		world.initialCamRot = rd.Get<libjaguar::Vector<float, 3>>("camRot");
-		world.skybox = rd.Get<std::string>("skybox");
-		world.actors = rd.Get<std::vector<World::Actor>>("actors");
+		world.initialCamPos = rd.Query<libjaguar::Vector<float, 3>>("camPos");
+		world.initialCamRot = rd.Query<libjaguar::Vector<float, 3>>("camRot");
+		world.skybox = rd.Query<std::string>("skybox");
+		world.actors = rd.Query<std::vector<World::Actor>>("actors");
 		return world;
 	}
 

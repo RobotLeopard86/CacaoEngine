@@ -1,5 +1,6 @@
 #include "Targetgen.hpp"
 #include "CSO.hpp"
+#include "CheckException.hpp"
 
 #include <sstream>
 

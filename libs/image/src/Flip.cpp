@@ -1,6 +1,8 @@
 #include "libcacaoimage.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
+
 #include <memory>
+#include <cstring>
 
 namespace libcacaoimage {
 	Image Flip(const Image& src) {

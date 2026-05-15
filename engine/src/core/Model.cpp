@@ -6,7 +6,8 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/texture.h"
-#include "libcacaocommon.hpp"
+
+#include "Bytestream.hpp"
 #include "libcacaoimage.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -258,15 +259,15 @@ namespace Cacao {
 			for(const auto& [color, bits] : channels) {
 				if(bits <= 0) ++zeroedChannels;
 			}
-			if(zeroedChannels != 0) CheckException(zeroedChannels % 2 != 0, "Invalid zeroed-channel layout for model embedded texture!");
-			if(zeroedChannels == 1) CheckException(channels['a'] == 0, "Only the alpha channel may be zero for a model embedded texture layout with only one zeroed channel!");
+			if(zeroedChannels != 0) Check<MiscException>(zeroedChannels % 2 != 0, "Invalid zeroed-channel layout for model embedded texture!");
+			if(zeroedChannels == 1) Check<MiscException>(channels['a'] == 0, "Only the alpha channel may be zero for a model embedded texture layout with only one zeroed channel!");
 
 			//Set layout in image object
 			switch(zeroedChannels) {
 				case 0: img.layout = libcacaoimage::Image::Layout::RGBA; break;
 				case 1: img.layout = libcacaoimage::Image::Layout::RGB; break;
 				case 3: img.layout = libcacaoimage::Image::Layout::Grayscale; break;
-				default: CheckException(false, "Impossible channel layout for model embedded texture!");
+				default: Check<MiscException>(false, "Impossible channel layout for model embedded texture!");
 			}
 
 			//Move data to image object

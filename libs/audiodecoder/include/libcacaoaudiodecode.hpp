@@ -1,12 +1,14 @@
 #pragma once
 
-#include <string>
 #include <cstdint>
 #include <vector>
+#include <istream>
+
+#include "DllHelper.hpp"
 
 namespace libcacaoaudiodecode {
 	///@brief Decoded audio data and properties necessary to use it
-	struct Result {
+	struct CACAO_API Result {
 		std::vector<short> data;///<Audio data
 		uint64_t sampleCount;	///<Number of audio samples
 		uint32_t sampleRate;	///<Rate of samples per second
@@ -24,5 +26,5 @@ namespace libcacaoaudiodecode {
 	 *
 	 * @throws std::runtime_error If the provided data is not of the correct size, is of an unsupported format, or the audio decoding fails
 	 */
-	Result DecodeAudio(std::istream& encoded);
+	CACAO_API Result DecodeAudio(std::istream& encoded);
 }

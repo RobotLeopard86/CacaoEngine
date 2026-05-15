@@ -7,11 +7,13 @@
 #include <cstdint>
 #include <variant>
 
+#include "DllHelper.hpp"
+
 namespace libcacaoasset {
 	/**
 	 * @brief Representation of any type of resource within an asset pack
 	 */
-	struct Resource {
+	struct CACAO_API Resource {
 		/**
 		 * @brief Enumeration of all resource types
 		 */
@@ -36,19 +38,19 @@ namespace libcacaoasset {
 	/**
 	 * @brief Representation of a world resource
 	 */
-	struct World {
+	struct CACAO_API World {
 		std::string skybox;						  ///<Skybox resource address
 		libjaguar::Vector<float, 3> initialCamPos;///<Initial camera position
 		libjaguar::Vector<float, 3> initialCamRot;///<Initial camera rotation
 
 		///@brief Type for components on actors
-		struct Component {
+		struct CACAO_API Component {
 			std::string typeID;					  ///<Component type ID
 			std::vector<unsigned char> reflection;///<Jaguar-encoded component reflection data (for use with Astra)
 		};
 
 		///@brief Type for actors in the world
-		struct Actor {
+		struct CACAO_API Actor {
 			std::array<unsigned char, 16> guid;		 ///<Actor GUID
 			std::array<unsigned char, 16> parentGUID;///<GUID of parent actor or all zeroes if this is a top-level actor
 			std::string name;						 ///<Human-friendly actor name
@@ -63,9 +65,9 @@ namespace libcacaoasset {
 	/**
 	 * @brief Representation of a shader resource
 	 */
-	struct Shader {
+	struct CACAO_API Shader {
 		std::vector<unsigned char> irCode;///<Compiled Slang IR
-		struct Descriptor {
+		struct CACAO_API Descriptor {
 			/**
 			 * @brief The type of object a shader is for
 			 */
@@ -94,7 +96,7 @@ namespace libcacaoasset {
 			/**
 			 * @brief Info about a uniform parameter
 			 */
-			struct UniformParameter {
+			struct CACAO_API UniformParameter {
 				enum class DataType : uint8_t {
 					Int = 0xD1,		///<32-bit signed integer
 					UInt = 0xE1,	///<32-bit unsigned integer
@@ -121,7 +123,7 @@ namespace libcacaoasset {
 			/**
 			 * @brief Information about a texture parameter
 			 */
-			struct TextureParameter {
+			struct CACAO_API TextureParameter {
 				std::string name;	 ///<Parameter name
 				unsigned int binding;///<Descriptor binding index
 				bool isCubemap;		 ///<If the texture is a Cubemap or a Tex2D
@@ -135,7 +137,7 @@ namespace libcacaoasset {
 	/**
 	 * @brief Representation of a cubemap resource
 	 */
-	struct Cubemap {
+	struct CACAO_API Cubemap {
 		std::vector<unsigned char> left;  ///<Image data for left face
 		std::vector<unsigned char> right; ///<Image data for right face
 		std::vector<unsigned char> top;	  ///<Image data for top face
@@ -147,20 +149,20 @@ namespace libcacaoasset {
 	/**
 	 * @brief Representation of a material resource
 	 */
-	struct Material {
+	struct CACAO_API Material {
 		/**
 		 * @brief A special object to refer to textures in material data storage
 		 */
-		struct TexRef {
+		struct CACAO_API TexRef {
 			std::string address;///<The resource address of the target texture
-			bool cubemap;		///<If the address refers to a cubemap or not
+			bool isCubemap;		///<If the address refers to a cubemap or not
 		};
 
-		using Storage = std::variant<int, unsigned int, bool, libjaguar::Vector<float, 2>, libjaguar::Vector<float, 3>, libjaguar::Vector<float, 4>,
-			TexRef, libjaguar::Vector<int, 2>, libjaguar::Vector<int, 3>, libjaguar::Vector<int, 4>, libjaguar::Vector<unsigned int, 2>,
-			libjaguar::Vector<unsigned int, 3>, libjaguar::Vector<unsigned int, 4>, libjaguar::Matrix<float, 2, 2>, libjaguar::Matrix<float, 3, 3>, libjaguar::Matrix<float, 4, 4>>;
+		using Storage = std::variant<int, unsigned int, float, bool, TexRef, libjaguar::Vector<float, 2>, libjaguar::Vector<float, 3>, libjaguar::Vector<float, 4>,
+			libjaguar::Vector<int, 2>, libjaguar::Vector<int, 3>, libjaguar::Vector<int, 4>, libjaguar::Vector<unsigned int, 2>, libjaguar::Vector<unsigned int, 3>,
+			libjaguar::Vector<unsigned int, 4>, libjaguar::Matrix<float, 2, 2>, libjaguar::Matrix<float, 3, 3>, libjaguar::Matrix<float, 4, 4>>;
 
-		struct Param {
+		struct CACAO_API Param {
 			std::string target;///<The shader parameter that receives the stored data
 			Storage storage;   ///<The data storage for the parameter value
 		};
@@ -169,38 +171,10 @@ namespace libcacaoasset {
 		std::vector<Param> parameters;///<Data to apply to the shader
 	};
 
-	///@cond
-	constexpr Shader::Descriptor::InputBits operator|(Shader::Descriptor::InputBits a, Shader::Descriptor::InputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
-		return static_cast<Shader::Descriptor::InputBits>(
-			static_cast<U>(a) | static_cast<U>(b));
-	}
-
-	constexpr Shader::Descriptor::InputBits operator&(Shader::Descriptor::InputBits a, Shader::Descriptor::InputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
-		return static_cast<Shader::Descriptor::InputBits>(
-			static_cast<U>(a) & static_cast<U>(b));
-	}
-
-	constexpr Shader::Descriptor::InputBits operator~(Shader::Descriptor::InputBits a) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
-		return static_cast<Shader::Descriptor::InputBits>(
-			static_cast<U>(~static_cast<U>(a)));
-	}
-
-	constexpr Shader::Descriptor::InputBits& operator|=(Shader::Descriptor::InputBits& a, Shader::Descriptor::InputBits b) noexcept {
-		return a = a | b;
-	}
-
-	constexpr Shader::Descriptor::InputBits& operator&=(Shader::Descriptor::InputBits& a, Shader::Descriptor::InputBits b) noexcept {
-		return a = a & b;
-	}
-	///@endcond
-
 	/**
 	 * @brief Interface for lazy access to an asset pack file
 	 */
-	class AssetPack {
+	class CACAO_API AssetPack {
 	  public:
 		/**
 		 * @brief Open an asset pack file from on disk
@@ -303,7 +277,7 @@ namespace libcacaoasset {
 	 *
 	 * @return If the address is valid
 	 */
-	bool ValidateResourceAddress(const std::string& address, Resource::Type type);
+	CACAO_API bool ValidateResourceAddress(const std::string& address, Resource::Type type);
 
 	/**
 	 * @brief Decode a world object from the stream data
@@ -316,7 +290,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream is not a valid world
 	 * @throws std::runtime_error If decoding fails
 	 */
-	World DecodeWorld(std::istream* stream);
+	CACAO_API World DecodeWorld(std::istream* stream);
 
 	/**
 	 * @brief Export a world object to a stream
@@ -327,7 +301,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream pointer is invalid
 	 * @throws std::runtime_error If encoding fails
 	 */
-	void EncodeWorld(const World& world, std::ostream* stream);
+	CACAO_API void EncodeWorld(const World& world, std::ostream* stream);
 
 	/**
 	 * @brief Decode a shader object from the stream data
@@ -340,7 +314,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream is not a valid shader
 	 * @throws std::runtime_error If decoding fails
 	 */
-	Shader DecodeShader(std::istream* stream);
+	CACAO_API Shader DecodeShader(std::istream* stream);
 
 	/**
 	 * @brief Export a shader object to a stream
@@ -351,7 +325,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream pointer is invalid
 	 * @throws std::runtime_error If encoding fails
 	 */
-	void EncodeShader(const Shader& shader, std::ostream* stream);
+	CACAO_API void EncodeShader(const Shader& shader, std::ostream* stream);
 
 	/**
 	 * @brief Decode a material object from the stream data
@@ -364,7 +338,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream is not a valid material
 	 * @throws std::runtime_error If decoding fails
 	 */
-	Material DecodeMaterial(std::istream* stream);
+	CACAO_API Material DecodeMaterial(std::istream* stream);
 
 	/**
 	 * @brief Export a material object to a stream
@@ -375,7 +349,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream pointer is invalid
 	 * @throws std::runtime_error If encoding fails
 	 */
-	void EncodeMaterial(const Material& material, std::ostream* stream);
+	CACAO_API void EncodeMaterial(const Material& material, std::ostream* stream);
 
 	/**
 	 * @brief Decode a cubemap object from the stream data
@@ -388,7 +362,7 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream is not a valid cubemap
 	 * @throws std::runtime_error If decoding fails
 	 */
-	Cubemap DecodeCubemap(std::istream* stream);
+	CACAO_API Cubemap DecodeCubemap(std::istream* stream);
 
 	/**
 	 * @brief Export a cubemap object to a stream
@@ -399,5 +373,33 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If the stream pointer is invalid
 	 * @throws std::runtime_error If encoding fails
 	 */
-	void EncodeCubemap(const Cubemap& cubemap, std::ostream* stream);
+	CACAO_API void EncodeCubemap(const Cubemap& cubemap, std::ostream* stream);
+
+	///@cond
+	CACAO_API constexpr Shader::Descriptor::InputBits operator|(Shader::Descriptor::InputBits a, Shader::Descriptor::InputBits b) noexcept {
+		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
+		return static_cast<Shader::Descriptor::InputBits>(
+			static_cast<U>(a) | static_cast<U>(b));
+	}
+
+	CACAO_API constexpr Shader::Descriptor::InputBits operator&(Shader::Descriptor::InputBits a, Shader::Descriptor::InputBits b) noexcept {
+		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
+		return static_cast<Shader::Descriptor::InputBits>(
+			static_cast<U>(a) & static_cast<U>(b));
+	}
+
+	CACAO_API constexpr Shader::Descriptor::InputBits operator~(Shader::Descriptor::InputBits a) noexcept {
+		using U = std::underlying_type_t<Shader::Descriptor::InputBits>;
+		return static_cast<Shader::Descriptor::InputBits>(
+			static_cast<U>(~static_cast<U>(a)));
+	}
+
+	CACAO_API constexpr Shader::Descriptor::InputBits& operator|=(Shader::Descriptor::InputBits& a, Shader::Descriptor::InputBits b) noexcept {
+		return a = a | b;
+	}
+
+	CACAO_API constexpr Shader::Descriptor::InputBits& operator&=(Shader::Descriptor::InputBits& a, Shader::Descriptor::InputBits b) noexcept {
+		return a = a & b;
+	}
+	///@endcond
 }

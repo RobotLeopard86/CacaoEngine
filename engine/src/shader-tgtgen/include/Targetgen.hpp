@@ -1,6 +1,7 @@
 #pragma once
 
-#include "libcacaocommon.hpp"
+#include "Bytestream.hpp"
+#include "DllHelper.hpp"
 
 #include <vector>
 #include <cstdint>
@@ -8,13 +9,13 @@
 namespace Targetgen {
 
 #ifdef BE_OPENGL
-	struct GLSL {
+	struct CACAO_API GLSL {
 		std::string vertex, fragment;
 	};
 
-	GLSL GenerateGLSL(ibytestream& in, bool es);
+	CACAO_API GLSL GenerateGLSL(ibytestream& in, bool es);
 #endif
 
-	std::vector<uint32_t> GenerateSPV(ibytestream& in);
+	CACAO_API std::vector<uint32_t> GenerateSPV(ibytestream& in);
 
 }

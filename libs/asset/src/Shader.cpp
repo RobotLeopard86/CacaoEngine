@@ -1,5 +1,5 @@
 #include "libcacaoasset.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 
 #include "libjaguar/Document.hpp"
 #include "libjaguar/StructuredTypeLayout.hpp"
@@ -12,31 +12,31 @@
 namespace libcacaoasset {
 	Shader::Descriptor::UniformParameter _DecUniformParameter(libjaguar::Document::ObjReader& rd) {
 		Shader::Descriptor::UniformParameter uparam;
-		uparam.name = rd.Get<std::string>("name");
-		uint8_t typeByte = rd.Get<uint8_t>("type");
+		uparam.name = rd.Query<std::string>("name");
+		uint8_t typeByte = rd.Query<uint8_t>("type");
 		CheckException(typeByte == 0x22 || typeByte == 0x33 || typeByte == 0x44 || typeByte == 0xB1 || ((typeByte >> 8) >= 0xD && (typeByte & 0xF) >= 1 && (typeByte & 0xF) <= 4), "Bad type byte!");
 		uparam.type = static_cast<Shader::Descriptor::UniformParameter::DataType>(typeByte);
-		uparam.bufferOffset = rd.Get<unsigned int>("uboOff");
+		uparam.bufferOffset = rd.Query<unsigned int>("uboOff");
 		return uparam;
 	}
 
 	Shader::Descriptor::TextureParameter _DecTextureParameter(libjaguar::Document::ObjReader& rd) {
 		Shader::Descriptor::TextureParameter tparam;
-		tparam.name = rd.Get<std::string>("name");
-		tparam.isCubemap = rd.Get<bool>("cube");
-		tparam.binding = rd.Get<unsigned int>("binding");
+		tparam.name = rd.Query<std::string>("name");
+		tparam.isCubemap = rd.Query<bool>("cube");
+		tparam.binding = rd.Query<unsigned int>("binding");
 		return tparam;
 	}
 
 	Shader _DecShader(libjaguar::Document::ObjReader& rd) {
 		Shader shader;
-		shader.irCode = rd.Get<std::vector<unsigned char>>("code");
-		shader.descriptor.inputs = static_cast<Shader::Descriptor::InputBits>(rd.Get<uint8_t>("inputs"));
-		uint8_t typeByte = rd.Get<uint8_t>("type");
+		shader.irCode = rd.Query<std::vector<unsigned char>>("code");
+		shader.descriptor.inputs = static_cast<Shader::Descriptor::InputBits>(rd.Query<uint8_t>("inputs"));
+		uint8_t typeByte = rd.Query<uint8_t>("type");
 		CheckException(typeByte == 0xA || typeByte == 0xD || typeByte == 0xE, "Bad type byte!");
 		shader.descriptor.type = static_cast<Shader::Descriptor::Type>(typeByte);
-		shader.descriptor.uniformParams = rd.Get<std::vector<Shader::Descriptor::UniformParameter>>("uparams");
-		shader.descriptor.texParams = rd.Get<std::vector<Shader::Descriptor::TextureParameter>>("tparams");
+		shader.descriptor.uniformParams = rd.Query<std::vector<Shader::Descriptor::UniformParameter>>("uparams");
+		shader.descriptor.texParams = rd.Query<std::vector<Shader::Descriptor::TextureParameter>>("tparams");
 		return shader;
 	}
 

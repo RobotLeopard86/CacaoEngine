@@ -1,5 +1,5 @@
 #include "libcacaoimage.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 
 #include "turbojpeg.h"
 

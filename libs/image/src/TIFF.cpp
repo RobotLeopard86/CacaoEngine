@@ -1,5 +1,6 @@
 #include "libcacaoimage.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
+#include "Bytestream.hpp"
 
 #include "tiff.h"
 #include "tiffio.h"

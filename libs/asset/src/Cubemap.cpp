@@ -1,5 +1,5 @@
 #include "libcacaoasset.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 
 #include "libjaguar/Document.hpp"
 
@@ -8,12 +8,12 @@
 namespace libcacaoasset {
 	Cubemap _DecCubemap(libjaguar::Document::ObjReader& rd) {
 		Cubemap cmap = {};
-		cmap.front = rd.Get<std::vector<unsigned char>>("front");
-		cmap.back = rd.Get<std::vector<unsigned char>>("back");
-		cmap.top = rd.Get<std::vector<unsigned char>>("top");
-		cmap.bottom = rd.Get<std::vector<unsigned char>>("bottom");
-		cmap.left = rd.Get<std::vector<unsigned char>>("left");
-		cmap.right = rd.Get<std::vector<unsigned char>>("right");
+		cmap.front = rd.Query<std::vector<unsigned char>>("front");
+		cmap.back = rd.Query<std::vector<unsigned char>>("back");
+		cmap.top = rd.Query<std::vector<unsigned char>>("top");
+		cmap.bottom = rd.Query<std::vector<unsigned char>>("bottom");
+		cmap.left = rd.Query<std::vector<unsigned char>>("left");
+		cmap.right = rd.Query<std::vector<unsigned char>>("right");
 		return cmap;
 	}
 
