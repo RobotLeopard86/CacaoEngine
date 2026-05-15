@@ -1,4 +1,5 @@
 #include "Bytestream.hpp"
+#include "YAMLValidate.hpp"
 #include "commands.hpp"
 
 #include <exception>
@@ -8,9 +9,7 @@
 #include "libcacaoasset.hpp"
 #include "libcacaoimage.hpp"
 
-#include "YAMLValidate.hpp"
-#include "yaml-cpp/node/parse.h"
-#include "yaml-cpp/node/type.h"
+#include "spinners.hpp"
 
 CreateCmd::CreateCmd(CLI::App& app) {
 	//Create the command CLI
@@ -31,13 +30,33 @@ CreateCmd::CreateCmd(CLI::App& app) {
 
 	//Register command callback function
 	cmd->callback([this]() {
-		this->Callback();
+		std::stringstream taskDesc;
+		taskDesc << "Creating cubemap from from " << inPath << "...";
+		std::unique_ptr<jms::Spinner> s;
+		if(outputLvl != OutputLevel::Silent) {
+			s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
+			s->start();
+		}
+		taskDesc.str("");
+		try {
+			this->Callback();
+		} catch(...) {
+			if(outputLvl != OutputLevel::Silent) {
+				taskDesc << "Failed to create cubemap.";
+				s->finish(jms::FinishedState::FAILURE, taskDesc.str());
+			}
+			exit(1);
+		}
+		if(outputLvl != OutputLevel::Silent) {
+			taskDesc << "Generated " << outPath << ".";
+			s->finish(jms::FinishedState::SUCCESS, taskDesc.str());
+		}
 	});
 }
 
 std::ifstream CreateCmd::OpenFile(const std::string& pathStr) {
 	//We need to chdir to the path of the file to make the absolute calculation correct
-	VLOG_NONL("\tChecking file path " << pathStr << "... ")
+	CVLOG_NONL("\tChecking file path " << pathStr << "... ")
 	std::filesystem::path cur = std::filesystem::current_path();
 	std::filesystem::current_path(inPath.parent_path());
 	std::filesystem::path p = std::filesystem::absolute(pathStr);
@@ -47,29 +66,29 @@ std::ifstream CreateCmd::OpenFile(const std::string& pathStr) {
 	if(!std::filesystem::exists(p)) {
 		CUBE_ERROR("Input file specifies a nonexistent file!")
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Open the stream
-	VLOG_NONL("\tOpening file stream... ")
+	CVLOG_NONL("\tOpening file stream... ")
 	std::ifstream in(p);
 	if(!in.is_open()) {
 		CUBE_ERROR("Failed to open face file stream for reading!")
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 	return in;
 }
 
 void CreateCmd::Callback() {
 	//Load the input file
-	VLOG_NONL("Opening input file " << inPath << "... ");
+	CVLOG_NONL("Opening input file " << inPath << "... ");
 	std::ifstream in(inPath);
 	if(!in.is_open()) {
 		CUBE_ERROR("Failed to open input file stream for reading!")
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Decode the definition file
-	VLOG("Parsing definition...")
+	CVLOG_NONL("Parsing definition...")
 	YAML::Node root;
 	try {
 		root = YAML::Load(in);
@@ -88,9 +107,10 @@ void CreateCmd::Callback() {
 	ValidateYAMLNode(left, YAML::NodeType::value::Scalar, "cubemap definition", "left (negative X) face");
 	YAML::Node right = root["right"];
 	ValidateYAMLNode(right, YAML::NodeType::value::Scalar, "cubemap definition", "right (positive X) face");
+	CVLOG("Done.")
 
 	//Load each face image
-	VLOG("Loading face images...");
+	CVLOG_SINGLE("Loading face images...");
 	libcacaoimage::Image frontImg, backImg, topImg, bottomImg, leftImg, rightImg;
 	{
 		std::ifstream stream = OpenFile(front.Scalar());
@@ -118,9 +138,9 @@ void CreateCmd::Callback() {
 	}
 
 	//Encode and write the file
-	VLOG("Generating output... ")
+	CVLOG_SINGLE("Generating output... ")
 	libcacaoasset::Cubemap cmap;
-	VLOG_NONL("\tRe-encoding images...");
+	CVLOG_NONL("\tRe-encoding images...");
 	{
 		obytestream out(cmap.front);
 		libcacaoimage::encode::EncodeWebP(frontImg, out);
@@ -145,12 +165,12 @@ void CreateCmd::Callback() {
 		obytestream out(cmap.right);
 		libcacaoimage::encode::EncodeWebP(rightImg, out);
 	}
-	VLOG("Done.")
-	VLOG_NONL("\tWriting output file " << outPath << "... ");
+	CVLOG("Done.")
+	CVLOG_NONL("\tWriting output file " << outPath << "... ");
 	std::ofstream out(outPath, std::ios::binary);
 	if(!in.is_open()) {
 		CUBE_ERROR("Failed to open output file stream for writing!")
 	}
 	libcacaoasset::EncodeCubemap(cmap, &out);
-	VLOG("Done.")
+	CVLOG("Done.")
 }

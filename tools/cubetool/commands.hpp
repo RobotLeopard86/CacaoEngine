@@ -8,7 +8,7 @@
 
 #define CUBE_ERROR(...)                                                         \
 	std::cerr << "\x1b[0m\x1b[1;91mERROR: \x1b[0m" << __VA_ARGS__ << std::endl; \
-	exit(1);
+	throw std::runtime_error("no");
 
 class CreateCmd {
   public:
@@ -30,10 +30,14 @@ class ExtractCmd {
   private:
 	CLI::App* cmd;
 	bool doAll;
+
 	const std::array<const char*, 6> validFaces = {"front", "back", "top", "bottom", "left", "right"};
 	const std::array<const char*, 5> validFormats = {"png", "jpeg", "webp", "tga", "tiff"};
+
+	std::vector<std::string> _f;//Ignore these; we use the integer versions below that get converted but we have to save these
+	std::string _fmt;			//Ignore these; we use the integer versions below that get converted but we have to save these
 	std::vector<uint8_t> faces;
 	uint8_t format = 0;
 	std::filesystem::path inPath;
-	std::filesystem::path out;
+	std::filesystem::path outPath;
 };

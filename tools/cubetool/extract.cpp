@@ -9,6 +9,8 @@
 #include "libcacaoasset.hpp"
 #include "libcacaoimage.hpp"
 
+#include "spinners.hpp"
+
 ExtractCmd::ExtractCmd(CLI::App& app) {
 	//Create the command CLI
 	cmd = app.add_subcommand("extract", "Extract face images from a cubemap");
@@ -18,7 +20,6 @@ ExtractCmd::ExtractCmd(CLI::App& app) {
 
 	//Face settings
 	CLI::Option* allOpt = cmd->add_flag("-A,--all-faces", doAll, "Extract all face images from the cubemap");
-	std::vector<std::string> _f;
 	CLI::Option* facesOpt = cmd->add_option("-f,--face", _f, "Extract specific faces from the cubemap (front, back, top, bottom, left, right)")->excludes(allOpt)->check([this](const std::string& s) {
 		if(auto it = std::find_if(validFaces.cbegin(), validFaces.cend(), [s](const char* v) {
 			   return std::string(v).compare(s) == 0;
@@ -35,7 +36,7 @@ ExtractCmd::ExtractCmd(CLI::App& app) {
 	allOpt->excludes(facesOpt);
 
 	//Output directory
-	CLI::Option* outOpt = cmd->add_option("-o", out, "Directory to place output files in")->check([](const std::string& outdir) {
+	CLI::Option* outOpt = cmd->add_option("-o", outPath, "Directory to place output files in")->check([](const std::string& outdir) {
 		if(CLI::NonexistentPath(outdir).compare("") == 0) return "";
 		if(CLI::ExistingDirectory(outdir).compare("") == 0) return "";
 		return "The output directory must either be a directory to write into or a nonexistent directory!";
@@ -46,24 +47,43 @@ ExtractCmd::ExtractCmd(CLI::App& app) {
 	});
 
 	//Format
-	std::string _fmt = "png";
-	cmd->add_option("-F,--out-format", _fmt, "Output images in a specific format (png, jpeg, webp, tga, tiff); png is default")->check([this](const std::string& s) {
-		if(auto it = std::find_if(validFaces.cbegin(), validFaces.cend(), [s](const char* v) {
+	cmd->add_option("-F,--output-format", _fmt, "Output images in a specific format (png, jpeg, webp, tga, tiff); png is default")->default_val("png")->check([this](const std::string& s) {
+		if(auto it = std::find_if(validFormats.cbegin(), validFormats.cend(), [s](const char* v) {
 			   return std::string(v).compare(s) == 0;
 		   });
 			it != validFormats.cend()) {
 
 			//We'll turn this into the index for later also
-			format = std::distance(std::begin(validFaces), it);
+			format = std::distance(std::begin(validFormats), it);
 			return "";
 		} else {
-			return "Invalid face name!";
+			return "Invalid output format!";
 		}
 	});
 
 	//Command behavior
 	cmd->callback([this]() {
-		this->Callback();
+		std::stringstream taskDesc;
+		taskDesc << "Extracting faces from from " << inPath << "...";
+		std::unique_ptr<jms::Spinner> s;
+		if(outputLvl != OutputLevel::Silent) {
+			s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
+			s->start();
+		}
+		taskDesc.str("");
+		try {
+			this->Callback();
+		} catch(...) {
+			if(outputLvl != OutputLevel::Silent) {
+				taskDesc << "Failed to extract faces.";
+				s->finish(jms::FinishedState::FAILURE, taskDesc.str());
+			}
+			exit(1);
+		}
+		if(outputLvl != OutputLevel::Silent) {
+			taskDesc << "Extracted to " << outPath << ".";
+			s->finish(jms::FinishedState::SUCCESS, taskDesc.str());
+		}
 	});
 }
 
@@ -74,60 +94,72 @@ void ExtractCmd::Callback() {
 	if(faces.size() <= 0) {
 		CUBE_ERROR("No faces selected for extraction!")
 	}
-	std::filesystem::create_directories(out);
+	std::filesystem::create_directories(outPath);
 
 	//Load the input file
-	VLOG_NONL("Opening input file " << inPath << "... ");
-	std::ifstream in(inPath, std::ios::binary);
-	if(!in.is_open()) {
+	CVLOG_NONL("Opening input file " << inPath << "... ");
+	std::ifstream* in = new std::ifstream(inPath, std::ios::binary);
+	if(!in || !in->is_open()) {
 		CUBE_ERROR("Failed to open input file stream for reading!")
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Decode the file
-	VLOG_NONL("Decoding input file... ")
+	CVLOG_NONL("Decoding input file... ")
 	libcacaoasset::Cubemap cmap;
 	try {
-		cmap = libcacaoasset::DecodeCubemap(&in);
+		cmap = libcacaoasset::DecodeCubemap(in);
 	} catch(const std::runtime_error& e) {
 		CUBE_ERROR(e.what());
 	}
-	VLOG("Done.")
+	CVLOG("Done.")
 
 	//Extract the requested faces
-	VLOG("Extracting faces...")
+	CVLOG_SINGLE("Extracting faces...")
 	std::string original = inPath.filename().stem().string();
 	for(uint8_t i : faces) {
 		//Open stream
 		std::stringstream fname;
-		fname << original << "_" << validFaces[i] << ".png";
-		std::filesystem::path outfile = out / fname.str();
-		VLOG("\tOpening output stream for " << validFaces[i] << ": " << outfile << "... ")
+		fname << original << "_" << validFaces[i] << "." << validFormats[format];
+		std::filesystem::path outfile = outPath / fname.str();
+		CVLOG_NONL("\tOpening output stream for " << validFaces[i] << " face: " << outfile << "... ")
 		std::ofstream outStream(outfile, std::ios::binary);
-		if(!in.is_open()) {
+		if(!outStream.is_open()) {
 			CUBE_ERROR("Failed to open output file stream for writing!")
 		}
-		VLOG("Done.")
+		CVLOG("Done.")
 
 		//Check for WebP (if so we can avoid re-encoding)
 		if(format == 2) {
 			//Stream-to-stream copy
-			VLOG_NONL("\tWriting output... ")
+			CVLOG_NONL("\tWriting output... ")
 			switch(i) {
-				case 0: std::copy(cmap.front.begin(), cmap.front.end(), std::ostreambuf_iterator<char>(outStream));
-				case 1: std::copy(cmap.back.begin(), cmap.back.end(), std::ostreambuf_iterator<char>(outStream));
-				case 2: std::copy(cmap.top.begin(), cmap.top.end(), std::ostreambuf_iterator<char>(outStream));
-				case 3: std::copy(cmap.bottom.begin(), cmap.bottom.end(), std::ostreambuf_iterator<char>(outStream));
-				case 4: std::copy(cmap.left.begin(), cmap.left.end(), std::ostreambuf_iterator<char>(outStream));
-				case 5: std::copy(cmap.right.begin(), cmap.right.end(), std::ostreambuf_iterator<char>(outStream));
+				case 0:
+					std::copy(cmap.front.begin(), cmap.front.end(), std::ostreambuf_iterator<char>(outStream));
+					break;
+				case 1:
+					std::copy(cmap.back.begin(), cmap.back.end(), std::ostreambuf_iterator<char>(outStream));
+					break;
+				case 2:
+					std::copy(cmap.top.begin(), cmap.top.end(), std::ostreambuf_iterator<char>(outStream));
+					break;
+				case 3:
+					std::copy(cmap.bottom.begin(), cmap.bottom.end(), std::ostreambuf_iterator<char>(outStream));
+					break;
+				case 4:
+					std::copy(cmap.left.begin(), cmap.left.end(), std::ostreambuf_iterator<char>(outStream));
+					break;
+				case 5:
+					std::copy(cmap.right.begin(), cmap.right.end(), std::ostreambuf_iterator<char>(outStream));
+					break;
 				default: throw std::runtime_error("impossible to get here");
 			}
-			VLOG("Done.")
+			CVLOG("Done.")
 		} else {
 			//We have to re-encode :(
 
 			//Select image
-			VLOG_NONL("\tRe-encoding image... ")
+			CVLOG_NONL("\tRe-encoding image... ")
 			ibytestream encodedIn = [i, &cmap]() {
 				switch(i) {
 					case 0: return ibytestream(cmap.front);
@@ -140,10 +172,10 @@ void ExtractCmd::Callback() {
 				}
 			}();
 			libcacaoimage::Image img = libcacaoimage::decode::DecodeWebP(encodedIn);
-			VLOG("Done.")
+			CVLOG("Done.")
 
 			//Encode and write contents
-			VLOG_NONL("\tWriting output... ")
+			CVLOG_NONL("\tWriting output... ")
 			try {
 				switch(format) {
 					case 0:
@@ -162,7 +194,7 @@ void ExtractCmd::Callback() {
 			} catch(const std::runtime_error& e) {
 				CUBE_ERROR(e.what())
 			}
-			VLOG("Done.")
+			CVLOG("Done.")
 		}
 	}
 }
