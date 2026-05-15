@@ -342,8 +342,12 @@
 <li class="toctree-l2"><a class="reference internal" href="classbytestreambuf.html">Class bytestreambuf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classibytestream.html">Class ibytestream</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classobytestream.html">Class obytestream</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classubytestreambuf.html">Class ubytestreambuf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_CheckException_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_libcacaocommon_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html">Function ValidateYAMLNode(const YAML::Node&amp;, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1abf3a03a8501d77df1f87ca6c2d42e5b2.html">Function ValidateYAMLNode(const YAML::Node&amp;, YAML::NodeType::value, const std::string&amp;, const std::string&amp;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1a32b425e2dafa98e574a7760d5222f9fc.html">Function ValidateYAMLNode(const YAML::Node&amp;, YAML::NodeType::value, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html">Define CACAO_API</a></li>
 </ul>
 </details></li>
@@ -493,7 +497,7 @@
 <ul class="treeView" id="class-treeView">
   <li>
     <ul class="collapsibleList">
-      <li>Class <a href="classbytestreambuf.html#exhale-class-classbytestreambuf">bytestreambuf</a></li><li>Class <a href="classibytestream.html#exhale-class-classibytestream">ibytestream</a></li><li class="lastChild">Class <a href="classobytestream.html#exhale-class-classobytestream">obytestream</a></li>
+      <li>Class <a href="classbytestreambuf.html#exhale-class-classbytestreambuf">bytestreambuf</a></li><li>Class <a href="classibytestream.html#exhale-class-classibytestream">ibytestream</a></li><li>Class <a href="classobytestream.html#exhale-class-classobytestream">obytestream</a></li><li class="lastChild">Class <a href="classubytestreambuf.html#exhale-class-classubytestreambuf">ubytestreambuf</a></li>
     </ul>
   </li><!-- only tree view element -->
 </ul><!-- /treeView class-treeView --></section>
@@ -502,7 +506,7 @@
 <ul class="treeView" id="file-treeView">
   <li>
     <ul class="collapsibleList">
-      <li class="lastChild">Directory <a href="dir_libs.html#dir-libs">libs</a><ul><li class="lastChild">Directory <a href="dir_libs_common.html#dir-libs-common">common</a><ul><li class="lastChild">Directory <a href="dir_libs_common_include.html#dir-libs-common-include">include</a><ul><li>File <a href="file_libs_common_include_Bytestream.hpp.html#file-libs-common-include-Bytestream.hpp">Bytestream.hpp</a></li><li>File <a href="file_libs_common_include_CheckException.hpp.html#file-libs-common-include-CheckException.hpp">CheckException.hpp</a></li><li>File <a href="file_libs_common_include_DllHelper.hpp.html#file-libs-common-include-DllHelper.hpp">DllHelper.hpp</a></li><li class="lastChild">File <a href="file_libs_common_include_libcacaocommon.hpp.html#file-libs-common-include-libcacaocommon.hpp">libcacaocommon.hpp</a></li></ul></li></ul></li></ul></li>
+      <li class="lastChild">Directory <a href="dir_libs.html#dir-libs">libs</a><ul><li class="lastChild">Directory <a href="dir_libs_common.html#dir-libs-common">common</a><ul><li class="lastChild">Directory <a href="dir_libs_common_include.html#dir-libs-common-include">include</a><ul><li>File <a href="file_libs_common_include_Bytestream.hpp.html#file-libs-common-include-Bytestream.hpp">Bytestream.hpp</a></li><li>File <a href="file_libs_common_include_CheckException.hpp.html#file-libs-common-include-CheckException.hpp">CheckException.hpp</a></li><li>File <a href="file_libs_common_include_DllHelper.hpp.html#file-libs-common-include-DllHelper.hpp">DllHelper.hpp</a></li><li>File <a href="file_libs_common_include_libcacaocommon.hpp.html#file-libs-common-include-libcacaocommon.hpp">libcacaocommon.hpp</a></li><li class="lastChild">File <a href="file_libs_common_include_YAMLValidate.hpp.html#file-libs-common-include-YAMLValidate.hpp">YAMLValidate.hpp</a></li></ul></li></ul></li></ul></li>
     </ul>
   </li><!-- only tree view element -->
 </ul><!-- /treeView file-treeView --></section>
@@ -542,6 +546,7 @@
 <li class="toctree-l2"><a class="reference internal" href="classibytestream.html#class-documentation">Class Documentation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="classibytestream.html#_CPPv411ibytestream"><code class="docutils literal notranslate"><span class="pre">ibytestream</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="classibytestream.html#_CPPv4N11ibytestream11ibytestreamERNSt6vectorIcEE"><code class="docutils literal notranslate"><span class="pre">ibytestream()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="classibytestream.html#_CPPv4N11ibytestream11ibytestreamERNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">ibytestream()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="classibytestream.html#_CPPv4N11ibytestreamD0Ev"><code class="docutils literal notranslate"><span class="pre">~ibytestream()</span></code></a></li>
 </ul>
 </li>
@@ -561,7 +566,30 @@
 <li class="toctree-l2"><a class="reference internal" href="classobytestream.html#class-documentation">Class Documentation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="classobytestream.html#_CPPv411obytestream"><code class="docutils literal notranslate"><span class="pre">obytestream</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="classobytestream.html#_CPPv4N11obytestream11obytestreamERNSt6vectorIcEE"><code class="docutils literal notranslate"><span class="pre">obytestream()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="classobytestream.html#_CPPv4N11obytestream11obytestreamERNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">obytestream()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="classobytestream.html#_CPPv4N11obytestreamD0Ev"><code class="docutils literal notranslate"><span class="pre">~obytestream()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classubytestreambuf.html">Class ubytestreambuf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classubytestreambuf.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classubytestreambuf.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classubytestreambuf.html#class-documentation">Class Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classubytestreambuf.html#_CPPv414ubytestreambuf"><code class="docutils literal notranslate"><span class="pre">ubytestreambuf</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="classubytestreambuf.html#_CPPv4N14ubytestreambuf14ubytestreambufERNSt6vectorIhEE"><code class="docutils literal notranslate"><span class="pre">ubytestreambuf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="classubytestreambuf.html#_CPPv4N14ubytestreambuf8overflowEi"><code class="docutils literal notranslate"><span class="pre">overflow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="classubytestreambuf.html#_CPPv4N14ubytestreambuf6xsputnEPKcNSt10streamsizeE"><code class="docutils literal notranslate"><span class="pre">xsputn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="classubytestreambuf.html#_CPPv4N14ubytestreambuf7seekoffE8off_typeNSt8ios_base7seekdirENSt8ios_base8openmodeE"><code class="docutils literal notranslate"><span class="pre">seekoff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="classubytestreambuf.html#_CPPv4N14ubytestreambuf7seekposE8pos_typeNSt8ios_base8openmodeE"><code class="docutils literal notranslate"><span class="pre">seekpos()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -585,6 +613,39 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="function_libcacaocommon_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="function_libcacaocommon_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html">Function ValidateYAMLNode(const YAML::Node&amp;, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html#function-documentation">Function Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html#_CPPv416ValidateYAMLNodeRKN4YAML4NodeENSt8functionIFNSt6stringERKN4YAML4NodeEEEERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ValidateYAMLNode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_YAMLValidate_8hpp_1abf3a03a8501d77df1f87ca6c2d42e5b2.html">Function ValidateYAMLNode(const YAML::Node&amp;, YAML::NodeType::value, const std::string&amp;, const std::string&amp;)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1abf3a03a8501d77df1f87ca6c2d42e5b2.html#function-documentation">Function Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function_YAMLValidate_8hpp_1abf3a03a8501d77df1f87ca6c2d42e5b2.html#_CPPv416ValidateYAMLNodeRKN4YAML4NodeEN4YAML8NodeType5valueERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ValidateYAMLNode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_YAMLValidate_8hpp_1a32b425e2dafa98e574a7760d5222f9fc.html">Function ValidateYAMLNode(const YAML::Node&amp;, YAML::NodeType::value, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1a32b425e2dafa98e574a7760d5222f9fc.html#function-documentation">Function Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function_YAMLValidate_8hpp_1a32b425e2dafa98e574a7760d5222f9fc.html#_CPPv416ValidateYAMLNodeRKN4YAML4NodeEN4YAML8NodeType5valueENSt8functionIFNSt6stringERKN4YAML4NodeEEEERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">ValidateYAMLNode()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
