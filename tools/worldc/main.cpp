@@ -1,6 +1,7 @@
 #include "CLI11.hpp"
 #include "spinners.hpp"
 
+#include <exception>
 #include <vector>
 #include <filesystem>
 #include <iostream>
@@ -8,8 +9,11 @@
 #include <string>
 
 #include "toolutil.hpp"
+#include "YAMLValidate.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
+
+#include "crossguid/guid.hpp"
 
 #define WORLD_FILE_EXTENSION ".xjw"
 
@@ -25,52 +29,152 @@
 #define COMPILER_VER "unknown"
 #endif
 
-std::pair<bool, std::string> compile(const std::filesystem::path& in, const std::filesystem::path& out) {
-	//Create decoder
-	//Yes, I do know the message says otherwise. I just think this sounds better. Deal with it.
-	CVLOG_NONL("\tCreating parser... ");
-	libcacaoformats::UnpackedDecoder dec;
+libcacaoasset::World parseWorldYML(std::istream& in) {
+	//Load YAML
+	YAML::Node root;
+	try {
+		root = YAML::Load(in);
+	} catch(...) {
+		CheckException(false, "Failed to parse material data stream!");
+	}
+
+	//Validate and parse structure
+	libcacaoasset::World out;
+	YAML::Node sky = root["skybox"];
+	if(sky) {
+		ValidateYAMLNode(sky, YAML::NodeType::value::Scalar, [](const YAML::Node& val) { return libcacaoasset::ValidateResourceAddress(val.Scalar(), libcacaoasset::Resource::Type::Tex2D) ? "" : "Invalid resource address for skybox"; }, "world data", "skybox asset path");
+		out.skybox = sky.Scalar();
+	} else {
+		out.skybox = "";
+	}
+	YAML::Node cam = root["cam"];
+	ValidateYAMLNode(cam, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
+			YAML::Node p = node["position"], r = node["rotation"];
+			try {
+				if(!(p.IsMap() && p["x"].IsScalar() && p["y"].IsScalar() && p["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for camera initial position";
+				out.initialCamPos.x = std::strtof(p["x"].Scalar().c_str(), nullptr);
+				out.initialCamPos.y = std::strtof(p["y"].Scalar().c_str(), nullptr);
+				out.initialCamPos.z = std::strtof(p["z"].Scalar().c_str(), nullptr);
+				if(!(p.IsMap() && r["x"].IsScalar() && r["y"].IsScalar() && r["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for camera initial rotation";
+				out.initialCamRot.x = std::strtof(r["x"].Scalar().c_str(), nullptr);
+				out.initialCamRot.y = std::strtof(r["y"].Scalar().c_str(), nullptr);
+				out.initialCamRot.z = std::strtof(r["z"].Scalar().c_str(), nullptr);
+			} catch(...) {
+				return "Non-float value found in camera initial state";
+			}
+			return ""; }, "world data", "initial camera state");
+	ValidateYAMLNode(root["actors"], YAML::NodeType::value::Sequence, "world data", "actors list");
+	for(const YAML::Node& e : root["actors"]) {
+		libcacaoasset::World::Actor actor;
+
+		YAML::Node name = e["name"];
+		ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "world actor data", "actor name");
+		actor.name = name.Scalar();
+
+		YAML::Node guid = e["guid"];
+		ValidateYAMLNode(guid, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
+				for(char c : node.Scalar()) {
+					if(c == '-') continue;
+					if(c < 48 || c > 102 || (c > 57 && c < 97)) {
+						std::stringstream ss;
+						ss << "Invalid GUID character \"" << c << "\"";
+						return ss.str();
+					}
+				}
+				return std::string(""); }, "world actor data", "GUID");
+		actor.guid = xg::Guid(guid.Scalar()).bytes();
+
+		YAML::Node parentGUID = e["parent"];
+		ValidateYAMLNode(parentGUID, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
+				for(char c : node.Scalar()) {
+					if(c == '-') continue;
+					if(c < 48 || c > 102 || (c > 57 && c < 97)) {
+						std::stringstream ss;
+						ss << "Invalid GUID character \"" << c << "\"";
+						return ss.str();
+					}
+				}
+				return std::string(""); }, "world actor data", "parent GUID");
+		actor.parentGUID = xg::Guid(parentGUID.Scalar()).bytes();
+
+		YAML::Node transform = e["transform"];
+		ValidateYAMLNode(transform, YAML::NodeType::value::Map, "world actor data", "initial transform");
+
+		YAML::Node pos = transform["position"];
+		ValidateYAMLNode(pos, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["x"].IsScalar()) return "X value is not a scalar";
+				if(!node["y"].IsScalar()) return "Y value is not a scalar";
+				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				return ""; }, "world actor transform", "position property");
+		actor.initialPos.x = std::strtof(pos["x"].Scalar().c_str(), nullptr);
+		actor.initialPos.y = std::strtof(pos["y"].Scalar().c_str(), nullptr);
+		actor.initialPos.z = std::strtof(pos["z"].Scalar().c_str(), nullptr);
+
+		YAML::Node rot = transform["rotation"];
+		ValidateYAMLNode(rot, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["x"].IsScalar()) return "X value is not a scalar";
+				if(!node["y"].IsScalar()) return "Y value is not a scalar";
+				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				return ""; }, "world actor transform", "rotation property");
+		actor.initialRot.x = std::strtof(rot["x"].Scalar().c_str(), nullptr);
+		actor.initialRot.y = std::strtof(rot["y"].Scalar().c_str(), nullptr);
+		actor.initialRot.z = std::strtof(rot["z"].Scalar().c_str(), nullptr);
+
+		YAML::Node scl = transform["scale"];
+		ValidateYAMLNode(scl, YAML::NodeType::value::Map, [](const YAML::Node& node) {
+				if(!node["x"].IsScalar()) return "X value is not a scalar";
+				if(!node["y"].IsScalar()) return "Y value is not a scalar";
+				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				return ""; }, "world actor transform", "scale property");
+		actor.initialScale.x = std::strtof(scl["x"].Scalar().c_str(), nullptr);
+		actor.initialScale.y = std::strtof(scl["y"].Scalar().c_str(), nullptr);
+		actor.initialScale.z = std::strtof(scl["z"].Scalar().c_str(), nullptr);
+
+		YAML::Node components = e["components"];
+		ValidateYAMLNode(components, YAML::NodeType::value::Sequence, "world actor", "component list");
+		for(const YAML::Node& c : components) {
+			libcacaoasset::World::Component component;
+
+			YAML::Node id = c["id"];
+			ValidateYAMLNode(id, YAML::NodeType::value::Scalar, "world actor component", "component ID");
+			component.typeID = id.Scalar();
+
+			YAML::Node rfl = c["rfl"];
+			ValidateYAMLNode(rfl, [](const YAML::Node& node) { return (node.IsDefined() ? "" : "Reflection data doesn't exist"); }, "world actor component", "component reflection data");
+
+			//TODO: Convert reflection data from YAML to binary via Astra
+
+			actor.components.push_back(component);
+		}
+
+		out.actors.push_back(actor);
+	}
+
+	//Return result
+	return out;
+}
+
+std::pair<bool, std::string> compile(const std::filesystem::path& inPath, const std::filesystem::path& out) {
+	//Open input stream
+	CVLOG_NONL("\tOpening input file " << inPath << "... ");
+	std::ifstream input(inPath);
+	CompileCheck(input.is_open(), "Failed to open source stream!");
 	CVLOG("Done.")
 
-	//Decode file
-	CVLOG_NONL("\tParsing source... ");
-	std::ifstream input(in);
-	CompileCheck(input.is_open(), "Failed to open source stream!");
-	libcacaoformats::World w;
+	//Parse input file
+	CVLOG_NONL("\tParsing world data... ");
+	libcacaoasset::World w;
 	try {
-		w = dec.DecodeWorld(input);
-	} catch(const std::runtime_error& e) {
+		w = parseWorldYML(input);
+	} catch(const std::exception& e) {
 		return {false, e.what()};
 	}
-	CVLOG("Done.")
 
-	//Prepare for encoding
-	CVLOG_NONL("\tPreparing compiler... ");
-	libcacaoformats::PackedEncoder enc;
-	CVLOG("Done.");
-
-	//Compile the world
-	CVLOG_NONL("\tCompiling world... ");
-	std::pair<bool, std::string> pcGetErr;
-	libcacaoformats::PackedContainer pc = [&]() {
-		try {
-			pcGetErr = {true, ""};
-			return enc.EncodeWorld(w);
-		} catch(const std::runtime_error& e) {
-			pcGetErr = {false, e.what()};
-			return libcacaoformats::PackedContainer();
-		}
-	}();
-	if(!pcGetErr.first) {
-		return pcGetErr;
-	}
-	CVLOG("Done.");
-
-	//Write the compiled output
+	//Compile and write the output
 	CVLOG_NONL("\tWriting output file " << out << "... ");
 	std::ofstream outStream(out, std::ios::binary);
 	CompileCheck(outStream.is_open(), "Failed to open output file!");
-	pc.ExportToStream(outStream);
+	libcacaoasset::EncodeWorld(w, &outStream);
 	CVLOG("Done.");
 
 	return {true, ""};
@@ -169,7 +273,7 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		if(!result) {
-			ERROR("Failed to compile one or more materials: " << log)
+			ERROR("Failed to compile one or more worlds: " << log)
 			return 1;
 		}
 	}
