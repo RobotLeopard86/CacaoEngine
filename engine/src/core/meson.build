@@ -78,7 +78,7 @@ engine_srcs += files(
 )
 engine_deps += [
 	yaml_cpp,
-	silica_dep,
+	astra_dep,
 	crossguid,
 	spirv_cross,
 	audiodecode_dep,

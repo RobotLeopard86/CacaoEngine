@@ -101,12 +101,12 @@ yaml_cpp = subproject('yaml-cpp', required: true, default_options: {
 	'tests': 'disabled'
 }).get_variable('yaml_cpp_dep')
 
-# Configure Silica
-silica = subproject('silica', required: true, default_options: {
+# Configure Astra
+astra = subproject('astra', required: true, default_options: {
 	'example': false,
-	'generator': false
+	'generator': true
 })
-silica_dep = silica.get_variable('silica_dep')
+astra_dep = astra.get_variable('astra_dep')
 
 # Configure crossguid
 crossguid_sp = subproject('crossguid', required: true)
