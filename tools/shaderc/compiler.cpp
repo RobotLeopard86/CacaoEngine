@@ -3,6 +3,7 @@
 
 #include "CheckException.hpp"
 #include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 
 #include <sstream>
 #include <fstream>
@@ -188,7 +189,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	}
 	CVLOG("Done.");
 
-	//Generate shader object for writing
+	//Serialize IR blob to container
 	CVLOG_NONL("\tSerializing IR blob... ")
 	ComPtr<ISlangBlob> irBlob;
 	{
@@ -199,8 +200,14 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 			CompileCheck(false, err.str());
 		}
 	}
-	std::vector<unsigned char> shader(irBlob->getBufferSize());
-	std::memcpy(shader.data(), irBlob->getBufferPointer(), irBlob->getBufferSize());
+	libcacaoasset::Shader shader;
+	shader.irCode = std::vector<unsigned char>(irBlob->getBufferSize());
+	std::memcpy(shader.irCode.data(), irBlob->getBufferPointer(), irBlob->getBufferSize());
+	CVLOG("Done.")
+
+	//Generate shader descriptor
+	CVLOG_NONL("\tGenerating descriptor information... ");
+
 	CVLOG("Done.")
 
 	//Write shader
@@ -208,7 +215,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	std::ofstream outStream(out, std::ios::binary);
 	CompileCheck(outStream.is_open(), "Failed to open output file!");
 	libcacaoformats::PackedEncoder encoder;
-	encoder.EncodeShader(shader).ExportToStream(outStream);
+	encoder.EncodeShader(shader.irCode).ExportToStream(outStream);
 	CVLOG("Done.");
 
 	return {true, ""};
