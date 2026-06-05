@@ -2,7 +2,7 @@ asset_deps = [commonlib_dep, image_dep, astra_dep]
 
 # libjaguar
 jaguar_sp = subproject('jaguar', required: true, default_options: ['default_library=static', 'testing=false'])
-asset_deps += jaguar_sp.get_variable('libjaguar_dep')
+asset_deps += jaguar_sp.get_variable('libjaguar_dep').as_static().as_link_whole()
 
 # The library itself
 asset_lib = static_library('cacaoasset', sources: [
