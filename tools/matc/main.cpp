@@ -1,4 +1,5 @@
 #include "CLI11.hpp"
+#include "libjaguar/MathTypes.hpp"
 #include "spinners.hpp"
 
 #include <vector>
@@ -8,8 +9,9 @@
 #include <string>
 
 #include "toolutil.hpp"
+#include "YAMLValidate.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 
 #define MAT_FILE_EXTENSION ".xjm"
 
@@ -25,52 +27,226 @@
 #define COMPILER_VER "unknown"
 #endif
 
-std::pair<bool, std::string> compile(const std::filesystem::path& in, const std::filesystem::path& out) {
-	//Create decoder
-	//Yes, I do know the message says otherwise. I just think this sounds better. Deal with it.
-	CVLOG_NONL("\tCreating parser... ");
-	libcacaoformats::UnpackedDecoder dec;
+enum class ScalarKind {
+	Neutral,
+	Float,
+	SignedInt,
+	UnsignedInt
+};
+
+ScalarKind classifyScalar(const std::string& s) {
+	if(s == "true" || s == "false") return ScalarKind::Neutral;
+	if(s.back() == 'u') return ScalarKind::UnsignedInt;
+	if(s.find('.') != std::string::npos ||
+		s.find('e') != std::string::npos ||
+		s.find('E') != std::string::npos) return ScalarKind::Float;
+	if(s.front() == '-') return ScalarKind::SignedInt;
+	return ScalarKind::Neutral;
+}
+
+std::string stripUnsignedSuffix(const std::string& s) {
+	return (s.back() == 'u') ? s.substr(0, s.size() - 1) : s;
+}
+
+ScalarKind identifyScalar(const YAML::Node& seq, const std::string& context) {
+	ScalarKind committed = ScalarKind::Neutral;
+	for(std::size_t i = 0; i < seq.size(); ++i) {
+		ScalarKind k = classifyScalar(seq[i].as<std::string>());
+		if(k == ScalarKind::Neutral) continue;
+		if(committed == ScalarKind::Neutral) {
+			committed = k;
+			continue;
+		}
+		CheckException(committed == k,
+			std::format("While parsing {}, conflicting numeric types in sequence at index {}", context, i));
+	}
+	return (committed == ScalarKind::Neutral) ? ScalarKind::SignedInt : committed;
+}
+
+libcacaoasset::Material::Storage parseVec(const YAML::Node& seq, const std::string& context) {
+	const std::size_t N = seq.size();
+	CheckException(N >= 2 && N <= 4,
+		std::format("While parsing {}, vector must have 2–4 components, got {}", context, N));
+
+	const ScalarKind kind = identifyScalar(seq, context);
+	switch(kind) {
+		case ScalarKind::Float: {
+			auto get = [&](std::size_t i) { return std::stof(seq[i].as<std::string>()); };
+			if(N == 2) return libjaguar::Vector<float, 2> {{get(0)}, {get(1)}};
+			if(N == 3) return libjaguar::Vector<float, 3> {{get(0)}, {get(1)}, {get(2)}};
+			return libjaguar::Vector<float, 4> {{get(0)}, {get(1)}, {get(2)}, {get(3)}};
+			break;
+		}
+		case ScalarKind::UnsignedInt: {
+			auto get = [&](std::size_t i) { return static_cast<unsigned int>(std::stoul(stripUnsignedSuffix(seq[i].as<std::string>()))); };
+			if(N == 2) return libjaguar::Vector<unsigned int, 2> {{get(0)}, {get(1)}};
+			if(N == 3) return libjaguar::Vector<unsigned int, 3> {{get(0)}, {get(1)}, {get(2)}};
+			return libjaguar::Vector<unsigned int, 4> {{get(0)}, {get(1)}, {get(2)}, {get(3)}};
+			break;
+		}
+		case ScalarKind::SignedInt: {
+			auto get = [&](std::size_t i) { return std::stoi(seq[i].as<std::string>()); };
+			if(N == 2) return libjaguar::Vector<int, 2> {{get(0)}, {get(1)}};
+			if(N == 3) return libjaguar::Vector<int, 3> {{get(0)}, {get(1)}, {get(2)}};
+			return libjaguar::Vector<int, 4> {{get(0)}, {get(1)}, {get(2)}, {get(3)}};
+			break;
+		}
+		default: throw std::runtime_error("impossible to get here");
+	}
+}
+
+libcacaoasset::Material::Storage parseMatrix(const YAML::Node& rows, const std::string& context) {
+	const std::size_t N = rows.size();
+	CheckException(N >= 2 && N <= 4,
+		std::format("While parsing {}, matrix must be 2x2, 3x3, or 4x4, got {} rows", context, N));
+	for(std::size_t r = 0; r < N; ++r) {
+		ValidateYAMLNode(rows[r], YAML::NodeType::Sequence, context,
+			std::format("matrix row {}", r));
+		CheckException(rows[r].size() == N,
+			std::format("While parsing {}, matrix row {} has {} columns, expected {}",
+				context, r, rows[r].size(), N));
+	}
+	ScalarKind committed = ScalarKind::Neutral;
+	for(std::size_t r = 0; r < N; ++r) {
+		for(std::size_t c = 0; c < N; ++c) {
+			ScalarKind k = classifyScalar(rows[r][c].as<std::string>());
+			if(k == ScalarKind::Neutral) continue;
+			if(committed == ScalarKind::Neutral) {
+				committed = k;
+				continue;
+			}
+			CheckException(committed == k,
+				std::format("While parsing {}, conflicting numeric types in matrix at [{},{}]",
+					context, r, c));
+		}
+	}
+	CheckException(committed == ScalarKind::Float || committed == ScalarKind::Neutral,
+		std::format("While parsing {}, only float matrices are supported", context));
+	auto get = [&](std::size_t r, std::size_t c) {
+		return std::stof(rows[r][c].as<std::string>());
+	};
+	if(N == 2) {
+		libjaguar::Matrix<float, 2, 2> m;
+		for(std::size_t r = 0; r < 2; ++r)
+			for(std::size_t c = 0; c < 2; ++c)
+				m[c][r] = get(r, c);
+		return m;
+	} else if(N == 3) {
+		libjaguar::Matrix<float, 3, 3> m;
+		for(std::size_t r = 0; r < 3; ++r)
+			for(std::size_t c = 0; c < 3; ++c)
+				m[c][r] = get(r, c);
+		return m;
+	} else if(N == 4) {
+		libjaguar::Matrix<float, 4, 4> m;
+		for(std::size_t r = 0; r < 4; ++r)
+			for(std::size_t c = 0; c < 4; ++c)
+				m[c][r] = get(r, c);
+		return m;
+	}
+	throw std::runtime_error("impossible to get here");
+}
+
+libcacaoasset::Material::Storage parseStorage(const YAML::Node& node, const std::string& context) {
+	if(node.IsScalar()) {
+		const std::string s = node.as<std::string>();
+		if(s == "true") return true;
+		if(s == "false") return false;
+
+		switch(classifyScalar(s)) {
+			case ScalarKind::Float: return std::stof(s);
+			case ScalarKind::UnsignedInt: return static_cast<unsigned int>(std::stoul(stripUnsignedSuffix(s)));
+			default: return std::stoi(s);//SignedInt or Neutral
+		}
+	}
+
+	if(node.IsSequence()) {
+		CheckException(node.size() > 0,
+			std::format("While parsing {}, sequence must not be empty", context));
+		if(node[0].IsSequence()) return parseMatrix(node, context);
+		return parseVec(node, context);
+	}
+
+	if(node.IsMap()) {
+		ValidateYAMLNode(node["address"], YAML::NodeType::Scalar, context, "TexRef.address");
+		ValidateYAMLNode(node["isCubemap"], YAML::NodeType::Scalar, context, "TexRef.isCubemap");
+
+		const std::string cb = node["isCubemap"].as<std::string>();
+		CheckException(cb == "true" || cb == "false",
+			std::format("While parsing {}, TexRef.isCubemap must be true or false, got '{}'", context, cb));
+
+		return libcacaoasset::Material::TexRef {
+			.address = node["address"].as<std::string>(),
+			.isCubemap = (cb == "true"),
+		};
+	}
+
+	throw std::runtime_error(
+		std::format("While parsing {}, storage value is not a scalar, sequence, or map", context));
+}
+
+libcacaoasset::Material parseMaterialYML(const YAML::Node& root, const std::string& context) {
+	ValidateYAMLNode(root, YAML::NodeType::Map, context, "material root");
+
+	ValidateYAMLNode(root["shaderAddress"], YAML::NodeType::Scalar, context, "shaderAddress");
+
+	ValidateYAMLNode(root["parameters"], YAML::NodeType::Sequence, context, "parameters");
+	const YAML::Node& params = root["parameters"];
+
+	libcacaoasset::Material mat;
+	mat.shaderAddress = root["shaderAddress"].as<std::string>();
+	mat.parameters.reserve(params.size());
+
+	for(std::size_t i = 0; i < params.size(); ++i) {
+		const std::string paramCtx = std::format("{} parameter[{}]", context, i);
+		const YAML::Node& p = params[i];
+
+		ValidateYAMLNode(p, YAML::NodeType::Map, context, std::format("parameter[{}]", i));
+		ValidateYAMLNode(p["target"], YAML::NodeType::Scalar, context,
+			std::format("parameter[{}].target", i));
+		ValidateYAMLNode(p["value"], [](const YAML::Node& n) -> std::string { return (n.IsScalar() || n.IsSequence() || n.IsMap()) ? "" : "must be scalar, sequence, or map"; }, context, std::format("parameter[{}].value", i));
+
+		mat.parameters.push_back(libcacaoasset::Material::Param {
+			.target = p["target"].as<std::string>(),
+			.storage = parseStorage(p["value"], std::format("{}.{}", paramCtx, p["target"].as<std::string>())),
+		});
+	}
+
+	return mat;
+}
+
+std::pair<bool, std::string> compile(const std::filesystem::path& inPath, const std::filesystem::path& out) {
+	//Open input stream
+	CVLOG_NONL("\tOpening input file " << inPath << "... ");
+	std::ifstream input(inPath);
+	CompileCheck(input.is_open(), "Failed to open source stream!");
 	CVLOG("Done.")
 
-	//Decode file
-	CVLOG_NONL("\tParsing source... ");
-	std::ifstream input(in);
-	CompileCheck(input.is_open(), "Failed to open source stream!");
-	libcacaoformats::Material m;
+	//Parse input file
+	CVLOG_NONL("\tParsing world data... ");
+	YAML::Node root;
 	try {
-		m = dec.DecodeMaterial(input);
-	} catch(const std::runtime_error& e) {
+		root = YAML::Load(input);
+	} catch(...) {
+		CheckException(false, "Failed to parse material data stream!");
+	}
+	libcacaoasset::Material m;
+	try {
+		m = parseMaterialYML(root, "material");
+	} catch(const std::exception& e) {
 		return {false, e.what()};
 	}
 	CVLOG("Done.")
 
-	//Prepare for encoding
-	CVLOG_NONL("\tPreparing compiler... ");
-	libcacaoformats::PackedEncoder enc;
-	CVLOG("Done.");
-
-	//Compile the material (weird function stuff is because of the try catch)
-	CVLOG_NONL("\tCompiling material... ");
-	std::pair<bool, std::string> pcGetErr;
-	libcacaoformats::PackedContainer pc = [&]() {
-		try {
-			pcGetErr = {true, ""};
-			return enc.EncodeMaterial(m);
-		} catch(const std::runtime_error& e) {
-			pcGetErr = {false, e.what()};
-			return libcacaoformats::PackedContainer();
-		}
-	}();
-	if(!pcGetErr.first) {
-		return pcGetErr;
-	}
-	CVLOG("Done.");
-
-	//Write the compiled output
+	//Compile and write the output
 	CVLOG_NONL("\tWriting output file " << out << "... ");
 	std::ofstream outStream(out, std::ios::binary);
 	CompileCheck(outStream.is_open(), "Failed to open output file!");
-	pc.ExportToStream(outStream);
+	try {
+		libcacaoasset::EncodeMaterial(m, &outStream);
+	} catch(const std::exception& e) {
+		return {false, e.what()};
+	}
 	CVLOG("Done.");
 
 	return {true, ""};
@@ -111,7 +287,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
+        ss << "Material Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Parse the CLI

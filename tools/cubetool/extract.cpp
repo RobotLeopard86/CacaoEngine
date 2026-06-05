@@ -131,7 +131,7 @@ void ExtractCmd::Callback() {
 
 		//Check for WebP (if so we can avoid re-encoding)
 		if(format == 2) {
-			//Stream-to-stream copy
+			//Direct copy to stream
 			CVLOG_NONL("\tWriting output... ")
 			switch(i) {
 				case 0:

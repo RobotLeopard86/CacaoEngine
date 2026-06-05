@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
+        ss << "Shader Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Parse the CLI

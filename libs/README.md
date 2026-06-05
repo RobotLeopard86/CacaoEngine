@@ -28,6 +28,6 @@ It currently supports PNG, JPEG, Targa (TGA), TIFF, and WebP files.
 It powers most of the Cacao Engine tooling behind the scenes.
 
 ## `libcacaoasset`
-`libcacaoasset` is a library for encoding and decoding the new Cacao Engine file formats based on [Jaguar](https://github.com/RobotLeopard86/Jaguar) streams. It succeeds the old `libcacaoformats` library, which dealt with the old, custom formats.  
+`libcacaoasset` is a library for encoding and decoding the new Cacao Engine file formats, which are based on [Jaguar](https://github.com/RobotLeopard86/Jaguar) streams. It succeeds the old `libcacaoformats` library, which dealt with the old, custom formats.  
 
 Unlike its predecessor, `libcacaoasset` works exclusively with the compiled forms of these assets. Direct transformation of human-editable versions into the compiled forms is not a feature provided by this library.

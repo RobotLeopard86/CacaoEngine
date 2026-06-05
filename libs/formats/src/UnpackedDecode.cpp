@@ -9,8 +9,9 @@
 
 namespace libcacaoformats {
 	unsigned int stou(std::string value) {
-		int i = std::stoi(value);
+		long i = std::stol(value);
 		if(i < 0) throw std::invalid_argument("Value is signed");
+		if(i > UINT32_MAX) throw std::invalid_argument("Value is too large!");
 		return (unsigned int)i;
 	}
 

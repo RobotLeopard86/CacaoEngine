@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Asset pack tool v" << XAK_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
+        ss << "Asset Pack Utility v" << XAK_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Configure commands

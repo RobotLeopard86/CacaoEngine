@@ -1,4 +1,6 @@
+#include "Bytestream.hpp"
 #include "CLI11.hpp"
+#include "astra/serialized_convert.hpp"
 #include "spinners.hpp"
 
 #include <exception>
@@ -14,6 +16,7 @@
 #include "libcacaoasset.hpp"
 
 #include "crossguid/guid.hpp"
+#include "yaml-cpp/node/type.h"
 
 #define WORLD_FILE_EXTENSION ".xjw"
 
@@ -35,7 +38,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 	try {
 		root = YAML::Load(in);
 	} catch(...) {
-		CheckException(false, "Failed to parse material data stream!");
+		CheckException(false, "Failed to parse world data stream!");
 	}
 
 	//Validate and parse structure
@@ -140,9 +143,12 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 			component.typeID = id.Scalar();
 
 			YAML::Node rfl = c["rfl"];
-			ValidateYAMLNode(rfl, [](const YAML::Node& node) { return (node.IsDefined() ? "" : "Reflection data doesn't exist"); }, "world actor component", "component reflection data");
-
-			//TODO: Convert reflection data from YAML to binary via Astra
+			ValidateYAMLNode(rfl, YAML::NodeType::value::Map, "world actor component", "component reflection data");
+			{
+				libjaguar::Document rflDoc = astra::convert::yamlToBinary(rfl);
+				obytestream obs(component.reflection);
+				rflDoc.ExportTo(obs);
+			}
 
 			actor.components.push_back(component);
 		}
@@ -169,6 +175,7 @@ std::pair<bool, std::string> compile(const std::filesystem::path& inPath, const 
 	} catch(const std::exception& e) {
 		return {false, e.what()};
 	}
+	CVLOG("Done.")
 
 	//Compile and write the output
 	CVLOG_NONL("\tWriting output file " << out << "... ");
@@ -215,7 +222,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
+        ss << "World Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Parse the CLI

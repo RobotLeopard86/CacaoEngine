@@ -119,7 +119,11 @@ namespace libcacaoasset {
 		} catch(...) {
 			//Guess it's a scope
 			//We can just use the TexRef decoder (since that's the only allowable scope); if that fails then this was never going to work
-			param.storage = rd.Query<Material::TexRef>("storage.payload");
+			try {
+				param.storage = rd.Query<Material::TexRef>("storage.payload");
+			} catch(...) {
+				no = true;
+			}
 		}
 		CheckException(!no, "Illegal payload type!");
 		return param;
@@ -127,7 +131,7 @@ namespace libcacaoasset {
 
 	void _EncParam(const Material::Param& p, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<std::string>("target", p.target);
-		ow.Create<libjaguar::UnstructuredObjTag>("storage");
+		ow.EnsureUnstructuredObjExists("storage");
 		switch(p.storage.index()) {
 			case 0:
 				ow.SetOrCreate<int>("storage.payload", std::get<int>(p.storage));
@@ -225,12 +229,12 @@ namespace libcacaoasset {
 		//Material itself
 		libjaguar::StructuredTypeLayout mLayout = {};
 		{
-			libjaguar::StructuredTypeLayout::Field& shader = pLayout.fields.emplace_back();
+			libjaguar::StructuredTypeLayout::Field& shader = mLayout.fields.emplace_back();
 			shader.name = "shader";
 			shader.type = libjaguar::TypeTag::String;
 		}
 		{
-			libjaguar::StructuredTypeLayout::Field& params = pLayout.fields.emplace_back();
+			libjaguar::StructuredTypeLayout::Field& params = mLayout.fields.emplace_back();
 			params.name = "params";
 			params.type = libjaguar::TypeTag::List;
 			params.elementType = libjaguar::TypeTag::StructuredObj;
