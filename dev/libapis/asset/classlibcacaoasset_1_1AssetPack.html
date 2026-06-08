@@ -523,6 +523,23 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13libcacaoasset9AssetPack14DeleteResourceERKNSt6stringE">
+<span id="_CPPv3N13libcacaoasset9AssetPack14DeleteResourceERKNSt6stringE"></span><span id="_CPPv2N13libcacaoasset9AssetPack14DeleteResourceERKNSt6stringE"></span><span id="libcacaoasset::AssetPack::DeleteResource__ssCR"></span><span class="target" id="classlibcacaoasset_1_1AssetPack_1addfe4b030247da864ac12c0798ef5bbe"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteResource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13libcacaoasset9AssetPack14DeleteResourceERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Remove a resource from the pack. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> – The resource’s address</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the resource address provided is invalid </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – If the resource does not exist in the pack </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N13libcacaoasset9AssetPack13ListResourcesEv">
 <span id="_CPPv3N13libcacaoasset9AssetPack13ListResourcesEv"></span><span id="_CPPv2N13libcacaoasset9AssetPack13ListResourcesEv"></span><span id="libcacaoasset::AssetPack::ListResources"></span><span class="target" id="classlibcacaoasset_1_1AssetPack_1a01f1656e6c00daeaf93cd4f560062b47"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ListResources</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13libcacaoasset9AssetPack13ListResourcesEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get a list of resources in the pack. </p>
@@ -543,6 +560,20 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of all matchingresource addresses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13libcacaoasset9AssetPack11HasResourceERKNSt6stringE">
+<span id="_CPPv3N13libcacaoasset9AssetPack11HasResourceERKNSt6stringE"></span><span id="_CPPv2N13libcacaoasset9AssetPack11HasResourceERKNSt6stringE"></span><span id="libcacaoasset::AssetPack::HasResource__ssCR"></span><span class="target" id="classlibcacaoasset_1_1AssetPack_1aeaec277ca6a8b7a4e9e62026171e03f5"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasResource</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13libcacaoasset9AssetPack11HasResourceERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check if the pack contains a specific resource. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> – The resource’s address</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the pack contains the resource </p>
 </dd>
 </dl>
 </dd></dl>
@@ -697,8 +728,10 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPackE"><code class="docutils literal notranslate"><span class="pre">libcacaoasset::AssetPack</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack11GetResourceERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">GetResource()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack14DeleteResourceERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">DeleteResource()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack13ListResourcesEv"><code class="docutils literal notranslate"><span class="pre">ListResources()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack19ListResourcesOfTypeEN8Resource4TypeE"><code class="docutils literal notranslate"><span class="pre">ListResourcesOfType()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack11HasResourceERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">HasResource()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack11PutResourceERKNSt6stringERR8Resource"><code class="docutils literal notranslate"><span class="pre">PutResource()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack6ExportEPNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">Export()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N13libcacaoasset9AssetPack12OpenFromFileERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OpenFromFile()</span></code></a></li>
