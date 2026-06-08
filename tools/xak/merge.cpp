@@ -4,6 +4,7 @@
 #include <string>
 
 #include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 #include "spinners.hpp"
 
 MergeCmd::MergeCmd(CLI::App& app) {
@@ -54,72 +55,40 @@ MergeCmd::MergeCmd(CLI::App& app) {
 
 void MergeCmd::Callback() {
 	std::unordered_map<std::string, std::filesystem::path> origins;
-	libcacaoformats::AssetPack work;
+	libcacaoasset::AssetPack out = libcacaoasset::AssetPack::CreateEmpty();
 
 	//Load each pack
-	libcacaoformats::PackedDecoder dec;
 	for(const std::filesystem::path& pakPath : inPaks) {
 		//Get packed container
 		CVLOG_SINGLE("Processing pack " << pakPath << "...")
 		CVLOG_NONL("\tReading pack... ")
-		libcacaoformats::PackedContainer pak = [&pakPath]() {
-			std::ifstream stream(pakPath);
-			if(!stream.is_open()) {
-				XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to open pack file stream!")
-			}
+		libcacaoasset::AssetPack pack = [&pakPath]() -> libcacaoasset::AssetPack {
 			try {
-				return libcacaoformats::PackedContainer::FromStream(stream);
-			} catch(const std::exception& e) {
-				XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to create pack object: \"" << e.what() << "\"!")
+				return libcacaoasset::AssetPack::OpenFromFile(pakPath);
+			} catch(...) {
+				XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
 			}
 		}();
-		if(fail) return;
-		CVLOG("Done.")
-
-		//Decode the pack
-		CVLOG_NONL("\tDecoding pack... ")
-		libcacaoformats::AssetPack out = [&pak, &dec]() {
-			try {
-				return dec.DecodeAssetPack(pak);
-			} catch(const std::exception& e) {
-				XAK_ERROR_NONVOID(libcacaoformats::AssetPack {}, "Failed to decode asset pack: \"" << e.what() << "\"!")
-			}
-		}();
-		if(fail) return;
 		CVLOG("Done.")
 
 		//Check for conflicts with already loaded assets
 		CVLOG_NONL("\tChecking for conflicts... ")
-		for(const auto& [asset, _] : work) {
-			for(const auto& [asset2, _] : out) {
-				if(asset.compare(asset2) == 0) {
-					XAK_ERROR("Asset address collision on asset \"" << asset << "\", found in " << origins.at(asset) << " and " << pakPath << "!")
+		for(const std::string& res : pack.ListResources()) {
+			for(const std::string& res2 : out.ListResources()) {
+				if(res.compare(res2) == 0) {
+					XAK_ERROR("Resource address collision on resource \"" << res << "\", found in " << origins.at(res) << " and " << pakPath << "!")
 				}
 			}
 		}
 		CVLOG("Done.")
 
-		//Record origins
-		for(const auto& [asset, _] : out) {
-			origins.insert_or_assign(asset, pakPath);
+		//Record origins and merge
+		for(const std::string& res : pack.ListResources()) {
+			libcacaoasset::Resource r = pack.GetResource(res);
+			out.PutResource(res, std::move(r));
+			origins.insert_or_assign(res, pakPath);
 		}
-
-		//Merge
-		work.merge(out);
 	}
-
-	//Encode merged pack
-	CVLOG_NONL("Encoding merged pack... ")
-	libcacaoformats::PackedContainer pc = [&work]() {
-		try {
-			libcacaoformats::PackedEncoder enc;
-			return enc.EncodeAssetPack(work);
-		} catch(const std::exception& e) {
-			XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to encode asset pack: \"" << e.what() << "\"!")
-		}
-	}();
-	if(fail) return;
-	CVLOG("Done.")
 
 	//Make output directory if it doesn't exist
 	if(!std::filesystem::exists(outPath.parent_path())) {
@@ -132,6 +101,6 @@ void MergeCmd::Callback() {
 	if(!outStream.is_open()) {
 		XAK_ERROR("Failed to open output file stream!")
 	}
-	pc.ExportToStream(outStream);
+	out.Export(&outStream);
 	CVLOG("Done.")
 }

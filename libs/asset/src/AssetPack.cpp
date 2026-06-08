@@ -126,6 +126,17 @@ namespace libcacaoasset {
 		return ret;
 	}
 
+	bool AssetPack::HasResource(const std::string& address) {
+		CheckException(address.starts_with("a:") || address.starts_with("r:"), "Invalid resource address!");
+		std::string tgt = std::format("{}Root", address[0]);
+		auto filtered = std::views::filter(doc.QueryScopeInfo(tgt).subscopes, [this, tgt, address](const libjaguar::ScopeEntry& entry) -> bool {
+			return doc.QueryValue<std::string>(std::format("{}[{}].id", tgt, entry.name)).compare(address.substr(2)) == 0;
+		}) | std::views::common;
+		std::vector<libjaguar::ScopeEntry> result(filtered.begin(), filtered.end());
+		CheckException(result.size() <= 1, "Broken asset pack: duplicate entries!");
+		return result.size() == 1;
+	}
+
 	std::vector<std::string> AssetPack::ListResources() {
 		libjaguar::ScopeEntry aRoot = doc.QueryScopeInfo("aRoot");
 		libjaguar::ScopeEntry rRoot = doc.QueryScopeInfo("rRoot");
@@ -177,6 +188,21 @@ namespace libcacaoasset {
 		} else {
 			doc.SetOrCreateValue<Resource>(std::format("{}[{}]", tgt, result[0].name), resource);
 		}
+	}
+
+	void AssetPack::DeleteResource(const std::string& address) {
+		CheckException(address.starts_with("a:") || address.starts_with("r:"), "Invalid resource address!");
+
+		//Find the resource
+		std::string tgt = std::format("{}Root", address[0]);
+		auto filtered = std::views::filter(doc.QueryScopeInfo(tgt).subscopes, [this, tgt, address](const libjaguar::ScopeEntry& entry) -> bool {
+			return doc.QueryValue<std::string>(std::format("{}[{}].id", tgt, entry.name)).compare(address.substr(2)) == 0;
+		}) | std::views::common;
+		std::vector<libjaguar::ScopeEntry> result(filtered.begin(), filtered.end());
+		CheckException(result.size() == 1, "Cannot delete a nonexistent resource!");
+
+		//Delete it
+		doc.DeleteValue(std::format("{}[{}].id", tgt, result[0].name));
 	}
 
 	void AssetPack::Export(std::ostream* stream) {

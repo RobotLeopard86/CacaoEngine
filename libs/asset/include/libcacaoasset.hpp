@@ -224,6 +224,16 @@ namespace libcacaoasset {
 		Resource GetResource(const std::string& address);
 
 		/**
+		 * @brief Remove a resource from the pack
+		 *
+		 * @param address The resource's address
+		 *
+		 * @throws std::runtime_error If the resource address provided is invalid
+		 * @throws std::runtime_error If the resource does not exist in the pack
+		 */
+		void DeleteResource(const std::string& address);
+
+		/**
 		 * @brief Get a list of resources in the pack
 		 *
 		 * @return A list of all resource addresses
@@ -238,6 +248,15 @@ namespace libcacaoasset {
 		 * @throws std::runtime_error If the provided type is a type of resource that cannot be embedded in a pack
 		 */
 		std::vector<std::string> ListResourcesOfType(Resource::Type type);
+
+		/**
+		 * @brief Check if the pack contains a specific resource
+		 *
+		 * @param address The resource's address
+		 *
+		 * @return If the pack contains the resource
+		 */
+		bool HasResource(const std::string& address);
 
 		/**
 		 * @brief Insert a resource into the pack, replacing any previous resources at its address

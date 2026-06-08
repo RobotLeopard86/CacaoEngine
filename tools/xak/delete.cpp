@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 #include "spinners.hpp"
 
 DelCmd::DelCmd(CLI::App& app) {
@@ -46,67 +46,29 @@ DelCmd::DelCmd(CLI::App& app) {
 
 void DelCmd::Callback() {
 	//Load the pack
-	libcacaoformats::AssetPack work;
-	{
-		//Get packed container
-		CVLOG_NONL("Reading pack... ")
-		libcacaoformats::PackedContainer pak = [this]() {
-			std::ifstream stream(inPath);
-			if(!stream.is_open()) {
-				XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to open pack file stream!")
-			}
-			try {
-				return libcacaoformats::PackedContainer::FromStream(stream);
-			} catch(const std::exception& e) {
-				XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to create pack object: \"" << e.what() << "\"!")
-			}
-		}();
-		if(fail) return;
-		CVLOG("Done.")
-
-		//Decode the pack
-		CVLOG_NONL("Decoding pack... ")
-		work = [&pak]() {
-			try {
-				libcacaoformats::PackedDecoder dec;
-				return dec.DecodeAssetPack(pak);
-			} catch(const std::exception& e) {
-				XAK_ERROR_NONVOID(libcacaoformats::AssetPack {}, "Failed to decode asset pack: \"" << e.what() << "\"!")
-			}
-		}();
-		if(fail) return;
-		CVLOG("Done.")
-	}
-
-	//Find and delete the requested assets
-	for(const std::string& asset : toDelete) {
-		CVLOG_NONL("Deleting asset \"" << asset << "\"... ")
-		if(!work.contains(asset)) {
-			XAK_ERROR("Pack does not contain asset \"" << asset << "\"!")
-		}
-		work.erase(asset);
-		CVLOG("Done.")
-	}
-
-	//Encode modified pack
-	CVLOG_NONL("Encoding modified pack... ")
-	libcacaoformats::PackedContainer pc = [&work]() {
+	CVLOG_NONL("Reading pack... ")
+	libcacaoasset::AssetPack pack = [this]() -> libcacaoasset::AssetPack {
 		try {
-			libcacaoformats::PackedEncoder enc;
-			return enc.EncodeAssetPack(work);
-		} catch(const std::exception& e) {
-			XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to encode asset pack: \"" << e.what() << "\"!")
+			return libcacaoasset::AssetPack::OpenFromFile(inPath);
+		} catch(...) {
+			XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
 		}
 	}();
-	if(fail) return;
 	CVLOG("Done.")
 
+	//Delete the requested assets
+	for(const std::string& asset : toDelete) {
+		CVLOG_NONL("Deleting asset \"" << asset << "\"... ")
+		pack.DeleteResource(asset);
+		CVLOG("Done.")
+	}
+
 	//Write pack to output file
-	CVLOG_NONL("Writing back changes... ")
+	CVLOG_NONL("Writing output file " << inPath << "... ")
 	std::ofstream outStream(inPath, std::ios::binary);
 	if(!outStream.is_open()) {
-		XAK_ERROR("Failed to open output stream!")
+		XAK_ERROR("Failed to open output file stream!")
 	}
-	pc.ExportToStream(outStream);
+	pack.Export(&outStream);
 	CVLOG("Done.")
 }

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 #include "yaml-cpp/yaml.h"
 #include "spinners.hpp"
 
@@ -23,9 +23,9 @@ CreateCmd::CreateCmd(CLI::App& app) {
 	//Assets directory help
 	const auto assetsDirHelpFunc = []() {
 		std::cout << "An asset in this context refers to one of:\n"
-				  << "\t* A Cacao Engine packed shader\n"
-				  << "\t* A Cacao Engine packed cubemap\n"
-				  << "\t* A Cacao Engine packed material\n"
+				  << "\t* A compiled Cacao Engine shader\n"
+				  << "\t* A compiled Cacao Engine cubemap\n"
+				  << "\t* A compiled Cacao Engine material\n"
 				  << "\t* A 2D texture file (PNG, JPEG, WebP, Targa/TGA, or TIFF)\n"
 				  << "\t* A model file (FBX, glTF2 binary (.glb), Collada (.dae), or Wavefront OBJ) containing one or more meshes and optionally textures.\n"
 				  << "\t* A font file (TrueType or OpenType)\n"
@@ -84,8 +84,8 @@ void CreateCmd::Callback() {
 	bool noAsset = (assetRoot.compare("") == 0);
 	bool noRes = (resRoot.compare("") == 0);
 
-	//Define asset table
-	libcacaoformats::AssetPack assetTable;
+	//Define asset pack
+	libcacaoasset::AssetPack pack = libcacaoasset::AssetPack::CreateEmpty();
 	std::unordered_map<std::filesystem::path, std::string> assets;
 	std::vector<std::filesystem::path> resources;
 	YAML::Node addrMap;
@@ -151,17 +151,16 @@ res_begin:
 	CVLOG("Done.")
 
 	//Add blob resources to asset table
-	for(const std::filesystem::path& res : resources) {
-		//Log
-		CVLOG_NONL("Adding blob resource " << res << "... ")
-
-		//Create packed asset object
-		libcacaoformats::PackedAsset pa = {};
-		pa.kind = libcacaoformats::PackedAsset::Kind::Resource;
+	for(const std::filesystem::path& resPath : resources) {
+		//Create resource object
+		libcacaoasset::Resource res;
+		CVLOG_NONL("Adding blob resource " << resPath << "... ")
+		res.type = libcacaoasset::Resource::Type::Blob;
+		res.id = std::filesystem::relative(resPath, resRoot).string();
 
 		//Load buffer
-		pa.buffer = [res]() {
-			std::ifstream stream(res);
+		res.bytes = [&resPath]() {
+			std::ifstream stream(resPath);
 			if(!stream.is_open()) {
 				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open blob resource data stream!")
 			}
@@ -187,11 +186,8 @@ res_begin:
 		}();
 		if(fail) return;
 
-		//Get relative path for identifier
-		std::string rel2Root = std::filesystem::relative(res, resRoot).string();
-
-		//Insert into table
-		assetTable.insert_or_assign(rel2Root, pa);
+		//Insert into pack
+		pack.PutResource(std::format("r:{}", res.id), std::move(res));
 		CVLOG("Done.")
 	}
 	if(noAsset) goto encode;
@@ -203,10 +199,10 @@ asset_process:
 		std::stringstream logmsg;
 		logmsg << "Checking if file " << asset << " ";
 		if(addr.compare("\0") != 0) logmsg << "(assigned to address \"" << addr << "\") ";
-		logmsg << "is an asset... ";
+		logmsg << "is a valid asset... ";
 		CVLOG_NONL(logmsg.str())
-		libcacaoformats::PackedAsset pa;
-		pa.buffer = [asset]() {
+		libcacaoasset::Resource res;
+		res.bytes = [asset]() {
 			std::ifstream stream(asset, std::ios::binary);
 			if(!stream.is_open()) {
 				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open asset data stream!")
@@ -252,180 +248,177 @@ asset_process:
 #pragma pack(pop)
 
 		//Check header for validity
-		std::size_t pabSz = pa.buffer.size();
-		if(pabSz >= 2) {
-			if(pa.buffer[0] == 0xFF && pa.buffer[1] == 0xE0) {
+		std::size_t resBufSize = res.bytes.size();
+		if(resBufSize >= 2) {
+			if(res.bytes[0] == 0xFF && res.bytes[1] == 0xE0) {
 				//MP3 audio
-				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+				res.type = libcacaoasset::Resource::Type::Audio;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == ' ') {
+			} else if(res.bytes[0] == 'v' && res.bytes[1] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'o' && pa.buffer[1] == ' ') {
+			} else if(res.bytes[0] == 'o' && res.bytes[1] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'g' && pa.buffer[1] == ' ') {
+			} else if(res.bytes[0] == 'g' && res.bytes[1] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 's' && pa.buffer[1] == ' ') {
+			} else if(res.bytes[0] == 's' && res.bytes[1] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'f' && pa.buffer[1] == ' ') {
+			} else if(res.bytes[0] == 'f' && res.bytes[1] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'l' && pa.buffer[1] == ' ') {
+			} else if(res.bytes[0] == 'l' && res.bytes[1] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= 3) {
-			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2]}; str.compare("ID3") == 0) {
+		if(resBufSize >= 3) {
+			if(std::string str {(char)res.bytes[0], (char)res.bytes[1], (char)res.bytes[2]}; str.compare("ID3") == 0) {
 				//MP3 audio with an ID3 tag
-				pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+				res.type = libcacaoasset::Resource::Type::Audio;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 0xFF && pa.buffer[1] == 0xD8 && pa.buffer[2] == 0xFF) {
+			} else if(res.bytes[0] == 0xFF && res.bytes[1] == 0xD8 && res.bytes[2] == 0xFF) {
 				//JPEG image
-				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+				res.type = libcacaoasset::Resource::Type::Tex2D;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == 't' && pa.buffer[2] == ' ') {
+			} else if(res.bytes[0] == 'v' && res.bytes[1] == 't' && res.bytes[2] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == 'n' && pa.buffer[2] == ' ') {
+			} else if(res.bytes[0] == 'v' && res.bytes[1] == 'n' && res.bytes[2] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 'v' && pa.buffer[1] == 'p' && pa.buffer[2] == ' ') {
+			} else if(res.bytes[0] == 'v' && res.bytes[1] == 'p' && res.bytes[2] == ' ') {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= 4) {
-			std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3]};
+		if(resBufSize >= 4) {
+			std::string str {(char)res.bytes[0], (char)res.bytes[1], (char)res.bytes[2], (char)res.bytes[3]};
 			if(str.compare("OTTO") == 0) {
 				//OpenType font
-				pa.kind = libcacaoformats::PackedAsset::Kind::Font;
+				res.type = libcacaoasset::Resource::Type::Font;
 				goto asset_ok;
 			} else if(str.compare("glTF") == 0) {
 				//glTF binary model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
-			} else if(pa.buffer[0] == 0xCA && pa.buffer[1] == 0xCA && pa.buffer[2] == 0x00) {
-				//Cacao packed container (still need to check type)
-				if(pa.buffer[3] == 0xC4) {
-					//Cubemap
-					pa.kind = libcacaoformats::PackedAsset::Kind::Cubemap;
-					goto asset_ok;
-				} else if(pa.buffer[3] == 0x1B) {
-					//Shader
-					pa.kind = libcacaoformats::PackedAsset::Kind::Shader;
-					goto asset_ok;
-				} else if(pa.buffer[3] == 0x3E) {
-					//Material
-					pa.kind = libcacaoformats::PackedAsset::Kind::Material;
-					goto asset_ok;
-				}
-			} else if(pa.buffer[0] == 'I' && pa.buffer[1] == 'I' && pa.buffer[2] == '*' && pa.buffer[3] == 0x00) {
+			} else if(res.bytes[0] == 'I' && res.bytes[1] == 'I' && res.bytes[2] == '*' && res.bytes[3] == 0x00) {
 				//TIFF image
-				pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+				res.type = libcacaoasset::Resource::Type::Tex2D;
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= 5 && pa.buffer[0] == 0x00 && pa.buffer[1] == 0x01 && pa.buffer[2] == 0x00 && pa.buffer[3] == 0x00 && pa.buffer[4] == 0x00) {
+		if(resBufSize >= 5 && res.bytes[0] == 0x00 && res.bytes[1] == 0x01 && res.bytes[2] == 0x00 && res.bytes[3] == 0x00 && res.bytes[4] == 0x00) {
 			//TrueType font
-			pa.kind = libcacaoformats::PackedAsset::Kind::Font;
+			res.type = libcacaoasset::Resource::Type::Font;
 			goto asset_ok;
 		}
-		if(pabSz >= 6) {
-			std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5]};
-			if(str.compare("mtllib") == 0) {
+		if(resBufSize >= 6) {
+			std::string str {(char)res.bytes[0], (char)res.bytes[1], (char)res.bytes[2], (char)res.bytes[3], (char)res.bytes[4], (char)res.bytes[5]};
+			if(str.compare("cecmap") == 0) {
+				//Cubemap
+				res.type = libcacaoasset::Resource::Type::Cubemap;
+				goto asset_ok;
+			} else if(str.compare("cematl") == 0) {
+				//Material
+				res.type = libcacaoasset::Resource::Type::Material;
+				goto asset_ok;
+			} else if(str.compare("ceshdr") == 0) {
+				//Shader
+				res.type = libcacaoasset::Resource::Type::Shader;
+				goto asset_ok;
+			} else if(str.compare("mtllib") == 0) {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
 			} else if(str.compare("usemtl") == 0) {
 				//OBJ model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= 8 && pa.buffer[0] == 0x89 && pa.buffer[1] == 0x50 && pa.buffer[2] == 0x4E && pa.buffer[3] == 0x47 &&
-			pa.buffer[4] == 0x0D && pa.buffer[5] == 0x0A && pa.buffer[6] == 0x1A && pa.buffer[7] == 0x0A) {
+		if(resBufSize >= 8 && res.bytes[0] == 0x89 && res.bytes[1] == 0x50 && res.bytes[2] == 0x4E && res.bytes[3] == 0x47 &&
+			res.bytes[4] == 0x0D && res.bytes[5] == 0x0A && res.bytes[6] == 0x1A && res.bytes[7] == 0x0A) {
 
 			//PNG image
-			pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+			res.type = libcacaoasset::Resource::Type::Tex2D;
 			goto asset_ok;
 		}
-		if(pabSz >= 12) {
-			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
-				   (char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10], (char)pa.buffer[11]};
+		if(resBufSize >= 12) {
+			if(std::string str {(char)res.bytes[0], (char)res.bytes[1], (char)res.bytes[2], (char)res.bytes[3], (char)res.bytes[4], (char)res.bytes[5],
+				   (char)res.bytes[6], (char)res.bytes[7], (char)res.bytes[8], (char)res.bytes[9], (char)res.bytes[10], (char)res.bytes[11]};
 				str.starts_with("RIFF")) {
 
 				if(str.ends_with("WEBP")) {
 					//WebP image
-					pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+					res.type = libcacaoasset::Resource::Type::Tex2D;
 					goto asset_ok;
 				} else if(str.ends_with("WAVE")) {
 					//WAV audio
-					pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+					res.type = libcacaoasset::Resource::Type::Audio;
 					goto asset_ok;
 				}
 			}
 		}
-		if(pabSz >= 18) {
-			if(std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
-				   (char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10], (char)pa.buffer[11],
-				   (char)pa.buffer[12], (char)pa.buffer[13], (char)pa.buffer[14], (char)pa.buffer[15], (char)pa.buffer[16], (char)pa.buffer[17]};
+		if(resBufSize >= 18) {
+			if(std::string str {(char)res.bytes[0], (char)res.bytes[1], (char)res.bytes[2], (char)res.bytes[3], (char)res.bytes[4], (char)res.bytes[5],
+				   (char)res.bytes[6], (char)res.bytes[7], (char)res.bytes[8], (char)res.bytes[9], (char)res.bytes[10], (char)res.bytes[11],
+				   (char)res.bytes[12], (char)res.bytes[13], (char)res.bytes[14], (char)res.bytes[15], (char)res.bytes[16], (char)res.bytes[17]};
 				str.compare("Kaydara FBX Binary") == 0) {
 				//FBX model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= 23) {
-			std::string str {(char)pa.buffer[0], (char)pa.buffer[1], (char)pa.buffer[2], (char)pa.buffer[3], (char)pa.buffer[4], (char)pa.buffer[5],
-				(char)pa.buffer[6], (char)pa.buffer[7], (char)pa.buffer[8], (char)pa.buffer[9], (char)pa.buffer[10], (char)pa.buffer[11],
-				(char)pa.buffer[12], (char)pa.buffer[13], (char)pa.buffer[14], (char)pa.buffer[15], (char)pa.buffer[16], (char)pa.buffer[17],
-				(char)pa.buffer[18], (char)pa.buffer[19], (char)pa.buffer[20], (char)pa.buffer[21], (char)pa.buffer[22], (char)pa.buffer[23],
-				(char)pa.buffer[24], (char)pa.buffer[25], (char)pa.buffer[26], (char)pa.buffer[27], (char)pa.buffer[28], (char)pa.buffer[29],
-				(char)pa.buffer[30], (char)pa.buffer[31], (char)pa.buffer[32], (char)pa.buffer[33], (char)pa.buffer[34], (char)pa.buffer[35]};
+		if(resBufSize >= 23) {
+			std::string str {(char)res.bytes[0], (char)res.bytes[1], (char)res.bytes[2], (char)res.bytes[3], (char)res.bytes[4], (char)res.bytes[5],
+				(char)res.bytes[6], (char)res.bytes[7], (char)res.bytes[8], (char)res.bytes[9], (char)res.bytes[10], (char)res.bytes[11],
+				(char)res.bytes[12], (char)res.bytes[13], (char)res.bytes[14], (char)res.bytes[15], (char)res.bytes[16], (char)res.bytes[17],
+				(char)res.bytes[18], (char)res.bytes[19], (char)res.bytes[20], (char)res.bytes[21], (char)res.bytes[22], (char)res.bytes[23],
+				(char)res.bytes[24], (char)res.bytes[25], (char)res.bytes[26], (char)res.bytes[27], (char)res.bytes[28], (char)res.bytes[29],
+				(char)res.bytes[30], (char)res.bytes[31], (char)res.bytes[32], (char)res.bytes[33], (char)res.bytes[34], (char)res.bytes[35]};
 
 			if(str.starts_with("OggS")) {
 				if(str.find("vorbis") != std::string::npos) {
 					//Ogg Vorbis audio
-					pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+					res.type = libcacaoasset::Resource::Type::Audio;
 					goto asset_ok;
 				} else if(str.find("OpusHead") != std::string::npos) {
 					//Ogg Opus audio
-					pa.kind = libcacaoformats::PackedAsset::Kind::Sound;
+					res.type = libcacaoasset::Resource::Type::Audio;
 					goto asset_ok;
 				}
 			}
 		}
-		if(pabSz >= 62) {
+		if(resBufSize >= 62) {
 			//Get past (maybe) the XML header to find the COLLADA tag
-			auto xmlIt = std::find(pa.buffer.cbegin(), pa.buffer.cend(), '>');
-			if(xmlIt == pa.buffer.cend()) goto asset_skip;
-			unsigned int xml = std::distance(pa.buffer.cbegin(), xmlIt);
-			std::string str {(char)pa.buffer[xml + 1], (char)pa.buffer[xml + 2], (char)pa.buffer[xml + 3], (char)pa.buffer[xml + 4],
-				(char)pa.buffer[xml + 5], (char)pa.buffer[xml + 6], (char)pa.buffer[xml + 7], (char)pa.buffer[xml + 8], (char)pa.buffer[xml + 9]};
+			auto xmlIt = std::find(res.bytes.cbegin(), res.bytes.cend(), '>');
+			if(xmlIt == res.bytes.cend()) goto asset_skip;
+			unsigned int xml = std::distance(res.bytes.cbegin(), xmlIt);
+			std::string str {(char)res.bytes[xml + 1], (char)res.bytes[xml + 2], (char)res.bytes[xml + 3], (char)res.bytes[xml + 4],
+				(char)res.bytes[xml + 5], (char)res.bytes[xml + 6], (char)res.bytes[xml + 7], (char)res.bytes[xml + 8], (char)res.bytes[xml + 9]};
 
 			if(str.find("<COLLADA") != std::string::npos) {
 				//Collada model
-				pa.kind = libcacaoformats::PackedAsset::Kind::Model;
+				res.type = libcacaoasset::Resource::Type::Model;
 				goto asset_ok;
 			}
 		}
-		if(pabSz >= sizeof(TGAHeader)) {
+		if(resBufSize >= sizeof(TGAHeader)) {
 			//Obtain the TGA header
 			TGAHeader tga = {};
-			std::memcpy(&tga, pa.buffer.data(), sizeof(TGAHeader));
+			std::memcpy(&tga, res.bytes.data(), sizeof(TGAHeader));
 
 			//Do some checks on the header
 			if(tga.colormapType > 1) goto asset_skip;
@@ -440,7 +433,7 @@ asset_process:
 			}
 
 			//Valid (probably) TGA image
-			pa.kind = libcacaoformats::PackedAsset::Kind::Tex2D;
+			res.type = libcacaoasset::Resource::Type::Tex2D;
 			goto asset_ok;
 		}
 
@@ -453,8 +446,13 @@ asset_process:
 
 		//Auto-generate address if not listed
 		std::string trueAddr = addr;
+		std::set<std::string> knownAddrs;
+		{
+			std::vector<std::string> list = pack.ListResources();
+			knownAddrs = std::set<std::string>(list.cbegin(), list.cend());
+		}
 		if(addr.compare("\0") == 0) {
-			CVLOG_NONL("Generating address... ")
+			CVLOG_NONL("\tGenerating address... ")
 			std::stringstream gen;
 			gen << asset.filename().stem().string();
 			int counter = 0;
@@ -463,30 +461,19 @@ asset_process:
 			do {
 				work = base;
 				work += std::to_string(counter++);
-			} while(assetTable.contains(work));
+			} while(knownAddrs.contains(work));
 			trueAddr = work;
 			CVLOG("Done.")
 		}
 
 		//Add to table
-		CVLOG_NONL("Adding asset \"" << trueAddr << "\"... ")
-		assetTable.insert_or_assign(trueAddr, pa);
+		CVLOG_NONL("\tAdding asset \"" << trueAddr << "\"... ")
+		res.id = trueAddr;
+		pack.PutResource(std::format("a:{}", trueAddr), std::move(res));
 		CVLOG("Done.")
 	}
 
 encode:
-	//Encode asset pack
-	CVLOG_NONL("Encoding pack... ")
-	libcacaoformats::PackedContainer pc = [&assetTable]() {
-		try {
-			libcacaoformats::PackedEncoder enc;
-			return enc.EncodeAssetPack(assetTable);
-		} catch(const std::exception& e) {
-			XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to encode asset pack: \"" << e.what() << "\"!")
-		}
-	}();
-	if(fail) return;
-	CVLOG("Done.")
 
 	//Make output directory if it doesn't exist
 	if(!std::filesystem::exists(outPath.parent_path())) {
@@ -499,6 +486,6 @@ encode:
 	if(!outStream.is_open()) {
 		XAK_ERROR("Failed to open output file stream!")
 	}
-	pc.ExportToStream(outStream);
+	pack.Export(&outStream);
 	CVLOG("Done.")
 }

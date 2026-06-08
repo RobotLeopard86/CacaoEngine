@@ -3,6 +3,7 @@
 #include <string>
 
 #include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 
 ListCmd::ListCmd(CLI::App& app) {
 	//List the command CLI
@@ -33,26 +34,20 @@ ListCmd::ListCmd(CLI::App& app) {
 }
 
 void ListCmd::Callback() {
-	//Open input file
-	std::ifstream in(inPath, std::ios::binary);
-	if(!in.is_open()) {
-		XAK_ERROR("Failed to open input file stream for reading!")
-	}
-
-	//Decode the file
-	libcacaoformats::PackedDecoder dec;
-	libcacaoformats::AssetPack decoded;
-	try {
-		libcacaoformats::PackedContainer pc = libcacaoformats::PackedContainer::FromStream(in);
-		decoded = dec.DecodeAssetPack(pc);
-	} catch(const std::runtime_error& e) {
-		XAK_ERROR(e.what());
-	}
+	//Load the pack
+	libcacaoasset::AssetPack pack = [this]() -> libcacaoasset::AssetPack {
+		try {
+			return libcacaoasset::AssetPack::OpenFromFile(inPath);
+		} catch(...) {
+			XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
+		}
+	}();
 
 	//Sort files by type
 	std::vector<std::string> a, r;
-	for(const auto& [addr, pa] : decoded) {
-		if(pa.kind == libcacaoformats::PackedAsset::Kind::Resource && doResources) {
+	for(const std::string& addr : pack.ListResources()) {
+		libcacaoasset::Resource res = pack.GetResource(addr);
+		if(res.type == libcacaoasset::Resource::Type::Blob && doResources) {
 			r.push_back(addr);
 			continue;
 		}
@@ -69,26 +64,26 @@ void ListCmd::Callback() {
 			std::cout << asset;
 			if(assetMeta) {
 				std::cout << " (";
-				switch(decoded[asset].kind) {
-					case libcacaoformats::PackedAsset::Kind::Cubemap:
+				switch(pack.GetResource(asset).type) {
+					case libcacaoasset::Resource::Type::Cubemap:
 						std::cout << "Cubemap)";
 						break;
-					case libcacaoformats::PackedAsset::Kind::Shader:
+					case libcacaoasset::Resource::Type::Shader:
 						std::cout << "Shader)";
 						break;
-					case libcacaoformats::PackedAsset::Kind::Material:
+					case libcacaoasset::Resource::Type::Material:
 						std::cout << "Material)";
 						break;
-					case libcacaoformats::PackedAsset::Kind::Font:
+					case libcacaoasset::Resource::Type::Font:
 						std::cout << "Font)";
 						break;
-					case libcacaoformats::PackedAsset::Kind::Model:
+					case libcacaoasset::Resource::Type::Model:
 						std::cout << "Model)";
 						break;
-					case libcacaoformats::PackedAsset::Kind::Sound:
-						std::cout << "Sound)";
+					case libcacaoasset::Resource::Type::Audio:
+						std::cout << "Audio)";
 						break;
-					case libcacaoformats::PackedAsset::Kind::Tex2D:
+					case libcacaoasset::Resource::Type::Tex2D:
 						std::cout << "2D Texture)";
 						break;
 					default:

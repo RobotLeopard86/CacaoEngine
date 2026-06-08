@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 #include "spinners.hpp"
 
 ExtractCmd::ExtractCmd(CLI::App& app) {
@@ -60,41 +60,19 @@ ExtractCmd::ExtractCmd(CLI::App& app) {
 
 void ExtractCmd::Callback() {
 	//Load the pack
-	libcacaoformats::AssetPack pak;
-	{
-		//Get packed container
-		CVLOG_NONL("Reading pack... ")
-		libcacaoformats::PackedContainer pc = [this]() {
-			std::ifstream stream(inPath);
-			if(!stream.is_open()) {
-				XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to open pack file stream!")
-			}
-			try {
-				return libcacaoformats::PackedContainer::FromStream(stream);
-			} catch(const std::exception& e) {
-				XAK_ERROR_NONVOID(libcacaoformats::PackedContainer {}, "Failed to create pack object: \"" << e.what() << "\"!")
-			}
-		}();
-		if(fail) return;
-		CVLOG("Done.")
-
-		//Decode the pack
-		CVLOG_NONL("Decoding pack... ")
-		pak = [&pc]() {
-			try {
-				libcacaoformats::PackedDecoder dec;
-				return dec.DecodeAssetPack(pc);
-			} catch(const std::exception& e) {
-				XAK_ERROR_NONVOID(libcacaoformats::AssetPack {}, "Failed to decode asset pack: \"" << e.what() << "\"!")
-			}
-		}();
-		if(fail) return;
-		CVLOG("Done.")
-	}
+	CVLOG_NONL("Reading pack... ")
+	libcacaoasset::AssetPack pack = [this]() -> libcacaoasset::AssetPack {
+		try {
+			return libcacaoasset::AssetPack::OpenFromFile(inPath);
+		} catch(...) {
+			XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
+		}
+	}();
+	CVLOG("Done.")
 
 	//If all assets requested, get them
 	if(all) {
-		for(const auto& [asset, _] : pak) {
+		for(const std::string& asset : pack.ListResources()) {
 			toExtract.push_back(asset);
 		}
 	}
@@ -102,70 +80,70 @@ void ExtractCmd::Callback() {
 	//Define output map
 	std::unordered_map<std::filesystem::path, std::vector<unsigned char>> out;
 
-	//Find the requested assets and assign their paths
+	//Find the requested resources and assign their paths
 	bool hasRes = false;
-	for(const std::string& asset : toExtract) {
-		CVLOG_NONL("Checking for asset \"" << asset << "\"... ")
-		if(!pak.contains(asset)) {
-			XAK_ERROR("Pack does not contain asset \"" << asset << "\"!")
+	for(const std::string& res : toExtract) {
+		CVLOG_NONL("Checking for resource \"" << res << "\"... ")
+		if(!pack.HasResource(res)) {
+			XAK_ERROR("Pack does not contain resource \"" << res << "\"!")
 		}
-		libcacaoformats::PackedAsset& pa = pak.at(asset);
+		libcacaoasset::Resource resource = pack.GetResource(res);
 		CVLOG("Done.")
 
 		//Path assignment
 		std::filesystem::path oasset = outDir;
-		if(pa.kind == libcacaoformats::PackedAsset::Kind::Resource) {
-			(oasset /= "res") /= asset;
+		if(resource.type == libcacaoasset::Resource::Type::Blob) {
+			(oasset /= "res") /= res;
 			hasRes = true;
 		} else {
-			oasset /= asset;
-			switch(pa.kind) {
-				case libcacaoformats::PackedAsset::Kind::Cubemap:
+			oasset /= res;
+			switch(resource.type) {
+				case libcacaoasset::Resource::Type::Cubemap:
 					oasset += ".xjc";
 					break;
-				case libcacaoformats::PackedAsset::Kind::Shader:
+				case libcacaoasset::Resource::Type::Shader:
 					oasset += ".xjs";
 					break;
-				case libcacaoformats::PackedAsset::Kind::Material:
+				case libcacaoasset::Resource::Type::Material:
 					oasset += ".xjm";
 					break;
-				case libcacaoformats::PackedAsset::Kind::Font:
-					if(pa.buffer[0] == 'O') {
+				case libcacaoasset::Resource::Type::Font:
+					if(resource.bytes[0] == 'O') {
 						oasset += ".otf";
 					} else {
 						oasset += ".ttf";
 					}
 					break;
-				case libcacaoformats::PackedAsset::Kind::Model:
-					if(pa.buffer[0] == 'K') {
+				case libcacaoasset::Resource::Type::Model:
+					if(resource.bytes[0] == 'K') {
 						oasset += ".fbx";
-					} else if(pa.buffer[0] == 'g') {
+					} else if(resource.bytes[0] == 'g') {
 						oasset += ".glb";
-					} else if(pa.buffer[0] == '<') {
+					} else if(resource.bytes[0] == '<') {
 						oasset += ".dae";
 					} else {
 						oasset += ".obj";
 					}
 					break;
-				case libcacaoformats::PackedAsset::Kind::Tex2D:
-					if(pa.buffer[0] == 0x89) {
+				case libcacaoasset::Resource::Type::Tex2D:
+					if(resource.bytes[0] == 0x89) {
 						oasset += ".png";
-					} else if(pa.buffer[0] == 0xFF) {
+					} else if(resource.bytes[0] == 0xFF) {
 						oasset += ".jpg";
-					} else if(pa.buffer[0] == 'I') {
+					} else if(resource.bytes[0] == 'I') {
 						oasset += ".tiff";
-					} else if(pa.buffer[0] == 'R') {
+					} else if(resource.bytes[0] == 'R') {
 						oasset += ".webp";
 					} else {
 						oasset += ".tga";
 					}
 					break;
-				case libcacaoformats::PackedAsset::Kind::Sound:
-					if(pa.buffer[0] == 0xFF || pa.buffer[0] == 'I') {
+				case libcacaoasset::Resource::Type::Audio:
+					if(resource.bytes[0] == 0xFF || resource.bytes[0] == 'I') {
 						oasset += ".mp3";
-					} else if(pa.buffer[0] == 'R') {
+					} else if(resource.bytes[0] == 'R') {
 						oasset += ".wav";
-					} else if(pa.buffer[34] == 'a') {
+					} else if(resource.bytes[34] == 'a') {
 						oasset += ".opus";
 					} else {
 						oasset += ".ogg";
@@ -174,7 +152,7 @@ void ExtractCmd::Callback() {
 				default: break;
 			}
 		}
-		out.insert_or_assign(oasset, std::move(pa.buffer));
+		out.insert_or_assign(oasset, std::move(resource.bytes));
 	}
 
 	//Prep output directory
