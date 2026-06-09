@@ -9,7 +9,7 @@ namespace Cacao {
 		virtual void DropRealized() = 0;
 
 		std::vector<unsigned char> irBuffer;
-		ShaderDescription description;
+		libcacaoasset::Shader::Descriptor description;
 
 		virtual ~Impl() = default;
 	};
