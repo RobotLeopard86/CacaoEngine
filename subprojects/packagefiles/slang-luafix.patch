@@ -1,15 +1,15 @@
 diff --git a/tools/slang-fiddle/slang-fiddle-lua.cpp b/tools/slang-fiddle/slang-fiddle-lua.cpp
-index adebf55..0d5f04e 100644
+index 882289ca4..ddcff53d5 100644
 --- a/tools/slang-fiddle/slang-fiddle-lua.cpp
 +++ b/tools/slang-fiddle/slang-fiddle-lua.cpp
-@@ -2,4 +2,4 @@
+@@ -7,4 +7,4 @@
+ #define LUA_USE_POSIX
+ #endif
  
- 
- #define MAKE_LIB 1
 -#include "lua/onelua.c"
 +#include "onelua.c"
 diff --git a/tools/slang-fiddle/slang-fiddle-scrape.h b/tools/slang-fiddle/slang-fiddle-scrape.h
-index 098c11a..557e0e7 100644
+index 098c11aad..557e0e7a6 100644
 --- a/tools/slang-fiddle/slang-fiddle-scrape.h
 +++ b/tools/slang-fiddle/slang-fiddle-scrape.h
 @@ -2,7 +2,7 @@
@@ -22,7 +22,7 @@ index 098c11a..557e0e7 100644
  
  namespace fiddle
 diff --git a/tools/slang-fiddle/slang-fiddle-script.cpp b/tools/slang-fiddle/slang-fiddle-script.cpp
-index e713a37..e179e33 100644
+index eb55e383d..82293ff77 100644
 --- a/tools/slang-fiddle/slang-fiddle-script.cpp
 +++ b/tools/slang-fiddle/slang-fiddle-script.cpp
 @@ -2,9 +2,9 @@
@@ -39,7 +39,7 @@ index e713a37..e179e33 100644
  #include <cstdio>
  
 diff --git a/tools/slang-fiddle/slang-fiddle-script.h b/tools/slang-fiddle/slang-fiddle-script.h
-index 94bda45..4432fe0 100644
+index 94bda453b..4432fe0e5 100644
 --- a/tools/slang-fiddle/slang-fiddle-script.h
 +++ b/tools/slang-fiddle/slang-fiddle-script.h
 @@ -4,8 +4,8 @@

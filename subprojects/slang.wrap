@@ -2,6 +2,6 @@
 url = https://github.com/shader-slang/slang
 depth = 1
 clone-recursive = true
-revision = v2025.19.1
+revision = v2026.10.2
 patch_directory = slang
 diff_files = slang-luafix.patch

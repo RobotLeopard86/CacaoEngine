@@ -2,7 +2,7 @@
 cpp = meson.get_compiler('cpp')
 
 # Engine headers
-engine_headers = include_directories('include', '..' / 'libs' / 'formats' / 'include', '..' / 'libs' / 'image' / 'include')
+engine_headers = include_directories('include', '..' / 'libs' / 'asset' / 'include', '..' / 'libs' / 'image' / 'include')
 install_subdir('include' / 'Cacao', install_dir: 'include')
 
 # Headers private to modules

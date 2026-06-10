@@ -2,13 +2,15 @@ diff --git a/meson.build b/meson.build
 index aadf7ca..688d4c0 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -645,6 +645,10 @@ else
+@@ -645,6 +645,12 @@ else
    endif
  endif
  
 +# run autogeneration
-+message('Autogenerating DNN model files...')
-+run_command('autogen.' + (build_machine.system() == 'windows' ? 'bat' : 'sh'), check: true)
++if not import('fs').exists('dnn' / 'models')
++  message('Autogenerating DNN model files...')
++  run_command('autogen.' + (build_machine.system() == 'windows' ? 'bat' : 'sh'), check: true)
++endif
 +
  # extract source file lists from .mk files
  mk_files = [

@@ -12,7 +12,7 @@
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 
 #include <memory>
 #include <ranges>
@@ -31,37 +31,39 @@ namespace Cacao {
 		cam->SetRotation(glm::vec3 {0});
 	}
 
-	std::shared_ptr<World> World::Create(const std::string& addr, const libcacaoformats::World& world) {
+	std::shared_ptr<World> World::Create(const std::string& addr, const libcacaoasset::World& world) {
 		//Create base world
 		std::shared_ptr<World> w = Create(addr);
 
 		//Configure camera and skybox
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
 		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
-		if(!world.skyboxRef.empty() && ValidateResourceAddr<World>(world.skyboxRef)) {
-			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skyboxRef);
+		if(!world.skybox.empty() && ValidateResourceAddr<World>(world.skybox)) {
+			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
 
 		//Process actors and make tree
 		std::unordered_map<xg::Guid, ActorRef> foundActors;
-		std::unordered_map<xg::Guid, std::vector<libcacaoformats::World::Actor>> awaitingParents;
-		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor) {
-			auto impl = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor, auto& iref) mutable {
+		std::unordered_map<xg::Guid, std::vector<libcacaoasset::World::Actor>> awaitingParents;
+		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoasset::World::Actor& actor) {
+			auto impl = [w, &foundActors, &awaitingParents](const libcacaoasset::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
 				ActorRef ref;
-				if(actor.parentGUID == xg::Guid {}) {
+				xg::Guid pguid(actor.parentGUID);
+				xg::Guid guid(actor.guid);
+				if(pguid == xg::Guid {}) {
 					//Top-level actor
-					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, ActorRef {}, actor.guid))};
+					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, ActorRef {}, guid))};
 					w->impl->slotTable.push_back(std::move(slot));
 					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
-				} else if(foundActors.contains(actor.parentGUID)) {
+				} else if(foundActors.contains(pguid)) {
 					//The parent has been added to the tree
-					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, foundActors[actor.parentGUID], actor.guid))};
+					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, foundActors[pguid], guid))};
 					w->impl->slotTable.push_back(std::move(slot));
 					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
 				} else {
 					//The parent has not been added to the tree but we'll save this for when it is
-					awaitingParents[actor.parentGUID].push_back(actor);
+					awaitingParents[pguid].push_back(actor);
 					return;
 				}
 
@@ -74,7 +76,7 @@ namespace Cacao {
 				ref->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
 
 				//Mount components
-				for(const libcacaoformats::World::Component& comp : actor.components) {
+				for(const libcacaoasset::World::Component& comp : actor.components) {
 					//Ensure the type is in the code registry
 					Check<NonexistentValueException>(CodeRegistry::Get().HasFactory<Component>(comp.typeID), "World contains component of an unknown type! Hint: all component types must be registered in the CodeRegistry.");
 
@@ -85,12 +87,12 @@ namespace Cacao {
 				}
 
 				//Process components that should be children of this one
-				if(awaitingParents.contains(actor.guid))
-					for(const libcacaoformats::World::Actor& ca : awaitingParents[actor.guid]) iref(ca, iref);
+				if(awaitingParents.contains(guid))
+					for(const libcacaoasset::World::Actor& ca : awaitingParents[guid]) iref(ca, iref);
 			};
 			impl(actor, impl);
 		};
-		for(const libcacaoformats::World::Actor& actor : world.actors) processActor(actor);
+		for(const libcacaoasset::World::Actor& actor : world.actors) processActor(actor);
 
 		//Return built world
 		return w;

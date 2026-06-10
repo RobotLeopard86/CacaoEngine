@@ -1,4 +1,4 @@
-# Material compiler (basically just a libcacaoformats wrapper)
+# Cubemap tool
 cubetool = executable('ce-cubetool', sources: [
     'main.cpp',
     'create.cpp',

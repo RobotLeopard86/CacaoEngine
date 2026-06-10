@@ -1,5 +1,4 @@
 subdir('common')
 subdir('audiodecoder')
 subdir('image')
-subdir('formats')
 subdir('asset')

@@ -19,14 +19,6 @@ It currently supports MP3, WAV, Ogg Vorbis, and Ogg Opus files.
 
 It currently supports PNG, JPEG, Targa (TGA), TIFF, and WebP files.
 
-## `libcacaoformats`
-> [!WARNING]  
-> This library is being superseded by the new `libcacaoasset` library, and will be **removed** once that transition is complete.  
-
-`libcacaoformats` is a library for working with Cacao Engine file formats, including asset packs, cubemaps, shaders, materials, and worlds. It deals with both "packed" (binary) and "unpacked" (YAML) files, the former being used at runtime by the engine and the latter being used by developers directly.  
-
-It powers most of the Cacao Engine tooling behind the scenes.
-
 ## `libcacaoasset`
 `libcacaoasset` is a library for encoding and decoding the new Cacao Engine file formats, which are based on [Jaguar](https://github.com/RobotLeopard86/Jaguar) streams. It succeeds the old `libcacaoformats` library, which dealt with the old, custom formats.  
 

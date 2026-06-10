@@ -6,7 +6,7 @@
 #include "Actor.hpp"
 #include "Resource.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 
 #include <memory>
 #include <optional>
@@ -38,7 +38,7 @@ namespace Cacao {
 		 *
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<World> Create(const std::string& addr, const libcacaoformats::World& world);
+		static std::shared_ptr<World> Create(const std::string& addr, const libcacaoasset::World& world);
 
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
 

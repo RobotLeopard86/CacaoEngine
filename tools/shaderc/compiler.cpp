@@ -2,11 +2,11 @@
 #include "toolutil.hpp"
 
 #include "CheckException.hpp"
-#include "libcacaoformats.hpp"
 #include "libcacaoasset.hpp"
 
 #include <sstream>
 #include <fstream>
+#include <cstring>
 
 CacaoShaderCompiler::CacaoShaderCompiler() {
 	//Initialize global session
@@ -214,8 +214,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	CVLOG_NONL("\tWriting output file " << out << "... ");
 	std::ofstream outStream(out, std::ios::binary);
 	CompileCheck(outStream.is_open(), "Failed to open output file!");
-	libcacaoformats::PackedEncoder encoder;
-	encoder.EncodeShader(shader.irCode).ExportToStream(outStream);
+	libcacaoasset::EncodeShader(shader, &outStream);
 	CVLOG("Done.");
 
 	return {true, ""};

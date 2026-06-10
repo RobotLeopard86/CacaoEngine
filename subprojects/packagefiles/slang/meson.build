@@ -1,4 +1,4 @@
-project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2025.19.1', license: 'Apache-2.0 WITH LLVM-exception', subproject_dir: 'external', default_options: ['cpp_std=c++20', 'warning_level=3', 'b_staticpic=true', 'default_library=static'])
+project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2026.10.2', license: 'Apache-2.0 WITH LLVM-exception', subproject_dir: 'external', default_options: ['cpp_std=c++20', 'warning_level=3', 'b_staticpic=true', 'default_library=static'])
 
 ###################################
 # COMMON SETUP
@@ -88,6 +88,10 @@ spirv_headers_dep = spirv_headers.get_variable('spirv_headers_dep')
 lua = subproject('lua')
 lua_headers_dep = lua.get_variable('lua_headers_dep')
 
+# cmark
+cmark = subproject('cmark')
+cmark_dep = cmark.get_variable('cmark_dep')
+
 # threads
 threads = dependency('threads', required: true)
 
@@ -99,6 +103,7 @@ libdl_dep = meson.get_compiler('cpp').find_library('dl', required: host_machine.
 ###################################
 verfile_config = configuration_data()
 verfile_config.set('SLANG_VERSION_FULL', 'v' + meson.project_version())
+verfile_config.set('SLANG_VERSION_NUMERIC', 'v' + meson.project_version())
 verfile = configure_file(input: 'slang-tag-version.h.in', output: 'slang-tag-version.h', format: 'cmake@', configuration: verfile_config)
 
 ###################################
@@ -233,16 +238,25 @@ no_embedded_core_module_source_dep = declare_dependency(sources: 'source' / 'sla
     fiddle_output_dep, spirv_headers_dep], include_directories: common_includes)
 
 ###################################
+# NEURAL MODULE CONFIGURATION
+###################################
+
+neural_config_data = configuration_data()
+neural_config_data.set('SLANG_STANDARD_MODULE_DIR_NAME', '')
+neural_config_data.set('SLANG_STANDARD_MODULE_INSTALL_DIR', host_machine.system() == 'windows' ? 'bin' : 'lib')
+neural_config_data.set('SLANG_NEURAL_MODULE_FILE_NAME', 'neural.slang_module')
+neural_config_h = configure_file(input: 'source' / 'standard-modules' / 'slang-standard-module-config.h.in', output: 'slang-standard-module-config.h', format: 'cmake@', configuration: neural_config_data)
+
+###################################
 # SLANG COMMON STUFF
 ###################################
 
 slang_base_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang'], check: true).stdout().strip().splitlines()
-slang_record_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'record'], check: true).stdout().strip().splitlines()
-slang_replay_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'replay'], check: true).stdout().strip().splitlines()
-slang_record_replay_util_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'util'], check: true).stdout().strip().splitlines()
-slang_src = [slang_base_src, slang_record_src, slang_replay_src, slang_record_replay_util_src]
+slang_record_replay_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay'], check: true).stdout().strip().splitlines()
+slang_record_replay_proxy_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'proxy'], check: true).stdout().strip().splitlines()
+slang_src = [slang_base_src, slang_record_replay_src, slang_record_replay_proxy_src, neural_config_h]
 slang_common_dep = declare_dependency(sources: [slang_src, verfile], compile_args: export_args, include_directories: common_includes, dependencies: [slang_core_dep, slang_prelude_dep, slang_compiler_core_dep,
-    capability_defs_dep, capability_lookup_dep, fiddle_output_dep, lookup_tables_dep, spirv_headers_dep])
+    capability_defs_dep, capability_lookup_dep, fiddle_output_dep, lookup_tables_dep, spirv_headers_dep, cmark_dep])
 
 ###################################
 # CORE MODULE BOOTSTRAP SETUP

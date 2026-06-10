@@ -2,7 +2,6 @@
 
 #include <string>
 
-#include "libcacaoformats.hpp"
 #include "libcacaoasset.hpp"
 
 ListCmd::ListCmd(CLI::App& app) {

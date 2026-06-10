@@ -2,5 +2,4 @@
 url = https://gitlab.xiph.org/xiph/opus.git
 depth = 1
 revision = v1.6.1
-patch_directory = opus
 diff_files = opus-fixes.patch

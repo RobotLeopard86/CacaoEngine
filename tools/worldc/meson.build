@@ -1,2 +1,2 @@
-# World compiler (basically just a libcacaoformats wrapper)
+# World compiler
 worldc = executable('ce-worldc', 'main.cpp', dependencies: [asset_dep, cli11_dep, spinners_dep, crossguid], cpp_args: '-DCOMPILER_VER="1.0.0"', include_directories: '..', install: true)

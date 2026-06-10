@@ -72,7 +72,6 @@ html_css_files = ["fonts.css"]
 
 breathe_projects = {
     "Cacao Engine": "./_doxy/cacao/xml",
-    "libcacaoformats": "./_doxy/formats/xml",
     "libcacaoasset": "./_doxy/asset/xml",
     "libcacaocommon": "./_doxy/commonlib/xml",
     "libcacaoaudiodecoder": "./_doxy/audiodecoder/xml",
@@ -105,15 +104,6 @@ exhale_projects_args = {
 									'''),
         "containmentFolder": "./api",
         "rootFileTitle": "API Reference"
-    },
-    "libcacaoformats": {
-        "exhaleDoxygenStdin": dedent('''
-									INPUT = ../libs/formats/include
-									HIDE_UNDOC_MEMBERS = YES
-									MAX_INITIALIZER_LINES = 0
-									'''),
-        "containmentFolder": "./libapis/formats",
-        "rootFileTitle": "Cacao Formats Library API"
     },
     "libcacaoasset": {
         "exhaleDoxygenStdin": dedent('''
