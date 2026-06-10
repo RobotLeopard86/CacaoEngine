@@ -92,7 +92,7 @@ endforeach
 ###################################
 
 zlib_dep = dependency('zlib', static: true, required: true)
-rt_dep = cpp.find_library('rt', static: true, required: host_machine.system() != 'windows')
+rt_dep = cpp.find_library('rt', static: true, required: host_machine.system() == 'linux')
 
 pugixml = static_library('pugixml', sources: [
 	'contrib' / 'pugixml' / 'src' / 'pugiconfig.hpp',
@@ -164,22 +164,16 @@ open3dgc = static_library('open3dgc', sources: [
     'contrib' / 'Open3DGC' / 'o3dgcDynamicVector.h',
     'contrib' / 'Open3DGC' / 'o3dgcFIFO.h',
     'contrib' / 'Open3DGC' / 'o3dgcIndexedFaceSet.h',
-    #'contrib' / 'Open3DGC' / 'o3dgcIndexedFaceSet.inl',
     'contrib' / 'Open3DGC' / 'o3dgcSC3DMCDecoder.h',
-    #'contrib' / 'Open3DGC' / 'o3dgcSC3DMCDecoder.inl',
     'contrib' / 'Open3DGC' / 'o3dgcSC3DMCEncodeParams.h',
     'contrib' / 'Open3DGC' / 'o3dgcSC3DMCEncoder.h',
-    #'contrib' / 'Open3DGC' / 'o3dgcSC3DMCEncoder.inl',
     'contrib' / 'Open3DGC' / 'o3dgcTimer.h',
     'contrib' / 'Open3DGC' / 'o3dgcTools.cpp',
     'contrib' / 'Open3DGC' / 'o3dgcTriangleFans.cpp',
     'contrib' / 'Open3DGC' / 'o3dgcTriangleFans.h',
     'contrib' / 'Open3DGC' / 'o3dgcTriangleListDecoder.h',
-    #'contrib' / 'Open3DGC' / 'o3dgcTriangleListDecoder.inl',
     'contrib' / 'Open3DGC' / 'o3dgcTriangleListEncoder.h',
-    #'contrib' / 'Open3DGC' / 'o3dgcTriangleListEncoder.inl',
     'contrib' / 'Open3DGC' / 'o3dgcVector.h',
-    #'contrib' / 'Open3DGC' / 'o3dgcVector.inl'
 ], include_directories: ['contrib' / 'Open3DGC', 'include'])
 open3dgc_dep = declare_dependency(include_directories: 'contrib' / 'Open3DGC', link_whole: open3dgc)
 
@@ -234,33 +228,26 @@ public_headers = [
 	header_path /'ai_assert.h',
 	header_path /'camera.h',
 	header_path /'color4.h',
-	#header_path /'color4.inl',
 	header_path /'ColladaMetaData.h',
 	header_path /'commonMetaData.h',
 	header_path /'defs.h',
 	header_path /'cfileio.h',
 	header_path /'light.h',
 	header_path /'material.h',
-	#header_path /'material.inl',
 	header_path /'matrix3x3.h',
-	#header_path /'matrix3x3.inl',
 	header_path /'matrix4x4.h',
-	#header_path /'matrix4x4.inl',
 	header_path /'mesh.h',
 	header_path /'ObjMaterial.h',
 	header_path /'pbrmaterial.h',
 	header_path /'GltfMaterial.h',
 	header_path /'postprocess.h',
 	header_path /'quaternion.h',
-	#header_path /'quaternion.inl',
 	header_path /'scene.h',
 	header_path /'metadata.h',
 	header_path /'texture.h',
 	header_path /'types.h',
 	header_path /'vector2.h',
-	#header_path /'vector2.inl',
 	header_path /'vector3.h',
-	#header_path /'vector3.inl',
 	header_path /'version.h',
 	header_path /'cimport.h',
 	header_path /'AssertHandler.h',
@@ -295,7 +282,6 @@ public_headers = [
 	header_path /'SkeletonMeshBuilder.h',
 	header_path /'SmallVector.h',
 	header_path /'SmoothingGroups.h',
-	#header_path /'SmoothingGroups.inl',
 	header_path /'StandardShapes.h',
 	header_path /'RemoveComments.h',
 	header_path /'Subdivision.h',
@@ -362,7 +348,6 @@ common_src = [
 	source_path / 'Common' / 'ScenePreprocessor.h',
 	source_path / 'Common' / 'SkeletonMeshBuilder.cpp',
 	source_path / 'Common' / 'StackAllocator.h',
-	#source_path / 'Common' / 'StackAllocator.inl',
 	source_path / 'Common' / 'StandardShapes.cpp',
 	source_path / 'Common' / 'TargetAnimation.cpp',
 	source_path / 'Common' / 'TargetAnimation.h',
@@ -511,15 +496,11 @@ importer_src = [
 	source_path / 'AssetLib' / 'glTFCommon' / 'glTFCommon.h',
 	source_path / 'AssetLib' / 'glTFCommon' / 'glTFCommon.cpp',
 	source_path / 'AssetLib' / 'glTF' / 'glTFAsset.h',
-	#source_path / 'AssetLib' / 'glTF' / 'glTFAsset.inl',
 	source_path / 'AssetLib' / 'glTF' / 'glTFAssetWriter.h',
-	#source_path / 'AssetLib' / 'glTF' / 'glTFAssetWriter.inl',
 	source_path / 'AssetLib' / 'glTF' / 'glTFImporter.cpp',
 	source_path / 'AssetLib' / 'glTF' / 'glTFImporter.h',
 	source_path / 'AssetLib' / 'glTF2' / 'glTF2Asset.h',
-	#source_path / 'AssetLib' / 'glTF2' / 'glTF2Asset.inl',
 	source_path / 'AssetLib' / 'glTF2' / 'glTF2AssetWriter.h',
-	#source_path / 'AssetLib' / 'glTF2' / 'glTF2AssetWriter.inl',
 	source_path / 'AssetLib' / 'glTF2' / 'glTF2Importer.cpp',
 	source_path / 'AssetLib' / 'glTF2' / 'glTF2Importer.h'
 ]

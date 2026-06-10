@@ -50,7 +50,7 @@ endif
 
 # Set some macOS-specific options
 if host_machine.system() == 'darwin'
-	add_languages('objcpp')
+	add_languages('objcpp', native: false)
 	add_project_arguments(['-fexperimental-library', '-DHAS_MACOS'], language: 'cpp')
 	add_project_link_arguments('-fexperimental-library', language: 'cpp')
 	dep_compiler_args += '-fexperimental-library'

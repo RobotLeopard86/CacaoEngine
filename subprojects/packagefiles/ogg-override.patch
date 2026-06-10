@@ -2,8 +2,9 @@ diff --git a/src/meson.build b/src/meson.build
 index 3696e30..7f45446 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -29,3 +29,5 @@ pkgconfig = import('pkgconfig')
- pkgconfig.generate(libogg,
+@@ -36,4 +36,6 @@ pkgconfig = import('pkgconfig')
+ pkgconfig.generate(
+   libogg,
    description: 'ogg is a library for manipulating ogg bitstreams',
  )
 +
