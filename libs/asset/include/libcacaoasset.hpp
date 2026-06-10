@@ -162,13 +162,26 @@ namespace libcacaoasset {
 			libjaguar::Vector<int, 2>, libjaguar::Vector<int, 3>, libjaguar::Vector<int, 4>, libjaguar::Vector<unsigned int, 2>, libjaguar::Vector<unsigned int, 3>,
 			libjaguar::Vector<unsigned int, 4>, libjaguar::Matrix<float, 2, 2>, libjaguar::Matrix<float, 3, 3>, libjaguar::Matrix<float, 4, 4>>;
 
+		/**
+		 * @brief Parameter name and data wrapper
+		 */
 		struct CACAO_API Param {
 			std::string target;///<The shader parameter that receives the stored data
 			Storage storage;   ///<The data storage for the parameter value
 		};
 
+		/**
+		 * @brief Transparency mode for an object
+		 */
+		enum class TransparencyMode : uint8_t {
+			Opaque = 0,	   ///<Fully opaque geometry
+			Cutout = 1,	   ///<Geometry with only full opacity or full transparency
+			Transparent = 2///<Geometry with full or partial transparency
+		};
+
 		std::string shaderAddress;	  ///<Resource address of the base shader
 		std::vector<Param> parameters;///<Data to apply to the shader
+		TransparencyMode transparency;///<Transparency mode for rendering
 	};
 
 	/**

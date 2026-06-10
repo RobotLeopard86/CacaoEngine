@@ -189,6 +189,17 @@ libcacaoasset::Material parseMaterialYML(const YAML::Node& root, const std::stri
 	ValidateYAMLNode(root, YAML::NodeType::Map, context, "material root");
 
 	ValidateYAMLNode(root["shaderAddress"], YAML::NodeType::Scalar, context, "shaderAddress");
+	ValidateYAMLNode(root["transparency"], YAML::NodeType::Scalar, [](const YAML::Node& node) {
+		try {
+			std::string val = node.as<std::string>();
+			std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+			if(val.compare("opaque") == 0) return "";
+			if(val.compare("cutout") == 0) return "";
+			if(val.compare("transparent") == 0) return "";
+			return "Invalid transparency value!";
+		} catch(...) {
+			return "Not a string!";
+		} }, context, "transparency");
 
 	ValidateYAMLNode(root["parameters"], YAML::NodeType::Sequence, context, "parameters");
 	const YAML::Node& params = root["parameters"];
@@ -196,6 +207,15 @@ libcacaoasset::Material parseMaterialYML(const YAML::Node& root, const std::stri
 	libcacaoasset::Material mat;
 	mat.shaderAddress = root["shaderAddress"].as<std::string>();
 	mat.parameters.reserve(params.size());
+
+	std::string tval = root["transparency"].as<std::string>();
+	std::transform(tval.begin(), tval.end(), tval.begin(), ::tolower);
+	if(tval.compare("opaque") == 0)
+		mat.transparency = libcacaoasset::Material::TransparencyMode::Opaque;
+	else if(tval.compare("cutout") == 0)
+		mat.transparency = libcacaoasset::Material::TransparencyMode::Cutout;
+	else if(tval.compare("transparent") == 0)
+		mat.transparency = libcacaoasset::Material::TransparencyMode::Transparent;
 
 	for(std::size_t i = 0; i < params.size(); ++i) {
 		const std::string paramCtx = std::format("{} parameter[{}]", context, i);
