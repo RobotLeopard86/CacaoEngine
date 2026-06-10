@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Function CheckException(bool, std::string, std::function&lt;void()&gt;) &#8212; Cacao Engine Docs</title>
+    <title>Function CheckException &#8212; Cacao Engine Docs</title>
   
   
   
@@ -55,7 +55,7 @@
         </script>
     <link rel="icon" href="../../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Function CheckException(bool, std::string, std::function&lt;void()&gt;)" href="function_libcacaocommon_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html" />
+    <link rel="next" title="Function ValidateYAMLNode(const YAML::Node&amp;, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)" href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html" />
     <link rel="prev" title="Class ubytestreambuf" href="classubytestreambuf.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -343,33 +343,11 @@
 <li class="toctree-l2"><a class="reference internal" href="classibytestream.html">Class ibytestream</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classobytestream.html">Class obytestream</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classubytestreambuf.html">Class ubytestreambuf</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="function_libcacaocommon_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Function CheckException</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html">Function ValidateYAMLNode(const YAML::Node&amp;, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1abf3a03a8501d77df1f87ca6c2d42e5b2.html">Function ValidateYAMLNode(const YAML::Node&amp;, YAML::NodeType::value, const std::string&amp;, const std::string&amp;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="function_YAMLValidate_8hpp_1a32b425e2dafa98e574a7760d5222f9fc.html">Function ValidateYAMLNode(const YAML::Node&amp;, YAML::NodeType::value, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="define_DllHelper_8hpp_1ac25eea2af71595b76696718f3b96fa5f.html">Define CACAO_API</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../formats/root.html">Cacao Formats Library API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../formats/namespace_libcacaoformats.html">Namespace libcacaoformats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Material.html">Struct Material</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Material_1_1TextureRef.html">Struct Material::TextureRef</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Matrix.html">Template Struct Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1PackedAsset.html">Struct PackedAsset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Vec2.html">Template Struct Vec2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Vec3.html">Template Struct Vec3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1Vec4.html">Template Struct Vec4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1World.html">Struct World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1World_1_1Actor.html">Struct World::Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/structlibcacaoformats_1_1World_1_1Component.html">Struct World::Component</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1PackedContainer.html">Class PackedContainer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1PackedDecoder.html">Class PackedDecoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1PackedEncoder.html">Class PackedEncoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1UnpackedDecoder.html">Class UnpackedDecoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/classlibcacaoformats_1_1UnpackedEncoder.html">Class UnpackedEncoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/enum_libcacaoformats_8hpp_1aee88c451c51b6591aa2bf2045bbb48fb.html">Enum PackedFormat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../formats/typedef_libcacaoformats_8hpp_1a4900aa84455dadf605d68f102e50b0bc.html">Typedef libcacaoformats::AssetPack</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../asset/root.html">Cacao Assets Library API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -472,7 +450,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">Cacao Common Utilities API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Function CheckException</span></li>
   </ul>
 </nav>
 </div>
@@ -489,23 +467,29 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="function-checkexception-bool-std-string-std-function-void">
-<span id="exhale-function-checkexception-8hpp-1a1c5d8b79b10ba4b33fc56f3b6f8b763b"></span><h1>Function CheckException(bool, std::string, std::function&lt;void()&gt;)<a class="headerlink" href="#function-checkexception-bool-std-string-std-function-void" title="Link to this heading"><span/></a></h1>
+  <section id="function-checkexception">
+<span id="exhale-function-checkexception-8hpp-1a1c5d8b79b10ba4b33fc56f3b6f8b763b"></span><h1>Function CheckException<a class="headerlink" href="#function-checkexception" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_libs_common_include_CheckException.hpp.html#file-libs-common-include-checkexception-hpp"><span class="std std-ref">File CheckException.hpp</span></a></p></li>
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Link to this heading"><span/></a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Unable to resolve function “CheckException” with arguments (bool, std::string, std::function&lt;void()&gt;) in doxygen xml output for project “libcacaocommon” from directory: ./_doxy/commonlib/xml.
-Potential matches:
-</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">CheckException</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">cond</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span>
-<span class="o">-</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">CheckException</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">cond</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span>
-</pre></div>
-</div>
-</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414CheckExceptionbNSt6stringENSt8functionIFvvEEE">
+<span id="_CPPv314CheckExceptionbNSt6stringENSt8functionIFvvEEE"></span><span id="_CPPv214CheckExceptionbNSt6stringENSt8functionIFvvEEE"></span><span class="target" id="CheckException_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CheckException</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cond</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">msg</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">unwindFn</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[]()</span> <span class="pre">{}</span></code><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414CheckExceptionbNSt6stringENSt8functionIFvvEEE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Quick utility to throw an exception on an error condition. </p>
+<p>The exception will be thrown if the condition evaluates to false</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cond</strong> – The condition to evaluate </p></li>
+<li><p><strong>msg</strong> – The message for the exception thrown </p></li>
+<li><p><strong>unwindFn</strong> – A function to clean up state before exception throwing should the condition be false </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -529,11 +513,11 @@ Potential matches:
       </div>
     </a>
     <a class="right-next"
-       href="function_libcacaocommon_8hpp_1a1c5d8b79b10ba4b33fc56f3b6f8b763b.html"
+       href="function_YAMLValidate_8hpp_1a61af1969c85c4b76c5ec28d3203acac2.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Function CheckException(bool, std::string, std::function&lt;void()&gt;)</p>
+        <p class="prev-next-title">Function ValidateYAMLNode(const YAML::Node&amp;, std::function&lt;std::string(const YAML::Node&amp;)&gt;, const std::string&amp;, const std::string&amp;)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -556,7 +540,10 @@ Potential matches:
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-documentation">Function Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv414CheckExceptionbNSt6stringENSt8functionIFvvEEE"><code class="docutils literal notranslate"><span class="pre">CheckException()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
