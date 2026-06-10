@@ -110,6 +110,8 @@ exhale_projects_args = {
 									INPUT = ../libs/asset/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/asset",
         "rootFileTitle": "Cacao Assets Library API",
@@ -120,6 +122,8 @@ exhale_projects_args = {
 									INPUT = ../libs/image/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/image",
         "rootFileTitle": "Cacao Images Library API",
@@ -130,6 +134,8 @@ exhale_projects_args = {
 									INPUT = ../libs/audiodecoder/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/audiodecoder",
         "rootFileTitle": "Cacao Audio Decoder Library API"
@@ -139,7 +145,8 @@ exhale_projects_args = {
 									INPUT = ../libs/common/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-                                    EXCLUDE_SYMBOLS = std
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/common",
         "rootFileTitle": "Cacao Common Utilities API"
