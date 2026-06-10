@@ -12,11 +12,43 @@ namespace Cacao {
 		float2 texCoords : TexCoord0;
 	};
 
+	struct SurfaceInput {
+		float2 texCoords;
+		float3 objLocalPos;
+		float3 objWorldPos;
+		float3 worldNormal;
+		float3 worldTangent;
+		float3 worldBitangent;
+	}
+
+	struct VSOut {
+		float4 outPosition : SV_Position;
+		SurfaceInput surfaceIn;
+	};
+
 	struct GlobalData {
-		float4x4 viewProjection;
+		float worldTime;
+		float deltaTime;
 	};
 	ParameterBlock<GlobalData> globals;
 
+	struct CameraData {
+		float4x4 viewMatrix;
+		float4x4 projectionMatrix;
+		float4x4 viewProjectionMatrix;
+		float3 worldPosition;
+	};
+	ParameterBlock<CameraData> cam;
+
+	struct Transform {
+		float4x4 transformMatrix;
+		float4x4 normalMatrix;
+	};
+
 	[vk::push_constant]
-	ConstantBuffer<float4x4> transform;
+	ConstantBuffer<Transform> transform;
+
+	struct SurfaceSample {
+		float4 albedo;
+	};
 }
