@@ -405,6 +405,8 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;typeindex&gt;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;crossguid/guid.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;astra/setup.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;astra/type_actions/common_actions.hpp&quot;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
@@ -443,7 +445,7 @@
 <span class="w">        </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">Resolve</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Component</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ASTRA_REFLECT</span><span class="w"> </span><span class="n">Component</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">AstraReflectBase</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsEnabled</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
@@ -461,10 +463,17 @@
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Component</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
-<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Component</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="n">ASTRASETUP</span><span class="p">(</span><span class="n">Component</span><span class="p">)</span>
 
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">OnMount</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
+<span class="cp">#ifdef _ASTRAGENERATE</span>
+<span class="w">        </span><span class="n">Component</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="cp">#endif</span>
+<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
+<span class="cp">#ifndef _ASTRAGENERATE</span>
+<span class="w">        </span><span class="n">Component</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">astra</span><span class="o">::</span><span class="n">CommonActions</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#endif</span>
+<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnMount</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnUnmount</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
@@ -515,7 +524,7 @@
 
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_constructible_v</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">ExistingValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="o">!</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;A component of the type specified already exists on the actor!&quot;</span><span class="p">);</span>
 
 <span class="w">            </span><span class="c1">//Prepare objects</span>
@@ -524,9 +533,12 @@
 
 <span class="w">            </span><span class="c1">//Call-down to internal function</span>
 <span class="w">            </span><span class="n">_ComponentSetup</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">component</span><span class="p">));</span>
+
+<span class="w">            </span><span class="c1">//Return the component reference</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">components</span><span class="p">[</span><span class="n">type</span><span class="p">].</span><span class="n">component</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">factoryID</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Component</span><span class="o">&amp;</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">factoryID</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>

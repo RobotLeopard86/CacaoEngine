@@ -544,6 +544,12 @@
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
+<section id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">AstraReflectBase</span></code></p></li>
+</ul>
+</section>
 <section id="derived-type">
 <h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
@@ -555,7 +561,7 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao9ComponentE">
-<span id="_CPPv3N5Cacao9ComponentE"></span><span id="_CPPv2N5Cacao9ComponentE"></span><span id="Cacao::Component"></span><span class="target" id="classCacao_1_1Component"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao9ComponentE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao9ComponentE"></span><span id="_CPPv2N5Cacao9ComponentE"></span><span id="Cacao::Component"></span><span class="target" id="classCacao_1_1Component"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">AstraReflectBase</span></span><a class="headerlink" href="#_CPPv4N5Cacao9ComponentE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>An object attached to an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> that performs tasks on its behalf. </p>
 <p>Subclassed by <a class="reference internal" href="classCacao_1_1Script.html#classCacao_1_1Script"><span class="std std-ref">Cacao::Script</span></a></p>
 <div class="breathe-sectiondef docutils container">
@@ -601,12 +607,9 @@
 <span id="_CPPv3N5Cacao9ComponentD0Ev"></span><span id="_CPPv2N5Cacao9ComponentD0Ev"></span><span id="Cacao::Component::~Component"></span><span class="target" id="classCacao_1_1Component_1a6f11670fc6cf0050d7c5b7927fc0bfaa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Component</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9ComponentD0Ev" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Component9ComponentEv">
-<span id="_CPPv3N5Cacao9Component9ComponentEv"></span><span id="_CPPv2N5Cacao9Component9ComponentEv"></span><span id="Cacao::Component::Component"></span><span class="target" id="classCacao_1_1Component_1ad5aef00283ecada1461371e9584f25ac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Component</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Component9ComponentEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1Component_1a18cd7e28220bd49536c3cb42599235d8"></span><span class="sig-name descname"><span class="pre">inline</span>&#160; <span class="pre">ASTRASETUP</span> <span class="pre">(Component)</span> <span class="pre">protected</span></span></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -644,6 +647,11 @@
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="property"><span class="pre">friend</span> <span class="pre">struct</span></span> <span class="pre">astra::CommonActions&lt;</span> <span class="pre">Component</span> <span class="pre">&gt;</span></dt>
+</dl>
+
 <dl>
 <dt class="sig sig-object cpp">
 <span class="property"><span class="pre">friend</span> <span class="pre">class</span></span> <span class="pre">Actor</span></dt>
@@ -703,6 +711,7 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-type">Base Type</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
 </ul>
 </li>
@@ -712,7 +721,6 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component10SetEnabledEb"><code class="docutils literal notranslate"><span class="pre">SetEnabled()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao9Component8GetOwnerEv"><code class="docutils literal notranslate"><span class="pre">GetOwner()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9ComponentD0Ev"><code class="docutils literal notranslate"><span class="pre">~Component()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9ComponentEv"><code class="docutils literal notranslate"><span class="pre">Component()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component7OnMountEv"><code class="docutils literal notranslate"><span class="pre">OnMount()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component9OnUnmountEv"><code class="docutils literal notranslate"><span class="pre">OnUnmount()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Component8OnEnableEv"><code class="docutils literal notranslate"><span class="pre">OnEnable()</span></code></a></li>
