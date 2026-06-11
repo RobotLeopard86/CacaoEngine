@@ -14,11 +14,11 @@ namespace Cacao {
 
 	struct SurfaceInput {
 		float2 texCoords;
-		float3 objLocalPos;
-		float3 objWorldPos;
-		float3 worldNormal;
-		float3 worldTangent;
-		float3 worldBitangent;
+		float3 localPos;
+		float3 worldPos;
+		float3 normal;
+		float3 tangent;
+		float3 bitangent;
 	}
 
 	struct VSOut {

@@ -37,7 +37,7 @@ namespace Cacao {
 
 		//Configure camera and skybox
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
-		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
+		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z, world.initialCamRot.w});
 		if(!world.skybox.empty() && ValidateResourceAddr<World>(world.skybox)) {
 			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
@@ -72,7 +72,7 @@ namespace Cacao {
 
 				//Setup transform
 				ref->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
-				ref->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z});
+				ref->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z, actor.initialRot.w});
 				ref->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
 
 				//Mount components

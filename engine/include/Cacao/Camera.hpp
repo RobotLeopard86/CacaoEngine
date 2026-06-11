@@ -1,9 +1,10 @@
 #pragma once
 
-#include "glm/glm.hpp"
-
 #include "EventManager.hpp"
 #include "DllHelper.hpp"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 namespace Cacao {
 	/**
@@ -41,16 +42,30 @@ namespace Cacao {
 		/**
 		 * @brief Get the rotation of the camera
 		 *
-		 * @return The camera rotation
+		 * @return The rotation
 		 */
-		virtual glm::vec3 GetRotation() const = 0;
+		virtual glm::quat GetRotation() const = 0;
+
+		/**
+		 * @brief Get the rotation of the camera as Euler angles in degrees
+		 *
+		 * @return The rotation as Euler angles
+		 */
+		virtual glm::vec3 GetRotationEuler() const = 0;
 
 		/**
 		 * @brief Set the rotation of the camera
 		 *
 		 * @param rot The new rotation
 		 */
-		virtual void SetRotation(glm::vec3 rot) = 0;
+		virtual void SetRotation(glm::quat rot) = 0;
+
+		/**
+		 * @brief Set the rotation of the camera using Euler angles in degrees
+		 *
+		 * @param rot The new rotation in Euler angles
+		 */
+		virtual void SetRotationEuler(glm::vec3 rot) = 0;
 
 		/**
 		 * @brief Get the projection matrix

@@ -22,7 +22,7 @@ namespace libcacaoasset {
 		actor.guid = rd.Query<std::array<unsigned char, 16>>("guid");
 		actor.parentGUID = rd.Query<std::array<unsigned char, 16>>("pguid");
 		actor.initialPos = rd.Query<libjaguar::Vector<float, 3>>("initPos");
-		actor.initialRot = rd.Query<libjaguar::Vector<float, 3>>("initRot");
+		actor.initialRot = rd.Query<libjaguar::Vector<float, 4>>("initRot");
 		actor.initialScale = rd.Query<libjaguar::Vector<float, 3>>("initScl");
 		actor.components = rd.Query<std::vector<World::Component>>("components");
 		return actor;
@@ -31,7 +31,7 @@ namespace libcacaoasset {
 	World _DecWorld(libjaguar::Document::ObjReader& rd) {
 		World world;
 		world.initialCamPos = rd.Query<libjaguar::Vector<float, 3>>("camPos");
-		world.initialCamRot = rd.Query<libjaguar::Vector<float, 3>>("camRot");
+		world.initialCamRot = rd.Query<libjaguar::Vector<float, 4>>("camRot");
 		world.skybox = rd.Query<std::string>("skybox");
 		world.actors = rd.Query<std::vector<World::Actor>>("actors");
 		return world;
@@ -47,14 +47,14 @@ namespace libcacaoasset {
 		ow.SetOrCreate<std::array<unsigned char, 16>>("guid", false, a.guid);
 		ow.SetOrCreate<std::array<unsigned char, 16>>("pguid", false, a.parentGUID);
 		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initPos", a.initialPos);
-		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initRot", a.initialRot);
+		ow.SetOrCreate<libjaguar::Vector<float, 4>>("initRot", a.initialRot);
 		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initScl", a.initialScale);
 		ow.SetOrCreate<std::vector<World::Component>>("components", a.components);
 	}
 
 	void _EncWorld(const World& w, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<libjaguar::Vector<float, 3>>("camPos", w.initialCamPos);
-		ow.SetOrCreate<libjaguar::Vector<float, 3>>("camRot", w.initialCamRot);
+		ow.SetOrCreate<libjaguar::Vector<float, 4>>("camRot", w.initialCamRot);
 		ow.SetOrCreate<std::string>("skybox", w.skybox);
 		ow.SetOrCreate<std::vector<World::Actor>>("actors", w.actors);
 	}
@@ -102,7 +102,7 @@ namespace libcacaoasset {
 			rot.name = "initRot";
 			rot.type = libjaguar::TypeTag::Vector;
 			rot.elementType = libjaguar::TypeTag::Float32;
-			rot.width = 3;
+			rot.width = 4;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& scale = aLayout.fields.emplace_back();
@@ -133,7 +133,7 @@ namespace libcacaoasset {
 			rot.name = "camRot";
 			rot.type = libjaguar::TypeTag::Vector;
 			rot.elementType = libjaguar::TypeTag::Float32;
-			rot.width = 3;
+			rot.width = 4;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& sky = aLayout.fields.emplace_back();

@@ -10,7 +10,7 @@ ParameterBlock<MaterialParameters> material;
 void CacaoVertexMain(Cacao::VSIn3D input, inout Cacao::VSOut output) {
 	float3 position = input.position;
 	position.y += material.yChange;
-	output.surfaceIn.objWorldPos += material.yChange;
+	output.surfaceIn.worldPos += material.yChange;
 	output.outPosition = mul(Cacao::cam.viewProjectionMatrix, mul(Cacao::transform.transformMatrix, float4(position, 1.0)));
 }
 

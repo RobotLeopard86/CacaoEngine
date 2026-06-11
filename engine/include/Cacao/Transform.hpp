@@ -1,7 +1,9 @@
 #pragma once
 
+#include "glm/trigonometric.hpp"
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 #include "DllHelper.hpp"
 
@@ -15,11 +17,11 @@ namespace Cacao {
 		 * @brief Create a new transform
 		 *
 		 * @param position Position relative to the parent
-		 * @param rotation Rotation about the center
+		 * @param rotation Rotation about the center as Euler angles in degrees
 		 * @param scale Scale from the center
 		 */
 		Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
-		  : pos(position), rot(rotation), scale(scale), transMat(1.0) {
+		  : pos(position), scale(scale), rot(glm::radians(rotation)), transMat(1.0) {
 			RecalculateTransformationMatrix();
 		}
 
@@ -37,8 +39,17 @@ namespace Cacao {
 		 *
 		 * @return The rotation
 		 */
-		glm::vec3 GetRotation() const {
+		glm::quat GetRotation() const {
 			return rot;
+		}
+
+		/**
+		 * @brief Get the rotation as Euler angles in degrees
+		 *
+		 * @return The rotation as Euler angles
+		 */
+		glm::vec3 GetRotationEuler() const {
+			return glm::degrees(glm::eulerAngles(rot));
 		}
 
 		/**
@@ -65,8 +76,18 @@ namespace Cacao {
 		 *
 		 * @param newRot The new rotation
 		 */
-		void SetRotation(glm::vec3 newRot) {
+		void SetRotation(glm::quat newRot) {
 			rot = newRot;
+			RecalculateTransformationMatrix();
+		}
+
+		/**
+		 * @brief Set the rotation using Euler angles in degrees
+		 *
+		 * @param newRot The new rotation in Euler angles
+		 */
+		void SetRotationEuler(glm::vec3 newRot) {
+			rot = glm::quat(glm::radians(newRot));
 			RecalculateTransformationMatrix();
 		}
 
@@ -90,7 +111,8 @@ namespace Cacao {
 		}
 
 	  private:
-		glm::vec3 pos, rot, scale;
+		glm::vec3 pos, scale;
+		glm::quat rot;
 
 		glm::mat4 transMat;
 

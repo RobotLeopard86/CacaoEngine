@@ -154,14 +154,40 @@ namespace Cacao {
 	  public:
 		std::string name;	///<The human-readable name of the actor
 		const xg::Guid guid;///<Actor ID, unique
-		Transform transform;///<Actor transform relative to parent
+		///<Actor transform relative to parent
+
+		/**
+		 * @brief Get the actor's local transform relative to its parent
+		 *
+		 * @return The local-space transform
+		 */
+		const Transform& GetLocalTransform() const {
+			return transform;
+		}
+
+		/**
+		 * @brief Update the local transform of the actor relative to its parent
+		 *
+		 * @param transform The new local-space transform
+		 */
+		void SetLocalTransform(Transform transform) {
+			transformDirty = true;
+			this->transform = transform;
+		}
 
 		/**
 		 * @brief Calculate the world-space transformation matrix of the actor
 		 *
 		 * @return The world-space transformation matrix
 		 */
-		glm::mat4 GetWorldTransformMatrix() const;
+		glm::mat4 GetWorldTransformationMatrix() const;
+
+		/**
+		 * @brief Get the effective transform of the actor in world-space
+		 *
+		 * @return The world-space transform
+		 */
+		Transform GetWorldTransform() const;
 
 		/**
 		 * @brief Access the parent of this actor
@@ -323,6 +349,9 @@ namespace Cacao {
 		ActorRef parent;
 		ActorRef self;
 		std::vector<ActorRef> children;
+		Transform transform;
+		mutable Transform worldTransformCached;
+		mutable bool transformDirty = true;
 		std::unordered_map<std::type_index, ComponentHandle> components;
 		World* world;//NON-OWNING --- DO NOT FREE THIS!!!
 

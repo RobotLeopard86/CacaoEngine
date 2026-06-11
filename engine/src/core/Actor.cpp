@@ -11,14 +11,14 @@
 
 namespace Cacao {
 	Actor::Actor(const std::string& name, ActorRef parent, xg::Guid guid)
-	  : name(name), guid(guid), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), parent(parent), world(parent->world), active(true) {
+	  : name(name), guid(guid), parent(parent), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), worldTransformCached(GetWorldTransform()), world(parent->world), active(true) {
 		const World::Impl::ActorSlot& ourSlot = *std::find_if(IMPL(World, *world).slotTable.begin(), IMPL(World, *world).slotTable.end(), [&guid](const World::Impl::ActorSlot& slot) {
 			return slot.actor->guid == guid;
 		});
 		self = ActorRef(std::static_pointer_cast<World>(world->shared_from_this()), ourSlot.id, ourSlot.generation);
 	}
 
-	glm::mat4 Actor::GetWorldTransformMatrix() const {
+	glm::mat4 Actor::GetWorldTransformationMatrix() const {
 		//Calculate the transformation matrix
 		//This should take a (0, 0, 0) coordinate relative to the actor and turn it into a world space transform
 		ActorRef current = self;
@@ -29,6 +29,37 @@ namespace Cacao {
 		} while((current = current->GetParent()));
 
 		return transMat;
+	}
+
+	Transform Actor::GetWorldTransform() const {
+		if(!transformDirty) return worldTransformCached;
+
+		//Calculate the parent chain up to the world root
+		//This is because to apply transformations correctly, we have to go parent -> child
+		std::vector<ActorRef> pchain;
+		{
+			ActorRef current = self;
+			do {
+				//Add parent to list
+				pchain.push_back(current);
+			} while((current = current->GetParent()));
+		}
+
+		//Now we go in reverse to actually apply the transformations
+		Transform worldTransform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
+		for(auto it = pchain.rbegin(); it != pchain.rend(); ++it) {
+			//Get current transform
+			Transform current = (*pchain.rbegin())->GetLocalTransform();
+
+			//Apply transformations
+			worldTransform.SetPosition(worldTransform.GetPosition() + worldTransform.GetRotation() * current.GetPosition());
+			worldTransform.SetRotation(worldTransform.GetRotation() * current.GetRotation());
+			worldTransform.SetScale(worldTransform.GetScale() * current.GetScale());
+		}
+
+		transformDirty = false;
+		worldTransformCached = worldTransform;
+		return worldTransformCached;
 	}
 
 	void Actor::Reparent(ActorRef newParent) {

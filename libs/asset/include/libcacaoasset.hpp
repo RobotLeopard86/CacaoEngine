@@ -41,7 +41,7 @@ namespace libcacaoasset {
 	struct CACAO_API World {
 		std::string skybox;						  ///<Skybox resource address
 		libjaguar::Vector<float, 3> initialCamPos;///<Initial camera position
-		libjaguar::Vector<float, 3> initialCamRot;///<Initial camera rotation
+		libjaguar::Vector<float, 4> initialCamRot;///<Initial camera rotation (as quaternion)
 
 		///@brief Type for components on actors
 		struct CACAO_API Component {
@@ -55,7 +55,7 @@ namespace libcacaoasset {
 			std::array<unsigned char, 16> parentGUID;///<GUID of parent actor or all zeroes if this is a top-level actor
 			std::string name;						 ///<Human-friendly actor name
 			libjaguar::Vector<float, 3> initialPos;	 ///<Initial position
-			libjaguar::Vector<float, 3> initialRot;	 ///<Initial rotation
+			libjaguar::Vector<float, 4> initialRot;	 ///<Initial rotation (as quaternion)
 			libjaguar::Vector<float, 3> initialScale;///<Initial scale
 			std::vector<Component> components;		 ///<Components mounted on this actor initially
 		};

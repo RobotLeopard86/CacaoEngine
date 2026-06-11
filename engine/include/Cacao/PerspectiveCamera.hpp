@@ -4,6 +4,7 @@
 #include "DllHelper.hpp"
 
 #include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 namespace Cacao {
 	/**
@@ -42,10 +43,19 @@ namespace Cacao {
 		/**
 		 * @brief Get the rotation of the camera
 		 *
-		 * @return The camera rotation
+		 * @return The rotation
 		 */
-		glm::vec3 GetRotation() const override {
+		glm::quat GetRotation() const override {
 			return rotation;
+		}
+
+		/**
+		 * @brief Get the rotation of the camera as Euler angles in degrees
+		 *
+		 * @return The rotation as Euler angles
+		 */
+		glm::vec3 GetRotationEuler() const override {
+			return glm::degrees(glm::eulerAngles(rotation));
 		}
 
 		/**
@@ -53,8 +63,18 @@ namespace Cacao {
 		 *
 		 * @param rot The new rotation
 		 */
-		void SetRotation(glm::vec3 rot) override {
+		void SetRotation(glm::quat rot) override {
 			rotation = rot;
+			RecalculateViewMatrix();
+		}
+
+		/**
+		 * @brief Set the rotation of the camera using Euler angles in degrees
+		 *
+		 * @param rot The new rotation in Euler angles
+		 */
+		void SetRotationEuler(glm::vec3 rot) override {
+			rotation = glm::quat(glm::radians(rot));
 			RecalculateViewMatrix();
 		}
 
@@ -143,7 +163,8 @@ namespace Cacao {
 	  private:
 		glm::mat4 projectionMatrix, viewMatrix, viewProjectionMatrix;
 
-		glm::vec3 position, rotation;
+		glm::vec3 position;
+		glm::quat rotation;
 		glm::vec3 frontVec, upVec, rightVec;
 
 		glm::uvec2 displaySize;
