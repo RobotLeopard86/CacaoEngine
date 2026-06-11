@@ -26,7 +26,9 @@ else
 	deps += meson.get_compiler('cpp').find_library('libuuid', required: true)
 endif
 
-crossguid = static_library('crossguid', 'src' / 'guid.cpp', include_directories: 'include', cpp_args: defs, dependencies: deps, pic: true)
+crossguid = static_library('crossguid', 'src' / 'guid.cpp', include_directories: 'include', cpp_args: defs, dependencies: deps, pic: true, install: true)
 
 crossguid_dep = declare_dependency(compile_args: defs, include_directories: 'include', link_with: crossguid)
 crossguid_headers_dep = declare_dependency(compile_args: defs, include_directories: 'include')
+
+install_headers('include' / 'crossguid' / 'guid.hpp', subdir: 'crossguid')

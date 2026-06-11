@@ -4,11 +4,17 @@ cpp = meson.get_compiler('cpp')
 # Reflection
 engine_reflection = custom_target('cacaoengine.astra.[cpphpp]', output: ['cacaoengine.astra.hpp', 'cacaoengine.astra.cpp'],
 	input: ['include' / 'Cacao' / 'Actor.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
-	meson.current_build_dir(), '-n', 'cacaoengine', '-p', 'Cacao', '-i', meson.current_source_dir() / 'include' / 'Cacao', '--', '-I../libs/asset/include', '-I../libs/image/include', '-I../libs/common/include'], install: true, install_dir: 'include' / 'Cacao')
+	meson.current_build_dir(), '-n', 'cacaoengine', '-p', 'Cacao', '-i', meson.current_source_dir() / 'include' / 'Cacao', '--', '-I../libs/asset/include', '-I../libs/image/include', '-I../libs/common/include'], 
+	install: true, install_dir: ['include' / 'Cacao', false])
 
 # Engine headers
 engine_headers = include_directories('include', '..' / 'libs' / 'asset' / 'include', '..' / 'libs' / 'image' / 'include', '..' / 'libs' / 'common' / 'include')
 install_subdir('include' / 'Cacao', install_dir: 'include')
+install_subdir(meson.current_build_dir() / 'astra_generated', install_dir: 'include' / 'Cacao')
+install_subdir('..' / 'libs' / 'asset' / 'include', install_dir: 'include', strip_directory: true)
+install_subdir('..' / 'libs' / 'common' / 'include', install_dir: 'include' / 'libcacaocommon', strip_directory: true)
+install_subdir('..' / 'libs' / 'image' / 'include', install_dir: 'include', strip_directory: true)
+install_subdir('..' / 'libs' / 'audiodecode' / 'include', install_dir: 'include', strip_directory: true)
 
 # Headers private to modules
 module_private_headers = include_directories('src' / 'private')

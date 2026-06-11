@@ -68,7 +68,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	CVLOG("Done.");
 
 	constexpr const char* cacaoModuleSrc =
-#include "cacaoshaderbase.inc"
+#include "cacaoengine.inc"
 		;
 
 	//Load Cacao Engine module
@@ -76,7 +76,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	ComPtr<slang::IModule> cacaoModule;
 	{
 		ComPtr<slang::IBlob> diagnosticsBlob;
-		cacaoModule = session->loadModuleFromSourceString("cacaoshaderbase", "cacaoshaderbase.slang", cacaoModuleSrc, diagnosticsBlob.writeRef());
+		cacaoModule = session->loadModuleFromSourceString("cacaoengine", "cacaoengine.slang", cacaoModuleSrc, diagnosticsBlob.writeRef());
 		if(!cacaoModule) {
 			std::stringstream err;
 			err << "Failed to load Cacao shader module";

@@ -96,7 +96,7 @@ namespace Targetgen {
 
 		//Create Cacao Engine shader base module
 		constexpr const char* cacaoModuleSrc =
-#include "cacaoshaderbase.inc"
+#include "cacaoengine.inc"
 			;
 		ComPtr<slang::IModule> cacaoModule;
 		{
