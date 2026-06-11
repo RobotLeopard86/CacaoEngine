@@ -18,7 +18,7 @@ path_separator = (host_machine.system() == 'windows' ? '\\' : '/')
 # Disable certain common warnings
 argsyntax = meson.get_compiler('cpp').get_argument_syntax()
 if argsyntax == 'gcc'
-    add_project_arguments(['-Wno-assume', '-Wno-reorder-ctor', '-Wno-switch', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-extra-semi', '-Wno-unused-variable', '-Wno-logical-op-parentheses'], language: 'cpp')
+    add_project_arguments(['-Wno-assume', '-Wno-reorder-ctor', '-Wno-switch', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-extra-semi', '-Wno-unused-variable', '-Wno-logical-op-parentheses', '-Wno-unused-local-typedef'], language: 'cpp')
 elif argsyntax == 'msvc'
     add_project_arguments(['/wd26495', '/wd4065', '/wd4189', '/wd4100', '/wd4068', '/wd4189', '/wd4805', '/wd4804'], language: 'cpp')
 endif

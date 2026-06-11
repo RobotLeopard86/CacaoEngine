@@ -1,8 +1,13 @@
 # Obtain compiler
 cpp = meson.get_compiler('cpp')
 
+# Reflection
+engine_reflection = custom_target('cacaoengine.astra.[cpphpp]', output: ['cacaoengine.astra.hpp', 'cacaoengine.astra.cpp'],
+	input: ['include' / 'Cacao' / 'Actor.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
+	meson.current_build_dir(), '-n', 'cacaoengine', '-p', 'Cacao', '-i', meson.current_source_dir() / 'include' / 'Cacao', '--', '-I../libs/asset/include', '-I../libs/image/include', '-I../libs/common/include'], install: true, install_dir: 'include' / 'Cacao')
+
 # Engine headers
-engine_headers = include_directories('include', '..' / 'libs' / 'asset' / 'include', '..' / 'libs' / 'image' / 'include')
+engine_headers = include_directories('include', '..' / 'libs' / 'asset' / 'include', '..' / 'libs' / 'image' / 'include', '..' / 'libs' / 'common' / 'include')
 install_subdir('include' / 'Cacao', install_dir: 'include')
 
 # Headers private to modules
@@ -10,7 +15,7 @@ module_private_headers = include_directories('src' / 'private')
 
 # Define data for modules to write into
 engine_inc = [engine_headers, module_private_headers]
-engine_srcs = []
+engine_srcs = [engine_reflection]
 engine_args = []
 engine_args_objcpp = []
 engine_deps = []
@@ -43,7 +48,7 @@ endforeach
 
 # Engine library
 libcacao = shared_library('cacao', sources: engine_srcs, include_directories: engine_inc, dependencies: engine_deps, cpp_args: engine_args, objcpp_args: engine_args_objcpp, install: true)
-cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [crossguid_headers, glm_dep, exathread_dep, commonlib_dep])
+cacao_dep = declare_dependency(include_directories: engine_headers, link_with: libcacao, dependencies: [crossguid_headers, glm_dep, exathread_dep, commonlib_dep, astra_dep])
 
 # Game runtime
 subdir('src' / 'runtime')

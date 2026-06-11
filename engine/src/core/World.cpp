@@ -14,6 +14,9 @@
 
 #include "libcacaoasset.hpp"
 
+#include "astra/var.hpp"
+#include "astra/binary.hpp"
+
 #include <memory>
 #include <ranges>
 
@@ -81,9 +84,11 @@ namespace Cacao {
 					Check<NonexistentValueException>(CodeRegistry::Get().HasFactory<Component>(comp.typeID), "World contains component of an unknown type! Hint: all component types must be registered in the CodeRegistry.");
 
 					//Create the component
-					ref->MountComponent(comp.typeID);
+					Component& component = ref->MountComponent(comp.typeID);
 
-					//TODO: Add the reflection data back in somehow
+					//Inject reflected data
+					astra::Var cvar(&component);
+					astra::binary::fromVectorIntoVar(comp.reflection, cvar);
 				}
 
 				//Process components that should be children of this one

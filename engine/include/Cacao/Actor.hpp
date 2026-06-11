@@ -10,6 +10,8 @@
 #include <typeindex>
 
 #include "crossguid/guid.hpp"
+#include "astra/setup.hpp"
+#include "astra/type_actions/common_actions.hpp"
 
 namespace Cacao {
 	class Actor;
@@ -77,7 +79,7 @@ namespace Cacao {
 	/**
 	 * @brief An object attached to an Actor that performs tasks on its behalf
 	 */
-	class CACAO_API Component {
+	class CACAO_API ASTRA_REFLECT Component : public AstraReflectBase {
 	  public:
 		/**
 		 * @brief Check if the component is enabled
@@ -113,9 +115,16 @@ namespace Cacao {
 
 		virtual ~Component() {}
 
-	  protected:
-		Component() {}
+		ASTRASETUP(Component)
 
+#ifdef _ASTRAGENERATE
+		Component() {}
+#endif
+	  protected:
+#ifndef _ASTRAGENERATE
+		Component() {}
+		friend struct astra::CommonActions<Component>;
+#endif
 		/**
 		 * @brief Runs when the component is first mounted on an Actor
 		 *
@@ -243,7 +252,7 @@ namespace Cacao {
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T> && std::is_constructible_v<T, Args&&...>
-		void MountComponent(Args&&... args) {
+		T& MountComponent(Args&&... args) {
 			Check<ExistingValueException>(!HasComponent<T>(), "A component of the type specified already exists on the actor!");
 
 			//Prepare objects
@@ -252,6 +261,9 @@ namespace Cacao {
 
 			//Call-down to internal function
 			_ComponentSetup(type, std::move(component));
+
+			//Return the component reference
+			return static_cast<T&>(*components[type].component);
 		}
 
 		/**
@@ -262,7 +274,7 @@ namespace Cacao {
 		 * @throws ExistingValueException If a component of this type already exists on the actor
 		 * @throws NonexistentValueException If the CodeRegistry does not have a Component actory registered for the provided ID
 		 */
-		void MountComponent(const std::string& factoryID);
+		Component& MountComponent(const std::string& factoryID);
 
 		/**
 		 * @brief Access a component on the actor

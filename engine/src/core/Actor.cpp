@@ -77,7 +77,7 @@ namespace Cacao {
 		parent->children.push_back(self);
 	}
 
-	void Actor::MountComponent(const std::string& factoryID) {
+	Component& Actor::MountComponent(const std::string& factoryID) {
 		//Try to create the object
 		auto [ptr, type] = CodeRegistry::Get().Instantiate<Component>(factoryID);
 		Check<ExistingValueException>(!components.contains(type), "A component of the type specified already exists on the actor!");
@@ -85,6 +85,9 @@ namespace Cacao {
 		//Call down to common component setup
 		std::unique_ptr<Component> uptr(ptr);
 		_ComponentSetup(type, std::move(uptr));
+
+		//Return the component reference
+		return *components[type].component;
 	}
 
 	void Actor::SetActive(bool state) {
