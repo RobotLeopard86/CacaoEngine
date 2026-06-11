@@ -483,9 +483,19 @@
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="n">guid</span><span class="p">;</span>
-<span class="w">        </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="nf">GetWorldTransformMatrix</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">Transform</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">GetLocalTransform</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetLocalTransform</span><span class="p">(</span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">transformDirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">            </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="nf">GetWorldTransformationMatrix</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Transform</span><span class="w"> </span><span class="nf">GetWorldTransform</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="nf">GetParent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
@@ -572,6 +582,9 @@
 <span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
 <span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">self</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ActorRef</span><span class="o">&gt;</span><span class="w"> </span><span class="n">children</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">;</span>
+<span class="w">        </span><span class="k">mutable</span><span class="w"> </span><span class="n">Transform</span><span class="w"> </span><span class="n">worldTransformCached</span><span class="p">;</span>
+<span class="w">        </span><span class="k">mutable</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">transformDirty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">,</span><span class="w"> </span><span class="n">ComponentHandle</span><span class="o">&gt;</span><span class="w"> </span><span class="n">components</span><span class="p">;</span>
 <span class="w">        </span><span class="n">World</span><span class="o">*</span><span class="w"> </span><span class="n">world</span><span class="p">;</span><span class="c1">//NON-OWNING --- DO NOT FREE THIS!!!</span>
 

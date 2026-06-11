@@ -395,8 +395,10 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Transform.hpp.html#file-engine-include-cacao-transform-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Transform.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/trigonometric.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/vec3.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/mat4x4.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/gtc/quaternion.hpp&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 
@@ -404,7 +406,7 @@
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Transform</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">Transform</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">rotation</span><span class="p">,</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">scale</span><span class="p">)</span>
-<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">pos</span><span class="p">(</span><span class="n">position</span><span class="p">),</span><span class="w"> </span><span class="n">rot</span><span class="p">(</span><span class="n">rotation</span><span class="p">),</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span><span class="w"> </span><span class="n">transMat</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">pos</span><span class="p">(</span><span class="n">position</span><span class="p">),</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span><span class="w"> </span><span class="n">rot</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">radians</span><span class="p">(</span><span class="n">rotation</span><span class="p">)),</span><span class="w"> </span><span class="n">transMat</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -412,8 +414,12 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetRotation</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">quat</span><span class="w"> </span><span class="n">GetRotation</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">rot</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetRotationEuler</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">degrees</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">eulerAngles</span><span class="p">(</span><span class="n">rot</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">GetScale</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
@@ -425,8 +431,13 @@
 <span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetRotation</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newRot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetRotation</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">quat</span><span class="w"> </span><span class="n">newRot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">rot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newRot</span><span class="p">;</span>
+<span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetRotationEuler</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">newRot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">rot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">quat</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">radians</span><span class="p">(</span><span class="n">newRot</span><span class="p">));</span>
 <span class="w">            </span><span class="n">RecalculateTransformationMatrix</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -440,7 +451,8 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">rot</span><span class="p">,</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">scale</span><span class="p">;</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">quat</span><span class="w"> </span><span class="n">rot</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">transMat</span><span class="p">;</span>
 

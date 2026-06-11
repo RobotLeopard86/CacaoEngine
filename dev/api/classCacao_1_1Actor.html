@@ -551,12 +551,45 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor23GetWorldTransformMatrixEv">
-<span id="_CPPv3NK5Cacao5Actor23GetWorldTransformMatrixEv"></span><span id="_CPPv2NK5Cacao5Actor23GetWorldTransformMatrixEv"></span><span id="Cacao::Actor::GetWorldTransformMatrixC"></span><span class="target" id="classCacao_1_1Actor_1ab55ec1e88bf04359ceae467427fb69f7"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransformMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor23GetWorldTransformMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor17GetLocalTransformEv">
+<span id="_CPPv3NK5Cacao5Actor17GetLocalTransformEv"></span><span id="_CPPv2NK5Cacao5Actor17GetLocalTransformEv"></span><span id="Cacao::Actor::GetLocalTransformC"></span><span class="target" id="classCacao_1_1Actor_1ab39877663abb402d782b262157527899"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetLocalTransform</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor17GetLocalTransformEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the actor’s local transform relative to its parent. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The local-space transform </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor17SetLocalTransformE9Transform">
+<span id="_CPPv3N5Cacao5Actor17SetLocalTransformE9Transform"></span><span id="_CPPv2N5Cacao5Actor17SetLocalTransformE9Transform"></span><span id="Cacao::Actor::SetLocalTransform__Transform"></span><span class="target" id="classCacao_1_1Actor_1a2e81c657404650c0e25064e8f5246385"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetLocalTransform</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">transform</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor17SetLocalTransformE9Transform" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Update the local transform of the actor relative to its parent. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>transform</strong> – The new local-space transform </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor28GetWorldTransformationMatrixEv">
+<span id="_CPPv3NK5Cacao5Actor28GetWorldTransformationMatrixEv"></span><span id="_CPPv2NK5Cacao5Actor28GetWorldTransformationMatrixEv"></span><span id="Cacao::Actor::GetWorldTransformationMatrixC"></span><span class="target" id="classCacao_1_1Actor_1a544da47a7ac22362fdf9c85ce954f8fa"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransformationMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor28GetWorldTransformationMatrixEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Calculate the world-space transformation matrix of the actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The world-space transformation matrix </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor17GetWorldTransformEv">
+<span id="_CPPv3NK5Cacao5Actor17GetWorldTransformEv"></span><span id="_CPPv2NK5Cacao5Actor17GetWorldTransformEv"></span><span id="Cacao::Actor::GetWorldTransformC"></span><span class="target" id="classCacao_1_1Actor_1acd933c26ee0f2d282550822f65162e8e"></span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransform</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor17GetWorldTransformEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the effective transform of the actor in world-space. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The world-space transform </p>
 </dd>
 </dl>
 </dd></dl>
@@ -726,13 +759,8 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor4guidE">
 <span id="_CPPv3N5Cacao5Actor4guidE"></span><span id="_CPPv2N5Cacao5Actor4guidE"></span><span id="Cacao::Actor::guid__xg::GuidC"></span><span class="target" id="classCacao_1_1Actor_1a16527d72378cd0e02d2a85867d310058"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">guid</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Actor4guidE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> ID, unique. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor9transformE">
-<span id="_CPPv3N5Cacao5Actor9transformE"></span><span id="_CPPv2N5Cacao5Actor9transformE"></span><span id="Cacao::Actor::transform__Transform"></span><span class="target" id="classCacao_1_1Actor_1a6a9765596438aaf3adadbea267932c7c"></span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transform</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Actor9transformE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p><a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> transform relative to parent. </p>
+<p><a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> ID, unique </p>
 </dd></dl>
 
 </div>
@@ -790,7 +818,10 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5ActorE"><code class="docutils literal notranslate"><span class="pre">Cacao::Actor</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor23GetWorldTransformMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetWorldTransformMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor17GetLocalTransformEv"><code class="docutils literal notranslate"><span class="pre">GetLocalTransform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor17SetLocalTransformE9Transform"><code class="docutils literal notranslate"><span class="pre">SetLocalTransform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor28GetWorldTransformationMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetWorldTransformationMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor17GetWorldTransformEv"><code class="docutils literal notranslate"><span class="pre">GetWorldTransform()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor9GetParentEv"><code class="docutils literal notranslate"><span class="pre">GetParent()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor8IsActiveEv"><code class="docutils literal notranslate"><span class="pre">IsActive()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor9SetActiveEb"><code class="docutils literal notranslate"><span class="pre">SetActive()</span></code></a></li>
@@ -805,7 +836,6 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor14GetAllChildrenEv"><code class="docutils literal notranslate"><span class="pre">GetAllChildren()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor4nameE"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor4guidE"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor9transformE"><code class="docutils literal notranslate"><span class="pre">transform</span></code></a></li>
 </ul>
 </li>
 </ul>

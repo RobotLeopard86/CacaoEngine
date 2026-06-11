@@ -597,22 +597,44 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao17PerspectiveCamera11GetRotationEv">
-<span id="_CPPv3NK5Cacao17PerspectiveCamera11GetRotationEv"></span><span id="_CPPv2NK5Cacao17PerspectiveCamera11GetRotationEv"></span><span id="Cacao::PerspectiveCamera::GetRotationC"></span><span class="target" id="classCacao_1_1PerspectiveCamera_1adcb5f0593db8d804c52ce70caff4c2f7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK5Cacao17PerspectiveCamera11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao17PerspectiveCamera11GetRotationEv"></span><span id="_CPPv2NK5Cacao17PerspectiveCamera11GetRotationEv"></span><span id="Cacao::PerspectiveCamera::GetRotationC"></span><span class="target" id="classCacao_1_1PerspectiveCamera_1a12f3a3f322fb6a3f7d24e8eb81560328"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK5Cacao17PerspectiveCamera11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the rotation of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The camera rotation </p>
+<dd class="field-odd"><p>The rotation </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17PerspectiveCamera11SetRotationEN3glm4vec3E">
-<span id="_CPPv3N5Cacao17PerspectiveCamera11SetRotationEN3glm4vec3E"></span><span id="_CPPv2N5Cacao17PerspectiveCamera11SetRotationEN3glm4vec3E"></span><span id="Cacao::PerspectiveCamera::SetRotation__glm::vec3"></span><span class="target" id="classCacao_1_1PerspectiveCamera_1ade107bf205ee8551b63bbe338db85231"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao17PerspectiveCamera11SetRotationEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao17PerspectiveCamera16GetRotationEulerEv">
+<span id="_CPPv3NK5Cacao17PerspectiveCamera16GetRotationEulerEv"></span><span id="_CPPv2NK5Cacao17PerspectiveCamera16GetRotationEulerEv"></span><span id="Cacao::PerspectiveCamera::GetRotationEulerC"></span><span class="target" id="classCacao_1_1PerspectiveCamera_1a1ce81722c5860b0df8d8519b3d9ed2d1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK5Cacao17PerspectiveCamera16GetRotationEulerEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the rotation of the camera as Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation as Euler angles </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17PerspectiveCamera11SetRotationEN3glm4quatE">
+<span id="_CPPv3N5Cacao17PerspectiveCamera11SetRotationEN3glm4quatE"></span><span id="_CPPv2N5Cacao17PerspectiveCamera11SetRotationEN3glm4quatE"></span><span id="Cacao::PerspectiveCamera::SetRotation__glm::quat"></span><span class="target" id="classCacao_1_1PerspectiveCamera_1a0475d6709533f48b8286ab435dcca99f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao17PerspectiveCamera11SetRotationEN3glm4quatE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the rotation of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>rot</strong> – The new rotation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao17PerspectiveCamera16SetRotationEulerEN3glm4vec3E">
+<span id="_CPPv3N5Cacao17PerspectiveCamera16SetRotationEulerEN3glm4vec3E"></span><span id="_CPPv2N5Cacao17PerspectiveCamera16SetRotationEulerEN3glm4vec3E"></span><span id="Cacao::PerspectiveCamera::SetRotationEuler__glm::vec3"></span><span class="target" id="classCacao_1_1PerspectiveCamera_1acbf16aaab0b460683dea3a071eec1042"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N5Cacao17PerspectiveCamera16SetRotationEulerEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the rotation of the camera using Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rot</strong> – The new rotation in Euler angles </p>
 </dd>
 </dl>
 </dd></dl>
@@ -783,7 +805,9 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao17PerspectiveCamera11GetPositionEv"><code class="docutils literal notranslate"><span class="pre">GetPosition()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17PerspectiveCamera11SetPositionEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetPosition()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao17PerspectiveCamera11GetRotationEv"><code class="docutils literal notranslate"><span class="pre">GetRotation()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17PerspectiveCamera11SetRotationEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao17PerspectiveCamera16GetRotationEulerEv"><code class="docutils literal notranslate"><span class="pre">GetRotationEuler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17PerspectiveCamera11SetRotationEN3glm4quatE"><code class="docutils literal notranslate"><span class="pre">SetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17PerspectiveCamera16SetRotationEulerEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetRotationEuler()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao17PerspectiveCamera6GetFOVEv"><code class="docutils literal notranslate"><span class="pre">GetFOV()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao17PerspectiveCamera6SetFOVEf"><code class="docutils literal notranslate"><span class="pre">SetFOV()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao17PerspectiveCamera19GetProjectionMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetProjectionMatrix()</span></code></a></li>

@@ -558,7 +558,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>position</strong> – Position relative to the parent </p></li>
-<li><p><strong>rotation</strong> – Rotation about the center </p></li>
+<li><p><strong>rotation</strong> – Rotation about the center as Euler angles in degrees </p></li>
 <li><p><strong>scale</strong> – Scale from the center </p></li>
 </ul>
 </dd>
@@ -578,11 +578,22 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao9Transform11GetRotationEv">
-<span id="_CPPv3NK5Cacao9Transform11GetRotationEv"></span><span id="_CPPv2NK5Cacao9Transform11GetRotationEv"></span><span id="Cacao::Transform::GetRotationC"></span><span class="target" id="classCacao_1_1Transform_1a08e305f82e524522926ffad6b2e4bfe2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao9Transform11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao9Transform11GetRotationEv"></span><span id="_CPPv2NK5Cacao9Transform11GetRotationEv"></span><span id="Cacao::Transform::GetRotationC"></span><span class="target" id="classCacao_1_1Transform_1ae75ca3df4e9a08276090cf95e8d11b15"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao9Transform11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the rotation. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The rotation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao9Transform16GetRotationEulerEv">
+<span id="_CPPv3NK5Cacao9Transform16GetRotationEulerEv"></span><span id="_CPPv2NK5Cacao9Transform16GetRotationEulerEv"></span><span id="Cacao::Transform::GetRotationEulerC"></span><span class="target" id="classCacao_1_1Transform_1a528c154ca6a9aee621a820b8a66504ae"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao9Transform16GetRotationEulerEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the rotation as Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation as Euler angles </p>
 </dd>
 </dl>
 </dd></dl>
@@ -610,12 +621,23 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform11SetRotationEN3glm4vec3E">
-<span id="_CPPv3N5Cacao9Transform11SetRotationEN3glm4vec3E"></span><span id="_CPPv2N5Cacao9Transform11SetRotationEN3glm4vec3E"></span><span id="Cacao::Transform::SetRotation__glm::vec3"></span><span class="target" id="classCacao_1_1Transform_1a6ca2a78cc38d5be8f48635109dfbb253"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newRot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Transform11SetRotationEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform11SetRotationEN3glm4quatE">
+<span id="_CPPv3N5Cacao9Transform11SetRotationEN3glm4quatE"></span><span id="_CPPv2N5Cacao9Transform11SetRotationEN3glm4quatE"></span><span id="Cacao::Transform::SetRotation__glm::quat"></span><span class="target" id="classCacao_1_1Transform_1ab5b88a5639b9c3d8265ec9afb448c458"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newRot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Transform11SetRotationEN3glm4quatE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the rotation. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>newRot</strong> – The new rotation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao9Transform16SetRotationEulerEN3glm4vec3E">
+<span id="_CPPv3N5Cacao9Transform16SetRotationEulerEN3glm4vec3E"></span><span id="_CPPv2N5Cacao9Transform16SetRotationEulerEN3glm4vec3E"></span><span id="Cacao::Transform::SetRotationEuler__glm::vec3"></span><span class="target" id="classCacao_1_1Transform_1a7a77ee4aff7661dfbdeae2e9c976726d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">newRot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao9Transform16SetRotationEulerEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the rotation using Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newRot</strong> – The new rotation in Euler angles </p>
 </dd>
 </dl>
 </dd></dl>
@@ -700,9 +722,11 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Transform9TransformEN3glm4vec3EN3glm4vec3EN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">Transform()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao9Transform11GetPositionEv"><code class="docutils literal notranslate"><span class="pre">GetPosition()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao9Transform11GetRotationEv"><code class="docutils literal notranslate"><span class="pre">GetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao9Transform16GetRotationEulerEv"><code class="docutils literal notranslate"><span class="pre">GetRotationEuler()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao9Transform8GetScaleEv"><code class="docutils literal notranslate"><span class="pre">GetScale()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Transform11SetPositionEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetPosition()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Transform11SetRotationEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Transform11SetRotationEN3glm4quatE"><code class="docutils literal notranslate"><span class="pre">SetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Transform16SetRotationEulerEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetRotationEuler()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao9Transform8SetScaleEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetScale()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao9Transform23GetTransformationMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetTransformationMatrix()</span></code></a></li>
 </ul>
