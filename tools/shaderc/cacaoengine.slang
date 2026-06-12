@@ -26,9 +26,16 @@ namespace Cacao {
 		SurfaceInput surfaceIn;
 	};
 
+	enum RenderMode : uint8_t {
+		Opaque = 0,
+		Cutout = 1,
+		Transparent = 2
+	}
+
 	struct GlobalData {
 		float worldTime;
 		float deltaTime;
+		RenderMode renderMode;
 	};
 	ParameterBlock<GlobalData> globals;
 
