@@ -26,8 +26,7 @@ engine_args = []
 engine_args_objcpp = []
 engine_deps = []
 
-# Always-included modules
-subdir('src' / 'shader-tgtgen')
+# Always-included core module
 subdir('src' / 'core')
 
 # Windowing modules

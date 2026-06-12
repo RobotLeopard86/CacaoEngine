@@ -144,51 +144,6 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 	slang::TypeReflection* fragOut = fsep->getFunctionReflection()->getReturnType();
 	CompileCheck(fragOut->getKind() == slang::TypeReflection::Kind::Vector && fragOut->getScalarType() == slang::TypeReflection::ScalarType::Float32 && fragOut->getColumnCount() == 4 && fragOut->getRowCount() == 1, "Shader's fragment stage enrty point does not return a float4!");
 
-	//Compose program
-	CVLOG_NONL("\tComposing shader program... ");
-	std::array<slang::IComponentType*, 4> componentTypes {
-		cacaoModule,
-		mod,
-		vsep,
-		fsep};
-	ComPtr<slang::IComponentType> composed;
-	{
-		ComPtr<slang::IBlob> diagnosticsBlob;
-		SlangResult r = session->createCompositeComponentType(componentTypes.data(), componentTypes.size(), composed.writeRef(), diagnosticsBlob.writeRef());
-		if(r != SLANG_OK || !composed) {
-			std::stringstream err;
-			err << "Failed to compose shader program";
-			if(diagnosticsBlob) {
-				err << ":\n"
-					<< (const char*)diagnosticsBlob->getBufferPointer();
-			} else {
-				err << "!";
-			}
-			CompileCheck(false, err.str());
-		}
-	}
-	CVLOG("Done.");
-
-	//Link program (we don't store this, we just need to ensure it links to avoid errors at runtime)
-	CVLOG_NONL("\tLinking shader program... ");
-	{
-		ComPtr<slang::IComponentType> linked;
-		ComPtr<slang::IBlob> diagnosticsBlob;
-		SlangResult r = composed->link(linked.writeRef(), diagnosticsBlob.writeRef());
-		if(r != SLANG_OK || !linked) {
-			std::stringstream err;
-			err << "Failed to link shader program";
-			if(diagnosticsBlob) {
-				err << ":\n"
-					<< (const char*)diagnosticsBlob->getBufferPointer();
-			} else {
-				err << "!";
-			}
-			CompileCheck(false, err.str());
-		}
-	}
-	CVLOG("Done.");
-
 	//Serialize IR blob to container
 	CVLOG_NONL("\tSerializing IR blob... ")
 	ComPtr<ISlangBlob> irBlob;

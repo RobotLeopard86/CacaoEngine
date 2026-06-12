@@ -70,12 +70,14 @@ engine_srcs += files(
 	'Resource.cpp',
 	'Shader.cpp',
 	'Sound.cpp',
+	'Targetgen.cpp',
 	'Tex2D.cpp',
 	'TickController.cpp',
 	'Transform.cpp',
 	'Window.cpp',
-	'World.cpp'
+	'World.cpp',
 )
+engine_srcs += shaderbasemod
 engine_deps += [
 	yaml_cpp,
 	astra_dep,
@@ -91,6 +93,7 @@ engine_deps += [
 	spdlog_dep,
 	exathread_dep,
 	eternal_dep,
+	slang_dep,
 	icu_dep,
 	freetype_dep,
 	harfbuzz_dep,

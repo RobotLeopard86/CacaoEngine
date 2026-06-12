@@ -1,61 +1,21 @@
 #include "Targetgen.hpp"
-#include "CSO.hpp"
 
-#include "CheckException.hpp"
+#include "Cacao/Exceptions.hpp"
+
+#include "slang.h"
+#include "slang-com-ptr.h"
 
 #include <sstream>
-#include <atomic>
 
-namespace Targetgen {
-	//Slang is annoying about blobs; you can't make one on your own
-	//So this is a hacked together mess blob subclass
-	//Please fix your API, Slang.
-	class VecBlob : public ISlangBlob {
-	  public:
-		SLANG_NO_THROW void const* SLANG_MCALL getBufferPointer() SLANG_OVERRIDE {
-			return data.data();
-		}
-		SLANG_NO_THROW size_t SLANG_MCALL getBufferSize() SLANG_OVERRIDE {
-			return data.size();
-		}
-		SLANG_NO_THROW uint32_t SLANG_MCALL release() SLANG_OVERRIDE {
-			assert(refCount != 0);
-			const uint32_t count = --refCount;
-			if(count == 0) {
-				delete this;
-			}
-			return count;
-		}
-		SLANG_NO_THROW uint32_t SLANG_MCALL addRef() SLANG_OVERRIDE {
-			return ++refCount;
-		}
-		SLANG_NO_THROW SlangResult SLANG_MCALL queryInterface(SlangUUID const&, void**) SLANG_OVERRIDE {
-			return SLANG_E_NO_INTERFACE;
-		}
-		VecBlob& operator=(const VecBlob&) {
-			return *this;
-		}
+using Slang::ComPtr;
 
-		static inline ComPtr<ISlangBlob> create(const std::vector<unsigned char>& v) {
-			return ComPtr<ISlangBlob>(new VecBlob(v));
-		}
-
-		virtual ~VecBlob() {}
-
-	  private:
-		const std::vector<unsigned char> data;
-		std::atomic<uint32_t> refCount;
-
-		VecBlob(const std::vector<unsigned char>& v)
-		  : data(v), refCount(0) {}
-	};
-
+namespace Cacao {
 	CompiledShaderObject SetupCSO(ibytestream& in, SlangCompileTarget tgt, const std::string& profile) {
 		CompiledShaderObject cso;
 
 		//Configure global session
 		SlangResult r = slang::createGlobalSession(cso.gsession.writeRef());
-		CheckException(r == SLANG_OK && cso.gsession, "Failed to create global session!");
+		Check<ExternalException>(r == SLANG_OK && cso.gsession, "Failed to create global session!");
 
 		//Describe session
 		slang::SessionDesc sessionDesc;
@@ -92,7 +52,7 @@ namespace Targetgen {
 
 		//Create session
 		r = cso.gsession->createSession(sessionDesc, cso.session.writeRef());
-		CheckException(r == SLANG_OK && cso.session, "Failed to create Slang compiler session!");
+		Check<ExternalException>(r == SLANG_OK && cso.session, "Failed to create Slang compiler session!");
 
 		//Create Cacao Engine shader base module
 		constexpr const char* cacaoModuleSrc =
@@ -101,7 +61,7 @@ namespace Targetgen {
 		ComPtr<slang::IModule> cacaoModule;
 		{
 			ComPtr<slang::IBlob> diagnosticsBlob;
-			cacaoModule = cso.session->loadModuleFromSourceString("cacaoshaderbase", "cacaoshaderbase.slang", cacaoModuleSrc, diagnosticsBlob.writeRef());
+			cacaoModule = cso.session->loadModuleFromSourceString("cacaoengine", "cacaoengine.slang", cacaoModuleSrc, diagnosticsBlob.writeRef());
 			if(!cacaoModule) {
 				std::stringstream err;
 				err << "Failed to create Cacao shader module";
@@ -111,7 +71,7 @@ namespace Targetgen {
 				} else {
 					err << "!";
 				}
-				CheckException(false, err.str());
+				Check<ExternalException>(false, err.str());
 			}
 		}
 
@@ -138,7 +98,8 @@ namespace Targetgen {
 					throw std::runtime_error("Failed to read shader bytecode stream!");
 				}
 			}();
-			ComPtr<slang::IBlob> irBlob = VecBlob::create(irData);
+			slang::IBlob* irBlob = slang_createBlob(irData.data(), irData.size());
+			Check<ExternalException>(irBlob != nullptr, "Failed to create IR blob!");
 
 			ComPtr<slang::IBlob> diagnosticsBlob;
 			usrModule = cso.session->loadModuleFromIRBlob("cacaousercode", "usercode.slang", irBlob, diagnosticsBlob.writeRef());
@@ -151,14 +112,14 @@ namespace Targetgen {
 				} else {
 					err << "!";
 				}
-				CheckException(false, err.str());
+				Check<ExternalException>(false, err.str());
 			}
 		}
 
 		//Get entry points
 		ComPtr<slang::IEntryPoint> vsep, fsep;
-		CheckException(usrModule->findEntryPointByName("VS_main", vsep.writeRef()) == SLANG_OK, "Failed to fetch vertex stage entrypoint!");
-		CheckException(usrModule->findEntryPointByName("FS_main", fsep.writeRef()) == SLANG_OK, "Failed to fetch fragment stage entrypoint!");
+		Check<ExternalException>(usrModule->findEntryPointByName("VS_main", vsep.writeRef()) == SLANG_OK, "Failed to fetch vertex stage entrypoint!");
+		Check<ExternalException>(usrModule->findEntryPointByName("FS_main", fsep.writeRef()) == SLANG_OK, "Failed to fetch fragment stage entrypoint!");
 
 		//Compose program
 		std::array<slang::IComponentType*, 4> componentTypes {
@@ -179,7 +140,7 @@ namespace Targetgen {
 				} else {
 					err << "!";
 				}
-				CheckException(false, err.str());
+				Check<ExternalException>(false, err.str());
 			}
 		}
 
@@ -196,11 +157,39 @@ namespace Targetgen {
 				} else {
 					err << "!";
 				}
-				CheckException(false, err.str());
+				Check<ExternalException>(false, err.str());
 			}
 		}
 
 		//Return result
 		return cso;
+	}
+
+	std::vector<uint32_t> GenerateSPV(ibytestream& in) {
+		//Create CSO
+		CompiledShaderObject cso = SetupCSO(in, SlangCompileTarget::SLANG_SPIRV, "spirv_1_3");
+
+		//Generate target code
+		ComPtr<slang::IBlob> codeBlob;
+		{
+			ComPtr<slang::IBlob> diagnosticsBlob;
+			SlangResult r = cso.linked->getTargetCode(0, codeBlob.writeRef(), diagnosticsBlob.writeRef());
+			if(r != SLANG_OK || !codeBlob) {
+				std::stringstream err;
+				err << "Failed to generate SPIR-V target code!";
+				if(diagnosticsBlob) {
+					err << ":\n"
+						<< (const char*)diagnosticsBlob->getBufferPointer();
+				} else {
+					err << "!";
+				}
+				Check<ExternalException>(false, err.str());
+			}
+		}
+
+		//Copy SPIR-V into buffer and return
+		std::vector<uint32_t> code(codeBlob->getBufferSize());
+		std::memcpy(code.data(), codeBlob->getBufferPointer(), codeBlob->getBufferSize());
+		return code;
 	}
 }
