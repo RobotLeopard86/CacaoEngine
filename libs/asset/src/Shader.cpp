@@ -30,11 +30,12 @@ namespace libcacaoasset {
 
 	Shader _DecShader(libjaguar::Document::ObjReader& rd) {
 		Shader shader;
-		shader.irCode = rd.Query<std::vector<unsigned char>>("code");
-		shader.descriptor.inputs = static_cast<Shader::Descriptor::InputBits>(rd.Query<uint8_t>("inputs"));
-		uint8_t typeByte = rd.Query<uint8_t>("type");
-		CheckException(typeByte == 0xA || typeByte == 0xD || typeByte == 0xE, "Bad type byte!");
-		shader.descriptor.type = static_cast<Shader::Descriptor::Type>(typeByte);
+		shader.irCode = rd.Query<std::vector<unsigned char>>("ir");
+		shader.descriptor.vertexInputs = static_cast<Shader::Descriptor::VertexInputBits>(rd.Query<uint8_t>("vInputs"));
+		shader.descriptor.objectInputs = static_cast<Shader::Descriptor::ObjectInputBits>(rd.Query<uint8_t>("oInputs"));
+		uint8_t domainByte = rd.Query<uint8_t>("domain");
+		CheckException(domainByte == 0xA || domainByte == 0xD || domainByte == 0xE, "Bad domain byte!");
+		shader.descriptor.domain = static_cast<Shader::Descriptor::Domain>(domainByte);
 		shader.descriptor.uniformParams = rd.Query<std::vector<Shader::Descriptor::UniformParameter>>("uparams");
 		shader.descriptor.texParams = rd.Query<std::vector<Shader::Descriptor::TextureParameter>>("tparams");
 		return shader;
@@ -53,9 +54,10 @@ namespace libcacaoasset {
 	}
 
 	void _EncShader(const Shader& s, libjaguar::Document::ObjWriter& ow) {
-		ow.SetOrCreate<std::vector<unsigned char>>("code", false, s.irCode);
-		ow.SetOrCreate<uint8_t>("type", static_cast<uint8_t>(s.descriptor.type));
-		ow.SetOrCreate<uint8_t>("inputs", static_cast<uint8_t>(s.descriptor.inputs));
+		ow.SetOrCreate<std::vector<unsigned char>>("ir", false, s.irCode);
+		ow.SetOrCreate<uint8_t>("domain", static_cast<uint8_t>(s.descriptor.domain));
+		ow.SetOrCreate<uint8_t>("vInputs", static_cast<uint8_t>(s.descriptor.vertexInputs));
+		ow.SetOrCreate<uint8_t>("oInputs", static_cast<uint8_t>(s.descriptor.vertexInputs));
 		ow.SetOrCreate<std::vector<Shader::Descriptor::UniformParameter>>("uparams", s.descriptor.uniformParams);
 		ow.SetOrCreate<std::vector<Shader::Descriptor::TextureParameter>>("tparams", s.descriptor.texParams);
 	}
@@ -100,19 +102,24 @@ namespace libcacaoasset {
 		//Shader
 		libjaguar::StructuredTypeLayout sLayout = {};
 		{
-			libjaguar::StructuredTypeLayout::Field& code = sLayout.fields.emplace_back();
-			code.name = "code";
-			code.type = libjaguar::TypeTag::ByteBuffer;
+			libjaguar::StructuredTypeLayout::Field& ir = sLayout.fields.emplace_back();
+			ir.name = "ir";
+			ir.type = libjaguar::TypeTag::ByteBuffer;
 		}
 		{
-			libjaguar::StructuredTypeLayout::Field& in = sLayout.fields.emplace_back();
-			in.name = "inbits";
-			in.type = libjaguar::TypeTag::UInt8;
+			libjaguar::StructuredTypeLayout::Field& vIn = sLayout.fields.emplace_back();
+			vIn.name = "vInputs";
+			vIn.type = libjaguar::TypeTag::UInt8;
 		}
 		{
-			libjaguar::StructuredTypeLayout::Field& type = sLayout.fields.emplace_back();
-			type.name = "type";
-			type.type = libjaguar::TypeTag::UInt8;
+			libjaguar::StructuredTypeLayout::Field& oIn = sLayout.fields.emplace_back();
+			oIn.name = "oInputs";
+			oIn.type = libjaguar::TypeTag::UInt8;
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& domain = sLayout.fields.emplace_back();
+			domain.name = "domain";
+			domain.type = libjaguar::TypeTag::UInt8;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& uparam = sLayout.fields.emplace_back();

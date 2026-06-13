@@ -191,16 +191,16 @@ namespace libcacaoasset {
 		Material mat = {};
 		mat.shaderAddress = rd.Query<std::string>("shader");
 		mat.parameters = rd.Query<std::vector<Material::Param>>("params");
-		uint8_t tval = rd.Query<uint8_t>("transparency");
-		CheckException(tval >= 0 && tval <= 2, "Invalid transparency value!");
-		mat.transparency = static_cast<Material::TransparencyMode>(tval);
+		uint8_t rval = rd.Query<uint8_t>("rmode");
+		CheckException(rval >= 0 && rval <= 2, "Invalid render mode value!");
+		mat.renderMode = static_cast<Material::RenderMode>(rval);
 		return mat;
 	}
 
 	void _EncMaterial(const Material& m, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<std::string>("shader", m.shaderAddress);
 		ow.SetOrCreate<std::vector<Material::Param>>("params", m.parameters);
-		ow.SetOrCreate<uint8_t>("transparency", static_cast<uint8_t>(m.transparency));
+		ow.SetOrCreate<uint8_t>("rmode", static_cast<uint8_t>(m.renderMode));
 	}
 
 	void _RegisterMaterialTypes(libjaguar::Document& doc) {
@@ -245,9 +245,9 @@ namespace libcacaoasset {
 			params.typeID = "MatParam";
 		}
 		{
-			libjaguar::StructuredTypeLayout::Field& tmode = mLayout.fields.emplace_back();
-			tmode.name = "transparency";
-			tmode.type = libjaguar::TypeTag::UInt8;
+			libjaguar::StructuredTypeLayout::Field& rmode = mLayout.fields.emplace_back();
+			rmode.name = "rmode";
+			rmode.type = libjaguar::TypeTag::UInt8;
 		}
 
 		//Register types
