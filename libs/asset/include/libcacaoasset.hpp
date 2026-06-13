@@ -95,8 +95,20 @@ namespace libcacaoasset {
 				Transform = 1 << 2,///<Shader uses transform/normal matrices
 			};
 
+			/**
+			 * @brief Vertex processing mode for a shader
+			 */
+			enum class VertexMode : uint8_t {
+				NoProcess = 0x00,			 ///<No shader-controlled vertex processing
+				PreprocessOnly = 0xD0,		 ///<Shader-controlled vertex processing before engine transform
+				PostprocessOnly = 0x0D,		 ///<Shader controlled vertex processing after engine transform
+				PreprocessPostprocess = 0xDD,///<Shader-controlled vertex processing before and after engine transform
+				Custom = 0x37				 ///<Shader implements fully-custom vertex pipeline
+			};
+
 			VertexInputBits vertexInputs;///<Vertex input values used by the shader, represented as a bitmask of VertexInputBits
 			ObjectInputBits objectInputs;///<Object input values used by the shader, represented as a bitmask of ObjectInputBits
+			VertexMode mode;			 ///<Vertex processing mode
 
 			/**
 			 * @brief Info about a uniform parameter

@@ -211,11 +211,11 @@ libcacaoasset::Material parseMaterialYML(const YAML::Node& root, const std::stri
 	std::string tval = root["transparency"].as<std::string>();
 	std::transform(tval.begin(), tval.end(), tval.begin(), ::tolower);
 	if(tval.compare("opaque") == 0)
-		mat.transparency = libcacaoasset::Material::TransparencyMode::Opaque;
+		mat.renderMode = libcacaoasset::Material::RenderMode::Opaque;
 	else if(tval.compare("cutout") == 0)
-		mat.transparency = libcacaoasset::Material::TransparencyMode::Cutout;
+		mat.renderMode = libcacaoasset::Material::RenderMode::Cutout;
 	else if(tval.compare("transparent") == 0)
-		mat.transparency = libcacaoasset::Material::TransparencyMode::Transparent;
+		mat.renderMode = libcacaoasset::Material::RenderMode::Transparent;
 
 	for(std::size_t i = 0; i < params.size(); ++i) {
 		const std::string paramCtx = std::format("{} parameter[{}]", context, i);

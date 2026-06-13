@@ -36,6 +36,9 @@ namespace libcacaoasset {
 		uint8_t domainByte = rd.Query<uint8_t>("domain");
 		CheckException(domainByte == 0xA || domainByte == 0xD || domainByte == 0xE, "Bad domain byte!");
 		shader.descriptor.domain = static_cast<Shader::Descriptor::Domain>(domainByte);
+		uint8_t modeByte = rd.Query<uint8_t>("vmode");
+		CheckException(modeByte == 0x00 || modeByte == 0xD0 || modeByte == 0x0D || modeByte == 0xDD || modeByte == 0x37, "Bad vertex mode byte!");
+		shader.descriptor.mode = static_cast<Shader::Descriptor::VertexMode>(modeByte);
 		shader.descriptor.uniformParams = rd.Query<std::vector<Shader::Descriptor::UniformParameter>>("uparams");
 		shader.descriptor.texParams = rd.Query<std::vector<Shader::Descriptor::TextureParameter>>("tparams");
 		return shader;
@@ -56,6 +59,7 @@ namespace libcacaoasset {
 	void _EncShader(const Shader& s, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<std::vector<unsigned char>>("ir", false, s.irCode);
 		ow.SetOrCreate<uint8_t>("domain", static_cast<uint8_t>(s.descriptor.domain));
+		ow.SetOrCreate<uint8_t>("vmode", static_cast<uint8_t>(s.descriptor.mode));
 		ow.SetOrCreate<uint8_t>("vInputs", static_cast<uint8_t>(s.descriptor.vertexInputs));
 		ow.SetOrCreate<uint8_t>("oInputs", static_cast<uint8_t>(s.descriptor.vertexInputs));
 		ow.SetOrCreate<std::vector<Shader::Descriptor::UniformParameter>>("uparams", s.descriptor.uniformParams);
@@ -120,6 +124,11 @@ namespace libcacaoasset {
 			libjaguar::StructuredTypeLayout::Field& domain = sLayout.fields.emplace_back();
 			domain.name = "domain";
 			domain.type = libjaguar::TypeTag::UInt8;
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& vmode = sLayout.fields.emplace_back();
+			vmode.name = "vmode";
+			vmode.type = libjaguar::TypeTag::UInt8;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& uparam = sLayout.fields.emplace_back();
