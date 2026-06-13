@@ -3,8 +3,7 @@ namespace Cacao {
 		float3 position : Position0;
 		float2 texCoords : TexCoord0;
 		float3 normal : Normal0;
-		float3 tangent : Tangent0;
-		float3 bitangent : Bitangent0;
+		float4 tangent : Tangent0;
 	};
 
 	struct VSIn2D {
@@ -17,8 +16,7 @@ namespace Cacao {
 		float3 localPos;
 		float3 worldPos;
 		float3 normal;
-		float3 tangent;
-		float3 bitangent;
+		float4 tangent;
 	}
 
 	struct VSOut {

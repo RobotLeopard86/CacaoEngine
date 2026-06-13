@@ -120,7 +120,7 @@ namespace Cacao {
 		//Get mesh info
 		aiMesh* amesh = impl->meshIndex[id];
 		bool hasTexCoord = amesh->HasTextureCoords(0);
-		bool hasTanBitan = amesh->HasTangentsAndBitangents();
+		bool hasTangents = amesh->HasTangentsAndBitangents();
 		bool hasNormals = amesh->HasNormals();
 
 		//Create output buffers
@@ -135,7 +135,6 @@ namespace Cacao {
 
 			glm::vec2 texCoords = glm::vec2(0.0f);
 			glm::vec3 tangent = glm::vec3(0.0f);
-			glm::vec3 bitangent = glm::vec3(0.0f);
 			glm::vec3 normal = glm::vec3(0.0f);
 
 			//Texture coordinates
@@ -144,12 +143,10 @@ namespace Cacao {
 				texCoords = {tc.x, tc.y};
 			}
 
-			//Tangent and bitangent vectors
-			if(hasTanBitan) {
+			//Tangent vectors
+			if(hasTangents) {
 				aiVector3D tan = amesh->mTangents[i];
-				aiVector3D bitan = amesh->mBitangents[i];
 				tangent = {tan.x, tan.y, tan.z};
-				bitangent = {bitan.x, bitan.y, bitan.z};
 			}
 
 			//Normal vectors
@@ -180,7 +177,7 @@ namespace Cacao {
 			}
 
 			//Add vertex
-			Vertex vertex {position, texCoords, tangent, bitangent, normal};
+			Vertex vertex {position, texCoords, normal, {tangent, 1.0f}};
 			vertices.push_back(vertex);
 		}
 

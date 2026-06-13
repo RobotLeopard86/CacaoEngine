@@ -20,10 +20,11 @@ spdlog_dep = subproject('spdlog', required: true, default_options: {
 	'std_format': 'disabled'
 }).get_variable('spdlog_dep')
 
-# Exathread, glm, high_resolution_sleep, and eternal
+# Exathread, glm, high_resolution_sleep, eternal, and mikktspace
 exathread_dep = subproject('exathread', required: true).get_variable('exathread_dep')
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
 eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
+mikktspace_dep = subproject('mikktspace', required: true).get_variable('mikktspace_dep')
 
 # Configure icu
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
@@ -99,6 +100,7 @@ engine_deps += [
 	harfbuzz_dep,
 	harfbuzz_icu_dep,
 	harfbuzz_sub_dep,
+	mikktspace_dep,
 	libdl,
 	libatomic,
 	libpipewire,

@@ -15,21 +15,19 @@ namespace Cacao {
 	struct CACAO_API Vertex {
 		const glm::vec3 position; ///<The position in local space
 		const glm::vec2 texCoords;///<The texture coordinates
-		const glm::vec3 tangent;  ///<The right vector in tangent space
-		const glm::vec3 bitangent;///<The front vector in tangent space
-		const glm::vec3 normal;	  ///<The up vector in tangent space
+		const glm::vec3 normal;	  ///<The surface normal vector
+		const glm::vec4 tangent;  ///<The surface tangent vector (stored as XYZ for the vector and W for the tangent sign)
 
 		/**
 		 * @brief Create a new vertex
 		 *
 		 * @param position The position in local space
 		 * @param texCoords The texture coordinates (optional, defaults to {0, 0})
-		 * @param tangent The right vector in tangent space (optional, defaults to {0, 0, 0})
-		 * @param bitangent The front vector in tangent space (optional, defaults to {0, 0, 0})
-		 * @param normal The up vector in tangent space (optional, defaults to {0, 0, 0})
+		 * @param normal The surface normal vector (optional, defaults to {0, 0, 0})
+		 * @param tangent The surface tangent vector (optional, defaults to {0, 0, 0, 1}), stored as XYZ for vector and W for sign
 		 */
-		Vertex(glm::vec3 position, glm::vec2 texCoords = glm::vec2(0.0f), glm::vec3 tangent = glm::vec3(0.0f), glm::vec3 bitangent = glm::vec3(0.0f), glm::vec3 normal = glm::vec3(0.0f))
-		  : position(position), texCoords(texCoords), tangent(tangent), bitangent(bitangent), normal(normal) {}
+		Vertex(glm::vec3 position, glm::vec2 texCoords = glm::vec2(0.0f), glm::vec3 normal = glm::vec3(0.0f), glm::vec4 tangent = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f))
+		  : position(position), texCoords(texCoords), normal(normal), tangent(tangent) {}
 	};
 
 	/**
