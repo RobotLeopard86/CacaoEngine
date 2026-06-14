@@ -1,6 +1,7 @@
 #include "CLI11.hpp"
 #include "spinners.hpp"
 
+#include <thread>
 #include <vector>
 #include <filesystem>
 #include <iostream>
@@ -98,10 +99,6 @@ int main(int argc, char* argv[]) {
 
 	//Compilation
 	try {
-		//Create compiler object
-		CacaoShaderCompiler csc;
-
-		//Compile
 		std::unique_ptr<jms::Spinner> s;
 		for(const auto& [in, out] : tasks) {
 			std::stringstream taskDesc;
@@ -110,6 +107,7 @@ int main(int argc, char* argv[]) {
 				s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
 				s->start();
 			}
+			CacaoShaderCompiler csc;
 			auto [result, log] = csc.compile(in, out);
 			if(outputLvl != OutputLevel::Silent) {
 				taskDesc.str("");

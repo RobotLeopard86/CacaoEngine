@@ -1,17 +1,17 @@
 # Cacao Engine Cubemap Tool
 
 ## About
-A tool to create packed cubemap (.xjc) files from unpacked files (.ajc) and their associated images, as well as extract face images from existing packed cubemaps.
+A tool to create compiled cubemap (.xjc) files from cubemap definition files (.ajc) and their associated images, as well as extract face images from existing compiled cubemaps.
 
 ## Supported Formats
-Input images referenced in an unpacked cubemap file may be in one of these formats:
+Input images referenced in a cubemap definition file may be in one of these formats:
 * JPEG
 * PNG
 * TGA
 * TIFF
 * WebP
 
-Output images from the extractor will be converted to PNG files when outputted for easiest use (though they are stored as lossless WebP images in the packed file).
+Output images from the extractor will be converted to PNG files when outputted for easiest use (though they are stored as lossless WebP images in the compiled file).
 
 ## Command-Line Usage
 ```
@@ -39,8 +39,7 @@ ce-cubetool create [OPTIONS] input
 
 
 POSITIONALS:
-  input TEXT:FILE REQUIRED    Path to an unpacked cubemap definition file (.ajc) to read as 
-                              input 
+  input TEXT:FILE REQUIRED    Input cubemap definition file (.ajc) path 
 
 OPTIONS:
   -h,     --help              Print this help message and exit 
@@ -54,7 +53,7 @@ ce-cubetool extract [OPTIONS] input
 
 
 POSITIONALS:
-  input TEXT:FILE REQUIRED    Path to an packed cubemap file (.xjc) to read as input 
+  input TEXT:FILE REQUIRED    Input cubemap file (.xjc) path 
 
 OPTIONS:
   -h,     --help              Print this help message and exit 
