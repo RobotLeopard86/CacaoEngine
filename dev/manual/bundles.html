@@ -435,12 +435,12 @@
 <span class="nb">configure_file</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cacaospec.yml.in&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cacaospec.yml&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">configuration</span><span class="p">:</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">cacaospec.yml.in</span></code>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cacaospec.yml.in</span></code> (note: the quotes are significant!):</p>
 <div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">pkgId</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">ID@</span>
-<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">TITLE@</span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">VERSION@</span>
-<span class="nt">binary</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">BINPATH@</span>
+<span class="w">  </span><span class="nt">pkgId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;@ID@&#39;&quot;</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;@TITLE@&#39;&quot;</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;@VERSION@&#39;&quot;</span>
+<span class="nt">binary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;@BINPATH@&#39;&quot;</span>
 </pre></div>
 </div>
 <p>An example for creating a more complex bundle layout will be available at release.</p>
