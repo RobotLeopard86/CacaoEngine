@@ -101,13 +101,14 @@ int main(int argc, char* argv[]) {
 	try {
 		std::unique_ptr<jms::Spinner> s;
 		for(const auto& [in, out] : tasks) {
-			std::stringstream taskDesc;
-			taskDesc << "Compiling " << in << "...";
 			if(outputLvl != OutputLevel::Silent) {
-				s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
+				s = std::make_unique<jms::Spinner>("Waiting for compiler to finish initializing...", jms::dots);
 				s->start();
 			}
 			CacaoShaderCompiler csc;
+			std::stringstream taskDesc;
+			taskDesc << "Compiling " << in << "...";
+			if(outputLvl != OutputLevel::Silent) s->setText(taskDesc.str());
 			auto [result, log] = csc.compile(in, out);
 			if(outputLvl != OutputLevel::Silent) {
 				taskDesc.str("");

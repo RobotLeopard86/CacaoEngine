@@ -31,8 +31,6 @@ namespace libcacaoasset {
 	Shader _DecShader(libjaguar::Document::ObjReader& rd) {
 		Shader shader;
 		shader.irCode = rd.Query<std::vector<unsigned char>>("ir");
-		shader.descriptor.vertexInputs = static_cast<Shader::Descriptor::VertexInputBits>(rd.Query<uint8_t>("vInputs"));
-		shader.descriptor.objectInputs = static_cast<Shader::Descriptor::ObjectInputBits>(rd.Query<uint8_t>("oInputs"));
 		uint8_t domainByte = rd.Query<uint8_t>("domain");
 		CheckException(domainByte == 0xA || domainByte == 0xD || domainByte == 0xE, "Bad domain byte!");
 		shader.descriptor.domain = static_cast<Shader::Descriptor::Domain>(domainByte);
@@ -57,13 +55,11 @@ namespace libcacaoasset {
 	}
 
 	void _EncShader(const Shader& s, libjaguar::Document::ObjWriter& ow) {
-		ow.SetOrCreate<std::vector<unsigned char>>("ir", false, s.irCode);
 		ow.SetOrCreate<uint8_t>("domain", static_cast<uint8_t>(s.descriptor.domain));
 		ow.SetOrCreate<uint8_t>("vmode", static_cast<uint8_t>(s.descriptor.mode));
-		ow.SetOrCreate<uint8_t>("vInputs", static_cast<uint8_t>(s.descriptor.vertexInputs));
-		ow.SetOrCreate<uint8_t>("oInputs", static_cast<uint8_t>(s.descriptor.vertexInputs));
 		ow.SetOrCreate<std::vector<Shader::Descriptor::UniformParameter>>("uparams", s.descriptor.uniformParams);
 		ow.SetOrCreate<std::vector<Shader::Descriptor::TextureParameter>>("tparams", s.descriptor.texParams);
+		ow.SetOrCreate<std::vector<unsigned char>>("ir", false, std::move(s.irCode));
 	}
 
 	void _RegisterShaderTypes(libjaguar::Document& doc) {
@@ -106,21 +102,6 @@ namespace libcacaoasset {
 		//Shader
 		libjaguar::StructuredTypeLayout sLayout = {};
 		{
-			libjaguar::StructuredTypeLayout::Field& ir = sLayout.fields.emplace_back();
-			ir.name = "ir";
-			ir.type = libjaguar::TypeTag::ByteBuffer;
-		}
-		{
-			libjaguar::StructuredTypeLayout::Field& vIn = sLayout.fields.emplace_back();
-			vIn.name = "vInputs";
-			vIn.type = libjaguar::TypeTag::UInt8;
-		}
-		{
-			libjaguar::StructuredTypeLayout::Field& oIn = sLayout.fields.emplace_back();
-			oIn.name = "oInputs";
-			oIn.type = libjaguar::TypeTag::UInt8;
-		}
-		{
 			libjaguar::StructuredTypeLayout::Field& domain = sLayout.fields.emplace_back();
 			domain.name = "domain";
 			domain.type = libjaguar::TypeTag::UInt8;
@@ -143,6 +124,11 @@ namespace libcacaoasset {
 			tparam.type = libjaguar::TypeTag::List;
 			tparam.elementType = libjaguar::TypeTag::StructuredObj;
 			tparam.typeID = "tprm";
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& ir = sLayout.fields.emplace_back();
+			ir.name = "ir";
+			ir.type = libjaguar::TypeTag::ByteBuffer;
 		}
 
 		//Register types

@@ -73,27 +73,8 @@ namespace libcacaoasset {
 			 */
 			enum class Domain : uint8_t {
 				Geometry3D = 0xA,///<3D world geometry
-				Surface2D = 0xD	 ///<2D surface
+				Canvas2D = 0xD	 ///<2D canvas
 			} domain;			 ///<Type of this shader
-
-			/**
-			 * @brief Bits of used per-vertex input data fields
-			 */
-			enum class VertexInputBits : uint8_t {
-				Position = 1 << 0, ///<Shader uses position in local space
-				TexCoords = 1 << 1,///<Shader uses texture coordinates
-				Normal = 1 << 2,   ///<Shader uses surface normal vector
-				Tangent = 1 << 3,  ///<Shader uses surface tangent vector with sign
-			};
-
-			/**
-			 * @brief Bits of used per-object input data fields
-			 */
-			enum class ObjectInputBits : uint8_t {
-				Globals = 1 << 0,  ///<Shader uses engine global data
-				Camera = 1 << 1,   ///<Shader uses camera data
-				Transform = 1 << 2,///<Shader uses transform/normal matrices
-			};
 
 			/**
 			 * @brief Vertex processing mode for a shader
@@ -104,11 +85,7 @@ namespace libcacaoasset {
 				PostprocessOnly = 0x0D,		 ///<Shader controlled vertex processing after engine transform
 				PreprocessPostprocess = 0xDD,///<Shader-controlled vertex processing before and after engine transform
 				Custom = 0x37				 ///<Shader implements fully-custom vertex pipeline
-			};
-
-			VertexInputBits vertexInputs;///<Vertex input values used by the shader, represented as a bitmask of VertexInputBits
-			ObjectInputBits objectInputs;///<Object input values used by the shader, represented as a bitmask of ObjectInputBits
-			VertexMode mode;			 ///<Vertex processing mode
+			} mode;							 ///<Vertex processing mode
 
 			/**
 			 * @brief Info about a uniform parameter
@@ -423,58 +400,4 @@ namespace libcacaoasset {
 	 * @throws std::runtime_error If encoding fails
 	 */
 	CACAO_API void EncodeCubemap(const Cubemap& cubemap, std::ostream* stream);
-
-	///@cond
-	CACAO_API constexpr Shader::Descriptor::VertexInputBits operator|(Shader::Descriptor::VertexInputBits a, Shader::Descriptor::VertexInputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::VertexInputBits>;
-		return static_cast<Shader::Descriptor::VertexInputBits>(
-			static_cast<U>(a) | static_cast<U>(b));
-	}
-
-	CACAO_API constexpr Shader::Descriptor::VertexInputBits operator&(Shader::Descriptor::VertexInputBits a, Shader::Descriptor::VertexInputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::VertexInputBits>;
-		return static_cast<Shader::Descriptor::VertexInputBits>(
-			static_cast<U>(a) & static_cast<U>(b));
-	}
-
-	CACAO_API constexpr Shader::Descriptor::VertexInputBits operator~(Shader::Descriptor::VertexInputBits a) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::VertexInputBits>;
-		return static_cast<Shader::Descriptor::VertexInputBits>(
-			static_cast<U>(~static_cast<U>(a)));
-	}
-
-	CACAO_API constexpr Shader::Descriptor::VertexInputBits& operator|=(Shader::Descriptor::VertexInputBits& a, Shader::Descriptor::VertexInputBits b) noexcept {
-		return a = a | b;
-	}
-
-	CACAO_API constexpr Shader::Descriptor::VertexInputBits& operator&=(Shader::Descriptor::VertexInputBits& a, Shader::Descriptor::VertexInputBits b) noexcept {
-		return a = a & b;
-	}
-
-	CACAO_API constexpr Shader::Descriptor::ObjectInputBits operator|(Shader::Descriptor::ObjectInputBits a, Shader::Descriptor::ObjectInputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::ObjectInputBits>;
-		return static_cast<Shader::Descriptor::ObjectInputBits>(
-			static_cast<U>(a) | static_cast<U>(b));
-	}
-
-	CACAO_API constexpr Shader::Descriptor::ObjectInputBits operator&(Shader::Descriptor::ObjectInputBits a, Shader::Descriptor::ObjectInputBits b) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::ObjectInputBits>;
-		return static_cast<Shader::Descriptor::ObjectInputBits>(
-			static_cast<U>(a) & static_cast<U>(b));
-	}
-
-	CACAO_API constexpr Shader::Descriptor::ObjectInputBits operator~(Shader::Descriptor::ObjectInputBits a) noexcept {
-		using U = std::underlying_type_t<Shader::Descriptor::ObjectInputBits>;
-		return static_cast<Shader::Descriptor::ObjectInputBits>(
-			static_cast<U>(~static_cast<U>(a)));
-	}
-
-	CACAO_API constexpr Shader::Descriptor::ObjectInputBits& operator|=(Shader::Descriptor::ObjectInputBits& a, Shader::Descriptor::ObjectInputBits b) noexcept {
-		return a = a | b;
-	}
-
-	CACAO_API constexpr Shader::Descriptor::ObjectInputBits& operator&=(Shader::Descriptor::ObjectInputBits& a, Shader::Descriptor::ObjectInputBits b) noexcept {
-		return a = a & b;
-	}
-	///@endcond
 }

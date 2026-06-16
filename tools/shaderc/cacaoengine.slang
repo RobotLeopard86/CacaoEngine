@@ -6,11 +6,6 @@ namespace Cacao {
 		float4 tangent : Tangent0;
 	};
 
-	struct VSIn2D {
-		float2 position : Position0;
-		float2 texCoords : TexCoord0;
-	};
-
 	struct SurfaceInput {
 		float2 texCoords;
 		float3 localPos;
@@ -19,9 +14,24 @@ namespace Cacao {
 		float4 tangent;
 	}
 
-	struct VSOut {
-		float4 outPosition : SV_Position;
+	struct VSOut3D {
+		float4 gpuPosition : SV_Position;
 		SurfaceInput surfaceIn;
+	};
+
+	struct VSIn2D {
+		float2 position : Position0;
+		float2 texCoords : TexCoord0;
+	};
+
+	struct CanvasInput {
+		float2 position;
+		float2 texCoords;
+	};
+
+	struct VSOut2D {
+		float4 gpuPosition : SV_Position;
+		CanvasInput canvasIn;
 	};
 
 	enum RenderMode : uint8_t {
@@ -35,7 +45,9 @@ namespace Cacao {
 		float deltaTime;
 		RenderMode renderMode;
 	};
-	[vk::binding(0)] ParameterBlock<GlobalData> globals : register(b0);
+
+	[vk::binding(0)]
+	ConstantBuffer<GlobalData> globals : register(b0);
 
 	struct CameraData {
 		float4x4 viewMatrix;
@@ -43,14 +55,17 @@ namespace Cacao {
 		float4x4 viewProjectionMatrix;
 		float3 worldPosition;
 	};
-	[vk::binding(1)] ParameterBlock<CameraData> cam : register(b1);
+
+	[vk::binding(1)]
+	ConstantBuffer<CameraData> cam : register(b1);
 
 	struct Transform {
 		float4x4 transformMatrix;
 		float4x4 normalMatrix;
 	};
 
-	[vk::push_constant] ConstantBuffer<Transform> transform : register(b2);
+	[vk::push_constant]
+	ConstantBuffer<Transform> transform : register(b2);
 
 	struct SurfaceSample {
 		float4 albedo;
