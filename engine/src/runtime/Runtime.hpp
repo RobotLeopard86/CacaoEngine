@@ -3,6 +3,7 @@
 #include "Cacao/Engine.hpp"
 
 #include "dynalo/dynalo.hpp"
+#include "astra/setup.hpp"
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
@@ -19,13 +20,20 @@ inline class Runtime {
 	Cacao::Engine::InitConfig icfg = {};
 	std::unique_ptr<dynalo::library> gameBinary;
 
-	struct Cacaospec {
-		struct Meta {
+	struct ASTRA_REFLECT Cacaospec : public AstraReflectBase {
+		std::string binary;
+		std::string startupWorld;
+		struct ASTRA_REFLECT Meta : public AstraReflectBase {
 			std::string pkgId;
 			std::string title;
 			std::string version;
+
+			ASTRASETUP(Meta)
+			virtual ~Meta() {}
 		} meta;
-		std::string binary;
+
+		ASTRASETUP(Cacaospec)
+		virtual ~Cacaospec() {}
 	} cacaospec;
 
 	void SetupEngine();

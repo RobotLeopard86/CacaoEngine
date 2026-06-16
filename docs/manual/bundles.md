@@ -24,13 +24,13 @@ spec.set('TITLE', 'Cacao Engine Sandbox Application')
 spec.set('VERSION', meson.project_version())
 configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
 ```  
-`cacaospec.yml.in`:
+`cacaospec.yml.in` (note: the quotes are significant!):
 ```{code-block} YAML
 meta:
-  pkgId: @ID@
-  title: @TITLE@
-  version: @VERSION@
-binary: @BINPATH@
+  pkgId: "'@ID@'"
+  title: "'@TITLE@'"
+  version: "'@VERSION@'"
+binary: "'@BINPATH@'"
 ```  
 
 An example for creating a more complex bundle layout will be available at release.
