@@ -1,5 +1,8 @@
 #include "Runtime.hpp"
 #include "abi/ABI.hpp"
+#include <exception>
+#include <memory>
+#include <stdexcept>
 
 void Runtime::SetupEngine() {
 	//Initialize engine
@@ -102,6 +105,21 @@ void Runtime::LoadGame() {
 		}
 	}
 #endif
+	ABIHandshakeTestFuncs funcs = gameBinary->get_function<ABIHandshakeTestFuncs()>("__CacaoAbiFuncsHandshake")();
+	if(funcs.stringRoundtrip("¿Cómo estás?").compare("¡Estoy bien!") != 0) binpanic("String exchange failed");
+	try {
+		funcs.clientThrow();
+	} catch(const std::exception& e) {
+		if(std::string(e.what()).compare("exceptions ok") != 0) binpanic("Runtime cannot receive game exceptions");
+	}
+	if(!funcs.engineThrow([]() {
+		   throw std::runtime_error("exceptions ok");
+	   })) binpanic("Game binary cannot receive engine exceptions");
+	std::shared_ptr<unsigned int> testPtr = std::make_shared<unsigned int>(67);
+	if(!funcs.clientConsumePtr(testPtr, 67)) binpanic("Game binary cannot receive engine smart pointers");
+	if(*funcs.engineConsumePtr() != 37) binpanic("Engine cannot receive game binary smart pointers");
+	if(funcs.clientConsumeCallback([](int val) { return val * 2; }, 913) != ((913 * 2) + 1)) binpanic("Game binary cannot receive engine callbacks");
+	if(funcs.engineConsumeCallback()(72) != 74) binpanic("Engine cannot receive game binary callbacks!");
 #undef binpanic
 }
 

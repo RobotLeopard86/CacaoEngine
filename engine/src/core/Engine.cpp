@@ -73,7 +73,7 @@ namespace Cacao {
 		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
 
 		//Done with stage
-		Logger::Engine(Logger::Level::Info) << "Reached target Core Initialization.";
+		Logger::Engine(Logger::Level::Info) << "Core initialization complete.";
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;
@@ -151,7 +151,7 @@ namespace Cacao {
 		}
 
 		//Done with stage
-		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
+		Logger::Engine(Logger::Level::Info) << "Graphics initialization complete.";
 		std::lock_guard lkg(stateMtx);
 		state = State::Ready;
 	}

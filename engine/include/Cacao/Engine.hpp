@@ -92,7 +92,7 @@ namespace Cacao {
 			ClientIdentity clientID;
 
 			/**
-			 * @brief Whether to start the frame processor with the graphics system or to start it when the engine starts running
+			 * @brief Whether to start the frame processor during graphics system initialization or to start it with the engine gameloop
 			 *
 			 * This is set to @c false by default, which is best for games. However, other users may want to continue rendering
 			 * without an active gameloop, thus this option exists.
