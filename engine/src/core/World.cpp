@@ -155,12 +155,13 @@ namespace Cacao {
 		//Check resource cache
 		if(!IMPL(ResourceManager).cache.contains(addr)) {
 			//noload check
-			Check<NonexistentValueException>(noload, "World requested for activation is not loaded, and noload flag was specified!");
+			Check<NonexistentValueException>(!noload, "World requested for activation is not loaded, and noload flag was specified!");
 
 			//Load it
 			impl->active = *ResourceManager::Get().Load<World>(addr);
+		} else {
+			impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
 		}
-		impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
 	}
 
 	ActorRef World::CreateActor(const std::string& name, ActorRef parent) {

@@ -136,12 +136,12 @@ namespace libcacaoasset {
 			rot.width = 4;
 		}
 		{
-			libjaguar::StructuredTypeLayout::Field& sky = aLayout.fields.emplace_back();
+			libjaguar::StructuredTypeLayout::Field& sky = wLayout.fields.emplace_back();
 			sky.name = "skybox";
 			sky.type = libjaguar::TypeTag::String;
 		}
 		{
-			libjaguar::StructuredTypeLayout::Field& actors = aLayout.fields.emplace_back();
+			libjaguar::StructuredTypeLayout::Field& actors = wLayout.fields.emplace_back();
 			actors.name = "actors";
 			actors.type = libjaguar::TypeTag::List;
 			actors.elementType = libjaguar::TypeTag::StructuredObj;

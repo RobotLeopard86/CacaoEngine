@@ -11,3 +11,8 @@ spec.set('ID', 'net.rl86.CacaoSandbox')
 spec.set('TITLE', 'Cacao Engine Sandbox Application')
 spec.set('VERSION', meson.project_version())
 configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
+
+# Resource configuration
+subdir('assets')
+subdir('packs')
+subdir('worlds')

@@ -1,3 +1,4 @@
+#include "Cacao/WorldManager.hpp"
 #include "Runtime.hpp"
 #include "abi/ABI.hpp"
 #include <exception>
@@ -121,6 +122,9 @@ void Runtime::LoadGame() {
 	if(funcs.clientConsumeCallback([](int val) { return val * 2; }, 913) != ((913 * 2) + 1)) binpanic("Game binary cannot receive engine callbacks");
 	if(funcs.engineConsumeCallback()(72) != 74) binpanic("Engine cannot receive game binary callbacks!");
 #undef binpanic
+
+	//Load and activate initial world
+	Cacao::WorldManager::Get().SetActiveWorld(rt.cacaospec.startupWorld);
 }
 
 void Runtime::DestroyGfxObjects() {

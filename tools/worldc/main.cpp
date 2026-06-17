@@ -58,10 +58,11 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 				out.initialCamPos.x = std::strtof(p["x"].Scalar().c_str(), nullptr);
 				out.initialCamPos.y = std::strtof(p["y"].Scalar().c_str(), nullptr);
 				out.initialCamPos.z = std::strtof(p["z"].Scalar().c_str(), nullptr);
-				if(!(p.IsMap() && r["x"].IsScalar() && r["y"].IsScalar() && r["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for camera initial rotation";
+				if(!(p.IsMap() && r["x"].IsScalar() && r["y"].IsScalar() && r["z"].IsScalar() && r["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for camera initial rotation";
 				out.initialCamRot.x = std::strtof(r["x"].Scalar().c_str(), nullptr);
 				out.initialCamRot.y = std::strtof(r["y"].Scalar().c_str(), nullptr);
 				out.initialCamRot.z = std::strtof(r["z"].Scalar().c_str(), nullptr);
+				out.initialCamRot.w = std::strtof(r["w"].Scalar().c_str(), nullptr);
 			} catch(...) {
 				return "Non-float value found in camera initial state";
 			}
@@ -118,10 +119,12 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 				if(!node["x"].IsScalar()) return "X value is not a scalar";
 				if(!node["y"].IsScalar()) return "Y value is not a scalar";
 				if(!node["z"].IsScalar()) return "Z value is not a scalar";
+				if(!node["w"].IsScalar()) return "W value is not a scalar";
 				return ""; }, "world actor transform", "rotation property");
 		actor.initialRot.x = std::strtof(rot["x"].Scalar().c_str(), nullptr);
 		actor.initialRot.y = std::strtof(rot["y"].Scalar().c_str(), nullptr);
 		actor.initialRot.z = std::strtof(rot["z"].Scalar().c_str(), nullptr);
+		actor.initialRot.w = std::strtof(rot["w"].Scalar().c_str(), nullptr);
 
 		YAML::Node scl = transform["scale"];
 		ValidateYAMLNode(scl, YAML::NodeType::value::Map, [](const YAML::Node& node) {
