@@ -1,3 +1,4 @@
+#include "Cacao/Log.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Runtime.hpp"
 #include "abi/ABI.hpp"
@@ -76,10 +77,14 @@ ABIHandshakeInfo GetRuntimeABIInfo() {
 }
 
 void Runtime::LoadGame() {
+	Cacao::Logger::Runtime() << "Welcome to \"" << rt.cacaospec.meta.title << "\" (" << rt.cacaospec.meta.pkgId << ")!";
+	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Loading game binary...";
+
 	//Load binary
 	gameBinary = std::make_unique<dynalo::library>(cacaospec.binary);
 
 	//Perform ABI checks
+	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Performing ABI compatibility checks...";
 	ABIHandshakeInfo gameABI = gameBinary->get_function<ABIHandshakeInfo()>("__CacaoAbiInfoHandshake")();
 	ABIHandshakeInfo ourABI = GetRuntimeABIInfo();
 #define binpanic(msg) panic(msg, "This usually means the game binary is not compiled with the correct settings to match the runtime")
@@ -123,6 +128,9 @@ void Runtime::LoadGame() {
 	if(funcs.engineConsumeCallback()(72) != 74) binpanic("Engine cannot receive game binary callbacks!");
 #undef binpanic
 
+	Cacao::Logger::Runtime() << "Game package successfully loaded!";
+	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Preparing to run...";
+
 	//Load and activate initial world
 	Cacao::WorldManager::Get().SetActiveWorld(rt.cacaospec.startupWorld);
 }
@@ -133,5 +141,6 @@ void Runtime::DestroyGfxObjects() {
 
 void Runtime::Cleanup() {
 	//Unload binary
+	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Unloading game binary...";
 	gameBinary.reset();
 }

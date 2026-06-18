@@ -109,6 +109,29 @@ namespace Cacao {
 		}
 	}
 
+	exathread::ValueTask<std::vector<Script*>> FindScripts(ActorRef actor) {
+		//Inactive actor stop
+		if(!actor->IsActive()) co_return {};
+
+		//Get all scripts and add them to the list
+		auto actorScripts = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
+			return (dynamic_cast<Script*>(component.get()));
+		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
+			return static_cast<Script*>(item.second);
+		}) | std::views::common;
+		std::vector scripts(actorScripts.begin(), actorScripts.end());
+
+		//Handle children
+		exathread::MultiFuture<std::vector<Script*>> childScriptsFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindScripts);
+		co_await exathread::yieldUntilComplete(childScriptsFut);
+
+		//Merge lists and return
+		std::vector<std::vector<Script*>> toMerge = childScriptsFut.results();
+		toMerge.push_back(std::move(scripts));
+		auto joined = std::views::join(toMerge) | std::views::common;
+		co_return std::vector<Script*>(joined.begin(), joined.end());
+	}
+
 	void TickController::Impl::DynTick(std::chrono::seconds timestep [[maybe_unused]]) {
 		//Freeze input state
 		Input::Get().FreezeInputState();
@@ -128,32 +151,7 @@ namespace Cacao {
 		if(!world) return;
 
 		//Find scripts
-		std::vector<Script*> scripts;
-		std::mutex scriptsMtx;
-		const auto scriptFinder = [world, &scripts, &scriptsMtx](ActorRef actor) -> exathread::VoidTask {
-			auto impl = [world, &scripts, &scriptsMtx](ActorRef actor, auto& iref) -> exathread::VoidTask {
-				//Inactive stop
-				if(!actor->IsActive()) co_return;
-
-				//Get all scripts and add them to the list
-				auto actorScripts = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
-					return (dynamic_cast<Script*>(component.get()));
-				});
-				{
-					std::lock_guard lk(scriptsMtx);
-					for(auto& [_, cptr] : actorScripts) {
-						scripts.push_back(static_cast<Script*>(cptr));
-					}
-				}
-
-				//Handle children
-				exathread::MultiFuture<void> childrenFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), iref, iref);
-				co_await exathread::yieldUntilComplete(childrenFut);
-			};
-			impl(actor, impl);
-			co_return;
-		};
-		exathread::MultiFuture<void> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), scriptFinder);
+		exathread::MultiFuture<std::vector<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindScripts);
 		scriptsFut.await();
 	}
 }

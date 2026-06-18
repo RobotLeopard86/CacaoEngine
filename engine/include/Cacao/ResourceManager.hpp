@@ -90,36 +90,7 @@ namespace Cacao {
 			Check<BadValueException>(Resource::ValidateResourceAddr<T>(address), "Cannot load a resource from a malformed address string!");
 
 			//Run load operation asynchronously
-			return Engine::Get().GetThreadPool()->submit([this, address]() -> std::shared_ptr<T> {
-				//Check cache
-				std::shared_ptr<Resource> maybeCached = CheckCache(address);
-				if(maybeCached) {
-					//There is a cached resource
-					try {
-						//Try to cast the resource to the correct type and return it
-						return std::dynamic_pointer_cast<T>(maybeCached);
-					} catch(const std::bad_cast&) {
-						Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
-						return {};
-					}
-				}
-
-				//Resource was not in cache, we need to load it
-				//Check for a valid loader
-				Check<BadStateException>(IsLoaderRegistered(typeid(T)), "No resource loader configured for the requested type!");
-
-				//Try to load the asset
-				std::shared_ptr<Resource> res = InvokeLoader(typeid(T), address);
-				try {
-					//Try to cast the resource to the correct type and return it
-					return std::dynamic_pointer_cast<T>(res);
-				} catch(const std::bad_cast&) {
-					Check<BadTypeException>(false, "Resource was loade but the returned object is not of the requested type!");
-					return {};
-				}
-
-				return {};
-			});
+			return Engine::Get().GetThreadPool()->submit(std::bind(&ResourceManager::_AsyncLoadOp<T>, this, std::placeholders::_1), address);
 		}
 
 		/**
@@ -152,6 +123,39 @@ namespace Cacao {
 		std::shared_ptr<Resource> CheckCache(const std::string& addr);
 		bool IsLoaderRegistered(std::type_index tp);
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
+
+		template<typename T>
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && (!std::is_same_v<Asset, T>)
+		std::shared_ptr<T> _AsyncLoadOp(std::string address) {
+			//Check cache
+			std::shared_ptr<Resource> maybeCached = CheckCache(address);
+			if(maybeCached) {
+				//There is a cached resource
+				try {
+					//Try to cast the resource to the correct type and return it
+					return std::dynamic_pointer_cast<T>(maybeCached);
+				} catch(const std::bad_cast&) {
+					Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
+					return {};
+				}
+			}
+
+			//Resource was not in cache, we need to load it
+			//Check for a valid loader
+			Check<BadStateException>(IsLoaderRegistered(typeid(T)), "No resource loader configured for the requested type!");
+
+			//Try to load the asset
+			std::shared_ptr<Resource> res = InvokeLoader(typeid(T), address);
+			try {
+				//Try to cast the resource to the correct type and return it
+				return std::dynamic_pointer_cast<T>(res);
+			} catch(const std::bad_cast&) {
+				Check<BadTypeException>(false, "Resource was loade but the returned object is not of the requested type!");
+				return {};
+			}
+
+			return {};
+		}
 
 		///@cond
 		struct ErasedLoader {
