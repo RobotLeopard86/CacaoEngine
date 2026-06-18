@@ -629,12 +629,30 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger7RuntimeE5Level">
+<span id="_CPPv3N5Cacao6Logger7RuntimeE5Level"></span><span id="_CPPv2N5Cacao6Logger7RuntimeE5Level"></span><span id="Cacao::Logger::Runtime__Level"></span><span class="target" id="classCacao_1_1Logger_1ac67e2cfcc064363d9b2d3862de362249"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Cacao::Logger::Level::Info"><span class="n"><span class="pre">Info</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger7RuntimeE5Level" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Log a message from the runtime. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use only by engine runtimes.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> – The severity of the message (optional, defaults to Info)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html#structCacao_1_1Logger_1_1LogToken"><span class="std std-ref">LogToken</span></a>, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger6ClientE5Level">
 <span id="_CPPv3N5Cacao6Logger6ClientE5Level"></span><span id="_CPPv2N5Cacao6Logger6ClientE5Level"></span><span id="Cacao::Logger::Client__Level"></span><span class="target" id="classCacao_1_1Logger_1a9043c65728c6357c5e2c4ef52d4f5421"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Client</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Cacao::Logger::Level::Info"><span class="n"><span class="pre">Info</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger6ClientE5Level" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Log a message from the client. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For use by engine clients.</p>
+<p>For use by games.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -652,6 +670,30 @@
 <span id="_CPPv3N5Cacao6Logger8LogTokenE"></span><span id="_CPPv2N5Cacao6Logger8LogTokenE"></span><span id="Cacao::Logger::LogToken"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogToken</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>A small object used to make the logging API more ergonomic. </p>
 <p>Use operator&lt;&lt; with it just like with std::cout to write log messages (no ending newline or <code class="docutils literal notranslate"><span class="pre">std::endl</span></code> necessary) You can also use LogFormatted just like you would <code class="docutils literal notranslate"><span class="pre">std::format</span></code></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6SourceE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6SourceE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6SourceE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Source</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6SourceE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6Source6ClientE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6Source6ClientE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6Source6ClientE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7a577d7068826de925ea2aec01dbadf5e4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Client</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6Source6ClientE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6Source7RuntimeE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6Source7RuntimeE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6Source7RuntimeE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7abc366f2d0ba3d681e7a3899917c5d3de"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6Source7RuntimeE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6Source6EngineE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6Source6EngineE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6Source6EngineE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7a7bfa30721c5e726ff17e3f972237a82c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Engine</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6Source6EngineE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -741,8 +783,8 @@
 <dd></dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken8isClientE">
-<span id="_CPPv3N5Cacao6Logger8LogToken8isClientE"></span><span id="_CPPv2N5Cacao6Logger8LogToken8isClientE"></span><span id="Cacao::Logger::LogToken::isClient__b"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac33136538a2bccd18fd21d9eb7eda865"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isClient</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken8isClientE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken3srcE">
+<span id="_CPPv3N5Cacao6Logger8LogToken3srcE"></span><span id="_CPPv2N5Cacao6Logger8LogToken3srcE"></span><span id="Cacao::Logger::LogToken::src__Cacao::Logger::LogToken::Source"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ab7dab5161a006e7d8ec7ff06fe133e2b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6LoggerE" title="Cacao::Logger"><span class="n"><span class="pre">Logger</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogToken6SourceE" title="Cacao::Logger::LogToken::Source"><span class="n"><span class="pre">Source</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">src</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken3srcE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -816,8 +858,15 @@
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger3GetEv"><code class="docutils literal notranslate"><span class="pre">Get()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6EngineE5Level"><code class="docutils literal notranslate"><span class="pre">Engine()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger7RuntimeE5Level"><code class="docutils literal notranslate"><span class="pre">Runtime()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6ClientE5Level"><code class="docutils literal notranslate"><span class="pre">Client()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenE"><code class="docutils literal notranslate"><span class="pre">Cacao::Logger::LogToken</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6SourceE"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6Source6ClientE"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6Source7RuntimeE"><code class="docutils literal notranslate"><span class="pre">Runtime</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6Source6EngineE"><code class="docutils literal notranslate"><span class="pre">Engine</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenEv"><code class="docutils literal notranslate"><span class="pre">LogToken()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenERK8LogToken"><code class="docutils literal notranslate"><span class="pre">LogToken()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenERR8LogToken"><code class="docutils literal notranslate"><span class="pre">LogToken()</span></code></a></li>
@@ -829,7 +878,7 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenD0Ev"><code class="docutils literal notranslate"><span class="pre">~LogToken()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3lvlE"><code class="docutils literal notranslate"><span class="pre">lvl</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3ossE"><code class="docutils literal notranslate"><span class="pre">oss</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8isClientE"><code class="docutils literal notranslate"><span class="pre">isClient</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3srcE"><code class="docutils literal notranslate"><span class="pre">src</span></code></a></li>
 </ul>
 </li>
 </ul>

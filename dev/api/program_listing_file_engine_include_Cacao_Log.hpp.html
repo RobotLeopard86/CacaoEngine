@@ -424,7 +424,11 @@
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">LogToken</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">Level</span><span class="w"> </span><span class="n">lvl</span><span class="p">;</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span><span class="w"> </span><span class="n">oss</span><span class="p">;</span>
-<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">isClient</span><span class="p">;</span>
+<span class="w">            </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Source</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Client</span><span class="p">,</span>
+<span class="w">                </span><span class="n">Runtime</span><span class="p">,</span>
+<span class="w">                </span><span class="n">Engine</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="n">src</span><span class="p">;</span>
 
 <span class="w">          </span><span class="k">public</span><span class="o">:</span>
 <span class="w">            </span><span class="n">LogToken</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -451,12 +455,14 @@
 
 <span class="w">            </span><span class="o">~</span><span class="n">LogToken</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">Logger</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">ImplLog</span><span class="p">(</span><span class="n">oss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span><span class="w"> </span><span class="n">lvl</span><span class="p">,</span><span class="w"> </span><span class="n">isClient</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">Logger</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">ImplLog</span><span class="p">(</span><span class="n">oss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span><span class="w"> </span><span class="n">lvl</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="p">);</span>
 <span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(...)</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">LogToken</span><span class="w"> </span><span class="nf">Engine</span><span class="p">(</span><span class="n">Level</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="o">::</span><span class="n">Info</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">LogToken</span><span class="w"> </span><span class="nf">Runtime</span><span class="p">(</span><span class="n">Level</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="o">::</span><span class="n">Info</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="n">LogToken</span><span class="w"> </span><span class="nf">Client</span><span class="p">(</span><span class="n">Level</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="o">::</span><span class="n">Info</span><span class="p">);</span>
 
@@ -464,7 +470,7 @@
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
 
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ImplLog</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">Level</span><span class="w"> </span><span class="n">level</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isClient</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">ImplLog</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">Level</span><span class="w"> </span><span class="n">level</span><span class="p">,</span><span class="w"> </span><span class="n">LogToken</span><span class="o">::</span><span class="n">Source</span><span class="w"> </span><span class="n">src</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="n">LogToken</span><span class="p">;</span>
 
