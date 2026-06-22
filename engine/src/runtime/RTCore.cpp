@@ -1,8 +1,13 @@
+#include "Cacao/Exceptions.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Runtime.hpp"
+
 #include "abi/ABI.hpp"
+#include "libcacaoasset.hpp"
+
 #include <exception>
+#include <filesystem>
 #include <memory>
 #include <stdexcept>
 
@@ -11,7 +16,8 @@ void Runtime::SetupEngine() {
 	Cacao::Engine::Get().CoreInit(icfg);
 	Cacao::Engine::Get().GfxInit();
 
-	//TODO: Configure resource loading
+	//Configure resource loading
+	CfgLoader();
 }
 
 ABIHandshakeInfo GetRuntimeABIInfo() {
@@ -77,7 +83,7 @@ ABIHandshakeInfo GetRuntimeABIInfo() {
 }
 
 void Runtime::LoadGame() {
-	Cacao::Logger::Runtime() << "Welcome to \"" << rt.cacaospec.meta.title << "\" (" << rt.cacaospec.meta.pkgId << ")!";
+	Cacao::Logger::Runtime() << "Welcome to \"" << cacaospec.meta.title << "\" (" << cacaospec.meta.pkgId << ")!";
 	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Loading game binary...";
 
 	//Load binary
@@ -127,6 +133,21 @@ void Runtime::LoadGame() {
 	if(funcs.clientConsumeCallback([](int val) { return val * 2; }, 913) != ((913 * 2) + 1)) binpanic("Game binary cannot receive engine callbacks");
 	if(funcs.engineConsumeCallback()(72) != 74) binpanic("Engine cannot receive game binary callbacks!");
 #undef binpanic
+
+	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Scanning resources...";
+	Check<FileNotFoundException>(std::filesystem::exists("worlds") && std::filesystem::is_directory("worlds"), "Worlds directory does not exist!");
+	Check<FileNotFoundException>(std::filesystem::exists("packs") && std::filesystem::is_directory("packs"), "Asset packs directory does not exist!");
+	for(const std::filesystem::path& p : std::filesystem::directory_iterator("worlds")) {
+		if(p.extension().compare(".xjw") != 0) continue;
+		worldScan["w:" + p.stem().generic_string()] = p.native();
+	}
+	for(const std::filesystem::path& p : std::filesystem::directory_iterator("packs")) {
+		if(p.extension().compare(".xak") != 0) continue;
+		libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(p);
+		for(const std::string& r : pak.ListResources()) {
+			resourceScan[r] = p.native();
+		}
+	}
 
 	Cacao::Logger::Runtime() << "Game package successfully loaded!";
 	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Preparing to run...";

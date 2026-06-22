@@ -26,19 +26,17 @@ namespace Cacao {
 		 *
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<World> Create(const std::string& addr) {
-			return std::shared_ptr<World>(new World(addr));
-		}
+		static std::shared_ptr<World> Create(const std::string& addr);
 
 		/**
 		 * @brief Create a new world using data
 		 *
-		 * @param addr The resource address to associate with the world
 		 * @param world The world information for setup
+		 * @param addr The resource address to associate with the world
 		 *
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<World> Create(const std::string& addr, const libcacaoasset::World& world);
+		static std::shared_ptr<World> Create(const libcacaoasset::World& world, const std::string& addr);
 
 		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
 

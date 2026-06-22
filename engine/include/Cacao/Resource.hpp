@@ -39,13 +39,9 @@ namespace Cacao {
 
 	  protected:
 		Resource(const std::string& addr)
-		  : address(addr) {
-			RegisterSelf();
-		}
+		  : address(addr) {}
 
 		std::string address;
-
-		void RegisterSelf();
 	};
 
 	/**

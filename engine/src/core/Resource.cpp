@@ -63,14 +63,6 @@ namespace Cacao {
 		IMPL(ResourceManager).cache.erase(address);
 	}
 
-	void Resource::RegisterSelf() {
-		//Get our pointer
-		std::shared_ptr<Resource> selfPtr = shared_from_this();
-
-		//Cache it
-		IMPL(ResourceManager).cache.insert_or_assign(address, selfPtr);
-	}
-
 	CACAOST_GET(ResourceManager)
 
 	ResourceManager::ResourceManager() {
@@ -91,6 +83,10 @@ namespace Cacao {
 	std::shared_ptr<Resource> ResourceManager::InvokeLoader(std::type_index tp, const std::string& addr) {
 		Check<BadStateException>(IsLoaderRegistered(tp), "A loader has not been configured for this type!");
 		return impl->loaders[tp].load(addr);
+	}
+
+	void ResourceManager::RegisterLoader(std::type_index tp, ResourceManager::ErasedLoader el) {
+		impl->loaders.insert_or_assign(tp, el);
 	}
 
 	BinaryBlobResource::BinaryBlobResource(std::vector<unsigned char>&& data, const std::string& addr)

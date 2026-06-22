@@ -2,16 +2,17 @@ diff --git a/meson.build b/meson.build
 index 6032e70..6fb0aa2 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -21,7 +21,7 @@ else
+@@ -21,7 +21,8 @@ else
    )
  endif
  
 -fmt_dep = dependency('fmt')
 +fmt_dep = dependency('fmt', static: true)
++add_project_arguments('-DFMT_DEPRECATED_HEAVY_CORE', language: ['c', 'cpp'])
  
  if host_machine.system() != 'windows'
    thread_dep = dependency('threads')
-@@ -89,7 +89,7 @@ solaris_dep = dependency(
+@@ -89,7 +90,7 @@ solaris_dep = dependency(
  
  if host_machine.system() == 'windows'
    add_project_arguments(
@@ -20,7 +21,7 @@ index 6032e70..6fb0aa2 100644
      language: 'cpp',
    )
    if cpp.get_argument_syntax() == 'msvc'
-@@ -102,6 +102,11 @@ if host_machine.system() == 'windows'
+@@ -102,6 +103,11 @@ if host_machine.system() == 'windows'
        language: 'cpp',
      )
    endif

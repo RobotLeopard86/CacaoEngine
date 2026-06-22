@@ -28,9 +28,7 @@ namespace Cacao {
 					internalFormat = GL_SRGB8_ALPHA8;
 					break;
 				default:
-					Check<MiscException>(false, "UNREACHABLE CODE!!!! HOW DID YOU GET HERE!!!!");
-					throw 0;
-					break;
+					throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");
 			}
 
 			//Create texture object

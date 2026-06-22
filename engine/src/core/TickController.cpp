@@ -151,7 +151,9 @@ namespace Cacao {
 		if(!world) return;
 
 		//Find scripts
-		exathread::MultiFuture<std::vector<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindScripts);
-		scriptsFut.await();
+		if(world->GetToplevelActors().size() > 0) {
+			exathread::MultiFuture<std::vector<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindScripts);
+			scriptsFut.await();
+		}
 	}
 }

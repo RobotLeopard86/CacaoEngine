@@ -34,7 +34,13 @@ namespace Cacao {
 		cam->SetRotation(glm::vec3 {0});
 	}
 
-	std::shared_ptr<World> World::Create(const std::string& addr, const libcacaoasset::World& world) {
+	std::shared_ptr<World> World::Create(const std::string& addr) {
+		std::shared_ptr<World> ptr(new World(addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
+	}
+
+	std::shared_ptr<World> World::Create(const libcacaoasset::World& world, const std::string& addr) {
 		//Create base world
 		std::shared_ptr<World> w = Create(addr);
 

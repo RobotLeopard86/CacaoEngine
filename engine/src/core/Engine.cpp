@@ -248,7 +248,6 @@ namespace Cacao {
 
 	void Engine::CoreShutdown() {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run core shutdown!");
-		Logger::Engine(Logger::Level::Info) << "Shutting down engine core...";
 
 		//Shutdown FreeType
 		Logger::Engine(Logger::Level::Trace) << "Destroying FreeType instance...";

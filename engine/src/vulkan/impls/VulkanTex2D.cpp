@@ -18,8 +18,7 @@ namespace Cacao {
 				format = vk::Format::eR8G8B8A8Srgb;
 				break;
 			default:
-				Check<MiscException>(false, "UNREACHABLE CODE!!!! HOW DID YOU GET HERE!!!!");
-				throw 0;
+				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");
 		}
 
 		//Allocate GPU texture & data upload buffers

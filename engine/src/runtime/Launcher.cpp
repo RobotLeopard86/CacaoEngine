@@ -1,5 +1,7 @@
 #include "CLI11.hpp"
+#include "Cacao/Engine.hpp"
 #include "Cacao/Identity.hpp"
+#include "Cacao/Log.hpp"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
 
@@ -70,7 +72,7 @@ int main(int argc, char* argv[]) {
 	CLI::App app(rt.cacaospec.meta.title, std::filesystem::path(argv[0]).filename().string());
 	rt.icfg.startFrameProcessorWithGfxSystem = false;
 	rt.icfg.initialRequestedBackend = "vulkan";
-	rt.icfg.clientID = Cacao::ClientIdentity {.id = rt.cacaospec.meta.pkgId, .displayName = rt.cacaospec.meta.title};
+	rt.icfg.clientID = ClientIdentity {.id = rt.cacaospec.meta.pkgId, .displayName = rt.cacaospec.meta.title};
 
 	//Backend option
 	app.add_option("--backend,-B", rt.icfg.initialRequestedBackend, "The preferred backend to use. One of ['opengl', 'vulkan'];")->default_val("vulkan")->check([](const std::string& v) {
@@ -101,24 +103,40 @@ int main(int argc, char* argv[]) {
 #endif
 
 	//Engine setup
-	rt.SetupEngine();
+	try {
+		rt.SetupEngine();
+	} catch(...) {
+		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in engine initialization. Exiting...";
+		Engine::Get().GfxShutdown();
+		Engine::Get().CoreShutdown();
+		exit(-1);
+	}
 
 	//Prepare game to run
 	//This is where we load initial resources and whatnot
-	rt.LoadGame();
+	try {
+		rt.LoadGame();
+	} catch(...) {
+		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in game initialization. Exiting...";
+		rt.DestroyGfxObjects();
+		rt.Cleanup();
+		Engine::Get().GfxShutdown();
+		Engine::Get().CoreShutdown();
+		exit(-1);
+	}
 
 	//Run (blocks)
-	Cacao::Engine::Get().Run();
+	Engine::Get().Run();
 
 	//Game has stopped now, destroy graphics objects before shutting down that part of the engine
 	rt.DestroyGfxObjects();
-	Cacao::Engine::Get().GfxShutdown();
+	Engine::Get().GfxShutdown();
 
 	//Run cleanup tasks (unload game data)
 	rt.Cleanup();
 
 	//Stop the engine fully
-	Cacao::Engine::Get().CoreShutdown();
+	Engine::Get().CoreShutdown();
 }
 
 //Windows no-console wrapper

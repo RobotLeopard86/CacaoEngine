@@ -4,6 +4,10 @@
 
 #include "dynalo/dynalo.hpp"
 #include "astra/setup.hpp"
+#include "libcacaoasset.hpp"
+
+#include <memory>
+#include <vector>
 
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
@@ -13,12 +17,16 @@
 #define CACAO_RELEASE_NICKNAME "Name TBD"
 #endif
 
+using namespace Cacao;
+
 void panic(const std::string& err, const std::string& hint);
 
 inline class Runtime {
   public:
-	Cacao::Engine::InitConfig icfg = {};
+	Engine::InitConfig icfg = {};
 	std::unique_ptr<dynalo::library> gameBinary;
+	std::unordered_map<std::string, std::string> worldScan;
+	std::unordered_map<std::string, std::string> resourceScan;
 
 	struct ASTRA_REFLECT Cacaospec : public AstraReflectBase {
 		std::string binary;
@@ -41,3 +49,5 @@ inline class Runtime {
 	void DestroyGfxObjects();
 	void Cleanup();
 } rt;
+
+void CfgLoader();

@@ -6,7 +6,9 @@
 #include "Resource.hpp"
 #include "Engine.hpp"
 
+#include <exception>
 #include <memory>
+#include <stdexcept>
 #include <type_traits>
 #include <string>
 #include <typeindex>
@@ -37,9 +39,9 @@ namespace Cacao {
 	 * These functions should expect to be invoked in the thread pool
 	 */
 	template<typename T, typename R>
-	concept Loader = std::is_base_of_v<Resource, R> && requires(T obj, const std::string& addr) {
+	concept Loader = std::is_base_of_v<Resource, R> && (!std::is_same_v<BlobResource, R>) && (!std::is_same_v<Asset, R>) && requires(T obj, const std::string& addr) {
 		{ obj.template FetchData<R>(addr) } -> std::same_as<std::unique_ptr<LoaderIntermediate<T, R>>>;
-		{ obj.template CreateResource<R>(std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
+		{ obj.template CreateResource<R>(addr, std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
 	};
 
 	/**
@@ -135,7 +137,7 @@ namespace Cacao {
 					//Try to cast the resource to the correct type and return it
 					return std::dynamic_pointer_cast<T>(maybeCached);
 				} catch(const std::bad_cast&) {
-					Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
+					Check<BadTypeException>(false, "Resource exists in cache, but is not of the requested type!");
 					return {};
 				}
 			}
@@ -150,7 +152,7 @@ namespace Cacao {
 				//Try to cast the resource to the correct type and return it
 				return std::dynamic_pointer_cast<T>(res);
 			} catch(const std::bad_cast&) {
-				Check<BadTypeException>(false, "Resource was loade but the returned object is not of the requested type!");
+				Check<BadTypeException>(false, "Resource was loaded, but the returned object is not of the requested type!");
 				return {};
 			}
 
@@ -163,6 +165,8 @@ namespace Cacao {
 			std::function<std::shared_ptr<Resource>(const std::string&)> load;
 		};
 
+		void RegisterLoader(std::type_index tp, ErasedLoader l);
+
 		template<typename T, typename R>
 			requires Loader<std::remove_reference_t<T>, R>
 		void _ConfigureResourceLoader(const T& loader) {
@@ -172,9 +176,19 @@ namespace Cacao {
 			ErasedLoader el;
 			el.loaderObj = loader;
 			el.load = [loader](const std::string& addr) {
-				std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader.template FetchData<R>(addr);
-				return std::static_pointer_cast<Resource>(loader.template CreateResource<R>(std::move(intermediate)));
+				try {
+					std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader.template FetchData<R>(addr);
+					return std::static_pointer_cast<Resource>(loader.template CreateResource<R>(addr, std::move(intermediate)));
+				} catch(const Exception&) {
+					std::rethrow_exception(std::current_exception());
+				} catch(const std::exception& e) {
+					Check<ExternalException>(false, e.what());
+					throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
+				}
 			};
+
+			//Add loader to list
+			RegisterLoader(typeid(R), el);
 		}
 		///@endcond
 	};

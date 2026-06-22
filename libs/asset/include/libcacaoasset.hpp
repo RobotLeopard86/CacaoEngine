@@ -308,7 +308,7 @@ namespace libcacaoasset {
 	/**
 	 * @brief Decode a world object from the stream data
 	 *
-	 * @param stream The stream to read data from
+	 * @param stream The stream to read data from <b>(warning: this pointer becomes owned exclusively by this function and will be freed when it returns)</b>
 	 *
 	 * @return The resulting world object
 	 *
@@ -332,7 +332,7 @@ namespace libcacaoasset {
 	/**
 	 * @brief Decode a shader object from the stream data
 	 *
-	 * @param stream The stream to read data from
+	 * @param stream The stream to read data from <b>(warning: this pointer becomes owned exclusively by this function and will be freed when it returns)</b>
 	 *
 	 * @return The resulting shader object
 	 *
@@ -356,7 +356,7 @@ namespace libcacaoasset {
 	/**
 	 * @brief Decode a material object from the stream data
 	 *
-	 * @param stream The stream to read data from
+	 * @param stream The stream to read data from <b>(warning: this pointer becomes owned exclusively by this function and will be freed when it returns)</b>
 	 *
 	 * @return The resulting material object
 	 *
@@ -380,7 +380,7 @@ namespace libcacaoasset {
 	/**
 	 * @brief Decode a cubemap object from the stream data
 	 *
-	 * @param stream The stream to read data from
+	 * @param stream The stream to read data from <b>(warning: this pointer becomes owned exclusively by this function and will be freed when it returns)</b>
 	 *
 	 * @return The resulting cubemap object
 	 *
