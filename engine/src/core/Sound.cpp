@@ -2,6 +2,8 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "impl/Sound.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 
 #include "Bytestream.hpp"
 
@@ -16,6 +18,12 @@ namespace Cacao {
 
 		//Move audio buffer
 		impl->encodedAudio = encodedAudio;
+	}
+
+	std::shared_ptr<Sound> Sound::Create(std::vector<char>&& encodedAudio, const std::string& addr) {
+		std::shared_ptr<Sound> ptr(new Sound(std::move(encodedAudio), addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
 	}
 
 	Sound::~Sound() {

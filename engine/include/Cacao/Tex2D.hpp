@@ -22,9 +22,7 @@ namespace Cacao {
 		 * @throws BadValueException If the image buffer is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Tex2D> Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
-			return std::shared_ptr<Tex2D>(new Tex2D(std::move(imageBuffer), addr));
-		}
+		static std::shared_ptr<Tex2D> Create(libcacaoimage::Image&& imageBuffer, const std::string& addr);
 
 		///@cond
 		Tex2D(const Tex2D&) = delete;

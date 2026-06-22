@@ -24,9 +24,7 @@ namespace Cacao {
 		 * @throws BadValueException If the faces are not all the same size
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Cubemap> Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr) {
-			return std::shared_ptr<Cubemap>(new Cubemap(std::move(faces), addr));
-		}
+		static std::shared_ptr<Cubemap> Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr);
 
 		///@cond
 		Cubemap(const Cubemap&) = delete;

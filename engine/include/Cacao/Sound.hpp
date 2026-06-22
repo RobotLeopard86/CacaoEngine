@@ -21,9 +21,7 @@ namespace Cacao {
 		 * @throws BadValueException If the audio buffer is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr) {
-			return std::shared_ptr<Sound>(new Sound(std::move(encodedAudio), addr));
-		}
+		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr);
 
 		///@cond
 		Sound(const Sound&) = delete;

@@ -49,12 +49,7 @@ namespace Cacao {
 	}
 
 	template<>
-	bool Resource::ValidateResourceAddr<TextBlobResource>(const std::string& addr) {
-		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Blob);
-	}
-
-	template<>
-	bool Resource::ValidateResourceAddr<BinaryBlobResource>(const std::string& addr) {
+	bool Resource::ValidateResourceAddr<BlobResource>(const std::string& addr) {
 		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Blob);
 	}
 
@@ -89,13 +84,13 @@ namespace Cacao {
 		impl->loaders.insert_or_assign(tp, el);
 	}
 
-	BinaryBlobResource::BinaryBlobResource(std::vector<unsigned char>&& data, const std::string& addr)
-	  : BlobResource(addr), data(data) {
-		Check<BadValueException>(ValidateResourceAddr<BinaryBlobResource>(addr), "Resource address is malformed!");
+	BlobResource::BlobResource(std::vector<unsigned char>&& data, const std::string& addr)
+	  : Resource(addr), data(data) {
+		Check<BadValueException>(ValidateResourceAddr<BlobResource>(addr), "Resource address is malformed!");
 	}
 
-	TextBlobResource::TextBlobResource(std::string&& data, const std::string& addr)
-	  : BlobResource(addr), data(data) {
-		Check<BadValueException>(ValidateResourceAddr<TextBlobResource>(addr), "Resource address is malformed!");
+	BlobResource::BlobResource(std::string&& data, const std::string& addr)
+	  : Resource(addr), data(data.begin(), data.end()) {
+		Check<BadValueException>(ValidateResourceAddr<BlobResource>(addr), "Resource address is malformed!");
 	}
 }

@@ -20,9 +20,7 @@ namespace Cacao {
 		 * @throws BadValueException If the model data is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
-			return std::shared_ptr<Model>(new Model(std::move(modelBin), addr));
-		}
+		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr);
 
 		/**
 		 * @brief Get a list of stored meshes

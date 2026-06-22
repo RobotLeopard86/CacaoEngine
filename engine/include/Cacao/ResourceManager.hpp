@@ -39,7 +39,7 @@ namespace Cacao {
 	 * These functions should expect to be invoked in the thread pool
 	 */
 	template<typename T, typename R>
-	concept Loader = std::is_base_of_v<Resource, R> && (!std::is_same_v<BlobResource, R>) && (!std::is_same_v<Asset, R>) && requires(T obj, const std::string& addr) {
+	concept Loader = std::is_base_of_v<Resource, R> && (!std::is_same_v<Asset, R>) && requires(T obj, const std::string& addr) {
 		{ obj.template FetchData<R>(addr) } -> std::same_as<std::unique_ptr<LoaderIntermediate<T, R>>>;
 		{ obj.template CreateResource<R>(addr, std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
 	};
@@ -86,7 +86,7 @@ namespace Cacao {
 		 * @return A future that will return a handle to the resource when completed
 		 */
 		template<typename T>
-			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && (!std::is_same_v<Asset, T>)
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
 		exathread::Future<std::shared_ptr<T>> Load(const std::string& address) {
 			//Validate the address
 			Check<BadValueException>(Resource::ValidateResourceAddr<T>(address), "Cannot load a resource from a malformed address string!");
@@ -127,7 +127,7 @@ namespace Cacao {
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
 
 		template<typename T>
-			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && (!std::is_same_v<Asset, T>)
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
 		std::shared_ptr<T> _AsyncLoadOp(std::string address) {
 			//Check cache
 			std::shared_ptr<Resource> maybeCached = CheckCache(address);

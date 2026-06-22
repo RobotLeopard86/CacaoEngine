@@ -2,6 +2,8 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Shader.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
 
 namespace Cacao {
@@ -16,6 +18,12 @@ namespace Cacao {
 		//Fill data
 		impl->irBuffer = std::move(shaderIR);
 		impl->description = desc;
+	}
+
+	std::shared_ptr<Shader> Shader::Create(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr) {
+		std::shared_ptr<Shader> ptr(new Shader(std::move(shaderIR), desc, addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
 	}
 
 	Shader::~Shader() {

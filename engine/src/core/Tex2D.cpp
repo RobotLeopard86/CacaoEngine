@@ -2,7 +2,10 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Tex2D.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
+
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
@@ -17,6 +20,12 @@ namespace Cacao {
 		//Fill data
 		impl->img = (imageBuffer.bitsPerChannel == 16 ? libcacaoimage::Convert16To8BitColor(imageBuffer) : std::move(imageBuffer));
 		if(impl->img.layout == libcacaoimage::Image::Layout::RGB) impl->img = libcacaoimage::ChangeChannelLayout(impl->img, libcacaoimage::Image::Layout::RGBA);
+	}
+
+	std::shared_ptr<Tex2D> Tex2D::Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
+		std::shared_ptr<Tex2D> ptr(new Tex2D(std::move(imageBuffer), addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
 	}
 
 	Tex2D::~Tex2D() {

@@ -2,6 +2,8 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Cubemap.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
 
 #include "libcacaoimage.hpp"
@@ -33,6 +35,12 @@ namespace Cacao {
 
 		//Fill data
 		impl->faces = std::move(images);
+	}
+
+	std::shared_ptr<Cubemap> Cubemap::Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr) {
+		std::shared_ptr<Cubemap> ptr(new Cubemap(std::move(faces), addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
 	}
 
 	Cubemap::~Cubemap() {

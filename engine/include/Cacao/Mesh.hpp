@@ -45,9 +45,7 @@ namespace Cacao {
 		 * @throws BadValueException If the vertex or index data is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Mesh> Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
-			return std::shared_ptr<Mesh>(new Mesh(std::move(vtx), std::move(idx), addr));
-		}
+		static std::shared_ptr<Mesh> Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr);
 
 		///@cond
 		Mesh(const Mesh&) = delete;

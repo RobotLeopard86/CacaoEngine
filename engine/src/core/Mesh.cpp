@@ -2,6 +2,8 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Mesh.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
 
 namespace Cacao {
@@ -16,6 +18,12 @@ namespace Cacao {
 		//Fill data
 		impl->vertices = std::move(vtx);
 		impl->indices = std::move(idx);
+	}
+
+	std::shared_ptr<Mesh> Mesh::Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
+		std::shared_ptr<Mesh> ptr(new Mesh(std::move(vtx), std::move(idx), addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
 	}
 
 	Mesh::~Mesh() {

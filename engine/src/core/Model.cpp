@@ -1,5 +1,7 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/config.h"
@@ -32,6 +34,12 @@ namespace Cacao {
 		std::unordered_map<std::string, aiMesh*> meshIndex;
 		std::unordered_map<std::string, aiTexture*> textureIndex;
 	};
+
+	std::shared_ptr<Model> Model::Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
+		std::shared_ptr<Model> ptr(new Model(std::move(modelBin), addr));
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
+	}
 
 	Model::Model(std::vector<unsigned char>&& modelBin, const std::string& addr)
 	  : Resource(addr) {

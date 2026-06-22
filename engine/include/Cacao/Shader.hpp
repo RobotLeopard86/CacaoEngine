@@ -24,9 +24,7 @@ namespace Cacao {
 		 * @throws BadValueException If the shader description contains invalid data
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Shader> Create(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr) {
-			return std::shared_ptr<Shader>(new Shader(std::move(shaderIR), desc, addr));
-		}
+		static std::shared_ptr<Shader> Create(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr);
 
 		///@cond
 		Shader(const Shader&) = delete;
