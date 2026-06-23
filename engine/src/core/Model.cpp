@@ -1,5 +1,6 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Mesh.hpp"
 #include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
 
@@ -11,6 +12,7 @@
 
 #include "Bytestream.hpp"
 #include "libcacaoimage.hpp"
+#include "mikktspace.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
@@ -57,11 +59,10 @@ namespace Cacao {
 
 		Post-processing flags applied are:
 		JoinIdenticalVertices - Makes vertices used by more than one face the same (not stored that way by default)
-		CalcTangentSpace - For meshes with normals (normal mapping will later be added and require this)
 		Triangulate - Ensure all polygons are triangles with 3 indices
 		SortByPType - Split meshes with 2+ primitive types into submeshes with 1 primitive type (and ignores lines and points due to configuration property above)
 		*/
-		impl->scene = impl->importer.ReadFileFromMemory(modelBin.data(), modelBin.size(), aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_SortByPType);
+		impl->scene = impl->importer.ReadFileFromMemory(modelBin.data(), modelBin.size(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_SortByPType);
 
 		//Check validity of scene
 		Check<NonexistentValueException>(impl->scene != nullptr, std::string("Failed to load model data, Assimp provided error message: ") + impl->importer.GetErrorString());
@@ -127,13 +128,14 @@ namespace Cacao {
 
 		//Get mesh info
 		aiMesh* amesh = impl->meshIndex[id];
-		bool hasTexCoord = amesh->HasTextureCoords(0);
-		bool hasTangents = amesh->HasTangentsAndBitangents();
+		bool hasTexCoords = amesh->HasTextureCoords(0);
 		bool hasNormals = amesh->HasNormals();
+		bool hasTangents = amesh->HasTangentsAndBitangents();
 
 		//Create output buffers
 		std::vector<Vertex> vertices;
-		std::vector<glm::uvec3> indices;
+		vertices.reserve(amesh->mNumVertices);
+		std::vector<glm::uvec3> indices(amesh->mNumFaces);
 
 		//Handle vertices
 		for(unsigned int i = 0; i < amesh->mNumVertices; ++i) {
@@ -142,57 +144,137 @@ namespace Cacao {
 			glm::vec3 position = {vert.x, vert.y, vert.z};
 
 			glm::vec2 texCoords = glm::vec2(0.0f);
-			glm::vec3 tangent = glm::vec3(0.0f);
 			glm::vec3 normal = glm::vec3(0.0f);
+			glm::vec4 tangent = glm::vec4(glm::vec3 {0.0f}, 1.0f);
 
 			//Texture coordinates
-			if(hasTexCoord) {
+			if(hasTexCoords) {
 				aiVector3D tc = amesh->mTextureCoords[0][i];
 				texCoords = {tc.x, tc.y};
-			}
-
-			//Tangent vectors
-			if(hasTangents) {
-				aiVector3D tan = amesh->mTangents[i];
-				tangent = {tan.x, tan.y, tan.z};
 			}
 
 			//Normal vectors
 			if(hasNormals) {
 				aiVector3D norm = amesh->mNormals[i];
-				normal = {norm.x, norm.y, norm.z};
+				normal = glm::normalize(glm::vec3 {norm.x, norm.y, norm.z});
 			}
 
-			//Apply axis correction
-			switch(impl->orient) {
-				case Impl::ModelOrientation::PosY:
-					break;
-				case Impl::ModelOrientation::NegY:
-					position = glm::rotateZ(position, glm::radians(180.0f));
-					break;
-				case Impl::ModelOrientation::PosX:
-					position = glm::rotateZ(position, glm::radians(-90.0f));
-					break;
-				case Impl::ModelOrientation::NegX:
-					position = glm::rotateZ(position, glm::radians(90.0f));
-					break;
-				case Impl::ModelOrientation::PosZ:
-					position = glm::rotateX(position, glm::radians(-90.0f));
-					break;
-				case Impl::ModelOrientation::NegZ:
-					position = glm::rotateX(position, glm::radians(90.0f));
-					break;
+			//Tangent vectors
+			if(hasTangents) {
+				aiVector3D aTan = amesh->mTangents[i];
+				aiVector3D aBitan = amesh->mBitangents[i];
+				glm::vec3 tan = glm::normalize(glm::vec3 {aTan.x, aTan.y, aTan.z});
+				glm::vec3 bitan = glm::normalize(glm::vec3 {aBitan.x, aBitan.y, aBitan.z});
+				float sign = glm::dot(glm::cross(normal, tan), bitan) < 0.0f ? -1.0f : 1.0f;
+				tangent = {tan, sign};
 			}
 
 			//Add vertex
-			Vertex vertex {position, texCoords, normal, {tangent, 1.0f}};
+			Vertex vertex {position, texCoords, normal, tangent};
 			vertices.push_back(vertex);
 		}
 
 		//Handle indices
 		for(unsigned int i = 0; i < amesh->mNumFaces; ++i) {
 			aiFace face = amesh->mFaces[i];
-			indices.push_back({face.mIndices[0], face.mIndices[1], face.mIndices[2]});
+			indices[i] = glm::uvec3 {face.mIndices[0], face.mIndices[1], face.mIndices[2]};
+		}
+
+		//Generate tangents if not given by mesh
+		if(!hasTangents && hasNormals && hasTexCoords) {
+			//Define user data
+			struct MikkUserData {
+				std::vector<Vertex>* vtx;
+				std::vector<glm::uvec3>* idx;
+			} userData;
+			userData.vtx = &vertices;
+			userData.idx = &indices;
+
+			//MikkTSpace callbacks
+#define usr (static_cast<MikkUserData*>(ctx->m_pUserData))
+			SMikkTSpaceInterface mikk = {};
+			mikk.m_getNumFaces = [](const SMikkTSpaceContext* ctx) -> int {
+				return (int)usr->idx->size();
+			};
+			mikk.m_getNumVerticesOfFace = [](const SMikkTSpaceContext*, const int) -> int {
+				return 3;//TRIANGLES, BABY!
+			};
+			mikk.m_getPosition = [](const SMikkTSpaceContext* ctx, float posOut[], const int face, const int vertexIndex) -> void {
+				const glm::uvec3& tri = (*(usr->idx))[face];
+				const glm::vec3& pos = (*(usr->vtx))[tri[vertexIndex]].position;
+				posOut[0] = pos.x;
+				posOut[1] = pos.y;
+				posOut[2] = pos.z;
+			};
+			mikk.m_getNormal = [](const SMikkTSpaceContext* ctx, float normOut[], const int face, const int vertexIndex) -> void {
+				const glm::uvec3& tri = (*(usr->idx))[face];
+				const glm::vec3& norm = (*(usr->vtx))[tri[vertexIndex]].normal;
+				normOut[0] = norm.x;
+				normOut[1] = norm.y;
+				normOut[2] = norm.z;
+			};
+			mikk.m_getTexCoord = [](const SMikkTSpaceContext* ctx, float tcOut[], const int face, const int vertexIndex) -> void {
+				const glm::uvec3& tri = (*(usr->idx))[face];
+				const glm::vec2& uv = (*(usr->vtx))[tri[vertexIndex]].texCoords;
+				tcOut[0] = uv.x;
+				tcOut[1] = uv.y;
+			};
+			mikk.m_setTSpaceBasic = [](const SMikkTSpaceContext* ctx, const float tangent[], const float sign, const int face, const int vertexIndex) -> void {
+				Vertex& vtx = (*(usr->vtx))[(*(usr->idx))[face][vertexIndex]];
+				vtx.tangent = glm::vec4(glm::normalize(glm::vec3 {tangent[0], tangent[1], tangent[2]}), sign);
+			};
+
+			//Execute MikkTSpace
+			SMikkTSpaceContext mikkCtx = {};
+			mikkCtx.m_pUserData = &userData;
+			mikkCtx.m_pInterface = &mikk;
+			Check<MiscException>(genTangSpaceDefault(&mikkCtx), "Failed to generate mesh tangent space!");
+		}
+
+		//Apply axis correction
+		switch(impl->orient) {
+			case Impl::ModelOrientation::PosY:
+				break;
+			case Impl::ModelOrientation::NegY:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateZ(v.position, glm::radians(180.0f));
+					v.normal = glm::normalize(glm::rotateZ(v.normal, glm::radians(180.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateZ(glm::vec3 {v.tangent}, glm::radians(180.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::PosX:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateZ(v.position, glm::radians(-90.0f));
+					v.normal = glm::normalize(glm::rotateZ(v.normal, glm::radians(-90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateZ(glm::vec3 {v.tangent}, glm::radians(-90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::NegX:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateZ(v.position, glm::radians(90.0f));
+					v.normal = glm::normalize(glm::rotateZ(v.normal, glm::radians(90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateZ(glm::vec3 {v.tangent}, glm::radians(90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::PosZ:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateX(v.position, glm::radians(-90.0f));
+					v.normal = glm::normalize(glm::rotateX(v.normal, glm::radians(-90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateX(glm::vec3 {v.tangent}, glm::radians(-90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::NegZ:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateX(v.position, glm::radians(90.0f));
+					v.normal = glm::normalize(glm::rotateX(v.normal, glm::radians(90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateX(glm::vec3 {v.tangent}, glm::radians(90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
 		}
 
 		//Construct and return mesh

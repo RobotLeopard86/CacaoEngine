@@ -44,6 +44,7 @@ namespace Cacao {
 		 * @return A handle to the mesh resource
 		 *
 		 * @throws NonexistentValueException If the provided ID is not found in the mesh list
+		 * @throws MiscException If the mesh requires tangent generation and that step fails
 		 */
 		std::shared_ptr<Mesh> GetMesh(const std::string& id);
 
