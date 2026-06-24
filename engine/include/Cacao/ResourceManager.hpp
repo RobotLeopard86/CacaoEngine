@@ -129,6 +129,12 @@ namespace Cacao {
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
 		std::shared_ptr<T> _AsyncLoadOp(std::string address) {
+			//Check if this is a built-in resource
+			if(address.starts_with("a:builtin_")) {
+				//TODO: redirect query to built-in resource gallery
+				return {};
+			}
+
 			//Check cache
 			std::shared_ptr<Resource> maybeCached = CheckCache(address);
 			if(maybeCached) {

@@ -18,7 +18,7 @@ In debug builds, you can set the following environment variables when using the 
 | OpenGL | ✅ | ✅ | ✅ |
 | Vulkan | ✅ | ❌ | ✅  |  
 
-\* Most Linux testing occurs on Fedora Linux. Other distributions may have different compatibilities.
+\* The majority of Linux testing is performed on Fedora Linux and Arch Linux. Other distributions may have different compatibilities.
 
 #### Legend
 * ✅ - Fully working and supported

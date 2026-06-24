@@ -2,7 +2,32 @@ project('cacaoengine', 'c', 'cpp', meson_version: '>=1.10.2', version: '2026.1.0
 
 # We are Ninja-only
 if get_option('backend') != 'ninja'
-	error('Only the Ninja backend is supported. If you\'re trying to use Visual Studio, see the Visual Studio page in the documentation for instructions.')
+	error('Only the Ninja backend is supported. If you are trying to use Visual Studio, refer to the Visual Studio page in the documentation for instructions.')
+endif
+
+# Resolve component dependencies
+build_libs = get_option('build_libs')
+build_engine = get_option('build_engine')
+build_sandbox = get_option('build_sandbox')
+build_tools = get_option('build_tools')
+if build_engine and not build_libs
+	warning('You have selected to build the engine but not supporting libraries. Supporting libraries will be automatically built as they are required to build this component.')
+	build_libs = true
+endif
+if build_engine and not build_tools
+	warning('You have selected to build the engine but not tools. Tools will be automatically built as they are required to build this component.')
+	build_libs = true
+endif
+if build_tools and not build_libs
+	warning('You have selected to build tools but not supporting libraries. Supporting libraries will be automatically built as they are required to built this component.')
+	build_libs = true
+endif
+if build_sandbox and not build_engine
+	warning('You have selected to build the sandbox demo but not the engine. The engine will be automatically built as it is required to built this component.')
+	build_engine = true
+endif
+if not build_libs and not build_engine and not build_sandbox and not build_tools
+	error('You have not selected anything to build.')
 endif
 
 # Get some options
@@ -13,27 +38,6 @@ dep_compiler_args = []
 
 # Find Python
 python = find_program('python3', required: true)
-
-# Resolve component dependencies
-build_libs = get_option('build_libs')
-build_engine = get_option('build_engine')
-build_sandbox = get_option('build_sandbox')
-build_tools = get_option('build_tools')
-if build_engine and not build_libs
-	warning('You have selected to build the engine but not supporting libraries. Supporting libraries will be automatically built as they are required.')
-	build_libs = true
-endif
-if build_tools and not build_libs
-	warning('You have selected to build tools but not supporting libraries. Supporting libraries will be automatically built as they are required.')
-	build_libs = true
-endif
-if build_sandbox and not build_engine
-	warning('You have selected to build the sandbox demo but not the engine. The engine will be automatically built as it is required.')
-	build_engine = true
-endif
-if not build_libs and not build_engine and not build_sandbox and not build_tools
-	error('You have not selected anything to build.')
-endif
 
 # Import filesystem module
 fs = import('fs')

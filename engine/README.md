@@ -2,7 +2,7 @@
 
 ## Welcome!
 Welcome to the engine source code! This is the code that is actually part of the engine and is used for making games.  
-This has a few components, so this is a guide to help break them down.  
+This comprises quite a few components, so this is a guide to help break them down.  
 
 > [!WARNING]
 > As a note, the engine is currently undergoing heavy restructuring. Any directories with `OLD` in their names contain code that is now not in use and will eventually be deleted.  
@@ -36,7 +36,7 @@ Each of the subdirectories handles the windowing code for that system.
 This is the windowing integration for macOS using the Cocoa API. This is written in Objective-C++ to allow for integration with Apple's APIs while still being able to operate within the Cacao Engine context.
 
 ## OpenGL Backend (`src/opengl`)
-The OpenGL backend uses OpenGL 4.1 (no GLES) Core Profile, as described in the backends page in the [manual](https://robotleopard86.github.io/CacaoEngine/dev/manual). It is the only common backend across all three major supported platforms, but may in the future lack more advanced features should they be added, simply due to age.  
+The OpenGL backend uses OpenGL 4.1 Core Profile (no OpenGL ES for now), as described in the backends page in the [manual](https://robotleopard86.github.io/CacaoEngine/dev/manual). It is the only common backend across all three major supported platforms, but may in the future lack more advanced features should they be added, simply due to age.  
 
 This also contains the context management code for each of the supported platforms (with the macOS portion being written in Objective-C++). EGL is used on both X11 and Wayland.
 
@@ -45,10 +45,13 @@ All engine source components have access to these private headers, but they shou
 
 These contain important internal systems; for example the `ImplAccessor`, which grants access to the underlying PIMPL pointers from outside of the class, as well as the implementations of said pointer's classes. For more complete information about the tools found in the private headers, view the [private headers guide](src/private/README.md).
 
-## Game Runtime (`src/runtime`)
+## Cacao Runtime (`src/runtime`)
 The prebuilt game runtime is contained here, and is an executable that handles launching games and loading content from the standard bundle structure. This is the executable that is invoked when a game is launched.  
 
 It is possible to build other runtimes based on the Cacao Engine shared library, but that process is not recommended and undocumented.
+
+## Shader Code Library (`src/shaders`)
+All of the built-in Cacao Engine shader code lives here, encompassing both rendering pipeline systems, shaders for rendering UI, built-in shader assets, etc. All shader code for the engine is written in [Slang](https://shader-slang.org) and compiled via the [`ce-shaderc`](../tools/shaderc/README.md) tool bundled with the engine.
 
 ## Vulkan Backend (`src/vulkan`)
 The Vulkan backend uses Vulkan 1.3+ with widely-available extensions, as described in the backends page in the [manual](https://robotleopard86.github.io/CacaoEngine/dev/manual). It works on both Windows and Linux and (for now) is the primary backend for implementation and use, except on macOS as only OpenGL is supported there at present.
