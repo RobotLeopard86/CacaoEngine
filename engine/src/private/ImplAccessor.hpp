@@ -12,6 +12,7 @@
 #include "Cacao/Input.hpp"
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/Shader.hpp"
+#include "Cacao/Material.hpp"
 #include "Cacao/World.hpp"
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
@@ -54,8 +55,12 @@ namespace Cacao {
 		IA_MKGETTER(Model)
 		IA_MKGETTER(Shader)
 		IA_MKGETTER(World)
+		IA_MKGETTER(Material)
 
 	  private:
 		ImplAccessor();
 	};
 }
+
+#undef IA_MKGETTER
+#undef IA_MKGETTER_SINGLE

@@ -35,4 +35,4 @@ This is a utility macro that allows for retrieving environment variables as a `s
 This is a tiny helper macro used to declare `Get` functions for the various singleton objects in the engine. It just makes things cleaner and reduces code duplication.
 
 ## `Targetgen.hpp`
-This header contains the primary interface for shader code generation to the target language for the appropriate graphics API. Its main implementation lives in the engine core, with final codegen responsibilities dedicated to the relevant backend directories.
+This header contains the primary interface for shader code generation to the target language for the appropriate graphics API. Its main implementation lives in the engine core, with final codegen responsibilities delegated to the relevant backend directories.

@@ -99,6 +99,7 @@ namespace Cacao {
 		Tex2D::Impl* ConfigureTex2D() override;
 		Cubemap::Impl* ConfigureCubemap() override;
 		Shader::Impl* ConfigureShader() override;
+		Material::Impl* ConfigureMaterial() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
 
 		OpenGLModule()

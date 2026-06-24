@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cacao/GPU.hpp"
+#include "Cacao/Material.hpp"
 #include "impl/PAL.hpp"
 
 #ifdef __linux__
@@ -149,6 +150,7 @@ namespace Cacao {
 		Tex2D::Impl* ConfigureTex2D() override;
 		Cubemap::Impl* ConfigureCubemap() override;
 		Shader::Impl* ConfigureShader() override;
+		Material::Impl* ConfigureMaterial() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
 		std::unique_ptr<CommandBuffer> CreateCmdBuffer() override;
 

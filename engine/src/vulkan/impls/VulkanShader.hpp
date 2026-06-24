@@ -19,5 +19,9 @@ namespace Cacao {
 
 		//Descriptor set layout
 		vk::DescriptorSetLayout descriptorLayout;
+
+		//Object data UBO (optional)
+		Allocated<vk::Buffer> ubo;
+		void* uboMem;
 	};
 }

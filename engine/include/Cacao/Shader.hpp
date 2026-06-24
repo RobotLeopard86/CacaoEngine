@@ -5,8 +5,6 @@
 
 #include "libcacaoasset.hpp"
 
-#include <cstdint>
-
 namespace Cacao {
 	/**
 	 * @brief Asset type for GPU shaders

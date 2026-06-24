@@ -15,5 +15,9 @@ namespace Cacao {
 
 		//Shader program object
 		GLuint program;
+
+		//Object data UBO (optional)
+		GLuint ubo;
+		GLuint uboBinding;
 	};
 }

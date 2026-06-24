@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <functional>
 
+#include "Cacao/Material.hpp"
 #include "DllHelper.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/PAL.hpp"
@@ -32,6 +33,7 @@ namespace Cacao {
 		virtual Tex2D::Impl* ConfigureTex2D() = 0;
 		virtual Cubemap::Impl* ConfigureCubemap() = 0;
 		virtual Shader::Impl* ConfigureShader() = 0;
+		virtual Material::Impl* ConfigureMaterial() = 0;
 		virtual GPUManager::Impl* ConfigureGPUManager() = 0;
 
 		virtual ~PALModule() {}

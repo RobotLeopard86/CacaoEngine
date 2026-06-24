@@ -10,7 +10,8 @@ engine_srcs += files(
 	'impls' / 'OpenGLMesh.cpp',
 	'impls' / 'OpenGLTex2D.cpp',
 	'impls' / 'OpenGLCubemap.cpp',
-	'impls' / 'OpenGLShader.cpp'
+	'impls' / 'OpenGLShader.cpp',
+	'impls' / 'OpenGLMaterial.cpp'
 )
 engine_inc += include_directories('.')
 engine_deps += gladgl_dep

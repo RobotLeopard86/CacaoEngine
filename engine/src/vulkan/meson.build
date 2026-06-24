@@ -13,11 +13,12 @@ engine_srcs += files(
 	'VulkanModule.cpp',
 	'VulkanImpl.cpp',
 	'Commands.cpp',
+	'wsi' / 'Common.cpp',
 	'impls' / 'VulkanMesh.cpp',
 	'impls' / 'VulkanTex2D.cpp',
 	'impls' / 'VulkanCubemap.cpp',
 	'impls' / 'VulkanShader.cpp',
-	'wsi' / 'Common.cpp'
+	'impls' / 'VulkanMaterial.cpp'
 )
 engine_inc += include_directories('.')
 engine_deps += [vkheaders, vkhpp, vma, vmahpp]
