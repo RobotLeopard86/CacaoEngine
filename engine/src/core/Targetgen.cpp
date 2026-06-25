@@ -2,15 +2,62 @@
 
 #include "Cacao/Exceptions.hpp"
 
+#include "libcacaoasset.hpp"
 #include "slang.h"
 #include "slang-com-ptr.h"
 
 #include <sstream>
+#include <cstring>
 
 using Slang::ComPtr;
 
 namespace Cacao {
-	CompiledShaderObject SetupCSO(ibytestream& in, SlangCompileTarget tgt, const std::string& profile) {
+	std::pair<std::string, std::string> GetEntrypointNames(const libcacaoasset::Shader& in) {
+		//Get the names
+		std::string vsepName, fsepName;
+		if(in.descriptor.domain == libcacaoasset::Shader::Descriptor::Domain::Geometry3D) {
+			fsepName = "Cacao_Surface_FSmain";
+			switch(in.descriptor.mode) {
+				case libcacaoasset::Shader::Descriptor::VertexMode::NoProcess:
+					vsepName = "Cacao_NoProcess3D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessOnly:
+					vsepName = "Cacao_Preprocess3D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PostprocessOnly:
+					vsepName = "Cacao_Postprocess3D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessPostprocess:
+					vsepName = "Cacao_PrePostprocess3D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::Custom:
+					vsepName = "Cacao_Custom3D_VSmain";
+					break;
+			}
+		} else {
+			fsepName = "Cacao_Canvas_FSmain";
+			switch(in.descriptor.mode) {
+				case libcacaoasset::Shader::Descriptor::VertexMode::NoProcess:
+					vsepName = "Cacao_NoProcess2D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessOnly:
+					vsepName = "Cacao_Preprocess2D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::Custom:
+					vsepName = "Cacao_Custom2D_VSmain";
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PostprocessOnly:
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessPostprocess:
+					Check<BadValueException>(false, "2D shaders may not use post-processing!");
+					throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
+			}
+		}
+
+		//Put 'em in a pair
+		return std::make_pair<std::string, std::string>(std::move(vsepName), std::move(vsepName));
+	}
+
+	CompiledShaderObject SetupCSO(const libcacaoasset::Shader& in, SlangCompileTarget tgt, const std::string& profile) {
 		CompiledShaderObject cso;
 
 		//Configure global session
@@ -78,27 +125,8 @@ namespace Cacao {
 		//Create user module
 		ComPtr<slang::IModule> usrModule;
 		{
-			//Read out input buffer
-			std::vector<unsigned char> irData = [&in]() {
-				try {
-					//Grab size
-					in.clear();
-					in.exceptions(std::ios::failbit | std::ios::badbit);
-					in.seekg(0, std::ios::end);
-					auto size = in.tellg();
-					in.seekg(0, std::ios::beg);
-
-					//Read data
-					std::vector<unsigned char> contents(size);
-					in.read(reinterpret_cast<char*>(contents.data()), size);
-
-					return contents;
-				} catch(std::ios_base::failure& ios_failure) {
-					if(errno == 0) { throw ios_failure; }
-					throw std::runtime_error("Failed to read shader bytecode stream!");
-				}
-			}();
-			slang::IBlob* irBlob = slang_createBlob(irData.data(), irData.size());
+			//Create Slang blob
+			slang::IBlob* irBlob = slang_createBlob(in.irCode.data(), in.irCode.size());
 			Check<ExternalException>(irBlob != nullptr, "Failed to create IR blob!");
 
 			ComPtr<slang::IBlob> diagnosticsBlob;
@@ -116,15 +144,57 @@ namespace Cacao {
 			}
 		}
 
+		//Create Cacao Engine pipelines module
+		constexpr const char* vpipelineModuleSrc =
+#include "vertex_pipeline.inc"
+			;
+		constexpr const char* fpipelineModuleSrc =
+#include "fragment_pipeline.inc"
+			;
+		ComPtr<slang::IModule> vpipelineModule, fpipelineModule;
+		{
+			ComPtr<slang::IBlob> diagnosticsBlob;
+			vpipelineModule = cso.session->loadModuleFromSourceString("vertex_pipeline", "vertex_pipeline.slang", vpipelineModuleSrc, diagnosticsBlob.writeRef());
+			if(!vpipelineModule) {
+				std::stringstream err;
+				err << "Failed to create Cacao vertex pipeline module";
+				if(diagnosticsBlob) {
+					err << ":\n"
+						<< (const char*)diagnosticsBlob->getBufferPointer();
+				} else {
+					err << "!";
+				}
+				Check<ExternalException>(false, err.str());
+			}
+		}
+		{
+			ComPtr<slang::IBlob> diagnosticsBlob;
+			fpipelineModule = cso.session->loadModuleFromSourceString("fragment_pipeline", "fragment_pipeline.slang", fpipelineModuleSrc, diagnosticsBlob.writeRef());
+			if(!fpipelineModule) {
+				std::stringstream err;
+				err << "Failed to create Cacao fragment pipeline module";
+				if(diagnosticsBlob) {
+					err << ":\n"
+						<< (const char*)diagnosticsBlob->getBufferPointer();
+				} else {
+					err << "!";
+				}
+				Check<ExternalException>(false, err.str());
+			}
+		}
+
 		//Get entry points
 		ComPtr<slang::IEntryPoint> vsep, fsep;
-		Check<ExternalException>(usrModule->findEntryPointByName("VS_main", vsep.writeRef()) == SLANG_OK, "Failed to fetch vertex stage entrypoint!");
-		Check<ExternalException>(usrModule->findEntryPointByName("FS_main", fsep.writeRef()) == SLANG_OK, "Failed to fetch fragment stage entrypoint!");
+		auto [vsepName, fsepName] = GetEntrypointNames(in);
+		Check<ExternalException>(usrModule->findEntryPointByName(vsepName.c_str(), vsep.writeRef()) == SLANG_OK, "Failed to fetch vertex stage entrypoint!");
+		Check<ExternalException>(usrModule->findEntryPointByName(fsepName.c_str(), fsep.writeRef()) == SLANG_OK, "Failed to fetch fragment stage entrypoint!");
 
 		//Compose program
-		std::array<slang::IComponentType*, 4> componentTypes {
+		std::array<slang::IComponentType*, 6> componentTypes {
 			cacaoModule,
 			usrModule,
+			vpipelineModule,
+			fpipelineModule,
 			vsep,
 			fsep};
 		ComPtr<slang::IComponentType> composed;
@@ -165,7 +235,7 @@ namespace Cacao {
 		return cso;
 	}
 
-	std::vector<uint32_t> GenerateSPV(ibytestream& in) {
+	std::vector<uint32_t> GenerateSPV(const libcacaoasset::Shader& in) {
 		//Create CSO
 		CompiledShaderObject cso = SetupCSO(in, SlangCompileTarget::SLANG_SPIRV, "spirv_1_3");
 

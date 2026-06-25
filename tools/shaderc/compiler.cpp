@@ -191,7 +191,7 @@ std::pair<bool, std::string> CacaoShaderCompiler::compile(const std::filesystem:
 		slang::FunctionReflection* pre2D = layout->findFunctionByName("CacaoVertexPreprocess2D");
 		slang::FunctionReflection* custom2D = layout->findFunctionByName("CacaoVertexCustom2D");
 		slang::FunctionReflection* surface = layout->findFunctionByName("CacaoSurfaceMain");
-		slang::FunctionReflection* canvas = layout->findFunctionByName("CacaoCanvasurface");
+		slang::FunctionReflection* canvas = layout->findFunctionByName("CacaoCanvasMain");
 		constexpr uint8_t PRE3D = (1 << 0);
 		constexpr uint8_t POST3D = (1 << 1);
 		constexpr uint8_t CUSTOM3D = (1 << 2);

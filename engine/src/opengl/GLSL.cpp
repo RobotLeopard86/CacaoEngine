@@ -5,7 +5,7 @@
 #include "spirv_glsl.hpp"
 
 namespace Cacao {
-	GLSL GenerateGLSL(ibytestream& in, bool es) {
+	GLSL GenerateGLSL(const libcacaoasset::Shader& in, bool es) {
 		//Get SPIR-V
 		std::vector<uint32_t> spv = GenerateSPV(in);
 
@@ -33,13 +33,14 @@ namespace Cacao {
 
 		//Create output object
 		GLSL code = {};
+		auto [vsepName, fsepName] = GetEntrypointNames(in);
 
 		//Get vertex shader code
-		glsl.set_entry_point("VS_main", spv::ExecutionModel::ExecutionModelVertex);
+		glsl.set_entry_point(vsepName, spv::ExecutionModel::ExecutionModelVertex);
 		code.vertex = glsl.compile();
 
 		//Get fragment shader code
-		glsl.set_entry_point("FS_main", spv::ExecutionModel::ExecutionModelFragment);
+		glsl.set_entry_point(vsepName, spv::ExecutionModel::ExecutionModelFragment);
 		code.fragment = glsl.compile();
 
 		//Return the goodies
