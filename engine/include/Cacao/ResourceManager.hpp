@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Asset.hpp"
+#include "Cacao/Tex2D.hpp"
+#include "Model.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 #include "Engine.hpp"
+#include "exathread.hpp"
 
 #include <exception>
 #include <memory>
@@ -125,44 +128,28 @@ namespace Cacao {
 		std::shared_ptr<Resource> CheckCache(const std::string& addr);
 		bool IsLoaderRegistered(std::type_index tp);
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
+		exathread::ValueTask<std::shared_ptr<Resource>> _AsyncLoadOpImpl(std::string addr, std::type_index tp);
 
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
-		std::shared_ptr<T> _AsyncLoadOp(std::string address) {
+		exathread::ValueTask<std::shared_ptr<T>> _AsyncLoadOp(std::string address) {
 			//Check if this is a built-in resource
 			if(address.starts_with("a:builtin_")) {
 				//TODO: redirect query to built-in resource gallery
-				return {};
+				co_return {};
 			}
 
-			//Check cache
-			std::shared_ptr<Resource> maybeCached = CheckCache(address);
-			if(maybeCached) {
-				//There is a cached resource
-				try {
-					//Try to cast the resource to the correct type and return it
-					return std::dynamic_pointer_cast<T>(maybeCached);
-				} catch(const std::bad_cast&) {
-					Check<BadTypeException>(false, "Resource exists in cache, but is not of the requested type!");
-					return {};
-				}
-			}
-
-			//Resource was not in cache, we need to load it
-			//Check for a valid loader
-			Check<BadStateException>(IsLoaderRegistered(typeid(T)), "No resource loader configured for the requested type!");
-
-			//Try to load the asset
-			std::shared_ptr<Resource> res = InvokeLoader(typeid(T), address);
+			//Return casted impl
+			exathread::Future<std::shared_ptr<Resource>> fut = Engine::Get().GetThreadPool()->submit(std::bind(&ResourceManager::_AsyncLoadOpImpl, this, std::placeholders::_1, std::placeholders::_2),
+				address, std::type_index {typeid(T)});
+			co_await exathread::yieldUntilComplete(fut);
+			std::shared_ptr<Resource> result = *fut;
 			try {
-				//Try to cast the resource to the correct type and return it
-				return std::dynamic_pointer_cast<T>(res);
+				co_return std::dynamic_pointer_cast<T>(result);
 			} catch(const std::bad_cast&) {
-				Check<BadTypeException>(false, "Resource was loaded, but the returned object is not of the requested type!");
-				return {};
+				Check<BadTypeException>(false, "Resource exists, but is not of the requested type!");
+				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
 			}
-
-			return {};
 		}
 
 		///@cond

@@ -13,8 +13,8 @@
 
 void Runtime::SetupEngine() {
 	//Initialize engine
-	Cacao::Engine::Get().CoreInit(icfg);
-	Cacao::Engine::Get().GfxInit();
+	Engine::Get().CoreInit(icfg);
+	Engine::Get().GfxInit();
 
 	//Configure resource loading
 	CfgLoader();
@@ -83,17 +83,21 @@ ABIHandshakeInfo GetRuntimeABIInfo() {
 }
 
 void Runtime::LoadGame() {
-	Cacao::Logger::Runtime() << "Welcome to \"" << cacaospec.meta.title << "\" (" << cacaospec.meta.pkgId << ")!";
-	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Loading game binary...";
+	Logger::Runtime() << "Welcome to \"" << cacaospec.meta.title << "\" (" << cacaospec.meta.pkgId << ")!";
+	Logger::Runtime(Logger::Level::Trace) << "Loading game binary...";
 
 	//Load binary
 	gameBinary = std::make_unique<dynalo::library>(cacaospec.binary);
 
 	//Perform ABI checks
-	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Performing ABI compatibility checks...";
+	Logger::Runtime(Logger::Level::Trace) << "Performing ABI compatibility checks...";
 	ABIHandshakeInfo gameABI = gameBinary->get_function<ABIHandshakeInfo()>("__CacaoAbiInfoHandshake")();
 	ABIHandshakeInfo ourABI = GetRuntimeABIInfo();
-#define binpanic(msg) panic(msg, "This usually means the game binary is not compiled with the correct settings to match the runtime")
+#define binpanic(msg)                                                                                                                                            \
+	{                                                                                                                                                            \
+		Logger::Runtime(Logger::Level::Error) << msg << "! This usually means the game binary was not compiled with the correct settings to match the runtime."; \
+		throw 0;                                                                                                                                                 \
+	}
 	if(gameABI.dbg != ourABI.dbg) binpanic("Debug mode mismatch");
 	if(gameABI.pointerSz != ourABI.pointerSz) binpanic("Pointer size mismatch");
 	if(gameABI.sizetSz != ourABI.sizetSz) binpanic("size_t size mismatch");
@@ -134,7 +138,7 @@ void Runtime::LoadGame() {
 	if(funcs.engineConsumeCallback()(72) != 74) binpanic("Engine cannot receive game binary callbacks!");
 #undef binpanic
 
-	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Scanning resources...";
+	Logger::Runtime(Logger::Level::Trace) << "Scanning resources...";
 	Check<FileNotFoundException>(std::filesystem::exists("worlds") && std::filesystem::is_directory("worlds"), "Worlds directory does not exist!");
 	Check<FileNotFoundException>(std::filesystem::exists("packs") && std::filesystem::is_directory("packs"), "Asset packs directory does not exist!");
 	for(const std::filesystem::path& p : std::filesystem::directory_iterator("worlds")) {
@@ -149,11 +153,11 @@ void Runtime::LoadGame() {
 		}
 	}
 
-	Cacao::Logger::Runtime() << "Game package successfully loaded!";
-	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Preparing to run...";
+	Logger::Runtime() << "Game package successfully loaded!";
+	Logger::Runtime(Logger::Level::Trace) << "Preparing to run...";
 
 	//Load and activate initial world
-	Cacao::WorldManager::Get().SetActiveWorld(rt.cacaospec.startupWorld);
+	WorldManager::Get().SetActiveWorld(rt.cacaospec.startupWorld);
 }
 
 void Runtime::DestroyGfxObjects() {
@@ -162,6 +166,6 @@ void Runtime::DestroyGfxObjects() {
 
 void Runtime::Cleanup() {
 	//Unload binary
-	Cacao::Logger::Runtime(Cacao::Logger::Level::Trace) << "Unloading game binary...";
+	Logger::Runtime(Logger::Level::Trace) << "Unloading game binary...";
 	gameBinary.reset();
 }

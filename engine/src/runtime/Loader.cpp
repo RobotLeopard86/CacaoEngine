@@ -44,10 +44,6 @@ class RTLoader {
 		using type = std::vector<unsigned char>;
 	};
 	template<>
-	struct intermediate<Mesh> {
-		using type = std::pair<std::vector<Vertex>, std::vector<glm::uvec3>>;
-	};
-	template<>
 	struct intermediate<Sound> {
 		using type = std::vector<char>;
 	};
@@ -104,9 +100,9 @@ std::unique_ptr<libcacaoasset::Cubemap> RTLoader::FetchData<Cubemap>(const std::
 	//Open asset pack and get resource
 	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
 	libcacaoasset::Resource r = pak.GetResource(addr);
-	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Cubemap, "Tried to load a resource as a cubemap that was not one!");
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Cubemap, "Tried to load a resource as a cubemap that is not one!");
 
-	//Decode world and return (pointer will be freed by DecodeCubemap)
+	//Decode cubemap and return (pointer will be freed by DecodeCubemap)
 	ibytestream* ibs = new ibytestream(r.bytes);
 	libcacaoasset::Cubemap cmap;
 	try {
@@ -158,9 +154,9 @@ std::unique_ptr<libcacaoasset::Shader> RTLoader::FetchData<Shader>(const std::st
 	//Open asset pack and get resource
 	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
 	libcacaoasset::Resource r = pak.GetResource(addr);
-	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Shader, "Tried to load a resource as a shader that was not one!");
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Shader, "Tried to load a resource as a shader that is not one!");
 
-	//Decode world and return (pointer will be freed by DecodeCubemap)
+	//Decode shader and return (pointer will be freed by DecodeShader)
 	ibytestream* ibs = new ibytestream(r.bytes);
 	libcacaoasset::Shader shader;
 	try {
@@ -184,7 +180,7 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Tex2D>(const std
 	//Open asset pack and get resource
 	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
 	libcacaoasset::Resource r = pak.GetResource(addr);
-	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Tex2D, "Tried to load a resource as a 2D texture that was not one!");
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Tex2D, "Tried to load a resource as a 2D texture that is not one!");
 
 	return std::make_unique<std::vector<unsigned char>>(std::move(r.bytes));
 }
@@ -203,7 +199,7 @@ std::unique_ptr<std::vector<char>> RTLoader::FetchData<Sound>(const std::string&
 	//Open asset pack and get resource
 	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
 	libcacaoasset::Resource r = pak.GetResource(addr);
-	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Audio, "Tried to load a resource as a sound that was not one!");
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Audio, "Tried to load a resource as a sound that is not one!");
 
 	//Convert to vector<char>
 	std::unique_ptr<std::vector<char>> asChar = std::make_unique<std::vector<char>>();
@@ -224,7 +220,7 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Model>(const std
 	//Open asset pack and get resource
 	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
 	libcacaoasset::Resource r = pak.GetResource(addr);
-	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Model, "Tried to load a resource as a model that was not one!");
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Model, "Tried to load a resource as a model that is not one!");
 
 	return std::make_unique<std::vector<unsigned char>>(std::move(r.bytes));
 }
@@ -241,7 +237,7 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<BlobResource>(co
 	//Open asset pack and get resource
 	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
 	libcacaoasset::Resource r = pak.GetResource(addr);
-	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Blob, "Tried to load a resource as a blob that was not one!");
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Blob, "Tried to load a resource as a blob that is not one!");
 
 	return std::make_unique<std::vector<unsigned char>>(std::move(r.bytes));
 }

@@ -72,7 +72,7 @@ engine_srcs += files(
 	'Model.cpp',
 	'PAL.cpp',
 	'PerspectiveCamera.cpp',
-	'Resource.cpp',
+	'ResourceManager.cpp',
 	'Shader.cpp',
 	'Sound.cpp',
 	'Targetgen.cpp',

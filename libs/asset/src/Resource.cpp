@@ -21,11 +21,11 @@ namespace libcacaoasset {
 	}
 
 	bool ValidateResourceAddress_Tex2D(const std::string& addr) {
-		return BaseResAddrCheck(addr, addr[0] == 'm' ? "/" : "") && (addr[0] == 'a' || (addr[0] == 'm' && addr[2] == 't' && addr[3] == 'e' && addr[4] == 'x' && addr[5] == '/' && addr.find_first_of('/' == addr.find_last_of('/'))));
+		return BaseResAddrCheck(addr, addr[0] == 'e' ? "/" : "") && (addr[0] == 'a' || (addr[0] == 'e' && addr.find_first_of('/') == addr.find_last_of('/')));
 	}
 
 	bool ValidateResourceAddress_Mesh(const std::string& addr) {
-		return BaseResAddrCheck(addr, addr[0] == 'm' ? "/" : "") && (addr[0] == 'a' || (addr[0] == 'm' && addr[2] == 'm' && addr[3] == 's' && addr[4] == 'h' && addr[5] == '/' && addr.find_first_of('/' == addr.find_last_of('/'))));
+		return BaseResAddrCheck(addr, "/") && addr[0] == 'm' && addr.find_first_of('/') == addr.find_last_of('/');
 	}
 
 	bool ValidateResourceAddress_AssetGeneric(const std::string& addr) {

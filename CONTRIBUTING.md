@@ -63,13 +63,13 @@ During release preparation, a branch should be made from `main` named `staging/<
 Release tags should be made for all releases, regardless of status (alpha, beta, RC, stable), and created from the staging branch, being named exactly the same as the version number (see the [versioning info page on the documentation site](https://robotleopard86.github.io/CacaoEngine/dev/manual/versioning.html) for further information); no prefix or suffix should be used (`2026.1.0a`, not `v2026.1.0a`)
 
 ## AI Policy
-While generative AI is extremely useful for programming, we have certain rules regarding how generative AI may be used in Cacao Engine.  
+While generative AI is extremely useful for programming, there are rules regarding how generative AI may be used in Cacao Engine.  
 
-It is perfectly acceptable to use AI for brainstorming, prototyping, debugging, and code generation (provided you actually engage in the design process and review the code prior to submission). However, you **must be able to explain _in detail_ what your code is doing** without the AI's help and are wholly responsible for the code you submit.  
+It is perfectly acceptable to use AI for brainstorming, prototyping, debugging, and code generation (provided you actually engage in the design process and **manually review the code** prior to submission). However, you **must be able to explain _in detail_ what your code is doing** without the AI's help and are wholly responsible for the code you submit.  
 
 If you use AI in this manner, please include the **unedited** chat log for your change (although it's fine to censor stuff like personal information) as an attachment on your PR. You must show that sufficient human effort was put into the PR. If you cannot explain your patch without the AI's help or cannot demonstrate that you involved yourself in the development process (aside from tiny, self-explanatory patches), **your PR will be rejected**.  
 
-As for what counts as sufficient human involvement, we would look to see things such as involved planning and design conversation, multiple rounds of iteration and feedback, and/or manual edits. For the most part, you should be fine as long as you don't just tell the AI "fix this bug" or "implement this feature" and leave it at that.
+As for what counts as sufficient human involvement, things such as involved planning and design conversation, multiple rounds of iteration and feedback, and/or manual edits will generally qualify. For the most part, you should be fine as long as you don't just tell the AI "fix this bug" or "implement this feature" and leave it at that.
 
 More scrutiny will be applied to AI-generated changes to more important components, and less for smaller pieces like scripts/Meson files. Sweeping AI-generated changes to the codebase will generally be rejected, especially if no clear or satisfactory reason can be provided.
 

@@ -16,7 +16,7 @@ Assets are contained in an asset pack and are resources that have a direct engin
 * 2D Textures
 * Cubemaps
 * Sounds
-* Models (see dedicated section below)
+* Models
 * Fonts
 * Shaders
 * Materials
@@ -27,9 +27,13 @@ If you use auto-generated asset addresses for your packs and don't recall the as
 ```  
 
 ## Models
-Models are also stored in asset packs just like assets. However, their main use comes from the meshes and textures that they contain. While models themselves may be loaded by directly using their address, often you will want to specifically refer to the contained assets.
+Models are stored in asset packs, and may themselves be loaded by directly using their address. However, often, you want to refer to the contained assets (namely meshes and textures). Thus, a special address format exists for referencing these contained assets. You cannot use need these special addresses when working with the `Model` class API, but the resource manager will accept them and cache the model for future requests.
 
-To access these, you use a special address. These address use the type prefix `m`, and the identifier is the the model asset address followed by the type of subasset (`msh` for a mesh or `tex` for a texture), a `/`, and then the mesh/texture name within the model. You cannot use need these special addresses when working with the `Model` class API, but the resource manager will accept them and cache the model for future requests.
+### Meshes
+Meshes, unlike most assets, are not contained directly within asset packs, but instead within models. To access a mesh, use its special address format, which uses the type prefix `m`. The identifier consists of the containing model's identifier, a `/`, then the mesh's name within the model.
+
+### Textures
+Though many textures are stored externally to a model file, some formats contain embedded textures. To access these embedded textures, use their special address format, which has the type prefix `e`. The identifier consists of the containing model's identifier, a `/`, then the texture's name within the model.
 
 ## Worlds
 Worlds are where your game takes place. They are stored separately from assets, but may reference them. Loading a world will often trigger asset loading as well. World discovery will fail if the world is not in the proper location.  

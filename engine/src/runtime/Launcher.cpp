@@ -15,9 +15,9 @@
 #include "cacaort.astra.hpp"
 
 void panic(const std::string& err, const std::string& hint) {
-	std::cerr << "ERROR: " << err << "!\n"
-			  << (!hint.empty() ? std::string("Hint: ") + hint + ".\n" : "")
-			  << "If you are an end user seeing this error, please report this to the developer of the application." << std::endl;
+	std::cerr << "\x1b[1;91mERROR: \x1b[0m" << err << "!\n"
+			  << (!hint.empty() ? std::string("\x1b[1;96mHint: \x1b[0m") + hint + ".\n" : "")
+			  << "\x1b[3mIf you are an end user seeing this error, please report this to the developer of the application.\x1b[0m" << std::endl;
 	exit(-1);
 }
 
@@ -109,6 +109,8 @@ int main(int argc, char* argv[]) {
 		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in engine initialization. Exiting...";
 		Engine::Get().GfxShutdown();
 		Engine::Get().CoreShutdown();
+		Logger::Runtime(Logger::Level::Warn) << "Engine exited with an error code!";
+		Logger::Runtime(Logger::Level::Warn) << "If you are an end user seeing this error, please report it to the application developer.";
 		exit(-1);
 	}
 
@@ -122,6 +124,8 @@ int main(int argc, char* argv[]) {
 		rt.Cleanup();
 		Engine::Get().GfxShutdown();
 		Engine::Get().CoreShutdown();
+		Logger::Runtime(Logger::Level::Warn) << "Engine exited with an error code!";
+		Logger::Runtime(Logger::Level::Warn) << "If you are an end user seeing this error, please report it to the application developer.";
 		exit(-1);
 	}
 
