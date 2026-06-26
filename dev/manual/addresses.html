@@ -425,7 +425,7 @@
 <li><p>2D Textures</p></li>
 <li><p>Cubemaps</p></li>
 <li><p>Sounds</p></li>
-<li><p>Models (see dedicated section below)</p></li>
+<li><p>Models</p></li>
 <li><p>Fonts</p></li>
 <li><p>Shaders</p></li>
 <li><p>Materials</p></li>
@@ -438,8 +438,15 @@
 </section>
 <section id="models">
 <h2>Models<a class="headerlink" href="#models" title="Link to this heading"><span/></a></h2>
-<p>Models are also stored in asset packs just like assets. However, their main use comes from the meshes and textures that they contain. While models themselves may be loaded by directly using their address, often you will want to specifically refer to the contained assets.</p>
-<p>To access these, you use a special address. These address use the type prefix <code class="docutils literal notranslate"><span class="pre">m</span></code>, and the identifier is the the model asset address followed by the type of subasset (<code class="docutils literal notranslate"><span class="pre">msh</span></code> for a mesh or <code class="docutils literal notranslate"><span class="pre">tex</span></code> for a texture), a <code class="docutils literal notranslate"><span class="pre">/</span></code>, and then the mesh/texture name within the model. You cannot use need these special addresses when working with the <code class="docutils literal notranslate"><span class="pre">Model</span></code> class API, but the resource manager will accept them and cache the model for future requests.</p>
+<p>Models are stored in asset packs, and may themselves be loaded by directly using their address. However, often, you want to refer to the contained assets (namely meshes and textures). Thus, a special address format exists for referencing these contained assets. You cannot use need these special addresses when working with the <code class="docutils literal notranslate"><span class="pre">Model</span></code> class API, but the resource manager will accept them and cache the model for future requests.</p>
+<section id="meshes">
+<h3>Meshes<a class="headerlink" href="#meshes" title="Link to this heading"><span/></a></h3>
+<p>Meshes, unlike most assets, are not contained directly within asset packs, but instead within models. To access a mesh, use its special address format, which uses the type prefix <code class="docutils literal notranslate"><span class="pre">m</span></code>. The identifier consists of the containing model’s identifier, a <code class="docutils literal notranslate"><span class="pre">/</span></code>, then the mesh’s name within the model.</p>
+</section>
+<section id="textures">
+<h3>Textures<a class="headerlink" href="#textures" title="Link to this heading"><span/></a></h3>
+<p>Though many textures are stored externally to a model file, some formats contain embedded textures. To access these embedded textures, use their special address format, which has the type prefix <code class="docutils literal notranslate"><span class="pre">e</span></code>. The identifier consists of the containing model’s identifier, a <code class="docutils literal notranslate"><span class="pre">/</span></code>, then the texture’s name within the model.</p>
+</section>
 </section>
 <section id="worlds">
 <h2>Worlds<a class="headerlink" href="#worlds" title="Link to this heading"><span/></a></h2>
@@ -497,7 +504,11 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blob-resources">Blob Resources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assets">Assets</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meshes">Meshes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#textures">Textures</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worlds">Worlds</a></li>
 </ul>
   </nav></div>
