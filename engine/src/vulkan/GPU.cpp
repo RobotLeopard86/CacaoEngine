@@ -78,7 +78,6 @@ namespace Cacao {
 
 		//If this was a rendering context, release context
 		if(render) render = nullptr;
-		if(render) render = nullptr;
 		if(transient) transient = nullptr;
 
 		//Free command buffer
