@@ -215,7 +215,7 @@ namespace Cacao {
 		}
 
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
-		Event e("EngineShutdown");
+		Event e("ClientQuit");
 		EventManager::Get().Dispatch(e);
 	}
 
@@ -257,14 +257,18 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Terminating audio system...";
 		AudioManager::Get().Terminate();
 
-		//Stop thread pool
-		Logger::Engine(Logger::Level::Trace) << "Stopping thread pool...";
-		pool->waitIdle();
-		pool.reset();
+		//Fire shutdown event (this (for now) will block until all consumers have responded)
+		Event e("EngineShutdown");
+		EventManager::Get().Dispatch(e);
 
 		//Unsubscribe all final event consumers
 		Logger::Engine(Logger::Level::Trace) << "Unsubscribing remaining event consumers...";
 		EventManager::Get().UnsubscribeAllConsumers();
+
+		//Stop thread pool
+		Logger::Engine(Logger::Level::Trace) << "Stopping thread pool...";
+		pool->waitIdle();
+		pool.reset();
 
 		//Final goodbye message
 		std::lock_guard lkg(stateMtx);

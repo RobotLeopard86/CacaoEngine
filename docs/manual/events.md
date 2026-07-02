@@ -3,6 +3,7 @@
 The below are all of the built-in event types in Cacao Engine.
 | Event ID | Trigger | Type |
 | -------- | ------- | ---- |
+| `ClientQuit` | The client has requested the engine to quit | `Event` |
 | `EngineShutdown` | The engine is shutting down | `Event` |
 | `WindowClose` | The window is closing | `Event` |
 | `WindowResize` | The size of the window has changed | `DataEvent<glm::uvec2>` |
@@ -13,4 +14,4 @@ The below are all of the built-in event types in Cacao Engine.
 | `KeyDown` | A key has been pressed | `DataEvent<unsigned int>` |
 | `KeyUp` | A key has been released | `DataEvent<unsigned int>` |  
 
-There are also certain internal event types that are used for communication within the engine but should not be used by external code. These types are thus not documented here, but may be found in the private headers document in the engine source tree.
+There are also certain internal event types that are used for communication within the engine but should not be used by external code. These types are thus not documented here.

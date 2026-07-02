@@ -7,7 +7,6 @@
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 #include "Engine.hpp"
-#include "exathread.hpp"
 
 #include <exception>
 #include <memory>
@@ -18,7 +17,7 @@
 
 namespace Cacao {
 	//This is a helper type typedef because fully written out it's super long and nonsensical
-	//To explain: This is the contained type of the returned unique_ptr type of a raw T (deref-ed for consistency)'s FetchData function
+	//To explain: Given a type T (deref'ed for consistency), LoaderIntermediate is the U in the unique_ptr<U> return value of T's FetchData function
 	///@cond
 	template<typename T, typename R>
 	using LoaderIntermediate = decltype(std::declval<std::remove_reference_t<T>>().template FetchData<R>(std::declval<std::string>()))::element_type;

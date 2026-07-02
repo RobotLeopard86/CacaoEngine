@@ -1,6 +1,8 @@
 #include "Cacao/World.hpp"
 #include "Cacao/Actor.hpp"
 #include "Cacao/CodeRegistry.hpp"
+#include "Cacao/EventConsumer.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/PerspectiveCamera.hpp"
 #include "Cacao/Resource.hpp"
@@ -135,11 +137,19 @@ namespace Cacao {
 
 	struct WorldManager::Impl {
 		std::shared_ptr<World> active;
+		EventConsumer shutdownConsumer;
 	};
 
 	WorldManager::WorldManager() {
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
+
+		//Register active world release on shutdown
+		impl->shutdownConsumer = EventConsumer([this](Event&) {
+			impl->active.reset();
+			EventManager::Get().UnsubscribeConsumer("EngineShutdown", impl->shutdownConsumer);
+		});
+		EventManager::Get().SubscribeConsumer("EngineShutdown", impl->shutdownConsumer);
 	}
 
 	WorldManager::~WorldManager() {}

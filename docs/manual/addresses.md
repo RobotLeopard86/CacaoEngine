@@ -2,8 +2,6 @@
 
 Loading anything related to your game in Cacao Engine requires you to know its address. This is a specially-formatted string describing how to fetch the resource and its identifier.  Specifically, it is formated like this: `<type prefix>:<identifier>`. Note that all addresses are case-sensitive. Unless explicitly specified by the resource type (such as a `/` for a separator), only alphanumeric characters and underscores are permitted in the identifier.   
 
-As a general note, the engine will refuse to load unpacked Cacao Engine formats at runtime. For that reason, referencing an unpacked-format file will fail as the engine won't be able to discover it.
-
 Below, the different formats are specified.
 
 ## Blob Resources

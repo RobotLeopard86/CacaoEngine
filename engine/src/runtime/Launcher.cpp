@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
 		exit(-1);
 	}
 
-	//Run (blocks)
+	//Run (blocks until the game says it's done)
 	Engine::Get().Run();
 
 	//Game has stopped now, destroy graphics objects before shutting down that part of the engine
