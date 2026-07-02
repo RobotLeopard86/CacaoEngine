@@ -402,7 +402,6 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Engine.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;exathread.hpp&quot;</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
@@ -413,7 +412,7 @@
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">//This is a helper type typedef because fully written out it&#39;s super long and nonsensical</span>
-<span class="w">    </span><span class="c1">//To explain: This is the contained type of the returned unique_ptr type of a raw T (deref-ed for consistency)&#39;s FetchData function</span>
+<span class="w">    </span><span class="c1">//To explain: Given a type T (deref&#39;ed for consistency), LoaderIntermediate is the U in the unique_ptr&lt;U&gt; return value of T&#39;s FetchData function</span>
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">R</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">LoaderIntermediate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">decltype</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="k">template</span><span class="w"> </span><span class="n">FetchData</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">()))</span><span class="o">::</span><span class="n">element_type</span><span class="p">;</span>
 
