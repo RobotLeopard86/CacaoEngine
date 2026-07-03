@@ -3,13 +3,21 @@ import cacaousercode;
 
 Cacao::VSOut3D _GenOutput(Cacao::VSIn3D input) {
 	Cacao::VSOut3D out = {};
-	//TODO: everything
+	float4 worldPos = mul(Cacao::transform.transformMatrix, float4(input.position, 1.0));
+	out.surfaceIn.worldPos = worldPos.xyz / worldPos.w;
+	out.gpuPosition = mul(Cacao::cam.viewProjectionMatrix, worldPos);
+	out.surfaceIn.localPos = input.position;
+	out.surfaceIn.texCoords = input.texCoords;
+	out.surfaceIn.normal = normalize(mul(Cacao::transform.normalMatrix, input.normal));
+	out.surfaceIn.tangent = float4(normalize(mul(Cacao::transform.normalMatrix, input.tangent.xyz)), input.tangent.w * Cacao::transform.handedness);
 	return out;
 }
 
 Cacao::VSOut2D _GenOutput2D(Cacao::VSIn2D input) {
 	Cacao::VSOut2D out = {};
-	//TODO: everything
+	out.gpuPosition = mul(Cacao::cam.projectionMatrix, float4(input.position, 0.0, 1.0));
+	out.canvasIn.position = input.position;
+	out.canvasIn.texCoords = input.texCoords;
 	return out;
 }
 

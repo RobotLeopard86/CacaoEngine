@@ -61,7 +61,8 @@ namespace Cacao {
 
 	struct Transform {
 		float4x4 transformMatrix;
-		float4x4 normalMatrix;
+		float3x3 normalMatrix;
+		float handedness;
 	};
 
 	[vk::push_constant]
