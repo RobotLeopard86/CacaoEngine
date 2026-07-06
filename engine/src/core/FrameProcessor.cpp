@@ -134,12 +134,8 @@ namespace Cacao {
 			if(!cmd->SetupContext(true)) continue;
 
 			//Clear color
-			static glm::vec3 clearColor {0x00, 0xAC, 0xE6};
-			static float adjust = 1.0f;
-			clearColor.r += adjust;
-			if(clearColor.r >= 0xFF) adjust = -1.0f;
-			if(clearColor.r <= 0) adjust = 1.0f;
-			const glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
+			constexpr static glm::vec3 clearColor {0x00, 0xAC, 0xE6};
+			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
 
 			//Record commands
 			cmd->StartRendering(clearColorLinear);

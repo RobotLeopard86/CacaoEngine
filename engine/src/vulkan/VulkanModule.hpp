@@ -43,6 +43,13 @@ namespace Cacao {
 		ViewImage(std::pair<vk::Image, vma::Allocation> p) : Allocated<vk::Image>(p) {}
 	};
 
+	struct MappedBuffer : Allocated<vk::Buffer> {
+		void* mem;
+
+		MappedBuffer() {}
+		MappedBuffer(std::pair<vk::Buffer, vma::Allocation> p) : Allocated<vk::Buffer>(p) {}
+	};
+
 	struct Sync {
 		vk::Semaphore semaphore;
 		uint64_t doneValue = 0;
@@ -186,8 +193,8 @@ namespace Cacao {
 		vk::CommandPool renderingPool;
 
 		//==================== GLOBALS UBO AND MEMORY ====================
-		Allocated<vk::Buffer> globalsUBO;
-		void* globalsMem;
+		MappedBuffer globals;
+		MappedBuffer camData;
 
 		//==================== MISCELLANEOUS FIELDS ====================
 		bool vsync;

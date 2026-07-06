@@ -14,14 +14,26 @@ namespace Cacao {
 		std::vector<uint32_t> spv;
 
 		//Pipeline object and layout
-		vk::Pipeline pipeline;
+		vk::Pipeline pipelineOpaque;
+		vk::Pipeline pipelineTransparent;
 		vk::PipelineLayout layout;
 
-		//Descriptor set layout
-		vk::DescriptorSetLayout descriptorLayout;
+		//Descriptor set layouts
+		vk::DescriptorSetLayout cacaoLayout;
+		vk::DescriptorSetLayout matLayout;//optional
 
-		//Object data UBO (optional)
-		Allocated<vk::Buffer> ubo;
-		void* uboMem;
+		//Material data UBO (optional)
+		MappedBuffer materialData;
+
+		//Custom shader compilation settings
+		struct CustomCompileSettings {
+			bool blendUseSrc;
+			enum class Depth {
+				Off,
+				Less,
+				Lequal
+			} depth;
+		};
+		std::optional<CustomCompileSettings> customSettings;
 	};
 }

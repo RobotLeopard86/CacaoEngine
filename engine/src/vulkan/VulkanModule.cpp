@@ -178,10 +178,10 @@ namespace Cacao {
 		TransientCommandContext::Get();
 
 		//Create globals UBO
-		vk::BufferCreateInfo globalsCI({}, sizeof(glm::mat4) * 2, vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+		vk::BufferCreateInfo globalsCI({}, sizeof(float) * 2 + sizeof(uint8_t), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
 		vma::AllocationCreateInfo globalsAllocCI({}, vma::MemoryUsage::eCpuToGpu);
 		try {
-			globalsUBO = allocator.createBuffer(globalsCI, globalsAllocCI);
+			globals = allocator.createBuffer(globalsCI, globalsAllocCI);
 		} catch(vk::SystemError& err) {
 			TransientCommandContext::Cleanup();
 			allocator.destroy();
@@ -193,13 +193,42 @@ namespace Cacao {
 		}
 
 		//Map globals UBO
-		if(allocator.mapMemory(globalsUBO.alloc, &globalsMem) != vk::Result::eSuccess) {
-			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+		if(allocator.mapMemory(globals.alloc, &globals.mem) != vk::Result::eSuccess) {
+			allocator.destroyBuffer(globals.obj, globals.alloc);
 			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
 			instance.destroy();
 			Check<ExternalException>(false, "Could not map globals uniform buffer memory!");
+		}
+
+		//Create camera data UBO
+		vk::BufferCreateInfo camDataCI({}, sizeof(glm::mat4) * 3 + sizeof(glm::vec3), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo camDataAllocCI({}, vma::MemoryUsage::eCpuToGpu);
+		try {
+			camData = allocator.createBuffer(camDataCI, camDataAllocCI);
+		} catch(vk::SystemError& err) {
+			allocator.unmapMemory(globals.alloc);
+			allocator.destroyBuffer(globals.obj, globals.alloc);
+			TransientCommandContext::Cleanup();
+			allocator.destroy();
+			dev.destroy();
+			instance.destroy();
+			std::stringstream emsg;
+			emsg << "Could not create camera data uniform buffer: " << err.what();
+			Check<ExternalException>(false, emsg.str());
+		}
+
+		//Map camera data UBO
+		if(allocator.mapMemory(camData.alloc, &camData.mem) != vk::Result::eSuccess) {
+			allocator.destroyBuffer(camData.obj, camData.alloc);
+			allocator.unmapMemory(globals.alloc);
+			allocator.destroyBuffer(globals.obj, globals.alloc);
+			TransientCommandContext::Cleanup();
+			allocator.destroy();
+			dev.destroy();
+			instance.destroy();
+			Check<ExternalException>(false, "Could not map camera data uniform buffer memory!");
 		}
 
 		//Find good depth image format
@@ -214,8 +243,10 @@ namespace Cacao {
 			}
 		}
 		if(selectedDF == vk::Format::eUndefined) {
-			allocator.unmapMemory(globalsUBO.alloc);
-			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			allocator.unmapMemory(camData.alloc);
+			allocator.destroyBuffer(camData.obj, camData.alloc);
+			allocator.unmapMemory(globals.alloc);
+			allocator.destroyBuffer(globals.obj, globals.alloc);
 			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
@@ -229,8 +260,10 @@ namespace Cacao {
 			renderingPool = vulkan->dev.createCommandPool(renderPoolCI);
 		} catch(vk::SystemError& err) {
 			selectedDF = vk::Format::eUndefined;
-			allocator.unmapMemory(globalsUBO.alloc);
-			allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+			allocator.unmapMemory(camData.alloc);
+			allocator.destroyBuffer(camData.obj, camData.alloc);
+			allocator.unmapMemory(globals.alloc);
+			allocator.destroyBuffer(globals.obj, globals.alloc);
 			TransientCommandContext::Cleanup();
 			allocator.destroy();
 			dev.destroy();
@@ -273,8 +306,10 @@ namespace Cacao {
 
 		//Destroy Vulkan objects
 		dev.destroyCommandPool(renderingPool);
-		allocator.unmapMemory(globalsUBO.alloc);
-		allocator.destroyBuffer(globalsUBO.obj, globalsUBO.alloc);
+		allocator.unmapMemory(camData.alloc);
+		allocator.destroyBuffer(camData.obj, camData.alloc);
+		allocator.unmapMemory(globals.alloc);
+		allocator.destroyBuffer(globals.obj, globals.alloc);
 		allocator.destroy();
 		dev.destroy();
 		instance.destroy();
