@@ -4,6 +4,7 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
+#include "vulkan/vulkan_handles.hpp"
 
 #ifdef __linux__
 #include "impl/Window.hpp"
@@ -249,10 +250,12 @@ namespace Cacao {
 
 		//Clean up rendering context objects
 		for(RenderCommandContext& rc : swapchain.contexts) {
-			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
 			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
 			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
+		}
+		for(vk::Semaphore& sem : swapchain.acquireSems) {
+			if(sem) vulkan->dev.destroySemaphore(sem);
 		}
 
 		//Clean up transient command context objects

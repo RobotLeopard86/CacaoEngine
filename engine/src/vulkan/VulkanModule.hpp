@@ -79,7 +79,7 @@ namespace Cacao {
 	class RenderCommandContext {
 	  public:
 		vk::Fence inFlight;
-		vk::Semaphore acquired, rendered;
+		vk::Semaphore rendered;
 		uint32_t imageIndex;
 		Sync sync;
 	};
@@ -178,6 +178,10 @@ namespace Cacao {
 
 			//Contexts
 			std::vector<RenderCommandContext> contexts;
+
+			//Acquire semaphore data
+			std::vector<vk::Semaphore> acquireSems;
+			std::vector<uint16_t> imageSemIndices;
 		} swapchain;
 		vk::CommandPool renderingPool;
 

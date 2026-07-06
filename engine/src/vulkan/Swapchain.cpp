@@ -2,6 +2,7 @@
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "vulkan/vulkan_enums.hpp"
+#include "vulkan/vulkan_handles.hpp"
 #include "vulkan/vulkan_structs.hpp"
 
 #include <cstdint>
@@ -90,6 +91,16 @@ namespace Cacao {
 			}
 		}
 
+		//Create new acquire semaphores
+		for(vk::Semaphore& sem : vulkan->swapchain.acquireSems) {
+			vulkan->dev.destroySemaphore(sem);
+		}
+		vulkan->swapchain.acquireSems.resize(vulkan->swapchain.images.size());
+		for(vk::Semaphore& sem : vulkan->swapchain.acquireSems) {
+			sem = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {});
+		}
+		vulkan->swapchain.imageSemIndices.assign(vulkan->swapchain.acquireSems.size(), UINT16_MAX);
+
 		//Create new depth objects
 		vulkan->swapchain.depthImages = std::vector<ViewImage>(vulkan->swapchain.images.size());
 		for(std::size_t i = 0; i < vulkan->swapchain.depthImages.size(); ++i) {
@@ -130,7 +141,6 @@ namespace Cacao {
 
 		//Destroy old contexts
 		for(RenderCommandContext& rc : vulkan->swapchain.contexts) {
-			if(rc.acquired) vulkan->dev.destroySemaphore(rc.acquired);
 			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
 			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
@@ -143,10 +153,8 @@ namespace Cacao {
 		vk::SemaphoreCreateInfo timelineCI({}, &semTypeCI);
 		vk::FenceCreateInfo fenceCI(vk::FenceCreateFlagBits::eSignaled);
 		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
-			//Render context 2
 			RenderCommandContext& rc = vulkan->swapchain.contexts[i];
 			try {
-				rc.acquired = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.rendered = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.inFlight = vulkan->dev.createFence(fenceCI);
 				rc.sync.semaphore = vulkan->dev.createSemaphore(timelineCI);

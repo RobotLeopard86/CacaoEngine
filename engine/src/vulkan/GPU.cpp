@@ -88,11 +88,12 @@ namespace Cacao {
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
 		//Obtain context object
 		if(rendering) {
-			//Try get next context
-			render = &vulkan->swapchain.contexts[vulkan->swapchain.cycle];
-
 			//Advance swapchain cycle
+			uint16_t currentCycle = vulkan->swapchain.cycle;
 			vulkan->swapchain.cycle = (vulkan->swapchain.cycle + 1) % vulkan->swapchain.contexts.size();
+
+			//Try to get next context
+			render = &vulkan->swapchain.contexts[currentCycle];
 
 			//Wait for it to be ready
 			vulkan->dev.waitForFences(render->inFlight, VK_TRUE, UINT64_MAX);
@@ -100,10 +101,11 @@ namespace Cacao {
 
 			//Acquire next swapchain image
 			try {
-				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, render->acquired, VK_NULL_HANDLE, 1);
+				vk::AcquireNextImageInfoKHR acquireInfo(vulkan->swapchain.chain, UINT64_MAX, vulkan->swapchain.acquireSems[currentCycle], VK_NULL_HANDLE, 1);
 				auto result = vulkan->dev.acquireNextImage2KHR(acquireInfo);
 				if(result.result != vk::Result::eSuccess) throw vk::SystemError(result.result, "Unknown reason.");
 				render->imageIndex = result.value;
+				vulkan->swapchain.imageSemIndices[render->imageIndex] = currentCycle;
 			} catch(vk::SystemError& err) {
 				//Reset data members
 				render = nullptr;
@@ -193,7 +195,7 @@ namespace Cacao {
 
 			//Build submission info
 			vk::CommandBufferSubmitInfo cbSubmit(cmd);
-			vk::SemaphoreSubmitInfo wait(render->acquired, 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
+			vk::SemaphoreSubmitInfo wait(vulkan->swapchain.acquireSems[vulkan->swapchain.imageSemIndices[render->imageIndex]], 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 			std::array<vk::SemaphoreSubmitInfo, 2> signals;
 			signals[0] = vk::SemaphoreSubmitInfo(render->rendered, 0, vk::PipelineStageFlagBits2::eAllCommands);
 			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
