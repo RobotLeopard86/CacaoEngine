@@ -27,7 +27,7 @@ namespace Cacao {
 	}
 
 	Sound::~Sound() {
-		if(realized) DropRealized();
+		if(baked) Discard();
 	}
 
 	Sound::Sound(Sound&& other)
@@ -35,9 +35,9 @@ namespace Cacao {
 		//Steal the implementation pointer
 		impl = std::move(other.impl);
 
-		//Copy realization state
-		realized = other.realized;
-		other.realized = false;
+		//Copy baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Blank out other asset address
 		other.address = "";
@@ -47,9 +47,9 @@ namespace Cacao {
 		//Implementation pointer
 		impl = std::move(other.impl);
 
-		//Realization state
-		realized = other.realized;
-		other.realized = false;
+		//Baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Asset address
 		address = other.address;
@@ -58,9 +58,9 @@ namespace Cacao {
 		return *this;
 	}
 
-	void Sound::Realize() {
-		Check<BadRealizeStateException>(!realized, "Sound must not be realized when Realize is called!");
-		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to realize a sound!");
+	void Sound::Bake() {
+		Check<BadBakeStateException>(!baked, "Sound must not be baked when Bake is called!");
+		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to bake a sound!");
 
 		//Decode audio (yes, we rethrow the exception. deal with it.)
 		ibytestream audioIn(impl->encodedAudio);
@@ -78,14 +78,14 @@ namespace Cacao {
 		alBufferData(impl->bufferObj, impl->audio.channelCount == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, impl->audio.data.data(), impl->audio.data.size() * sizeof(short), impl->audio.sampleRate);
 		Check<ExternalException>(alGetError() == AL_NO_ERROR, "Failed to load data into OpenAL buffer!");
 
-		realized = true;
+		baked = true;
 	}
 
-	void Sound::DropRealized() {
-		Check<BadRealizeStateException>(realized, "Sound must be realized when DropRealize is called!");
-		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to drop a sound's realized representation!");
+	void Sound::Discard() {
+		Check<BadBakeStateException>(baked, "Sound must be baked when DropBake is called!");
+		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to drop a sound's baked representation!");
 
-		realized = false;
+		baked = false;
 
 		//Delete OpenAL buffer
 		alDeleteBuffers(1, &impl->bufferObj);

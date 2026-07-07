@@ -12,32 +12,32 @@ namespace Cacao {
 		/**
 		 * @brief Convert the loaded data into a form suitable for use
 		 *
-		 * @throws BadRealizeStateException If the asset is already realized
+		 * @throws BadBakeStateException If the asset is already baked
 		 */
-		virtual void Realize() = 0;
+		virtual void Bake() = 0;
 
 		/**
-		 * @brief Destroy the realized representation of the asset
+		 * @brief Destroy the baked representation of the asset
 		 *
-		 * @throws BadRealizeStateException If the asset is not realized
+		 * @throws BadBakeStateException If the asset is not baked
 		 */
-		virtual void DropRealized() = 0;
+		virtual void Discard() = 0;
 
 		/**
-		 * @brief Check if the asset is realized
+		 * @brief Check if the asset is baked
 		 *
-		 * @return Whether the asset is realized
+		 * @return Whether the asset is baked
 		 */
-		virtual bool IsRealized() const {
-			return realized;
+		virtual bool IsBaked() const {
+			return baked;
 		}
 
 		virtual ~Asset() {}
 
 	  protected:
 		Asset(const std::string& addr)
-		  : Resource(addr), realized(false) {}
+		  : Resource(addr), baked(false) {}
 
-		bool realized;
+		bool baked;
 	};
 }

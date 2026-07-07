@@ -11,7 +11,7 @@
 #include "vulkan/vulkan_structs.hpp"
 
 namespace Cacao {
-	void VulkanShaderImpl::Realize(bool& success) {
+	void VulkanShaderImpl::Bake(bool& success) {
 		//Convert Slang IR to SPIR-V
 		libcacaoasset::Shader shdr = {};
 		shdr.irCode = irBuffer;
@@ -151,7 +151,7 @@ namespace Cacao {
 		success = true;
 	}
 
-	void VulkanShaderImpl::DropRealized() {
+	void VulkanShaderImpl::Discard() {
 		if(description.uniformParams.size() > 0) {
 			vulkan->allocator.unmapMemory(materialData.alloc);
 			vulkan->allocator.destroyBuffer(materialData.obj, materialData.alloc);

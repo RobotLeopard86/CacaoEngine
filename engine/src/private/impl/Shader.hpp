@@ -5,8 +5,8 @@
 namespace Cacao {
 	class Shader::Impl {
 	  public:
-		virtual void Realize(bool& success) = 0;
-		virtual void DropRealized() = 0;
+		virtual void Bake(bool& success) = 0;
+		virtual void Discard() = 0;
 
 		std::vector<unsigned char> irBuffer;
 		libcacaoasset::Shader::Descriptor description;

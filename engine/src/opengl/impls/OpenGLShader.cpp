@@ -5,11 +5,11 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void OpenGLShaderImpl::Realize(bool& success) {
+	void OpenGLShaderImpl::Bake(bool& success) {
 		success = true;
 	}
 
-	void OpenGLShaderImpl::DropRealized() {}
+	void OpenGLShaderImpl::Discard() {}
 
 	Shader::Impl* OpenGLModule::ConfigureShader() {
 		return new OpenGLShaderImpl();

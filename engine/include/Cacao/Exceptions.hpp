@@ -43,7 +43,7 @@ namespace Cacao {
 	DEF_EXCEPTION(FileOpen, "File Open")
 	DEF_EXCEPTION(InvalidYAML, "Invalid YAML")
 	DEF_EXCEPTION(BadInitState, "Bad Initialization State")
-	DEF_EXCEPTION(BadRealizeState, "Bad Realization State")
+	DEF_EXCEPTION(BadBakeState, "Bad Baking State")
 	DEF_EXCEPTION(BadState, "Bad State")
 	DEF_EXCEPTION(BadThread, "Bad Thread")
 	DEF_EXCEPTION(BadType, "Bad Type")

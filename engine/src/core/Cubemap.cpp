@@ -44,7 +44,7 @@ namespace Cacao {
 	}
 
 	Cubemap::~Cubemap() {
-		if(realized) DropRealized();
+		if(baked) Discard();
 	}
 
 	Cubemap::Cubemap(Cubemap&& other)
@@ -52,9 +52,9 @@ namespace Cacao {
 		//Steal the implementation pointer
 		impl = std::move(other.impl);
 
-		//Copy realization state
-		realized = other.realized;
-		other.realized = false;
+		//Copy baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Blank out other asset address
 		other.address = "";
@@ -64,9 +64,9 @@ namespace Cacao {
 		//Implementation pointer
 		impl = std::move(other.impl);
 
-		//Realization state
-		realized = other.realized;
-		other.realized = false;
+		//Baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Asset address
 		address = other.address;
@@ -75,16 +75,16 @@ namespace Cacao {
 		return *this;
 	}
 
-	void Cubemap::Realize() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
+	void Cubemap::Bake() {
+		Check<BadBakeStateException>(!baked, "Cannot bake a baked cubemap!");
 
-		impl->Realize(realized);
+		impl->Bake(baked);
 	}
 
-	void Cubemap::DropRealized() {
-		Check<BadRealizeStateException>(realized, "Cannot drop the realized representation of an unrealized cubemap; it does not exist!");
+	void Cubemap::Discard() {
+		Check<BadBakeStateException>(baked, "Cannot discard baked representation of an unbaked cubemap; it does not exist!");
 
-		realized = false;
-		impl->DropRealized();
+		baked = false;
+		impl->Discard();
 	}
 }

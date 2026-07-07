@@ -9,7 +9,7 @@ Cacao Engine exceptions come in a variety of different classes (though they are 
 * `FileOpen` - A file could not be opened
 * `InvalidYAML` - YAML input followed a different schema than what was expected
 * `BadInitState` - Something was in the wrong initialization state
-* `BadRealizeState` - A resource's realized representation existed when it should not have, or did not exist when it should have
+* `BadBakeState` - A resource was not baked when it should have been, or was baked when it should not have been
 * `BadState` - Something was in the wrong state
 * `BadThread` - A function was called on an unsupported thread
 * `BadType` - An object of a different type than the expected one was passed

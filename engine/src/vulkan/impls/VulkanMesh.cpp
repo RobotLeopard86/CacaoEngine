@@ -5,7 +5,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void VulkanMeshImpl::Realize(bool& success) {
+	void VulkanMeshImpl::Bake(bool& success) {
 		//Allocate vertex data buffers
 		vk::BufferCreateInfo vertexCI({}, sizeof(Vertex) * vertices.size(), vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
 		vma::AllocationCreateInfo vertexAllocCI(vma::AllocationCreateFlagBits::eWithinBudget, vma::MemoryUsage::eAutoPreferDevice, vk::MemoryPropertyFlagBits::eDeviceLocal);
@@ -77,7 +77,7 @@ namespace Cacao {
 		success = true;
 	}
 
-	void VulkanMeshImpl::DropRealized() {
+	void VulkanMeshImpl::Discard() {
 		vulkan->allocator.destroyBuffer(vbo.obj, vbo.alloc);
 		vulkan->allocator.destroyBuffer(ibo.obj, ibo.alloc);
 	}

@@ -57,18 +57,18 @@ namespace Cacao {
 		/**
 		 * @brief Convert the mesh data into a form suitable for rendering
 		 *
-		 * @throws BadRealizeStateException If the mesh is already realized
+		 * @throws BadBakeStateException If the mesh is already baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Realize();
+		void Bake();
 
 		/**
-		 * @brief Destroy the realized representation of the asset
+		 * @brief Destroy the baked representation of the asset
 		 *
-		 * @throws BadRealizeStateException If the mesh is not realized
+		 * @throws BadBakeStateException If the mesh is not baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void DropRealized();
+		void Discard();
 
 		///@cond
 		class Impl;

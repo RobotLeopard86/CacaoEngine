@@ -7,8 +7,8 @@
 namespace Cacao {
 	class VulkanShaderImpl : public Shader::Impl {
 	  public:
-		void Realize(bool& success) override;
-		void DropRealized() override;
+		void Bake(bool& success) override;
+		void Discard() override;
 
 		//SPIR-V code
 		std::vector<uint32_t> spv;

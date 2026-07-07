@@ -7,6 +7,7 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
+#include "Cacao/WorldManager.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/PAL.hpp"
@@ -124,8 +125,14 @@ namespace Cacao {
 				}
 			}
 
-			//Now we are safe to read the world state
-			//TODO: World read logic
+			//Within this block, world access is safe
+			{
+				//Acquire active world
+				std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
+				if(!world) return;
+
+				//TODO: Find meshes
+			}
 
 			//Allow tick controller to resume
 			//It has been blocking on this semaphore
@@ -142,6 +149,7 @@ namespace Cacao {
 
 			//Record commands
 			cmd->StartRendering(clearColorLinear);
+			//TODO: Render meshes
 			cmd->EndRendering();
 
 			//Execute command buffer

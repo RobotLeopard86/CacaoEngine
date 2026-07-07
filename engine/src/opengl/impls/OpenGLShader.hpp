@@ -7,8 +7,8 @@
 namespace Cacao {
 	class OpenGLShaderImpl : public Shader::Impl {
 	  public:
-		void Realize(bool& success) override;
-		void DropRealized() override;
+		void Bake(bool& success) override;
+		void Discard() override;
 
 		//GLSL shader source code (generated from IR)
 		std::string vertexGLSL, fragmentGLSL;

@@ -7,8 +7,8 @@
 namespace Cacao {
 	class OpenGLCubemapImpl : public Cubemap::Impl {
 	  public:
-		void Realize(bool& success) override;
-		void DropRealized() override;
+		void Bake(bool& success) override;
+		void Discard() override;
 
 		//Texture object
 		GLuint gpuTex;

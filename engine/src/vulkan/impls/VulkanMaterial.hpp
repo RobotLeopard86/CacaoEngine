@@ -7,7 +7,7 @@
 namespace Cacao {
 	class VulkanMaterialImpl : public Material::Impl {
 	  public:
-		void Realize(bool& success) override;
-		void DropRealized() override;
+		void Bake(bool& success) override;
+		void Discard() override;
 	};
 }

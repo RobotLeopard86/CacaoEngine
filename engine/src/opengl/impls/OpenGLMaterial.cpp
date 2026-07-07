@@ -5,11 +5,11 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void OpenGLMaterialImpl::Realize(bool& success) {
+	void OpenGLMaterialImpl::Bake(bool& success) {
 		success = true;
 	}
 
-	void OpenGLMaterialImpl::DropRealized() {}
+	void OpenGLMaterialImpl::Discard() {}
 
 	Material::Impl* OpenGLModule::ConfigureMaterial() {
 		return new OpenGLMaterialImpl();

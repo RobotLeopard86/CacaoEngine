@@ -4,7 +4,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void OpenGLMeshImpl::Realize(bool& success) {
+	void OpenGLMeshImpl::Bake(bool& success) {
 		//Unpack index buffer data
 		std::vector<unsigned int> ibd(indices.size() * 3);
 		for(unsigned int i = 0; i < indices.size(); ++i) {
@@ -58,7 +58,7 @@ namespace Cacao {
 		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
-	void OpenGLMeshImpl::DropRealized() {
+	void OpenGLMeshImpl::Discard() {
 		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
 		cmd->AddTask([this]() {
 			//Delete buffers and vertex array

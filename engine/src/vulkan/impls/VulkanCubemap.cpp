@@ -5,7 +5,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void VulkanCubemapImpl::Realize(bool& success) {
+	void VulkanCubemapImpl::Bake(bool& success) {
 		//Calculate sizes
 		vk::DeviceSize faceSize = faces[0].w * faces[0].h * 3;
 		vk::DeviceSize totalSize = faceSize * 6;
@@ -84,7 +84,7 @@ namespace Cacao {
 		success = true;
 	}
 
-	void VulkanCubemapImpl::DropRealized() {
+	void VulkanCubemapImpl::Discard() {
 		vulkan->dev.destroySampler(sampler);
 		vulkan->dev.destroyImageView(vi.view);
 		vulkan->allocator.destroyImage(vi.obj, vi.alloc);

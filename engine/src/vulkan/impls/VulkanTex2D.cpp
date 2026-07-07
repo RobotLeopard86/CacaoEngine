@@ -8,7 +8,7 @@
 #include "vulkan/vulkan_structs.hpp"
 
 namespace Cacao {
-	void VulkanTex2DImpl::Realize(bool& success) {
+	void VulkanTex2DImpl::Bake(bool& success) {
 		//Get texture format
 		switch(img.layout) {
 			case libcacaoimage::Image::Layout::Grayscale:
@@ -84,7 +84,7 @@ namespace Cacao {
 		success = true;
 	}
 
-	void VulkanTex2DImpl::DropRealized() {
+	void VulkanTex2DImpl::Discard() {
 		vulkan->dev.destroySampler(sampler);
 		vulkan->dev.destroyImageView(vi.view);
 		vulkan->allocator.destroyImage(vi.obj, vi.alloc);

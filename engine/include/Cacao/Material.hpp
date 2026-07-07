@@ -1,16 +1,16 @@
 #pragma once
 
 #include "DllHelper.hpp"
-#include "Asset.hpp"
+#include "Resource.hpp"
 #include "Shader.hpp"
 
 #include "libcacaoasset.hpp"
 
 namespace Cacao {
 	/**
-	 * @brief Asset type for rendering materials
+	 * @brief Asset type for rendering materials (technically does not inherit from Asset because baking is not needed)
 	 */
-	class CACAO_API Material : public Asset {
+	class CACAO_API Material : public Resource {
 	  public:
 		/**
 		 * @brief Create a new material based on a shader
@@ -33,18 +33,18 @@ namespace Cacao {
 		/**
 		 * @brief Convert the material data into a form suitable for rendering
 		 *
-		 * @throws BadRealizeStateException If the material is already realized
+		 * @throws BadBakeStateException If the material is already baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Realize();
+		void Bake();
 
 		/**
-		 * @brief Destroy the realized representation of the asset
+		 * @brief Destroy the baked representation of the asset
 		 *
-		 * @throws BadRealizeStateException If the material is not realized
+		 * @throws BadBakeStateException If the material is not baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void DropRealized();
+		void Discard();
 
 		///@cond
 		class Impl;

@@ -9,7 +9,7 @@
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	void OpenGLTex2DImpl::Realize(bool& success) {
+	void OpenGLTex2DImpl::Bake(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
 		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
@@ -61,7 +61,7 @@ namespace Cacao {
 		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
-	void OpenGLTex2DImpl::DropRealized() {
+	void OpenGLTex2DImpl::Discard() {
 		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
 		cmd->AddTask([this]() {
 			//Destroy texture object
