@@ -560,7 +560,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Script9OnDynTickENSt6chrono7secondsE">
 <span id="_CPPv3N5Cacao6Script9OnDynTickENSt6chrono7secondsE"></span><span id="_CPPv2N5Cacao6Script9OnDynTickENSt6chrono7secondsE"></span><span id="Cacao::Script::OnDynTick__std::chrono::seconds"></span><span class="target" id="classCacao_1_1Script_1a4a08406d7e4affd9231f1668ddcf0e21"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnDynTick</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">seconds</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timestep</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Script9OnDynTickENSt6chrono7secondsE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Runs each dynamic tick that the script is enabled and in an active <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a>. </p>
-<p>Most logic should be executed here.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This callback is called in a <strong>non-deterministic</strong> order; do not expect any form of consistent sequencing between scripts</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>timestep</strong> – The time in seconds since the last dynamic tick (not necessarily when the script was executed) </p>

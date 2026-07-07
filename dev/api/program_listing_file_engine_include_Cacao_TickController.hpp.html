@@ -434,6 +434,7 @@
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">binary_semaphore</span><span class="w"> </span><span class="n">grant</span><span class="p">;</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">binary_semaphore</span><span class="w"> </span><span class="n">done</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">snapshotControl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Engine</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FrameProcessor</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">TickController</span><span class="p">();</span>
