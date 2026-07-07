@@ -431,6 +431,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1OrthographicCamera.html">Class OrthographicCamera</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -541,9 +544,10 @@
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="derived-type">
-<h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
+<section id="derived-types">
+<h3>Derived Types<a class="headerlink" href="#derived-types" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::OrthographicCamera</span></code> (<a class="reference internal" href="classCacao_1_1OrthographicCamera.html#exhale-class-classcacao-1-1orthographiccamera"><span class="std std-ref">Class OrthographicCamera</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::PerspectiveCamera</span></code> (<a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#exhale-class-classcacao-1-1perspectivecamera"><span class="std std-ref">Class PerspectiveCamera</span></a>)</p></li>
 </ul>
 </section>
@@ -558,12 +562,12 @@
 <p class="admonition-title">Note</p>
 <p>Abstract, so cannot be passed by value </p>
 </div>
-<p>Subclassed by <a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#classCacao_1_1PerspectiveCamera"><span class="std std-ref">Cacao::PerspectiveCamera</span></a></p>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1OrthographicCamera.html#classCacao_1_1OrthographicCamera"><span class="std std-ref">Cacao::OrthographicCamera</span></a>, <a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#classCacao_1_1PerspectiveCamera"><span class="std std-ref">Cacao::PerspectiveCamera</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera6CameraEv">
-<span id="_CPPv3N5Cacao6Camera6CameraEv"></span><span id="_CPPv2N5Cacao6Camera6CameraEv"></span><span id="Cacao::Camera::Camera"></span><span class="target" id="classCacao_1_1Camera_1a3183ee821e4140afeb75a32ed8c9b73f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera6CameraEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera6CameraEv"></span><span id="_CPPv2N5Cacao6Camera6CameraEv"></span><span id="Cacao::Camera::Camera"></span><span class="target" id="classCacao_1_1Camera_1a3183ee821e4140afeb75a32ed8c9b73f"></span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera6CameraEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a camera. </p>
 </dd></dl>
 
@@ -575,7 +579,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera11GetPositionEv">
-<span id="_CPPv3NK5Cacao6Camera11GetPositionEv"></span><span id="_CPPv2NK5Cacao6Camera11GetPositionEv"></span><span id="Cacao::Camera::GetPositionC"></span><span class="target" id="classCacao_1_1Camera_1ab98713f8b38adea9943ef43425c70361"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetPositionEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera11GetPositionEv"></span><span id="_CPPv2NK5Cacao6Camera11GetPositionEv"></span><span id="Cacao::Camera::GetPositionC"></span><span class="target" id="classCacao_1_1Camera_1addb276d443e0044f9b45f5aaf431ff8e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetPositionEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the position of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -586,7 +590,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E">
-<span id="_CPPv3N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="Cacao::Camera::SetPosition__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a56f060ffb7b1598fd777c5b2b8dcd6b4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="Cacao::Camera::SetPosition__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1ad5c8cd7abc2caa1791a21c5a6a9bf67d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the position of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -597,7 +601,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera11GetRotationEv">
-<span id="_CPPv3NK5Cacao6Camera11GetRotationEv"></span><span id="_CPPv2NK5Cacao6Camera11GetRotationEv"></span><span id="Cacao::Camera::GetRotationC"></span><span class="target" id="classCacao_1_1Camera_1acc5eb3ce9f55a033ce479dd5c91f2281"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera11GetRotationEv"></span><span id="_CPPv2NK5Cacao6Camera11GetRotationEv"></span><span id="Cacao::Camera::GetRotationC"></span><span class="target" id="classCacao_1_1Camera_1a2396971f193b4d0685c1d15e32ee5add"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the rotation of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -608,7 +612,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera16GetRotationEulerEv">
-<span id="_CPPv3NK5Cacao6Camera16GetRotationEulerEv"></span><span id="_CPPv2NK5Cacao6Camera16GetRotationEulerEv"></span><span id="Cacao::Camera::GetRotationEulerC"></span><span class="target" id="classCacao_1_1Camera_1a82ad647f61d093511b1c7112642770d6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera16GetRotationEulerEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera16GetRotationEulerEv"></span><span id="_CPPv2NK5Cacao6Camera16GetRotationEulerEv"></span><span id="Cacao::Camera::GetRotationEulerC"></span><span class="target" id="classCacao_1_1Camera_1a78803032bc597a354faa3e2148b29c55"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera16GetRotationEulerEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the rotation of the camera as Euler angles in degrees. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -619,7 +623,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetRotationEN3glm4quatE">
-<span id="_CPPv3N5Cacao6Camera11SetRotationEN3glm4quatE"></span><span id="_CPPv2N5Cacao6Camera11SetRotationEN3glm4quatE"></span><span id="Cacao::Camera::SetRotation__glm::quat"></span><span class="target" id="classCacao_1_1Camera_1a18735c0b0804a7222f8e36753c242652"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4quatE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera11SetRotationEN3glm4quatE"></span><span id="_CPPv2N5Cacao6Camera11SetRotationEN3glm4quatE"></span><span id="Cacao::Camera::SetRotation__glm::quat"></span><span class="target" id="classCacao_1_1Camera_1aac356417da19f7b282f7b3852efca842"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4quatE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the rotation of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -630,7 +634,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E">
-<span id="_CPPv3N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"></span><span id="Cacao::Camera::SetRotationEuler__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a2200ed4028de50c520930bda5cbce1ba"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"></span><span id="Cacao::Camera::SetRotationEuler__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a022dca8bff8e0e15f1fe610919c5d89b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the rotation of the camera using Euler angles in degrees. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -641,7 +645,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv">
-<span id="_CPPv3NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="Cacao::Camera::GetProjectionMatrixC"></span><span class="target" id="classCacao_1_1Camera_1af6558cb9571d7e1edecad0115c9d8e3e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="Cacao::Camera::GetProjectionMatrixC"></span><span class="target" id="classCacao_1_1Camera_1a6622fa4dc4872f1f09c1a1895aaac0e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the projection matrix. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -652,7 +656,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera13GetViewMatrixEv">
-<span id="_CPPv3NK5Cacao6Camera13GetViewMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera13GetViewMatrixEv"></span><span id="Cacao::Camera::GetViewMatrixC"></span><span class="target" id="classCacao_1_1Camera_1aaea8f0c032068f91d8d14c8c95cf63a8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera13GetViewMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera13GetViewMatrixEv"></span><span id="Cacao::Camera::GetViewMatrixC"></span><span class="target" id="classCacao_1_1Camera_1ae231f337c500dc7183d27bd1963cdb69"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the view matrix. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -662,8 +666,52 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera14GetFrontVectorEv">
+<span id="_CPPv3NK5Cacao6Camera14GetFrontVectorEv"></span><span id="_CPPv2NK5Cacao6Camera14GetFrontVectorEv"></span><span id="Cacao::Camera::GetFrontVectorC"></span><span class="target" id="classCacao_1_1Camera_1a5fed9e7e75076d3948b9e5c84fd240e1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetFrontVector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera14GetFrontVectorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the camera’s front vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unit vector pointing out at the camera’s rotation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera14GetRightVectorEv">
+<span id="_CPPv3NK5Cacao6Camera14GetRightVectorEv"></span><span id="_CPPv2NK5Cacao6Camera14GetRightVectorEv"></span><span id="Cacao::Camera::GetRightVectorC"></span><span class="target" id="classCacao_1_1Camera_1a6062f60449836529c6521f277f4aca4e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRightVector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera14GetRightVectorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the camera’s up vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unit vector perpendicular to both the front and world up vectors </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera11GetUpVectorEv">
+<span id="_CPPv3NK5Cacao6Camera11GetUpVectorEv"></span><span id="_CPPv2NK5Cacao6Camera11GetUpVectorEv"></span><span id="Cacao::Camera::GetUpVectorC"></span><span class="target" id="classCacao_1_1Camera_1aab9d41e3d1a0d9fe3d5774781235aaa3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetUpVector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetUpVectorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the camera’s up vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unit vector perpendicular to both the front and right vectors </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera13GetLookTargetEv">
+<span id="_CPPv3NK5Cacao6Camera13GetLookTargetEv"></span><span id="_CPPv2NK5Cacao6Camera13GetLookTargetEv"></span><span id="Cacao::Camera::GetLookTargetC"></span><span class="target" id="classCacao_1_1Camera_1ad17b1945f938f5bd068260732ca5fea3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetLookTarget</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetLookTargetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the point in world space where the camera is looking. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The look target (which is the position + the front vector) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event">
-<span id="_CPPv3N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="_CPPv2N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="Cacao::Camera::ResizeProjectionMatrix__EventR"></span><span class="target" id="classCacao_1_1Camera_1a1edc10487c065c503b5c350067f388e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResizeProjectionMatrix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="_CPPv2N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="Cacao::Camera::ResizeProjectionMatrix__EventR"></span><span class="target" id="classCacao_1_1Camera_1a4f5e0766378072269af028d674ec326f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResizeProjectionMatrix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event" title="Link to this definition"><span/></a><br /></dt>
 <dd><p><a class="reference internal" href="classCacao_1_1Event.html#classCacao_1_1Event"><span class="std std-ref">Event</span></a> handler for resizing the projection matrix when the window size changes. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -671,10 +719,86 @@
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>e</strong> – The event object (which should be a DataEvent&lt;glm::uvec2&gt;) </p>
+<dd class="field-odd"><p><strong>e</strong> – The event object (which will be casted be a DataEvent&lt;glm::uvec2&gt;) </p>
 </dd>
 </dl>
 </dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera21RecalculateViewMatrixEv">
+<span id="_CPPv3N5Cacao6Camera21RecalculateViewMatrixEv"></span><span id="_CPPv2N5Cacao6Camera21RecalculateViewMatrixEv"></span><span id="Cacao::Camera::RecalculateViewMatrix"></span><span class="target" id="classCacao_1_1Camera_1aa70104e1cca5c73b122a4e54eb36fc88"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecalculateViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera21RecalculateViewMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera27RecalculateProjectionMatrixEv">
+<span id="_CPPv3N5Cacao6Camera27RecalculateProjectionMatrixEv"></span><span id="_CPPv2N5Cacao6Camera27RecalculateProjectionMatrixEv"></span><span id="Cacao::Camera::RecalculateProjectionMatrix"></span><span class="target" id="classCacao_1_1Camera_1aabbe46f501f2f9d285d243189af39286"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecalculateProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera27RecalculateProjectionMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera24RecalculateCameraVectorsEv">
+<span id="_CPPv3N5Cacao6Camera24RecalculateCameraVectorsEv"></span><span id="_CPPv2N5Cacao6Camera24RecalculateCameraVectorsEv"></span><span id="Cacao::Camera::RecalculateCameraVectors"></span><span class="target" id="classCacao_1_1Camera_1a43b2a95353424fb91640f09ad7c60706"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecalculateCameraVectors</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera24RecalculateCameraVectorsEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera14resizeConsumerE">
+<span id="_CPPv3N5Cacao6Camera14resizeConsumerE"></span><span id="_CPPv2N5Cacao6Camera14resizeConsumerE"></span><span id="Cacao::Camera::resizeConsumer__EventConsumer"></span><span class="target" id="classCacao_1_1Camera_1a881027cf7b7561d2e6100cca7cae84c4"></span><a class="reference internal" href="classCacao_1_1EventConsumer.html#_CPPv4N5Cacao13EventConsumerE" title="Cacao::EventConsumer"><span class="n"><span class="pre">EventConsumer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resizeConsumer</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera14resizeConsumerE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera10clearColorE">
+<span id="_CPPv3N5Cacao6Camera10clearColorE"></span><span id="_CPPv2N5Cacao6Camera10clearColorE"></span><span id="Cacao::Camera::clearColor__glm::vec4"></span><span class="target" id="classCacao_1_1Camera_1afd3890890e29a4112a83c3974b354421"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clearColor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera10clearColorE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera16projectionMatrixE">
+<span id="_CPPv3N5Cacao6Camera16projectionMatrixE"></span><span id="_CPPv2N5Cacao6Camera16projectionMatrixE"></span><span id="Cacao::Camera::projectionMatrix__glm::mat4"></span><span class="target" id="classCacao_1_1Camera_1afe31a79aaad3743b5f46f1a7c4aa9466"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">projectionMatrix</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera16projectionMatrixE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera10viewMatrixE">
+<span id="_CPPv3N5Cacao6Camera10viewMatrixE"></span><span id="_CPPv2N5Cacao6Camera10viewMatrixE"></span><span id="Cacao::Camera::viewMatrix__glm::mat4"></span><span class="target" id="classCacao_1_1Camera_1a121f6f34f4e7f5cac26c69c6b1c96731"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewMatrix</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera10viewMatrixE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera20viewProjectionMatrixE">
+<span id="_CPPv3N5Cacao6Camera20viewProjectionMatrixE"></span><span id="_CPPv2N5Cacao6Camera20viewProjectionMatrixE"></span><span id="Cacao::Camera::viewProjectionMatrix__glm::mat4"></span><span class="target" id="classCacao_1_1Camera_1a1832e49e3efc26e514ea91b293a53efb"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewProjectionMatrix</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera20viewProjectionMatrixE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8positionE">
+<span id="_CPPv3N5Cacao6Camera8positionE"></span><span id="_CPPv2N5Cacao6Camera8positionE"></span><span id="Cacao::Camera::position__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a112bf3ad26fa52f2cf18a740e29c2d7a"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8positionE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8rotationE">
+<span id="_CPPv3N5Cacao6Camera8rotationE"></span><span id="_CPPv2N5Cacao6Camera8rotationE"></span><span id="Cacao::Camera::rotation__glm::quat"></span><span class="target" id="classCacao_1_1Camera_1a93a1624e34012e3e9aa922a64ed33c67"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rotation</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8rotationE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8frontVecE">
+<span id="_CPPv3N5Cacao6Camera8frontVecE"></span><span id="_CPPv2N5Cacao6Camera8frontVecE"></span><span id="Cacao::Camera::frontVec__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1abbe3f989f50b80301838671f70e8fbee"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frontVec</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8frontVecE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera5upVecE">
+<span id="_CPPv3N5Cacao6Camera5upVecE"></span><span id="_CPPv2N5Cacao6Camera5upVecE"></span><span id="Cacao::Camera::upVec__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a15cf6273af3ea484bc33ea5f1febcc13"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">upVec</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera5upVecE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8rightVecE">
+<span id="_CPPv3N5Cacao6Camera8rightVecE"></span><span id="_CPPv2N5Cacao6Camera8rightVecE"></span><span id="Cacao::Camera::rightVec__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a0e988fd01382a01ede9774186a059c9c"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rightVec</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8rightVecE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11displaySizeE">
+<span id="_CPPv3N5Cacao6Camera11displaySizeE"></span><span id="_CPPv2N5Cacao6Camera11displaySizeE"></span><span id="Cacao::Camera::displaySize__glm::uvec2"></span><span class="target" id="classCacao_1_1Camera_1a95b2cd3888fcc6dc748f1b0fd96ffc1f"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displaySize</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11displaySizeE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -730,7 +854,7 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-types">Derived Types</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
@@ -745,7 +869,25 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetRotationEuler()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetProjectionMatrix()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetViewMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera14GetFrontVectorEv"><code class="docutils literal notranslate"><span class="pre">GetFrontVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera14GetRightVectorEv"><code class="docutils literal notranslate"><span class="pre">GetRightVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera11GetUpVectorEv"><code class="docutils literal notranslate"><span class="pre">GetUpVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera13GetLookTargetEv"><code class="docutils literal notranslate"><span class="pre">GetLookTarget()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event"><code class="docutils literal notranslate"><span class="pre">ResizeProjectionMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera21RecalculateViewMatrixEv"><code class="docutils literal notranslate"><span class="pre">RecalculateViewMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera27RecalculateProjectionMatrixEv"><code class="docutils literal notranslate"><span class="pre">RecalculateProjectionMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera24RecalculateCameraVectorsEv"><code class="docutils literal notranslate"><span class="pre">RecalculateCameraVectors()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera14resizeConsumerE"><code class="docutils literal notranslate"><span class="pre">resizeConsumer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera10clearColorE"><code class="docutils literal notranslate"><span class="pre">clearColor</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera16projectionMatrixE"><code class="docutils literal notranslate"><span class="pre">projectionMatrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera10viewMatrixE"><code class="docutils literal notranslate"><span class="pre">viewMatrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera20viewProjectionMatrixE"><code class="docutils literal notranslate"><span class="pre">viewProjectionMatrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8positionE"><code class="docutils literal notranslate"><span class="pre">position</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8rotationE"><code class="docutils literal notranslate"><span class="pre">rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8frontVecE"><code class="docutils literal notranslate"><span class="pre">frontVec</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera5upVecE"><code class="docutils literal notranslate"><span class="pre">upVec</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8rightVecE"><code class="docutils literal notranslate"><span class="pre">rightVec</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera11displaySizeE"><code class="docutils literal notranslate"><span class="pre">displaySize</span></code></a></li>
 </ul>
 </li>
 </ul>
