@@ -557,13 +557,13 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Mesh7RealizeEv">
-<span id="_CPPv3N5Cacao4Mesh7RealizeEv"></span><span id="_CPPv2N5Cacao4Mesh7RealizeEv"></span><span id="Cacao::Mesh::Realize"></span><span class="target" id="classCacao_1_1Mesh_1a5d918b037400b8963ab9f986f468a497"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Mesh7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Mesh4BakeEv">
+<span id="_CPPv3N5Cacao4Mesh4BakeEv"></span><span id="_CPPv2N5Cacao4Mesh4BakeEv"></span><span id="Cacao::Mesh::Bake"></span><span class="target" id="classCacao_1_1Mesh_1a709bf50ffca7c780369e75f524e623c4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bake</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Mesh4BakeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Convert the mesh data into a form suitable for rendering. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the mesh is already realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the mesh is already baked </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
@@ -571,13 +571,13 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Mesh12DropRealizedEv">
-<span id="_CPPv3N5Cacao4Mesh12DropRealizedEv"></span><span id="_CPPv2N5Cacao4Mesh12DropRealizedEv"></span><span id="Cacao::Mesh::DropRealized"></span><span class="target" id="classCacao_1_1Mesh_1a3eb5b10d8b6401458d431e02ff9b3f90"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DropRealized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Mesh12DropRealizedEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Destroy the realized representation of the asset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao4Mesh7DiscardEv">
+<span id="_CPPv3N5Cacao4Mesh7DiscardEv"></span><span id="_CPPv2N5Cacao4Mesh7DiscardEv"></span><span id="Cacao::Mesh::Discard"></span><span class="target" id="classCacao_1_1Mesh_1a0621f9b24f8a9a15bcb7283ff0fb6c2a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Discard</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao4Mesh7DiscardEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Destroy the baked representation of the asset. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the mesh is not realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the mesh is not baked </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
@@ -672,8 +672,8 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4MeshE"><code class="docutils literal notranslate"><span class="pre">Cacao::Mesh</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">DropRealized()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh4BakeEv"><code class="docutils literal notranslate"><span class="pre">Bake()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh7DiscardEv"><code class="docutils literal notranslate"><span class="pre">Discard()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4MeshD0Ev"><code class="docutils literal notranslate"><span class="pre">~Mesh()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao4Mesh6CreateERRNSt6vectorI6VertexEERRNSt6vectorIN3glm5uvec3EEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
 </ul>

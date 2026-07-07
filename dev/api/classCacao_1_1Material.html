@@ -544,7 +544,7 @@
 <section id="base-type">
 <h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Asset</span></code> (<a class="reference internal" href="classCacao_1_1Asset.html#exhale-class-classcacao-1-1asset"><span class="std std-ref">Class Asset</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Resource</span></code> (<a class="reference internal" href="classCacao_1_1Resource.html#exhale-class-classcacao-1-1resource"><span class="std std-ref">Class Resource</span></a>)</p></li>
 </ul>
 </section>
 </section>
@@ -552,18 +552,18 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao8MaterialE">
-<span id="_CPPv3N5Cacao8MaterialE"></span><span id="_CPPv2N5Cacao8MaterialE"></span><span id="Cacao::Material"></span><span class="target" id="classCacao_1_1Material"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Material</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Asset.html#_CPPv4N5Cacao5AssetE" title="Cacao::Asset"><span class="n"><span class="pre">Asset</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao8MaterialE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> type for rendering materials. </p>
+<span id="_CPPv3N5Cacao8MaterialE"></span><span id="_CPPv2N5Cacao8MaterialE"></span><span id="Cacao::Material"></span><span class="target" id="classCacao_1_1Material"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Material</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Resource.html#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao8MaterialE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> type for rendering materials (technically does not inherit from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> because baking is not needed) </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material7RealizeEv">
-<span id="_CPPv3N5Cacao8Material7RealizeEv"></span><span id="_CPPv2N5Cacao8Material7RealizeEv"></span><span id="Cacao::Material::Realize"></span><span class="target" id="classCacao_1_1Material_1a89d14b25025ca814d4aa56f7f7e93e0a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material4BakeEv">
+<span id="_CPPv3N5Cacao8Material4BakeEv"></span><span id="_CPPv2N5Cacao8Material4BakeEv"></span><span id="Cacao::Material::Bake"></span><span class="target" id="classCacao_1_1Material_1a089debee6ec8b4593799282af8290187"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bake</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material4BakeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Convert the material data into a form suitable for rendering. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the material is already realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the material is already baked </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
@@ -571,13 +571,13 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material12DropRealizedEv">
-<span id="_CPPv3N5Cacao8Material12DropRealizedEv"></span><span id="_CPPv2N5Cacao8Material12DropRealizedEv"></span><span id="Cacao::Material::DropRealized"></span><span class="target" id="classCacao_1_1Material_1aa33acac284cb58f4b8c78a4bce78b6fc"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DropRealized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material12DropRealizedEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Destroy the realized representation of the asset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material7DiscardEv">
+<span id="_CPPv3N5Cacao8Material7DiscardEv"></span><span id="_CPPv2N5Cacao8Material7DiscardEv"></span><span id="Cacao::Material::Discard"></span><span class="target" id="classCacao_1_1Material_1a2a50d325d19474425bcf47a84dd19947"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Discard</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material7DiscardEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Destroy the baked representation of the asset. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the material is not realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the material is not baked </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
@@ -671,8 +671,8 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialE"><code class="docutils literal notranslate"><span class="pre">Cacao::Material</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">DropRealized()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material4BakeEv"><code class="docutils literal notranslate"><span class="pre">Bake()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material7DiscardEv"><code class="docutils literal notranslate"><span class="pre">Discard()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialD0Ev"><code class="docutils literal notranslate"><span class="pre">~Material()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
 </ul>

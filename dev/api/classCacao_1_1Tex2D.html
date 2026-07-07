@@ -557,13 +557,13 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Tex2D7RealizeEv">
-<span id="_CPPv3N5Cacao5Tex2D7RealizeEv"></span><span id="_CPPv2N5Cacao5Tex2D7RealizeEv"></span><span id="Cacao::Tex2D::Realize"></span><span class="target" id="classCacao_1_1Tex2D_1aec4671c086b17e98ff2b86e28680efe5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Realize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Tex2D7RealizeEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Tex2D4BakeEv">
+<span id="_CPPv3N5Cacao5Tex2D4BakeEv"></span><span id="_CPPv2N5Cacao5Tex2D4BakeEv"></span><span id="Cacao::Tex2D::Bake"></span><span class="target" id="classCacao_1_1Tex2D_1a8b04d94429532d75e13d8f2a7d846c87"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bake</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Tex2D4BakeEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Convert the image data into a form suitable for rendering. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the texture is already realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the texture is already baked </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
@@ -571,13 +571,13 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Tex2D12DropRealizedEv">
-<span id="_CPPv3N5Cacao5Tex2D12DropRealizedEv"></span><span id="_CPPv2N5Cacao5Tex2D12DropRealizedEv"></span><span id="Cacao::Tex2D::DropRealized"></span><span class="target" id="classCacao_1_1Tex2D_1a7627b8b6926d2b8f2fdaa8406b317802"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DropRealized</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Tex2D12DropRealizedEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Destroy the realized representation of the asset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Tex2D7DiscardEv">
+<span id="_CPPv3N5Cacao5Tex2D7DiscardEv"></span><span id="_CPPv2N5Cacao5Tex2D7DiscardEv"></span><span id="Cacao::Tex2D::Discard"></span><span class="target" id="classCacao_1_1Tex2D_1af001d7e00def0240a8ca2c54989f2874"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Discard</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Tex2D7DiscardEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Destroy the baked representation of the asset. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadRealizeStateException</span></span></span> – If the texture is not realized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the texture is not baked </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
 </ul>
 </dd>
@@ -671,8 +671,8 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2DE"><code class="docutils literal notranslate"><span class="pre">Cacao::Tex2D</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2D7RealizeEv"><code class="docutils literal notranslate"><span class="pre">Realize()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2D12DropRealizedEv"><code class="docutils literal notranslate"><span class="pre">DropRealized()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2D4BakeEv"><code class="docutils literal notranslate"><span class="pre">Bake()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2D7DiscardEv"><code class="docutils literal notranslate"><span class="pre">Discard()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2DD0Ev"><code class="docutils literal notranslate"><span class="pre">~Tex2D()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Tex2D6CreateERRN13libcacaoimage5ImageERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
 </ul>
