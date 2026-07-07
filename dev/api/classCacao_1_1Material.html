@@ -553,41 +553,76 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao8MaterialE">
 <span id="_CPPv3N5Cacao8MaterialE"></span><span id="_CPPv2N5Cacao8MaterialE"></span><span id="Cacao::Material"></span><span class="target" id="classCacao_1_1Material"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Material</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Resource.html#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao8MaterialE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> type for rendering materials (technically does not inherit from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> because baking is not needed) </p>
+<dd><p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> type for rendering materials (technically does not inherit from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> because baking is not applicable) </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material10ParamValueE">
+<span id="_CPPv3N5Cacao8Material10ParamValueE"></span><span id="_CPPv2N5Cacao8Material10ParamValueE"></span><span class="target" id="classCacao_1_1Material_1a60b7a9aa04646d7fa56d08ae24b0c98c"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ParamValue</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ivec2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ivec3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ivec4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Tex2D.html#_CPPv4N5Cacao5Tex2DE" title="Cacao::Tex2D"><span class="n"><span class="pre">Tex2D</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Cubemap.html#_CPPv4N5Cacao7CubemapE" title="Cacao::Cubemap"><span class="n"><span class="pre">Cubemap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5Cacao8Material10ParamValueE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A storage type that holds any of the valid material parameter data types. </p>
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material4BakeEv">
-<span id="_CPPv3N5Cacao8Material4BakeEv"></span><span id="_CPPv2N5Cacao8Material4BakeEv"></span><span id="Cacao::Material::Bake"></span><span class="target" id="classCacao_1_1Material_1a089debee6ec8b4593799282af8290187"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bake</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material4BakeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Convert the material data into a form suitable for rendering. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material9GetShaderEv">
+<span id="_CPPv3N5Cacao8Material9GetShaderEv"></span><span id="_CPPv2N5Cacao8Material9GetShaderEv"></span><span id="Cacao::Material::GetShader"></span><span class="target" id="classCacao_1_1Material_1a8ffe37b8d96a32b2f0430c8ea1ca4ea3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Shader.html#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetShader</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material9GetShaderEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get a handle to the shader used by the material. </p>
 <dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current shader </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T">
+<span id="_CPPv3I0EN5Cacao8Material12SetParameterERKNSt6stringERK1T"></span><span id="_CPPv2I0EN5Cacao8Material12SetParameterERKNSt6stringERK1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Material_1a0efa5c4062b9e8dfc587c9b6764c2c38"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetParameter</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T" title="Cacao::Material::SetParameter::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the value of a material parameter. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The type of the parameter being set; must be one of the types in ParamValue</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name</strong> – The name of the parameter to set </p></li>
+<li><p><strong>value</strong> – The value to store in the parameter</p></li>
+</ul>
+</dd>
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the material is already baked </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the given parameter name is not one in the material </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadTypeException</span></span></span> – If the type given does not match the parameter type </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If a texture type is passed and the handle is empty </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material7DiscardEv">
-<span id="_CPPv3N5Cacao8Material7DiscardEv"></span><span id="_CPPv2N5Cacao8Material7DiscardEv"></span><span id="Cacao::Material::Discard"></span><span class="target" id="classCacao_1_1Material_1a2a50d325d19474425bcf47a84dd19947"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Discard</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material7DiscardEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Destroy the baked representation of the asset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE">
+<span id="_CPPv3I0EN5Cacao8Material12GetParameterERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao8Material12GetParameterERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Material_1a84786adbf4d037b1d6286e24433c5af1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE" title="Cacao::Material::GetParameter::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetParameter</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the value of a material parameter. </p>
 <dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The type of the parameter being set; must be one of the types in ParamValue</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>name</strong> – The name of the parameter to set</p>
+</dd>
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the material is not baked </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the graphics backend is not initialized or connected </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the given parameter name is not one in the material </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If no value has been set for the given parameter </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadTypeException</span></span></span> – If the type given does not match the parameter type</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The current value of the parameter </p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8MaterialD0Ev">
-<span id="_CPPv3N5Cacao8MaterialD0Ev"></span><span id="_CPPv2N5Cacao8MaterialD0Ev"></span><span id="Cacao::Material::~Material"></span><span class="target" id="classCacao_1_1Material_1aa64b5eee2d582cf9678fa32bb6a19aec"></span><span class="sig-name descname"><span class="n"><span class="pre">~Material</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8MaterialD0Ev" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
@@ -671,9 +706,10 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialE"><code class="docutils literal notranslate"><span class="pre">Cacao::Material</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material4BakeEv"><code class="docutils literal notranslate"><span class="pre">Bake()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material7DiscardEv"><code class="docutils literal notranslate"><span class="pre">Discard()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialD0Ev"><code class="docutils literal notranslate"><span class="pre">~Material()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material10ParamValueE"><code class="docutils literal notranslate"><span class="pre">ParamValue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material9GetShaderEv"><code class="docutils literal notranslate"><span class="pre">GetShader()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T"><code class="docutils literal notranslate"><span class="pre">SetParameter()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">GetParameter()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
 </ul>
 </li>
