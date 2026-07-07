@@ -1,20 +1,28 @@
 #include "Cacao/PerspectiveCamera.hpp"
+#include "Cacao/OrthographicCamera.hpp"
 #include "Cacao/Window.hpp"
 
+#include "glm/ext/matrix_clip_space.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include <limits>
 
 namespace Cacao {
-	/*
-	The constructor creates the perspective projection matrix using the provided FOV (field of view)
-	and aspect ratio, and a near clipping plane (where objects stop rendering when too close to the camera)
-	that is extremely close so that the camera can get super close to things before they disappear.
-	*/
+	Camera::Camera()
+	  : resizeConsumer(std::bind(&Camera::ResizeProjectionMatrix, this, std::placeholders::_1)), clearColor(1), projectionMatrix(1.0f), viewMatrix(1.0f), viewProjectionMatrix(0.0f), position(0.0f), rotation(1.0f, glm::vec3 {0.0f}), frontVec(0.0f), upVec(0.0f), rightVec(0.0f), displaySize(Window::Get().GetContentAreaSize()) {
+		EventManager::Get().SubscribeConsumer("WindowResize", resizeConsumer);
+	}
+
 	PerspectiveCamera::PerspectiveCamera(float fov)
-	  : projectionMatrix(1.0f), viewMatrix(1.0f), viewProjectionMatrix(0.0f), position(0.0f), rotation(1.0f, glm::vec3 {0.0f}), frontVec(0.0f), upVec(0.0f), rightVec(0.0f), displaySize(Window::Get().GetContentAreaSize()), fov(fov) {
+	  : Camera(), fov(fov) {
 		RecalculateProjectionMatrix();
 	}
 
-	void PerspectiveCamera::RecalculateViewMatrix() {
+	OrthographicCamera::OrthographicCamera(float zoom)
+	  : Camera(), zoom(zoom) {
+		RecalculateProjectionMatrix();
+	}
+
+	void Camera::RecalculateViewMatrix() {
 		//Figure out where we are looking
 		RecalculateCameraVectors();
 
@@ -22,7 +30,7 @@ namespace Cacao {
 		viewMatrix = glm::lookAt(position, position + frontVec, upVec);
 	}
 
-	void PerspectiveCamera::RecalculateCameraVectors() {
+	void Camera::RecalculateCameraVectors() {
 		//Get our X and Y rotation in radians
 		float tilt = glm::radians(rotation.x);
 		float pan = glm::radians(rotation.y);
@@ -42,12 +50,18 @@ namespace Cacao {
 		upVec = glm::normalize(glm::cross(rightVec, frontVec));
 	}
 
-	void PerspectiveCamera::ResizeProjectionMatrix(Event& e) {
+	void Camera::ResizeProjectionMatrix(Event&) {
 		displaySize = Window::Get().GetContentAreaSize();
 		RecalculateProjectionMatrix();
 	}
 
 	void PerspectiveCamera::RecalculateProjectionMatrix() {
 		projectionMatrix = glm::infinitePerspective(glm::radians(fov), ((float)displaySize.x / (float)displaySize.y), 0.1f);
+	}
+
+	void OrthographicCamera::RecalculateProjectionMatrix() {
+		float halfWidth = zoom;
+		float halfHeight = zoom * ((float)displaySize.x / (float)displaySize.y);
+		projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, 0.1f, 10000.0f);
 	}
 }
