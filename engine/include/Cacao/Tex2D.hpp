@@ -37,7 +37,7 @@ namespace Cacao {
 		 * @throws BadBakeStateException If the texture is already baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Bake();
+		void Bake() override;
 
 		/**
 		 * @brief Destroy the baked representation of the asset
@@ -45,7 +45,7 @@ namespace Cacao {
 		 * @throws BadBakeStateException If the texture is not baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Discard();
+		void Discard() override;
 
 		///@cond
 		class Impl;

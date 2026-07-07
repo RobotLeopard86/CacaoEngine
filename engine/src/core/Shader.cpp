@@ -17,7 +17,7 @@ namespace Cacao {
 
 		//Fill data
 		impl->irBuffer = std::move(shaderIR);
-		impl->description = desc;
+		impl->descriptor = desc;
 	}
 
 	std::shared_ptr<Shader> Shader::Create(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr) {
@@ -56,6 +56,10 @@ namespace Cacao {
 		other.address = "";
 
 		return *this;
+	}
+
+	libcacaoasset::Shader::Descriptor Shader::GetDescriptor() {
+		return impl->descriptor;
 	}
 
 	void Shader::Bake() {

@@ -46,6 +46,11 @@ namespace Cacao {
 	}
 
 	template<>
+	bool Resource::ValidateResourceAddr<Material>(const std::string& addr) {
+		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::Material);
+	}
+
+	template<>
 	bool Resource::ValidateResourceAddr<World>(const std::string& addr) {
 		return libcacaoasset::ValidateResourceAddress(addr, libcacaoasset::Resource::Type::World);
 	}

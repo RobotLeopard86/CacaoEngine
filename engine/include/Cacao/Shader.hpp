@@ -32,12 +32,19 @@ namespace Cacao {
 		///@endcond
 
 		/**
+		 * @brief Get the descriptor for this shader
+		 *
+		 * @return The shader descriptor
+		 */
+		libcacaoasset::Shader::Descriptor GetDescriptor();
+
+		/**
 		 * @brief Convert the shader data into a form suitable for rendering
 		 *
 		 * @throws BadBakeStateException If the shader is already baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Bake();
+		void Bake() override;
 
 		/**
 		 * @brief Destroy the baked representation of the asset
@@ -45,7 +52,7 @@ namespace Cacao {
 		 * @throws BadBakeStateException If the shader is not baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Discard();
+		void Discard() override;
 
 		///@cond
 		class Impl;

@@ -67,6 +67,7 @@ engine_srcs += files(
 	'GPU.cpp',
 	'Input.cpp',
 	'Log.cpp',
+	'Material.cpp',
 	'Mesh.cpp',
 	'Misc.cpp',
 	'Model.cpp',

@@ -7,7 +7,6 @@
 namespace Cacao {
 	class OpenGLMaterialImpl : public Material::Impl {
 	  public:
-		void Bake(bool& success) override;
-		void Discard() override;
+		void Upload() override;
 	};
 }

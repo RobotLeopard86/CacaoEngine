@@ -36,7 +36,7 @@ namespace Cacao {
 		 * @throws BadBakeStateException If the sound is already baked
 		 * @throws BadInitStateException If the audio system is not initialized
 		 */
-		void Bake();
+		void Bake() override;
 
 		/**
 		 * @brief Destroy the baked representation of the asset
@@ -44,7 +44,7 @@ namespace Cacao {
 		 * @throws BadBakeStateException If the sound is not baked
 		 * @throws BadInitStateException If the audio system is not initialized
 		 */
-		void Discard();
+		void Discard() override;
 
 		///@cond
 		struct Impl;

@@ -15,7 +15,7 @@ namespace Cacao {
 		//Convert Slang IR to SPIR-V
 		libcacaoasset::Shader shdr = {};
 		shdr.irCode = irBuffer;
-		shdr.descriptor = description;
+		shdr.descriptor = descriptor;
 		spv = GenerateSPV(shdr);
 
 		//Create shader module
@@ -82,7 +82,7 @@ namespace Cacao {
 			{2, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)},
 			{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, tangent)}}};
 		vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
-		if(description.domain == libcacaoasset::Shader::Descriptor::Domain::Canvas2D) {
+		if(descriptor.domain == libcacaoasset::Shader::Descriptor::Domain::Canvas2D) {
 			inputBinding.stride = sizeof(float) * 5;
 			inputStateCI.setVertexBindingDescriptions(inputBinding);
 			std::array<vk::VertexInputAttributeDescription, 2> vtcAttrs = {inputAttrs[0], inputAttrs[1]};
@@ -98,10 +98,10 @@ namespace Cacao {
 		//Create pipeline layout
 		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float));
 		vk::PipelineLayoutCreateInfo layoutCI;
-		if(description.uniformParams.size() > 0 || description.texParams.size() > 0) {
+		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) {
 			std::vector<vk::DescriptorSetLayoutBinding> matDSBindings;
-			if(description.uniformParams.size() > 0) matDSBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
-			for(auto texParam : description.texParams) {
+			if(descriptor.uniformParams.size() > 0) matDSBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
+			for(auto texParam : descriptor.texParams) {
 				matDSBindings.emplace_back(texParam.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
 			}
 			matLayout = vulkan->dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, matDSBindings});
@@ -132,7 +132,7 @@ namespace Cacao {
 		vulkan->dev.destroyShaderModule(module);
 
 		//Create material data UBO
-		if(description.uniformParams.size() > 0) {
+		if(descriptor.uniformParams.size() > 0) {
 			//Create buffer
 			vk::BufferCreateInfo uboCI({}, sizeof(glm::mat4) * 3 + sizeof(glm::vec3), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
 			vma::AllocationCreateInfo uboAllocCI({}, vma::MemoryUsage::eCpuToGpu);
@@ -152,13 +152,13 @@ namespace Cacao {
 	}
 
 	void VulkanShaderImpl::Discard() {
-		if(description.uniformParams.size() > 0) {
+		if(descriptor.uniformParams.size() > 0) {
 			vulkan->allocator.unmapMemory(materialData.alloc);
 			vulkan->allocator.destroyBuffer(materialData.obj, materialData.alloc);
 		}
 		vulkan->dev.destroyPipeline(pipelineOpaque);
 		vulkan->dev.destroyPipeline(pipelineTransparent);
-		if(description.uniformParams.size() > 0 || description.texParams.size() > 0) vulkan->dev.destroyDescriptorSetLayout(matLayout);
+		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) vulkan->dev.destroyDescriptorSetLayout(matLayout);
 		vulkan->dev.destroyDescriptorSetLayout(cacaoLayout);
 	}
 

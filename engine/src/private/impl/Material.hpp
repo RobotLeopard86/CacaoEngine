@@ -2,11 +2,15 @@
 
 #include "Cacao/Material.hpp"
 
+#include <unordered_map>
+
 namespace Cacao {
 	class Material::Impl {
 	  public:
-		virtual void Bake(bool& success) = 0;
-		virtual void Discard() = 0;
+		virtual void Upload() = 0;
+
+		std::shared_ptr<Shader> shader;
+		std::unordered_map<std::string, ParamValue> storage;
 
 		virtual ~Impl() = default;
 	};

@@ -14,6 +14,7 @@
 #include "Cubemap.hpp"
 #include "GPUManager.hpp"
 #include "Shader.hpp"
+#include "Material.hpp"
 
 namespace Cacao {
 	class CACAO_API PALModule {

@@ -9,7 +9,7 @@ namespace Cacao {
 		virtual void Discard() = 0;
 
 		std::vector<unsigned char> irBuffer;
-		libcacaoasset::Shader::Descriptor description;
+		libcacaoasset::Shader::Descriptor descriptor;
 
 		virtual ~Impl() = default;
 	};

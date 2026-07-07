@@ -5,11 +5,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void VulkanMaterialImpl::Bake(bool& success) {
-		success = true;
-	}
-
-	void VulkanMaterialImpl::Discard() {}
+	void VulkanMaterialImpl::Upload() {}
 
 	Material::Impl* VulkanModule::ConfigureMaterial() {
 		return new VulkanMaterialImpl();

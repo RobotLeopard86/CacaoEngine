@@ -6,6 +6,7 @@
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Shader.hpp"
+#include "Cacao/Material.hpp"
 
 namespace Cacao {
 	template<>
@@ -22,4 +23,7 @@ namespace Cacao {
 
 	template<>
 	void PAL::ConfigureImplPtr<Shader>(Shader&);
+
+	template<>
+	void PAL::ConfigureImplPtr<Material>(Material&);
 }
