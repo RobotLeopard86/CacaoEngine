@@ -76,7 +76,15 @@ namespace Cacao {
 		lastSecond = clock::now();
 		lastTick = clock::now();
 
-		//Loop
+		//If frame processor was started before us, then we should wait until it's done with whatever it's doing before starting
+		if(Engine::Get().GetInitConfig().startFrameProcessorWithGfxSystem) {
+			while(!TickController::Get().snapshotControl.done.try_acquire()) {
+				std::this_thread::yield();
+				if(stop.stop_requested()) return;
+			}
+		}
+
+		//Main runloop
 		while(!stop.stop_requested()) {
 			//Check for frame processor snapshot request
 			if(TickController::Get().snapshotControl.request.exchange(false, std::memory_order_acq_rel)) {
@@ -132,7 +140,7 @@ namespace Cacao {
 		co_return std::vector<Script*>(joined.begin(), joined.end());
 	}
 
-	void TickController::Impl::DynTick(std::chrono::seconds timestep [[maybe_unused]]) {
+	void TickController::Impl::DynTick(std::chrono::seconds timestep) {
 		//Freeze input state
 		Input::Get().FreezeInputState();
 
@@ -152,8 +160,16 @@ namespace Cacao {
 
 		//Find scripts
 		if(world->GetToplevelActors().size() > 0) {
+			//Wait for scripts to be returned
 			exathread::MultiFuture<std::vector<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindScripts);
 			scriptsFut.await();
+
+			//Execute scripts
+			std::vector<std::vector<Script*>> toMerge = scriptsFut.results();
+			auto joined = std::views::join(toMerge) | std::views::common;
+			for(Script* s : joined) {
+				s->OnDynTick(timestep);
+			}
 		}
 	}
 }

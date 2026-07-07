@@ -13,7 +13,7 @@ namespace Cacao {
 		/**
 		 * @brief Runs each dynamic tick that the script is enabled and in an active World
 		 *
-		 * Most logic should be executed here.
+		 * @warning This callback is called in a @b non-deterministic order; do not expect any form of consistent sequencing between scripts
 		 *
 		 * @param timestep The time in seconds since the last dynamic tick (not necessarily when the script was executed)
 		 */

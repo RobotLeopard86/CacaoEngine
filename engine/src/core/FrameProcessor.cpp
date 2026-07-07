@@ -112,13 +112,16 @@ namespace Cacao {
 				}
 			}
 
-			//Request a snapshot of the world state
-			TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
+			//If tick controller is running, neogtiate snapshot
+			if(TickController::Get().IsRunning()) {
+				//Request a snapshot of the world state
+				TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
 
-			//Block until the tick controller grants the request
-			while(!TickController::Get().snapshotControl.grant.try_acquire()) {
-				std::this_thread::yield();
-				if(stop.stop_requested()) return;
+				//Block until the tick controller grants the request
+				while(!TickController::Get().snapshotControl.grant.try_acquire()) {
+					std::this_thread::yield();
+					if(stop.stop_requested()) return;
+				}
 			}
 
 			//Now we are safe to read the world state
@@ -126,7 +129,7 @@ namespace Cacao {
 
 			//Allow tick controller to resume
 			//It has been blocking on this semaphore
-			TickController::Get().snapshotControl.done.release();
+			if(TickController::Get().IsRunning()) TickController::Get().snapshotControl.done.release();
 
 			//Setup command buffer
 			//We use the internal API so we can do rendering setup

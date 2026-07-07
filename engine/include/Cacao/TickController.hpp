@@ -70,6 +70,7 @@ namespace Cacao {
 			std::binary_semaphore grant;
 			std::binary_semaphore done;
 		} snapshotControl;
+		friend class Engine;
 		friend class FrameProcessor;
 		///@endcond
 
