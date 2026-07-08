@@ -87,7 +87,8 @@ namespace Cacao {
 				//Register actor object
 				foundActors.insert_or_assign(ref->guid, ref);
 
-				//Setup transform
+				//Setup transform and state
+				ref->SetActive(actor.active);
 				ref->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
 				ref->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z, actor.initialRot.w});
 				ref->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});

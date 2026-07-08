@@ -83,6 +83,10 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 		ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "world actor data", "actor name");
 		actor.name = name.Scalar();
 
+		YAML::Node active = e["active"];
+		ValidateYAMLNode(active, YAML::NodeType::value::Scalar, "world actor data", "actor activation state");
+		actor.active = active.as<bool>();
+
 		YAML::Node guid = e["guid"];
 		ValidateYAMLNode(guid, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
 				for(char c : node.Scalar()) {

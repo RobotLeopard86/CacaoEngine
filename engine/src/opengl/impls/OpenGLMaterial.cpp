@@ -5,7 +5,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void OpenGLMaterialImpl::Upload(std::unique_ptr<CommandBuffer>& cmd) {}
+	void OpenGLMaterialImpl::Upload(CommandBuffer* cmd) {}
 
 	Material::Impl* OpenGLModule::ConfigureMaterial() {
 		return new OpenGLMaterialImpl();

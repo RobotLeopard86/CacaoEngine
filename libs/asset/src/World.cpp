@@ -19,6 +19,7 @@ namespace libcacaoasset {
 	World::Actor _DecActor(libjaguar::Document::ObjReader& rd) {
 		World::Actor actor;
 		actor.name = rd.Query<std::string>("name");
+		actor.active = rd.Query<bool>("active");
 		actor.guid = rd.Query<std::array<unsigned char, 16>>("guid");
 		actor.parentGUID = rd.Query<std::array<unsigned char, 16>>("pguid");
 		actor.initialPos = rd.Query<libjaguar::Vector<float, 3>>("initPos");
@@ -46,6 +47,7 @@ namespace libcacaoasset {
 
 	void _EncActor(const World::Actor& a, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<std::string>("name", a.name);
+		ow.SetOrCreate<bool>("active", a.active);
 		ow.SetOrCreate<std::array<unsigned char, 16>>("guid", false, a.guid);
 		ow.SetOrCreate<std::array<unsigned char, 16>>("pguid", false, a.parentGUID);
 		ow.SetOrCreate<libjaguar::Vector<float, 3>>("initPos", a.initialPos);
@@ -83,6 +85,11 @@ namespace libcacaoasset {
 			libjaguar::StructuredTypeLayout::Field& name = aLayout.fields.emplace_back();
 			name.name = "name";
 			name.type = libjaguar::TypeTag::String;
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& active = aLayout.fields.emplace_back();
+			active.name = "active";
+			active.type = libjaguar::TypeTag::Boolean;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& guid = aLayout.fields.emplace_back();

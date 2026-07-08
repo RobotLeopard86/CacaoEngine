@@ -15,12 +15,11 @@
 #include "libcacaoasset.hpp"
 #include "vulkan/vulkan_enums.hpp"
 
-#include <memory>
 #include <variant>
 #include <ranges>
 
 namespace Cacao {
-	void VulkanMaterialImpl::Upload(std::unique_ptr<CommandBuffer>& cmd) {
+	void VulkanMaterialImpl::Upload(CommandBuffer* cmd) {
 		//Check that all values are set
 		Check<BadValueException>(storage.size() == (shader->GetDescriptor().uniformParams.size() + shader->GetDescriptor().texParams.size()),
 			"Material element storage is not the same size as descriptor parameters!");
@@ -154,7 +153,7 @@ namespace Cacao {
 		bakeFuts.await();
 
 		//Bind shader pipeline
-		vk::CommandBuffer& vkCmd = CBRefCast<VulkanCommandBuffer>(cmd)->cmd;
+		vk::CommandBuffer& vkCmd = static_cast<VulkanCommandBuffer*>(cmd)->cmd;
 		VulkanShaderImpl& vkShader = RES_IMPL(Shader, Vulkan, *shader);
 		vkShader.Bind(vkCmd, renderMode == libcacaoasset::Material::RenderMode::Transparent);
 

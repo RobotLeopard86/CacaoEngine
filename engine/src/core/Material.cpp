@@ -164,4 +164,8 @@ namespace Cacao {
 	libcacaoasset::Material::RenderMode Material::GetRenderMode() {
 		return impl->renderMode;
 	}
+
+	std::shared_ptr<Shader> Material::GetShader() {
+		return impl->shader;
+	}
 }

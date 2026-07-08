@@ -100,10 +100,11 @@ namespace Cacao {
 		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
 
 		void Execute() override;
-
 		Sync& GetSync();
 
 		vk::CommandBuffer cmd;
+
+		void DrawMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, Transform transform) override;
 
 	  protected:
 		//Contexts

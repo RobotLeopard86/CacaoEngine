@@ -1,4 +1,9 @@
+#include "Cacao/Exceptions.hpp"
 #include "VulkanModule.hpp"
+#include "impls/VulkanMaterial.hpp"
+#include "impls/VulkanMesh.hpp"
+#include "impls/VulkanShader.hpp"
+#include "ImplAccessor.hpp"
 
 namespace Cacao {
 	void VulkanCommandBuffer::StartRendering(glm::vec3 clearColor) {
@@ -41,5 +46,36 @@ namespace Cacao {
 
 	void VulkanCommandBuffer::EndRendering() {
 		cmd.endRendering();
+	}
+
+	void VulkanCommandBuffer::DrawMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, Transform transform) {
+		Check<Mesh, NonexistentValueException>(mesh, "Cannot draw null mesh!");
+		Check<Material, NonexistentValueException>(material, "Cannot draw mesh with null material!");
+		Check<BadBakeStateException>(mesh->IsBaked(), "Cannot draw unbaked mesh!");
+		Check<BadBakeStateException>(material->GetShader()->IsBaked(), "Cannot draw mesh using unbaked shader!");
+
+		//Apply material (will also bind shader pipeline)
+		RES_IMPL(Material, Vulkan, *material).Upload(this);
+
+		//Bind mesh vertex and index buffer
+		VulkanMeshImpl& vkMesh = RES_IMPL(Mesh, Vulkan, *mesh);
+		constexpr std::array<vk::DeviceSize, 1> offsets = {{0}};
+		cmd.bindVertexBuffers(0, vkMesh.vbo.obj, offsets);
+		cmd.bindIndexBuffer(vkMesh.ibo.obj, offsets[0], vk::IndexType::eUint32);
+
+		//Push constant for transform data
+		struct PushConstants {
+			glm::mat4 transform;
+			glm::mat3 normal;
+			float handedness;
+		} push = {};
+		push.transform = transform.GetTransformationMatrix();
+		glm::mat3 transformLinear(push.transform);
+		push.normal = glm::transpose(glm::inverse(transformLinear));
+		push.handedness = (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f);
+		cmd.pushConstants(RES_IMPL(Shader, Vulkan, *material->GetShader()).layout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), &push);
+
+		//Draw mesh
+		cmd.drawIndexed(vkMesh.indices.size() * 3, 1, 0, 0, 0);
 	}
 }

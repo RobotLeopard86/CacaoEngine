@@ -7,6 +7,6 @@
 namespace Cacao {
 	class VulkanMaterialImpl : public Material::Impl {
 	  public:
-		void Upload(std::unique_ptr<CommandBuffer>& cmd) override;
+		void Upload(CommandBuffer* cmd) override;
 	};
 }

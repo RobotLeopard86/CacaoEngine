@@ -60,6 +60,7 @@ namespace libcacaoasset {
 			libjaguar::Vector<float, 4> initialRot;	 ///<Initial rotation (as quaternion)
 			libjaguar::Vector<float, 3> initialScale;///<Initial scale
 			std::vector<Component> components;		 ///<Components mounted on this actor initially
+			bool active;							 ///<Whether the actor is initially active
 		};
 		std::vector<Actor> actors;///<All actors in the world
 	};

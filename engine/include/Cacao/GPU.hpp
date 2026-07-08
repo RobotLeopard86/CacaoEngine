@@ -61,7 +61,7 @@ namespace Cacao {
 	/**
 	 * @brief The centralized GPU interaction system
 	 *
-	 * @warning Wild usage of this system is <b>not recommended</b> since you will end up fighting with the world renderer. For this reason, you should only access this interface during the custom rendering hooks in the FrameProcessor.
+	 * @warning While documented, most clients should <b>never touch this system</b>. Only use for exceptional cases.
 	 */
 	class CACAO_API GPUManager {
 	  public:
