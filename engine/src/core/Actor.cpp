@@ -129,6 +129,8 @@ namespace Cacao {
 		return active && (parent ? parent->IsActive() : true);
 	}
 
+	ActorRef::ActorRef(std::weak_ptr<World> world, uint64_t slot, uint64_t generation) : world(world), slotID(slot), generation(generation), null(false) {}
+
 	//Returns nullptr on non-valid handle
 	void* ActorRef::Resolve() const noexcept {
 		//Lock world

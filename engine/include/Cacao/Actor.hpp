@@ -20,7 +20,7 @@ namespace Cacao {
 	/**
 	 * @brief An handle for Actors to control world tree ownership
 	 */
-	class ActorRef {
+	class CACAO_API ASTRA_REFLECT ActorRef : public AstraReflectBase {
 	  public:
 		/**
 		 * @brief Create a new "null" ActorRef that is invalid
@@ -55,25 +55,29 @@ namespace Cacao {
 		 */
 		bool operator==(const ActorRef& rhs) const noexcept;
 
+		ASTRASETUP(ActorRef)
+
+		virtual ~ActorRef() {}
+
 	  private:
 		friend class Actor;
 		friend class World;
 
 		//Non-owning World pointer
-		std::weak_ptr<World> world;
+		ASTRA_IGNORE std::weak_ptr<World> world;
 
 		//Actor slot access information
-		uint64_t slotID;
-		uint64_t generation;
+		ASTRA_IGNORE uint64_t slotID;
+		ASTRA_IGNORE uint64_t generation;
 
 		//Null state
-		bool null = true;
+		ASTRA_IGNORE bool null = true;
 
 		//Hidden valid handle constructor
-		ActorRef(std::weak_ptr<World> world, uint64_t slot, uint64_t generation) : world(world), slotID(slot), generation(generation), null(false) {}
+		ActorRef(std::weak_ptr<World> world, uint64_t slot, uint64_t generation);
 
 		//Hidden resolver function
-		void* Resolve() const noexcept;
+		ASTRA_IGNORE void* Resolve() const noexcept;
 	};
 
 	/**
@@ -153,7 +157,7 @@ namespace Cacao {
 
 	  private:
 		bool enabled;
-		ActorRef owner;
+		ASTRA_IGNORE ActorRef owner;
 	};
 
 	/**
