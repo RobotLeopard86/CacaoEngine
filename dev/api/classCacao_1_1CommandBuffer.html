@@ -551,6 +551,28 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBuffer8DrawMeshENSt10shared_ptrI4MeshEENSt10shared_ptrI8MaterialEE9Transform">
+<span id="_CPPv3N5Cacao13CommandBuffer8DrawMeshENSt10shared_ptrI4MeshEENSt10shared_ptrI8MaterialEE9Transform"></span><span id="_CPPv2N5Cacao13CommandBuffer8DrawMeshENSt10shared_ptrI4MeshEENSt10shared_ptrI8MaterialEE9Transform"></span><span id="Cacao::CommandBuffer::DrawMesh__std::shared_ptr:Mesh:.std::shared_ptr:Material:.Transform"></span><span class="target" id="classCacao_1_1CommandBuffer_1ab016ef2a589bf109eebb5a1d8f1a1ca9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DrawMesh</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Mesh.html#_CPPv4N5Cacao4MeshE" title="Cacao::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Material.html#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">material</span></span>, <a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">transform</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBuffer8DrawMeshENSt10shared_ptrI4MeshEENSt10shared_ptrI8MaterialEE9Transform" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Draw a mesh using a material. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – The mesh to draw </p></li>
+<li><p><strong>material</strong> – The material to draw the mesh with </p></li>
+<li><p><strong>transform</strong> – The transform to position the mesh</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If either the mesh or material handles are empty </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the mesh is not baked </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the shader backing the material is not baked </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao13CommandBufferD0Ev">
 <span id="_CPPv3N5Cacao13CommandBufferD0Ev"></span><span id="_CPPv2N5Cacao13CommandBufferD0Ev"></span><span id="Cacao::CommandBuffer::~CommandBuffer"></span><span class="target" id="classCacao_1_1CommandBuffer_1a262e20e4cd6f51264f0ac7cb8d6f6940"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~CommandBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao13CommandBufferD0Ev" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
@@ -660,6 +682,7 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBufferE"><code class="docutils literal notranslate"><span class="pre">Cacao::CommandBuffer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer8DrawMeshENSt10shared_ptrI4MeshEENSt10shared_ptrI8MaterialEE9Transform"><code class="docutils literal notranslate"><span class="pre">DrawMesh()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBufferD0Ev"><code class="docutils literal notranslate"><span class="pre">~CommandBuffer()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer6CreateEv"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao13CommandBuffer13CommandBufferEv"><code class="docutils literal notranslate"><span class="pre">CommandBuffer()</span></code></a></li>

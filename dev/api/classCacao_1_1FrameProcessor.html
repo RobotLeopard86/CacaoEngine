@@ -549,6 +549,28 @@
 <span id="_CPPv3N5Cacao14FrameProcessorE"></span><span id="_CPPv2N5Cacao14FrameProcessorE"></span><span id="Cacao::FrameProcessor"></span><span class="target" id="classCacao_1_1FrameProcessor"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FrameProcessor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14FrameProcessorE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Singleton in charge of generating frame rendering command buffers and submitting them to the <a class="reference internal" href="classCacao_1_1GPUManager.html#classCacao_1_1GPUManager"><span class="std std-ref">GPUManager</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14FrameProcessor5PhaseE">
+<span id="_CPPv3N5Cacao14FrameProcessor5PhaseE"></span><span id="_CPPv2N5Cacao14FrameProcessor5PhaseE"></span><span class="target" id="classCacao_1_1FrameProcessor_1a3b790f06ebfd8f7f22dc9e2d748a68f2"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Phase</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14FrameProcessor5PhaseE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Describes during what phase of rendering a custom callback should be run. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14FrameProcessor5Phase6OpaqueE">
+<span id="_CPPv3N5Cacao14FrameProcessor5Phase6OpaqueE"></span><span id="_CPPv2N5Cacao14FrameProcessor5Phase6OpaqueE"></span><span class="target" id="classCacao_1_1FrameProcessor_1a3b790f06ebfd8f7f22dc9e2d748a68f2afaa90538de35640e4b1e31ccf35b6eb5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Opaque</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14FrameProcessor5Phase6OpaqueE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Opaque geometry pass. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14FrameProcessor5Phase11TransparentE">
+<span id="_CPPv3N5Cacao14FrameProcessor5Phase11TransparentE"></span><span id="_CPPv2N5Cacao14FrameProcessor5Phase11TransparentE"></span><span class="target" id="classCacao_1_1FrameProcessor_1a3b790f06ebfd8f7f22dc9e2d748a68f2a3d971943089a3388c01fb297a32d9ba7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Transparent</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao14FrameProcessor5Phase11TransparentE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Transparent geometry pass. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao14FrameProcessor5StartEv">
@@ -593,6 +615,38 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The FPS </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14FrameProcessor25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb">
+<span id="_CPPv3N5Cacao14FrameProcessor25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb"></span><span id="_CPPv2N5Cacao14FrameProcessor25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb"></span><span class="target" id="classCacao_1_1FrameProcessor_1a98c170589bc53c36024708ed4c8d3fb6"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterRenderingCallback</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1CommandBuffer.html#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">callback</span></span>, <a class="reference internal" href="#_CPPv4N5Cacao14FrameProcessor5PhaseE" title="Cacao::FrameProcessor::Phase"><span class="n"><span class="pre">Phase</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">phase</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">runPost</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao14FrameProcessor25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Register a custom rendering callback. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callback</strong> – The function to run </p></li>
+<li><p><strong>phase</strong> – What rendering phase to run the callback in </p></li>
+<li><p><strong>runPost</strong> – Whether to run the callback post-phase (if true) or pre-phase (if false)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A GUID that can be used to unregister the callback </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao14FrameProcessor27UnregisterRenderingCallbackERKN2xg4GuidE">
+<span id="_CPPv3N5Cacao14FrameProcessor27UnregisterRenderingCallbackERKN2xg4GuidE"></span><span id="_CPPv2N5Cacao14FrameProcessor27UnregisterRenderingCallbackERKN2xg4GuidE"></span><span id="Cacao::FrameProcessor::UnregisterRenderingCallback__xg::GuidCR"></span><span class="target" id="classCacao_1_1FrameProcessor_1af6ef65bee062b5c94a59b70750ba35c0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnregisterRenderingCallback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callbackGUID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao14FrameProcessor27UnregisterRenderingCallbackERKN2xg4GuidE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Unregister a custom rendering callback. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callbackGUID</strong> – The GUID returned from the registration function to identify the callback</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If no registered callback is associated with the provided GUID </p>
 </dd>
 </dl>
 </dd></dl>
@@ -666,10 +720,17 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessorE"><code class="docutils literal notranslate"><span class="pre">Cacao::FrameProcessor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor5PhaseE"><code class="docutils literal notranslate"><span class="pre">Phase</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor5Phase6OpaqueE"><code class="docutils literal notranslate"><span class="pre">Opaque</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor5Phase11TransparentE"><code class="docutils literal notranslate"><span class="pre">Transparent</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor5StartEv"><code class="docutils literal notranslate"><span class="pre">Start()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor4StopEv"><code class="docutils literal notranslate"><span class="pre">Stop()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao14FrameProcessor9IsRunningEv"><code class="docutils literal notranslate"><span class="pre">IsRunning()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor13GetCurrentFPSEv"><code class="docutils literal notranslate"><span class="pre">GetCurrentFPS()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb"><code class="docutils literal notranslate"><span class="pre">RegisterRenderingCallback()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor27UnregisterRenderingCallbackERKN2xg4GuidE"><code class="docutils literal notranslate"><span class="pre">UnregisterRenderingCallback()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao14FrameProcessor3GetEv"><code class="docutils literal notranslate"><span class="pre">Get()</span></code></a></li>
 </ul>
 </li>

@@ -461,11 +461,19 @@
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">frontVec</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">u8vec3</span><span class="w"> </span><span class="n">GetClearColor</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">clearColor</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">SetClearColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">u8vec3</span><span class="w"> </span><span class="n">color</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">clearColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">ResizeProjectionMatrix</span><span class="p">(</span><span class="n">Event</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
 
 <span class="w">      </span><span class="k">protected</span><span class="o">:</span>
 <span class="w">        </span><span class="n">EventConsumer</span><span class="w"> </span><span class="n">resizeConsumer</span><span class="p">;</span>
-<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="w"> </span><span class="n">clearColor</span><span class="p">;</span>
+<span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">u8vec3</span><span class="w"> </span><span class="n">clearColor</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="w"> </span><span class="n">projectionMatrix</span><span class="p">,</span><span class="w"> </span><span class="n">viewMatrix</span><span class="p">,</span><span class="w"> </span><span class="n">viewProjectionMatrix</span><span class="p">;</span>
 
