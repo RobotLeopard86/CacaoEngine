@@ -134,6 +134,24 @@ namespace Cacao {
 		}
 
 		/**
+		 * @brief Get the clear color used by the camera
+		 *
+		 * @return The camera clear color (in hexadecimal 00 to FF per component)
+		 */
+		glm::u8vec3 GetClearColor() const {
+			return clearColor;
+		}
+
+		/**
+		 * @brief Set the camera's clear color
+		 *
+		 * @param color The new clear color (in hexadecimal 00 to FF per component)
+		 */
+		void SetClearColor(glm::u8vec3 color) {
+			clearColor = color;
+		}
+
+		/**
 		 * @brief Event handler for resizing the projection matrix when the window size changes
 		 *
 		 * @note For use by the engine only
@@ -144,7 +162,7 @@ namespace Cacao {
 
 	  protected:
 		EventConsumer resizeConsumer;
-		glm::vec4 clearColor;
+		glm::u8vec3 clearColor;
 
 		glm::mat4 projectionMatrix, viewMatrix, viewProjectionMatrix;
 

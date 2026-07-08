@@ -22,11 +22,12 @@ namespace Cacao {
 		/**
 		 * @brief Create a new blank world
 		 *
+		 * @param useOrthographicCamera Whether to use an orthographic camera (true) or perspective camera (false)
 		 * @param addr The resource address to associate with the world
 		 *
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<World> Create(const std::string& addr);
+		static std::shared_ptr<World> Create(bool useOrthographicCamera, const std::string& addr);
 
 		/**
 		 * @brief Create a new world using data
@@ -87,7 +88,7 @@ namespace Cacao {
 		///@endcond
 
 	  private:
-		World(const std::string& addr);
+		World(bool useOrthographicCamera, const std::string& addr);
 		friend class ResourceManager;
 
 		std::unique_ptr<Impl> impl;

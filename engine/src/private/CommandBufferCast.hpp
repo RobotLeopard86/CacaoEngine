@@ -8,3 +8,9 @@ template<typename D>
 inline std::unique_ptr<D> CBCast(std::unique_ptr<Cacao::CommandBuffer>&& cb) {
 	return std::unique_ptr<D>(static_cast<D*>(cb.release()));
 }
+
+template<typename D>
+	requires std::is_base_of_v<Cacao::CommandBuffer, D>
+inline D* CBRefCast(std::unique_ptr<Cacao::CommandBuffer>& cb) {
+	return static_cast<D*>(cb.get());
+}

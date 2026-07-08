@@ -52,7 +52,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 	}
 	YAML::Node cam = root["cam"];
 	ValidateYAMLNode(cam, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
-			YAML::Node p = node["position"], r = node["rotation"];
+			YAML::Node p = node["position"], r = node["rotation"], o = node["orthographic"], c = node["clear"];
 			try {
 				if(!(p.IsMap() && p["x"].IsScalar() && p["y"].IsScalar() && p["z"].IsScalar())) return "Expected 'x', 'y', and 'z' scalar values for camera initial position";
 				out.initialCamPos.x = std::strtof(p["x"].Scalar().c_str(), nullptr);
@@ -63,6 +63,14 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 				out.initialCamRot.y = std::strtof(r["y"].Scalar().c_str(), nullptr);
 				out.initialCamRot.z = std::strtof(r["z"].Scalar().c_str(), nullptr);
 				out.initialCamRot.w = std::strtof(r["w"].Scalar().c_str(), nullptr);
+				if(!o.IsScalar()) return "Expected 'orthographic' scalar value for camera";
+				out.camOrthographic = o.as<bool>();
+				if(!c.IsScalar()) return "Expected 'clear' scalar value for camera";
+				if(!(c.Scalar().size() == 6 && c.Scalar().find_first_not_of("0123456789ABCDEFabcdef") == std::string::npos)) return "Expected 'clear' scalar value for camera to be formatted as hex color code (RRGGBB)";
+				std::string hexCode = c.Scalar();
+				out.camClearColor.r = std::stoi(hexCode.substr(0, 2), 0, 16);
+				out.camClearColor.g = std::stoi(hexCode.substr(2, 2), 0, 16);
+				out.camClearColor.b = std::stoi(hexCode.substr(4, 2), 0, 16);
 			} catch(...) {
 				return "Non-float value found in camera initial state";
 			}

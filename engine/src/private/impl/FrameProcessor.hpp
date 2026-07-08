@@ -24,5 +24,9 @@ namespace Cacao {
 		unsigned int counter;
 		clock::time_point lastSecond;
 		std::array<unsigned int, FPS_AVG_WINDOW> fpsMeasures;
+
+		std::unordered_map<xg::Guid, std::function<void(std::unique_ptr<CommandBuffer>&)>> callbacks;
+		std::unordered_map<FrameProcessor::Phase, std::pair<std::vector<xg::Guid>, std::vector<xg::Guid>>> mappings;
+		std::unordered_map<xg::Guid, std::pair<FrameProcessor::Phase, bool>> reverseMappings;
 	};
 }

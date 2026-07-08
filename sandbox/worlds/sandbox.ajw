@@ -9,4 +9,6 @@ cam:
     y: 0
     z: 0
     w: 1
+  clear: 00ACE6
+  orthographic: false
 actors: []

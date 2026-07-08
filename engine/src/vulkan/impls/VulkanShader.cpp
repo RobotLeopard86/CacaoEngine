@@ -6,6 +6,7 @@
 #include "Targetgen.hpp"
 
 #include "libcacaoasset.hpp"
+#include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_enums.hpp"
 #include "vulkan/vulkan_handles.hpp"
 #include "vulkan/vulkan_structs.hpp"
@@ -160,6 +161,25 @@ namespace Cacao {
 		vulkan->dev.destroyPipeline(pipelineTransparent);
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) vulkan->dev.destroyDescriptorSetLayout(matLayout);
 		vulkan->dev.destroyDescriptorSetLayout(cacaoLayout);
+	}
+
+	void VulkanShaderImpl::Bind(vk::CommandBuffer& cmd, bool transparent) {
+		//Bind pipeline object
+		cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, transparent ? pipelineTransparent : pipelineOpaque);
+
+		//Push engine descriptors
+		vk::DescriptorBufferInfo globalsDBI(vulkan->globals.obj, 0, vk::WholeSize);
+		vk::DescriptorBufferInfo camDBI(vulkan->camData.obj, 0, vk::WholeSize);
+		std::array<vk::WriteDescriptorSet, 2> set0 {{{VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI},
+			{VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &camDBI}}};
+		cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, layout, 0, set0);
+
+		//Push material data UBO descriptor
+		if(descriptor.uniformParams.size() > 0) {
+			vk::DescriptorBufferInfo matDBI(materialData.obj, 0, vk::WholeSize);
+			vk::WriteDescriptorSet set1(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &matDBI);
+			cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, layout, 1, set1);
+		}
 	}
 
 	Shader::Impl* VulkanModule::ConfigureShader() {

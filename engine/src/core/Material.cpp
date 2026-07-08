@@ -74,6 +74,68 @@ namespace Cacao {
 			//Store value
 			impl->storage[name] = value;
 		} else {
+			//Find parameter object
+			auto it = std::find_if(descriptor.uniformParams.cbegin(), descriptor.uniformParams.cend(), [&name](const libcacaoasset::Shader::Descriptor::UniformParameter& param) {
+				return param.name.compare(name) == 0;
+			});
+			Check<NonexistentValueException>(it != descriptor.uniformParams.cend(), "Cannot set the value of a nonexistent material parameter!");
+
+			//Type check
+			switch(it->type) {
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int:
+					Check<BadTypeException>(value.index() == 0, "Cannot upload non-int to int material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt:
+					Check<BadTypeException>(value.index() == 1, "Cannot upload non-uint to uint material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float:
+					Check<BadTypeException>(value.index() == 2, "Cannot upload non-float to float material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Bool:
+					Check<BadTypeException>(value.index() == 3, "Cannot upload non-boolean to boolean material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int2:
+					Check<BadTypeException>(value.index() == 4, "Cannot upload non-int2 to int2 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int3:
+					Check<BadTypeException>(value.index() == 5, "Cannot upload non-int3 to int3 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int4:
+					Check<BadTypeException>(value.index() == 6, "Cannot upload non-int4 to int4 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt2:
+					Check<BadTypeException>(value.index() == 7, "Cannot upload non-uint2 to uint2 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt3:
+					Check<BadTypeException>(value.index() == 8, "Cannot upload non-uint3 to uint3 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt4:
+					Check<BadTypeException>(value.index() == 9, "Cannot upload non-uint4 to uint4 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float2:
+					Check<BadTypeException>(value.index() == 10, "Cannot upload non-float2 to float2 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float3:
+					Check<BadTypeException>(value.index() == 11, "Cannot upload non-float3 to float3 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float4:
+					Check<BadTypeException>(value.index() == 12, "Cannot upload non-float4 to float4 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float2x2:
+					Check<BadTypeException>(value.index() == 13, "Cannot upload non-float2x2 to float2x2 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float3x3:
+					Check<BadTypeException>(value.index() == 14, "Cannot upload non-float3x3 to float3x3 material parameter!");
+					break;
+				case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float4x4:
+					Check<BadTypeException>(value.index() == 15, "Cannot upload non-float4x4 to float4x4 material parameter!");
+					break;
+				default:
+					break;
+			}
+
+			//Store value
+			impl->storage[name] = value;
 		}
 	}
 
@@ -93,5 +155,13 @@ namespace Cacao {
 
 		//Return result
 		return impl->storage[name];
+	}
+
+	void Material::SetRenderMode(libcacaoasset::Material::RenderMode mode) {
+		impl->renderMode = mode;
+	}
+
+	libcacaoasset::Material::RenderMode Material::GetRenderMode() {
+		return impl->renderMode;
 	}
 }

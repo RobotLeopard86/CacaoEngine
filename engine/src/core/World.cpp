@@ -4,6 +4,7 @@
 #include "Cacao/EventConsumer.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/OrthographicCamera.hpp"
 #include "Cacao/PerspectiveCamera.hpp"
 #include "Cacao/Resource.hpp"
 #include "Cacao/ResourceManager.hpp"
@@ -23,7 +24,7 @@
 #include <ranges>
 
 namespace Cacao {
-	World::World(const std::string& addr)
+	World::World(bool useOrthographicCamera, const std::string& addr)
 	  : Resource(addr) {
 		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
 
@@ -31,24 +32,29 @@ namespace Cacao {
 		impl = std::make_unique<Impl>();
 
 		//Create camera
-		cam = std::make_shared<PerspectiveCamera>();
+		if(useOrthographicCamera) {
+			cam = std::make_shared<OrthographicCamera>();
+		} else {
+			cam = std::make_shared<PerspectiveCamera>();
+		}
 		cam->SetPosition(glm::vec3 {0});
 		cam->SetRotation(glm::vec3 {0});
 	}
 
-	std::shared_ptr<World> World::Create(const std::string& addr) {
-		std::shared_ptr<World> ptr(new World(addr));
+	std::shared_ptr<World> World::Create(bool useOrthographicCamera, const std::string& addr) {
+		std::shared_ptr<World> ptr(new World(useOrthographicCamera, addr));
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}
 
 	std::shared_ptr<World> World::Create(const libcacaoasset::World& world, const std::string& addr) {
 		//Create base world
-		std::shared_ptr<World> w = Create(addr);
+		std::shared_ptr<World> w = Create(world.camOrthographic, addr);
 
 		//Configure camera and skybox
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
 		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z, world.initialCamRot.w});
+		w->cam->SetClearColor({world.camClearColor.r, world.camClearColor.g, world.camClearColor.b});
 		if(!world.skybox.empty() && ValidateResourceAddr<World>(world.skybox)) {
 			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}

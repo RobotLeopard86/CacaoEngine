@@ -4,6 +4,9 @@
 #include <memory>
 
 #include "DllHelper.hpp"
+#include "Material.hpp"
+#include "Mesh.hpp"
+#include "Transform.hpp"
 
 #include "glm/glm.hpp"
 
@@ -25,6 +28,19 @@ namespace Cacao {
 		CommandBuffer& operator=(CommandBuffer&&);
 		///@endcond
 
+		/**
+		 * @brief Draw a mesh using a material
+		 *
+		 * @param mesh The mesh to draw
+		 * @param material The material to draw the mesh with
+		 * @param transform The transform to position the mesh
+		 *
+		 * @throws NonexistentValueException If either the mesh or material handles are empty
+		 * @throws BadBakeStateException If the mesh is not baked
+		 * @throws BadBakeStateException If the shader backing the material is not baked
+		 */
+		virtual void DrawMesh([[maybe_unused]] std::shared_ptr<Mesh> mesh, [[maybe_unused]] std::shared_ptr<Material> material, [[maybe_unused]] Transform transform) {}
+
 		virtual ~CommandBuffer() {};
 
 	  protected:
@@ -35,17 +51,17 @@ namespace Cacao {
 		friend class FrameProcessor;
 		friend class PALModule;
 
-		virtual bool SetupContext(bool rendering = false) {
+		virtual bool SetupContext([[maybe_unused]] bool rendering = false) {
 			return true;
 		}
-		virtual void StartRendering(glm::vec3 clearColor) {}
+		virtual void StartRendering([[maybe_unused]] glm::vec3 clearColor) {}
 		virtual void EndRendering() {}
 	};
 
 	/**
 	 * @brief The centralized GPU interaction system
 	 *
-	 * @warning Wild usage of this system is <b>not recommended</b> since you will end up fighting with the world renderer. For this reason, you should only access this interface during the pre- and post-render hooks in the FrameProcessor (not yet implemented).
+	 * @warning Wild usage of this system is <b>not recommended</b> since you will end up fighting with the world renderer. For this reason, you should only access this interface during the custom rendering hooks in the FrameProcessor.
 	 */
 	class CACAO_API GPUManager {
 	  public:

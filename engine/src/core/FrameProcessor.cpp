@@ -10,6 +10,7 @@
 #include "Cacao/WorldManager.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
+#include "crossguid/guid.hpp"
 #include "impl/PAL.hpp"
 #include "impl/FrameProcessor.hpp"
 
@@ -81,6 +82,32 @@ namespace Cacao {
 		return std::accumulate(impl->fpsMeasures.begin(), impl->fpsMeasures.end(), 0) / FPS_AVG_WINDOW;
 	}
 
+	xg::Guid FrameProcessor::RegisterRenderingCallback(std::function<void(std::unique_ptr<CommandBuffer>&)> callback, Phase phase, bool runPost) {
+		xg::Guid guid = xg::newGuid();
+		impl->callbacks[guid] = callback;
+		impl->reverseMappings[guid] = std::pair<Phase, bool>(phase, runPost);
+		if(!runPost) {
+			impl->mappings[phase].first.push_back(guid);
+		} else {
+			impl->mappings[phase].second.push_back(guid);
+		}
+		return guid;
+	}
+
+	void FrameProcessor::UnregisterRenderingCallback(const xg::Guid& callbackGUID) {
+		Check<NonexistentValueException>(impl->callbacks.contains(callbackGUID), "Cannot unregister nonexistent custom rendering callback!");
+		impl->callbacks.erase(callbackGUID);
+		std::pair<Phase, bool> reverse = impl->reverseMappings[callbackGUID];
+		std::vector<xg::Guid>* mappingsVec;
+		if(!reverse.second) {
+			mappingsVec = &impl->mappings[reverse.first].first;
+		} else {
+			mappingsVec = &impl->mappings[reverse.first].second;
+		}
+		mappingsVec->erase(std::find(mappingsVec->begin(), mappingsVec->end(), callbackGUID));
+		impl->reverseMappings.erase(callbackGUID);
+	}
+
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		//Setup variables
 		counter = 0;
@@ -125,32 +152,61 @@ namespace Cacao {
 				}
 			}
 
-			//Within this block, world access is safe
-			{
-				//Acquire active world
-				std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
-				if(!world) return;
-
-				//TODO: Find meshes
-			}
-
-			//Allow tick controller to resume
-			//It has been blocking on this semaphore
-			if(TickController::Get().IsRunning()) TickController::Get().snapshotControl.done.release();
-
 			//Setup command buffer
 			//We use the internal API so we can do rendering setup
 			std::unique_ptr<CommandBuffer> cmd = IMPL(PAL).mod->CreateCmdBuffer();
 			if(!cmd->SetupContext(true)) continue;
 
-			//Clear color
-			constexpr static glm::vec3 clearColor {0x00, 0xAC, 0xE6};
-			const static glm::vec3 clearColorLinear {srgbChannel2Linear(clearColor.r / 255), srgbChannel2Linear(clearColor.g / 255), srgbChannel2Linear(clearColor.b / 255)};
+			//Within this block, world access is safe
+			glm::vec3 linearClearColor;
+			{
+				//Acquire active world
+				std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
+				if(!world) return;
 
-			//Record commands
-			cmd->StartRendering(clearColorLinear);
-			//TODO: Render meshes
-			cmd->EndRendering();
+				//Set clear color from camera
+				linearClearColor = glm::vec3 {srgbChannel2Linear((float)world->cam->GetClearColor().r / 0xFF),
+					srgbChannel2Linear((float)world->cam->GetClearColor().g / 0xFF),
+					srgbChannel2Linear((float)world->cam->GetClearColor().b / 0xFF)};
+
+				//TODO: Find mesh components
+
+				//Start rendering and clear screen
+				cmd->StartRendering(linearClearColor);
+
+				//Run pre-opaque callbacks
+				for(const xg::Guid& guid : mappings[Phase::Opaque].first) {
+					callbacks[guid](cmd);
+				}
+
+				//TODO: render opaque / cutout meshes (front to back)
+
+				//Run post-opaque callbacks
+				for(const xg::Guid& guid : mappings[Phase::Opaque].second) {
+					callbacks[guid](cmd);
+				}
+
+				//TODO: render skybox if applicable
+
+				//Run pre-transparent callbacks
+				for(const xg::Guid& guid : mappings[Phase::Transparent].first) {
+					callbacks[guid](cmd);
+				}
+
+				//TODO: render-transparent meshes
+
+				//Run post-transparent callbacks
+				for(const xg::Guid& guid : mappings[Phase::Transparent].second) {
+					callbacks[guid](cmd);
+				}
+
+				//End rendering
+				cmd->EndRendering();
+			}
+
+			//Allow tick controller to resume
+			//It has been blocking on this semaphore
+			if(TickController::Get().IsRunning()) TickController::Get().snapshotControl.done.release();
 
 			//Execute command buffer
 			try {

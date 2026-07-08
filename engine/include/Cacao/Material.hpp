@@ -103,6 +103,20 @@ namespace Cacao {
 			return std::get<T>(pv);
 		}
 
+		/**
+		 * @brief Set the rendering mode
+		 *
+		 * @param mode The new rendering mode
+		 */
+		void SetRenderMode(libcacaoasset::Material::RenderMode mode);
+
+		/**
+		 * @brief Get the current rendering mode
+		 *
+		 * @return The rendering mode
+		 */
+		libcacaoasset::Material::RenderMode GetRenderMode();
+
 		///@cond
 		class Impl;
 		///@endcond

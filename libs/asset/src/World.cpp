@@ -32,6 +32,8 @@ namespace libcacaoasset {
 		World world;
 		world.initialCamPos = rd.Query<libjaguar::Vector<float, 3>>("camPos");
 		world.initialCamRot = rd.Query<libjaguar::Vector<float, 4>>("camRot");
+		world.camClearColor = rd.Query<libjaguar::Vector<uint8_t, 3>>("camClear");
+		world.camOrthographic = rd.Query<bool>("camIsOrtho");
 		world.skybox = rd.Query<std::string>("skybox");
 		world.actors = rd.Query<std::vector<World::Actor>>("actors");
 		return world;
@@ -55,6 +57,8 @@ namespace libcacaoasset {
 	void _EncWorld(const World& w, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<libjaguar::Vector<float, 3>>("camPos", w.initialCamPos);
 		ow.SetOrCreate<libjaguar::Vector<float, 4>>("camRot", w.initialCamRot);
+		ow.SetOrCreate<libjaguar::Vector<uint8_t, 3>>("camClear", w.camClearColor);
+		ow.SetOrCreate<bool>("camIsOrtho", w.camOrthographic);
 		ow.SetOrCreate<std::string>("skybox", w.skybox);
 		ow.SetOrCreate<std::vector<World::Actor>>("actors", w.actors);
 	}
@@ -134,6 +138,18 @@ namespace libcacaoasset {
 			rot.type = libjaguar::TypeTag::Vector;
 			rot.elementType = libjaguar::TypeTag::Float32;
 			rot.width = 4;
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& clear = wLayout.fields.emplace_back();
+			clear.name = "camClear";
+			clear.type = libjaguar::TypeTag::Vector;
+			clear.elementType = libjaguar::TypeTag::UInt8;
+			clear.width = 3;
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& ortho = wLayout.fields.emplace_back();
+			ortho.name = "camIsOrtho";
+			ortho.type = libjaguar::TypeTag::Boolean;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& sky = wLayout.fields.emplace_back();
