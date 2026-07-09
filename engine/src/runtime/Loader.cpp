@@ -2,6 +2,7 @@
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/Engine.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Material.hpp"
 #include "Cacao/Mesh.hpp"
 #include "Cacao/Model.hpp"
 #include "Cacao/Resource.hpp"
@@ -52,6 +53,10 @@ class RTLoader {
 		using type = libcacaoasset::World;
 	};
 	template<>
+	struct intermediate<Material> {
+		using type = libcacaoasset::Material;
+	};
+	template<>
 	struct intermediate<BlobResource> {
 		using type = std::vector<unsigned char>;
 	};
@@ -68,7 +73,7 @@ class RTLoader {
 
 void CfgLoader() {
 	RTLoader l;
-	ResourceManager::Get().ConfigureResourceLoader<RTLoader, World, Cubemap, Shader, Tex2D, Sound, Model, BlobResource>(std::move(l));
+	ResourceManager::Get().ConfigureResourceLoader<RTLoader, World, Cubemap, Shader, Tex2D, Sound, Model, Material, BlobResource>(std::move(l));
 }
 
 template<>
@@ -144,7 +149,9 @@ std::shared_ptr<Cubemap> RTLoader::CreateResource<Cubemap>(const std::string& ad
 	}
 
 	//Return cubemap asset
-	return Cubemap::Create(std::move(faces), addr);
+	std::shared_ptr<Cubemap> cmap = Cubemap::Create(std::move(faces), addr);
+	cmap->Bake();
+	return cmap;
 }
 
 template<>
@@ -170,7 +177,9 @@ std::unique_ptr<libcacaoasset::Shader> RTLoader::FetchData<Shader>(const std::st
 
 template<>
 std::shared_ptr<Shader> RTLoader::CreateResource<Shader>(const std::string& addr, std::unique_ptr<libcacaoasset::Shader>&& data) const {
-	return Shader::Create(std::move(data->irCode), data->descriptor, addr);
+	std::shared_ptr<Shader> shader = Shader::Create(std::move(data->irCode), data->descriptor, addr);
+	shader->Bake();
+	return shader;
 }
 
 template<>
@@ -189,7 +198,9 @@ template<>
 std::shared_ptr<Tex2D> RTLoader::CreateResource<Tex2D>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) const {
 	ibytestream ibs {*data};
 	libcacaoimage::Image img = libcacaoimage::decode::DecodeGeneric(ibs);
-	return Tex2D::Create(std::move(img), addr);
+	std::shared_ptr<Tex2D> tex = Tex2D::Create(std::move(img), addr);
+	tex->Bake();
+	return tex;
 }
 
 template<>
@@ -210,7 +221,9 @@ std::unique_ptr<std::vector<char>> RTLoader::FetchData<Sound>(const std::string&
 
 template<>
 std::shared_ptr<Sound> RTLoader::CreateResource<Sound>(const std::string& addr, std::unique_ptr<std::vector<char>>&& data) const {
-	return Sound::Create(std::move(*data), addr);
+	std::shared_ptr<Sound> sound = Sound::Create(std::move(*data), addr);
+	sound->Bake();
+	return sound;
 }
 
 template<>
@@ -245,4 +258,116 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<BlobResource>(co
 template<>
 std::shared_ptr<BlobResource> RTLoader::CreateResource<BlobResource>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) const {
 	return BlobResource::Create(std::move(*data), addr);
+}
+
+template<>
+std::unique_ptr<libcacaoasset::Material> RTLoader::FetchData<Material>(const std::string& addr) const {
+	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent material!");
+
+	//Open asset pack and get resource
+	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::Resource r = pak.GetResource(addr);
+	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Material, "Tried to load a resource as a material that is not one!");
+
+	//Decode material and return (pointer will be freed by DecodeMaterial)
+	ibytestream* ibs = new ibytestream(r.bytes);
+	libcacaoasset::Material material;
+	try {
+		material = libcacaoasset::DecodeMaterial(ibs);
+	} catch(const std::exception& e) {
+		Check<ExternalException>(false, e.what());
+		throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
+	}
+	return std::make_unique<libcacaoasset::Material>(std::move(material));
+}
+
+template<>
+std::shared_ptr<Material> RTLoader::CreateResource<Material>(const std::string& addr, std::unique_ptr<libcacaoasset::Material>&& data) const {
+	std::shared_ptr<Material> m = Material::Create(*ResourceManager::Get().Load<Shader>(data->shaderAddress), addr);
+	m->SetRenderMode(data->renderMode);
+	for(const libcacaoasset::Material::Param& param : data->parameters) {
+		switch(param.storage.index()) {
+			case 0:
+				m->SetParameter(param.target, std::get<int>(param.storage));
+				break;
+			case 1:
+				m->SetParameter(param.target, std::get<unsigned int>(param.storage));
+				break;
+			case 2:
+				m->SetParameter(param.target, std::get<float>(param.storage));
+				break;
+			case 3:
+				m->SetParameter(param.target, std::get<bool>(param.storage));
+				break;
+			case 4: {
+				libcacaoasset::Material::TexRef val = std::get<libcacaoasset::Material::TexRef>(param.storage);
+				if(!val.isCubemap) {
+					m->SetParameter(param.target, *ResourceManager::Get().Load<Tex2D>(val.address));
+				} else {
+					m->SetParameter(param.target, *ResourceManager::Get().Load<Cubemap>(val.address));
+				}
+			}
+			case 5: {
+				auto val = std::get<libjaguar::Vector<float, 2>>(param.storage);
+				m->SetParameter(param.target, glm::vec2 {val.x, val.y});
+				break;
+			}
+			case 6: {
+				auto val = std::get<libjaguar::Vector<float, 3>>(param.storage);
+				m->SetParameter(param.target, glm::vec3 {val.x, val.y, val.z});
+				break;
+			}
+			case 7: {
+				auto val = std::get<libjaguar::Vector<float, 4>>(param.storage);
+				m->SetParameter(param.target, glm::vec4 {val.x, val.y, val.z, val.w});
+				break;
+			}
+			case 8: {
+				auto val = std::get<libjaguar::Vector<int, 2>>(param.storage);
+				m->SetParameter(param.target, glm::ivec2 {val.x, val.y});
+				break;
+			}
+			case 9: {
+				auto val = std::get<libjaguar::Vector<int, 3>>(param.storage);
+				m->SetParameter(param.target, glm::ivec3 {val.x, val.y, val.z});
+				break;
+			}
+			case 10: {
+				auto val = std::get<libjaguar::Vector<int, 4>>(param.storage);
+				m->SetParameter(param.target, glm::ivec4 {val.x, val.y, val.z, val.w});
+				break;
+			}
+			case 11: {
+				auto val = std::get<libjaguar::Vector<unsigned int, 2>>(param.storage);
+				m->SetParameter(param.target, glm::uvec2 {val.x, val.y});
+				break;
+			}
+			case 12: {
+				auto val = std::get<libjaguar::Vector<unsigned int, 3>>(param.storage);
+				m->SetParameter(param.target, glm::uvec3 {val.x, val.y, val.z});
+				break;
+			}
+			case 13: {
+				auto val = std::get<libjaguar::Vector<unsigned int, 4>>(param.storage);
+				m->SetParameter(param.target, glm::uvec4 {val.x, val.y, val.z, val.w});
+				break;
+			}
+			case 14: {
+				auto val = std::get<libjaguar::Matrix<float, 2, 2>>(param.storage);
+				m->SetParameter(param.target, glm::mat2 {val[0][0], val[0][1], val[1][0], val[1][1]});
+				break;
+			}
+			case 15: {
+				auto val = std::get<libjaguar::Matrix<float, 3, 3>>(param.storage);
+				m->SetParameter(param.target, glm::mat3 {val[0][0], val[0][1], val[0][2], val[1][0], val[1][1], val[1][2], val[2][0], val[2][1], val[2][2]});
+				break;
+			}
+			case 16: {
+				auto val = std::get<libjaguar::Matrix<float, 4, 4>>(param.storage);
+				m->SetParameter(param.target, glm::mat4 {val[0][0], val[0][1], val[0][2], val[0][3], val[1][0], val[1][1], val[1][2], val[1][3], val[2][0], val[2][1], val[2][2], val[2][3], val[3][0], val[3][1], val[3][2], val[3][3]});
+				break;
+			}
+		}
+	}
+	return m;
 }

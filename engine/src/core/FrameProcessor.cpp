@@ -8,6 +8,7 @@
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/WorldManager.hpp"
+#include "Cacao/MeshRenderer.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "crossguid/guid.hpp"
@@ -108,6 +109,29 @@ namespace Cacao {
 		impl->reverseMappings.erase(callbackGUID);
 	}
 
+	exathread::ValueTask<std::vector<MeshRenderer*>> FindMeshRenderers(ActorRef actor) {
+		//Inactive actor stop
+		if(!actor->IsActive()) co_return {};
+
+		//Get all meshrenderers and add them to the list
+		auto actorMeshRenderers = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
+			return (dynamic_cast<MeshRenderer*>(component.get()));
+		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
+			return static_cast<MeshRenderer*>(item.second);
+		}) | std::views::common;
+		std::vector meshrenderers(actorMeshRenderers.begin(), actorMeshRenderers.end());
+
+		//Handle children
+		exathread::MultiFuture<std::vector<MeshRenderer*>> childMeshRenderersFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindMeshRenderers);
+		co_await exathread::yieldUntilComplete(childMeshRenderersFut);
+
+		//Merge lists and return
+		std::vector<std::vector<MeshRenderer*>> toMerge = childMeshRenderersFut.results();
+		toMerge.push_back(std::move(meshrenderers));
+		auto joined = std::views::join(toMerge) | std::views::common;
+		co_return std::vector<MeshRenderer*>(joined.begin(), joined.end());
+	}
+
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
 		//Setup variables
 		counter = 0;
@@ -158,21 +182,31 @@ namespace Cacao {
 			if(!cmd->SetupContext(true)) continue;
 
 			//Within this block, world access is safe
-			glm::vec3 linearClearColor;
 			{
 				//Acquire active world
 				std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
 				if(!world) return;
 
 				//Set clear color from camera
-				linearClearColor = glm::vec3 {srgbChannel2Linear((float)world->cam->GetClearColor().r / 0xFF),
+				glm::vec3 linearClearColor = glm::vec3 {srgbChannel2Linear((float)world->cam->GetClearColor().r / 0xFF),
 					srgbChannel2Linear((float)world->cam->GetClearColor().g / 0xFF),
 					srgbChannel2Linear((float)world->cam->GetClearColor().b / 0xFF)};
 
-				//TODO: Find mesh components
-
 				//Start rendering and clear screen
 				cmd->StartRendering(linearClearColor);
+
+				//Find meshes to render
+				std::vector<MeshRenderer*> meshes;
+				if(world->GetToplevelActors().size() > 0) {
+					//Wait for meshes to be returned
+					exathread::MultiFuture<std::vector<MeshRenderer*>> meshesFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindMeshRenderers);
+					meshesFut.await();
+
+					//Join final mesh list
+					std::vector<std::vector<MeshRenderer*>> toMerge = meshesFut.results();
+					auto joined = std::views::join(toMerge) | std::views::common;
+					meshes = std::vector<MeshRenderer*>(joined.begin(), joined.end());
+				}
 
 				//Run pre-opaque callbacks
 				for(const xg::Guid& guid : mappings[Phase::Opaque].first) {
@@ -193,7 +227,7 @@ namespace Cacao {
 					callbacks[guid](cmd);
 				}
 
-				//TODO: render-transparent meshes
+				//TODO: render-transparent meshes (back to front)
 
 				//Run post-transparent callbacks
 				for(const xg::Guid& guid : mappings[Phase::Transparent].second) {

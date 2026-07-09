@@ -96,7 +96,7 @@ slang = subproject('slang', required: true)
 slang_dep = slang.get_variable('slang_dep')
 
 # Process shader base module file
-shaderbasemod = custom_target('cacaoengine-shaderdefs', input: meson.project_source_root() / 'engine' / 'src' / 'shaders' / 'cacaoengine.slang', output: 'cacaoengine.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
+shaderbasemod = custom_target('cacaoengine.inc', input: meson.project_source_root() / 'engine' / 'src' / 'shaders' / 'cacaoengine.slang', output: 'cacaoengine.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
 
 # Configure yaml-cpp
 yaml_cpp = subproject('yaml-cpp', required: true, default_options: {

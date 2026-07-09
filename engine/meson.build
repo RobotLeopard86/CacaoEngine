@@ -26,6 +26,10 @@ engine_args = []
 engine_args_objcpp = []
 engine_deps = []
 
+# Default assets go first so that they can be included
+subdir('src' / 'assets')
+
+
 # Always-included core module
 subdir('src' / 'core')
 

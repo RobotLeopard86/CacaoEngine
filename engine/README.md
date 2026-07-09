@@ -22,6 +22,9 @@ The only external libraries that may be referenced in the headers are:
 * GLM
 * Cacao Engine libraries (those in the `libs` directory at the source tree root).
 
+## Default Assets Library
+All of the built-in Cacao Engine assets can be found here, including meshes (via models), textures, and fonts. All resources in this directory will be embedded inside of the engine binary.
+
 ## Engine Core (`src/core`)
 The engine core is the platform- and backend-agnostic portion of the engine. Its job is to handle everything that can be achieved in that manner. Most engine responsibilities should be handled here.  
 

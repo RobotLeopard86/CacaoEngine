@@ -59,6 +59,7 @@ engine_srcs += files(
 	'expf.c',
 	'Actor.cpp',
 	'AudioManager.cpp',
+	'BuiltinAssets.cpp',
 	'Cameras.cpp',
 	'CodeRegistry.cpp',
 	'Cubemap.cpp',
@@ -83,7 +84,7 @@ engine_srcs += files(
 	'Window.cpp',
 	'World.cpp',
 )
-engine_srcs += [shaderbasemod, vertex_pipeline, fragment_pipeline]
+engine_srcs += [shaderbasemod, vertex_pipeline, fragment_pipeline, default_assets]
 engine_deps += [
 	yaml_cpp,
 	astra_dep,
