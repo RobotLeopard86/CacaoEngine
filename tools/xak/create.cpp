@@ -127,8 +127,8 @@ void CreateCmd::Callback() {
 			if(v.find_first_not_of("abcdefghghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789_") != std::string::npos) {
 				XAK_ERROR("Address listed in map contains invalid characters! (Hint: only lowercase letters, uppercase letters, numbers, and underscores are allowed.)")
 			}
-			if(v.starts_with("builtin_")) {
-				XAK_ERROR("Cannot redefine engine built-in resources in an asset pack!");
+			if(v.starts_with("builtin_") || v.starts_with("internal_")) {
+				XAK_ERROR("Cannot redefine engine built-in/internal resources in an asset pack!");
 			}
 			foundAddrs.push_back(v);
 		}

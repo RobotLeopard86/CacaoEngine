@@ -51,8 +51,8 @@ setupapi = cpp.find_library('setupapi', required: host_machine.system() == 'wind
 apple_audio = dependency('appleframeworks', modules: ['CoreAudio', 'AudioToolbox'], required: host_machine.system() == 'darwin')
 
 # Render pipeline shaders
-vertex_pipeline = custom_target('cacaoengine-vertexpipeline', input: meson.project_source_root() / 'engine' / 'src' / 'shaders' / 'vertex_pipeline.slang', output: 'vertex_pipeline.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
-fragment_pipeline = custom_target('cacaoengine-fragmentpipeline', input: meson.project_source_root() / 'engine' / 'src' / 'shaders' / 'fragment_pipeline.slang', output: 'fragment_pipeline.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
+vertex_pipeline = custom_target('cacaoengine-vertexpipeline', input: meson.project_source_root() / 'engine' / 'src' / 'shaders' / 'pipeline' / 'vertex.slang', output: 'vertex_pipeline.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
+fragment_pipeline = custom_target('cacaoengine-fragmentpipeline', input: meson.project_source_root() / 'engine' / 'src' / 'shaders' / 'pipeline' / 'fragment.slang', output: 'fragment_pipeline.inc', command: [python, meson.project_source_root() / 'scripts' / 'includable.py', '@INPUT@', '@OUTDIR@'])
 
 # Add core module data
 engine_srcs += files(

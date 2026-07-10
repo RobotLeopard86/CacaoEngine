@@ -25,7 +25,7 @@ namespace libcacaoasset {
 	}
 
 	bool ValidateResourceAddress_Mesh(const std::string& addr) {
-		return BaseResAddrCheck(addr, "/") && addr[0] == 'm' && addr.find_first_of('/') == addr.find_last_of('/');
+		return BaseResAddrCheck(addr, "/") && ((addr[0] == 'm' && addr.find_first_of('/') == addr.find_last_of('/')) || (addr.starts_with("a:builtin_") && addr.find('/') == std::string::npos));
 	}
 
 	bool ValidateResourceAddress_AssetGeneric(const std::string& addr) {

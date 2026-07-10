@@ -278,8 +278,8 @@ namespace Cacao {
 		}
 
 		//Construct and return mesh
-		std::stringstream meshAddr("m:");
-		meshAddr << address.substr(2) << "/" << id;
+		std::stringstream meshAddr;
+		meshAddr << "m:" << address.substr(2) << "/" << id;
 		std::shared_ptr<Mesh> mesh = Mesh::Create(std::move(vertices), std::move(indices), meshAddr.str());
 		mesh->Bake();
 		return mesh;
@@ -424,8 +424,8 @@ namespace Cacao {
 
 		//Okay so now we finally have the texture data in the correct format
 		//Now we can make the Tex2D
-		std::stringstream texAddr("e:");
-		texAddr << address.substr(2) << "/" << id;
+		std::stringstream texAddr;
+		texAddr << "e:" << address.substr(2) << "/" << id;
 		std::shared_ptr<Tex2D> t2d = Tex2D::Create(std::move(img), texAddr.str());
 		t2d->Bake();
 		return t2d;

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Asset.hpp"
-#include "Cacao/Tex2D.hpp"
+#include "Tex2D.hpp"
 #include "Model.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 #include "Engine.hpp"
+#include "Shader.hpp"
 
 #include <exception>
 #include <memory>
@@ -120,6 +121,7 @@ namespace Cacao {
 	  private:
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
+		friend class Engine;
 
 		ResourceManager();
 		~ResourceManager();
@@ -128,14 +130,17 @@ namespace Cacao {
 		bool IsLoaderRegistered(std::type_index tp);
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
 		exathread::ValueTask<std::shared_ptr<Resource>> _AsyncLoadOpImpl(std::string addr, std::type_index tp);
+		void SetupBuiltins();
 		std::shared_ptr<Mesh> LoadBuiltinMesh(const std::string& id);
+		std::shared_ptr<Shader> LoadBuiltinShader(const std::string& id);
 
 		template<typename T>
 			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
 		exathread::ValueTask<std::shared_ptr<T>> _AsyncLoadOp(std::string address) {
 			//Check if this is a built-in resource
-			if(address.starts_with("a:builtin_")) {
+			if(address.starts_with("a:builtin_") || address.starts_with("a:internal_")) {
 				if constexpr(std::is_same_v<T, Mesh>) co_return LoadBuiltinMesh(address);
+				if constexpr(std::is_same_v<T, Shader>) co_return LoadBuiltinShader(address);
 				Check<NonexistentValueException>(false, "No built-in resource found!");
 			}
 

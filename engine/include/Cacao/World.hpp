@@ -39,8 +39,7 @@ namespace Cacao {
 		 */
 		static std::shared_ptr<World> Create(const libcacaoasset::World& world, const std::string& addr);
 
-		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
-
+		std::shared_ptr<Camera> cam;	   ///<World camera that will be used to render everything else
 		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
 
 		/**

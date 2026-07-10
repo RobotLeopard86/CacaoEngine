@@ -12,7 +12,7 @@ Cacao Engine project management happens on [Taiga](https://tree.taiga.io/project
 Please **do not create issues in Taiga**, as they will not be synced to GitHub (a limitation of Taiga's GitHub integration).
 
 ## Repository Structure
-This monorepo for Cacao Engine contains the engine itself, a suite of command-line tools for working with the engine, and the auxiliary libraries used by the enginea and tooling. These may be found in the `engine`, `tools`, and `libs` directories respectively, which each contain their own README files.
+This monorepo for Cacao Engine contains the engine itself, a suite of command-line tools for working with the engine, and the auxiliary libraries used by the enginea and tooling. These may be found in the [`engine`](engine/README.md), [`tools`](tools/README.md), and [`libs`](libs/README.md) directories respectively, which each contain their own README files.
 
 ## Contributing
 If you wish to contribute to Cacao Engine, please consult the [contribution guidelines page](CONTRIBUTING.md) for more information.

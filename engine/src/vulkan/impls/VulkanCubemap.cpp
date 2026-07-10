@@ -11,7 +11,7 @@ namespace Cacao {
 		vk::DeviceSize totalSize = faceSize * 6;
 
 		//Allocate GPU texture & data upload buffers
-		vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8Srgb, {faces[0].w, faces[0].h, 1}, 1, 1,
+		vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8Srgb, {faces[0].w, faces[0].h, 1}, 1, 6,
 			vk::SampleCountFlagBits::e1, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
 		vma::AllocationCreateInfo texAllocCI(vma::AllocationCreateFlagBits::eWithinBudget, vma::MemoryUsage::eAutoPreferDevice, vk::MemoryPropertyFlagBits::eDeviceLocal);
 		vk::BufferCreateInfo texUpCI({}, totalSize, vk::BufferUsageFlagBits::eTransferSrc, vk::SharingMode::eExclusive, 0);

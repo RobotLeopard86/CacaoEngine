@@ -1,0 +1,2 @@
+skyshader = custom_target('skyshader.xjs', input: 'skyshader.slang', output: 'skyshader.xjs', command: [shaderc, '-V', '@INPUT@', '-o', '@OUTPUT@'], build_by_default: true)
+default_assets += custom_target('skyshader.inc', input: skyshader, output: 'skyshader.inc', command: [python, meson.project_source_root() / 'scripts' / 'arrify.py', '@INPUT@', '@OUTPUT@', 'skyshader'], build_by_default: true)

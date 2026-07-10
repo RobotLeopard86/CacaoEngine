@@ -5,7 +5,9 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Log.hpp"
+#include "Cacao/ResourceManager.hpp"
 #include "Cacao/TickController.hpp"
+#include "Cacao/Transform.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Cacao/MeshRenderer.hpp"
@@ -220,7 +222,25 @@ namespace Cacao {
 					callbacks[guid](cmd);
 				}
 
-				//TODO: render skybox if applicable
+				//Render skybox
+				if(world->skyboxTex) {
+					//Skybox shader setup
+					if(!skyShader) skyShader = *ResourceManager::Get().Load<Shader>("a:internal_skyshader");
+
+					//Skybox mesh setup
+					if(!skyCube) skyCube = *ResourceManager::Get().Load<Mesh>("a:builtin_cube");
+
+					//Skybox material setup
+					if(lastKnownSkybox.compare(world->skyboxTex->GetAddress()) != 0) {
+						lastKnownSkybox = world->skyboxTex->GetAddress();
+						skyMat.reset();//Explicit reset ensures the material address is free
+						skyMat = Material::Create({}, "a:internal_skymat");
+						skyMat->SetParameter("skyTex", world->skyboxTex);
+					}
+
+					//Draw the skybox mesh
+					cmd->DrawMesh(skyCube, skyMat, Transform(glm::vec3 {0.0f}, glm::vec3 {0.0f}, glm::vec3 {1.0f}));
+				}
 
 				//Run pre-transparent callbacks
 				for(const xg::Guid& guid : mappings[Phase::Transparent].first) {

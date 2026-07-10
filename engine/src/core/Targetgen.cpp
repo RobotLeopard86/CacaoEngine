@@ -8,10 +8,13 @@
 
 #include <sstream>
 #include <cstring>
+#include <set>
 
 using Slang::ComPtr;
 
 namespace Cacao {
+	Slang::ComPtr<slang::IGlobalSession> CompiledShaderObject::gsession;
+
 	std::pair<std::string, std::string> GetEntrypointNames(const libcacaoasset::Shader& in) {
 		//Get the names
 		std::string vsepName, fsepName;
@@ -54,15 +57,11 @@ namespace Cacao {
 		}
 
 		//Put 'em in a pair
-		return std::make_pair<std::string, std::string>(std::move(vsepName), std::move(vsepName));
+		return std::make_pair<std::string, std::string>(std::move(vsepName), std::move(fsepName));
 	}
 
 	CompiledShaderObject SetupCSO(const libcacaoasset::Shader& in, SlangCompileTarget tgt, const std::string& profile) {
 		CompiledShaderObject cso;
-
-		//Configure global session
-		SlangResult r = slang::createGlobalSession(cso.gsession.writeRef());
-		Check<ExternalException>(r == SLANG_OK && cso.gsession, "Failed to create global session!");
 
 		//Describe session
 		slang::SessionDesc sessionDesc;
@@ -95,10 +94,10 @@ namespace Cacao {
 		sessionDesc.compilerOptionEntryCount = entries.size();
 		slang::TargetDesc tgtDesc = {};
 		tgtDesc.format = tgt;
-		tgtDesc.profile = cso.gsession->findProfile(profile.c_str());
+		tgtDesc.profile = CompiledShaderObject::gsession->findProfile(profile.c_str());
 
 		//Create session
-		r = cso.gsession->createSession(sessionDesc, cso.session.writeRef());
+		SlangResult r = CompiledShaderObject::gsession->createSession(sessionDesc, cso.session.writeRef());
 		Check<ExternalException>(r == SLANG_OK && cso.session, "Failed to create Slang compiler session!");
 
 		//Create Cacao Engine shader base module
@@ -128,7 +127,6 @@ namespace Cacao {
 			//Create Slang blob
 			slang::IBlob* irBlob = slang_createBlob(in.irCode.data(), in.irCode.size());
 			Check<ExternalException>(irBlob != nullptr, "Failed to create IR blob!");
-
 			ComPtr<slang::IBlob> diagnosticsBlob;
 			usrModule = cso.session->loadModuleFromIRBlob("cacaousercode", "usercode.slang", irBlob, diagnosticsBlob.writeRef());
 			if(!usrModule) {
@@ -144,20 +142,67 @@ namespace Cacao {
 			}
 		}
 
-		//Create Cacao Engine pipelines module
+		//Some processing on the pipelines (to add definitions for unused functions)
 		constexpr const char* vpipelineModuleSrc =
 #include "vertex_pipeline.inc"
 			;
 		constexpr const char* fpipelineModuleSrc =
 #include "fragment_pipeline.inc"
 			;
+		std::string vpipelineSrc(vpipelineModuleSrc);
+		std::string fpipelineSrc(fpipelineModuleSrc);
+		std::vector<uint8_t> undefFuncIDs {0, 1, 2, 3, 4};
+		constexpr std::array<const char*, 5> undefFuncs {{"void CacaoVertexPreprocess(const Cacao::VSIn3D input, inout Cacao::VSIn3D output) {}",
+			"void CacaoVertexPostprocess(const Cacao::VSOut3D input, inout Cacao::VSOut3D output) {}",
+			"void CacaoVertexCustom(const Cacao::VSIn3D input, inout Cacao::VSOut3D output) {}",
+			"void CacaoVertexPreprocess2D(const Cacao::VSIn2D input, inout Cacao::VSIn2D output) {}",
+			"void CacaoVertexCustom2D(const Cacao::VSIn2D input, inout Cacao::VSOut2D output) {}"}};
+		if(in.descriptor.domain == libcacaoasset::Shader::Descriptor::Domain::Geometry3D) {
+			fpipelineSrc += "\n\nfloat4 CacaoCanvasMain(const Cacao::CanvasInput input) { return float4(1.0); }";
+			switch(in.descriptor.mode) {
+				case libcacaoasset::Shader::Descriptor::VertexMode::NoProcess:
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessOnly:
+					undefFuncIDs.erase(undefFuncIDs.begin());
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PostprocessOnly:
+					undefFuncIDs.erase(undefFuncIDs.begin() + 1);
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessPostprocess:
+					undefFuncIDs.erase(undefFuncIDs.begin());
+					undefFuncIDs.erase(undefFuncIDs.begin());
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::Custom:
+					undefFuncIDs.erase(undefFuncIDs.begin() + 2);
+					break;
+			}
+		} else {
+			fpipelineSrc += "\n\nvoid CacaoSurfaceMain(const Cacao::SurfaceInput input, inout Cacao::SurfaceSample output) {}";
+			switch(in.descriptor.mode) {
+				case libcacaoasset::Shader::Descriptor::VertexMode::NoProcess:
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::PreprocessOnly:
+					undefFuncIDs.erase(undefFuncIDs.begin() + 3);
+					break;
+				case libcacaoasset::Shader::Descriptor::VertexMode::Custom:
+					undefFuncIDs.erase(undefFuncIDs.begin() + 4);
+					break;
+				default: break;
+			}
+		}
+		for(uint8_t id : undefFuncIDs) {
+			vpipelineSrc += "\n\n";
+			vpipelineSrc += undefFuncs[id];
+		}
+
+		//Create Cacao Engine pipelines module
 		ComPtr<slang::IModule> vpipelineModule, fpipelineModule;
 		{
 			ComPtr<slang::IBlob> diagnosticsBlob;
-			vpipelineModule = cso.session->loadModuleFromSourceString("vertex_pipeline", "vertex_pipeline.slang", vpipelineModuleSrc, diagnosticsBlob.writeRef());
+			vpipelineModule = cso.session->loadModuleFromSourceString("vertex_pipeline", "vertex_pipeline.slang", vpipelineSrc.c_str(), diagnosticsBlob.writeRef());
 			if(!vpipelineModule) {
 				std::stringstream err;
-				err << "Failed to create Cacao vertex pipeline module";
+				err << "Failed to create engine vertex pipeline module";
 				if(diagnosticsBlob) {
 					err << ":\n"
 						<< (const char*)diagnosticsBlob->getBufferPointer();
@@ -169,10 +214,10 @@ namespace Cacao {
 		}
 		{
 			ComPtr<slang::IBlob> diagnosticsBlob;
-			fpipelineModule = cso.session->loadModuleFromSourceString("fragment_pipeline", "fragment_pipeline.slang", fpipelineModuleSrc, diagnosticsBlob.writeRef());
+			fpipelineModule = cso.session->loadModuleFromSourceString("fragment_pipeline", "fragment_pipeline.slang", fpipelineSrc.c_str(), diagnosticsBlob.writeRef());
 			if(!fpipelineModule) {
 				std::stringstream err;
-				err << "Failed to create Cacao fragment pipeline module";
+				err << "Failed to create engine fragment pipeline module";
 				if(diagnosticsBlob) {
 					err << ":\n"
 						<< (const char*)diagnosticsBlob->getBufferPointer();
@@ -186,8 +231,8 @@ namespace Cacao {
 		//Get entry points
 		ComPtr<slang::IEntryPoint> vsep, fsep;
 		auto [vsepName, fsepName] = GetEntrypointNames(in);
-		Check<ExternalException>(usrModule->findEntryPointByName(vsepName.c_str(), vsep.writeRef()) == SLANG_OK, "Failed to fetch vertex stage entrypoint!");
-		Check<ExternalException>(usrModule->findEntryPointByName(fsepName.c_str(), fsep.writeRef()) == SLANG_OK, "Failed to fetch fragment stage entrypoint!");
+		Check<ExternalException>(vpipelineModule->findEntryPointByName(vsepName.c_str(), vsep.writeRef()) == SLANG_OK, "Failed to fetch vertex stage entrypoint!");
+		Check<ExternalException>(fpipelineModule->findEntryPointByName(fsepName.c_str(), fsep.writeRef()) == SLANG_OK, "Failed to fetch fragment stage entrypoint!");
 
 		//Compose program
 		std::array<slang::IComponentType*, 6> componentTypes {
@@ -246,7 +291,7 @@ namespace Cacao {
 			SlangResult r = cso.linked->getTargetCode(0, codeBlob.writeRef(), diagnosticsBlob.writeRef());
 			if(r != SLANG_OK || !codeBlob) {
 				std::stringstream err;
-				err << "Failed to generate SPIR-V target code!";
+				err << "Failed to generate SPIR-V target code";
 				if(diagnosticsBlob) {
 					err << ":\n"
 						<< (const char*)diagnosticsBlob->getBufferPointer();

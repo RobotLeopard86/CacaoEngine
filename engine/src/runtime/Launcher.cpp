@@ -107,8 +107,8 @@ int main(int argc, char* argv[]) {
 		rt.SetupEngine();
 	} catch(...) {
 		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in engine initialization. Exiting...";
-		Engine::Get().GfxShutdown();
-		Engine::Get().CoreShutdown();
+		if(Engine::Get().GetState() == Engine::State::Ready) Engine::Get().GfxShutdown();
+		if(Engine::Get().GetState() == Engine::State::Alive) Engine::Get().CoreShutdown();
 		Logger::Runtime(Logger::Level::Warn) << "Engine exited with an error code!";
 		Logger::Runtime(Logger::Level::Warn) << "If you are an end user seeing this error, please report it to the application developer.";
 		exit(-1);

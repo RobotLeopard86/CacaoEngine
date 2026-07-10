@@ -2,11 +2,15 @@ import cacaoengine;
 import cacaousercode;
 
 [shader("fragment")]
-float4 Cacao_Surface_FSmain(Cacao::SurfaceSample input) : SV_Target {
+float4 Cacao_Surface_FSmain(Cacao::VSOut3D input) : SV_Target {
+	//Get sample
+	Cacao::SurfaceSample sample;
+	CacaoSurfaceMain(input.surfaceIn, sample);
+
 	//Calculate base color
 	//Maybe someday we'll have lighting here...
 	//Wow it's such a fancy algorithm
-	float4 color = input.albedo;
+	float4 color = sample.albedo;
 
 	//Render mode application
 	switch(Cacao::globals.renderMode) {
@@ -21,7 +25,10 @@ float4 Cacao_Surface_FSmain(Cacao::SurfaceSample input) : SV_Target {
 }
 
 [shader("fragment")]
-float4 Cacao_Canvas_FSmain(float4 input) : SV_Target {
+float4 Cacao_Canvas_FSmain(Cacao::VSOut2D input) : SV_Target {
+	//Get sample
+	float4 output = CacaoCanvasMain(input.canvasIn);
+
 	//Not really anything important here (for now)
-	return input;
+	return output;
 }

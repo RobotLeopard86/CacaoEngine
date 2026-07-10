@@ -28,7 +28,7 @@ engine_deps = []
 
 # Default assets go first so that they can be included
 subdir('src' / 'assets')
-
+subdir('src' / 'shaders')
 
 # Always-included core module
 subdir('src' / 'core')

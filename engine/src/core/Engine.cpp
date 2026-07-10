@@ -5,12 +5,14 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/Resource.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
+#include "Targetgen.hpp"
 #include "exathread.hpp"
 #include "impl/PAL.hpp"
 
@@ -33,6 +35,9 @@
 #include <filesystem>
 #include <memory>
 #include <thread>
+
+#include "slang.h"
+#include "slang-com-ptr.h"
 
 namespace Cacao {
 	Engine::Engine()
@@ -133,6 +138,11 @@ namespace Cacao {
 		}
 		Logger::Engine(Logger::Level::Info) << "Selected backend \"" << chosen << "\".";
 
+		//Setup shader compiler
+		Logger::Engine(Logger::Level::Trace) << "Setting up shader compiler (this may take a while)...";
+		SlangResult r = slang::createGlobalSession(CompiledShaderObject::gsession.writeRef());
+		Check<ExternalException>(r == SLANG_OK && CompiledShaderObject::gsession, "Failed to create Slang global session!");
+
 		//Open window
 		Logger::Engine(Logger::Level::Trace) << "Creating window...";
 		Window::Get().Open(icfg.clientID.displayName, {1280, 720}, true, Window::Mode::Windowed);
@@ -143,6 +153,10 @@ namespace Cacao {
 
 		//Enable V-Sync by default
 		GPUManager::Get().SetVSync(true);
+
+		//Preload built-in assets
+		Logger::Engine(Logger::Level::Trace) << "Preloading built-in assets...";
+		ResourceManager::Get().SetupBuiltins();
 
 		//Start the frame processor if doing so at this time
 		if(icfg.startFrameProcessorWithGfxSystem) {
@@ -176,7 +190,7 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
 		TickController::Get().Start();
 
-		Logger::Engine(Logger::Level::Info) << "Reached target Game Launch.";
+		Logger::Engine(Logger::Level::Info) << "Engine startup complete!";
 
 		while(state == State::Running) {
 			//Handle OS events

@@ -21,7 +21,9 @@ namespace Cacao {
 		};
 		std::unordered_map<std::string, ModelData> models;
 
-		//Built-in meshes
+		//Built-in assets
+		bool builtinsReady = false;
 		std::unordered_map<std::string, std::shared_ptr<Mesh>> builtinMeshes;
+		std::unordered_map<std::string, std::shared_ptr<Shader>> builtinShaders;
 	};
 }

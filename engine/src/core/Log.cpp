@@ -48,7 +48,7 @@ namespace Cacao {
 		spdlog::set_level(spdlog::level::trace);
 
 		//Apply logging pattern (Month/Day/Year @ Hour:Minute:Second [Logger Name:Thread ID/Message Level]: Message Text)
-		spdlog::set_pattern("%^%D @ %X [%n:%t/%l]: %v%$");
+		spdlog::set_pattern("%^%d %B %Y @ %X [%n:%t/%l]: %v%$");
 
 		//Force log file flushing
 		spdlog::flush_on(spdlog::level::trace);
