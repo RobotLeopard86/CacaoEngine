@@ -14,7 +14,7 @@ install_subdir(meson.current_build_dir() / 'astra_generated', install_dir: 'incl
 install_subdir('..' / 'libs' / 'asset' / 'include', install_dir: 'include', strip_directory: true)
 install_subdir('..' / 'libs' / 'common' / 'include', install_dir: 'include' / 'libcacaocommon', strip_directory: true)
 install_subdir('..' / 'libs' / 'image' / 'include', install_dir: 'include', strip_directory: true)
-install_subdir('..' / 'libs' / 'audiodecode' / 'include', install_dir: 'include', strip_directory: true)
+install_subdir('..' / 'libs' / 'audiodecoder' / 'include', install_dir: 'include', strip_directory: true)
 
 # Headers private to modules
 module_private_headers = include_directories('src' / 'private')

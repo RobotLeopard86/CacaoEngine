@@ -26,7 +26,7 @@ cacao_runtime_exe = executable('cacaort', sources: [
 cacaort_dep = declare_dependency(sources: ['abi' / 'ABIHandshake.cpp', 'abi' / 'ABI.hpp'], dependencies: cacao_dep, compile_args: bt.contains('debug') ? '-D_DEBUG' : '-DNDEBUG')
 
 # License file
-licenses = custom_target('cacaolicenses', command: [python, meson.project_source_root() / 'scripts' / 'licensecombiner.py', '@OUTPUT@'], output: 'cacaolicenses.txt', build_by_default: true, input: [
+licenses = custom_target('cacaolicenses.txt', command: [python, meson.project_source_root() / 'scripts' / 'licensecombiner.py', '@OUTPUT@'], output: 'cacaolicenses.txt', build_by_default: true, input: [
 	meson.project_source_root() / 'scripts' / 'licensecombiner.py',
 	meson.project_source_root() / 'licenses' / 'CANARY.txt'
 ])

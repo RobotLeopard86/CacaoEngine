@@ -66,12 +66,19 @@ namespace Cacao {
 		//Push constant for transform data
 		struct PushConstants {
 			glm::mat4 transform;
-			glm::mat3 normal;
+			struct _Std140 {
+				glm::vec3 col;
+				float pad;
+			};
+			std::array<_Std140, 3> normal;
 			float handedness;
 		} push = {};
 		push.transform = transform.GetTransformationMatrix();
 		glm::mat3 transformLinear(push.transform);
-		push.normal = glm::transpose(glm::inverse(transformLinear));
+		glm::mat3 normal = glm::transpose(glm::inverse(transformLinear));
+		push.normal[0].col = normal[0];
+		push.normal[1].col = normal[1];
+		push.normal[2].col = normal[2];
 		push.handedness = (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f);
 		cmd.pushConstants(RES_IMPL(Shader, Vulkan, *material->GetShader()).layout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), &push);
 

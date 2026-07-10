@@ -34,7 +34,7 @@ namespace Cacao {
 		CanvasInput canvasIn;
 	};
 
-	enum RenderMode : uint8_t {
+	enum RenderMode : uint32_t {
 		Opaque = 0,
 		Cutout = 1,
 		Transparent = 2

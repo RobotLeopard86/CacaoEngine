@@ -21,6 +21,8 @@ float4 Cacao_Surface_FSmain(Cacao::VSOut3D input) : SV_Target {
 			return color;
 		case Cacao::RenderMode::Transparent:
 			return color;
+		default:
+			return color;
 	}
 }
 

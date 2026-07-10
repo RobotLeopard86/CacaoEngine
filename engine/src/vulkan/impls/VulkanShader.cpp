@@ -97,7 +97,7 @@ namespace Cacao {
 		cacaoLayout = vulkan->dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
 
 		//Create pipeline layout
-		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float));
+		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4));
 		vk::PipelineLayoutCreateInfo layoutCI;
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) {
 			std::vector<vk::DescriptorSetLayoutBinding> matDSBindings;

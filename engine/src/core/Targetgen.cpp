@@ -9,6 +9,7 @@
 #include <sstream>
 #include <cstring>
 #include <set>
+#include <sys/types.h>
 
 using Slang::ComPtr;
 
@@ -90,11 +91,13 @@ namespace Cacao {
 			opt.value = slang::CompilerOptionValue {slang::CompilerOptionValueKind::Int, true, 0, nullptr, nullptr};
 			entries.push_back(opt);
 		}
-		sessionDesc.compilerOptionEntries = entries.data();
-		sessionDesc.compilerOptionEntryCount = entries.size();
 		slang::TargetDesc tgtDesc = {};
 		tgtDesc.format = tgt;
 		tgtDesc.profile = CompiledShaderObject::gsession->findProfile(profile.c_str());
+		sessionDesc.targetCount = 1;
+		sessionDesc.targets = &tgtDesc;
+		sessionDesc.compilerOptionEntries = entries.data();
+		sessionDesc.compilerOptionEntryCount = entries.size();
 
 		//Create session
 		SlangResult r = CompiledShaderObject::gsession->createSession(sessionDesc, cso.session.writeRef());
@@ -303,7 +306,8 @@ namespace Cacao {
 		}
 
 		//Copy SPIR-V into buffer and return
-		std::vector<uint32_t> code(codeBlob->getBufferSize());
+		std::vector<uint32_t> code;
+		code.resize(codeBlob->getBufferSize() / sizeof(uint32_t));//Division is done because SPIR-V is in uint32_t and Slang buffers are uint8_t (we need 1/4 as many elements)
 		std::memcpy(code.data(), codeBlob->getBufferPointer(), codeBlob->getBufferSize());
 		return code;
 	}
