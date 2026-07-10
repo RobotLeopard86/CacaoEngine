@@ -90,14 +90,8 @@ namespace Cacao {
 			inputStateCI.setVertexAttributeDescriptions(vtcAttrs);
 		}
 
-		//Create engine descriptor layout
-		std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
-		dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
-		dsBindings.emplace_back(1, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
-		cacaoLayout = vulkan->dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, dsBindings});
-
 		//Create pipeline layout
-		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4));
+		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4));
 		vk::PipelineLayoutCreateInfo layoutCI;
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) {
 			std::vector<vk::DescriptorSetLayoutBinding> matDSBindings;
@@ -106,10 +100,10 @@ namespace Cacao {
 				matDSBindings.emplace_back(texParam.binding, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
 			}
 			matLayout = vulkan->dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, matDSBindings});
-			std::array<vk::DescriptorSetLayout, 2> layouts {{cacaoLayout, matLayout}};
+			std::array<vk::DescriptorSetLayout, 2> layouts {{vulkan->engineSetLayout, matLayout}};
 			layoutCI = vk::PipelineLayoutCreateInfo({}, layouts, pcr);
 		} else {
-			layoutCI = vk::PipelineLayoutCreateInfo({}, cacaoLayout, pcr);
+			layoutCI = vk::PipelineLayoutCreateInfo({}, vulkan->engineSetLayout, pcr);
 		}
 		layout = vulkan->dev.createPipelineLayout(layoutCI);
 
@@ -160,25 +154,20 @@ namespace Cacao {
 		vulkan->dev.destroyPipeline(pipelineOpaque);
 		vulkan->dev.destroyPipeline(pipelineTransparent);
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) vulkan->dev.destroyDescriptorSetLayout(matLayout);
-		vulkan->dev.destroyDescriptorSetLayout(cacaoLayout);
 	}
 
-	void VulkanShaderImpl::Bind(vk::CommandBuffer& cmd, bool transparent) {
+	void VulkanShaderImpl::Bind(VulkanCommandBuffer* vcb, bool transparent) {
 		//Bind pipeline object
-		cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, transparent ? pipelineTransparent : pipelineOpaque);
+		vcb->cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, transparent ? pipelineTransparent : pipelineOpaque);
 
-		//Push engine descriptors
-		vk::DescriptorBufferInfo globalsDBI(vulkan->globals.obj, 0, vk::WholeSize);
-		vk::DescriptorBufferInfo camDBI(vulkan->camData.obj, 0, vk::WholeSize);
-		std::array<vk::WriteDescriptorSet, 2> set0 {{{VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI},
-			{VK_NULL_HANDLE, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &camDBI}}};
-		cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, layout, 0, set0);
+		//Bind engine descriptor set
+		vcb->BindSet(layout);
 
 		//Push material data UBO descriptor
 		if(descriptor.uniformParams.size() > 0) {
 			vk::DescriptorBufferInfo matDBI(materialData.obj, 0, vk::WholeSize);
 			vk::WriteDescriptorSet set1(VK_NULL_HANDLE, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &matDBI);
-			cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, layout, 1, set1);
+			vcb->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, layout, 1, set1);
 		}
 	}
 

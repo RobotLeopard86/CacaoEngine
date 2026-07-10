@@ -25,21 +25,19 @@ namespace Cacao {
 			"Material element storage is not the same size as descriptor parameters!");
 
 		//Bake shader and textures if needed
-		if(!shader->IsBaked()) {
-			shader->Bake();
-		}
+		if(!shader->IsBaked()) shader->Bake();
 		std::vector<exathread::Future<void>> bakers;
 		for(auto& [name, val] : storage) {
 			if(val.index() == std::variant_size_v<Material::ParamValue> - 2) {
 				//Tex2D
 				bakers.push_back(Engine::Get().GetThreadPool()->submit([](std::shared_ptr<Tex2D> tex) {
-					tex->Bake();
+					if(!tex->IsBaked()) tex->Bake();
 				},
 					std::get<std::shared_ptr<Tex2D>>(val)));
 			} else if(val.index() == std::variant_size_v<Material::ParamValue> - 1) {
 				//Cubemap
 				bakers.push_back(Engine::Get().GetThreadPool()->submit([](std::shared_ptr<Cubemap> cmap) {
-					cmap->Bake();
+					if(!cmap->IsBaked()) cmap->Bake();
 				},
 					std::get<std::shared_ptr<Cubemap>>(val)));
 			}
@@ -153,9 +151,9 @@ namespace Cacao {
 		bakeFuts.await();
 
 		//Bind shader pipeline
-		vk::CommandBuffer& vkCmd = static_cast<VulkanCommandBuffer*>(cmd)->cmd;
+		VulkanCommandBuffer* vcb = static_cast<VulkanCommandBuffer*>(cmd);
 		VulkanShaderImpl& vkShader = RES_IMPL(Shader, Vulkan, *shader);
-		vkShader.Bind(vkCmd, renderMode == libcacaoasset::Material::RenderMode::Transparent);
+		vkShader.Bind(vcb, renderMode == libcacaoasset::Material::RenderMode::Transparent);
 
 		//Bind textures to descriptors
 		std::vector<vk::DescriptorImageInfo> diis;
@@ -174,7 +172,7 @@ namespace Cacao {
 			return vk::WriteDescriptorSet(VK_NULL_HANDLE, tparam.binding, 0, 1, vk::DescriptorType::eCombinedImageSampler, &dii);
 		}) | std::views::common;
 		std::vector<vk::WriteDescriptorSet> writes(writeView.begin(), writeView.end());
-		vkCmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, vkShader.layout, 1, writes);
+		vcb->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, vkShader.layout, 1, writes);
 	}
 
 	Material::Impl* VulkanModule::ConfigureMaterial() {

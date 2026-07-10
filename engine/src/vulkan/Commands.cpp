@@ -4,6 +4,7 @@
 #include "impls/VulkanMesh.hpp"
 #include "impls/VulkanShader.hpp"
 #include "ImplAccessor.hpp"
+#include "vulkan/vulkan_enums.hpp"
 
 namespace Cacao {
 	void VulkanCommandBuffer::StartRendering(glm::vec3 clearColor) {
@@ -14,7 +15,7 @@ namespace Cacao {
 			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::ClearColorValue(std::array<float, 4> {clearColor.r, clearColor.g, clearColor.b, 1.0f}));
 		vk::RenderingAttachmentInfo depthAttachment(vulkan->swapchain.depthImages[render->imageIndex].view, vk::ImageLayout::eDepthAttachmentOptimal, {}, {}, {},
 			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, vk::ClearDepthStencilValue(1.0f, 0.0f));
-		vk::RenderingInfo renderInfo(vk::RenderingFlagBits::eContentsSecondaryCommandBuffers, vk::Rect2D({0, 0}, vulkan->swapchain.extent), 1, 0, colorAttachment, &depthAttachment);
+		vk::RenderingInfo renderInfo({}, vk::Rect2D({0, 0}, vulkan->swapchain.extent), 1, 0, colorAttachment, &depthAttachment);
 
 		//Make our image drawable
 		{
@@ -80,7 +81,7 @@ namespace Cacao {
 		push.normal[1].col = normal[1];
 		push.normal[2].col = normal[2];
 		push.handedness = (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f);
-		cmd.pushConstants(RES_IMPL(Shader, Vulkan, *material->GetShader()).layout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::mat4), &push);
+		cmd.pushConstants(RES_IMPL(Shader, Vulkan, *material->GetShader()).layout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(glm::mat4), &push);
 
 		//Draw mesh
 		cmd.drawIndexed(vkMesh.indices.size() * 3, 1, 0, 0, 0);

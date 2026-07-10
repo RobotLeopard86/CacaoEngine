@@ -10,7 +10,7 @@ namespace Cacao {
 	  public:
 		void Bake(bool& success) override;
 		void Discard() override;
-		void Bind(vk::CommandBuffer& cmd, bool transparent);
+		void Bind(VulkanCommandBuffer* vcb, bool transparent);
 
 		//SPIR-V code
 		std::vector<uint32_t> spv;
@@ -20,9 +20,8 @@ namespace Cacao {
 		vk::Pipeline pipelineTransparent;
 		vk::PipelineLayout layout;
 
-		//Descriptor set layouts
-		vk::DescriptorSetLayout cacaoLayout;
-		vk::DescriptorSetLayout matLayout;//optional
+		//Descriptor set layout for material data (optional)
+		vk::DescriptorSetLayout matLayout;
 
 		//Material data UBO (optional)
 		MappedBuffer materialData;

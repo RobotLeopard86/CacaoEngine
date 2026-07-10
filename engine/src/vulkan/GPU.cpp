@@ -164,6 +164,11 @@ namespace Cacao {
 			return transient->sync;
 	}
 
+	void VulkanCommandBuffer::BindSet(const vk::PipelineLayout& layout) {
+		Check<BadStateException>(render != nullptr, "Cannot bind set for non-rendering command buffer!");
+		cmd.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, layout, 0, render->set, {});
+	}
+
 	void VulkanCommandBuffer::Execute() {
 		//Obtain queue lock
 		std::lock_guard lk(vulkan->queueMtx);

@@ -85,10 +85,15 @@ namespace Cacao {
 
 	class RenderCommandContext {
 	  public:
+		//Rendering control
 		vk::Fence inFlight;
 		vk::Semaphore rendered;
 		uint32_t imageIndex;
 		Sync sync;
+
+		//Engine descriptors
+		MappedBuffer globals, camData;
+		vk::DescriptorSet set;
 	};
 
 	//THIS IS NOT THREAD-SAFE
@@ -105,6 +110,7 @@ namespace Cacao {
 		vk::CommandBuffer cmd;
 
 		void DrawMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, Transform transform) override;
+		void BindSet(const vk::PipelineLayout& layout);
 
 	  protected:
 		//Contexts
@@ -193,9 +199,9 @@ namespace Cacao {
 		} swapchain;
 		vk::CommandPool renderingPool;
 
-		//==================== GLOBALS UBO AND MEMORY ====================
-		MappedBuffer globals;
-		MappedBuffer camData;
+		//==================== ENGINE DATA DESCRIPTORS ====================
+		vk::DescriptorSetLayout engineSetLayout;
+		vk::DescriptorPool descriptorPool;
 
 		//==================== MISCELLANEOUS FIELDS ====================
 		bool vsync;

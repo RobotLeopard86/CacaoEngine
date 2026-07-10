@@ -1,6 +1,8 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "vulkan/vulkan.hpp"
+#include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_enums.hpp"
 #include "vulkan/vulkan_handles.hpp"
 #include "vulkan/vulkan_structs.hpp"
@@ -139,11 +141,32 @@ namespace Cacao {
 			}
 		}
 
+		//Re-create descriptor pool
+		if(vulkan->descriptorPool) {
+			vulkan->dev.resetDescriptorPool(vulkan->descriptorPool);
+			vulkan->dev.destroyDescriptorPool(vulkan->descriptorPool);
+		}
+		vk::DescriptorPoolSize poolSize(vk::DescriptorType::eUniformBuffer, 2 * vulkan->swapchain.images.size());
+		vk::DescriptorPoolCreateInfo poolCI({}, vulkan->swapchain.images.size(), poolSize);
+		try {
+			vulkan->descriptorPool = vulkan->dev.createDescriptorPool(poolCI);
+		} catch(vk::SystemError& err) {
+			Check<ExternalException>(false, "Failed to create new descriptor pool!");
+		}
+
 		//Destroy old contexts
 		for(RenderCommandContext& rc : vulkan->swapchain.contexts) {
 			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
 			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
+			if(rc.globals.obj) {
+				vulkan->allocator.unmapMemory(rc.globals.alloc);
+				vulkan->allocator.destroyBuffer(rc.globals.obj, rc.globals.alloc);
+			}
+			if(rc.camData.obj) {
+				vulkan->allocator.unmapMemory(rc.camData.alloc);
+				vulkan->allocator.destroyBuffer(rc.camData.obj, rc.camData.alloc);
+			}
 		}
 		vulkan->swapchain.contexts.resize(vulkan->swapchain.images.size());
 
@@ -152,6 +175,10 @@ namespace Cacao {
 		vk::SemaphoreCreateInfo semaphoreCI {};
 		vk::SemaphoreCreateInfo timelineCI({}, &semTypeCI);
 		vk::FenceCreateInfo fenceCI(vk::FenceCreateFlagBits::eSignaled);
+		vk::BufferCreateInfo globalsCI({}, sizeof(float) * 2 + sizeof(uint8_t), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+		vk::BufferCreateInfo camDataCI({}, sizeof(glm::mat4) * 3 + sizeof(glm::vec3), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo uboAllocCI({}, vma::MemoryUsage::eCpuToGpu);
+		vk::DescriptorSetAllocateInfo setAI(vulkan->descriptorPool, vulkan->engineSetLayout);
 		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
 			RenderCommandContext& rc = vulkan->swapchain.contexts[i];
 			try {
@@ -159,9 +186,23 @@ namespace Cacao {
 				rc.inFlight = vulkan->dev.createFence(fenceCI);
 				rc.sync.semaphore = vulkan->dev.createSemaphore(timelineCI);
 				rc.sync.doneValue = 0;
+				rc.globals = vulkan->allocator.createBuffer(globalsCI, uboAllocCI);
+				rc.camData = vulkan->allocator.createBuffer(camDataCI, uboAllocCI);
+				rc.set = vulkan->dev.allocateDescriptorSets(setAI)[0];
 			} catch(vk::SystemError& err) {
-				Check<ExternalException>(false, "Failed to create synchronization objects for rendering context!");
+				Check<ExternalException>(false, "Failed to create objects for rendering context!");
 			}
+			try {
+				vk::DescriptorBufferInfo globalsDBI(rc.globals.obj, 0, vk::WholeSize);
+				vk::DescriptorBufferInfo camDBI(rc.camData.obj, 0, vk::WholeSize);
+				std::array<vk::WriteDescriptorSet, 2> writes {{{rc.set, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI},
+					{rc.set, 1, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &camDBI}}};
+				vulkan->dev.updateDescriptorSets(writes, {});
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to bind rendering context descriptor set objects!");
+			}
+			Check<ExternalException>(vulkan->allocator.mapMemory(rc.globals.alloc, &rc.globals.mem) == vk::Result::eSuccess, "Failed to map rendering context UBO memory!");
+			Check<ExternalException>(vulkan->allocator.mapMemory(rc.camData.alloc, &rc.camData.mem) == vk::Result::eSuccess, "Failed to map rendering context UBO memory!");
 		}
 	}
 }
