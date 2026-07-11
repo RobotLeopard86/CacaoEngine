@@ -4,9 +4,7 @@
 #include "Cacao/Log.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
-#include "vulkan/vulkan_enums.hpp"
-#include "vulkan/vulkan_handles.hpp"
-#include "vulkan/vulkan_structs.hpp"
+#include "SafeGetenv.hpp"
 
 #ifdef __linux__
 #include "impl/Window.hpp"
@@ -66,8 +64,8 @@ namespace Cacao {
 		//Get required layers
 		std::vector<const char*> layers = {};
 #ifdef _DEBUG
-		if(auto vv = std::getenv("CACAO_DISABLE_VULKAN_VALIDATION"); vv == nullptr || (vv != nullptr && std::string(vv).compare("YES") != 0)) layers.push_back("VK_LAYER_KHRONOS_validation");
-		if(auto ad = std::getenv("CACAO_ENABLE_APIDUMP"); ad != nullptr && std::string(ad).compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
+		//if(safe_getenv("CACAO_DISABLE_VULKAN_VALIDATION").compare("YES") != 0) layers.push_back("VK_LAYER_KHRONOS_validation");
+		if(safe_getenv("CACAO_ENABLE_VULKAN_API_DUMP").compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
 
 		//Create instance
@@ -96,7 +94,8 @@ namespace Cacao {
 		//Find best device
 		std::vector<const char*> requiredDevExts = {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-			VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME};
+			VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME,
+			VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME};
 #ifdef __linux__
 		requiredDevExts.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
 #endif
@@ -121,6 +120,7 @@ namespace Cacao {
 			}
 			if(good) okDevs.push_back(pdev);
 		}
+		Check<ExternalException>(!okDevs.empty(), "No devices support the required Vulkan extensions!", [this]() { instance.destroy(); });
 		std::vector<std::function<bool(const vk::PhysicalDevice&)>> physDevChecks = {
 			//Check for real GPU
 			[](const vk::PhysicalDevice& device) {
@@ -133,20 +133,33 @@ namespace Cacao {
 			}};
 		RankPhysicalDevices(&okDevs, physDevChecks);
 		physDev = okDevs[0];
-		Check<ExternalException>(physDev, "No devices support the required Vulkan extensions!", [this]() { instance.destroy(); });
 		Logger::Engine(Logger::Level::Trace) << "Selected Vulkan device \"" << physDev.getProperties().deviceName << "\".";
+
+		//Select queue family
+		std::vector<vk::QueueFamilyProperties2> queueProps = physDev.getQueueFamilyProperties2();
+		int queueFamily = -1;
+		int counter = -1;
+		for(const vk::QueueFamilyProperties2& props : queueProps) {
+			++counter;
+			if(props.queueFamilyProperties.queueCount < 1) continue;
+			if(!(props.queueFamilyProperties.queueFlags & vk::QueueFlagBits::eGraphics)) continue;
+			if(!(props.queueFamilyProperties.queueFlags & vk::QueueFlagBits::eTransfer)) continue;
+			queueFamily = counter;
+			break;
+		}
+		Check<ExternalException>(queueFamily >= 0, "No queues support the required Vulkan operations!");
 
 		//Create logical device
 		float priority = 1.0f;
-		vk::DeviceQueueCreateInfo queueCI({}, 0, 1, &priority);
-		vk::PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures(VK_TRUE);
-		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &dynamicRenderingFeatures);
-		vk::PhysicalDeviceSynchronization2Features sync2Features(VK_TRUE, &extendedDynamicStateFeatures);
+		vk::DeviceQueueCreateInfo queueCI({}, queueFamily, 1, &priority);
+		vk::PhysicalDeviceVulkan13Features vulkan13Features {};
+		vulkan13Features.setDynamicRendering(VK_TRUE);
+		vulkan13Features.setSynchronization2(VK_TRUE);
+		vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures(VK_TRUE, &vulkan13Features);
 		vk::PhysicalDeviceVulkan12Features vulkan12Features {};
 		vulkan12Features.setTimelineSemaphore(VK_TRUE);
-		vulkan12Features.setPNext(&sync2Features);
+		vulkan12Features.setPNext(&extendedDynamicStateFeatures);
 		vk::PhysicalDeviceFeatures2 deviceFeatures2({}, &vulkan12Features);
-		deviceFeatures2.features.setInheritedQueries(VK_TRUE);
 		deviceFeatures2.features.setRobustBufferAccess(VK_TRUE);
 		deviceFeatures2.features.setIndependentBlend(VK_TRUE);
 		deviceFeatures2.features.setOcclusionQueryPrecise(VK_TRUE);
@@ -163,7 +176,7 @@ namespace Cacao {
 		VULKAN_HPP_DEFAULT_DISPATCHER.init(instance, dev);
 
 		//Get queue
-		queue = dev.getQueue(0, 0);
+		queue = dev.getQueue(queueFamily, 0);
 
 		//Create memory allocator
 		vma::VulkanFunctions vkFuncs(VULKAN_HPP_DEFAULT_DISPATCHER.vkGetInstanceProcAddr, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr);

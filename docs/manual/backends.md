@@ -10,7 +10,7 @@ In the future, it may be possible that some advanced features that may be added 
 Vulkan version 1.3 or later. The `VK_KHR_swapchain` (almost universally available) and `VK_KHR_push_descriptor` (no longer needed since Vulkan 1.4) extensions are required.  
 In debug builds, you can set the following environment variables when using the Vulkan backend to manage diagnostics:
 * `CACAO_DISABLE_VULKAN_VALIDATION`: set to `YES` to disable Vulkan validation layers
-* `CACAO_ENABLE_APIDUMP`: set to `YES` to enable API dumping of Vulkan calls (warning: produces a lot of output)
+* `CACAO_ENABLE_VULKAN_API_DUMP`: set to `YES` to enable API dumping of Vulkan calls (warning: produces a lot of output)
 
 ## Compatibility Matrix
 | Backend | Windows | Mac | Linux* |
