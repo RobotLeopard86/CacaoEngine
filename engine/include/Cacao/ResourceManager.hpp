@@ -131,6 +131,7 @@ namespace Cacao {
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
 		exathread::ValueTask<std::shared_ptr<Resource>> _AsyncLoadOpImpl(std::string addr, std::type_index tp);
 		void SetupBuiltins();
+		void CleanupBuiltins();
 		std::shared_ptr<Mesh> LoadBuiltinMesh(const std::string& id);
 		std::shared_ptr<Shader> LoadBuiltinShader(const std::string& id);
 

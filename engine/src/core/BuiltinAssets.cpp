@@ -100,6 +100,20 @@ namespace Cacao {
 		impl->builtinsReady = true;
 	}
 
+	void ResourceManager::CleanupBuiltins() {
+		impl->builtinsReady = false;
+		for(auto& [_, shader] : impl->builtinShaders) {
+			shader->Discard();
+			shader.reset();
+		}
+		impl->builtinShaders.clear();
+		for(auto& [_, mesh] : impl->builtinMeshes) {
+			mesh->Discard();
+			mesh.reset();
+		}
+		impl->builtinMeshes.clear();
+	}
+
 	std::shared_ptr<Mesh> ResourceManager::LoadBuiltinMesh(const std::string& id) {
 		//Get and bake built-in assets if they haven't been yet
 		if(!impl->builtinsReady) SetupBuiltins();

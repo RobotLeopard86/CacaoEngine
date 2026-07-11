@@ -77,11 +77,9 @@ namespace Cacao {
 		lastTick = clock::now();
 
 		//If frame processor was started before us, then we should wait until it's done with whatever it's doing before starting
-		if(Engine::Get().GetInitConfig().startFrameProcessorWithGfxSystem) {
-			while(!TickController::Get().snapshotControl.done.try_acquire()) {
-				std::this_thread::yield();
-				if(stop.stop_requested()) return;
-			}
+		while(!TickController::Get().snapshotControl.done.try_acquire()) {
+			std::this_thread::yield();
+			if(stop.stop_requested()) return;
 		}
 
 		//Main runloop

@@ -243,6 +243,14 @@ namespace Cacao {
 			FrameProcessor::Get().Stop();
 		}
 
+		//Fire shutdown event (this (for now) will block until all consumers have responded)
+		Event e("EngineShutdown");
+		EventManager::Get().Dispatch(e);
+
+		//Cleanup built-in assets
+		Logger::Engine(Logger::Level::Trace) << "Unloading built-in assets...";
+		ResourceManager::Get().CleanupBuiltins();
+
 		//Stop the GPU manager
 		Logger::Engine(Logger::Level::Trace) << "Stopping GPU manager...";
 		GPUManager::Get().Stop();
@@ -271,10 +279,6 @@ namespace Cacao {
 		//Terminate audio
 		Logger::Engine(Logger::Level::Trace) << "Terminating audio system...";
 		AudioManager::Get().Terminate();
-
-		//Fire shutdown event (this (for now) will block until all consumers have responded)
-		Event e("EngineShutdown");
-		EventManager::Get().Dispatch(e);
 
 		//Unsubscribe all final event consumers
 		Logger::Engine(Logger::Level::Trace) << "Unsubscribing remaining event consumers...";
