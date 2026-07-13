@@ -421,21 +421,13 @@
 
 <span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetCurrentTPS</span><span class="p">();</span>
 
-<span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ImplAccessor</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">running</span><span class="p">;</span>
-
-<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">SnapshotRequestControl</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">SnapshotRequestControl</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">request</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="w"> </span><span class="n">grant</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">done</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_bool</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">binary_semaphore</span><span class="w"> </span><span class="n">grant</span><span class="p">;</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">binary_semaphore</span><span class="w"> </span><span class="n">done</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="n">snapshotControl</span><span class="p">;</span>
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Engine</span><span class="p">;</span>
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FrameProcessor</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">TickController</span><span class="p">();</span>
 <span class="w">        </span><span class="o">~</span><span class="n">TickController</span><span class="p">();</span>
