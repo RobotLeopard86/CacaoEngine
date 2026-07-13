@@ -4,11 +4,13 @@
 #include <memory>
 
 #include "DllHelper.hpp"
+#include "Camera.hpp"
 #include "Material.hpp"
 #include "Mesh.hpp"
 #include "Transform.hpp"
 
 #include "glm/glm.hpp"
+#include "libcacaoasset.hpp"
 
 namespace Cacao {
 	/**
@@ -56,6 +58,7 @@ namespace Cacao {
 		}
 		virtual void StartRendering([[maybe_unused]] glm::vec3 clearColor) {}
 		virtual void EndRendering() {}
+		virtual void UpdateEngineData([[maybe_unused]] std::shared_ptr<Camera> cam, [[maybe_unused]] bool worldRefresh) {}
 	};
 
 	/**

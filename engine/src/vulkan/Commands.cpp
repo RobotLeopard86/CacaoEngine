@@ -5,6 +5,7 @@
 #include "impls/VulkanShader.hpp"
 #include "ImplAccessor.hpp"
 #include "vulkan/vulkan_enums.hpp"
+#include <chrono>
 
 namespace Cacao {
 	void VulkanCommandBuffer::StartRendering(glm::vec3 clearColor) {
@@ -66,24 +67,56 @@ namespace Cacao {
 
 		//Push constant for transform data
 		struct PushConstants {
-			glm::mat4 transform;
-			struct _Std140 {
-				glm::vec3 col;
-				float pad;
-			};
-			std::array<_Std140, 3> normal;
-			float handedness;
+			struct Transform {
+				glm::mat4 transform;
+				struct _Std140 {
+					glm::vec3 col;
+					float pad;
+				};
+				std::array<_Std140, 3> normal;
+				float handedness;
+			} t;
+			struct RMWrap {
+				uint32_t mode;
+			} r;
 		} push = {};
-		push.transform = transform.GetTransformationMatrix();
-		glm::mat3 transformLinear(push.transform);
+		push.t.transform = transform.GetTransformationMatrix();
+		glm::mat3 transformLinear(push.t.transform);
 		glm::mat3 normal = glm::transpose(glm::inverse(transformLinear));
-		push.normal[0].col = normal[0];
-		push.normal[1].col = normal[1];
-		push.normal[2].col = normal[2];
-		push.handedness = (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f);
-		cmd.pushConstants(RES_IMPL(Shader, Vulkan, *material->GetShader()).layout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(glm::mat4), &push);
+		push.t.normal[0].col = normal[0];
+		push.t.normal[1].col = normal[1];
+		push.t.normal[2].col = normal[2];
+		push.t.handedness = (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f);
+		push.r.mode = static_cast<uint8_t>(material->GetRenderMode());
+		cmd.pushConstants(RES_IMPL(Shader, Vulkan, *material->GetShader()).layout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(PushConstants), &push);
 
 		//Draw mesh
 		cmd.drawIndexed(vkMesh.indices.size() * 3, 1, 0, 0, 0);
+	}
+
+	void VulkanCommandBuffer::UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) {
+		//Camera info
+		GlobalsData gd = {};
+		gd.viewMatrix = cam->GetViewMatrix();
+		gd.projectionMatrix = cam->GetProjectionMatrix();
+		gd.viewProjectionMatrix = gd.projectionMatrix * gd.viewMatrix;
+		gd.camWorldRot = cam->GetRotation();
+		gd.camWorldPos = cam->GetPosition();
+
+		//Timing info
+		using clock = std::chrono::steady_clock;
+		static clock::time_point initial = clock::now();
+		static clock::time_point last = clock::now();
+		clock::time_point now = clock::now();
+		if(worldRefresh) {
+			initial = now;
+			last = now;
+		}
+		gd.deltaTime = std::chrono::duration_cast<std::chrono::seconds>(now - last).count();
+		gd.worldTime = std::chrono::duration_cast<std::chrono::seconds>(now - initial).count();
+		if(!worldRefresh) last = now;
+
+		//Copy our data to the GPU
+		std::memcpy(render->globals.mem, &gd, sizeof(gd));
 	}
 }

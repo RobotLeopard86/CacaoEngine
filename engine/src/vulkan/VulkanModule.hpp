@@ -92,8 +92,18 @@ namespace Cacao {
 		Sync sync;
 
 		//Engine descriptors
-		MappedBuffer globals, camData;
+		MappedBuffer globals;
 		vk::DescriptorSet set;
+	};
+
+	struct GlobalsData {
+		glm::mat4 viewMatrix;
+		glm::mat4 projectionMatrix;
+		glm::mat4 viewProjectionMatrix;
+		glm::quat camWorldRot;
+		glm::vec3 camWorldPos;
+		float worldTime;
+		float deltaTime;
 	};
 
 	//THIS IS NOT THREAD-SAFE
@@ -127,6 +137,7 @@ namespace Cacao {
 		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
+		void UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) override;
 
 		friend class VulkanGPU;
 		friend class VulkanModule;

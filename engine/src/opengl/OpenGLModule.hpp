@@ -59,9 +59,12 @@ namespace Cacao {
 			tasks.push_back(task);
 		}
 
+		void DrawMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, Transform transform) override;
+
 	  protected:
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
+		void UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) override;
 
 	  private:
 		std::vector<std::function<void()>> tasks;

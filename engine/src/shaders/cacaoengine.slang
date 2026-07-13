@@ -41,23 +41,17 @@ namespace Cacao {
 	}
 
 	struct GlobalData {
+		float4x4 viewMatrix;
+		float4x4 projectionMatrix;
+		float4x4 viewProjectionMatrix;
+		float4 cameraWorldRotationQuat;
+		float3 cameraWorldPosition;
 		float worldTime;
 		float deltaTime;
-		RenderMode renderMode;
 	};
 
 	[vk::binding(0)]
 	ConstantBuffer<GlobalData> globals : register(b0);
-
-	struct CameraData {
-		float4x4 viewMatrix;
-		float4x4 projectionMatrix;
-		float4x4 viewProjectionMatrix;
-		float3 worldPosition;
-	};
-
-	[vk::binding(1)]
-	ConstantBuffer<CameraData> cam : register(b1);
 
 	struct Transform {
 		float4x4 transformMatrix;
@@ -66,7 +60,14 @@ namespace Cacao {
 	};
 
 	[vk::push_constant]
-	ConstantBuffer<Transform> transform : register(b2);
+	ConstantBuffer<Transform> transform : register(b1);
+
+	struct RMWrap {
+		RenderMode mode;
+	}
+
+	[vk::push_constant]
+	ConstantBuffer<RMWrap> renderMode : register(b2);
 
 	struct SurfaceSample {
 		float4 albedo;

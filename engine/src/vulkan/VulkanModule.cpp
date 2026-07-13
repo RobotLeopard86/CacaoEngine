@@ -225,11 +225,9 @@ namespace Cacao {
 		}
 
 		//Create engine descriptor set layout
-		std::vector<vk::DescriptorSetLayoutBinding> dsBindings;
-		dsBindings.emplace_back(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
-		dsBindings.emplace_back(1, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
+		vk::DescriptorSetLayoutBinding dsBinding(0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, VK_NULL_HANDLE);
 		try {
-			engineSetLayout = vulkan->dev.createDescriptorSetLayout({{}, dsBindings});
+			engineSetLayout = vulkan->dev.createDescriptorSetLayout({{}, dsBinding});
 		} catch(vk::SystemError& err) {
 			vulkan->dev.destroyCommandPool(renderingPool);
 			selectedDF = vk::Format::eUndefined;
@@ -263,10 +261,6 @@ namespace Cacao {
 			if(rc.globals.obj) {
 				allocator.unmapMemory(rc.globals.alloc);
 				allocator.destroyBuffer(rc.globals.obj, rc.globals.alloc);
-			}
-			if(rc.camData.obj) {
-				allocator.unmapMemory(rc.camData.alloc);
-				allocator.destroyBuffer(rc.camData.obj, rc.camData.alloc);
 			}
 		}
 		for(vk::Semaphore& sem : swapchain.acquireSems) {

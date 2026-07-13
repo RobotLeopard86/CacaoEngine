@@ -5,7 +5,7 @@ Cacao::VSOut3D _GenOutput(Cacao::VSIn3D input) {
 	Cacao::VSOut3D out = {};
 	float4 worldPos = mul(Cacao::transform.transformMatrix, float4(input.position, 1.0));
 	out.surfaceIn.worldPos = worldPos.xyz / worldPos.w;
-	out.gpuPosition = mul(Cacao::cam.viewProjectionMatrix, worldPos);
+	out.gpuPosition = mul(Cacao::globals.viewProjectionMatrix, worldPos);
 	out.surfaceIn.localPos = input.position;
 	out.surfaceIn.texCoords = input.texCoords;
 	out.surfaceIn.normal = normalize(mul(Cacao::transform.normalMatrix, input.normal));
@@ -15,7 +15,7 @@ Cacao::VSOut3D _GenOutput(Cacao::VSIn3D input) {
 
 Cacao::VSOut2D _GenOutput2D(Cacao::VSIn2D input) {
 	Cacao::VSOut2D out = {};
-	out.gpuPosition = mul(Cacao::cam.projectionMatrix, float4(input.position, 0.0, 1.0));
+	out.gpuPosition = mul(Cacao::globals.projectionMatrix, float4(input.position, 0.0, 1.0));
 	out.canvasIn.position = input.position;
 	out.canvasIn.texCoords = input.texCoords;
 	return out;

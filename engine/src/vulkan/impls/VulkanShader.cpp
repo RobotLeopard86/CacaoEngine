@@ -81,7 +81,7 @@ namespace Cacao {
 		std::array<vk::VertexInputAttributeDescription, 4> inputAttrs {{{0, 0, vk::Format::eR32G32B32Sfloat, 0},
 			{1, 0, vk::Format::eR32G32Sfloat, offsetof(Vertex, texCoords)},
 			{2, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, normal)},
-			{3, 0, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, tangent)}}};
+			{3, 0, vk::Format::eR32G32B32A32Sfloat, offsetof(Vertex, tangent)}}};
 		vk::PipelineVertexInputStateCreateInfo inputStateCI({}, inputBinding, inputAttrs);
 		if(descriptor.domain == libcacaoasset::Shader::Descriptor::Domain::Canvas2D) {
 			inputBinding.stride = sizeof(float) * 5;
@@ -91,7 +91,8 @@ namespace Cacao {
 		}
 
 		//Create pipeline layout
-		vk::PushConstantRange pcr(vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4));
+		std::array<vk::PushConstantRange, 2> pcrs {{{vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4)},
+			{vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4), sizeof(uint32_t)}}};
 		vk::PipelineLayoutCreateInfo layoutCI;
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) {
 			std::vector<vk::DescriptorSetLayoutBinding> matDSBindings;
@@ -101,9 +102,9 @@ namespace Cacao {
 			}
 			matLayout = vulkan->dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, matDSBindings});
 			std::array<vk::DescriptorSetLayout, 2> layouts {{vulkan->engineSetLayout, matLayout}};
-			layoutCI = vk::PipelineLayoutCreateInfo({}, layouts, pcr);
+			layoutCI = vk::PipelineLayoutCreateInfo({}, layouts, pcrs);
 		} else {
-			layoutCI = vk::PipelineLayoutCreateInfo({}, vulkan->engineSetLayout, pcr);
+			layoutCI = vk::PipelineLayoutCreateInfo({}, vulkan->engineSetLayout, pcrs);
 		}
 		layout = vulkan->dev.createPipelineLayout(layoutCI);
 

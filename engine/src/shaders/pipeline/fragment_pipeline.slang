@@ -13,7 +13,7 @@ float4 Cacao_Surface_FSmain(Cacao::VSOut3D input) : SV_Target {
 	float4 color = sample.albedo;
 
 	//Render mode application
-	switch(Cacao::globals.renderMode) {
+	switch(Cacao::renderMode.mode) {
 		case Cacao::RenderMode::Opaque:
 			return float4(color.r, color.g, color.b, 1.0);
 		case Cacao::RenderMode::Cutout:

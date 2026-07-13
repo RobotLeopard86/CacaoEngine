@@ -207,6 +207,12 @@ namespace Cacao {
 					srgbChannel2Linear((float)world->cam->GetClearColor().g / 0xFF),
 					srgbChannel2Linear((float)world->cam->GetClearColor().b / 0xFF)};
 
+				//Update engine data
+				static std::string lastWorldAddr = "";
+				bool diffWorld = lastWorldAddr.compare(world->GetAddress()) != 0;
+				cmd->UpdateEngineData(world->cam, diffWorld);
+				if(diffWorld) lastWorldAddr = world->GetAddress();
+
 				//Start rendering and clear screen
 				cmd->StartRendering(linearClearColor);
 
@@ -222,6 +228,10 @@ namespace Cacao {
 					auto joined = std::views::join(toMerge) | std::views::common;
 					meshes = std::vector<MeshRenderer*>(joined.begin(), joined.end());
 				}
+
+				//Split into lists by render mode
+				std::vector<MeshRenderer*> opaqueCutout;
+				std::vector<MeshRenderer*> transparent;
 
 				//Run pre-opaque callbacks
 				for(const xg::Guid& guid : mappings[Phase::Opaque].first) {
