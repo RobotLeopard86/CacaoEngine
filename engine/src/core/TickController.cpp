@@ -7,6 +7,7 @@
 #include "Cacao/Script.hpp"
 #include "Cacao/Input.hpp"
 #include "SingletonGet.hpp"
+#include "impl/TickController.hpp"
 
 #include "exathread.hpp"
 
@@ -18,22 +19,7 @@
 
 using namespace std::chrono_literals;
 
-#define TPS_AVG_WINDOW 5
-
 namespace Cacao {
-	using clock = std::chrono::steady_clock;
-
-	struct TickController::Impl {
-		void DynTick(std::chrono::seconds timestep);
-		void Runloop(std::stop_token stop);
-
-		std::unique_ptr<std::jthread> thread;
-		unsigned int counter;
-		clock::time_point lastSecond;
-		clock::time_point lastTick;
-		std::array<unsigned int, TPS_AVG_WINDOW> tpsMeasures;
-	};
-
 	TickController::TickController()
 	  : running(false) {
 		//Create implementation pointer
@@ -76,26 +62,8 @@ namespace Cacao {
 		lastSecond = clock::now();
 		lastTick = clock::now();
 
-		//If frame processor was started before us, then we should wait until it's done with whatever it's doing before starting
-		while(!TickController::Get().snapshotControl.done.try_acquire()) {
-			std::this_thread::yield();
-			if(stop.stop_requested()) return;
-		}
-
 		//Main runloop
 		while(!stop.stop_requested()) {
-			//Check for frame processor snapshot request
-			if(TickController::Get().snapshotControl.request.exchange(false, std::memory_order_acq_rel)) {
-				//Allow frame processor to run
-				TickController::Get().snapshotControl.grant.release();
-
-				//Wait until it's done by blocking on the done semaphore
-				while(!TickController::Get().snapshotControl.done.try_acquire()) {
-					std::this_thread::yield();
-					if(stop.stop_requested()) return;
-				}
-			}
-
 			//Get now
 			clock::time_point now = clock::now();
 			if((now - lastSecond) >= 1s) {
@@ -112,7 +80,28 @@ namespace Cacao {
 			DynTick(std::chrono::duration_cast<std::chrono::seconds>(now - lastTick));
 			++counter;
 			lastTick = now;
+
+			//Frame processor synchronization
+			if(frameProcessorWants.exchange(false)) {
+				//Tell frame processor it's good and wake it up
+				tickControllerOwns.store(false);
+				tickControllerOwns.notify_all();
+
+				//Create stop callback
+				std::stop_callback cb(stop, [this]() {
+					tickControllerNeedsForShutdown.store(true);
+				});
+
+				//Block until:
+				// a) Frame processor is done and we can resume
+				// b) Stop callback fired and the loop will exit
+				tickControllerOwns.wait(false);
+			}
 		}
+
+		//We're exiting, hand off to frame processor
+		tickControllerOwns.store(false);
+		tickControllerOwns.notify_all();
 	}
 
 	exathread::ValueTask<std::vector<Script*>> FindScripts(ActorRef actor) {

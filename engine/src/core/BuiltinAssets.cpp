@@ -34,7 +34,7 @@ namespace Cacao {
 	std::shared_ptr<Mesh> _GenMesh(const std::array<unsigned char, S>& bin, const std::string& meshName, const std::string& addr) {
 		//Create model and get mesh from it
 		std::vector<unsigned char> modelBin(bin.begin(), bin.end());
-		std::shared_ptr<Model> mdl = Model::Create(std::move(modelBin), "a:TEMP_MODEL");
+		std::shared_ptr<Model> mdl = Model::Create(std::move(modelBin), std::format("a:internal_tmpmdl_{}", meshName));
 		std::shared_ptr<Mesh> badMesh = mdl->GetMesh(meshName);
 
 		//Recreate mesh using bad mesh data to ensure proper address

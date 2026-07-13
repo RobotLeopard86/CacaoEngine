@@ -56,23 +56,15 @@ namespace Cacao {
 		 */
 		unsigned int GetCurrentTPS();
 
-	  private:
+		///@cond
 		struct Impl;
+		///@endcond
+
+	  private:
 		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
 
 		bool running;
-
-		///@cond
-		struct SnapshotRequestControl {
-			SnapshotRequestControl() : request(false), grant(0), done(0) {}
-
-			std::atomic_bool request;
-			std::binary_semaphore grant;
-			std::binary_semaphore done;
-		} snapshotControl;
-		friend class Engine;
-		friend class FrameProcessor;
-		///@endcond
 
 		TickController();
 		~TickController();

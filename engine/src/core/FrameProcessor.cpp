@@ -13,9 +13,9 @@
 #include "Cacao/MeshRenderer.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
-#include "crossguid/guid.hpp"
 #include "impl/PAL.hpp"
 #include "impl/FrameProcessor.hpp"
+#include "impl/TickController.hpp"
 
 #include <atomic>
 #include <numeric>
@@ -23,6 +23,7 @@
 
 #include "glm/exponential.hpp"
 #include "glm/glm.hpp"
+#include "crossguid/guid.hpp"
 
 namespace Cacao {
 	FrameProcessor::FrameProcessor()
@@ -135,9 +136,13 @@ namespace Cacao {
 	}
 
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {
-		//Setup variables
+		//Set up variables
 		counter = 0;
 		lastSecond = clock::now();
+
+		//Set up skybox data
+		skyShader = *ResourceManager::Get().Load<Shader>("a:internal_skyshader");
+		skyCube = *ResourceManager::Get().Load<Mesh>("a:builtin_cube");
 
 		//Runloop
 		while(!stop.stop_requested()) {
@@ -169,13 +174,21 @@ namespace Cacao {
 			//If tick controller is running, neogtiate snapshot
 			if(TickController::Get().IsRunning()) {
 				//Request a snapshot of the world state
-				TickController::Get().snapshotControl.request.store(true, std::memory_order_release);
+				TickController::Impl& tcImpl = IMPL(TickController);
+				tcImpl.frameProcessorWants.store(true);
 
-				//Block until the tick controller grants the request
-				while(!TickController::Get().snapshotControl.grant.try_acquire()) {
-					std::this_thread::yield();
-					if(stop.stop_requested()) return;
-				}
+				//Set stop callback
+				bool stopFired = false;
+				std::stop_callback cb(stop, [&tcImpl, &stopFired]() {
+					stopFired = true;
+					tcImpl.tickControllerOwns.notify_all();
+				});
+
+				//Block until request granted
+				tcImpl.tickControllerOwns.wait(true);
+
+				//Check if the stop callback was fired and exit if so
+				if(stopFired) break;
 			}
 
 			//Setup command buffer
@@ -224,12 +237,6 @@ namespace Cacao {
 
 				//Render skybox
 				if(world->skyboxTex) {
-					//Skybox shader setup
-					if(!skyShader) skyShader = *ResourceManager::Get().Load<Shader>("a:internal_skyshader");
-
-					//Skybox mesh setup
-					if(!skyCube) skyCube = *ResourceManager::Get().Load<Mesh>("a:builtin_cube");
-
 					//Skybox material setup
 					if(lastKnownSkybox.compare(world->skyboxTex->GetAddress()) != 0) {
 						lastKnownSkybox = world->skyboxTex->GetAddress();
@@ -259,8 +266,11 @@ namespace Cacao {
 			}
 
 			//Allow tick controller to resume
-			//It has been blocking on this semaphore
-			if(TickController::Get().IsRunning()) TickController::Get().snapshotControl.done.release();
+			if(TickController::Get().IsRunning() || IMPL(TickController).tickControllerNeedsForShutdown) {
+				TickController::Impl& tcImpl = IMPL(TickController);
+				tcImpl.tickControllerOwns.store(true);
+				tcImpl.tickControllerOwns.notify_all();
+			}
 
 			//Execute command buffer
 			try {
@@ -273,5 +283,10 @@ namespace Cacao {
 				}
 			} catch(...) {}
 		}
+
+		//Clean up
+		skyMat.reset();
+		skyShader.reset();
+		skyCube.reset();
 	}
 }

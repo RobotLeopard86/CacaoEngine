@@ -161,7 +161,6 @@ namespace Cacao {
 		//Start the frame processor if doing so at this time
 		if(icfg.startFrameProcessorWithGfxSystem) {
 			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
-			TickController::Get().snapshotControl.done.acquire();
 			FrameProcessor::Get().Start();
 		}
 
