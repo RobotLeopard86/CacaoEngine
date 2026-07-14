@@ -95,10 +95,17 @@ namespace Cacao {
 	}
 
 	void VulkanCommandBuffer::UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) {
+		//Projection correction matrix
+		const static glm::mat4 projectionCorrection = glm::transpose(glm::mat4(
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, -1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.5f, 0.5f,
+			0.0f, 0.0f, 0.0f, 1.0f));
+
 		//Camera info
 		GlobalsData gd = {};
 		gd.viewMatrix = cam->GetViewMatrix();
-		gd.projectionMatrix = cam->GetProjectionMatrix();
+		gd.projectionMatrix = projectionCorrection * cam->GetProjectionMatrix();
 		gd.viewProjectionMatrix = gd.projectionMatrix * gd.viewMatrix;
 		gd.camWorldRot = cam->GetRotation();
 		gd.camWorldPos = cam->GetPosition();

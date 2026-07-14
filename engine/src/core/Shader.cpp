@@ -22,6 +22,7 @@ namespace Cacao {
 
 	std::shared_ptr<Shader> Shader::Create(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr) {
 		std::shared_ptr<Shader> ptr(new Shader(std::move(shaderIR), desc, addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}

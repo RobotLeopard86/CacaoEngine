@@ -65,7 +65,7 @@ namespace Cacao {
 		 * @param rot The new rotation
 		 */
 		void SetRotation(glm::quat rot) {
-			rotation = rot;
+			rotation = glm::normalize(rot);
 			RecalculateViewMatrix();
 		}
 
@@ -75,7 +75,7 @@ namespace Cacao {
 		 * @param rot The new rotation in Euler angles
 		 */
 		void SetRotationEuler(glm::vec3 rot) {
-			rotation = glm::quat(glm::radians(rot));
+			rotation = glm::normalize(glm::quat(glm::radians(rot)));
 			RecalculateViewMatrix();
 		}
 

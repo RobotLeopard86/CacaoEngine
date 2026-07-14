@@ -24,6 +24,7 @@ namespace Cacao {
 
 	std::shared_ptr<Tex2D> Tex2D::Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
 		std::shared_ptr<Tex2D> ptr(new Tex2D(std::move(imageBuffer), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}

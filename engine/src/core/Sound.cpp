@@ -22,6 +22,7 @@ namespace Cacao {
 
 	std::shared_ptr<Sound> Sound::Create(std::vector<char>&& encodedAudio, const std::string& addr) {
 		std::shared_ptr<Sound> ptr(new Sound(std::move(encodedAudio), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}

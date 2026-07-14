@@ -43,6 +43,7 @@ namespace Cacao {
 
 	std::shared_ptr<World> World::Create(bool useOrthographicCamera, const std::string& addr) {
 		std::shared_ptr<World> ptr(new World(useOrthographicCamera, addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}
@@ -176,15 +177,19 @@ namespace Cacao {
 		Check<BadValueException>(Resource::ValidateResourceAddr<World>(addr), "World address is malformed!");
 
 		//Check resource cache
+		std::unique_lock<std::mutex> lk {IMPL(ResourceManager).cacheProtector};
 		if(!IMPL(ResourceManager).cache.contains(addr)) {
 			//noload check
 			Check<NonexistentValueException>(!noload, "World requested for activation is not loaded, and noload flag was specified!");
 
 			//Load it
+			lk.unlock();
 			impl->active = *ResourceManager::Get().Load<World>(addr);
+			return;
 		} else {
 			impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
 		}
+		lk.unlock();
 	}
 
 	ActorRef World::CreateActor(const std::string& name, ActorRef parent) {

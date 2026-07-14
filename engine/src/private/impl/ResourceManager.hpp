@@ -8,6 +8,7 @@
 namespace Cacao {
 	struct ResourceManager::Impl {
 		//Resource cache
+		std::mutex cacheProtector;
 		std::unordered_map<std::string, std::weak_ptr<Resource>> cache;
 
 		//Configured loaders

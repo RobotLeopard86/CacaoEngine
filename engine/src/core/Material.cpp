@@ -25,6 +25,7 @@ namespace Cacao {
 
 	std::shared_ptr<Material> Material::Create(std::shared_ptr<Shader> shader, const std::string& addr) {
 		std::shared_ptr<Material> ptr(new Material(shader, addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}

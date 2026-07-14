@@ -39,6 +39,7 @@ namespace Cacao {
 
 	std::shared_ptr<Cubemap> Cubemap::Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr) {
 		std::shared_ptr<Cubemap> ptr(new Cubemap(std::move(faces), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}

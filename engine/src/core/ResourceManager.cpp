@@ -62,6 +62,7 @@ namespace Cacao {
 
 	Resource::~Resource() {
 		//Remove our pointer from the cache
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.erase(address);
 	}
 

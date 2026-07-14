@@ -22,6 +22,7 @@ namespace Cacao {
 
 	std::shared_ptr<Mesh> Mesh::Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
 		std::shared_ptr<Mesh> ptr(new Mesh(std::move(vtx), std::move(idx), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}

@@ -25,16 +25,5 @@ namespace Cacao {
 
 		//Material data UBO (optional)
 		MappedBuffer materialData;
-
-		//Custom shader compilation settings
-		struct CustomCompileSettings {
-			bool blendUseSrc;
-			enum class Depth {
-				Off,
-				Less,
-				Lequal
-			} depth;
-		};
-		std::optional<CustomCompileSettings> customSettings;
 	};
 }

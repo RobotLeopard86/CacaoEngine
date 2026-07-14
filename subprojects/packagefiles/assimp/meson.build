@@ -50,7 +50,6 @@ endif
 
 # Platform-independent defines
 defs = [
-	'-DASSIMP_DOUBLE_PRECISION',
 	'-DASSIMP_BUILD_NO_EXPORT',
 	'-DASSIMP_BUILD_NO_C4D_IMPORTER',
 	'-DASSIMP_BUILD_NO_OWN_ZLIB',
@@ -194,7 +193,7 @@ git_hash = run_command([git, 'rev-parse', '--short=8', 'HEAD'], capture: true, c
 ###################################
 
 conf_data = configuration_data()
-conf_data.set10('ASSIMP_DOUBLE_PRECISION', true)
+conf_data.set10('ASSIMP_DOUBLE_PRECISION', false)
 config_h = configure_file(input: 'include' / 'assimp' / 'config.h.in', output: 'config.h', format: 'cmake@', configuration: conf_data, build_subdir: 'assimp')
 
 rev_data = configuration_data()

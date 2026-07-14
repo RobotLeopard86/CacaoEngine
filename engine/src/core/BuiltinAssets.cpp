@@ -8,11 +8,13 @@
 
 #include "Cacao/ResourceManager.hpp"
 #include "impl/Mesh.hpp"
+#include "impl/Shader.hpp"
 #include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
 
 #include <cstdint>
 #include <array>
+#include <optional>
 
 #include "libcacaoasset.hpp"
 #include "Bytestream.hpp"
@@ -45,7 +47,7 @@ namespace Cacao {
 	}
 
 	template<std::size_t S>
-	std::shared_ptr<Shader> _GenShader(const std::array<unsigned char, S>& bin, const std::string& addr) {
+	std::shared_ptr<Shader> _GenShader(const std::array<unsigned char, S>& bin, const std::string& addr, std::optional<Shader::Impl::CustomCompileSettings> settings = {}) {
 		//Decode shader binary
 		std::vector<unsigned char> binVec(bin.begin(), bin.end());
 		ibytestream* ibs = new ibytestream(binVec);
@@ -59,6 +61,7 @@ namespace Cacao {
 
 		//Create shader object
 		std::shared_ptr<Shader> s = Shader::Create(std::move(shader.irCode), shader.descriptor, addr);
+		IMPL(Shader, *s).customSettings = settings;
 		s->Bake();
 		return s;
 	}
@@ -78,7 +81,12 @@ namespace Cacao {
 
 		//Shaders
 		std::vector<exathread::Future<std::shared_ptr<Shader>>> sfuts;
-		sfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenShader(assets::skyshader, "a:internal_skyshader"); }));
+		sfuts.push_back(Engine::Get().GetThreadPool()->submit([]() {
+			Shader::Impl::CustomCompileSettings cs = {};
+			cs.blendUseSrc = false;
+			cs.depth = Shader::Impl::CustomCompileSettings::Depth::Lequal;
+			return _GenShader(assets::skyshader, "a:internal_skyshader", cs);
+		}));
 		exathread::MultiFuture<std::shared_ptr<Shader>> shaders(std::move(sfuts));
 
 		//Assign meshes

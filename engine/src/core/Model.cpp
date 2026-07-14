@@ -1,6 +1,7 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Mesh.hpp"
+#include "assimp/vector3.h"
 #include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
 
@@ -39,6 +40,7 @@ namespace Cacao {
 
 	std::shared_ptr<Model> Model::Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
 		std::shared_ptr<Model> ptr(new Model(std::move(modelBin), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
 		return ptr;
 	}
