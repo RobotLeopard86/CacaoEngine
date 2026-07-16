@@ -48,6 +48,7 @@ namespace libcacaoasset {
 		///@brief Type for components on actors
 		struct CACAO_API Component {
 			std::string typeID;					  ///<Component type ID
+			bool enabled;						  ///<Whether the component is enabled by default
 			std::vector<unsigned char> reflection;///<Jaguar-encoded component reflection data (for use with Astra)
 		};
 

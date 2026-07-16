@@ -12,6 +12,7 @@ namespace libcacaoasset {
 	World::Component _DecComponent(libjaguar::Document::ObjReader& rd) {
 		World::Component component;
 		component.typeID = rd.Query<std::string>("typeid");
+		component.enabled = rd.Query<bool>("component");
 		component.reflection = rd.Query<std::vector<unsigned char>>("rfl");
 		return component;
 	}
@@ -42,6 +43,7 @@ namespace libcacaoasset {
 
 	void _EncComponent(const World::Component& c, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<std::string>("typeid", c.typeID);
+		ow.SetOrCreate<bool>("enabled", c.enabled);
 		ow.SetOrCreate<std::vector<unsigned char>>("typeid", false, c.reflection);
 	}
 
@@ -72,6 +74,11 @@ namespace libcacaoasset {
 			libjaguar::StructuredTypeLayout::Field& tid = cLayout.fields.emplace_back();
 			tid.name = "typeid";
 			tid.type = libjaguar::TypeTag::String;
+		}
+		{
+			libjaguar::StructuredTypeLayout::Field& enabled = cLayout.fields.emplace_back();
+			enabled.name = "enabled";
+			enabled.type = libjaguar::TypeTag::Boolean;
 		}
 		{
 			libjaguar::StructuredTypeLayout::Field& rfl = cLayout.fields.emplace_back();

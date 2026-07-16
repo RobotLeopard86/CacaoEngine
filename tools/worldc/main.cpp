@@ -76,18 +76,18 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 			}
 			return ""; }, "world data", "initial camera state");
 	ValidateYAMLNode(root["actors"], YAML::NodeType::value::Sequence, "world data", "actors list");
-	for(const YAML::Node& e : root["actors"]) {
+	for(const YAML::Node& a : root["actors"]) {
 		libcacaoasset::World::Actor actor;
 
-		YAML::Node name = e["name"];
+		YAML::Node name = a["name"];
 		ValidateYAMLNode(name, YAML::NodeType::value::Scalar, "world actor data", "actor name");
 		actor.name = name.Scalar();
 
-		YAML::Node active = e["active"];
+		YAML::Node active = a["active"];
 		ValidateYAMLNode(active, YAML::NodeType::value::Scalar, "world actor data", "actor activation state");
 		actor.active = active.as<bool>();
 
-		YAML::Node guid = e["guid"];
+		YAML::Node guid = a["guid"];
 		ValidateYAMLNode(guid, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
 				for(char c : node.Scalar()) {
 					if(c == '-') continue;
@@ -100,7 +100,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 				return std::string(""); }, "world actor data", "GUID");
 		actor.guid = xg::Guid(guid.Scalar()).bytes();
 
-		YAML::Node parentGUID = e["parent"];
+		YAML::Node parentGUID = a["parent"];
 		ValidateYAMLNode(parentGUID, YAML::NodeType::value::Scalar, [](const YAML::Node& node) {
 				for(char c : node.Scalar()) {
 					if(c == '-') continue;
@@ -113,7 +113,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 				return std::string(""); }, "world actor data", "parent GUID");
 		actor.parentGUID = xg::Guid(parentGUID.Scalar()).bytes();
 
-		YAML::Node transform = e["transform"];
+		YAML::Node transform = a["transform"];
 		ValidateYAMLNode(transform, YAML::NodeType::value::Map, "world actor data", "initial transform");
 
 		YAML::Node pos = transform["position"];
@@ -148,7 +148,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 		actor.initialScale.y = std::strtof(scl["y"].Scalar().c_str(), nullptr);
 		actor.initialScale.z = std::strtof(scl["z"].Scalar().c_str(), nullptr);
 
-		YAML::Node components = e["components"];
+		YAML::Node components = a["components"];
 		ValidateYAMLNode(components, YAML::NodeType::value::Sequence, "world actor", "component list");
 		for(const YAML::Node& c : components) {
 			libcacaoasset::World::Component component;
@@ -156,6 +156,10 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 			YAML::Node id = c["id"];
 			ValidateYAMLNode(id, YAML::NodeType::value::Scalar, "world actor component", "component ID");
 			component.typeID = id.Scalar();
+
+			YAML::Node enabled = c["enabled"];
+			ValidateYAMLNode(enabled, YAML::NodeType::value::Scalar, "world actor component", "component enabling");
+			component.enabled = id.as<bool>();
 
 			YAML::Node rfl = c["rfl"];
 			ValidateYAMLNode(rfl, YAML::NodeType::value::Map, "world actor component", "component reflection data");

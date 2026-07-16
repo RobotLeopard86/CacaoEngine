@@ -100,7 +100,7 @@ namespace Cacao {
 					Check<NonexistentValueException>(CodeRegistry::Get().HasFactory<Component>(comp.typeID), "World contains component of an unknown type! Hint: all component types must be registered in the CodeRegistry.");
 
 					//Create the component
-					Component& component = ref->MountComponent(comp.typeID);
+					Component& component = ref->MountComponent(comp.typeID, comp.enabled);
 
 					//Inject reflected data
 					astra::Var cvar(&component);

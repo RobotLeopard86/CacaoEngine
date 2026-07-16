@@ -77,14 +77,14 @@ namespace Cacao {
 		parent->children.push_back(self);
 	}
 
-	Component& Actor::MountComponent(const std::string& factoryID) {
+	Component& Actor::MountComponent(const std::string& factoryID, bool enabled) {
 		//Try to create the object
 		auto [ptr, type] = CodeRegistry::Get().Instantiate<Component>(factoryID);
 		Check<ExistingValueException>(!components.contains(type), "A component of the type specified already exists on the actor!");
 
 		//Call down to common component setup
 		std::unique_ptr<Component> uptr(ptr);
-		_ComponentSetup(type, std::move(uptr));
+		_ComponentSetup(type, std::move(uptr), enabled);
 
 		//Return the component reference
 		return *components[type].component;
@@ -95,7 +95,7 @@ namespace Cacao {
 		active = state;
 	}
 
-	void Actor::_ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr) {
+	void Actor::_ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr, bool enabled) {
 		//Get or create new handle
 		ComponentHandle& handle = components[type];
 
@@ -108,7 +108,7 @@ namespace Cacao {
 		//Set up component object
 		handle.component->owner = self;
 		handle.component->OnMount();
-		handle.component->SetEnabled(true);
+		handle.component->SetEnabled(enabled);
 	}
 
 	std::unordered_map<std::type_index, Component*> Actor::_ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const {

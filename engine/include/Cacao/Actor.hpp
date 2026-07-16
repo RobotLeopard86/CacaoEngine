@@ -173,10 +173,8 @@ namespace Cacao {
 
 		friend class Actor;
 
-	  protected:
-		bool enabled;//< DO NOT USE THIS DIRECTLY!!!!!!!!!!!!!!! ALWAYS USE THE FUNCTIONS!!!!!!!!!!!!!!!
-
 	  private:
+		ASTRA_IGNORE bool enabled;
 		ASTRA_IGNORE ActorRef owner;
 	};
 
@@ -276,7 +274,7 @@ namespace Cacao {
 		 */
 		template<typename T, typename... Args>
 			requires std::is_base_of_v<Component, T> && std::is_constructible_v<T, Args&&...>
-		T& MountComponent(Args&&... args) {
+		T& MountComponent(Args&&... args, bool enabled = true) {
 			Check<ExistingValueException>(!HasComponent<T>(), "A component of the type specified already exists on the actor!");
 
 			//Prepare objects
@@ -284,7 +282,7 @@ namespace Cacao {
 			std::unique_ptr<T> component = std::make_unique<T>(std::forward<Args...>(args...));
 
 			//Call-down to internal function
-			_ComponentSetup(type, std::move(component));
+			_ComponentSetup(type, std::move(component), enabled);
 
 			//Return the component reference
 			return static_cast<T&>(*components[type].component);
@@ -298,7 +296,7 @@ namespace Cacao {
 		 * @throws ExistingValueException If a component of this type already exists on the actor
 		 * @throws NonexistentValueException If the CodeRegistry does not have a Component actory registered for the provided ID
 		 */
-		Component& MountComponent(const std::string& factoryID);
+		Component& MountComponent(const std::string& factoryID, bool enabled = true);
 
 		/**
 		 * @brief Access a component on the actor
@@ -391,7 +389,7 @@ namespace Cacao {
 		std::unordered_map<std::type_index, ComponentHandle> components;
 		World* world;//NON-OWNING --- DO NOT FREE THIS!!!
 
-		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
+		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr, bool enabled);
 		std::unordered_map<std::type_index, Component*> _ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const;
 
 		bool active;
