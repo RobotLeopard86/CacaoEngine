@@ -347,6 +347,9 @@
 <li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structastra.html">Struct astra</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -604,8 +607,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P">
-<span id="_CPPv3I0ENK5Cacao5World9FindActorE1P"></span><span id="_CPPv2I0ENK5Cacao5World9FindActorE1P"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">P</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1World_1a5ed3fa353b4160373ec76c7653bd4323"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindActor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P" title="Cacao::World::FindActor::P"><span class="n"><span class="pre">P</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">predicate</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK5Cacao5World10FindActorsENSt6vectorI8ActorRefEE1P">
+<span id="_CPPv3I0ENK5Cacao5World10FindActorsE1P"></span><span id="_CPPv2I0ENK5Cacao5World10FindActorsE1P"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">P</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1World_1a1665be8807aabf492d655b3bb43a24c4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindActors</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5Cacao5World10FindActorsENSt6vectorI8ActorRefEE1P" title="Cacao::World::FindActors::P"><span class="n"><span class="pre">P</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">predicate</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK5Cacao5World10FindActorsENSt6vectorI8ActorRefEE1P" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Find an <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> according to some arbitrary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -613,6 +616,50 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An optional that contains the actor if it was found </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5World17GetSkyboxRotationEv">
+<span id="_CPPv3NK5Cacao5World17GetSkyboxRotationEv"></span><span id="_CPPv2NK5Cacao5World17GetSkyboxRotationEv"></span><span id="Cacao::World::GetSkyboxRotationC"></span><span class="target" id="classCacao_1_1World_1a0e85ef0acf107b7a33ff2b2edf83ea7d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetSkyboxRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5World17GetSkyboxRotationEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the rotation of the skybox. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5World22GetSkyboxRotationEulerEv">
+<span id="_CPPv3NK5Cacao5World22GetSkyboxRotationEulerEv"></span><span id="_CPPv2NK5Cacao5World22GetSkyboxRotationEulerEv"></span><span id="Cacao::World::GetSkyboxRotationEulerC"></span><span class="target" id="classCacao_1_1World_1a115ed3ca4c7300577012d27785e44cfe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetSkyboxRotationEuler</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5World22GetSkyboxRotationEulerEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the rotation of the skybox as Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation as Euler angles </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World17SetSkyboxRotationEN3glm4quatE">
+<span id="_CPPv3N5Cacao5World17SetSkyboxRotationEN3glm4quatE"></span><span id="_CPPv2N5Cacao5World17SetSkyboxRotationEN3glm4quatE"></span><span id="Cacao::World::SetSkyboxRotation__glm::quat"></span><span class="target" id="classCacao_1_1World_1ac8892d8869648458ee6b296112886c4f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetSkyboxRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World17SetSkyboxRotationEN3glm4quatE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the rotation of the skybox. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rot</strong> – The new rotation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5World22SetSkyboxRotationEulerEN3glm4vec3E">
+<span id="_CPPv3N5Cacao5World22SetSkyboxRotationEulerEN3glm4vec3E"></span><span id="_CPPv2N5Cacao5World22SetSkyboxRotationEulerEN3glm4vec3E"></span><span id="Cacao::World::SetSkyboxRotationEuler__glm::vec3"></span><span class="target" id="classCacao_1_1World_1a286e984176f877a7f60d7079b897cbb9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetSkyboxRotationEuler</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5World22SetSkyboxRotationEulerEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the rotation of the skybox using Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rot</strong> – The new rotation in Euler angles </p>
 </dd>
 </dl>
 </dd></dl>
@@ -736,7 +783,11 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World12MakeToplevelE8ActorRef"><code class="docutils literal notranslate"><span class="pre">MakeToplevel()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5World17GetToplevelActorsEv"><code class="docutils literal notranslate"><span class="pre">GetToplevelActors()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World11CreateActorERKNSt6stringE8ActorRef"><code class="docutils literal notranslate"><span class="pre">CreateActor()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5World9FindActorENSt8optionalI8ActorRefEE1P"><code class="docutils literal notranslate"><span class="pre">FindActor()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5World10FindActorsENSt6vectorI8ActorRefEE1P"><code class="docutils literal notranslate"><span class="pre">FindActors()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5World17GetSkyboxRotationEv"><code class="docutils literal notranslate"><span class="pre">GetSkyboxRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5World22GetSkyboxRotationEulerEv"><code class="docutils literal notranslate"><span class="pre">GetSkyboxRotationEuler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World17SetSkyboxRotationEN3glm4quatE"><code class="docutils literal notranslate"><span class="pre">SetSkyboxRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World22SetSkyboxRotationEulerEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetSkyboxRotationEuler()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5WorldD0Ev"><code class="docutils literal notranslate"><span class="pre">~World()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World3camE"><code class="docutils literal notranslate"><span class="pre">cam</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5World9skyboxTexE"><code class="docutils literal notranslate"><span class="pre">skyboxTex</span></code></a></li>

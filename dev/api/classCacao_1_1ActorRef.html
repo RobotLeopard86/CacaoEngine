@@ -347,6 +347,9 @@
 <li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structastra.html">Struct astra</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -545,20 +548,11 @@
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Actor.hpp.html#file-engine-include-cacao-actor-hpp"><span class="std std-ref">File Actor.hpp</span></a></p></li>
 </ul>
-<section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">AstraReflectBase</span></code></p></li>
-</ul>
-</section>
-</section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao8ActorRefE">
-<span id="_CPPv3N5Cacao8ActorRefE"></span><span id="_CPPv2N5Cacao8ActorRefE"></span><span id="Cacao::ActorRef"></span><span class="target" id="classCacao_1_1ActorRef"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ActorRef</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">AstraReflectBase</span></span><a class="headerlink" href="#_CPPv4N5Cacao8ActorRefE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao8ActorRefE"></span><span id="_CPPv2N5Cacao8ActorRefE"></span><span id="Cacao::ActorRef"></span><span class="target" id="classCacao_1_1ActorRef"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ActorRef</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao8ActorRefE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>An handle for Actors to control world tree ownership. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -576,6 +570,9 @@
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If this handle is invalid </p>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A non-owning pointer to the <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> object</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -586,6 +583,37 @@
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If this handle is invalid </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A non-owning pointer to the <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8ActorRef8GetWorldEv">
+<span id="_CPPv3N5Cacao8ActorRef8GetWorldEv"></span><span id="_CPPv2N5Cacao8ActorRef8GetWorldEv"></span><span id="Cacao::ActorRef::GetWorld"></span><span class="target" id="classCacao_1_1ActorRef_1a3a331cd9ca34b362267741205e272d34"></span><a class="reference internal" href="classCacao_1_1World.html#_CPPv4N5Cacao5WorldE" title="Cacao::World"><span class="n"><span class="pre">World</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetWorld</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8ActorRef8GetWorldEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Access the <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a> containing the underlying <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If this handle is invalid </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A non-owning pointer to the <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a> object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao8ActorRef8GetWorldEv">
+<span id="_CPPv3NK5Cacao8ActorRef8GetWorldEv"></span><span id="_CPPv2NK5Cacao8ActorRef8GetWorldEv"></span><span id="Cacao::ActorRef::GetWorldC"></span><span class="target" id="classCacao_1_1ActorRef_1ac9a330b3847864a330e00debb626c8e3"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1World.html#_CPPv4N5Cacao5WorldE" title="Cacao::World"><span class="n"><span class="pre">World</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetWorld</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao8ActorRef8GetWorldEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Constly access the <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a> containing the underlying <a class="reference internal" href="classCacao_1_1Actor.html#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If this handle is invalid </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A non-owning pointer to the <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a> object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -611,11 +639,6 @@
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classCacao_1_1ActorRef_1a8753c33795f26d8731e81815d24cde18"></span><span class="sig-name descname"><span class="pre">inline</span>&#160; <span class="pre">ASTRASETUP</span> <span class="pre">(ActorRef)</span> <span class="pre">virtual</span> <span class="pre">~ActorRef()</span></span></dt>
-<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -670,15 +693,13 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-type">Base Type</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8ActorRefE"><code class="docutils literal notranslate"><span class="pre">Cacao::ActorRef</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8ActorRef8ActorRefEv"><code class="docutils literal notranslate"><span class="pre">ActorRef()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8ActorRefptEv"><code class="docutils literal notranslate"><span class="pre">operator-&gt;()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao8ActorRefptEv"><code class="docutils literal notranslate"><span class="pre">operator-&gt;()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8ActorRef8GetWorldEv"><code class="docutils literal notranslate"><span class="pre">GetWorld()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao8ActorRef8GetWorldEv"><code class="docutils literal notranslate"><span class="pre">GetWorld()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao8ActorRefcvbEv"><code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">bool()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao8ActorRefeqERK8ActorRef"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
 </ul>

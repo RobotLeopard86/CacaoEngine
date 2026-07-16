@@ -412,7 +412,7 @@
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">World</span><span class="p">;</span>
 
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ASTRA_REFLECT</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">AstraReflectBase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">ActorRef</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
@@ -420,33 +420,33 @@
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">Actor</span><span class="o">*</span><span class="w"> </span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
+<span class="w">        </span><span class="n">World</span><span class="o">*</span><span class="w"> </span><span class="nf">GetWorld</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">World</span><span class="o">*</span><span class="w"> </span><span class="nf">GetWorld</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
 <span class="w">        </span><span class="k">operator</span><span class="w"> </span><span class="kt">bool</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ActorRef</span><span class="o">&amp;</span><span class="w"> </span><span class="n">rhs</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
-
-<span class="w">        </span><span class="n">ASTRASETUP</span><span class="p">(</span><span class="n">ActorRef</span><span class="p">)</span>
-
-<span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">ActorRef</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">World</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Non-owning World pointer</span>
-<span class="w">        </span><span class="n">ASTRA_IGNORE</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">World</span><span class="o">&gt;</span><span class="w"> </span><span class="n">world</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">World</span><span class="o">&gt;</span><span class="w"> </span><span class="n">world</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Actor slot access information</span>
-<span class="w">        </span><span class="n">ASTRA_IGNORE</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">slotID</span><span class="p">;</span>
-<span class="w">        </span><span class="n">ASTRA_IGNORE</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">generation</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">slotID</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">generation</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Null state</span>
-<span class="w">        </span><span class="n">ASTRA_IGNORE</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">null</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">null</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Hidden valid handle constructor</span>
 <span class="w">        </span><span class="n">ActorRef</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">World</span><span class="o">&gt;</span><span class="w"> </span><span class="n">world</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">generation</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">//Hidden resolver function</span>
-<span class="w">        </span><span class="n">ASTRA_IGNORE</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">Resolve</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">Resolve</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ASTRA_REFLECT</span><span class="w"> </span><span class="n">Component</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">AstraReflectBase</span><span class="w"> </span><span class="p">{</span>
@@ -487,8 +487,10 @@
 
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
 
+<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span><span class="c1">//&lt; DO NOT USE THIS DIRECTLY!!!!!!!!!!!!!!! ALWAYS USE THE FUNCTIONS!!!!!!!!!!!!!!!</span>
+
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span>
 <span class="w">        </span><span class="n">ASTRA_IGNORE</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">owner</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
