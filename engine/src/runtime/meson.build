@@ -9,16 +9,16 @@ dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
 
 # Reflection
 rt_reflection = custom_target('cacaort.astra.[cpphpp]', output: ['cacaort.astra.hpp', 'cacaort.astra.cpp'],
-	input: ['reflection.cpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
-	meson.current_build_dir(), '-n', 'cacaort', '-i', '@INPUT@'])
+	input: ['Runtime.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
+	meson.current_build_dir(), '-n', 'cacaort', '@INPUT@'])
 
 # Cacao game runtime
 rpath = host_machine.system() == 'darwin' ? '@executable_path' : '$ORIGIN'
 cacao_runtime_exe = executable('cacaort', sources: [
 	'Launcher.cpp',
-	'RTCore.cpp',
 	'Loader.cpp',
-	'reflection.cpp',
+	'Runtime.cpp',
+	'Runtime.hpp',
 	rt_reflection
 ], dependencies: [cacao_dep, yaml_cpp, cli11_dep, dynalo_dep, asset_dep], cpp_args: cppargs, build_rpath: rpath, install_rpath: rpath, install: true)
 

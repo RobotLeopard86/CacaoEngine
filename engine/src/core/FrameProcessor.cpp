@@ -256,7 +256,7 @@ namespace Cacao {
 					}
 
 					//Draw the skybox mesh
-					cmd->DrawMesh(skyCube, skyMat, Transform(glm::vec3 {0.0f}, glm::vec3 {0.0f}, glm::vec3 {1.0f}));
+					cmd->DrawMesh(skyCube, skyMat, Transform(glm::vec3 {0.0f}, world->GetSkyboxRotation(), glm::vec3 {1.0f}));
 				}
 
 				//Run pre-transparent callbacks

@@ -143,6 +143,14 @@ namespace Cacao {
 		return std::vector<ActorRef>(common.begin(), common.end());
 	}
 
+	std::vector<ActorRef> World::_FindActors(std::function<bool(ActorRef)> predicate) const {
+		auto common = impl->slotTable | std::views::transform([this](const Impl::ActorSlot& slot) {
+			return ActorRef(std::const_pointer_cast<World>(std::static_pointer_cast<const World>(shared_from_this())), slot.id, slot.generation);
+		}) | std::views::filter(predicate) |
+					  std::views::common;
+		return std::vector<ActorRef>(common.begin(), common.end());
+	}
+
 	struct WorldManager::Impl {
 		std::shared_ptr<World> active;
 		EventConsumer shutdownConsumer;

@@ -193,4 +193,14 @@ namespace Cacao {
 		const World::Impl::ActorSlot* slot = static_cast<const World::Impl::ActorSlot*>(Resolve());
 		return slot->actor.get();
 	}
+
+	World* ActorRef::GetWorld() {
+		Check<NonexistentValueException>(operator bool(), "Cannot dereference an invalid ActorRef!");
+		return world.lock().get();
+	}
+
+	const World* ActorRef::GetWorld() const {
+		Check<NonexistentValueException>(operator bool(), "Cannot dereference an invalid ActorRef!");
+		return world.lock().get();
+	}
 }

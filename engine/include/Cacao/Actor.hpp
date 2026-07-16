@@ -20,7 +20,7 @@ namespace Cacao {
 	/**
 	 * @brief An handle for Actors to control world tree ownership
 	 */
-	class CACAO_API ASTRA_REFLECT ActorRef : public AstraReflectBase {
+	class CACAO_API ActorRef {
 	  public:
 		/**
 		 * @brief Create a new "null" ActorRef that is invalid
@@ -30,6 +30,8 @@ namespace Cacao {
 		/**
 		 * @brief Access the underlying Actor
 		 *
+		 * @return A non-owning pointer to the Actor object
+		 *
 		 * @throws NonexistentValueException If this handle is invalid
 		 */
 		Actor* operator->();
@@ -37,9 +39,29 @@ namespace Cacao {
 		/**
 		 * @brief Access the underlying Actor constly
 		 *
+		 * @return A non-owning pointer to the Actor object
+		 *
 		 * @throws NonexistentValueException If this handle is invalid
 		 */
 		const Actor* operator->() const;
+
+		/**
+		 * @brief Access the World containing the underlying Actor
+		 *
+		 * @return A non-owning pointer to the World object
+		 *
+		 * @throws NonexistentValueException If this handle is invalid
+		 */
+		World* GetWorld();
+
+		/**
+		 * @brief Constly access the World containing the underlying Actor
+		 *
+		 * @return A non-owning pointer to the World object
+		 *
+		 * @throws NonexistentValueException If this handle is invalid
+		 */
+		const World* GetWorld() const;
 
 		/**
 		 * @brief Check if this handle is valid
@@ -55,29 +77,25 @@ namespace Cacao {
 		 */
 		bool operator==(const ActorRef& rhs) const noexcept;
 
-		ASTRASETUP(ActorRef)
-
-		virtual ~ActorRef() {}
-
 	  private:
 		friend class Actor;
 		friend class World;
 
 		//Non-owning World pointer
-		ASTRA_IGNORE std::weak_ptr<World> world;
+		std::weak_ptr<World> world;
 
 		//Actor slot access information
-		ASTRA_IGNORE uint64_t slotID;
-		ASTRA_IGNORE uint64_t generation;
+		uint64_t slotID;
+		uint64_t generation;
 
 		//Null state
-		ASTRA_IGNORE bool null = true;
+		bool null = true;
 
 		//Hidden valid handle constructor
 		ActorRef(std::weak_ptr<World> world, uint64_t slot, uint64_t generation);
 
 		//Hidden resolver function
-		ASTRA_IGNORE void* Resolve() const noexcept;
+		void* Resolve() const noexcept;
 	};
 
 	/**
@@ -155,8 +173,10 @@ namespace Cacao {
 
 		friend class Actor;
 
+	  protected:
+		bool enabled;//< DO NOT USE THIS DIRECTLY!!!!!!!!!!!!!!! ALWAYS USE THE FUNCTIONS!!!!!!!!!!!!!!!
+
 	  private:
-		bool enabled;
 		ASTRA_IGNORE ActorRef owner;
 	};
 

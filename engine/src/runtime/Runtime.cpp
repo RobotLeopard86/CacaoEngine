@@ -153,6 +153,9 @@ void Runtime::LoadGame() {
 		}
 	}
 
+	Logger::Runtime(Logger::Level::Trace) << "Registering types...";
+	gameBinary->get_function<void()>("__CacaoRegisterTypes")();
+
 	Logger::Runtime() << "Game package successfully loaded!";
 	Logger::Runtime(Logger::Level::Trace) << "Preparing to run...";
 

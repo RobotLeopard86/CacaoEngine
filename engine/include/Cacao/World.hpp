@@ -39,9 +39,6 @@ namespace Cacao {
 		 */
 		static std::shared_ptr<World> Create(const libcacaoasset::World& world, const std::string& addr);
 
-		std::shared_ptr<Camera> cam;	   ///<World camera that will be used to render everything else
-		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
-
 		/**
 		 * @brief Make an Actor a toplevel (no parent, at root of world tree)
 		 *
@@ -75,10 +72,49 @@ namespace Cacao {
 		 */
 		template<typename P>
 			requires std::is_invocable_r_v<bool, P, ActorRef>
-		std::optional<ActorRef> FindActor(P predicate) const {
+		std::vector<ActorRef> FindActors(P predicate) const {
 			//Invoke internal search function with wrapped predicate
-			return _FindActor([&predicate](ActorRef ref) { return predicate(ref); });
+			return _FindActors([&predicate](ActorRef ref) { return predicate(ref); });
 		}
+
+		/**
+		 * @brief Get the rotation of the skybox
+		 *
+		 * @return The rotation
+		 */
+		glm::quat GetSkyboxRotation() const {
+			return skyRot;
+		}
+
+		/**
+		 * @brief Get the rotation of the skybox as Euler angles in degrees
+		 *
+		 * @return The rotation as Euler angles
+		 */
+		glm::vec3 GetSkyboxRotationEuler() const {
+			return glm::degrees(glm::eulerAngles(skyRot));
+		}
+
+		/**
+		 * @brief Set the rotation of the skybox
+		 *
+		 * @param rot The new rotation
+		 */
+		void SetSkyboxRotation(glm::quat rot) {
+			skyRot = glm::normalize(rot);
+		}
+
+		/**
+		 * @brief Set the rotation of the skybox using Euler angles in degrees
+		 *
+		 * @param rot The new rotation in Euler angles
+		 */
+		void SetSkyboxRotationEuler(glm::vec3 rot) {
+			skyRot = glm::normalize(glm::quat(glm::radians(rot)));
+		}
+
+		std::shared_ptr<Camera> cam;	   ///<World camera that will be used to render everything else
+		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
 
 		~World();
 
@@ -94,6 +130,8 @@ namespace Cacao {
 		friend class ImplAccessor;
 
 		//Internal function for actually running a actor search
-		std::optional<ActorRef> _FindActor(std::function<bool(ActorRef)> predicate) const;
+		std::vector<ActorRef> _FindActors(std::function<bool(ActorRef)> predicate) const;
+
+		glm::quat skyRot;
 	};
 }

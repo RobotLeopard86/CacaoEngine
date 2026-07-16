@@ -17,6 +17,18 @@ namespace Cacao {
 		 * @brief Create a new transform
 		 *
 		 * @param position Position relative to the parent
+		 * @param rotation Rotation about the center expressed as a quaternion
+		 * @param scale Scale from the center
+		 */
+		Transform(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
+		  : pos(position), scale(scale), rot(rotation), transMat(1.0) {
+			RecalculateTransformationMatrix();
+		}
+
+		/**
+		 * @brief Create a new transform
+		 *
+		 * @param position Position relative to the parent
 		 * @param rotation Rotation about the center as Euler angles in degrees
 		 * @param scale Scale from the center
 		 */

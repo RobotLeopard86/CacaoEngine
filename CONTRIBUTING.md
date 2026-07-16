@@ -47,7 +47,6 @@ The public header files are those located in the following locations:
 * `engine/include`
 * `libs/audiodecoder/include`
 * `libs/common/include`
-* `libs/formats/include`
 * `libs/asset/include`
 * `libs/image/include`
 

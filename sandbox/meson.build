@@ -1,5 +1,14 @@
+# Sandbox reflection
+sandbox_reflection = custom_target('sandbox.astra.[cpphpp]', output: ['sandbox.astra.hpp', 'sandbox.astra.cpp'],
+	input: ['src' / 'rotator.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
+	meson.current_build_dir(), '-n', 'sandbox', '@INPUT@'], depends: engine_reflection)
+
 # Game binary
-sandbox = shared_module('sandbox', sources: 'src' / 'sandbox.cpp', dependencies: cacaort_dep, name_prefix: '', install: false)
+sandbox = shared_module('sandbox', sources: [
+    'src' / 'sandbox.cpp',
+    'src' / 'rotator.cpp',
+    sandbox_reflection
+], include_directories: 'src', dependencies: cacaort_dep, name_prefix: '', install: false)
 
 # Copy runtime executable
 custom_target('sandbox_rtsetup', command: [rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'sandbox.exe' : 'sandbox', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
