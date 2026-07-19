@@ -39,8 +39,8 @@ for r in remove:
 	print('Removing', p)
 	if p.is_dir():
 		for p2 in p.rglob('*'):
-			if p2.is_file():
-				p2.chmod(p.stat().st_mode | stat.S_IWRITE, follow_symlinks=False)
+			if p2.is_file() and not p2.is_symlink():
+				p2.chmod(p.stat().st_mode | stat.S_IWRITE)
 		shutil.rmtree(p)
 	else:
 		os.remove(p)
