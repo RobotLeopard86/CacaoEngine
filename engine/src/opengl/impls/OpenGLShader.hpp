@@ -1,5 +1,6 @@
 #pragma once
 
+#include "OpenGLModule.hpp"
 #include "impl/Shader.hpp"
 
 #include "glad/gl.h"
@@ -9,6 +10,7 @@ namespace Cacao {
 	  public:
 		void Bake(bool& success) override;
 		void Discard() override;
+		void Bind(OpenGLCommandBuffer* glcb, bool transparent);
 
 		//GLSL shader source code (generated from IR)
 		std::string vertexGLSL, fragmentGLSL;

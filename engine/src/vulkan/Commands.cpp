@@ -57,7 +57,7 @@ namespace Cacao {
 		Check<BadBakeStateException>(material->GetShader()->IsBaked(), "Cannot draw mesh using unbaked shader!");
 
 		//Apply material (will also bind shader pipeline)
-		RES_IMPL(Material, Vulkan, *material).Upload(this);
+		RES_IMPL(Material, Vulkan, *material).Apply(this);
 
 		//Bind mesh vertex and index buffer
 		VulkanMeshImpl& vkMesh = RES_IMPL(Mesh, Vulkan, *mesh);

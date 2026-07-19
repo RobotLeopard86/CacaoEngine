@@ -8,7 +8,7 @@
 namespace Cacao {
 	class Material::Impl {
 	  public:
-		virtual void Upload(CommandBuffer* cmd) = 0;
+		virtual void Apply(CommandBuffer* cmd) = 0;
 
 		std::shared_ptr<Shader> shader;
 		std::unordered_map<std::string, ParamValue> storage;

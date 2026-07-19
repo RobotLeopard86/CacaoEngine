@@ -7,6 +7,6 @@
 namespace Cacao {
 	class OpenGLMaterialImpl : public Material::Impl {
 	  public:
-		void Upload(CommandBuffer* cmd) override;
+		void Apply(CommandBuffer* cmd) override;
 	};
 }

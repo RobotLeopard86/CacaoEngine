@@ -13,13 +13,12 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "libcacaoasset.hpp"
-#include "vulkan/vulkan_enums.hpp"
 
 #include <variant>
 #include <ranges>
 
 namespace Cacao {
-	void VulkanMaterialImpl::Upload(CommandBuffer* cmd) {
+	void VulkanMaterialImpl::Apply(CommandBuffer* cmd) {
 		//Check that all values are set
 		Check<BadValueException>(storage.size() == (shader->GetDescriptor().uniformParams.size() + shader->GetDescriptor().texParams.size()),
 			"Material element storage is not the same size as descriptor parameters!");
