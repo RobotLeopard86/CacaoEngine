@@ -28,8 +28,6 @@ inline class Runtime {
 	std::unordered_map<std::string, std::string> resourceScan;
 
 	struct ASTRA_REFLECT Cacaospec : public AstraReflectBase {
-		std::string binary;
-		std::string startupWorld;
 		struct ASTRA_REFLECT Meta : public AstraReflectBase {
 			std::string pkgId;
 			std::string title;
@@ -37,7 +35,11 @@ inline class Runtime {
 
 			ASTRASETUP(Meta)
 			virtual ~Meta() {}
-		} meta;
+		};
+
+		std::string binary;
+		std::string startupWorld;
+		Meta meta;
 
 		ASTRASETUP(Cacaospec)
 		virtual ~Cacaospec() {}

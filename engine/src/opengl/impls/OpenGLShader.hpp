@@ -10,7 +10,7 @@ namespace Cacao {
 	  public:
 		void Bake(bool& success) override;
 		void Discard() override;
-		void Bind(OpenGLCommandBuffer* glcb, bool transparent);
+		void Bind(bool transparent);
 
 		//GLSL shader source code (generated from IR)
 		std::string vertexGLSL, fragmentGLSL;
@@ -19,7 +19,7 @@ namespace Cacao {
 		GLuint program;
 
 		//Object data UBO (optional)
-		GLuint ubo;
+		GLuint ubo = UINT32_MAX;
 		GLuint uboBinding;
 	};
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cacao/Actor.hpp"
 #include "Cacao/Script.hpp"
 
 namespace sandbox {
@@ -10,5 +11,7 @@ namespace sandbox {
 		void OnDynTick(std::chrono::seconds timestep) override;
 
 		ASTRASETUP(Rotator)
+
+		Cacao::ActorRef useless;
 	};
 }
