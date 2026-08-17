@@ -395,18 +395,18 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Actor.hpp.html#file-engine-include-cacao-actor-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Actor.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Transform.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Exceptions.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Transform.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Exceptions.hpp"</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;typeindex&gt;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;crossguid/guid.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;astra/setup.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;astra/type_actions/common_actions.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"crossguid/guid.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/setup.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/type_actions/common_actions.hpp"</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
@@ -461,7 +461,7 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="n">ActorRef</span><span class="w"> </span><span class="nf">GetOwner</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">((</span><span class="kt">bool</span><span class="p">)</span><span class="n">owner</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Cannot access the invalid owner of a component!&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">((</span><span class="kt">bool</span><span class="p">)</span><span class="n">owner</span><span class="p">,</span><span class="w"> </span><span class="s">"Cannot access the invalid owner of a component!"</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">owner</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -529,7 +529,7 @@
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Args</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_constructible_v</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">MountComponent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">ExistingValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="o">!</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;A component of the type specified already exists on the actor!&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">ExistingValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="o">!</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"A component of the type specified already exists on the actor!"</span><span class="p">);</span>
 
 <span class="w">            </span><span class="c1">//Prepare objects</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">));</span>
@@ -547,14 +547,14 @@
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">GetComponent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;A component of the type specified does not exist on the actor!&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"A component of the type specified does not exist on the actor!"</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">components</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">)).</span><span class="n">component</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Component</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">UnmountComponent</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;A component of the type specified does not exist on the actor!&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">NonexistentValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">HasComponent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="s">"A component of the type specified does not exist on the actor!"</span><span class="p">);</span>
 <span class="w">            </span><span class="n">components</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">type_index</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">)));</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -573,7 +573,7 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Actor</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Actor</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">ActorRef</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">);</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">World</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Component</span><span class="p">;</span>
 

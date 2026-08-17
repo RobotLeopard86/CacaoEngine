@@ -395,8 +395,8 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Exceptions.hpp.html#file-engine-include-cacao-exceptions-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Exceptions.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Log.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Log.hpp"</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
@@ -413,7 +413,7 @@
 <span class="w">      </span><span class="k">protected</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="s">""</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">};</span>
 
@@ -426,25 +426,25 @@
 <span class="cp">        ~cls##Exception() {}                                     \</span>
 <span class="cp">        std::string makeMsg(const std::string&amp; m) {              \</span>
 <span class="cp">            std::stringstream ss;                                \</span>
-<span class="cp">            ss &lt;&lt; &quot;(Cacao Engine &quot; &lt;&lt; tp &lt;&lt; &quot; Exception) &quot; &lt;&lt; m; \</span>
+<span class="cp">            ss &lt;&lt; "(Cacao Engine " &lt;&lt; tp &lt;&lt; " Exception) " &lt;&lt; m; \</span>
 <span class="cp">            return ss.str();                                     \</span>
 <span class="cp">        }                                                        \</span>
 <span class="cp">    };</span>
 
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">External</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;External&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileNotFound</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;File Not Found&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">IO</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;I/O&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileOpen</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;File Open&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">InvalidYAML</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid YAML&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadInitState</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Initialization State&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadBakeState</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Baking State&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadState</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad State&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadThread</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Thread&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadType</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Type&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadValue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Value&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">NonexistentValue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Nonexistent Value&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">ExistingValue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Existing Value&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">Misc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Miscellaneous&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">External</span><span class="p">,</span><span class="w"> </span><span class="s">"External"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileNotFound</span><span class="p">,</span><span class="w"> </span><span class="s">"File Not Found"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">IO</span><span class="p">,</span><span class="w"> </span><span class="s">"I/O"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileOpen</span><span class="p">,</span><span class="w"> </span><span class="s">"File Open"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">InvalidYAML</span><span class="p">,</span><span class="w"> </span><span class="s">"Invalid YAML"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadInitState</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Initialization State"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadBakeState</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Baking State"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadState</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad State"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadThread</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Thread"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadType</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Type"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadValue</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Value"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">NonexistentValue</span><span class="p">,</span><span class="w"> </span><span class="s">"Nonexistent Value"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">ExistingValue</span><span class="p">,</span><span class="w"> </span><span class="s">"Existing Value"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">Misc</span><span class="p">,</span><span class="w"> </span><span class="s">"Miscellaneous"</span><span class="p">)</span>
 
 <span class="cp">#undef DEF_EXCEPTION</span>
 

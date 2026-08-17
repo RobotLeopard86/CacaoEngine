@@ -395,19 +395,19 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Substitutes.hpp.html#file-engine-include-cacao-substitutes-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Substitutes.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao/Exceptions.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao/Resource.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao/ResourceManager.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Actor.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;World.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ResourceManager.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/Exceptions.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/Resource.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/ResourceManager.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Actor.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"World.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ResourceManager.hpp"</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;astra/serialized_substitute.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;astra/setup.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/serialized_substitute.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/setup.hpp"</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;crossguid/guid.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/glm.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"crossguid/guid.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"glm/glm.hpp"</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="p">;</span>
 
@@ -450,7 +450,7 @@
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ActorRef</span><span class="o">&gt;</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">World</span><span class="o">&gt;</span><span class="p">(</span><span class="n">worldAddr</span><span class="p">))</span><span class="o">-&gt;</span><span class="n">FindActors</span><span class="p">([</span><span class="k">this</span><span class="p">](</span><span class="n">ActorRef</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">guid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
 <span class="w">        </span><span class="p">});</span>
-<span class="w">        </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">BadValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad actor ref deserialization!&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">BadValueException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad actor ref deserialization!"</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 <span class="w">    </span><span class="p">}</span>
 

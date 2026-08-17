@@ -438,18 +438,18 @@ If all goes well, you should see something like this:</p>
 </pre></div>
 </div>
 <p>This is some C++ preprocessor stuff to make sure that our hook functions are always accessible. On most POSIX systems, all symbols in a shared library are automatically exported, meaning they are visible to other files. On Windows, however, everything in a shared library (DLL) is invisible by default, and must be exported.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao.hpp&quot;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao.hpp"</span>
 </pre></div>
 </div>
 <p>Here we include the Cacao Engine header file, giving us access to all of the Cacao Engine functions we need.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{...}</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{...}</span>
 </pre></div>
 </div>
 <p>This is telling the C++ compiler, “Hey! Keep these function names exactly like they are!”. By default, C++ compilers “mangle” names, so as to avoid conflicts. Here though, we need these names preserved so the engine can find them. Now we move inside this block.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">_CacaoLaunch</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">&quot;Hi!&quot;</span><span class="p">);</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">CreateWorld</span><span class="o">&lt;</span><span class="n">Cacao</span><span class="o">::</span><span class="n">PerspectiveCamera</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;World&quot;</span><span class="p">);</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetActiveWorld</span><span class="p">(</span><span class="s">&quot;World&quot;</span><span class="p">);</span>
+<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">"Hi!"</span><span class="p">);</span>
+<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">CreateWorld</span><span class="o">&lt;</span><span class="n">Cacao</span><span class="o">::</span><span class="n">PerspectiveCamera</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
+<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetActiveWorld</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -459,7 +459,7 @@ Note that the log function specifically says <code class="docutils literal notra
 You may also notice that everything is prefixed with <code class="docutils literal notranslate"><span class="pre">Cacao::</span></code>. All Cacao Engine things live in the <code class="docutils literal notranslate"><span class="pre">Cacao</span></code> namespace. If you want to omit this, add <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">namespace</span> <span class="pre">Cacao;</span></code> right after including the <code class="docutils literal notranslate"><span class="pre">Cacao.hpp</span></code> header file.<br />
 Lastly, many components of Cacao Engine follow the singleton pattern, meaning there is only ever one instance of them. In this function, we get the instance of the <code class="docutils literal notranslate"><span class="pre">WorldManager</span></code> to use it.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">_CacaoExiting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">&quot;Bye!&quot;</span><span class="p">);</span>
+<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>

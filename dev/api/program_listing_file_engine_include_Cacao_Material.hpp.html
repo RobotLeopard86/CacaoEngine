@@ -395,16 +395,16 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Material.hpp.html#file-engine-include-cacao-material-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Material.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cacao/Exceptions.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Cubemap.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Resource.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Shader.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Tex2D.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/Exceptions.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cubemap.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Resource.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Shader.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Tex2D.hpp"</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;libcacaoasset.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"libcacaoasset.hpp"</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;glm/glm.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"glm/glm.hpp"</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;variant&gt;</span>
@@ -445,7 +445,7 @@
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">is_variant_alternative_v</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">ParamValue</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="n">T</span><span class="w"> </span><span class="n">GetParameter</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">ParamValue</span><span class="w"> </span><span class="n">pv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_GetParam</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">BadTypeException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pv</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Cannot get parameter from material with wrong type!&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">BadTypeException</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pv</span><span class="p">),</span><span class="w"> </span><span class="s">"Cannot get parameter from material with wrong type!"</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pv</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
