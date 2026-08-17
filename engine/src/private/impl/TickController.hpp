@@ -13,7 +13,7 @@ namespace Cacao {
 
 	struct TickController::Impl {
 		//Methods
-		void DynTick(std::chrono::seconds timestep);
+		void DynTick(float timestep);
 		void Runloop(std::stop_token stop);
 
 		//The thread of doom

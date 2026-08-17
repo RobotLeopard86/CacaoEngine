@@ -119,8 +119,8 @@ namespace Cacao {
 			initial = now;
 			last = now;
 		}
-		gd.deltaTime = std::chrono::duration_cast<std::chrono::seconds>(now - last).count();
-		gd.worldTime = std::chrono::duration_cast<std::chrono::seconds>(now - initial).count();
+		gd.deltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(now - last).count();
+		gd.worldTime = std::chrono::duration_cast<std::chrono::duration<float>>(now - initial).count();
 		if(!worldRefresh) last = now;
 
 		//Copy our data to the GPU

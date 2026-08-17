@@ -23,6 +23,7 @@ namespace Cacao {
 			return UINT32_MAX;
 		}
 		virtual void GenSwapchain() = 0;
+		virtual void WaitIdle() {}
 
 		struct VSyncRequest {
 			std::atomic_bool needChange;

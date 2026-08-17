@@ -3,8 +3,6 @@
 #include "Actor.hpp"
 #include "DllHelper.hpp"
 
-#include <chrono>
-
 namespace Cacao {
 	/**
 	 * @brief A component that
@@ -18,7 +16,7 @@ namespace Cacao {
 		 *
 		 * @param timestep The time in seconds since the last dynamic tick (not necessarily when the script was executed)
 		 */
-		virtual void OnDynTick([[maybe_unused]] std::chrono::seconds timestep) {};
+		virtual void OnDynTick([[maybe_unused]] float timestep) {};
 
 		ASTRASETUP(Script)
 

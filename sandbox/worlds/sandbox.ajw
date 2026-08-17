@@ -30,4 +30,7 @@ actors:
         x: 1
         y: 1
         z: 1
-    components: []
+    components:
+      - id: rotator
+        enabled: true
+        rfl: {}

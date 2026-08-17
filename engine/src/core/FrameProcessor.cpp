@@ -298,6 +298,9 @@ namespace Cacao {
 			} catch(...) {}
 		}
 
+		//Wait for GPU to be idle so resource cleanup is safe
+		IMPL(GPUManager).WaitIdle();
+
 		//Clean up
 		skyMat.reset();
 		skyShader.reset();

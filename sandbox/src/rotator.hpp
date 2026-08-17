@@ -9,7 +9,7 @@ namespace sandbox {
 	  public:
 		Rotator() {}
 
-		void OnDynTick(std::chrono::seconds timestep) override;
+		void OnDynTick(float timestep) override;
 
 		ASTRASETUP(Rotator)
 	};

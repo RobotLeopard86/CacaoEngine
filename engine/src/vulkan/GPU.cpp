@@ -301,4 +301,8 @@ namespace Cacao {
 	unsigned int VulkanGPU::MaxFramesInFlight() {
 		return vulkan->swapchain.contexts.size();
 	}
+
+	void VulkanGPU::WaitIdle() {
+		vulkan->dev.waitIdle();
+	}
 }

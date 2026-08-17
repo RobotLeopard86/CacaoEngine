@@ -77,7 +77,7 @@ namespace Cacao {
 			if(counter > Engine::Get().GetRuntimeConfig().maxTPS) std::this_thread::sleep_until(lastSecond + 1s);
 
 			//Run next dynamic tick
-			DynTick(std::chrono::duration_cast<std::chrono::seconds>(now - lastTick));
+			DynTick(std::chrono::duration_cast<std::chrono::duration<float>>(now - lastTick).count());
 			++counter;
 			lastTick = now;
 
@@ -132,7 +132,7 @@ namespace Cacao {
 		}
 	}
 
-	void TickController::Impl::DynTick(std::chrono::seconds timestep) {
+	void TickController::Impl::DynTick(float timestep) {
 		//Freeze input state
 		Input::Get().FreezeInputState();
 

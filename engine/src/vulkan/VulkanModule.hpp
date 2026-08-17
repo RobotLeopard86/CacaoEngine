@@ -155,6 +155,7 @@ namespace Cacao {
 		}
 		unsigned int MaxFramesInFlight() override;
 		void GenSwapchain() override;
+		void WaitIdle() override;
 
 	  private:
 		std::vector<std::unique_ptr<VulkanCommandBuffer>> submitted;

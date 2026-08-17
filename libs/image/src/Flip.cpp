@@ -15,7 +15,7 @@ namespace libcacaoimage {
 		if(src.h == 1) return src;
 
 		//Calculate row pitch
-		const std::size_t rowPitch = static_cast<std::size_t>(src.w) * src.h * static_cast<uint8_t>(src.layout) * (src.bitsPerChannel / 8);
+		const std::size_t rowPitch = static_cast<std::size_t>(src.w) * static_cast<uint8_t>(src.layout) * (src.bitsPerChannel / 8);
 
 		//Allocate temporary row buffer
 		std::unique_ptr<unsigned char[]> tempRow = std::make_unique_for_overwrite<unsigned char[]>(rowPitch);
@@ -24,10 +24,10 @@ namespace libcacaoimage {
 		Image out = src;
 
 		//Flip the rows
-		for(unsigned int y = 0; y < (src.h / 2); ++y) {
+		for(unsigned int y = 0; y < (out.h / 2); ++y) {
 			//Calculate pointers for copy
-			unsigned char* top = const_cast<unsigned char*>(src.data.data()) + static_cast<std::size_t>(y) * rowPitch;
-			unsigned char* bottom = const_cast<unsigned char*>(src.data.data()) + static_cast<std::size_t>(src.h - y - 1) * rowPitch;
+			unsigned char* top = const_cast<unsigned char*>(out.data.data()) + static_cast<std::size_t>(y) * rowPitch;
+			unsigned char* bottom = const_cast<unsigned char*>(out.data.data()) + static_cast<std::size_t>(out.h - y - 1) * rowPitch;
 
 			//Copy top row into the temporary row buffer
 			std::memcpy(tempRow.get(), top, rowPitch);

@@ -52,6 +52,11 @@ namespace Cacao {
 			 * @brief The maximum allowed number of ticks per second; use this to throttle updates or set to UINT32_MAX for unlimited
 			 */
 			unsigned int maxTPS = UINT32_MAX;
+
+			/**
+			 * @brief Whether or not to verbosely log all received input events
+			 */
+			bool verboseInputLogging = false;
 		};
 
 		/**
