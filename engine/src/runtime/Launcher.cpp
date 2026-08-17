@@ -12,7 +12,7 @@
 #include "Runtime.hpp"
 
 #include "astra/yaml.hpp"
-#include "cacaort.astra.hpp"
+#include "cacaort.astra.hpp"// IWYU pragma: keep
 
 void panic(const std::string& err, const std::string& hint) {
 	std::cerr << "\x1b[1;91mERROR: \x1b[0m" << err << "!\n"

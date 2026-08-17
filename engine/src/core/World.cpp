@@ -57,7 +57,7 @@ namespace Cacao {
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
 		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z, world.initialCamRot.w});
 		w->cam->SetClearColor({world.camClearColor.r, world.camClearColor.g, world.camClearColor.b});
-		w->skyRot = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		w->SetSkyboxRotationEuler({0, 45, 0});
 		if(!world.skybox.empty() && ValidateResourceAddr<Cubemap>(world.skybox)) {
 			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
