@@ -10,6 +10,7 @@
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "crossguid/guid.hpp"
+#include "glm/fwd.hpp"
 #include "impl/ResourceManager.hpp"
 #include "impl/World.hpp"
 #include "SingletonGet.hpp"
@@ -56,6 +57,7 @@ namespace Cacao {
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
 		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z, world.initialCamRot.w});
 		w->cam->SetClearColor({world.camClearColor.r, world.camClearColor.g, world.camClearColor.b});
+		w->skyRot = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		if(!world.skybox.empty() && ValidateResourceAddr<Cubemap>(world.skybox)) {
 			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
@@ -70,24 +72,17 @@ namespace Cacao {
 		const auto processActor = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor) {
 			auto impl = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
-				ActorRef ref;
 				xg::Guid pguid(actor.parentGUID);
-				xg::Guid guid(actor.guid);
-				if(pguid == xg::Guid {}) {
-					//Top-level actor
-					Impl::ActorSlot& slot = w->impl->slotTable.emplace_back(Impl::ActorSlot {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor> {}});
-					slot.actor = std::unique_ptr<Actor>(new Actor(actor.name, fakeParent, guid));
-					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
-				} else if(foundActors.contains(pguid)) {
-					//The parent has been added to the tree
-					Impl::ActorSlot& slot = w->impl->slotTable.emplace_back(Impl::ActorSlot {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor> {}});
-					slot.actor = std::unique_ptr<Actor>(new Actor(actor.name, foundActors[pguid], guid));
-					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
-				} else {
-					//The parent has not been added to the tree but we'll save this for when it is
+				if(pguid != xg::Guid {} && foundActors.contains(pguid)) {
+					//The parent has not been added to the tree yet, so we'll save this for when it is
 					awaitingParents[pguid].push_back(actor);
 					return;
 				}
+
+				//Top-level actor or parent found
+				Impl::ActorSlot& slot = w->impl->slotTable.emplace_back(Impl::ActorSlot {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor> {}});
+				ActorRef ref(w, slot.id, slot.generation);
+				slot.actor = std::unique_ptr<Actor>(new Actor(actor.name, pguid == xg::Guid {} ? fakeParent : foundActors[pguid], ref, xg::Guid {actor.guid}));
 
 				//Register actor object
 				foundActors.insert_or_assign(ref->guid, ref);
@@ -112,8 +107,8 @@ namespace Cacao {
 				}
 
 				//Process components that should be children of this one
-				if(awaitingParents.contains(guid))
-					for(const libcacaoasset::World::Actor& ca : awaitingParents[guid]) iref(ca, iref);
+				if(awaitingParents.contains(ref->guid))
+					for(const libcacaoasset::World::Actor& childActor : awaitingParents[ref->guid]) iref(childActor, iref);
 			};
 			impl(actor, impl);
 		};
@@ -224,7 +219,8 @@ namespace Cacao {
 		}();
 
 		//Create actor in slot
-		slot.actor = std::unique_ptr<Actor>(new Actor(name, parent, xg::newGuid()));
-		return slot.actor->self;
+		ActorRef ref(std::static_pointer_cast<World>(shared_from_this()), slot.id, slot.generation);
+		slot.actor = std::unique_ptr<Actor>(new Actor(name, parent, ref, xg::newGuid()));
+		return ref;
 	}
 }

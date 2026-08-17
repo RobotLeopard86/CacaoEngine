@@ -4,7 +4,6 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/Log.hpp"
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Transform.hpp"
@@ -122,17 +121,22 @@ namespace Cacao {
 		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
 			return static_cast<MeshRenderer*>(item.second);
 		}) | std::views::common;
-		std::vector meshrenderers(actorMeshRenderers.begin(), actorMeshRenderers.end());
+		std::vector<MeshRenderer*> meshRenderers(actorMeshRenderers.begin(), actorMeshRenderers.end());
 
 		//Handle children
-		exathread::MultiFuture<std::vector<MeshRenderer*>> childMeshRenderersFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindMeshRenderers);
-		co_await exathread::yieldUntilComplete(childMeshRenderersFut);
+		if(actor->GetAllChildren().size() > 0) {
+			//Find them
+			exathread::MultiFuture<std::vector<MeshRenderer*>> childMeshRenderersFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindMeshRenderers);
+			co_await exathread::yieldUntilComplete(childMeshRenderersFut);
 
-		//Merge lists and return
-		std::vector<std::vector<MeshRenderer*>> toMerge = childMeshRenderersFut.results();
-		toMerge.push_back(std::move(meshrenderers));
-		auto joined = std::views::join(toMerge) | std::views::common;
-		co_return std::vector<MeshRenderer*>(joined.begin(), joined.end());
+			//Merge lists and return
+			std::vector<std::vector<MeshRenderer*>> toMerge = childMeshRenderersFut.results();
+			toMerge.push_back(std::move(meshRenderers));
+			auto joined = std::views::join(toMerge) | std::views::common;
+			co_return std::vector<MeshRenderer*>(joined.begin(), joined.end());
+		} else {
+			co_return meshRenderers;
+		}
 	}
 
 	void FrameProcessor::Impl::Runloop(std::stop_token stop) {

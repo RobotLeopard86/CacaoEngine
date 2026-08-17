@@ -1,9 +1,10 @@
+#include "Cacao/CodeRegistry.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Runtime.hpp"
-
 #include "abi/ABI.hpp"
+
 #include "libcacaoasset.hpp"
 
 #include <exception>
@@ -168,6 +169,9 @@ void Runtime::DestroyGfxObjects() {
 }
 
 void Runtime::Cleanup() {
+	//Clear code registry
+	CodeRegistry::Get().ClearAllFactories();
+
 	//Unload binary
 	Logger::Runtime(Logger::Level::Trace) << "Unloading game binary...";
 	gameBinary.reset();

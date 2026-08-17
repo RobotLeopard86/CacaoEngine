@@ -114,17 +114,22 @@ namespace Cacao {
 		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
 			return static_cast<Script*>(item.second);
 		}) | std::views::common;
-		std::vector scripts(actorScripts.begin(), actorScripts.end());
+		std::vector<Script*> scripts(actorScripts.begin(), actorScripts.end());
 
 		//Handle children
-		exathread::MultiFuture<std::vector<Script*>> childScriptsFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindScripts);
-		co_await exathread::yieldUntilComplete(childScriptsFut);
+		if(actor->GetAllChildren().size() > 0) {
+			//Find them
+			exathread::MultiFuture<std::vector<Script*>> childScriptsFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindScripts);
+			co_await exathread::yieldUntilComplete(childScriptsFut);
 
-		//Merge lists and return
-		std::vector<std::vector<Script*>> toMerge = childScriptsFut.results();
-		toMerge.push_back(std::move(scripts));
-		auto joined = std::views::join(toMerge) | std::views::common;
-		co_return std::vector<Script*>(joined.begin(), joined.end());
+			//Merge lists and return
+			std::vector<std::vector<Script*>> toMerge = childScriptsFut.results();
+			toMerge.push_back(std::move(scripts));
+			auto joined = std::views::join(toMerge) | std::views::common;
+			co_return std::vector<Script*>(joined.begin(), joined.end());
+		} else {
+			co_return scripts;
+		}
 	}
 
 	void TickController::Impl::DynTick(std::chrono::seconds timestep) {

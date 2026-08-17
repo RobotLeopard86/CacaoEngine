@@ -154,9 +154,9 @@ namespace Cacao {
 		/**
 		 * @brief Event handler for resizing the projection matrix when the window size changes
 		 *
-		 * @note For use by the engine only
+		 * @note For use only by the engine internally
 		 *
-		 * @param e The event object (which will be casted be a DataEvent<glm::uvec2>)
+		 * @param e The event object (which will be casted to a DataEvent<glm::uvec2>)
 		 */
 		void ResizeProjectionMatrix(Event& e);
 

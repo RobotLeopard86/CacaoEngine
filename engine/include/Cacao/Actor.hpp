@@ -355,7 +355,7 @@ namespace Cacao {
 		}
 
 	  private:
-		Actor(const std::string& name, ActorRef parent, xg::Guid);
+		Actor(const std::string& name, ActorRef parent, ActorRef self, xg::Guid);
 		friend class World;
 		friend class Component;
 

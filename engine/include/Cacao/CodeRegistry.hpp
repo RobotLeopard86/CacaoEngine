@@ -73,6 +73,13 @@ namespace Cacao {
 			requires std::is_same_v<Component, T>
 		std::pair<T*, std::type_index> Instantiate(const std::string& id);
 
+		/**
+		 * @brief Clear all factories from the registry
+		 *
+		 * @warning For use only by the engine or runtimes
+		 */
+		void ClearAllFactories();
+
 	  private:
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;

@@ -10,14 +10,8 @@
 #include <memory>
 
 namespace Cacao {
-	Actor::Actor(const std::string& name, ActorRef parent, xg::Guid guid)
-	  : name(name), guid(guid), parent(parent), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), worldTransformCached(transform), world(parent.world.lock().get()), active(true) {
-		const World::Impl::ActorSlot& ourSlot = *std::find_if(IMPL(World, *world).slotTable.begin(), IMPL(World, *world).slotTable.end(), [&guid](const World::Impl::ActorSlot& slot) {
-			return slot.actor->guid == guid;
-		});
-		self = ActorRef(parent.world.lock(), ourSlot.id, ourSlot.generation);
-		worldTransformCached = GetWorldTransform();
-	}
+	Actor::Actor(const std::string& name, ActorRef parent, ActorRef self, xg::Guid guid)
+	  : name(name), guid(guid), parent(parent), self(self), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), worldTransformCached(transform), world(parent.world.lock().get()), active(true) {}
 
 	glm::mat4 Actor::GetWorldTransformationMatrix() const {
 		//Calculate the transformation matrix
