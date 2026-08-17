@@ -11,11 +11,12 @@
 
 namespace Cacao {
 	Actor::Actor(const std::string& name, ActorRef parent, xg::Guid guid)
-	  : name(name), guid(guid), parent(parent), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), worldTransformCached(GetWorldTransform()), world(parent->world), active(true) {
+	  : name(name), guid(guid), parent(parent), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), worldTransformCached(transform), world(parent.world.lock().get()), active(true) {
 		const World::Impl::ActorSlot& ourSlot = *std::find_if(IMPL(World, *world).slotTable.begin(), IMPL(World, *world).slotTable.end(), [&guid](const World::Impl::ActorSlot& slot) {
 			return slot.actor->guid == guid;
 		});
-		self = ActorRef(std::static_pointer_cast<World>(world->shared_from_this()), ourSlot.id, ourSlot.generation);
+		self = ActorRef(parent.world.lock(), ourSlot.id, ourSlot.generation);
+		worldTransformCached = GetWorldTransform();
 	}
 
 	glm::mat4 Actor::GetWorldTransformationMatrix() const {

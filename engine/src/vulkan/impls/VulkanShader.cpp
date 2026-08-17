@@ -91,8 +91,7 @@ namespace Cacao {
 		}
 
 		//Create pipeline layout
-		std::array<vk::PushConstantRange, 2> pcrs {{{vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4)},
-			{vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(float) * 4), sizeof(uint32_t)}}};
+		vk::PushConstantRange pcr {vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, (sizeof(glm::mat4) + sizeof(glm::mat3) + sizeof(uint32_t) + sizeof(float) * 4)};
 		vk::PipelineLayoutCreateInfo layoutCI;
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) {
 			std::vector<vk::DescriptorSetLayoutBinding> matDSBindings;
@@ -102,9 +101,9 @@ namespace Cacao {
 			}
 			matLayout = vulkan->dev.createDescriptorSetLayout({vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR, matDSBindings});
 			std::array<vk::DescriptorSetLayout, 2> layouts {{vulkan->engineSetLayout, matLayout}};
-			layoutCI = vk::PipelineLayoutCreateInfo({}, layouts, pcrs);
+			layoutCI = vk::PipelineLayoutCreateInfo({}, layouts, pcr);
 		} else {
-			layoutCI = vk::PipelineLayoutCreateInfo({}, vulkan->engineSetLayout, pcrs);
+			layoutCI = vk::PipelineLayoutCreateInfo({}, vulkan->engineSetLayout, pcr);
 		}
 		layout = vulkan->dev.createPipelineLayout(layoutCI);
 
@@ -154,6 +153,7 @@ namespace Cacao {
 		}
 		vulkan->dev.destroyPipeline(pipelineOpaque);
 		vulkan->dev.destroyPipeline(pipelineTransparent);
+		vulkan->dev.destroyPipelineLayout(layout);
 		if(descriptor.uniformParams.size() > 0 || descriptor.texParams.size() > 0) vulkan->dev.destroyDescriptorSetLayout(matLayout);
 	}
 

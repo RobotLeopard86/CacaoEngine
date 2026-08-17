@@ -64,7 +64,7 @@ namespace Cacao {
 		//Get required layers
 		std::vector<const char*> layers = {};
 #ifdef _DEBUG
-		//if(safe_getenv("CACAO_DISABLE_VULKAN_VALIDATION").compare("YES") != 0) layers.push_back("VK_LAYER_KHRONOS_validation");
+		if(safe_getenv("CACAO_DISABLE_VULKAN_VALIDATION").compare("YES") != 0) layers.push_back("VK_LAYER_KHRONOS_validation");
 		if(safe_getenv("CACAO_ENABLE_VULKAN_API_DUMP").compare("YES") == 0) layers.push_back("VK_LAYER_LUNARG_api_dump");
 #endif
 

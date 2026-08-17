@@ -60,24 +60,28 @@ namespace Cacao {
 			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
 
+		//Create fake parent ref for toplevel actors
+		ActorRef fakeParent;
+		fakeParent.world = w;
+
 		//Process actors and make tree
 		std::unordered_map<xg::Guid, ActorRef> foundActors;
 		std::unordered_map<xg::Guid, std::vector<libcacaoasset::World::Actor>> awaitingParents;
-		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoasset::World::Actor& actor) {
-			auto impl = [w, &foundActors, &awaitingParents](const libcacaoasset::World::Actor& actor, auto& iref) mutable {
+		const auto processActor = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor) {
+			auto impl = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
 				ActorRef ref;
 				xg::Guid pguid(actor.parentGUID);
 				xg::Guid guid(actor.guid);
 				if(pguid == xg::Guid {}) {
 					//Top-level actor
-					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, ActorRef {}, guid))};
-					w->impl->slotTable.push_back(std::move(slot));
+					Impl::ActorSlot& slot = w->impl->slotTable.emplace_back(Impl::ActorSlot {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor> {}});
+					slot.actor = std::unique_ptr<Actor>(new Actor(actor.name, fakeParent, guid));
 					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
 				} else if(foundActors.contains(pguid)) {
 					//The parent has been added to the tree
-					Impl::ActorSlot slot = {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor>(new Actor(actor.name, foundActors[pguid], guid))};
-					w->impl->slotTable.push_back(std::move(slot));
+					Impl::ActorSlot& slot = w->impl->slotTable.emplace_back(Impl::ActorSlot {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor> {}});
+					slot.actor = std::unique_ptr<Actor>(new Actor(actor.name, foundActors[pguid], guid));
 					ref = ActorRef(w, w->impl->slotTable.size() - 1, 1);
 				} else {
 					//The parent has not been added to the tree but we'll save this for when it is
@@ -132,6 +136,7 @@ namespace Cacao {
 
 		//Set parent to null (marks it as toplevel)
 		actor->parent = ActorRef {};
+		actor->parent.world = std::static_pointer_cast<World>(shared_from_this());
 	}
 
 	std::vector<ActorRef> World::GetToplevelActors() const {

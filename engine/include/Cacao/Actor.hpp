@@ -185,7 +185,6 @@ namespace Cacao {
 	  public:
 		std::string name;	///<The human-readable name of the actor
 		const xg::Guid guid;///<Actor ID, unique
-		///<Actor transform relative to parent
 
 		/**
 		 * @brief Get the actor's local transform relative to its parent

@@ -7,11 +7,11 @@
 namespace Cacao {
 	void VulkanCubemapImpl::Bake(bool& success) {
 		//Calculate sizes
-		vk::DeviceSize faceSize = faces[0].w * faces[0].h * 3;
+		vk::DeviceSize faceSize = faces[0].w * faces[0].h * 4;
 		vk::DeviceSize totalSize = faceSize * 6;
 
 		//Allocate GPU texture & data upload buffers
-		vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8Srgb, {faces[0].w, faces[0].h, 1}, 1, 6,
+		vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8A8Srgb, {faces[0].w, faces[0].h, 1}, 1, 6,
 			vk::SampleCountFlagBits::e1, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
 		vma::AllocationCreateInfo texAllocCI(vma::AllocationCreateFlagBits::eWithinBudget, vma::MemoryUsage::eAutoPreferDevice, vk::MemoryPropertyFlagBits::eDeviceLocal);
 		vk::BufferCreateInfo texUpCI({}, totalSize, vk::BufferUsageFlagBits::eTransferSrc, vk::SharingMode::eExclusive, 0);
@@ -70,7 +70,7 @@ namespace Cacao {
 		vulkan->allocator.destroyBuffer(up.obj, up.alloc);
 
 		//Create image view
-		vk::ImageViewCreateInfo viewCI({}, vi.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8Srgb,
+		vk::ImageViewCreateInfo viewCI({}, vi.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8A8Srgb,
 			{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eOne},
 			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 		vi.view = vulkan->dev.createImageView(viewCI);
