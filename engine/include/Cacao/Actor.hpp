@@ -173,9 +173,6 @@ namespace Cacao {
 
 		friend class Actor;
 
-	  protected:
-		int gooberBones;
-
 	  private:
 		ASTRA_IGNORE bool enabled;
 		ASTRA_IGNORE ActorRef owner;

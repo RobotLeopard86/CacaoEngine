@@ -11,4 +11,26 @@ cam:
     w: 1
   clear: 00ACE6
   orthographic: false
-actors: []
+actors:
+  - name: Rotator
+    active: true
+    guid: c5cad2e0-ae55-4de5-9b91-c91773e43de6
+    parent: 0
+    transform:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: rotator
+        enabled: true
+        rfl: {}

@@ -159,7 +159,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 
 			YAML::Node enabled = c["enabled"];
 			ValidateYAMLNode(enabled, YAML::NodeType::value::Scalar, "world actor component", "component enabling");
-			component.enabled = id.as<bool>();
+			component.enabled = enabled.as<bool>();
 
 			YAML::Node rfl = c["rfl"];
 			ValidateYAMLNode(rfl, YAML::NodeType::value::Map, "world actor component", "component reflection data");

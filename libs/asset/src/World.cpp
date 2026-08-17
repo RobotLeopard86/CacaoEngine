@@ -12,7 +12,7 @@ namespace libcacaoasset {
 	World::Component _DecComponent(libjaguar::Document::ObjReader& rd) {
 		World::Component component;
 		component.typeID = rd.Query<std::string>("typeid");
-		component.enabled = rd.Query<bool>("component");
+		component.enabled = rd.Query<bool>("enabled");
 		component.reflection = rd.Query<std::vector<unsigned char>>("rfl");
 		return component;
 	}
@@ -44,7 +44,7 @@ namespace libcacaoasset {
 	void _EncComponent(const World::Component& c, libjaguar::Document::ObjWriter& ow) {
 		ow.SetOrCreate<std::string>("typeid", c.typeID);
 		ow.SetOrCreate<bool>("enabled", c.enabled);
-		ow.SetOrCreate<std::vector<unsigned char>>("typeid", false, c.reflection);
+		ow.SetOrCreate<std::vector<unsigned char>>("rfl", false, c.reflection);
 	}
 
 	void _EncActor(const World::Actor& a, libjaguar::Document::ObjWriter& ow) {
