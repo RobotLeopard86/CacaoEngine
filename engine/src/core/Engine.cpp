@@ -1,10 +1,13 @@
 #include "Cacao/Engine.hpp"
+#include "Cacao/Actor.hpp"
+#include "Cacao/CodeRegistry.hpp"
 #include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/MeshRenderer.hpp"
 #include "Cacao/Resource.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
@@ -157,6 +160,9 @@ namespace Cacao {
 		//Preload built-in assets
 		Logger::Engine(Logger::Level::Trace) << "Preloading built-in assets...";
 		ResourceManager::Get().SetupBuiltins();
+
+		//Register built-in component types
+		RegisterBuiltinComponents();
 
 		//Start the frame processor if doing so at this time
 		if(icfg.startFrameProcessorWithGfxSystem) {
@@ -326,5 +332,10 @@ namespace Cacao {
 		Check<exathread::Pool, BadStateException>(pool, "Engine must be in the Alive state to use the thread pool!");
 
 		return pool;
+	}
+
+	void Engine::RegisterBuiltinComponents() {
+		//Mesh renderer
+		CodeRegistry::Get().RegisterFactory<Component>("cacao.meshRenderer", []() { return new MeshRenderer(); }, typeid(MeshRenderer));
 	}
 }

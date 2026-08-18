@@ -267,6 +267,8 @@ namespace Cacao {
 
 		std::shared_ptr<exathread::Pool> pool;
 
+		void RegisterBuiltinComponents();
+
 		Engine();
 		~Engine();
 	};

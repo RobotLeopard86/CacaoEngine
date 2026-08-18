@@ -39,3 +39,27 @@ actors:
       - id: rotator
         enabled: true
         rfl: {}
+  - name: Cubey
+    active: true
+    guid: aab4d03b-1f4e-4829-bcc2-531e41169d19
+    parent: 0
+    transform:
+      position:
+        x: 0
+        y: 0
+        z: 5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: "'a:builtin_cube'"
+          material: "'a:cubey'"

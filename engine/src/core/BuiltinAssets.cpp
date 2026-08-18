@@ -30,6 +30,8 @@ namespace Cacao {
 #include "sphere.inc"
 #include "tripyramid.inc"
 #include "skyshader.inc"
+#include "basic_color.inc"
+#include "basic_texture.inc"
 	}
 
 	template<std::size_t S>
@@ -87,6 +89,8 @@ namespace Cacao {
 			cs.depth = Shader::Impl::CustomCompileSettings::Depth::Lequal;
 			return _GenShader(assets::skyshader, "a:internal_skyshader", cs);
 		}));
+		sfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenShader(assets::basic_color, "a:builtin_basic_color_shader"); }));
+		sfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenShader(assets::basic_texture, "a:builtin_basic_texture_shader"); }));
 		exathread::MultiFuture<std::shared_ptr<Shader>> shaders(std::move(sfuts));
 
 		//Assign meshes

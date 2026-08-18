@@ -1,0 +1,5 @@
+shaderAddress: a:builtin_basic_color_shader
+renderMode: opaque
+parameters:
+  - target: color
+    value: [0.0, 0.525, 0.702]
