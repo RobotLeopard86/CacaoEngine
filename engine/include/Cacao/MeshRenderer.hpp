@@ -6,13 +6,14 @@
 #include "Actor.hpp"
 
 namespace Cacao {
-	class CACAO_API MeshRenderer final : public Component {
+	class CACAO_API ASTRA_REFLECT MeshRenderer final : public Component {
 	  public:
 		MeshRenderer() {}
 
-		std::shared_ptr<Mesh> mesh;
-		std::shared_ptr<Material> material;
+		ASTRA_IGNORE std::shared_ptr<Mesh> mesh;
+		ASTRA_IGNORE std::shared_ptr<Material> material;
 
+		ASTRASETUP(MeshRenderer)
 		virtual ~MeshRenderer() {}
 	};
 }
