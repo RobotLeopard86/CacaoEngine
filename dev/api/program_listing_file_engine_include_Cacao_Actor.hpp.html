@@ -404,6 +404,7 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;typeindex&gt;</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/serialized_substitute.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"crossguid/guid.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/setup.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/type_actions/common_actions.hpp"</span>
@@ -431,6 +432,7 @@
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Actor</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">World</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="n">astra</span><span class="o">::</span><span class="n">SerializedSubstitute</span><span class="o">&lt;</span><span class="n">ActorRef</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">//Non-owning World pointer</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">World</span><span class="o">&gt;</span><span class="w"> </span><span class="n">world</span><span class="p">;</span>
