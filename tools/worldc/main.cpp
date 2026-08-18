@@ -1,5 +1,6 @@
 #include "Bytestream.hpp"
 #include "CLI11.hpp"
+#include "CheckException.hpp"
 #include "astra/serialized_convert.hpp"
 #include "spinners.hpp"
 
@@ -50,6 +51,19 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 	} else {
 		out.skybox = "";
 	}
+	YAML::Node skyRot = root["skyboxRotation"];
+	if(skyRot) {
+		CheckException((bool)sky, "Expected a set skybox to match skybox rotation parameter!");
+		ValidateYAMLNode(skyRot, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
+			if(!(node["x"].IsScalar() && node["y"].IsScalar() && node["z"].IsScalar() && node["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for camera initial rotation";
+				out.initialSkyRot.x = std::strtof(node["x"].Scalar().c_str(), nullptr);
+				out.initialSkyRot.y = std::strtof(node["y"].Scalar().c_str(), nullptr);
+				out.initialSkyRot.z = std::strtof(node["z"].Scalar().c_str(), nullptr);
+				out.initialSkyRot.w = std::strtof(node["w"].Scalar().c_str(), nullptr);
+				return ""; }, "world data", "skybox rotation");
+	} else {
+		out.initialSkyRot = libjaguar::Vector<float, 4> {{0.0f}, {0.0f}, {0.0f}, {1.0f}};
+	}
 	YAML::Node cam = root["cam"];
 	ValidateYAMLNode(cam, YAML::NodeType::value::Map, [&out](const YAML::Node& node) {
 			YAML::Node p = node["position"], r = node["rotation"], o = node["orthographic"], c = node["clear"];
@@ -58,7 +72,7 @@ libcacaoasset::World parseWorldYML(std::istream& in) {
 				out.initialCamPos.x = std::strtof(p["x"].Scalar().c_str(), nullptr);
 				out.initialCamPos.y = std::strtof(p["y"].Scalar().c_str(), nullptr);
 				out.initialCamPos.z = std::strtof(p["z"].Scalar().c_str(), nullptr);
-				if(!(p.IsMap() && r["x"].IsScalar() && r["y"].IsScalar() && r["z"].IsScalar() && r["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for camera initial rotation";
+				if(!(r.IsMap() && r["x"].IsScalar() && r["y"].IsScalar() && r["z"].IsScalar() && r["w"].IsScalar())) return "Expected 'x', 'y', 'z', and 'w' scalar values for camera initial rotation";
 				out.initialCamRot.x = std::strtof(r["x"].Scalar().c_str(), nullptr);
 				out.initialCamRot.y = std::strtof(r["y"].Scalar().c_str(), nullptr);
 				out.initialCamRot.z = std::strtof(r["z"].Scalar().c_str(), nullptr);

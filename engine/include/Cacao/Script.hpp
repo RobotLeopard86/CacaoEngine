@@ -19,6 +19,7 @@ namespace Cacao {
 		virtual void OnDynTick([[maybe_unused]] float timestep) {};
 
 		ASTRASETUP(Script)
+		virtual ~Script() {}
 
 #ifdef _ASTRAGENERATE
 		Script() {}

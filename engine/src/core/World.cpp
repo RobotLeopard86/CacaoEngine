@@ -55,9 +55,9 @@ namespace Cacao {
 
 		//Configure camera and skybox
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
-		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z, world.initialCamRot.w});
+		w->cam->SetRotation({world.initialCamRot.w, world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
 		w->cam->SetClearColor({world.camClearColor.r, world.camClearColor.g, world.camClearColor.b});
-		w->SetSkyboxRotationEuler({0, 180, 0});
+		w->SetSkyboxRotation({world.initialSkyRot.w, world.initialSkyRot.x, world.initialSkyRot.y, world.initialSkyRot.z});
 		if(!world.skybox.empty() && ValidateResourceAddr<Cubemap>(world.skybox)) {
 			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
@@ -90,7 +90,7 @@ namespace Cacao {
 				//Setup transform and state
 				ref->SetActive(actor.active);
 				ref->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
-				ref->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z, actor.initialRot.w});
+				ref->transform.SetRotation({actor.initialRot.w, actor.initialRot.x, actor.initialRot.y, actor.initialRot.z});
 				ref->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
 
 				//Mount components

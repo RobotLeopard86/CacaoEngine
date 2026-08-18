@@ -29,9 +29,6 @@ namespace Cacao {
 			//Convert to 8-bit
 			if(images[i].bitsPerChannel == 16) images[i] = libcacaoimage::Convert16To8BitColor(images[i]);
 
-			//Flip image (because of course we have to do that)
-			images[i] = libcacaoimage::Flip(images[i]);
-
 			//Ensure RGBA layout
 			if(images[i].layout != libcacaoimage::Image::Layout::RGBA) images[i] = libcacaoimage::ChangeChannelLayout(images[i], libcacaoimage::Image::Layout::RGBA);
 		}

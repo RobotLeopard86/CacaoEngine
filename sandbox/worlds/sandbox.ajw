@@ -1,4 +1,9 @@
 skybox: a:skybox
+skyboxRotation:
+  x: 0
+  y: 0.7071068
+  z: 0
+  w: -0.7071068
 cam:
   position:
     x: 0

@@ -9,6 +9,7 @@
 #include <string>
 #include <typeindex>
 
+#include "astra/serialized_substitute.hpp"
 #include "crossguid/guid.hpp"
 #include "astra/setup.hpp"
 #include "astra/type_actions/common_actions.hpp"
@@ -80,6 +81,7 @@ namespace Cacao {
 	  private:
 		friend class Actor;
 		friend class World;
+		friend astra::SerializedSubstitute<ActorRef>;
 
 		//Non-owning World pointer
 		std::weak_ptr<World> world;

@@ -40,6 +40,7 @@ namespace libcacaoasset {
 	 */
 	struct CACAO_API World {
 		std::string skybox;							///<Skybox resource address
+		libjaguar::Vector<float, 4> initialSkyRot;	///<Initial skybox rotation (as quaternion)
 		libjaguar::Vector<float, 3> initialCamPos;	///<Initial camera position
 		libjaguar::Vector<float, 4> initialCamRot;	///<Initial camera rotation (as quaternion)
 		bool camOrthographic;						///<Whether the camera is orthographic (true) or perspective (false)

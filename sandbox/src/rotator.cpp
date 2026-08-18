@@ -6,8 +6,8 @@
 namespace sandbox {
 	void Rotator::OnDynTick(float timestep) {
 		constexpr static float degPerSec = 10;
-		Cacao::World* w = GetOwner().GetWorld();
+		std::shared_ptr<Cacao::Camera> cam = GetOwner().GetWorld()->cam;
 		glm::quat rotDelta = glm::angleAxis(glm::radians(degPerSec * timestep), glm::vec3 {0, 1, 0});
-		w->SetSkyboxRotation(rotDelta * w->GetSkyboxRotation());
+		cam->SetRotation(rotDelta * cam->GetRotation());
 	}
 }
