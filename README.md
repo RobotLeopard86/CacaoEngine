@@ -27,6 +27,6 @@ Cacao Engine and its auxiliary libraries and tools are licensed under the Apache
 Transitive dependency libraries that are compiled into engine binaries and used at runtime will have their respective licenses located in the `transitive` directory within the `licenses` directory.  
 All other transitive dependencies that are not involved in the build process or used at runtime will have their respective licenses found in the subproject directory of the owning project. This will not be downloaded until configure-time by Meson.
 
-Additionally, the file `expf.c`, located in the directory `engine/src/core/src`, is instead licensed under the [Zero-Clause BSD license](https://opensource.org/license/0bsd). This is because it's a tiny patch that only exists because of an issue with the static Linux math library that sometimes crops up, and this is the closest thing you can get to public domain worldwide.  
+Additionally, the file `expf.c`, located in the directory `engine/src/core`, is instead licensed under the [Zero-Clause BSD license](https://opensource.org/license/0bsd). This is because it's a tiny patch that only exists because of an issue with the static Linux math library that sometimes crops up, and this is the closest thing you can get to public domain worldwide.  
 
 All Git patches and Meson build definitions located in `subprojects/packagefiles` are provided under the [MIT License](https://opensource.org/license/mit) instead, as this is the same license used by Meson wraps.

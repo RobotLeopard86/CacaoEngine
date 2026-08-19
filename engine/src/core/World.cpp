@@ -9,8 +9,6 @@
 #include "Cacao/Resource.hpp"
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
-#include "crossguid/guid.hpp"
-#include "glm/fwd.hpp"
 #include "impl/ResourceManager.hpp"
 #include "impl/World.hpp"
 #include "SingletonGet.hpp"
@@ -20,6 +18,8 @@
 
 #include "astra/var.hpp"
 #include "astra/binary.hpp"
+#include "crossguid/guid.hpp"
+#include "glm/fwd.hpp"
 
 #include <memory>
 #include <ranges>
@@ -73,7 +73,8 @@ namespace Cacao {
 			auto impl = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
 				xg::Guid pguid(actor.parentGUID);
-				if(pguid != xg::Guid {} && foundActors.contains(pguid)) {
+				static xg::Guid nullGuid {};
+				if(pguid != nullGuid && foundActors.contains(pguid)) {
 					//The parent has not been added to the tree yet, so we'll save this for when it is
 					awaitingParents[pguid].push_back(actor);
 					return;
