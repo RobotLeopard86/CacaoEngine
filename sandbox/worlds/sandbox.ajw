@@ -61,5 +61,5 @@ actors:
       - id: cacao.meshRenderer
         enabled: true
         rfl:
-          mesh: "'a:builtin_cube'"
-          material: "'a:cubey'"
+          mesh: a:builtin_cube
+          material: a:cubey

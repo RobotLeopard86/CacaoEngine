@@ -1,6 +1,6 @@
 meta:
-  pkgId: "'@ID@'"
-  title: "'@TITLE@'"
-  version: "'@VERSION@'"
-binary: "'@BINPATH@'"
-startupWorld: "'w:sandbox'"
+  pkgId: @ID@
+  title: @TITLE@
+  version: @VERSION@
+binary: @BINPATH@
+startupWorld: w:sandbox

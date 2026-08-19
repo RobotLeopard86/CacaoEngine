@@ -24,13 +24,13 @@ spec.set('TITLE', 'Cacao Engine Sandbox Application')
 spec.set('VERSION', meson.project_version())
 configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
 ```  
-`cacaospec.yml.in` (note: the quotes are significant!):
+`cacaospec.yml.in`:
 ```{code-block} YAML
 meta:
-  pkgId: "'@ID@'"
-  title: "'@TITLE@'"
-  version: "'@VERSION@'"
-binary: "'@BINPATH@'"
+  pkgId: @ID@
+  title: @TITLE@
+  version: @VERSION@
+binary: @BINPATH@
 ```  
 
 An example for creating a more complex bundle layout will be available at release.
@@ -76,3 +76,4 @@ The Cacaospec file defines some basic information about your game and how to lau
 	* `title`: The user-facing title of your game. Shown in the window titlebar.
 	* `version`: The version number of your game build.
 * `binary`: The name of your game binary file to load.
+* `startupWorld`: The resource address of the world to load on startup
