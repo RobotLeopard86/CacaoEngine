@@ -1,4 +1,4 @@
-project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2026.10.2', license: 'Apache-2.0 WITH LLVM-exception', subproject_dir: 'external', default_options: ['cpp_std=c++20', 'warning_level=1', 'b_staticpic=true', 'default_library=static'])
+project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2026.14.1', license: 'Apache-2.0 WITH LLVM-exception', subproject_dir: 'external', default_options: ['cpp_std=c++20', 'warning_level=1', 'b_staticpic=true', 'default_library=static'])
 
 ###################################
 # COMMON SETUP
