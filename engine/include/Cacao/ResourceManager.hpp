@@ -2,12 +2,12 @@
 
 #include "Asset.hpp"
 #include "Tex2D.hpp"
-#include "Model.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 #include "Engine.hpp"
 #include "Shader.hpp"
+#include "Mesh.hpp"
 
 #include <exception>
 #include <memory>

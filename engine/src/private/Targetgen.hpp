@@ -12,7 +12,6 @@
 namespace Cacao {
 
 	struct CompiledShaderObject {
-		static Slang::ComPtr<slang::IGlobalSession> gsession;
 		Slang::ComPtr<slang::ISession> session;
 		Slang::ComPtr<slang::IComponentType> linked;
 	};

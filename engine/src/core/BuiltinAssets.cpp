@@ -12,7 +12,6 @@
 #include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
 
-#include <cstdint>
 #include <array>
 #include <optional>
 
@@ -107,6 +106,8 @@ namespace Cacao {
 		//Assign shaders
 		shaders.await();
 		impl->builtinShaders["a:internal_skyshader"] = shaders.results()[0];
+		impl->builtinShaders["a:builtin_basic_color_shader"] = shaders.results()[1];
+		impl->builtinShaders["a:builtin_basic_texture_shader"] = shaders.results()[2];
 
 		//Complete
 		impl->builtinsReady = true;

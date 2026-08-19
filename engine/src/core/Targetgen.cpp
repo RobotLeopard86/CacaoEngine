@@ -1,21 +1,17 @@
 #include "Targetgen.hpp"
-
 #include "Cacao/Exceptions.hpp"
 
 #include "libcacaoasset.hpp"
+
 #include "slang.h"
 #include "slang-com-ptr.h"
 
 #include <sstream>
 #include <cstring>
-#include <set>
-#include <sys/types.h>
 
 using Slang::ComPtr;
 
 namespace Cacao {
-	Slang::ComPtr<slang::IGlobalSession> CompiledShaderObject::gsession;
-
 	std::pair<std::string, std::string> GetEntrypointNames(const libcacaoasset::Shader& in) {
 		//Get the names
 		std::string vsepName, fsepName;
@@ -64,6 +60,16 @@ namespace Cacao {
 	CompiledShaderObject SetupCSO(const libcacaoasset::Shader& in, SlangCompileTarget tgt, const std::string& profile) {
 		CompiledShaderObject cso;
 
+		//Get global session
+		ComPtr<slang::IGlobalSession> gsession = []() {
+			static thread_local ComPtr<slang::IGlobalSession> gs;
+			if(!gs) {
+				SlangResult r = slang::createGlobalSession(gs.writeRef());
+				Check<ExternalException>(r == SLANG_OK && gs, "Failed to create Slang global session!");
+			}
+			return gs;
+		}();
+
 		//Describe session
 		slang::SessionDesc sessionDesc;
 		std::vector<slang::CompilerOptionEntry> entries;
@@ -93,14 +99,14 @@ namespace Cacao {
 		}
 		slang::TargetDesc tgtDesc = {};
 		tgtDesc.format = tgt;
-		tgtDesc.profile = CompiledShaderObject::gsession->findProfile(profile.c_str());
+		tgtDesc.profile = gsession->findProfile(profile.c_str());
 		sessionDesc.targetCount = 1;
 		sessionDesc.targets = &tgtDesc;
 		sessionDesc.compilerOptionEntries = entries.data();
 		sessionDesc.compilerOptionEntryCount = entries.size();
 
 		//Create session
-		SlangResult r = CompiledShaderObject::gsession->createSession(sessionDesc, cso.session.writeRef());
+		SlangResult r = gsession->createSession(sessionDesc, cso.session.writeRef());
 		Check<ExternalException>(r == SLANG_OK && cso.session, "Failed to create Slang compiler session!");
 
 		//Create Cacao Engine shader base module

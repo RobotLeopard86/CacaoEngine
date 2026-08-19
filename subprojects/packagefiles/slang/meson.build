@@ -264,8 +264,9 @@ slang_base_src = run_command([python, 'sourceglob.py', meson.project_source_root
 slang_record_replay_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay'], check: true).stdout().strip().splitlines()
 slang_record_replay_proxy_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'proxy'], check: true).stdout().strip().splitlines()
 slang_src = [slang_base_src, slang_record_replay_src, slang_record_replay_proxy_src, stdmod_config_h]
-slang_common_dep = declare_dependency(sources: [slang_src, verfile], compile_args: export_args, include_directories: [common_includes, 'tools'], dependencies: [slang_core_dep, slang_prelude_dep, slang_compiler_core_dep,
+slang_common = static_library('slang_common', sources: [slang_src, verfile], cpp_args: export_args, include_directories: [common_includes, 'tools'], dependencies: [slang_core_dep, slang_prelude_dep, slang_compiler_core_dep,
     capability_defs_dep, capability_lookup_dep, fiddle_output_dep, lookup_tables_dep, spirv_headers_dep, cmark_dep])
+slang_common_dep = declare_dependency(compile_args: export_args, include_directories: [common_includes, 'tools'], link_with: slang_common)
 
 ###################################
 # CORE MODULE BOOTSTRAP SETUP
@@ -291,7 +292,7 @@ glsl_module_generated_headers = [
 bootstrap_headers = custom_target('bootstrap_headers', command: [slang_bootstrap, '-archive-type', 'riff-lz4', '-save-core-module-bin-source', '@OUTPUT0@', '-save-glsl-module-bin-source', '@OUTPUT1@'], 
     output: [core_module_generated_headers, glsl_module_generated_headers], depends: slang_without_embedded_core_module)
 embedded_core_module_dep = declare_dependency(sources: ['source' / 'slang-core-module' / 'slang-embedded-core-module.cpp', bootstrap_headers], dependencies: slang_core_dep, compile_args: [export_args, 
-    '-DSLANG_EMBED_CORE_MODULE_SOURCE'])
+    '-DSLANG_EMBED_CORE_MODULE'])
 glsl_module = shared_module('slang_glsl_module', sources: [bootstrap_headers[1], 'source' / 'slang-glsl-module' / 'slang-embedded-glsl-module.cpp'], cpp_args: '-DSLANG_SHARED_LIBRARY_TOOL',
     gnu_symbol_visibility: 'hidden', dependencies: slang_core_dep)
 

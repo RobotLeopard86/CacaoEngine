@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cacao/ResourceManager.hpp"
+#include "Cacao/Model.hpp"
 
 #include <unordered_map>
 #include <set>

@@ -141,11 +141,6 @@ namespace Cacao {
 		}
 		Logger::Engine(Logger::Level::Info) << "Selected backend \"" << chosen << "\".";
 
-		//Setup shader compiler
-		Logger::Engine(Logger::Level::Trace) << "Setting up shader compiler (this may take a while)...";
-		SlangResult r = slang::createGlobalSession(CompiledShaderObject::gsession.writeRef());
-		Check<ExternalException>(r == SLANG_OK && CompiledShaderObject::gsession, "Failed to create Slang global session!");
-
 		//Open window
 		Logger::Engine(Logger::Level::Trace) << "Creating window...";
 		Window::Get().Open(icfg.clientID.displayName, {1280, 720}, true, Window::Mode::Windowed);

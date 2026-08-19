@@ -36,8 +36,8 @@ namespace Cacao {
 		/**
 		 * @brief A storage type that holds any of the valid material parameter data types
 		 */
-		using ParamValue = std::variant<int, unsigned int, float, bool, glm::vec2, glm::vec3, glm::vec4, glm::ivec2, glm::ivec3, glm::ivec4,
-			glm::uvec2, glm::uvec3, glm::uvec4, glm::mat2, glm::mat3, glm::mat4, std::shared_ptr<Tex2D>, std::shared_ptr<Cubemap>>;
+		using ParamValue = std::variant<int, unsigned int, float, bool, glm::ivec2, glm::ivec3, glm::ivec4,
+			glm::uvec2, glm::uvec3, glm::uvec4, glm::vec2, glm::vec3, glm::vec4, glm::mat2, glm::mat3, glm::mat4, std::shared_ptr<Tex2D>, std::shared_ptr<Cubemap>>;
 
 		/**
 		 * @brief Create a new material based on a shader
