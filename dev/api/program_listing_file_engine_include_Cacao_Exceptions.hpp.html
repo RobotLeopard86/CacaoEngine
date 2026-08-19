@@ -417,18 +417,18 @@
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">};</span>
 
-<span class="cp">#define DEF_EXCEPTION(cls, tp)                                   \</span>
-<span class="cp">    class CACAO_API cls##Exception : public Exception {          \</span>
-<span class="cp">      public:                                                    \</span>
-<span class="cp">        cls##Exception(std::string m) : Exception() {            \</span>
-<span class="cp">            msg = makeMsg(m);                                    \</span>
-<span class="cp">        }                                                        \</span>
-<span class="cp">        ~cls##Exception() {}                                     \</span>
-<span class="cp">        std::string makeMsg(const std::string&amp; m) {              \</span>
-<span class="cp">            std::stringstream ss;                                \</span>
-<span class="cp">            ss &lt;&lt; "(Cacao Engine " &lt;&lt; tp &lt;&lt; " Exception) " &lt;&lt; m; \</span>
-<span class="cp">            return ss.str();                                     \</span>
-<span class="cp">        }                                                        \</span>
+<span class="cp">#define DEF_EXCEPTION(cls, tp)                                                \</span>
+<span class="cp">    class CACAO_API cls##Exception : public Exception {                       \</span>
+<span class="cp">      public:                                                                 \</span>
+<span class="cp">        cls##Exception(std::string_view m) : Exception() {                    \</span>
+<span class="cp">            msg = makeMsg(m);                                                 \</span>
+<span class="cp">        }                                                                     \</span>
+<span class="cp">        ~cls##Exception() {}                                                  \</span>
+<span class="cp">        std::string makeMsg(std::string_view m) {                             \</span>
+<span class="cp">            std::stringstream ss;                                             \</span>
+<span class="cp">            ss &lt;&lt; "(Cacao Engine " &lt;&lt; tp &lt;&lt; " Exception) " &lt;&lt; std::string(m); \</span>
+<span class="cp">            return ss.str();                                                  \</span>
+<span class="cp">        }                                                                     \</span>
 <span class="cp">    };</span>
 
 <span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">External</span><span class="p">,</span><span class="w"> </span><span class="s">"External"</span><span class="p">)</span>
@@ -451,10 +451,10 @@
 
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">E</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Exception</span><span class="p">,</span><span class="w"> </span><span class="n">E</span><span class="o">&gt;</span>
-<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">condition</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">condition</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">unwindFn</span><span class="p">();</span>
-<span class="w">            </span><span class="n">E</span><span class="w"> </span><span class="nf">ex</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="n">E</span><span class="w"> </span><span class="nf">ex</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="p">{</span><span class="n">message</span><span class="p">});</span>
 <span class="w">            </span><span class="n">Logger</span><span class="o">::</span><span class="n">Engine</span><span class="p">(</span><span class="n">Logger</span><span class="o">::</span><span class="n">Level</span><span class="o">::</span><span class="n">Error</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">what</span><span class="p">();</span>
 <span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -462,7 +462,7 @@
 
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">P</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">E</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Exception</span><span class="p">,</span><span class="w"> </span><span class="n">E</span><span class="o">&gt;</span>
-<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span><span class="p">((</span><span class="kt">bool</span><span class="p">)</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">unwindFn</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
