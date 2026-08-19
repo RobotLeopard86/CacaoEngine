@@ -3,7 +3,6 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
-#include "CommandBufferCast.hpp"
 #include "VulkanShader.hpp"
 #include "VulkanTex2D.hpp"
 #include "VulkanCubemap.hpp"
@@ -29,19 +28,22 @@ namespace Cacao {
 		for(auto& [name, val] : storage) {
 			if(val.index() == std::variant_size_v<Material::ParamValue> - 2) {
 				//Tex2D
-				bakers.push_back(Engine::Get().GetThreadPool()->submit([](std::shared_ptr<Tex2D> tex) {
-					if(!tex->IsBaked()) tex->Bake();
+				std::shared_ptr<Tex2D> tex = std::get<std::shared_ptr<Tex2D>>(val);
+				if(!tex->IsBaked()) bakers.push_back(Engine::Get().GetThreadPool()->submit([](std::shared_ptr<Tex2D> tex) {
+					tex->Bake();
 				},
-					std::get<std::shared_ptr<Tex2D>>(val)));
+					tex));
 			} else if(val.index() == std::variant_size_v<Material::ParamValue> - 1) {
 				//Cubemap
-				bakers.push_back(Engine::Get().GetThreadPool()->submit([](std::shared_ptr<Cubemap> cmap) {
-					if(!cmap->IsBaked()) cmap->Bake();
+				std::shared_ptr<Cubemap> cmap = std::get<std::shared_ptr<Cubemap>>(val);
+				if(!cmap->IsBaked()) bakers.push_back(Engine::Get().GetThreadPool()->submit([](std::shared_ptr<Cubemap> cmap) {
+					cmap->Bake();
 				},
-					std::get<std::shared_ptr<Cubemap>>(val)));
+					cmap));
 			}
 		}
-		exathread::MultiFuture<void> bakeFuts(std::move(bakers));
+		std::optional<exathread::MultiFuture<void>> bakeFuts;
+		if(bakers.size() > 0) bakeFuts.emplace(std::move(bakers));
 
 		//While textures are baking, we can upload uniform parameters
 		for(const libcacaoasset::Shader::Descriptor::UniformParameter& uparam : shader->GetDescriptor().uniformParams) {
@@ -147,7 +149,7 @@ namespace Cacao {
 		}
 
 		//Ensure textures are done baking
-		bakeFuts.await();
+		if(bakeFuts.has_value()) bakeFuts->await();
 
 		//Bind shader pipeline
 		VulkanCommandBuffer* vcb = static_cast<VulkanCommandBuffer*>(cmd);
@@ -155,23 +157,25 @@ namespace Cacao {
 		vkShader.Bind(vcb, renderMode == libcacaoasset::Material::RenderMode::Transparent);
 
 		//Bind textures to descriptors
-		std::vector<vk::DescriptorImageInfo> diis;
-		auto writeView = shader->GetDescriptor().texParams | std::views::transform([this, &diis](const libcacaoasset::Shader::Descriptor::TextureParameter& tparam) {
-			//Create image info
-			vk::DescriptorImageInfo& dii = diis.emplace_back();
-			if(!tparam.isCubemap) {
-				VulkanTex2DImpl& tex = RES_IMPL(Tex2D, Vulkan, *std::get<std::shared_ptr<Tex2D>>(storage[tparam.name]));
-				dii = vk::DescriptorImageInfo(tex.sampler, tex.vi.view, vk::ImageLayout::eShaderReadOnlyOptimal);
-			} else {
-				VulkanCubemapImpl& cmap = RES_IMPL(Cubemap, Vulkan, *std::get<std::shared_ptr<Cubemap>>(storage[tparam.name]));
-				dii = vk::DescriptorImageInfo(cmap.sampler, cmap.vi.view, vk::ImageLayout::eShaderReadOnlyOptimal);
-			}
+		if(vkShader.descriptor.texParams.size() > 0) {
+			std::vector<vk::DescriptorImageInfo> diis;
+			auto writeView = shader->GetDescriptor().texParams | std::views::transform([this, &diis](const libcacaoasset::Shader::Descriptor::TextureParameter& tparam) {
+				//Create image info
+				vk::DescriptorImageInfo& dii = diis.emplace_back();
+				if(!tparam.isCubemap) {
+					VulkanTex2DImpl& tex = RES_IMPL(Tex2D, Vulkan, *std::get<std::shared_ptr<Tex2D>>(storage[tparam.name]));
+					dii = vk::DescriptorImageInfo(tex.sampler, tex.vi.view, vk::ImageLayout::eShaderReadOnlyOptimal);
+				} else {
+					VulkanCubemapImpl& cmap = RES_IMPL(Cubemap, Vulkan, *std::get<std::shared_ptr<Cubemap>>(storage[tparam.name]));
+					dii = vk::DescriptorImageInfo(cmap.sampler, cmap.vi.view, vk::ImageLayout::eShaderReadOnlyOptimal);
+				}
 
-			//Create descriptor write
-			return vk::WriteDescriptorSet(VK_NULL_HANDLE, tparam.binding, 0, 1, vk::DescriptorType::eCombinedImageSampler, &dii);
-		}) | std::views::common;
-		std::vector<vk::WriteDescriptorSet> writes(writeView.begin(), writeView.end());
-		vcb->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, vkShader.layout, 1, writes);
+				//Create descriptor write
+				return vk::WriteDescriptorSet(VK_NULL_HANDLE, tparam.binding, 0, 1, vk::DescriptorType::eCombinedImageSampler, &dii);
+			}) | std::views::common;
+			std::vector<vk::WriteDescriptorSet> writes(writeView.begin(), writeView.end());
+			vcb->cmd.pushDescriptorSetKHR(vk::PipelineBindPoint::eGraphics, vkShader.layout, 1, writes);
+		}
 	}
 
 	Material::Impl* VulkanModule::ConfigureMaterial() {

@@ -84,7 +84,7 @@ namespace Cacao {
 		std::vector<exathread::Future<std::shared_ptr<Shader>>> sfuts;
 		sfuts.push_back(Engine::Get().GetThreadPool()->submit([]() {
 			Shader::Impl::CustomCompileSettings cs = {};
-			cs.blendUseSrc = false;
+			cs.blendUseOne = false;
 			cs.depth = Shader::Impl::CustomCompileSettings::Depth::Lequal;
 			return _GenShader(assets::skyshader, "a:internal_skyshader", cs);
 		}));

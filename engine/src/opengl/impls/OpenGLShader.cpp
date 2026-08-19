@@ -19,7 +19,7 @@ namespace Cacao {
 		//Configure blending and depth
 		glEnable(GL_BLEND);
 		if(customSettings) {
-			glBlendFunc(customSettings->blendUseSrc ? GL_SRC_ALPHA : GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendFunc((customSettings && customSettings->blendUseOne) ? GL_ONE : GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			if(customSettings->depth != CustomCompileSettings::Depth::Off) {
 				glEnable(GL_DEPTH_TEST);
 				glDepthFunc(customSettings->depth == CustomCompileSettings::Depth::Less ? GL_LESS : GL_LEQUAL);

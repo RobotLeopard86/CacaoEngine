@@ -14,7 +14,7 @@ namespace Cacao {
 
 		//Custom shader compilation settings
 		struct CustomCompileSettings {
-			bool blendUseSrc;
+			bool blendUseOne;
 			enum class Depth {
 				Off,
 				Less,

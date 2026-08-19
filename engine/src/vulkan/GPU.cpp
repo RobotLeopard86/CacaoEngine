@@ -6,10 +6,7 @@
 #include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
 #include "impl/FrameProcessor.hpp"
-#include "vulkan/vulkan_enums.hpp"
-#include "vulkan/vulkan_structs.hpp"
 
-#include <atomic>
 #include <future>
 #include <mutex>
 #include <stdexcept>

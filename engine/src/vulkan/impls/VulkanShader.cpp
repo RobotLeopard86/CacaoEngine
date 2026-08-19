@@ -1,8 +1,6 @@
 #include "VulkanShader.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
-#include "CommandBufferCast.hpp"
 #include "Targetgen.hpp"
 
 #include "libcacaoasset.hpp"
@@ -62,8 +60,8 @@ namespace Cacao {
 
 		//Color attachments
 		vk::PipelineColorBlendAttachmentState colorBlendAttachment(
-			VK_TRUE, (customSettings && customSettings->blendUseSrc) ? vk::BlendFactor::eSrcAlpha : vk::BlendFactor::eOne,
-			vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, (customSettings && customSettings->blendUseSrc) ? vk::BlendFactor::eSrcAlpha : vk::BlendFactor::eOne,
+			VK_TRUE, (customSettings && customSettings->blendUseOne) ? vk::BlendFactor::eOne : vk::BlendFactor::eSrcAlpha,
+			vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, (customSettings && customSettings->blendUseOne) ? vk::BlendFactor::eOne : vk::BlendFactor::eSrcAlpha,
 			vk::BlendFactor::eOneMinusSrcAlpha, vk::BlendOp::eAdd, vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
 		vk::PipelineColorBlendStateCreateInfo colorBlendCI({}, VK_FALSE, vk::LogicOp::eCopy, colorBlendAttachment, {0.0f, 0.0f, 0.0f, 0.0f});
 
