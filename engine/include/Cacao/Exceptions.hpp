@@ -23,18 +23,18 @@ namespace Cacao {
 		virtual ~Exception() {}
 	};
 
-#define DEF_EXCEPTION(cls, tp)                                   \
-	class CACAO_API cls##Exception : public Exception {          \
-	  public:                                                    \
-		cls##Exception(std::string m) : Exception() {            \
-			msg = makeMsg(m);                                    \
-		}                                                        \
-		~cls##Exception() {}                                     \
-		std::string makeMsg(const std::string& m) {              \
-			std::stringstream ss;                                \
-			ss << "(Cacao Engine " << tp << " Exception) " << m; \
-			return ss.str();                                     \
-		}                                                        \
+#define DEF_EXCEPTION(cls, tp)                                                \
+	class CACAO_API cls##Exception : public Exception {                       \
+	  public:                                                                 \
+		cls##Exception(std::string_view m) : Exception() {                    \
+			msg = makeMsg(m);                                                 \
+		}                                                                     \
+		~cls##Exception() {}                                                  \
+		std::string makeMsg(std::string_view m) {                             \
+			std::stringstream ss;                                             \
+			ss << "(Cacao Engine " << tp << " Exception) " << std::string(m); \
+			return ss.str();                                                  \
+		}                                                                     \
 	};
 
 	DEF_EXCEPTION(External, "External")
@@ -65,10 +65,10 @@ namespace Cacao {
 	 */
 	template<typename E>
 		requires std::is_base_of_v<Exception, E>
-	CACAO_API void Check(bool condition, std::string message, std::function<void()> unwindFn = []() {}) {
+	CACAO_API void Check(bool condition, std::string_view message, std::function<void()> unwindFn = []() {}) {
 		if(!condition) {
 			unwindFn();
-			E ex(message);
+			E ex(std::string {message});
 			Logger::Engine(Logger::Level::Error) << ex.what();
 			throw ex;
 		}
@@ -83,7 +83,7 @@ namespace Cacao {
 	 */
 	template<typename P, typename E>
 		requires std::is_base_of_v<Exception, E>
-	CACAO_API void Check(std::shared_ptr<P> ptr, std::string message, std::function<void()> unwindFn = []() {}) {
+	CACAO_API void Check(std::shared_ptr<P> ptr, std::string_view message, std::function<void()> unwindFn = []() {}) {
 		Check<E>((bool)ptr, message, unwindFn);
 	}
 }
