@@ -125,7 +125,7 @@ slang_core_dep = declare_dependency(include_directories: common_includes, depend
 
 # compiler-core
 compiler_core_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'compiler-core'], check: true).stdout().strip().splitlines()
-compiler_core = library('compiler-core', sources: compiler_core_src, include_directories: common_includes, dependencies: [slang_core_dep, spirv_headers_dep, fast_float_dep, slang_tint_dep], cpp_args: [export_args, '-fms-extensions'])
+compiler_core = library('compiler-core', sources: compiler_core_src, include_directories: common_includes, dependencies: [slang_core_dep, spirv_headers_dep, fast_float_dep, slang_tint_dep], cpp_args: [export_args, '-fms-extensions', '-DSLANG_ENABLE_DXIL_SUPPORT=0'])
 slang_compiler_core_dep = declare_dependency(dependencies: spirv_headers_dep, link_with: compiler_core, compile_args: [windows_defs, export_args])
 
 ###################################
