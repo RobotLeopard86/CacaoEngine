@@ -435,12 +435,12 @@
 <span class="nb">configure_file</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="s">'cacaospec.yml.in'</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">'cacaospec.yml'</span><span class="p">,</span><span class="w"> </span><span class="n">configuration</span><span class="p">:</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">cacaospec.yml.in</span></code> (note: the quotes are significant!):</p>
+<p><code class="docutils literal notranslate"><span class="pre">cacaospec.yml.in</span></code>:</p>
 <div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">pkgId</span><span class="p">:</span><span class="w"> </span><span class="s">"'@ID@'"</span>
-<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">"'@TITLE@'"</span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"'@VERSION@'"</span>
-<span class="nt">binary</span><span class="p">:</span><span class="w"> </span><span class="s">"'@BINPATH@'"</span>
+<span class="w">  </span><span class="nt">pkgId</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">ID@</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">TITLE@</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">VERSION@</span>
+<span class="nt">binary</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">BINPATH@</span>
 </pre></div>
 </div>
 <p>An example for creating a more complex bundle layout will be available at release.</p>
@@ -524,6 +524,7 @@
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code>: The name of your game binary file to load.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">startupWorld</span></code>: The resource address of the world to load on startup</p></li>
 </ul>
 </section>
 </section>
