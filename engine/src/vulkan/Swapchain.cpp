@@ -113,7 +113,7 @@ namespace Cacao {
 			vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {vulkan->swapchain.extent.width, vulkan->swapchain.extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
 				vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::SharingMode::eExclusive);
 			vma::AllocationCreateInfo depthAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
-			auto [img, alloc] = vulkan->allocator.createImage(depthCI, depthAllocCI);
+			auto [alloc, img] = vulkan->allocator.createImage(depthCI, depthAllocCI);
 			try {
 				vi.alloc = alloc;
 				vi.obj = img;

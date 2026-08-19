@@ -76,13 +76,18 @@ namespace Cacao {
 	VulkanCommandBuffer::~VulkanCommandBuffer() {
 		if(poolPtr == nullptr) return;
 
-		//If this was a rendering context, release context
-		if(render) render = nullptr;
-		if(transient) transient = nullptr;
+		//If this was a rendering context, lock pool for safe destruction
+		std::unique_lock<std::mutex> lk;
+		if(render) lk = std::unique_lock<std::mutex>(vulkan->renderPoolMtx);
 
 		//Free command buffer
 		vulkan->dev.freeCommandBuffers(*poolPtr, cmd);
+		if(render) lk.unlock();
+
+		//Invalidate pointers (technically not needed but useful for human tracking of lifecycle)
 		poolPtr = nullptr;
+		render = nullptr;
+		transient = nullptr;
 	}
 
 	bool VulkanCommandBuffer::SetupContext(bool rendering) {
@@ -137,8 +142,11 @@ namespace Cacao {
 
 		//Create command buffer from pool
 		try {
+			std::unique_lock<std::mutex> lk;
 			vk::CommandBufferAllocateInfo allocInfo(*poolPtr, vk::CommandBufferLevel::ePrimary, 1);
+			if(rendering) lk = std::unique_lock<std::mutex>(vulkan->renderPoolMtx);
 			cmd = vulkan->dev.allocateCommandBuffers(allocInfo)[0];
+			if(rendering) lk.unlock();
 		} catch(...) {
 			poolPtr = nullptr;
 			if(rendering) {
@@ -267,15 +275,10 @@ namespace Cacao {
 			std::unique_ptr<VulkanCommandBuffer>& vcb = *it;
 			Sync sync = vcb->GetSync();
 			if(vulkan->dev.getSemaphoreCounterValue(sync.semaphore) >= sync.doneValue) {
-				//If this was a rendering context, mark it available and adjust counter
+				//If this was a rendering context, decrement frames in flight
 				if(vcb->render) {
 					--(IMPL(FrameProcessor).numFramesInFlight);
-					vcb->render = nullptr;
 				}
-
-				//Release context pointers
-				vcb->poolPtr = nullptr;
-				vcb->transient = nullptr;
 
 				//Set the promise
 				vcb->promise.set_value();

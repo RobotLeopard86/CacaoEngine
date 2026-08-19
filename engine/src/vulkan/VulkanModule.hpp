@@ -33,21 +33,21 @@ namespace Cacao {
 		T obj;
 
 		Allocated() {}
-		Allocated(std::pair<T, vma::Allocation> p) : alloc(p.second), obj(p.first) {}
+		Allocated(std::pair<vma::Allocation, T> p) : alloc(p.first), obj(p.second) {}
 	};
 
 	struct ViewImage : public Allocated<vk::Image> {
 		vk::ImageView view;
 
 		ViewImage() {}
-		ViewImage(std::pair<vk::Image, vma::Allocation> p) : Allocated<vk::Image>(p) {}
+		ViewImage(std::pair<vma::Allocation, vk::Image> p) : Allocated<vk::Image>(p) {}
 	};
 
 	struct MappedBuffer : Allocated<vk::Buffer> {
 		void* mem;
 
 		MappedBuffer() {}
-		MappedBuffer(std::pair<vk::Buffer, vma::Allocation> p) : Allocated<vk::Buffer>(p) {}
+		MappedBuffer(std::pair<vma::Allocation, vk::Buffer> p) : Allocated<vk::Buffer>(p) {}
 	};
 
 	struct Sync {
@@ -210,6 +210,7 @@ namespace Cacao {
 			std::vector<uint16_t> imageSemIndices;
 		} swapchain;
 		vk::CommandPool renderingPool;
+		std::mutex renderPoolMtx;
 
 		//==================== ENGINE DATA DESCRIPTORS ====================
 		vk::DescriptorSetLayout engineSetLayout;
