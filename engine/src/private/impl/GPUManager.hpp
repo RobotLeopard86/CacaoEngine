@@ -39,6 +39,10 @@ namespace Cacao {
 		//Current frames-in-flight tracker
 		std::atomic<unsigned int> numFramesInFlight;
 
+		//Frame generation toggle
+		//This is false most of the time but set to true during shutdown to avoid asset unloading problems
+		std::atomic_bool masterFrameGenDisable;
+
 		//Swapchain regeneration state
 		std::atomic_bool swapchainRegen;
 		EventConsumer resizeConsumer;

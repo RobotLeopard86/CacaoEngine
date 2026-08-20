@@ -31,6 +31,7 @@ namespace Cacao {
 		PAL::Get().ConfigureImplPtr(*this);
 		impl->numFramesInFlight.store(0);
 		impl->swapchainRegen.store(false);
+		impl->masterFrameGenDisable.store(false);
 	}
 
 	GPUManager::~GPUManager() {
@@ -69,6 +70,11 @@ namespace Cacao {
 		//Signal run loop stop
 		impl->thread->request_stop();
 		impl->thread->join();
+
+		//Clean up skybox assets
+		impl->skyMat.reset();
+		impl->skyShader.reset();
+		impl->skyCube.reset();
 	}
 
 	float srgbChannel2Linear(float c) {
@@ -164,14 +170,14 @@ namespace Cacao {
 			}
 
 			//Frame generation
-			if(!Window::Get().IsMinimized() && numFramesInFlight <= MaxFramesInFlight() && skyResourcesReady) {
+			if(!Window::Get().IsMinimized() && numFramesInFlight <= MaxFramesInFlight() && skyResourcesReady && !masterFrameGenDisable) {
 				//If needed, regenerate swapchain
 				if(swapchainRegen.load(std::memory_order_relaxed)) {
 					if(numFramesInFlight == 0) {
 						swapchainRegen.store(false);
 						GenSwapchain();
 					} else {
-						continue;
+						goto abort_frame;
 					}
 				}
 
@@ -209,12 +215,6 @@ namespace Cacao {
 			std::this_thread::yield();
 			RunloopIteration();
 		}
-
-		//Discard skybox resources
-		WaitIdle();
-		skyMat.reset();
-		skyShader.reset();
-		skyCube.reset();
 
 		//Shutdown
 		RunloopStop();

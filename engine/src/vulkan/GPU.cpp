@@ -288,12 +288,7 @@ namespace Cacao {
 	}
 
 	void VulkanGPU::RunloopStop() {
-		//Wait until all jobs are done and clean them up
-		//To avoid code duplication, we just call Iteration over and over
-		while(submitted.size() > 0) {
-			RunloopIteration();
-		}
-		vulkan->dev.waitIdle();
+		WaitIdle();
 	}
 
 	unsigned int VulkanGPU::MaxFramesInFlight() {
@@ -301,6 +296,11 @@ namespace Cacao {
 	}
 
 	void VulkanGPU::WaitIdle() {
+		//Wait until all jobs are done before waiting for the device to be idle
+		//To avoid code duplication, we just call Iteration over and over
+		while(submitted.size() > 0) {
+			RunloopIteration();
+		}
 		vulkan->dev.waitIdle();
 	}
 }

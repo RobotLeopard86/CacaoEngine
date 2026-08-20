@@ -210,13 +210,17 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Stopping tick controller...";
 		TickController::Get().Stop();
 
-		//Fire shutdown event (this (for now) will block until all consumers have responded)
+		//Fire client quit event (this (for now) will block until all consumers have responded)
 		Event e("ClientQuit");
 		EventManager::Get().Dispatch(e);
 	}
 
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
+
+		//Disable frame generation and wait for GPU manager to clear its task queue before proceeding
+		IMPL(GPUManager).masterFrameGenDisable.store(true);
+		IMPL(GPUManager).WaitIdle();
 
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");
