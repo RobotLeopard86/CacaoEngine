@@ -1,7 +1,6 @@
 #include "Cacao/Engine.hpp"
 #include "Cacao/Actor.hpp"
 #include "Cacao/CodeRegistry.hpp"
-#include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/Exceptions.hpp"
@@ -66,7 +65,7 @@ namespace Cacao {
 
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
-		constexpr unsigned int coreServiceCount = 3;//Tick controller, GPU manager, frame processor
+		constexpr unsigned int coreServiceCount = 2;//Tick controller, GPU manager
 		pool = exathread::Pool::Create(std::clamp<std::size_t>(std::thread::hardware_concurrency() - coreServiceCount, 2, SIZE_MAX));
 
 		//Store thread ID
@@ -159,12 +158,6 @@ namespace Cacao {
 		//Register built-in component types
 		RegisterBuiltinComponents();
 
-		//Start the frame processor if doing so at this time
-		if(icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
-			FrameProcessor::Get().Start();
-		}
-
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Graphics initialization complete.";
 		std::lock_guard lkg(stateMtx);
@@ -179,12 +172,6 @@ namespace Cacao {
 		}
 
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
-
-		//Start the frame processor if doing so at this time
-		if(!icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
-			FrameProcessor::Get().Start();
-		}
 
 		//Start the tick controller
 		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
@@ -223,12 +210,6 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Stopping tick controller...";
 		TickController::Get().Stop();
 
-		//Stop the frame processor if doing so at this time
-		if(!icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
-			FrameProcessor::Get().Stop();
-		}
-
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("ClientQuit");
 		EventManager::Get().Dispatch(e);
@@ -236,12 +217,6 @@ namespace Cacao {
 
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
-
-		//Stop the frame processor if doing so at this time
-		if(icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
-			FrameProcessor::Get().Stop();
-		}
 
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");

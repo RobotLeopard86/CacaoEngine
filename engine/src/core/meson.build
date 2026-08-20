@@ -61,7 +61,6 @@ engine_srcs += files(
 	'Cubemap.cpp',
 	'Engine.cpp',	
 	'EventManager.cpp',
-	'FrameProcessor.cpp',
 	'GPU.cpp',
 	'Input.cpp',
 	'Log.cpp',

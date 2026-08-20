@@ -1,11 +1,9 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "Cacao/FrameProcessor.hpp"
 #include "VulkanModule.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
-#include "impl/FrameProcessor.hpp"
 
 #include <future>
 #include <mutex>
@@ -274,7 +272,7 @@ namespace Cacao {
 			if(vulkan->dev.getSemaphoreCounterValue(sync.semaphore) >= sync.doneValue) {
 				//If this was a rendering context, decrement frames in flight
 				if(vcb->render) {
-					--(IMPL(FrameProcessor).numFramesInFlight);
+					--numFramesInFlight;
 				}
 
 				//Set the promise

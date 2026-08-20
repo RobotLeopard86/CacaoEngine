@@ -1,7 +1,6 @@
 #include "Cacao/TickController.hpp"
 #include "Cacao/Actor.hpp"
 #include "Cacao/Engine.hpp"
-#include "Cacao/FrameProcessor.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "Cacao/Script.hpp"
@@ -81,9 +80,9 @@ namespace Cacao {
 			++counter;
 			lastTick = now;
 
-			//Frame processor synchronization
-			if(frameProcessorWants.exchange(false)) {
-				//Tell frame processor it's good and wake it up
+			//GPU manager synchronization
+			if(gpuMgrWants.exchange(false)) {
+				//Tell GPU manager it's good to make a frame
 				tickControllerOwns.store(false);
 				tickControllerOwns.notify_all();
 
@@ -93,13 +92,13 @@ namespace Cacao {
 				});
 
 				//Block until:
-				// a) Frame processor is done and we can resume
+				// a) GPU manager is done and we can resume
 				// b) Stop callback fired and the loop will exit
 				tickControllerOwns.wait(false);
 			}
 		}
 
-		//We're exiting, hand off to frame processor
+		//We're exiting, hand off to the GPU manager
 		tickControllerOwns.store(false);
 		tickControllerOwns.notify_all();
 	}
@@ -137,7 +136,7 @@ namespace Cacao {
 		Input::Get().FreezeInputState();
 
 		//Check TPS and FPS
-		if(Input::Get().IsKeyPressed(CACAO_KEY_P)) Logger::Engine(Logger::Level::Trace).LogFormatted("{} TPS, {} FPS", TickController::Get().GetCurrentTPS(), FrameProcessor::Get().GetCurrentFPS());
+		if(Input::Get().IsKeyPressed(CACAO_KEY_P)) Logger::Engine(Logger::Level::Trace).LogFormatted("{} TPS, {} FPS", TickController::Get().GetCurrentTPS(), GPUManager::Get().GetCurrentFPS());
 		static bool vUp = true;
 		if(Input::Get().IsKeyPressed(CACAO_KEY_V)) {
 			if(vUp) GPUManager::Get().SetVSync(!GPUManager::Get().IsVSynced());

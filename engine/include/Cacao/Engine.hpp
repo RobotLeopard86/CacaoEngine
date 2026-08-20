@@ -95,14 +95,6 @@ namespace Cacao {
 			 * @brief ID of the client application. This should be in reverse-domain format with a PascalCase final segment (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
-
-			/**
-			 * @brief Whether to start the frame processor during graphics system initialization or to start it with the engine gameloop
-			 *
-			 * This is set to @c false by default, which is best for games. However, other users may want to continue rendering
-			 * without an active gameloop, thus this option exists.
-			 */
-			bool startFrameProcessorWithGfxSystem = false;
 		};
 
 		/**

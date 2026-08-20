@@ -25,9 +25,9 @@ namespace Cacao {
 		clock::time_point lastTick;
 		std::array<unsigned int, TPS_AVG_WINDOW> tpsMeasures;
 
-		//Frame processor synchronization
+		//GPU manager synchronization
 		std::atomic<bool> tickControllerOwns = true;
-		std::atomic<bool> frameProcessorWants = false;
+		std::atomic<bool> gpuMgrWants = false;
 		std::atomic<bool> tickControllerNeedsForShutdown = false;
 	};
 }

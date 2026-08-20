@@ -60,7 +60,7 @@ namespace Cacao {
 	}
 
 	void Sound::Bake() {
-		Check<BadBakeStateException>(!baked, "Sound must not be baked when Bake is called!");
+		Check<BadBakeStateException>(!baked, "Cannot bake a baked sound!");
 		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to bake a sound!");
 
 		//Decode audio (yes, we rethrow the exception. deal with it.)
@@ -83,7 +83,7 @@ namespace Cacao {
 	}
 
 	void Sound::Discard() {
-		Check<BadBakeStateException>(baked, "Sound must be baked when DropBake is called!");
+		Check<BadBakeStateException>(baked, "Cannot discard baked representation of an unbaked sound; it does not exist!");
 		Check<BadInitStateException>(AudioManager::Get().IsInitialized(), "The audio system must be initialized to drop a sound's baked representation!");
 
 		baked = false;

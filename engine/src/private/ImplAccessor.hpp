@@ -11,7 +11,6 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Input.hpp"
 #include "Cacao/TickController.hpp"
-#include "Cacao/FrameProcessor.hpp"
 #include "Cacao/Shader.hpp"
 #include "Cacao/Material.hpp"
 #include "Cacao/World.hpp"
@@ -46,7 +45,6 @@ namespace Cacao {
 		IA_MKGETTER_SINGLE(PAL)
 		IA_MKGETTER_SINGLE(GPUManager)
 		IA_MKGETTER_SINGLE(Input)
-		IA_MKGETTER_SINGLE(FrameProcessor)
 		IA_MKGETTER_SINGLE(TickController)
 
 		//Resources
