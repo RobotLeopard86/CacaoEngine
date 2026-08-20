@@ -56,7 +56,7 @@
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class Input" href="classCacao_1_1Input.html" />
-    <link rel="prev" title="Class FrameProcessor" href="classCacao_1_1FrameProcessor.html" />
+    <link rel="prev" title="Class EventManager" href="classCacao_1_1EventManager.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -409,9 +409,6 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
-</ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class GPUManager</a></li>
 </ul>
@@ -554,9 +551,27 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManagerE">
 <span id="_CPPv3N5Cacao10GPUManagerE"></span><span id="_CPPv2N5Cacao10GPUManagerE"></span><span id="Cacao::GPUManager"></span><span class="target" id="classCacao_1_1GPUManager"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPUManager</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManagerE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>The centralized GPU interaction system. </p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>While documented, most clients should <strong>never touch this system</strong>. Only use for exceptional cases. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager5PhaseE">
+<span id="_CPPv3N5Cacao10GPUManager5PhaseE"></span><span id="_CPPv2N5Cacao10GPUManager5PhaseE"></span><span class="target" id="classCacao_1_1GPUManager_1a26b945f004d737062d69806455b55e12"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Phase</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager5PhaseE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Describes during what phase of rendering a custom callback should be run. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager5Phase6OpaqueE">
+<span id="_CPPv3N5Cacao10GPUManager5Phase6OpaqueE"></span><span id="_CPPv2N5Cacao10GPUManager5Phase6OpaqueE"></span><span class="target" id="classCacao_1_1GPUManager_1a26b945f004d737062d69806455b55e12afaa90538de35640e4b1e31ccf35b6eb5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Opaque</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager5Phase6OpaqueE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Opaque geometry pass. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager5Phase11TransparentE">
+<span id="_CPPv3N5Cacao10GPUManager5Phase11TransparentE"></span><span id="_CPPv2N5Cacao10GPUManager5Phase11TransparentE"></span><span class="target" id="classCacao_1_1GPUManager_1a26b945f004d737062d69806455b55e12a3d971943089a3388c01fb297a32d9ba7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Transparent</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager5Phase11TransparentE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Transparent geometry pass. </p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -600,6 +615,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE">
 <span id="_CPPv3N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"></span><span id="_CPPv2N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"></span><span id="Cacao::GPUManager::Submit__std::unique_ptr:CommandBuffer:"></span><span class="target" id="classCacao_1_1GPUManager_1ad6407232629b3e19dcffedcd275ffe39"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_future</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Submit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1CommandBuffer.html#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cmd</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Submit a task to the GPU for processing. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Exercise caution when using this API in order to avoid conflicting with other engine systems</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>cmd</strong> – The <a class="reference internal" href="classCacao_1_1CommandBuffer.html#classCacao_1_1CommandBuffer"><span class="std std-ref">CommandBuffer</span></a> containing the task to execute</p>
@@ -646,6 +665,49 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager13GetCurrentFPSEv">
+<span id="_CPPv3N5Cacao10GPUManager13GetCurrentFPSEv"></span><span id="_CPPv2N5Cacao10GPUManager13GetCurrentFPSEv"></span><span id="Cacao::GPUManager::GetCurrentFPS"></span><span class="target" id="classCacao_1_1GPUManager_1a99c4b5e3d755d6d414ec32b33c5a03b6"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetCurrentFPS</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager13GetCurrentFPSEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check the current FPS (frames per second) of the engine. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The FPS </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb">
+<span id="_CPPv3N5Cacao10GPUManager25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb"></span><span id="_CPPv2N5Cacao10GPUManager25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb"></span><span class="target" id="classCacao_1_1GPUManager_1afbb44ecd6536f80b1eb59c1d89f7383a"></span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RegisterRenderingCallback</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1CommandBuffer.html#_CPPv4N5Cacao13CommandBufferE" title="Cacao::CommandBuffer"><span class="n"><span class="pre">CommandBuffer</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">callback</span></span>, <a class="reference internal" href="#_CPPv4N5Cacao10GPUManager5PhaseE" title="Cacao::GPUManager::Phase"><span class="n"><span class="pre">Phase</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">phase</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">runPost</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Register a custom rendering callback. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callback</strong> – The function to run </p></li>
+<li><p><strong>phase</strong> – What rendering phase to run the callback in </p></li>
+<li><p><strong>runPost</strong> – Whether to run the callback post-phase (if true) or pre-phase (if false)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A GUID that can be used to unregister the callback </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10GPUManager27UnregisterRenderingCallbackERKN2xg4GuidE">
+<span id="_CPPv3N5Cacao10GPUManager27UnregisterRenderingCallbackERKN2xg4GuidE"></span><span id="_CPPv2N5Cacao10GPUManager27UnregisterRenderingCallbackERKN2xg4GuidE"></span><span id="Cacao::GPUManager::UnregisterRenderingCallback__xg::GuidCR"></span><span class="target" id="classCacao_1_1GPUManager_1abe8c93ff13569c08908405ba6eba55e6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnregisterRenderingCallback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callbackGUID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10GPUManager27UnregisterRenderingCallbackERKN2xg4GuidE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Unregister a custom rendering callback. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callbackGUID</strong> – The GUID returned from the registration function to identify the callback</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If no registered callback is associated with the provided GUID </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
@@ -677,12 +739,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1FrameProcessor.html"
+       href="classCacao_1_1EventManager.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class FrameProcessor</p>
+        <p class="prev-next-title">Class EventManager</p>
       </div>
     </a>
     <a class="right-next"
@@ -715,12 +777,20 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManagerE"><code class="docutils literal notranslate"><span class="pre">Cacao::GPUManager</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager5PhaseE"><code class="docutils literal notranslate"><span class="pre">Phase</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager5Phase6OpaqueE"><code class="docutils literal notranslate"><span class="pre">Opaque</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager5Phase11TransparentE"><code class="docutils literal notranslate"><span class="pre">Transparent</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager5StartEv"><code class="docutils literal notranslate"><span class="pre">Start()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager4StopEv"><code class="docutils literal notranslate"><span class="pre">Stop()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao10GPUManager9IsRunningEv"><code class="docutils literal notranslate"><span class="pre">IsRunning()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager6SubmitENSt10unique_ptrI13CommandBufferEE"><code class="docutils literal notranslate"><span class="pre">Submit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager8SetVSyncEb"><code class="docutils literal notranslate"><span class="pre">SetVSync()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager9IsVSyncedEv"><code class="docutils literal notranslate"><span class="pre">IsVSynced()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager13GetCurrentFPSEv"><code class="docutils literal notranslate"><span class="pre">GetCurrentFPS()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager25RegisterRenderingCallbackENSt8functionIFvRNSt10unique_ptrI13CommandBufferEEEEE5Phaseb"><code class="docutils literal notranslate"><span class="pre">RegisterRenderingCallback()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager27UnregisterRenderingCallbackERKN2xg4GuidE"><code class="docutils literal notranslate"><span class="pre">UnregisterRenderingCallback()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10GPUManager3GetEv"><code class="docutils literal notranslate"><span class="pre">Get()</span></code></a></li>
 </ul>
 </li>

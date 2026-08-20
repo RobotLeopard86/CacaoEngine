@@ -426,7 +426,7 @@
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Execute</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FrameProcessor</span><span class="p">;</span>
+<span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">GPUManager</span><span class="p">;</span>
 <span class="w">        </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PALModule</span><span class="p">;</span>
 
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetupContext</span><span class="p">([[</span><span class="na">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">rendering</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -459,6 +459,17 @@
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetVSync</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">newState</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsVSynced</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetCurrentFPS</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Phase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Opaque</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Transparent</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="w"> </span><span class="nf">RegisterRenderingCallback</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">CommandBuffer</span><span class="o">&gt;&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="p">,</span><span class="w"> </span><span class="n">Phase</span><span class="w"> </span><span class="n">phase</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">runPost</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">UnregisterRenderingCallback</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">xg</span><span class="o">::</span><span class="n">Guid</span><span class="o">&amp;</span><span class="w"> </span><span class="n">callbackGUID</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">class</span><span class="w"> </span><span class="nc">Impl</span><span class="p">;</span>
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
