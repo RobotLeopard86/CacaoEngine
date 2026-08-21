@@ -43,6 +43,11 @@ namespace Cacao {
 				//Bind it
 				glActiveTexture(GL_TEXTURE0 + tparam.binding);
 				glBindTexture(tparam.isCubemap ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D, obj);
+
+				//Inform shader about the texture binding
+				GLint uniformLocation = glGetUniformLocation(glShader.program, tparam.name.c_str());
+				Check<ExternalException>(uniformLocation != -1, "Failed to locate texture object for binding!");
+				glUniform1i(uniformLocation, tparam.binding);
 			}
 
 			//Upload uniform parameters

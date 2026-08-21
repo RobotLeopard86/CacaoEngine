@@ -54,7 +54,6 @@ namespace Cacao {
 		//Stored presentation options for mode transitions
 		NSApplicationPresentationOptions lastPresentOpts;
 
-		//Keyboard stuff
 		//Keyboard
 		GCKeyboard* keyboard;
 		GCKeyboardInput* keyInput;

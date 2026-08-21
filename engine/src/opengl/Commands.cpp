@@ -1,11 +1,14 @@
+#include "BackendCommon.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Context.hpp"
 #include "OpenGLModule.hpp"
 #include "ImplAccessor.hpp"
 #include "impls/OpenGLMaterial.hpp"
 #include "impls/OpenGLMesh.hpp"
+#include "impls/OpenGLShader.hpp"
 
 #include "glad/gl.h"
+#include "glm/gtc/type_ptr.hpp"
 
 #include <memory>
 
@@ -35,15 +38,63 @@ namespace Cacao {
 			//Apply material (will also bind shader pipeline)
 			RES_IMPL(Material, OpenGL, *material).Apply(this);
 
-			//Bind mesh vertex and index buffer
+			//Bind mesh vertex array
 			OpenGLMeshImpl& glMesh = RES_IMPL(Mesh, OpenGL, *mesh);
 			glBindVertexArray(glMesh.vao);
+
+			//Upload uniforms
+			OpenGLShaderImpl& glShader = RES_IMPL(Shader, OpenGL, *(material->GetShader()));
+			if(glShader.hasTransform) {
+				//Transformation matrix, normal matrix, handedness
+				glm::mat4 transformationMatrix = transform.GetTransformationMatrix();
+				glm::mat3 transformLinear(transformationMatrix);
+				glm::mat3 normalMatrix = glm::transpose(glm::inverse(transformLinear));
+				glUniformMatrix4fv(glShader.transformUloc, 1, GL_FALSE, glm::value_ptr(transformationMatrix));
+				glUniformMatrix3fv(glShader.normalMatrixUloc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+				glUniform1f(glShader.handednessUloc, (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f));
+			}
+			glUniform1ui(glShader.renderModeUloc, static_cast<uint8_t>(material->GetRenderMode()));
+
+			//Draw the mesh
+			glDrawElements(GL_TRIANGLES, glMesh.indices.size() * 3, GL_UNSIGNED_INT, nullptr);
+
+			//Rese state
+			glBindVertexArray(0);
+			glUseProgram(0);
 		});
 	}
 
 	void OpenGLCommandBuffer::UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) {
 		AddTask([cam, worldRefresh]() {
-			//TODO
+			//Camera info
+			GlobalsData gd = {};
+			gd.viewMatrix = cam->GetViewMatrix();
+			gd.projectionMatrix = cam->GetProjectionMatrix();
+			gd.viewProjectionMatrix = gd.projectionMatrix * gd.viewMatrix;
+			gd.camWorldRot = cam->GetRotation();
+			gd.camWorldPos = cam->GetPosition();
+
+			//Timing info
+			using clock = std::chrono::steady_clock;
+			static clock::time_point initial = clock::now();
+			static clock::time_point last = clock::now();
+			clock::time_point now = clock::now();
+			if(worldRefresh) {
+				initial = now;
+				last = now;
+			}
+			gd.deltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(now - last).count();
+			gd.worldTime = std::chrono::duration_cast<std::chrono::duration<float>>(now - initial).count();
+			if(!worldRefresh) last = now;
+
+			//Bind UBO
+			glBindBuffer(GL_UNIFORM_BUFFER, gl->globalsUBO);
+
+			//Upload data
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GlobalsData), &gd);
+
+			//Unbind UBO
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		});
 	}
 }

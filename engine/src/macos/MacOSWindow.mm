@@ -7,17 +7,21 @@
 #include "Cacao/EventManager.hpp"
 #include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
-#include "glm/fwd.hpp"
+
 #include <AppKit/AppKit.h>
 #include <GameController/GCKeyCodes.h>
 #include <GameController/GameController.h>
 #include <Foundation/Foundation.h>
 
 #include <memory>
+#include <chrono>
+#include <thread>
 
+#include "glm/fwd.hpp"
 #include "eternal.hpp"
 
 constexpr NSWindowStyleMask windowedStyle = (NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable | NSWindowStyleMaskMiniaturizable);
+static std::atomic_bool quitRequested;
 
 namespace Cacao {
 	struct MacWinRegistrar {
@@ -140,7 +144,8 @@ namespace Cacao {
 	}
 
 	bool MacOSWindowImpl::Minimized() {
-		return win.miniaturized;
+		if(quitRequested) return false;
+		return [win isMiniaturized];
 	}
 
 	const glm::uvec2 MacOSWindowImpl::ContentAreaSize() {
@@ -233,7 +238,7 @@ namespace Cacao {
 	void MacOSWindowImpl::SaveWinSize() {
 		@autoreleasepool {
 			NSRect frame = win.frame;
-			lastPos = {frame.size.width, frame.size.height};
+			lastSize = {frame.size.width, frame.size.height};
 		}
 	}
 
@@ -368,12 +373,12 @@ namespace Cacao {
 	}
 }
 
-static std::atomic_bool quitRequested;
-
 using namespace Cacao;
 
 @implementation CacaoAppDelegate
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)sender {
+	quitRequested.store(true, std::memory_order_release);
+	Engine::Get().Quit();
 	return NSTerminateCancel;
 }
 
@@ -466,8 +471,11 @@ using namespace Cacao;
 
 @implementation CacaoWinDelegate
 
-- (void)windowWillClose:(id)sender {
-	if(!quitRequested) [WIN_IMPL(MacOS).app terminate:sender];
+- (BOOL)windowShouldClose:(id)sender {
+	if(!quitRequested) {
+		[WIN_IMPL(MacOS).app terminate:sender];
+	}
+	return NO;
 }
 
 - (NSSize)windowWillResize:(NSWindow*)sender toSize:(NSSize)frameSize {

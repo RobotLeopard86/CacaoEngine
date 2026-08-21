@@ -1,9 +1,7 @@
-#include "Cacao/Event.hpp"
 #include "OpenGLModule.hpp"
 #include "Cacao/GPU.hpp"
 #include "Context.hpp"
 #include "Cacao/Window.hpp"
-#include "Cacao/EventManager.hpp"
 #include "Cacao/PAL.hpp"
 #include "ImplAccessor.hpp"
 
@@ -37,11 +35,20 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "OpenGL v" << version << ", using " << renderer << " (" << vendor << ")";
 		ctx->Yield();
 
+		//Create globals UBO
+		glGenBuffers(1, &globalsUBO);
+		glBindBuffer(GL_UNIFORM_BUFFER, globalsUBO);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(GlobalsData), nullptr, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 		connected = true;
 	}
 
 	void OpenGLModule::Disconnect() {
 		connected = false;
+
+		//Destroy globals UBO
+		glDeleteBuffers(1, &globalsUBO);
 
 		//Destroy context
 		ctx.reset();

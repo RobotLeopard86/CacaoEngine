@@ -59,7 +59,7 @@ namespace Cacao {
 	}
 
 	void OpenGLMeshImpl::Discard() {
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this]() {
 			//Delete buffers and vertex array
 			glDeleteBuffers(1, &vbo);

@@ -5,7 +5,6 @@
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
 
-#include <bits/c++config.h>
 #include <exception>
 #include <filesystem>
 #include <string>

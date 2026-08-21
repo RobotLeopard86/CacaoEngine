@@ -3,6 +3,7 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/Material.hpp"
 #include "impl/PAL.hpp"
+#include "BackendCommon.hpp"
 
 #ifdef __linux__
 #ifdef HAS_X11
@@ -94,16 +95,6 @@ namespace Cacao {
 		//Engine descriptors
 		MappedBuffer globals;
 		vk::DescriptorSet set;
-	};
-
-	struct GlobalsData {
-		glm::mat4 viewMatrix;
-		glm::mat4 projectionMatrix;
-		glm::mat4 viewProjectionMatrix;
-		glm::quat camWorldRot;
-		glm::vec3 camWorldPos;
-		float worldTime;
-		float deltaTime;
 	};
 
 	//THIS IS NOT THREAD-SAFE

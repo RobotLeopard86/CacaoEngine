@@ -3,6 +3,7 @@
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "impl/GPUManager.hpp"
+#include "BackendCommon.hpp"
 #include "Cacao/Exceptions.hpp"// IWYU pragma: keep
 
 #include <queue>
@@ -104,6 +105,10 @@ namespace Cacao {
 		Shader::Impl* ConfigureShader() override;
 		Material::Impl* ConfigureMaterial() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
+
+		//==================== GLOBAL STATE ====================
+		GLuint shaderBindingCounter = 0;
+		GLuint globalsUBO;
 
 		OpenGLModule()
 		  : PALModule("opengl") {}

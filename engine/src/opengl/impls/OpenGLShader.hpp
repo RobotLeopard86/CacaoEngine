@@ -18,8 +18,12 @@ namespace Cacao {
 		//Shader program object
 		GLuint program;
 
+		//Uniform locations
+		GLint transformUloc, normalMatrixUloc, handednessUloc, renderModeUloc;
+		bool hasTransform;
+
 		//Object data UBO (optional)
-		GLuint ubo = UINT32_MAX;
+		GLuint ubo;
 		GLuint uboBinding;
 	};
 }

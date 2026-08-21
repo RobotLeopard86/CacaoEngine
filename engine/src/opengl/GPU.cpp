@@ -3,13 +3,16 @@
 #include "Cacao/Window.hpp"
 #include "OpenGLModule.hpp"
 #include "Context.hpp"
+#include "CommandBufferCast.hpp"
 #include "glad/gl.h"
 
+#include <chrono>
 #include <future>
 #include <memory>
 #include <mutex>
 #include <stdexcept>
 #include <optional>
+#include <thread>
 
 namespace Cacao {
 	void OpenGLGPU::RunloopStart() {
@@ -18,6 +21,16 @@ namespace Cacao {
 	}
 
 	void OpenGLGPU::RunloopStop() {
+		//Make sure the commands queue is empty
+		while(true) {
+			{
+				std::lock_guard lk(queueMtx);
+				if(commands.empty()) break;
+			}
+			RunloopIteration();
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		}
+
 		//Yield the context back to the main thread
 		ctx->Yield();
 	}
@@ -79,7 +92,7 @@ namespace Cacao {
 		glm::uvec2 caSize = Window::Get().GetContentAreaSize();
 
 		//Set viewport
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([caSize]() {
 			glViewport(0, 0, caSize.x, caSize.y);
 		});

@@ -70,11 +70,6 @@ namespace Cacao {
 		//Signal run loop stop
 		impl->thread->request_stop();
 		impl->thread->join();
-
-		//Clean up skybox assets
-		impl->skyMat.reset();
-		impl->skyShader.reset();
-		impl->skyCube.reset();
 	}
 
 	float srgbChannel2Linear(float c) {
@@ -142,8 +137,8 @@ namespace Cacao {
 		lastSecond = clock::now();
 
 		//Set up skybox data
-		exathread::Future<std::shared_ptr<Shader>> skyShaderFut = ResourceManager::Get().Load<Shader>("a:internal_skyshader");
-		exathread::Future<std::shared_ptr<Mesh>> skyCubeFut = ResourceManager::Get().Load<Mesh>("a:builtin_cube");
+		std::optional<exathread::Future<std::shared_ptr<Shader>>> skyShaderFut = ResourceManager::Get().Load<Shader>("a:internal_skyshader");
+		std::optional<exathread::Future<std::shared_ptr<Mesh>>> skyCubeFut = ResourceManager::Get().Load<Mesh>("a:builtin_cube");
 		bool skyResourcesReady = false;
 
 		//Main loop
@@ -164,8 +159,14 @@ namespace Cacao {
 
 			//Check if sky resources are ready
 			if(!skyResourcesReady) {
-				if(skyShaderFut.checkStatus() == exathread::Status::Complete) skyShader = *skyShaderFut;
-				if(skyCubeFut.checkStatus() == exathread::Status::Complete) skyCube = *skyCubeFut;
+				if(skyShaderFut.has_value() && skyShaderFut->checkStatus() == exathread::Status::Complete) {
+					skyShader = *(skyShaderFut.value());
+					skyShaderFut.reset();
+				}
+				if(skyCubeFut.has_value() && skyCubeFut->checkStatus() == exathread::Status::Complete) {
+					skyCube = *(skyCubeFut.value());
+					skyCubeFut.reset();
+				}
 				skyResourcesReady = (skyShader && skyCube);
 			}
 
@@ -212,6 +213,17 @@ namespace Cacao {
 
 		abort_frame:
 			//Run backend iteration
+			std::this_thread::yield();
+			RunloopIteration();
+		}
+
+		//Spawn detached workers to reset skybox resources so that we don't get stuck waiting for ourselves
+		Engine::Get().GetThreadPool()->submitDetached([this]() {
+			skyMat.reset();
+			skyShader.reset();
+			skyCube.reset();
+		});
+		while(skyMat || skyShader || skyCube) {
 			std::this_thread::yield();
 			RunloopIteration();
 		}
