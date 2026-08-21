@@ -118,11 +118,8 @@ namespace Cacao {
 
 			//Get uniform locations
 			transformUloc = glGetUniformLocation(program, "transform.transformMatrix");
-			hasTransform = (transformUloc != -1);
 			normalMatrixUloc = glGetUniformLocation(program, "transform.normalMatrix");
-			Check<ExternalException>(!hasTransform || (hasTransform && normalMatrixUloc != -1), "Failed to locate transformation normal matrix uniform!");
 			handednessUloc = glGetUniformLocation(program, "transform.handedness");
-			Check<ExternalException>(!hasTransform || (hasTransform && handednessUloc != -1), "Failed to locate transformation handedness uniform!");
 			renderModeUloc = glGetUniformLocation(program, "renderMode.mode");
 			Check<ExternalException>(renderModeUloc != -1, "Failed to locate render mode uniform!");
 

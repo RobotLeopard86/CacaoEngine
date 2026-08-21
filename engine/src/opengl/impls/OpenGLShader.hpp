@@ -19,8 +19,7 @@ namespace Cacao {
 		GLuint program;
 
 		//Uniform locations
-		GLint transformUloc, normalMatrixUloc, handednessUloc, renderModeUloc;
-		bool hasTransform;
+		GLint transformUloc = -1, normalMatrixUloc = -1, handednessUloc = -1, renderModeUloc = -1;
 
 		//Object data UBO (optional)
 		GLuint ubo;

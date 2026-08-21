@@ -14,9 +14,8 @@
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
-#include "Targetgen.hpp"
-#include "exathread.hpp"
 #include "impl/PAL.hpp"
+
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -37,9 +36,9 @@
 #include <filesystem>
 #include <memory>
 #include <thread>
+#include <chrono>
 
-#include "slang.h"
-#include "slang-com-ptr.h"
+#include "exathread.hpp"
 
 namespace Cacao {
 	Engine::Engine()
@@ -220,7 +219,9 @@ namespace Cacao {
 
 		//Disable frame generation and wait for GPU manager to clear its task queue before proceeding
 		IMPL(GPUManager).masterFrameGenDisable.store(true);
-		IMPL(GPUManager).WaitIdle();
+		while(IMPL(GPUManager).numFramesInFlight > 0) {
+			std::this_thread::sleep_for(std ::chrono::milliseconds(1));
+		}
 
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");

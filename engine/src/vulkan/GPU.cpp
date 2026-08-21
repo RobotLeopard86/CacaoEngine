@@ -2,7 +2,6 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "VulkanModule.hpp"
-#include "ImplAccessor.hpp"
 #include "impl/GPUManager.hpp"
 
 #include <future>

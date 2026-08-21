@@ -44,14 +44,13 @@ namespace Cacao {
 
 			//Upload uniforms
 			OpenGLShaderImpl& glShader = RES_IMPL(Shader, OpenGL, *(material->GetShader()));
-			if(glShader.hasTransform) {
-				//Transformation matrix, normal matrix, handedness
-				glm::mat4 transformationMatrix = transform.GetTransformationMatrix();
+			glm::mat4 transformationMatrix = transform.GetTransformationMatrix();
+			if(glShader.transformUloc != -1) glUniformMatrix4fv(glShader.transformUloc, 1, GL_FALSE, glm::value_ptr(transformationMatrix));
+			if(glShader.normalMatrixUloc != -1 || glShader.handednessUloc != -1) {
 				glm::mat3 transformLinear(transformationMatrix);
 				glm::mat3 normalMatrix = glm::transpose(glm::inverse(transformLinear));
-				glUniformMatrix4fv(glShader.transformUloc, 1, GL_FALSE, glm::value_ptr(transformationMatrix));
-				glUniformMatrix3fv(glShader.normalMatrixUloc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
-				glUniform1f(glShader.handednessUloc, (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f));
+				if(glShader.normalMatrixUloc != -1) glUniformMatrix3fv(glShader.normalMatrixUloc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+				if(glShader.handednessUloc != -1) glUniform1f(glShader.handednessUloc, (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f));
 			}
 			glUniform1ui(glShader.renderModeUloc, static_cast<uint8_t>(material->GetRenderMode()));
 

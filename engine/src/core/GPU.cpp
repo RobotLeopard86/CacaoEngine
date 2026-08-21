@@ -182,19 +182,6 @@ namespace Cacao {
 					}
 				}
 
-				//Handle immediate execution task state
-				if(UsesImmediateExecution() && immediateExecutionTask.has_value()) {
-					//If it's ready, then continue and reset state, if not, abort frame
-					std::future_status status = immediateExecutionTask->wait_for(std::chrono::nanoseconds(0));
-					if(status == std::future_status::ready) {
-						immediateExecutionTask->get();
-						if(numFramesInFlight < 0) --numFramesInFlight;
-						immediateExecutionTask.reset();
-					} else {
-						goto abort_frame;
-					}
-				}
-
 				//If tick controller is running, neogtiate snapshot
 				if(TickController::Get().IsRunning()) {
 					//Has the request been granted?
@@ -208,6 +195,19 @@ namespace Cacao {
 					}
 				} else {
 					FrameGen();
+				}
+			}
+
+			//Handle immediate execution task state
+			if(UsesImmediateExecution() && immediateExecutionTask.has_value()) {
+				//If it's ready, then continue and reset state, if not, abort frame
+				std::future_status status = immediateExecutionTask->wait_for(std::chrono::nanoseconds(0));
+				if(status == std::future_status::ready) {
+					immediateExecutionTask->get();
+					if(numFramesInFlight > 0) --numFramesInFlight;
+					immediateExecutionTask.reset();
+				} else {
+					goto abort_frame;
 				}
 			}
 
