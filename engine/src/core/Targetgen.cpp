@@ -60,15 +60,11 @@ namespace Cacao {
 	CompiledShaderObject SetupCSO(const libcacaoasset::Shader& in, SlangCompileTarget tgt, const std::string& profile) {
 		CompiledShaderObject cso;
 
-		//Get global session
-		ComPtr<slang::IGlobalSession> gsession = []() {
-			static thread_local ComPtr<slang::IGlobalSession> gs;
-			if(!gs) {
-				SlangResult r = slang::createGlobalSession(gs.writeRef());
-				Check<ExternalException>(r == SLANG_OK && gs, "Failed to create Slang global session!");
-			}
-			return gs;
-		}();
+		//Create global session
+		//We make one each time to reduce background memory usage when not compiling
+		ComPtr<slang::IGlobalSession> gsession;
+		SlangResult r = slang::createGlobalSession(gsession.writeRef());
+		Check<ExternalException>(r == SLANG_OK && gsession, "Failed to create Slang global session!");
 
 		//Describe session
 		slang::SessionDesc sessionDesc;
@@ -106,7 +102,7 @@ namespace Cacao {
 		sessionDesc.compilerOptionEntryCount = entries.size();
 
 		//Create session
-		SlangResult r = gsession->createSession(sessionDesc, cso.session.writeRef());
+		r = gsession->createSession(sessionDesc, cso.session.writeRef());
 		Check<ExternalException>(r == SLANG_OK && cso.session, "Failed to create Slang compiler session!");
 
 		//Create Cacao Engine shader base module
