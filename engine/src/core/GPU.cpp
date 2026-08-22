@@ -170,6 +170,19 @@ namespace Cacao {
 				skyResourcesReady = (skyShader && skyCube);
 			}
 
+			//Handle immediate execution task state
+			if(UsesImmediateExecution() && immediateExecutionTask.has_value()) {
+				//If it's ready, then continue and reset state, if not, abort frame
+				std::future_status status = immediateExecutionTask->wait_for(std::chrono::nanoseconds(0));
+				if(status == std::future_status::ready) {
+					immediateExecutionTask->get();
+					if(numFramesInFlight > 0) --numFramesInFlight;
+					immediateExecutionTask.reset();
+				} else {
+					goto abort_frame;
+				}
+			}
+
 			//Frame generation
 			if(!Window::Get().IsMinimized() && numFramesInFlight <= MaxFramesInFlight() && skyResourcesReady && !masterFrameGenDisable) {
 				//If needed, regenerate swapchain
@@ -195,19 +208,6 @@ namespace Cacao {
 					}
 				} else {
 					FrameGen();
-				}
-			}
-
-			//Handle immediate execution task state
-			if(UsesImmediateExecution() && immediateExecutionTask.has_value()) {
-				//If it's ready, then continue and reset state, if not, abort frame
-				std::future_status status = immediateExecutionTask->wait_for(std::chrono::nanoseconds(0));
-				if(status == std::future_status::ready) {
-					immediateExecutionTask->get();
-					if(numFramesInFlight > 0) --numFramesInFlight;
-					immediateExecutionTask.reset();
-				} else {
-					goto abort_frame;
 				}
 			}
 
