@@ -396,6 +396,11 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"Asset.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cubemap.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Model.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"World.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Material.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Sound.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"Tex2D.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"Exceptions.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
@@ -425,6 +430,34 @@
 
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">Rs</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="k">concept</span><span class="w"> </span><span class="nc">MultiLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Loader</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Rs</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">...);</span>
+
+<span class="w">    </span><span class="c1">//Declare explicitly allowed specializations</span>
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Tex2D</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Cubemap</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Sound</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Shader</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">World</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Resource</span><span class="o">::</span><span class="n">ValidateResourceAddr</span><span class="o">&lt;</span><span class="n">BlobResource</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ResourceManager</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
