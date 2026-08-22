@@ -63,7 +63,7 @@ void MergeCmd::Callback() {
 		CVLOG_NONL("\tReading pack... ")
 		libcacaoasset::AssetPack pack = [&pakPath]() -> libcacaoasset::AssetPack {
 			try {
-				return libcacaoasset::AssetPack::OpenFromFile(pakPath);
+				return libcacaoasset::AssetPack::OpenFromFile(pakPath.string());
 			} catch(...) {
 				XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
 			}

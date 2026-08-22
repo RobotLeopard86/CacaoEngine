@@ -1,6 +1,7 @@
 #pragma once
 
 #define WIN32_LEAN_AND_MEAN
+#undef UNICODE
 #include <Windows.h>
 #undef Yield
 
@@ -33,7 +34,6 @@ namespace Cacao {
 		}
 
 		HINSTANCE hInst;
-		ATOM wndclass;
 		HWND hWnd;
 	};
 }

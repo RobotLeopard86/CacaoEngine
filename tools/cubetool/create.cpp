@@ -40,9 +40,9 @@ CreateCmd::CreateCmd(CLI::App& app) {
 		taskDesc.str("");
 		try {
 			this->Callback();
-		} catch(...) {
+		} catch(const std::exception& e) {
 			if(outputLvl != OutputLevel::Silent) {
-				taskDesc << "Failed to create cubemap.";
+				taskDesc << "Failed to create cubemap: " << e.what();
 				s->finish(jms::FinishedState::FAILURE, taskDesc.str());
 			}
 			exit(1);

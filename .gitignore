@@ -20,6 +20,7 @@ subprojects/*
 !subprojects/mikktspace
 subprojects/nlohmannjson.wrap
 subprojects/inja.wrap
+subprojects/llvm-win*.wrap
 
 # Don't send Python crap from utility scripts
 scripts/__pycache__

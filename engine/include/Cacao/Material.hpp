@@ -121,6 +121,8 @@ namespace Cacao {
 		class Impl;
 		///@endcond
 
+		~Material();
+
 	  private:
 		Material(std::shared_ptr<Shader> shader, const std::string& addr);
 		friend class ResourceManager;

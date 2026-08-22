@@ -1,6 +1,7 @@
 #include "Bytestream.hpp"
 #include "commands.hpp"
 
+#include <exception>
 #include <filesystem>
 #include <iterator>
 #include <stdexcept>
@@ -73,9 +74,9 @@ ExtractCmd::ExtractCmd(CLI::App& app) {
 		taskDesc.str("");
 		try {
 			this->Callback();
-		} catch(...) {
+		} catch(const std::exception& e) {
 			if(outputLvl != OutputLevel::Silent) {
-				taskDesc << "Failed to extract faces.";
+				taskDesc << "Failed to create cubemap: " << e.what();
 				s->finish(jms::FinishedState::FAILURE, taskDesc.str());
 			}
 			exit(1);

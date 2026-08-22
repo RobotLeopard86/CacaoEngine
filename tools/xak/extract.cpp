@@ -63,7 +63,7 @@ void ExtractCmd::Callback() {
 	CVLOG_NONL("Reading pack... ")
 	libcacaoasset::AssetPack pack = [this]() -> libcacaoasset::AssetPack {
 		try {
-			return libcacaoasset::AssetPack::OpenFromFile(inPath);
+			return libcacaoasset::AssetPack::OpenFromFile(inPath.string());
 		} catch(...) {
 			XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
 		}

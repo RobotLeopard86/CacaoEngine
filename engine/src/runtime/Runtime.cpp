@@ -144,13 +144,13 @@ void Runtime::LoadGame() {
 	Check<FileNotFoundException>(std::filesystem::exists("packs") && std::filesystem::is_directory("packs"), "Asset packs directory does not exist!");
 	for(const std::filesystem::path& p : std::filesystem::directory_iterator("worlds")) {
 		if(p.extension().compare(".xjw") != 0) continue;
-		worldScan["w:" + p.stem().generic_string()] = p.native();
+		worldScan["w:" + p.stem().generic_string()] = p.string();
 	}
 	for(const std::filesystem::path& p : std::filesystem::directory_iterator("packs")) {
 		if(p.extension().compare(".xak") != 0) continue;
-		libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(p);
+		libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(p.string());
 		for(const std::string& r : pak.ListResources()) {
-			resourceScan[r] = p.native();
+			resourceScan[r] = p.string();
 		}
 	}
 

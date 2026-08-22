@@ -91,9 +91,9 @@ namespace Cacao {
 	//Declare explicitly allowed specializations
 	///@cond
 	template<>
-	void CodeRegistry::RegisterFactory<Component>(const std::string& id, std::function<Component*()> factory, std::type_index type);
+	CACAO_API void CodeRegistry::RegisterFactory<Component>(const std::string& id, std::function<Component*()> factory, std::type_index type);
 
 	template<>
-	std::pair<Component*, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
+	CACAO_API std::pair<Component*, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
 	///@endcond
 }

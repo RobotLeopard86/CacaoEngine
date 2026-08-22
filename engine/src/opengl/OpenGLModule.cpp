@@ -6,6 +6,7 @@
 #include "ImplAccessor.hpp"
 
 #include "glad/gl.h"
+#undef Yield
 
 namespace Cacao {
 	struct OpenGLModuleRegistrar {

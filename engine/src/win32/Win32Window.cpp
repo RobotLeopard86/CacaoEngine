@@ -119,11 +119,11 @@ namespace Cacao {
 		winCls.hbrBackground = nullptr;
 		winCls.lpszMenuName = nullptr;
 		winCls.style = CS_OWNDC;
-		wndclass = RegisterClassExA(&winCls);
+		ATOM wndclass = RegisterClassExA(&winCls);
 		Check<ExternalException>(wndclass != 0, "Failed to register window class!");
 
 		//Create window
-		hWnd = CreateWindowExA(WS_EX_APPWINDOW, MAKEINTATOM(wndclass), title.c_str(),
+		hWnd = CreateWindowExA(WS_EX_APPWINDOW, "CacaoEngineWndClass", title.c_str(),
 			(mode == Window::Mode::Windowed ? windowedStyle : fullscreenStyle) | (visible ? WS_VISIBLE : 0),
 			CW_USEDEFAULT, CW_USEDEFAULT, size.x, size.y, nullptr, nullptr, hInst, nullptr);
 		Check<ExternalException>(hWnd != 0, "Failed to create window!");

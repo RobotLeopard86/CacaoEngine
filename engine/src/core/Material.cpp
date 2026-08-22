@@ -39,6 +39,8 @@ namespace Cacao {
 		other.address = "";
 	}
 
+	Material::~Material() {}
+
 	Material& Material::operator=(Material&& other) {
 		//Implementation pointer
 		impl = std::move(other.impl);

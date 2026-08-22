@@ -20,7 +20,7 @@ namespace Cacao {
 		//=============== SET UP FAKE WINDOW TO LOAD WGL ===============
 		{
 			//Make a fake window
-			HWND dummyWnd = CreateWindowExA(WS_EX_NOACTIVATE, MAKEINTATOM(WIN_IMPL(Win32).wndclass), "dummy", 0, CW_USEDEFAULT, CW_USEDEFAULT, 20, 20, nullptr, nullptr, WIN_IMPL(Win32).hInst, nullptr);
+			HWND dummyWnd = CreateWindowExA(WS_EX_NOACTIVATE, "CacaoEngineWndClass", "dummy", 0, CW_USEDEFAULT, CW_USEDEFAULT, 20, 20, nullptr, nullptr, WIN_IMPL(Win32).hInst, nullptr);
 			Check<ExternalException>(dummyWnd, "Failed to create dummy WGL window!");
 
 			//Obtain device context (DC)
@@ -48,9 +48,10 @@ namespace Cacao {
 				0,
 				0,
 				0,
+				//This is important though
 				24, 8, 0,
 				PFD_MAIN_PLANE,
-				//Again not important
+				//But this is not
 				0, 0, 0, 0};
 			int dummyPF = ChoosePixelFormat(dummyDC, &dummyPFD);
 			Check<ExternalException>(dummyPF != 0, "Failed to choose dummy WGL window pixel format!", [&dummyWnd, &dummyDC]() { ReleaseDC(dummyWnd, dummyDC); DestroyWindow(dummyWnd); });

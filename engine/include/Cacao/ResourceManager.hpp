@@ -1,6 +1,11 @@
 #pragma once
 
 #include "Asset.hpp"
+#include "Cubemap.hpp"
+#include "Model.hpp"
+#include "World.hpp"
+#include "Material.hpp"
+#include "Sound.hpp"
 #include "Tex2D.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
@@ -56,9 +61,39 @@ namespace Cacao {
 	template<typename T, typename... Rs>
 	concept MultiLoader = (Loader<T, Rs> && ...);
 
+	///@cond
+	//Declare explicitly allowed specializations
+	///@cond
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Tex2D>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Mesh>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Model>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Cubemap>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Sound>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Shader>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Material>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<World>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<BlobResource>(const std::string& addr);
+	///@endcond
+
 	/**
 	 * @brief Singleton for handling the loading of resources from a game bundle
-	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
 	 */
 	class CACAO_API ResourceManager {
 	  public:
