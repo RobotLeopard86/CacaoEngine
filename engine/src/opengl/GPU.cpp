@@ -92,10 +92,6 @@ namespace Cacao {
 		glm::uvec2 caSize = Window::Get().GetContentAreaSize();
 
 		//Set viewport
-		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
-		cmd->AddTask([caSize]() {
-			glViewport(0, 0, caSize.x, caSize.y);
-		});
-		GPUManager::Get().Submit(std::move(cmd)).get();
+		glViewport(0, 0, caSize.x, caSize.y);
 	}
 }
