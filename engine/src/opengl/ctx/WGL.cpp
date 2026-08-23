@@ -118,6 +118,9 @@ namespace Cacao {
 			WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
 			WGL_CONTEXT_MINOR_VERSION_ARB, 1,
 			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+#ifdef _DEBUG
+			WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
+#endif
 			0};
 		impl->ctx = wglCreateContextAttribsARB(impl->dc, nullptr, ctxAttrs);
 		Check<ExternalException>(impl->ctx, "Failed to create OpenGL context!", [this]() { Logger::Engine(Logger::Level::Error) << "0x" << std::hex << GetLastError() << std::dec; ReleaseDC(WIN_IMPL(Win32).hWnd, impl->dc); });

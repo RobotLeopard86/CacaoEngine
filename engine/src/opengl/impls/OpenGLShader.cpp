@@ -109,6 +109,86 @@ namespace Cacao {
 				//Create buffer
 				glGenBuffers(1, &ubo);
 
+				//Size it appropriately
+				std::size_t sizeTracker = 0;
+				for(const libcacaoasset::Shader::Descriptor::UniformParameter& uparam : descriptor.uniformParams) {
+					//Determine how large the parameter is
+					uint8_t size;
+					switch(uparam.type) {
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int: {
+							size = sizeof(int);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt: {
+							size = sizeof(unsigned int);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float: {
+							size = sizeof(float);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Bool: {
+							size = sizeof(bool);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int2: {
+							size = sizeof(glm::ivec2);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int3: {
+							size = sizeof(glm::ivec3);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Int4: {
+							size = sizeof(glm::ivec4);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt2: {
+							size = sizeof(glm::uvec2);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt3: {
+							size = sizeof(glm::uvec3);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::UInt4: {
+							size = sizeof(glm::uvec4);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float2: {
+							size = sizeof(glm::vec2);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float3: {
+							size = sizeof(glm::vec3);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float4: {
+							size = sizeof(glm::vec4);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float2x2: {
+							size = sizeof(glm::mat2);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float3x3: {
+							size = sizeof(glm::mat3);
+							break;
+						}
+						case libcacaoasset::Shader::Descriptor::UniformParameter::DataType::Float4x4: {
+							size = sizeof(glm::mat4);
+							break;
+						}
+						default: break;
+					}
+
+					//Increase buffer size if needed
+					sizeTracker = std::max(sizeTracker, (std::size_t)uparam.bufferOffset + size);
+				}
+				glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+				glBufferData(GL_UNIFORM_BUFFER, sizeTracker, nullptr, GL_DYNAMIC_DRAW);
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 				//Bind it to the program
 				GLuint materialDataIndex = glGetUniformBlockIndex(program, "MaterialParameters_std140");
 				Check<ExternalException>(materialDataIndex != GL_INVALID_INDEX, "Failed to locate material parameters uniform block!");
