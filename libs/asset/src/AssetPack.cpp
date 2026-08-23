@@ -20,7 +20,7 @@ namespace libcacaoasset {
 		CheckException(std::filesystem::exists(filePath), "File does not exist!");
 
 		//Open stream
-		std::ifstream* filestream = new std::ifstream(filePath);
+		std::ifstream* filestream = new std::ifstream(filePath, std::ios::binary);
 		CheckException(filestream && filestream->is_open(), "Failed to open asset pack file!");
 
 		//We're all good, send to common stream logic

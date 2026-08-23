@@ -163,7 +163,7 @@ res_begin:
 
 		//Load buffer
 		res.bytes = [&resPath]() {
-			std::ifstream stream(resPath);
+			std::ifstream stream(resPath, std::ios::binary);
 			if(!stream.is_open()) {
 				XAK_ERROR_NONVOID(std::vector<unsigned char> {}, "Failed to open blob resource data stream!")
 			}

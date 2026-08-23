@@ -70,7 +70,7 @@ std::ifstream CreateCmd::OpenFile(const std::string& pathStr) {
 
 	//Open the stream
 	CVLOG_NONL("\tOpening file stream... ")
-	std::ifstream in(p);
+	std::ifstream in(p, std::ios::binary);
 	if(!in.is_open()) {
 		CUBE_ERROR("Failed to open face file stream for reading!")
 	}

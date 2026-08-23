@@ -104,7 +104,8 @@ int main(int argc, char* argv[]) {
 	//Engine setup
 	try {
 		rt.SetupEngine();
-	} catch(...) {
+	} catch(const std::exception& e) {
+		Logger::Runtime(Logger::Level::Error) << "(Cacao Engine External Exception) " << e.what();
 		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in engine initialization. Exiting...";
 		if(Engine::Get().GetState() == Engine::State::Ready) Engine::Get().GfxShutdown();
 		if(Engine::Get().GetState() == Engine::State::Alive) Engine::Get().CoreShutdown();
@@ -117,7 +118,8 @@ int main(int argc, char* argv[]) {
 	//This is where we load initial resources and whatnot
 	try {
 		rt.LoadGame();
-	} catch(...) {
+	} catch(const std::exception& e) {
+		Logger::Runtime(Logger::Level::Error) << "(Cacao Engine External Exception) " << e.what();
 		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in game initialization. Exiting...";
 		rt.DestroyGfxObjects();
 		rt.Cleanup();

@@ -9,6 +9,7 @@ if host_machine.system() == 'windows'
 	defs += '-DGUID_WINDOWS'
 	defs += '-D_DLL'
 	defs += '-D_MT'
+	defs += '-DGUID_BUILD'
 	if get_option('buildtype') == 'debug'
 		defs += '-D_DEBUG'
 		defs += '-D_ITERATOR_DEBUG_LEVEL=2'
@@ -26,7 +27,7 @@ else
 	deps += meson.get_compiler('cpp').find_library('libuuid', required: true)
 endif
 
-crossguid = static_library('crossguid', 'src' / 'guid.cpp', include_directories: 'include', cpp_args: defs, dependencies: deps, pic: true, install: true)
+crossguid = static_library('crossguid', 'src' / 'guid.cpp', include_directories: 'include', cpp_args: [defs, '-DGUID_BUILD'], dependencies: deps, pic: true, install: true)
 
 crossguid_dep = declare_dependency(compile_args: defs, include_directories: 'include', link_with: crossguid)
 crossguid_headers_dep = declare_dependency(compile_args: defs, include_directories: 'include')

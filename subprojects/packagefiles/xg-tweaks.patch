@@ -1,0 +1,68 @@
+diff --git a/include/crossguid/guid.hpp b/include/crossguid/guid.hpp
+index 61e0f17..9e8e562 100644
+--- a/include/crossguid/guid.hpp
++++ b/include/crossguid/guid.hpp
+@@ -36,17 +36,28 @@ THE SOFTWARE.
+ #include <string_view>
+ #include <utility>
+ #include <iomanip>
++#include <cstdint>
+ 
+ #define BEGIN_XG_NAMESPACE namespace xg {
+ #define END_XG_NAMESPACE }
+ 
++#ifdef GUID_WINDOWS
++#ifdef GUID_BUILD
++#define GUID_API __declspec(dllexport)
++#else
++#define GUID_API __declspec(dllimport)
++#endif
++#else
++#define GUID_API
++#endif
++
+ BEGIN_XG_NAMESPACE
+ 
+ // Class to represent a GUID/UUID. Each instance acts as a wrapper around a
+ // 16 byte value that can be passed around by value. It also supports
+ // conversion to string (via the stream operator <<) and conversion from a
+ // string via constructor.
+-class Guid
++class GUID_API Guid
+ {
+ public:
+ 	explicit Guid(const std::array<unsigned char, 16> &bytes);
+@@ -80,7 +91,7 @@ private:
+ 	friend bool operator<(const Guid &lhs, const Guid &rhs);
+ };
+ 
+-Guid newGuid();
++GUID_API Guid newGuid();
+ 
+ #ifdef GUID_ANDROID
+ struct AndroidGuidInfo
+@@ -105,7 +116,7 @@ Guid newGuid(JNIEnv *env);
+ 
+ namespace details
+ {
+-	template <typename...> struct hash;
++	template <typename...> struct GUID_API hash;
+ 
+ 	template<typename T> 
+ 	struct hash<T> : public std::hash<T>
+@@ -132,13 +143,13 @@ namespace std
+ 	// Template specialization for std::swap<Guid>() --
+ 	// See guid.cpp for the function definition
+ 	template <>
+-	void swap(xg::Guid &guid0, xg::Guid &guid1) noexcept;
++	void GUID_API swap(xg::Guid &guid0, xg::Guid &guid1) noexcept;
+ 
+ 	// Specialization for std::hash<Guid> -- this implementation
+ 	// uses std::hash<std::string> on the stringification of the guid
+ 	// to calculate the hash
+ 	template <>
+-	struct hash<xg::Guid>
++	struct GUID_API hash<xg::Guid>
+ 	{
+ 		std::size_t operator()(xg::Guid const &guid) const
+ 		{

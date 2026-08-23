@@ -79,7 +79,7 @@ std::unique_ptr<libcacaoasset::World> RTLoader::FetchData<World>(const std::stri
 	Check<NonexistentValueException>(rt.worldScan.contains(addr), "Cannot load a nonexistent world!");
 
 	//Open file stream
-	std::ifstream* ifs = new std::ifstream(rt.worldScan[addr]);
+	std::ifstream* ifs = new std::ifstream(rt.worldScan[addr], std::ios::binary);
 	Check<IOException>(ifs && ifs->is_open(), "Failed to open world file stream!");
 
 	//Decode world and return (pointer will be freed by DecodeWorld)
