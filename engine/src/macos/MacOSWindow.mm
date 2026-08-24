@@ -7,6 +7,7 @@
 #include "Cacao/EventManager.hpp"
 #include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
+#include "impl/GPUManager.hpp"
 
 #include <AppKit/AppKit.h>
 #include <GameController/GCKeyCodes.h>
@@ -29,7 +30,7 @@ namespace Cacao {
 			MacOSWindowImpl::Impl::registry.insert_or_assign("cocoa", []() { return std::make_unique<MacOSWindowImpl>(); });
 		}
 	};
-	__attribute__((used)) MacWinRegistrar xwr;
+	__attribute__((used)) MacWinRegistrar mwr;
 
 	void MacOSWindowImpl::CreateWindow() {
 		@autoreleasepool {
@@ -103,8 +104,10 @@ namespace Cacao {
 			[win setAcceptsMouseMovedEvents:YES];
 			[win makeKeyAndOrderFront:nil];
 
-			//Connect graphics
+			//Connect graphics (the shenanigans with open are for the GetContentAreaSize method to work)
+			open = true;
 			PAL::Get().GfxConnect();
+			open = false;
 
 			//Finish launching
 			[app activateIgnoringOtherApps:YES];
@@ -129,6 +132,13 @@ namespace Cacao {
 	}
 
 	void MacOSWindowImpl::HandleEvents() {
+		//First handle window resize in order to force a swapchain regeneration
+		static bool first = true;
+		if(first) {
+			Window::Get().Resize(size);
+			first = false;
+		}
+
 		@autoreleasepool {
 			//Pump Cocoa events
 			NSEvent* event;
@@ -149,7 +159,11 @@ namespace Cacao {
 	}
 
 	const glm::uvec2 MacOSWindowImpl::ContentAreaSize() {
-		return {win.contentView.frame.size.width, win.contentView.frame.size.height};
+		@autoreleasepool {
+			NSRect contentRect = [win.contentView bounds];
+			NSRect backingRect = [win.contentView convertRectToBacking:contentRect];
+			return {backingRect.size.width, backingRect.size.height};
+		}
 	}
 
 	void MacOSWindowImpl::Visibility(bool visible) {
@@ -161,7 +175,6 @@ namespace Cacao {
 	}
 
 	void MacOSWindowImpl::Resize(const glm::uvec2& newSize) {
-		Check<BadInitStateException>(open, "The window must be open to set the title!");
 		Check<BadValueException>(newSize.x > 0 && newSize.y > 0, "New window size must not have any zero or negative coordinates!");
 
 		size = newSize;
@@ -245,6 +258,7 @@ namespace Cacao {
 	void MacOSWindowImpl::RestoreWin() {
 		@autoreleasepool {
 			NSRect frame = NSMakeRect(lastPos.x, lastPos.y, lastSize.x, lastSize.y);
+			size = lastSize;
 			[win setFrame:frame display:YES];
 		}
 	}
@@ -479,9 +493,25 @@ using namespace Cacao;
 }
 
 - (NSSize)windowWillResize:(NSWindow*)sender toSize:(NSSize)frameSize {
+	WIN_IMPL(MacOS).size = {frameSize.width, frameSize.height};
+	IMPL(GPUManager).masterFrameGenDisable.store(true);
+	while(IMPL(GPUManager).numFramesInFlight > 0) {
+		std::this_thread::sleep_for(std ::chrono::milliseconds(1));
+	}
 	DataEvent<glm::uvec2> wre("WindowResize", {frameSize.width, frameSize.height});
 	EventManager::Get().Dispatch(wre);
+	if(!self.isLiveResize) IMPL(GPUManager).masterFrameGenDisable.store(false);
 	return frameSize;
+}
+
+- (void)windowWillStartLiveResize:(NSNotification*)notification {
+	self.isLiveResize = true;
+	IMPL(GPUManager).masterFrameGenDisable.store(true);
+}
+
+- (void)windowDidEndLiveResize:(NSNotification*)notification {
+	IMPL(GPUManager).masterFrameGenDisable.store(false);
+	self.isLiveResize = false;
 }
 
 @end

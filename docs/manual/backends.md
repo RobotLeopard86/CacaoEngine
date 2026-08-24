@@ -15,7 +15,7 @@ In debug builds, you can set the following environment variables when using the 
 ## Compatibility Matrix
 | Backend | Windows | Mac | Linux* |
 | -- | ------- | --- | ------ |
-| OpenGL | ✅ | ✅ | ✅ |
+| OpenGL | ✅ | ✅| ✅ |
 | Vulkan | ✅ | ❌ | ✅  |  
 
 \* The majority of Linux testing is performed on Fedora Linux and Arch Linux. Other distributions may have different compatibilities.

@@ -14,6 +14,7 @@ using namespace Cacao;
 @end
 
 @interface CacaoWinDelegate : NSObject <NSWindowDelegate>
+@property bool isLiveResize;
 @end
 
 @interface CacaoWin : NSWindow

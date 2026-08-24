@@ -180,8 +180,20 @@ namespace Cacao {
 				}
 			}
 
+			//If needed, regenerate swapchain
+			if(swapchainRegen.load(std::memory_order_relaxed) && numFramesInFlight == 0) {
+				GenSwapchain();
+				swapchainRegen.store(false);
+			}
+
 			//Handle immediate execution task state
 			if(UsesImmediateExecution() && immediateExecutionTask.has_value()) {
+				//Ensure swapchain can regenerate properly
+				if(swapchainRegen.load(std::memory_order_relaxed)) {
+					numFramesInFlight = 0;
+					continue;
+				}
+
 				//If it's ready, then continue and reset state, if not, abort frame
 				std::future_status status = immediateExecutionTask->wait_for(std::chrono::nanoseconds(0));
 				if(status == std::future_status::ready) {
@@ -195,16 +207,6 @@ namespace Cacao {
 
 			//Frame generation
 			if(!Window::Get().IsMinimized() && numFramesInFlight <= MaxFramesInFlight() && skyResourcesReady && !masterFrameGenDisable) {
-				//If needed, regenerate swapchain
-				if(swapchainRegen.load(std::memory_order_relaxed)) {
-					if(numFramesInFlight == 0) {
-						swapchainRegen.store(false);
-						GenSwapchain();
-					} else {
-						goto abort_frame;
-					}
-				}
-
 				//If tick controller is running, neogtiate snapshot
 				if(TickController::Get().IsRunning()) {
 					//Has the request been granted?

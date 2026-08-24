@@ -1,6 +1,7 @@
 #include "rotator.hpp"
 
 #include "Cacao/World.hpp"
+
 #include "glm/trigonometric.hpp"
 
 namespace sandbox {

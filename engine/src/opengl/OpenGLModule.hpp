@@ -3,7 +3,7 @@
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "impl/GPUManager.hpp"
-#include "BackendCommon.hpp"
+#include "BackendCommon.hpp"   // IWYU pragma: keep
 #include "Cacao/Exceptions.hpp"// IWYU pragma: keep
 
 #include <queue>

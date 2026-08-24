@@ -1,10 +1,12 @@
 #include "ImplAccessor.hpp"
 #import "MacOSTypes.hpp"
 #include "Cacao/Exceptions.hpp"
-#include "../Context.hpp"
+#include "Cacao/EventManager.hpp"
+#include "Context.hpp"
 
 #include <AppKit/AppKit.h>
 #import <OpenGL/OpenGL.h>
+
 #include <memory>
 
 #include "glad/gl.h"
@@ -60,6 +62,9 @@ static CFBundleRef glFramework;
 	}
 	self.ctx.view = self;
 
+	//Ensure that we get the best resolution
+	[self.ctx.view setWantsBestResolutionOpenGLSurface:YES];
+
 	//Make context current
 	[self.ctx makeCurrentContext];
 
@@ -91,6 +96,7 @@ static CFBundleRef glFramework;
 namespace Cacao {
 	struct Context::Impl {
 		CacaoGLView* view;
+		EventConsumer resizer;
 	};
 
 	Context::Context() {
@@ -101,11 +107,24 @@ namespace Cacao {
 		impl->view = [[CacaoGLView alloc] initWithFrame:WIN_IMPL(MacOS).win.frame];
 		Check<ExternalException>(impl->view != nil, err);
 		[WIN_IMPL(MacOS).win setContentView:impl->view];
+
+		//Add resize consumer
+		// clang-format off
+		impl->resizer = EventConsumer([this](Event& e) {
+			Engine::Get().RunTaskOnMainThread([this]() {
+				[impl->view.ctx update];
+			}).get();
+		});
+		// clang-format on
+		EventManager::Get().SubscribeConsumer("WindowResize", impl->resizer);
 	}
 
 	Context::~Context() {
 		//Steal the context to make sure it's properly handled
 		MakeCurrent();
+
+		//Unsubscribe resizer
+		EventManager::Get().UnsubscribeConsumer("WindowResize", impl->resizer);
 
 		//Free OpenGL view
 		[WIN_IMPL(MacOS).win setContentView:nil];

@@ -424,6 +424,7 @@ namespace Cacao {
 
 	void WaylandWindowImpl::RestoreWin() {
 		//Set new libdecor state
+		size = lastSize;
 		libdecor_state* state = libdecor_state_new(lastSize.x, lastSize.y);
 		libdecor_frame_commit(frame, state, nullptr);
 		libdecor_state_free(state);

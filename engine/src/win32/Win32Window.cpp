@@ -186,6 +186,7 @@ namespace Cacao {
 	}
 
 	void Win32WindowImpl::RestoreWin() {
+		size = lastSize;
 		SetWindowPos(hWnd, nullptr, lastPos.x, lastPos.y, lastSize.x, lastSize.y, SWP_NOZORDER | SWP_FRAMECHANGED);
 	}
 

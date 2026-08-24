@@ -17,7 +17,7 @@ namespace Cacao {
 	};
 	__attribute__((used)) OpenGLModuleRegistrar glmr;
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && !defined(__APPLE__)
 	void GLAPIENTRY OpenGLMsgCallback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar* message, const void*) {
 		Logger::Level lvl;
 		switch(severity) {
@@ -84,14 +84,14 @@ namespace Cacao {
 		didInit = false;
 	}
 	void OpenGLModule::Connect() {
-		//Make context and configure
+		//Make context
 		ctx = std::make_shared<Context>();
-		glm::uvec2 contentSize = Window::Get().GetContentAreaSize();
-		glViewport(0, 0, contentSize.x, contentSize.y);
-
-		//Register message callback
 		ctx->MakeCurrent();
-#ifdef _DEBUG
+
+		//Configure API
+		glm::uvec2 caSize = Window::Get().GetContentAreaSize();
+		glViewport(0, 0, caSize.x, caSize.y);
+#if defined(_DEBUG) && !defined(__APPLE__)
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(OpenGLMsgCallback, nullptr);

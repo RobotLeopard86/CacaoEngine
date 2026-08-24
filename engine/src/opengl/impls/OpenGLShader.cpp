@@ -211,6 +211,7 @@ namespace Cacao {
 	void OpenGLShaderImpl::Discard() {
 		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this]() {
+			glDeleteBuffers(1, &ubo);
 			glDeleteProgram(program);
 		});
 		GPUManager::Get().Submit(std::move(cmd)).get();

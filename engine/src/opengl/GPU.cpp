@@ -4,8 +4,10 @@
 #include "OpenGLModule.hpp"
 #include "Context.hpp"
 #include "CommandBufferCast.hpp"
+
 #include "glad/gl.h"
 
+#include <atomic>
 #include <chrono>
 #include <future>
 #include <memory>
