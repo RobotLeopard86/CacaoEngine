@@ -12,8 +12,11 @@
 namespace Cacao {
 
 	struct CompiledShaderObject {
+		Slang::ComPtr<slang::IGlobalSession> gsession;
 		Slang::ComPtr<slang::ISession> session;
 		Slang::ComPtr<slang::IComponentType> linked;
+
+		~CompiledShaderObject();
 	};
 
 	CompiledShaderObject SetupCSO(const libcacaoasset::Shader& in, SlangCompileTarget tgt, const std::string& profile);

@@ -31,8 +31,11 @@ namespace Cacao {
 		vk::PipelineInputAssemblyStateCreateInfo assemblyCI({}, vk::PrimitiveTopology::eTriangleList, VK_FALSE);
 
 		//Rasterization info
-		vk::PipelineRasterizationStateCreateInfo rasterizerCI(
+		vk::PipelineRasterizationStateCreateInfo rasterizerOpaqueCI(
 			{}, VK_FALSE, VK_FALSE, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack,
+			vk::FrontFace::eCounterClockwise, VK_FALSE, 0, 0, 0, 1.0f);
+		vk::PipelineRasterizationStateCreateInfo rasterizerTransparentCI(
+			{}, VK_FALSE, VK_FALSE, vk::PolygonMode::eFill, vk::CullModeFlagBits::eNone,
 			vk::FrontFace::eCounterClockwise, VK_FALSE, 0, 0, 0, 1.0f);
 		vk::PipelineMultisampleStateCreateInfo multisamplingCI({}, vk::SampleCountFlagBits::e1, VK_FALSE);
 
@@ -106,7 +109,7 @@ namespace Cacao {
 		layout = vulkan->dev.createPipelineLayout(layoutCI);
 
 		//Create opaque pipeline
-		vk::GraphicsPipelineCreateInfo pipelineOpaqueCI({}, stages, &inputStateCI, &assemblyCI, nullptr, &viewportCI, &rasterizerCI,
+		vk::GraphicsPipelineCreateInfo pipelineOpaqueCI({}, stages, &inputStateCI, &assemblyCI, nullptr, &viewportCI, &rasterizerOpaqueCI,
 			&multisamplingCI, &depthStencilOpaqueCI, &colorBlendCI, &dynStateCI, layout);
 		pipelineOpaqueCI.pNext = &pipelineRenderingInfo;
 		auto pipelineOpaqueResult = vulkan->dev.createGraphicsPipeline({}, pipelineOpaqueCI);
@@ -114,7 +117,7 @@ namespace Cacao {
 		pipelineOpaque = pipelineOpaqueResult.value;
 
 		//Create transparent pipeline
-		vk::GraphicsPipelineCreateInfo pipelineTransparentCI({}, stages, &inputStateCI, &assemblyCI, nullptr, &viewportCI, &rasterizerCI,
+		vk::GraphicsPipelineCreateInfo pipelineTransparentCI({}, stages, &inputStateCI, &assemblyCI, nullptr, &viewportCI, &rasterizerTransparentCI,
 			&multisamplingCI, &depthStencilTransparentCI, &colorBlendCI, &dynStateCI, layout);
 		pipelineTransparentCI.pNext = &pipelineRenderingInfo;
 		auto pipelineTransparentResult = vulkan->dev.createGraphicsPipeline({}, pipelineTransparentCI);

@@ -17,6 +17,8 @@ namespace Cacao {
 		AddTask([clearColor]() {
 			//Clear screen
 			glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0);
+			glClearDepth(1.0);
+			glDepthMask(GL_TRUE);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		});
 	}
@@ -45,11 +47,11 @@ namespace Cacao {
 			//Upload uniforms
 			OpenGLShaderImpl& glShader = RES_IMPL(Shader, OpenGL, *(material->GetShader()));
 			glm::mat4 transformationMatrix = transform.GetTransformationMatrix();
-			if(glShader.transformUloc != -1) glUniformMatrix4fv(glShader.transformUloc, 1, GL_FALSE, glm::value_ptr(transformationMatrix));
+			if(glShader.transformUloc != -1) glUniformMatrix4fv(glShader.transformUloc, 1, GL_TRUE, glm::value_ptr(transformationMatrix));
 			if(glShader.normalMatrixUloc != -1 || glShader.handednessUloc != -1) {
 				glm::mat3 transformLinear(transformationMatrix);
 				glm::mat3 normalMatrix = glm::transpose(glm::inverse(transformLinear));
-				if(glShader.normalMatrixUloc != -1) glUniformMatrix3fv(glShader.normalMatrixUloc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+				if(glShader.normalMatrixUloc != -1) glUniformMatrix3fv(glShader.normalMatrixUloc, 1, GL_TRUE, glm::value_ptr(normalMatrix));
 				if(glShader.handednessUloc != -1) glUniform1f(glShader.handednessUloc, (glm::determinant(transformLinear) < 0.0f ? -1.0f : 1.0f));
 			}
 			glUniform1ui(glShader.renderModeUloc, static_cast<uint8_t>(material->GetRenderMode()));

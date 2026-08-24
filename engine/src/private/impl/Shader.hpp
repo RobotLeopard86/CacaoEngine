@@ -14,12 +14,12 @@ namespace Cacao {
 
 		//Custom shader compilation settings
 		struct CustomCompileSettings {
-			bool blendUseOne;
+			bool blendUseOne = false;
 			enum class Depth {
 				Off,
 				Less,
 				Lequal
-			} depth;
+			} depth = Depth::Less;
 		};
 		std::optional<CustomCompileSettings> customSettings;
 

@@ -18,9 +18,9 @@ namespace Cacao {
 
 		//Bake shader if needed
 		if(!shader->IsBaked()) shader->Bake();
-
-		//Bind shader
 		OpenGLShaderImpl& glShader = RES_IMPL(Shader, OpenGL, *shader);
+
+		//Bind shader program
 		glShader.Bind(renderMode == libcacaoasset::Material::RenderMode::Transparent);
 
 		//Bake and bind textures

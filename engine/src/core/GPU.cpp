@@ -2,6 +2,7 @@
 #include "Cacao/GPU.hpp"
 #include "Cacao/MeshRenderer.hpp"
 #include "Cacao/PAL.hpp"
+#include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "PALConfigurables.hpp"
 #include "SingletonGet.hpp"
@@ -9,6 +10,7 @@
 #include "impl/GPUManager.hpp"
 #include "impl/PAL.hpp"
 #include "impl/TickController.hpp"
+#include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
 
 #include <atomic>
@@ -137,9 +139,9 @@ namespace Cacao {
 		lastSecond = clock::now();
 
 		//Set up skybox data
-		std::optional<exathread::Future<std::shared_ptr<Shader>>> skyShaderFut = ResourceManager::Get().Load<Shader>("a:internal_skyshader");
-		std::optional<exathread::Future<std::shared_ptr<Mesh>>> skyCubeFut = ResourceManager::Get().Load<Mesh>("a:builtin_cube");
-		bool skyResourcesReady = false;
+		std::optional<exathread::Future<std::shared_ptr<Shader>>> skyShaderFut;
+		std::optional<exathread::Future<std::shared_ptr<Mesh>>> skyCubeFut;
+		bool skyResourcesLoading = false, skyResourcesReady = false;
 
 		//Main loop
 		while(!stop.stop_requested()) {
@@ -159,15 +161,23 @@ namespace Cacao {
 
 			//Check if sky resources are ready
 			if(!skyResourcesReady) {
-				if(skyShaderFut.has_value() && skyShaderFut->checkStatus() == exathread::Status::Complete) {
-					skyShader = *(skyShaderFut.value());
-					skyShaderFut.reset();
+				if(!skyResourcesLoading) {
+					if(IMPL(ResourceManager).builtinsReady) {
+						skyShaderFut = ResourceManager::Get().Load<Shader>("a:internal_skyshader");
+						skyCubeFut = ResourceManager::Get().Load<Mesh>("a:builtin_cube");
+						skyResourcesLoading = true;
+					}
+				} else {
+					if(skyShaderFut.has_value() && skyShaderFut->checkStatus() == exathread::Status::Complete) {
+						skyShader = *(skyShaderFut.value());
+						skyShaderFut.reset();
+					}
+					if(skyCubeFut.has_value() && skyCubeFut->checkStatus() == exathread::Status::Complete) {
+						skyCube = *(skyCubeFut.value());
+						skyCubeFut.reset();
+					}
+					skyResourcesReady = (skyShader && skyCube);
 				}
-				if(skyCubeFut.has_value() && skyCubeFut->checkStatus() == exathread::Status::Complete) {
-					skyCube = *(skyCubeFut.value());
-					skyCubeFut.reset();
-				}
-				skyResourcesReady = (skyShader && skyCube);
 			}
 
 			//Handle immediate execution task state

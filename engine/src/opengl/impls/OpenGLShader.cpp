@@ -9,17 +9,17 @@
 
 namespace Cacao {
 	void OpenGLShaderImpl::Bake(bool& success) {
+		//Convert Slang IR to GLSL
+		libcacaoasset::Shader shdr = {};
+		shdr.irCode = irBuffer;
+		shdr.descriptor = descriptor;
+		GLSL code = GenerateGLSL(shdr, false);
+		vertexGLSL = code.vertex;
+		fragmentGLSL = code.fragment;
+
 		//Open-GL specific stuff needs to be on the GPU thread
 		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
-			//Convert Slang IR to GLSL
-			libcacaoasset::Shader shdr = {};
-			shdr.irCode = irBuffer;
-			shdr.descriptor = descriptor;
-			GLSL code = GenerateGLSL(shdr, false);
-			vertexGLSL = code.vertex;
-			fragmentGLSL = code.fragment;
-
 			//Compile vertex stage
 			GLuint vertexStage = glCreateShader(GL_VERTEX_SHADER);
 			const GLchar* vsrc = vertexGLSL.c_str();
@@ -222,19 +222,25 @@ namespace Cacao {
 
 		//Configure blending and depth
 		glEnable(GL_BLEND);
+		glCullFace(GL_BACK);
 		if(customSettings) {
-			glBlendFunc((customSettings && customSettings->blendUseOne) ? GL_ONE : GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendFunc(customSettings->blendUseOne ? GL_ONE : GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			if(customSettings->depth != CustomCompileSettings::Depth::Off) {
 				glEnable(GL_DEPTH_TEST);
 				glDepthFunc(customSettings->depth == CustomCompileSettings::Depth::Less ? GL_LESS : GL_LEQUAL);
 			} else {
 				glDisable(GL_DEPTH_TEST);
 			}
+		} else {
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
 		}
 		if(!transparent) {
 			glDepthMask(GL_TRUE);
+			glEnable(GL_CULL_FACE);
 		} else {
 			glDepthMask(GL_FALSE);
+			glDisable(GL_CULL_FACE);
 		}
 
 		//Bind the globals UBO

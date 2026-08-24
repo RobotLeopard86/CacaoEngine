@@ -62,9 +62,8 @@ namespace Cacao {
 
 		//Create global session
 		//We make one each time to reduce background memory usage when not compiling
-		ComPtr<slang::IGlobalSession> gsession;
-		SlangResult r = slang::createGlobalSession(gsession.writeRef());
-		Check<ExternalException>(r == SLANG_OK && gsession, "Failed to create Slang global session!");
+		SlangResult r = slang::createGlobalSession(cso.gsession.writeRef());
+		Check<ExternalException>(r == SLANG_OK && cso.gsession, "Failed to create Slang global session!");
 
 		//Describe session
 		slang::SessionDesc sessionDesc;
@@ -95,14 +94,14 @@ namespace Cacao {
 		}
 		slang::TargetDesc tgtDesc = {};
 		tgtDesc.format = tgt;
-		tgtDesc.profile = gsession->findProfile(profile.c_str());
+		tgtDesc.profile = cso.gsession->findProfile(profile.c_str());
 		sessionDesc.targetCount = 1;
 		sessionDesc.targets = &tgtDesc;
 		sessionDesc.compilerOptionEntries = entries.data();
 		sessionDesc.compilerOptionEntryCount = entries.size();
 
 		//Create session
-		r = gsession->createSession(sessionDesc, cso.session.writeRef());
+		r = cso.gsession->createSession(sessionDesc, cso.session.writeRef());
 		Check<ExternalException>(r == SLANG_OK && cso.session, "Failed to create Slang compiler session!");
 
 		//Create Cacao Engine shader base module
@@ -312,5 +311,11 @@ namespace Cacao {
 		code.resize(codeBlob->getBufferSize() / sizeof(uint32_t));//Division is done because SPIR-V is in uint32_t and Slang buffers are uint8_t (we need 1/4 as many elements)
 		std::memcpy(code.data(), codeBlob->getBufferPointer(), codeBlob->getBufferSize());
 		return code;
+	}
+
+	CompiledShaderObject::~CompiledShaderObject() {
+		linked.setNull();
+		session.setNull();
+		gsession.setNull();
 	}
 }

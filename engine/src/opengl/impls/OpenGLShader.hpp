@@ -22,7 +22,7 @@ namespace Cacao {
 		GLint transformUloc = -1, normalMatrixUloc = -1, handednessUloc = -1, renderModeUloc = -1;
 
 		//Object data UBO (optional)
-		GLuint ubo;
+		GLuint ubo = UINT32_MAX;
 		GLuint uboBinding;
 	};
 }

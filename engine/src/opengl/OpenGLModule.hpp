@@ -107,7 +107,7 @@ namespace Cacao {
 		GPUManager::Impl* ConfigureGPUManager() override;
 
 		//==================== GLOBAL STATE ====================
-		GLuint shaderBindingCounter = 0;
+		GLuint shaderBindingCounter = 1;
 		GLuint globalsUBO;
 
 		OpenGLModule()

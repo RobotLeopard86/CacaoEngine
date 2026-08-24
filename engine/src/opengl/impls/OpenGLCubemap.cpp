@@ -21,11 +21,8 @@ namespace Cacao {
 			//Transfer face images
 			uint8_t i = 0;
 			for(const libcacaoimage::Image& image : faces) {
-				//Flip image because OpenGL likes it that way
-				libcacaoimage::Image flipped = libcacaoimage::Flip(image);
-
 				//Copy image data to GPU and adjust increment
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8, flipped.w, flipped.h, 0, GL_RGB, GL_UNSIGNED_BYTE, flipped.data.data());
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8_ALPHA8, image.w, image.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
 				GL_CHECK("Failed to upload cubemap face texture data!")
 			}
 

@@ -10,8 +10,8 @@ namespace Cacao {
 		glm::mat4 viewProjectionMatrix;
 		glm::quat camWorldRot;
 		glm::vec3 camWorldPos;
-		float _std140PaddingUnused;
 		float worldTime;
 		float deltaTime;
+		float _paddingUnusedDoNotTouch[3];
 	};
 }

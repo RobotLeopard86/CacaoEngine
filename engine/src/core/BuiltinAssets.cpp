@@ -128,16 +128,16 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<Mesh> ResourceManager::LoadBuiltinMesh(const std::string& id) {
-		//Get and bake built-in assets if they haven't been yet
-		if(!impl->builtinsReady) SetupBuiltins();
+		//Verify that built-in assets are ready
+		Check<BadStateException>(impl->builtinsReady, "Cannot load built-in mesh before it's ready!");
 
 		//Return the mesh the user wants
 		return impl->builtinMeshes[id];
 	}
 
 	std::shared_ptr<Shader> ResourceManager::LoadBuiltinShader(const std::string& id) {
-		//Get and bake built-in assets if they haven't been yet
-		if(!impl->builtinsReady) SetupBuiltins();
+		//Verify that built-in assets are ready
+		Check<BadStateException>(impl->builtinsReady, "Cannot load built-in shader before it's ready!");
 
 		//Return the shader the user wants
 		return impl->builtinShaders[id];
