@@ -129,7 +129,9 @@ namespace Cacao {
 		Check<ExternalException>(hWnd != 0, "Failed to create window!");
 
 		//Connect graphics
+		open = true;
 		PAL::Get().GfxConnect();
+		open = false;
 	}
 
 	void Win32WindowImpl::DestroyWindow() {
