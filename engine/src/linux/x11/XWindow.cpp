@@ -75,7 +75,9 @@ namespace Cacao {
 		xcb_flush(connection);
 
 		//Connect graphics
+		open = true;
 		PAL::Get().GfxConnect();
+		open = false;
 	}
 
 	void X11WindowImpl::DestroyWindow() {
