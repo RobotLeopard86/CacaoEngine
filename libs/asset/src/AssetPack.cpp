@@ -90,19 +90,16 @@ namespace libcacaoasset {
 		return pak;
 	}
 
-	AssetPack AssetPack::CreateEmpty() {
+	AssetPack::AssetPack() {
 		//Create base object and document
-		AssetPack pak;
-		pak.doc = libjaguar::Document();
+		doc = libjaguar::Document();
 
 		//Register resource type
-		pak.RegisterResourceType();
+		RegisterResourceType();
 
 		//Create empty root structures
-		pak.doc.CreateValue<std::vector<Resource>>("aRoot");
-		pak.doc.CreateValue<std::vector<Resource>>("rRoot");
-
-		return pak;
+		doc.CreateValue<std::vector<Resource>>("aRoot");
+		doc.CreateValue<std::vector<Resource>>("rRoot");
 	}
 
 	Resource AssetPack::GetResource(const std::string& address) {

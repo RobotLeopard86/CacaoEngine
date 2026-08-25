@@ -85,7 +85,7 @@ void CreateCmd::Callback() {
 	bool noRes = (resRoot.compare("") == 0);
 
 	//Define asset pack
-	libcacaoasset::AssetPack pack = libcacaoasset::AssetPack::CreateEmpty();
+	libcacaoasset::AssetPack pack;
 	std::unordered_map<std::filesystem::path, std::string> assets;
 	std::vector<std::filesystem::path> resources;
 	YAML::Node addrMap;

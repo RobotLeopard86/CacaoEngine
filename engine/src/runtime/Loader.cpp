@@ -11,9 +11,9 @@
 #include "Cacao/World.hpp"
 
 #include "libcacaoasset.hpp"
+#include "libcacaoimage.hpp"
 
 #include "Runtime.hpp"
-#include "libcacaoimage.hpp"
 
 #include <cstring>
 #include <exception>
@@ -63,10 +63,21 @@ class RTLoader {
 	using intermediate_t = intermediate<T>::type;
 
 	template<typename T>
-	std::unique_ptr<intermediate_t<T>> FetchData(const std::string& addr) const;
+	std::unique_ptr<intermediate_t<T>> FetchData(const std::string& addr);
 
 	template<typename T>
-	std::shared_ptr<T> CreateResource(const std::string& addr, std::unique_ptr<intermediate_t<T>>&& data) const;
+	std::shared_ptr<T> CreateResource(const std::string& addr, std::unique_ptr<intermediate_t<T>>&& data);
+
+	RTLoader() = default;
+	RTLoader(const RTLoader&) = delete;
+	RTLoader(RTLoader&&) = default;
+	RTLoader& operator=(const RTLoader&) = delete;
+	RTLoader& operator=(RTLoader&&) = default;
+
+  private:
+	std::unordered_map<std::string, libcacaoasset::AssetPack> loadedPacks;
+	std::unordered_map<std::string, std::vector<std::string>> resourcesLoadedFromPacks;
+	libcacaoasset::AssetPack& GetPackForResource(const std::string& resource);
 };
 
 void CfgLoader() {
@@ -74,8 +85,31 @@ void CfgLoader() {
 	ResourceManager::Get().ConfigureResourceLoader<RTLoader, World, Cubemap, Shader, Tex2D, Sound, Model, Material, BlobResource>(std::move(l));
 }
 
+libcacaoasset::AssetPack& RTLoader::GetPackForResource(const std::string& resource) {
+	//Find what pack we need
+	std::string pack = rt.resourceScan[resource];
+
+	//Close packs for which all resources are loaded (unless we want a resource from it)
+	for(auto it = loadedPacks.begin(); it != loadedPacks.end();) {
+		if(it->first.compare(pack) != 0 && resourcesLoadedFromPacks[it->first].size() >= it->second.ListResources().size()) {
+			resourcesLoadedFromPacks[it->first].clear();
+			it = loadedPacks.erase(it);
+		} else {
+			++it;
+		}
+	}
+
+	//Load pack if needed and return
+	resourcesLoadedFromPacks[pack].push_back(resource);
+	if(!loadedPacks.contains(pack)) {
+		//Load pack
+		loadedPacks[pack] = libcacaoasset::AssetPack::OpenFromFile(pack);
+	}
+	return loadedPacks[pack];
+}
+
 template<>
-std::unique_ptr<libcacaoasset::World> RTLoader::FetchData<World>(const std::string& addr) const {
+std::unique_ptr<libcacaoasset::World> RTLoader::FetchData<World>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.worldScan.contains(addr), "Cannot load a nonexistent world!");
 
 	//Open file stream
@@ -92,16 +126,16 @@ std::unique_ptr<libcacaoasset::World> RTLoader::FetchData<World>(const std::stri
 }
 
 template<>
-std::shared_ptr<World> RTLoader::CreateResource<World>(const std::string& addr, std::unique_ptr<libcacaoasset::World>&& data) const {
+std::shared_ptr<World> RTLoader::CreateResource<World>(const std::string& addr, std::unique_ptr<libcacaoasset::World>&& data) {
 	return World::Create(*data, addr);
 }
 
 template<>
-std::unique_ptr<libcacaoasset::Cubemap> RTLoader::FetchData<Cubemap>(const std::string& addr) const {
+std::unique_ptr<libcacaoasset::Cubemap> RTLoader::FetchData<Cubemap>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent cubemap!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Cubemap, "Tried to load a resource as a cubemap that is not one!");
 
@@ -118,7 +152,7 @@ std::unique_ptr<libcacaoasset::Cubemap> RTLoader::FetchData<Cubemap>(const std::
 }
 
 template<>
-std::shared_ptr<Cubemap> RTLoader::CreateResource<Cubemap>(const std::string& addr, std::unique_ptr<libcacaoasset::Cubemap>&& data) const {
+std::shared_ptr<Cubemap> RTLoader::CreateResource<Cubemap>(const std::string& addr, std::unique_ptr<libcacaoasset::Cubemap>&& data) {
 	//Create faces
 	std::array<libcacaoimage::Image, 6> faces;
 	{
@@ -153,11 +187,11 @@ std::shared_ptr<Cubemap> RTLoader::CreateResource<Cubemap>(const std::string& ad
 }
 
 template<>
-std::unique_ptr<libcacaoasset::Shader> RTLoader::FetchData<Shader>(const std::string& addr) const {
+std::unique_ptr<libcacaoasset::Shader> RTLoader::FetchData<Shader>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent shader!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Shader, "Tried to load a resource as a shader that is not one!");
 
@@ -174,18 +208,18 @@ std::unique_ptr<libcacaoasset::Shader> RTLoader::FetchData<Shader>(const std::st
 }
 
 template<>
-std::shared_ptr<Shader> RTLoader::CreateResource<Shader>(const std::string& addr, std::unique_ptr<libcacaoasset::Shader>&& data) const {
+std::shared_ptr<Shader> RTLoader::CreateResource<Shader>(const std::string& addr, std::unique_ptr<libcacaoasset::Shader>&& data) {
 	std::shared_ptr<Shader> shader = Shader::Create(std::move(data->irCode), data->descriptor, addr);
 	shader->Bake();
 	return shader;
 }
 
 template<>
-std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Tex2D>(const std::string& addr) const {
+std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Tex2D>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent 2D texture!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Tex2D, "Tried to load a resource as a 2D texture that is not one!");
 
@@ -193,7 +227,7 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Tex2D>(const std
 }
 
 template<>
-std::shared_ptr<Tex2D> RTLoader::CreateResource<Tex2D>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) const {
+std::shared_ptr<Tex2D> RTLoader::CreateResource<Tex2D>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) {
 	ibytestream ibs {*data};
 	libcacaoimage::Image img = libcacaoimage::decode::DecodeGeneric(ibs);
 	std::shared_ptr<Tex2D> tex = Tex2D::Create(std::move(img), addr);
@@ -202,11 +236,11 @@ std::shared_ptr<Tex2D> RTLoader::CreateResource<Tex2D>(const std::string& addr, 
 }
 
 template<>
-std::unique_ptr<std::vector<char>> RTLoader::FetchData<Sound>(const std::string& addr) const {
+std::unique_ptr<std::vector<char>> RTLoader::FetchData<Sound>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent sound!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Audio, "Tried to load a resource as a sound that is not one!");
 
@@ -218,18 +252,18 @@ std::unique_ptr<std::vector<char>> RTLoader::FetchData<Sound>(const std::string&
 }
 
 template<>
-std::shared_ptr<Sound> RTLoader::CreateResource<Sound>(const std::string& addr, std::unique_ptr<std::vector<char>>&& data) const {
+std::shared_ptr<Sound> RTLoader::CreateResource<Sound>(const std::string& addr, std::unique_ptr<std::vector<char>>&& data) {
 	std::shared_ptr<Sound> sound = Sound::Create(std::move(*data), addr);
 	sound->Bake();
 	return sound;
 }
 
 template<>
-std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Model>(const std::string& addr) const {
+std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Model>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent model!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Model, "Tried to load a resource as a model that is not one!");
 
@@ -237,16 +271,16 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<Model>(const std
 }
 
 template<>
-std::shared_ptr<Model> RTLoader::CreateResource<Model>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) const {
+std::shared_ptr<Model> RTLoader::CreateResource<Model>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) {
 	return Model::Create(std::move(*data), addr);
 }
 
 template<>
-std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<BlobResource>(const std::string& addr) const {
+std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<BlobResource>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent blob resource!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Blob, "Tried to load a resource as a blob that is not one!");
 
@@ -254,16 +288,16 @@ std::unique_ptr<std::vector<unsigned char>> RTLoader::FetchData<BlobResource>(co
 }
 
 template<>
-std::shared_ptr<BlobResource> RTLoader::CreateResource<BlobResource>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) const {
+std::shared_ptr<BlobResource> RTLoader::CreateResource<BlobResource>(const std::string& addr, std::unique_ptr<std::vector<unsigned char>>&& data) {
 	return BlobResource::Create(std::move(*data), addr);
 }
 
 template<>
-std::unique_ptr<libcacaoasset::Material> RTLoader::FetchData<Material>(const std::string& addr) const {
+std::unique_ptr<libcacaoasset::Material> RTLoader::FetchData<Material>(const std::string& addr) {
 	Check<NonexistentValueException>(rt.resourceScan.contains(addr), "Cannot load a nonexistent material!");
 
 	//Open asset pack and get resource
-	libcacaoasset::AssetPack pak = libcacaoasset::AssetPack::OpenFromFile(rt.resourceScan[addr]);
+	libcacaoasset::AssetPack& pak = GetPackForResource(addr);
 	libcacaoasset::Resource r = pak.GetResource(addr);
 	Check<BadValueException>(r.type == libcacaoasset::Resource::Type::Material, "Tried to load a resource as a material that is not one!");
 
@@ -280,7 +314,7 @@ std::unique_ptr<libcacaoasset::Material> RTLoader::FetchData<Material>(const std
 }
 
 template<>
-std::shared_ptr<Material> RTLoader::CreateResource<Material>(const std::string& addr, std::unique_ptr<libcacaoasset::Material>&& data) const {
+std::shared_ptr<Material> RTLoader::CreateResource<Material>(const std::string& addr, std::unique_ptr<libcacaoasset::Material>&& data) {
 	std::shared_ptr<Material> m = Material::Create(*ResourceManager::Get().Load<Shader>(data->shaderAddress), addr);
 	m->SetRenderMode(data->renderMode);
 	for(const libcacaoasset::Material::Param& param : data->parameters) {

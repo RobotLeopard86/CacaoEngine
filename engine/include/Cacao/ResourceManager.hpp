@@ -20,6 +20,7 @@
 #include <type_traits>
 #include <string>
 #include <typeindex>
+#include <utility>
 
 namespace Cacao {
 	//This is a helper type typedef because fully written out it's super long and nonsensical
@@ -195,24 +196,46 @@ namespace Cacao {
 
 		///@cond
 		struct ErasedLoader {
-			std::any loaderObj;
-			std::function<std::shared_ptr<Resource>(const std::string&)> load;
+			void* loaderObj = nullptr;
+			std::function<std::shared_ptr<Resource>(ErasedLoader&, const std::string&)> _load;
+			std::function<void(void*)> _destroy;
+			std::shared_ptr<Resource> load(const std::string& addr) {
+				return _load(*this, addr);
+			}
+			ErasedLoader() = default;
+			ErasedLoader(const ErasedLoader&) = delete;
+			ErasedLoader(ErasedLoader&& o)
+			  : loaderObj(std::exchange(o.loaderObj, nullptr)), _load(std::move(o._load)), _destroy(std::move(o._destroy)) {}
+			ErasedLoader& operator=(const ErasedLoader&) = delete;
+			ErasedLoader& operator=(ErasedLoader&& o) {
+				if(this != &o) {
+					loaderObj = std::exchange(o.loaderObj, nullptr);
+					_load = std::move(o._load);
+					_destroy = std::move(o._destroy);
+				}
+				return *this;
+			}
+			~ErasedLoader() {
+				if(loaderObj) _destroy(loaderObj);
+				loaderObj = nullptr;
+			}
 		};
 
-		void RegisterLoader(std::type_index tp, ErasedLoader l);
+		void RegisterLoader(std::type_index tp, ErasedLoader&& el);
 
 		template<typename T, typename R>
 			requires Loader<std::remove_reference_t<T>, R>
-		void _ConfigureResourceLoader(const T& loader) {
+		void _ConfigureResourceLoader(T&& loader) {
 			Check<BadStateException>(!IsLoaderRegistered(typeid(R)), "A loader has already been configured for this type!");
 
 			//Create erased loader object
 			ErasedLoader el;
-			el.loaderObj = loader;
-			el.load = [loader](const std::string& addr) {
+			el.loaderObj = (void*)new T(std::move(loader));
+			el._load = [](ErasedLoader& el, const std::string& addr) {
 				try {
-					std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader.template FetchData<R>(addr);
-					return std::static_pointer_cast<Resource>(loader.template CreateResource<R>(addr, std::move(intermediate)));
+					T* loader = static_cast<T*>(el.loaderObj);
+					std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader->template FetchData<R>(addr);
+					return std::static_pointer_cast<Resource>(loader->template CreateResource<R>(addr, std::move(intermediate)));
 				} catch(const Exception&) {
 					std::rethrow_exception(std::current_exception());
 				} catch(const std::exception& e) {
@@ -220,9 +243,12 @@ namespace Cacao {
 					throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
 				}
 			};
+			el._destroy = [](void* obj) {
+				delete static_cast<T*>(obj);
+			};
 
 			//Add loader to list
-			RegisterLoader(typeid(R), el);
+			RegisterLoader(typeid(R), std::move(el));
 		}
 		///@endcond
 	};

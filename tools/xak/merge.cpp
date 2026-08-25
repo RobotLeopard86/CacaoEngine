@@ -54,7 +54,7 @@ MergeCmd::MergeCmd(CLI::App& app) {
 
 void MergeCmd::Callback() {
 	std::unordered_map<std::string, std::filesystem::path> origins;
-	libcacaoasset::AssetPack out = libcacaoasset::AssetPack::CreateEmpty();
+	libcacaoasset::AssetPack out;
 
 	//Load each pack
 	for(const std::filesystem::path& pakPath : inPaks) {
@@ -65,7 +65,7 @@ void MergeCmd::Callback() {
 			try {
 				return libcacaoasset::AssetPack::OpenFromFile(pakPath.string());
 			} catch(...) {
-				XAK_ERROR_NONVOID(libcacaoasset::AssetPack::CreateEmpty(), "Failed to open asset pack!")
+				XAK_ERROR_NONVOID(libcacaoasset::AssetPack {}, "Failed to open asset pack!")
 			}
 		}();
 		CVLOG("Done.")

@@ -189,6 +189,11 @@ namespace libcacaoasset {
 	class CACAO_API AssetPack {
 	  public:
 		/**
+		 * @brief Create an empty asset pack
+		 */
+		AssetPack();
+
+		/**
 		 * @brief Open an asset pack file from on disk
 		 *
 		 * @param filePath The relative path (from the working directory) to the file to open
@@ -215,13 +220,6 @@ namespace libcacaoasset {
 		 * @throws std::runtime_error If decoding fails
 		 */
 		static AssetPack OpenFromStream(std::istream* stream);
-
-		/**
-		 * @brief Create an empty asset pack`
-		 *
-		 * @return The new pack
-		 */
-		static AssetPack CreateEmpty();
 
 		/**
 		 * @brief Access a resource
@@ -290,9 +288,14 @@ namespace libcacaoasset {
 		 */
 		void Export(std::ostream* stream);
 
-	  private:
-		AssetPack() {}
+		///@cond
+		AssetPack(const AssetPack&) = delete;
+		AssetPack& operator=(const AssetPack&) = delete;
+		AssetPack(AssetPack&&) = default;
+		AssetPack& operator=(AssetPack&&) = default;
+		///@endcond
 
+	  private:
 		libjaguar::Document doc;
 
 		void RegisterResourceType();

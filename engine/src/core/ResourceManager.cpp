@@ -98,8 +98,8 @@ namespace Cacao {
 		return impl->loaders[tp].load(addr);
 	}
 
-	void ResourceManager::RegisterLoader(std::type_index tp, ResourceManager::ErasedLoader el) {
-		impl->loaders.insert_or_assign(tp, el);
+	void ResourceManager::RegisterLoader(std::type_index tp, ResourceManager::ErasedLoader&& el) {
+		impl->loaders[tp] = std::move(el);
 	}
 	exathread::ValueTask<std::shared_ptr<Resource>> ResourceManager::_AsyncLoadOpImpl(std::string address, std::type_index tp) {
 		//Check cache
