@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class Material &#8212; Cacao Engine Docs</title>
+    <title>Class AudioPlayer &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Material';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1AudioPlayer';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
@@ -55,8 +55,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Mesh" href="classCacao_1_1Mesh.html" />
-    <link rel="prev" title="Class Logger" href="classCacao_1_1Logger.html" />
+    <link rel="next" title="Class BlobResource" href="classCacao_1_1BlobResource.html" />
+    <link rel="prev" title="Class AudioManager" href="classCacao_1_1AudioManager.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -376,8 +376,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class AudioPlayer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
@@ -421,8 +421,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Material</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
@@ -532,7 +532,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class Material</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class AudioPlayer</span></li>
   </ul>
 </nav>
 </div>
@@ -549,144 +549,259 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-material">
-<span id="exhale-class-classcacao-1-1material"></span><h1>Class Material<a class="headerlink" href="#class-material" title="Link to this heading"><span/></a></h1>
+  <section id="class-audioplayer">
+<span id="exhale-class-classcacao-1-1audioplayer"></span><h1>Class AudioPlayer<a class="headerlink" href="#class-audioplayer" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Material.hpp.html#file-engine-include-cacao-material-hpp"><span class="std std-ref">File Material.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_AudioPlayer.hpp.html#file-engine-include-cacao-audioplayer-hpp"><span class="std std-ref">File AudioPlayer.hpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
 <section id="base-type">
 <h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Resource</span></code> (<a class="reference internal" href="classCacao_1_1Resource.html#exhale-class-classcacao-1-1resource"><span class="std std-ref">Class Resource</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Component</span></code> (<a class="reference internal" href="classCacao_1_1Component.html#exhale-class-classcacao-1-1component"><span class="std std-ref">Class Component</span></a>)</p></li>
 </ul>
 </section>
 </section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8MaterialE">
-<span id="_CPPv3N5Cacao8MaterialE"></span><span id="_CPPv2N5Cacao8MaterialE"></span><span id="Cacao::Material"></span><span class="target" id="classCacao_1_1Material"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Material</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Resource.html#_CPPv4N5Cacao8ResourceE" title="Cacao::Resource"><span class="n"><span class="pre">Resource</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao8MaterialE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> type for rendering materials (technically does not inherit from <a class="reference internal" href="classCacao_1_1Asset.html#classCacao_1_1Asset"><span class="std std-ref">Asset</span></a> because baking is not applicable) </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material10ParamValueE">
-<span id="_CPPv3N5Cacao8Material10ParamValueE"></span><span id="_CPPv2N5Cacao8Material10ParamValueE"></span><span class="target" id="classCacao_1_1Material_1a25ed5fae1bb95682cf9ea7557cbfe03a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ParamValue</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ivec2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ivec3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ivec4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat3</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Tex2D.html#_CPPv4N5Cacao5Tex2DE" title="Cacao::Tex2D"><span class="n"><span class="pre">Tex2D</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Cubemap.html#_CPPv4N5Cacao7CubemapE" title="Cacao::Cubemap"><span class="n"><span class="pre">Cubemap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5Cacao8Material10ParamValueE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>A storage type that holds any of the valid material parameter data types. </p>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayerE">
+<span id="_CPPv3N5Cacao11AudioPlayerE"></span><span id="_CPPv2N5Cacao11AudioPlayerE"></span><span id="Cacao::AudioPlayer"></span><span class="target" id="classCacao_1_1AudioPlayer"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AudioPlayer</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><a class="headerlink" href="#_CPPv4N5Cacao11AudioPlayerE" title="Link to this definition"><span/></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material9GetShaderEv">
-<span id="_CPPv3N5Cacao8Material9GetShaderEv"></span><span id="_CPPv2N5Cacao8Material9GetShaderEv"></span><span id="Cacao::Material::GetShader"></span><span class="target" id="classCacao_1_1Material_1a8ffe37b8d96a32b2f0430c8ea1ca4ea3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Shader.html#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetShader</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material9GetShaderEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get a handle to the shader used by the material. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer11AudioPlayerEv">
+<span id="_CPPv3N5Cacao11AudioPlayer11AudioPlayerEv"></span><span id="_CPPv2N5Cacao11AudioPlayer11AudioPlayerEv"></span><span id="Cacao::AudioPlayer::AudioPlayer"></span><span class="target" id="classCacao_1_1AudioPlayer_1ab1915395af5e8a5bd0da06e733cf68fa"></span><span class="sig-name descname"><span class="n"><span class="pre">AudioPlayer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao11AudioPlayer11AudioPlayerEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new audio player. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The current shader </p>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T">
-<span id="_CPPv3I0EN5Cacao8Material12SetParameterERKNSt6stringERK1T"></span><span id="_CPPv2I0EN5Cacao8Material12SetParameterERKNSt6stringERK1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Material_1a0efa5c4062b9e8dfc587c9b6764c2c38"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetParameter</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T" title="Cacao::Material::SetParameter::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Set the value of a material parameter. </p>
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a5fb9e5c4d183b7f7cd9ce21445948b1c"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">Play</span> <span class="pre">()</span></span></dt>
+<dd><p>Play or resume the audio. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>T</strong> – The type of the parameter being set; must be one of the types in ParamValue</p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>name</strong> – The name of the parameter to set </p></li>
-<li><p><strong>value</strong> – The value to store in the parameter</p></li>
-</ul>
-</dd>
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the given parameter name is not one in the material </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadTypeException</span></span></span> – If the type given does not match the parameter type </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If a texture type is passed and the handle is empty </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If there is no set sound to play </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadBakeStateException</span></span></span> – If the set sound is not baked </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If the audio is already playing </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE">
-<span id="_CPPv3I0EN5Cacao8Material12GetParameterERKNSt6stringE"></span><span id="_CPPv2I0EN5Cacao8Material12GetParameterERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Material_1a84786adbf4d037b1d6286e24433c5af1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE" title="Cacao::Material::GetParameter::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetParameter</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Set the value of a material parameter. </p>
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1ad33fe113bc9804b511f75c30c6c8b8d1"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">Pause</span> <span class="pre">()</span></span></dt>
+<dd><p>Pause audio playback. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>T</strong> – The type of the parameter being set; must be one of the types in ParamValue</p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>name</strong> – The name of the parameter to set</p>
-</dd>
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the given parameter name is not one in the material </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If no value has been set for the given parameter </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadTypeException</span></span></span> – If the type given does not match the parameter type</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If no audio is playing </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a8b2e13b7d3e07dd408cbf6264a10e921"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">Stop</span> <span class="pre">()</span></span></dt>
+<dd><p>Stop audio playback. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadStateException</span></span></span> – If no audio is playing or paused </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a6eefb71714a61b747365a71cd3621299"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">State</span> <span class="pre">GetState</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Check the current state of the audio player. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The current value of the parameter </p>
+<dd class="field-even"><p>Current state</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material13SetRenderModeEN13libcacaoasset8Material10RenderModeE">
-<span id="_CPPv3N5Cacao8Material13SetRenderModeEN13libcacaoasset8Material10RenderModeE"></span><span id="_CPPv2N5Cacao8Material13SetRenderModeEN13libcacaoasset8Material10RenderModeE"></span><span id="Cacao::Material::SetRenderMode__libcacaoasset::Material::RenderMode"></span><span class="target" id="classCacao_1_1Material_1a704e655befed584b5b7099bacdd5a3c7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRenderMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">libcacaoasset</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../libapis/asset/structlibcacaoasset_1_1Material.html#_CPPv4N13libcacaoasset8MaterialE" title="libcacaoasset::Material"><span class="n"><span class="pre">Material</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../libapis/asset/structlibcacaoasset_1_1Material.html#_CPPv4N13libcacaoasset8Material10RenderModeE" title="libcacaoasset::Material::RenderMode"><span class="n"><span class="pre">RenderMode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material13SetRenderModeEN13libcacaoasset8Material10RenderModeE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Set the rendering mode. </p>
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1abeeeeefdba1ed4071729ea76eaad0c22"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">SetLooping</span> <span class="pre">(bool</span> <span class="pre">val)</span></span></dt>
+<dd><p>Set if the audio should loop. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mode</strong> – The new rendering mode </p>
+<dd class="field-odd"><p><strong>val</strong> – If the audio should loop</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material13GetRenderModeEv">
-<span id="_CPPv3N5Cacao8Material13GetRenderModeEv"></span><span id="_CPPv2N5Cacao8Material13GetRenderModeEv"></span><span id="Cacao::Material::GetRenderMode"></span><span class="target" id="classCacao_1_1Material_1a25b9af3462fc6755aefc79e862ac5dde"></span><span class="n"><span class="pre">libcacaoasset</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../libapis/asset/structlibcacaoasset_1_1Material.html#_CPPv4N13libcacaoasset8MaterialE" title="libcacaoasset::Material"><span class="n"><span class="pre">Material</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../libapis/asset/structlibcacaoasset_1_1Material.html#_CPPv4N13libcacaoasset8Material10RenderModeE" title="libcacaoasset::Material::RenderMode"><span class="n"><span class="pre">RenderMode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRenderMode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material13GetRenderModeEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get the current rendering mode. </p>
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1ac0391d69560249df4ea1eb9e80e7e6fc"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">SetGain</span> <span class="pre">(float</span> <span class="pre">val)</span></span></dt>
+<dd><p>Set the gain value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – The new gain value</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the provided multiplier is negative </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a550cc986978ffdb3abbb6696cf72998c"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">SetPitchMultiplier</span> <span class="pre">(float</span> <span class="pre">val)</span></span></dt>
+<dd><p>Set the pitch multiplier. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> – The new pitch multiplier<ul class="simple">
+<li><p>0-1: Deeper</p></li>
+<li><p>1: Normal</p></li>
+<li><p>&gt; 1: Higher</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the provided multiplier is negative or zero </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a1f50d64056fc4e9a3f5f10e50671bd36"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">SetPosition</span> <span class="pre">(float</span> <span class="pre">position)</span></span></dt>
+<dd><p>Set the playback position to the specified position in the sound. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> – The new playback position in seconds</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the provided position is negative or past the sound’s end point </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a764f83506560c934809350e34fc34f31"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">void</span> <span class="pre">SetSound</span> <span class="pre">(std::shared_ptr&lt;</span> <span class="pre">Sound</span> <span class="pre">&gt;</span> <span class="pre">sound)</span></span></dt>
+<dd><p>Set the sound to be played (may be null) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sound</strong> – The new sound</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1ab078eaa03da07f8480edda140c1687a4"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">bool</span> <span class="pre">GetLooping</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Check if the audio is looping. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether the audio is looping or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a4e313e2fa632839da296e2652292b6d9"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">float</span> <span class="pre">GetGain</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Get the current gain value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The current gain value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a407c59b292954dd5cc9200093bf0c0f2"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">float</span> <span class="pre">GetPitchMultiplier</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Get the current pitch multiplier. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The current pitch multiplier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1af308617a44b86d68d33a9fda06d27422"></span><span class="sig-name descname"><span class="pre">ASTRA_IGNORE</span> <span class="pre">float</span> <span class="pre">GetPosition</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Get the current playback position. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadInitStateException</span></span></span> – If the audio system is uninitialized </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The current playback position in seconds</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1a284f06c72f3d3444e5e54e5b1a330ce9"></span><span class="sig-name descname"><span class="pre">inline</span> <span class="pre">ASTRA_IGNORE</span> <span class="pre">std::shared_ptr&lt;</span> <span class="pre">Sound</span> <span class="pre">&gt;</span> <span class="pre">GetSound</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Get the current sound being played. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The rendering mode </p>
+<dd class="field-odd"><p>The current sound </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8MaterialD0Ev">
-<span id="_CPPv3N5Cacao8MaterialD0Ev"></span><span id="_CPPv2N5Cacao8MaterialD0Ev"></span><span id="Cacao::Material::~Material"></span><span class="target" id="classCacao_1_1Material_1aa64b5eee2d582cf9678fa32bb6a19aec"></span><span class="sig-name descname"><span class="n"><span class="pre">~Material</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8MaterialD0Ev" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp">
+<span class="target" id="classCacao_1_1AudioPlayer_1ae3ac73885d70cd4065e2c24731db2177"></span><span class="sig-name descname"><span class="pre">ASTRASETUP</span> <span class="pre">(AudioPlayer)</span> <span class="pre">virtual</span> <span class="pre">~AudioPlayer()</span></span></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE">
-<span id="_CPPv3N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE"></span><span id="_CPPv2N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE"></span><span id="Cacao::Material::Create__std::shared_ptr:Shader:.ssCR"></span><span class="target" id="classCacao_1_1Material_1a38e3d358d67646a43e9154142bd556e6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao8MaterialE" title="Cacao::Material"><span class="n"><span class="pre">Material</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Shader.html#_CPPv4N5Cacao6ShaderE" title="Cacao::Shader"><span class="n"><span class="pre">Shader</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">shader</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">addr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new material based on a shader. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>shader</strong> – The shader asset to use when rendering </p></li>
-<li><p><strong>addr</strong> – The resource address to associate with the material</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the provided shader pointer is an invalid asset </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If the address is malformed </p></li>
-</ul>
-</dd>
-</dl>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao11AudioPlayer8autoplayE">
+<span id="_CPPv3N5Cacao11AudioPlayer8autoplayE"></span><span id="_CPPv2N5Cacao11AudioPlayer8autoplayE"></span><span id="Cacao::AudioPlayer::autoplay__b"></span><span class="target" id="classCacao_1_1AudioPlayer_1a5d433176b19f73ab0ecf26a28849b667"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">autoplay</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao11AudioPlayer8autoplayE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Whether the audio player should start playing automatically when it’s enabled. </p>
 </dd></dl>
 
 </div>
@@ -706,20 +821,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Logger.html"
+       href="classCacao_1_1AudioManager.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Logger</p>
+        <p class="prev-next-title">Class AudioManager</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Mesh.html"
+       href="classCacao_1_1BlobResource.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Mesh</p>
+        <p class="prev-next-title">Class BlobResource</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -747,15 +862,9 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialE"><code class="docutils literal notranslate"><span class="pre">Cacao::Material</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material10ParamValueE"><code class="docutils literal notranslate"><span class="pre">ParamValue</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material9GetShaderEv"><code class="docutils literal notranslate"><span class="pre">GetShader()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao8Material12SetParameterEvRKNSt6stringERK1T"><code class="docutils literal notranslate"><span class="pre">SetParameter()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao8Material12GetParameterE1TRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">GetParameter()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material13SetRenderModeEN13libcacaoasset8Material10RenderModeE"><code class="docutils literal notranslate"><span class="pre">SetRenderMode()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material13GetRenderModeEv"><code class="docutils literal notranslate"><span class="pre">GetRenderMode()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8MaterialD0Ev"><code class="docutils literal notranslate"><span class="pre">~Material()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao8Material6CreateENSt10shared_ptrI6ShaderEERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao11AudioPlayerE"><code class="docutils literal notranslate"><span class="pre">Cacao::AudioPlayer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao11AudioPlayer11AudioPlayerEv"><code class="docutils literal notranslate"><span class="pre">AudioPlayer()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao11AudioPlayer8autoplayE"><code class="docutils literal notranslate"><span class="pre">autoplay</span></code></a></li>
 </ul>
 </li>
 </ul>

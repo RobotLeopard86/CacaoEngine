@@ -395,10 +395,11 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Substitutes.hpp.html#file-engine-include-cacao-substitutes-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Substitutes.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/Exceptions.hpp"</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/MeshRenderer.hpp"</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/Resource.hpp"</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/ResourceManager.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Exceptions.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"MeshRenderer.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Resource.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ResourceManager.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"AudioPlayer.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"Actor.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"World.hpp"</span>
@@ -471,7 +472,7 @@
 <span class="w">    </span><span class="n">ASTRASETUP</span><span class="p">(</span><span class="n">SerializedSubstitute</span><span class="p">)</span>
 <span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
-<span class="w">    </span><span class="c1">//Serialized string GUID of actor</span>
+<span class="w">    </span><span class="c1">//Asset addresses of mesh and material</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">mesh</span><span class="p">;</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">material</span><span class="p">;</span>
 
@@ -489,6 +490,51 @@
 <span class="w">        </span><span class="n">exathread</span><span class="o">::</span><span class="n">Future</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">matFut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="p">(</span><span class="n">material</span><span class="p">);</span>
 <span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">mesh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">meshFut</span><span class="p">;</span>
 <span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">material</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">matFut</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ASTRA_REFLECT</span><span class="w"> </span><span class="n">astra</span><span class="o">::</span><span class="n">SerializedSubstitute</span><span class="o">&lt;</span><span class="n">AudioPlayer</span><span class="o">&gt;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">AstraReflectBase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//Astra setup</span>
+<span class="w">    </span><span class="n">ASTRASETUP</span><span class="p">(</span><span class="n">SerializedSubstitute</span><span class="p">)</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="c1">//Serialized string GUID of actor</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">sound</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">//Settings</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">autoplay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">loop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">pitchMultiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">playbackPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">//Converters</span>
+<span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">AudioPlayer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ap</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">GetSound</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetAddress</span><span class="p">();</span>
+<span class="w">        </span><span class="n">autoplay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">autoplay</span><span class="p">;</span>
+<span class="w">        </span><span class="n">loop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">GetLooping</span><span class="p">();</span>
+<span class="w">        </span><span class="n">gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">GetGain</span><span class="p">();</span>
+<span class="w">        </span><span class="n">pitchMultiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">GetPitchMultiplier</span><span class="p">();</span>
+<span class="w">        </span><span class="n">playbackPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">GetPosition</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">AudioPlayer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">GetSound</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetAddress</span><span class="p">();</span>
+<span class="w">        </span><span class="n">autoplay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">autoplay</span><span class="p">;</span>
+<span class="w">        </span><span class="n">loop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">GetLooping</span><span class="p">();</span>
+<span class="w">        </span><span class="n">gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">GetGain</span><span class="p">();</span>
+<span class="w">        </span><span class="n">pitchMultiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">GetPitchMultiplier</span><span class="p">();</span>
+<span class="w">        </span><span class="n">playbackPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">GetPosition</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">AudioPlayer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">autoplay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">autoplay</span><span class="p">;</span>
+<span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">SetSound</span><span class="p">(</span><span class="o">*</span><span class="n">ResourceManager</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">Load</span><span class="o">&lt;</span><span class="n">Sound</span><span class="o">&gt;</span><span class="p">(</span><span class="n">sound</span><span class="p">));</span>
+<span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">SetLooping</span><span class="p">(</span><span class="n">loop</span><span class="p">);</span>
+<span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">SetGain</span><span class="p">(</span><span class="n">gain</span><span class="p">);</span>
+<span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">SetPitchMultiplier</span><span class="p">(</span><span class="n">pitchMultiplier</span><span class="p">);</span>
+<span class="w">        </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">SetPosition</span><span class="p">(</span><span class="n">playbackPosition</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>

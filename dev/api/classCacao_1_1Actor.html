@@ -377,6 +377,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -480,6 +483,12 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ad26bb9089bbca4800d0aa8c4fdda256f.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string_view, std::function&lt;void()&gt;)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1abba3b9a9b29998ce7472c02f14243d0e.html">Variable Paused</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1adff0cb2b0b9f2305d3d3d0fc7aa6dd46.html">Variable Playing</a></li>
 </ul>
 </div>
 </nav></div>
@@ -664,7 +673,10 @@
 <dd><p>Create a new component and add it to this actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> – The arguments to the component constructor</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – The arguments to the component constructor </p></li>
+<li><p><strong>enabled</strong> – Whether the component should start enabled or not</p></li>
+</ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p>
@@ -678,7 +690,31 @@
 <dd><p>Create a new component and add it to this actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>factoryID</strong> – The ID of the <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> factory in with the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> to create the component</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factoryID</strong> – The ID of the <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> factory in with the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> to create the component </p></li>
+<li><p><strong>enabled</strong> – Whether the component should start enabled or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> does not have a <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> actory registered for the provided ID </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb">
+<span id="_CPPv3N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb"></span><span id="_CPPv2N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb"></span><span class="target" id="classCacao_1_1Actor_1a74c216eaa32406c79adb8ab64130866e"></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">factoryID</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">configure</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enabled</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new component and add it to this actor, with a callback for intial configuration. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factoryID</strong> – The ID of the <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> factory in with the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> to create the component </p></li>
+<li><p><strong>configure</strong> – A callback accepting the instantiated component to run for initial configuration </p></li>
+<li><p><strong>enabled</strong> – Whether the component should start enabled or not</p></li>
+</ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -831,6 +867,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor12HasComponentEbv"><code class="docutils literal notranslate"><span class="pre">HasComponent()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentER1TDpRR4Argsb"><code class="docutils literal notranslate"><span class="pre">MountComponent()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringEb"><code class="docutils literal notranslate"><span class="pre">MountComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb"><code class="docutils literal notranslate"><span class="pre">MountComponent()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentER1Tv"><code class="docutils literal notranslate"><span class="pre">GetComponent()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao5Actor16UnmountComponentEvv"><code class="docutils literal notranslate"><span class="pre">UnmountComponent()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor16GetAllComponentsEv"><code class="docutils literal notranslate"><span class="pre">GetAllComponents()</span></code></a></li>

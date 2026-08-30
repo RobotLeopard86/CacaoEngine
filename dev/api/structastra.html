@@ -377,6 +377,9 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -481,6 +484,12 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ad26bb9089bbca4800d0aa8c4fdda256f.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1abba3b9a9b29998ce7472c02f14243d0e.html">Variable Paused</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1adff0cb2b0b9f2305d3d3d0fc7aa6dd46.html">Variable Playing</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -553,6 +562,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">xg::Guid</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">ActorRef</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">MeshRenderer</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">AudioPlayer</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span></code></p></li>
 </ul>
 </section>
 </section>
@@ -560,7 +570,7 @@
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp">
-<span class="target" id="structastra"></span><span class="sig-name descname"><span class="pre">template&lt;&gt;</span> <span class="pre">astra</span> <span class="pre">:</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">xg::Guid</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span> <span class="pre">,</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">ActorRef</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span> <span class="pre">,</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">MeshRenderer</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span></span></dt>
+<span class="target" id="structastra"></span><span class="sig-name descname"><span class="pre">template&lt;&gt;</span> <span class="pre">astra</span> <span class="pre">:</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">xg::Guid</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span> <span class="pre">,</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">ActorRef</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span> <span class="pre">,</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">MeshRenderer</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span> <span class="pre">,</span> <span class="pre">public</span> <span class="pre">SerializedSubstitute&lt;</span> <span class="pre">AudioPlayer</span> <span class="pre">&gt;</span> <span class="pre">public</span> <span class="pre">AstraReflectBase</span></span></dt>
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -638,6 +648,31 @@
 <span class="target" id="structastra_1a86b4373d219e657e4837fe6adb411712"></span><span class="sig-name descname"><span class="n"><span class="pre">SerializedSubstitute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structastra_1a070f4af791f0ed767d81eea664efc0f6"></span><span class="sig-name descname"><span class="pre">inline</span>&#160; <span class="pre">ASTRASETUP</span> <span class="pre">(SerializedSubstitute)</span> <span class="pre">virtual</span> <span class="pre">~SerializedSubstitute()</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError20SerializedSubstituteERK11AudioPlayer">
+<span id="_CPPv3N19PhonyNameDueToError20SerializedSubstituteERK11AudioPlayer"></span><span id="_CPPv2N19PhonyNameDueToError20SerializedSubstituteERK11AudioPlayer"></span><span id="PhonyNameDueToError::SerializedSubstitute__AudioPlayerCR"></span><span class="target" id="structastra_1ad1c8b81c52123dbfd75face0cfd568ee"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SerializedSubstitute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">AudioPlayer</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError20SerializedSubstituteERK11AudioPlayer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError26ASTRA_SUBSTITUTE_SERIALIZEE11AudioPlayer">
+<span id="_CPPv3N19PhonyNameDueToError26ASTRA_SUBSTITUTE_SERIALIZEE11AudioPlayer"></span><span id="_CPPv2N19PhonyNameDueToError26ASTRA_SUBSTITUTE_SERIALIZEE11AudioPlayer"></span><span id="PhonyNameDueToError::ASTRA_SUBSTITUTE_SERIALIZE__AudioPlayer"></span><span class="target" id="structastra_1ad9aa016ca4b18e9def3e43eba38addfd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ASTRA_SUBSTITUTE_SERIALIZE</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">AudioPlayer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError26ASTRA_SUBSTITUTE_SERIALIZEE11AudioPlayer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError28ASTRA_SUBSTITUTE_DESERIALIZEE11AudioPlayer">
+<span id="_CPPv3N19PhonyNameDueToError28ASTRA_SUBSTITUTE_DESERIALIZEE11AudioPlayer"></span><span id="_CPPv2N19PhonyNameDueToError28ASTRA_SUBSTITUTE_DESERIALIZEE11AudioPlayer"></span><span id="PhonyNameDueToError::ASTRA_SUBSTITUTE_DESERIALIZE__AudioPlayer"></span><span class="target" id="structastra_1a85d55bf99f2e100361efbd1f71f2ee7e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ASTRA_SUBSTITUTE_DESERIALIZE</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">AudioPlayer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError28ASTRA_SUBSTITUTE_DESERIALIZEE11AudioPlayer" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structastra_1a86b4373d219e657e4837fe6adb411712"></span><span class="sig-name descname"><span class="n"><span class="pre">SerializedSubstitute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd></dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
@@ -664,6 +699,36 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError8materialE">
 <span id="_CPPv3N19PhonyNameDueToError8materialE"></span><span id="_CPPv2N19PhonyNameDueToError8materialE"></span><span id="PhonyNameDueToError::material__ss"></span><span class="target" id="structastra_1a8f3dbba76b98ee1b23245101e94a90be"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">material</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError8materialE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError5soundE">
+<span id="_CPPv3N19PhonyNameDueToError5soundE"></span><span id="_CPPv2N19PhonyNameDueToError5soundE"></span><span id="PhonyNameDueToError::sound__ss"></span><span class="target" id="structastra_1a51702ddc7f695a54ff95c5eeebca51b0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sound</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError5soundE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError8autoplayE">
+<span id="_CPPv3N19PhonyNameDueToError8autoplayE"></span><span id="_CPPv2N19PhonyNameDueToError8autoplayE"></span><span id="PhonyNameDueToError::autoplay__b"></span><span class="target" id="structastra_1a6a1695e6abfe8178b997ea92a095c199"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">autoplay</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError8autoplayE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError4loopE">
+<span id="_CPPv3N19PhonyNameDueToError4loopE"></span><span id="_CPPv2N19PhonyNameDueToError4loopE"></span><span id="PhonyNameDueToError::loop__b"></span><span class="target" id="structastra_1aa11e6c17102f7a66bc6c18677d241de5"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">loop</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError4loopE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError4gainE">
+<span id="_CPPv3N19PhonyNameDueToError4gainE"></span><span id="_CPPv2N19PhonyNameDueToError4gainE"></span><span id="PhonyNameDueToError::gain__float"></span><span class="target" id="structastra_1aeda8a2006f6ffe42bb3b46061e988932"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gain</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError4gainE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError15pitchMultiplierE">
+<span id="_CPPv3N19PhonyNameDueToError15pitchMultiplierE"></span><span id="_CPPv2N19PhonyNameDueToError15pitchMultiplierE"></span><span id="PhonyNameDueToError::pitchMultiplier__float"></span><span class="target" id="structastra_1ae4effac173df41fabdbe1542803539c3"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pitchMultiplier</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError15pitchMultiplierE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError16playbackPositionE">
+<span id="_CPPv3N19PhonyNameDueToError16playbackPositionE"></span><span id="_CPPv2N19PhonyNameDueToError16playbackPositionE"></span><span id="PhonyNameDueToError::playbackPosition__float"></span><span class="target" id="structastra_1a8e94a34f0704950e8005595e439a9084"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">playbackPosition</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError16playbackPositionE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -734,11 +799,20 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError20SerializedSubstituteERK12MeshRenderer"><code class="docutils literal notranslate"><span class="pre">SerializedSubstitute()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError26ASTRA_SUBSTITUTE_SERIALIZEE12MeshRenderer"><code class="docutils literal notranslate"><span class="pre">ASTRA_SUBSTITUTE_SERIALIZE()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError28ASTRA_SUBSTITUTE_DESERIALIZEE12MeshRenderer"><code class="docutils literal notranslate"><span class="pre">ASTRA_SUBSTITUTE_DESERIALIZE()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError20SerializedSubstituteERK11AudioPlayer"><code class="docutils literal notranslate"><span class="pre">SerializedSubstitute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError26ASTRA_SUBSTITUTE_SERIALIZEE11AudioPlayer"><code class="docutils literal notranslate"><span class="pre">ASTRA_SUBSTITUTE_SERIALIZE()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError28ASTRA_SUBSTITUTE_DESERIALIZEE11AudioPlayer"><code class="docutils literal notranslate"><span class="pre">ASTRA_SUBSTITUTE_DESERIALIZE()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError4dataE"><code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError4guidE"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError9worldAddrE"><code class="docutils literal notranslate"><span class="pre">worldAddr</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError4meshE"><code class="docutils literal notranslate"><span class="pre">mesh</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError8materialE"><code class="docutils literal notranslate"><span class="pre">material</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError5soundE"><code class="docutils literal notranslate"><span class="pre">sound</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError8autoplayE"><code class="docutils literal notranslate"><span class="pre">autoplay</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError4loopE"><code class="docutils literal notranslate"><span class="pre">loop</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError4gainE"><code class="docutils literal notranslate"><span class="pre">gain</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError15pitchMultiplierE"><code class="docutils literal notranslate"><span class="pre">pitchMultiplier</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19PhonyNameDueToError16playbackPositionE"><code class="docutils literal notranslate"><span class="pre">playbackPosition</span></code></a></li>
 </ul>
 </li>
 </ul>
