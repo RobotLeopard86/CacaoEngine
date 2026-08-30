@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Cacao/Exceptions.hpp"
-#include "Cacao/MeshRenderer.hpp"
-#include "Cacao/Resource.hpp"
-#include "Cacao/ResourceManager.hpp"
+#include "Exceptions.hpp"
+#include "MeshRenderer.hpp"
+#include "Resource.hpp"
+#include "ResourceManager.hpp"
+#include "AudioPlayer.hpp"
 #include "DllHelper.hpp"
 #include "Actor.hpp"
 #include "World.hpp"
@@ -76,7 +77,7 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<MeshRenderer> : publi
 	ASTRASETUP(SerializedSubstitute)
 	virtual ~SerializedSubstitute() {}
 
-	//Serialized string GUID of actor
+	//Asset addresses of mesh and material
 	std::string mesh;
 	std::string material;
 
@@ -94,6 +95,51 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<MeshRenderer> : publi
 		exathread::Future<std::shared_ptr<Material>> matFut = ResourceManager::Get().Load<Material>(material);
 		out->mesh = *meshFut;
 		out->material = *matFut;
+	}
+
+	SerializedSubstitute() = default;
+};
+
+template<>
+struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<AudioPlayer> : public AstraReflectBase {
+	//Astra setup
+	ASTRASETUP(SerializedSubstitute)
+	virtual ~SerializedSubstitute() {}
+
+	//Serialized string GUID of actor
+	std::string sound;
+
+	//Settings
+	bool autoplay = false;
+	bool loop = false;
+	float gain = 1.0f;
+	float pitchMultiplier = 1.0f;
+	float playbackPosition = 0.0f;
+
+	//Converters
+	SerializedSubstitute(const AudioPlayer& ap) {
+		sound = ap.GetSound()->GetAddress();
+		autoplay = ap.autoplay;
+		loop = ap.GetLooping();
+		gain = ap.GetGain();
+		pitchMultiplier = ap.GetPitchMultiplier();
+		playbackPosition = ap.GetPosition();
+	}
+	ASTRA_SUBSTITUTE_SERIALIZE(AudioPlayer) {
+		sound = in->GetSound()->GetAddress();
+		autoplay = in->autoplay;
+		loop = in->GetLooping();
+		gain = in->GetGain();
+		pitchMultiplier = in->GetPitchMultiplier();
+		playbackPosition = in->GetPosition();
+	}
+	ASTRA_SUBSTITUTE_DESERIALIZE(AudioPlayer) {
+		out->autoplay = autoplay;
+		out->SetSound(*ResourceManager::Get().Load<Sound>(sound));
+		out->SetLooping(loop);
+		out->SetGain(gain);
+		out->SetPitchMultiplier(pitchMultiplier);
+		out->SetPosition(playbackPosition);
 	}
 
 	SerializedSubstitute() = default;

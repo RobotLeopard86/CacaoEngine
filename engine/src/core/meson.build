@@ -55,6 +55,7 @@ engine_srcs += files(
 	'expf.c',
 	'Actor.cpp',
 	'AudioManager.cpp',
+	'AudioPlayer.cpp',
 	'BuiltinAssets.cpp',
 	'Cameras.cpp',
 	'CodeRegistry.cpp',

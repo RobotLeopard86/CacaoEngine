@@ -64,13 +64,14 @@ namespace Cacao {
 	}
 
 	void AudioManager::SetGlobalGain(float value) {
-		Check<BadInitStateException>(IsInitialized(), "The audio system must be initialized to set the global gain is called!");
+		Check<BadInitStateException>(IsInitialized(), "The audio system must be initialized to set the global gain!");
+		Check<BadValueException>(value >= 0, "Cannot set global gain value to a negative number!");
 
 		alListenerf(AL_GAIN, value);
 	}
 
 	float AudioManager::GetGlobalGain() {
-		Check<BadInitStateException>(IsInitialized(), "The audio system must be initialized to check the global gain is called!");
+		Check<BadInitStateException>(IsInitialized(), "The audio system must be initialized to check the global gain!");
 
 		float retval;
 		alGetListenerf(AL_GAIN, &retval);

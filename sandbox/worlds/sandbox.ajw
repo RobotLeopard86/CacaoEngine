@@ -39,6 +39,12 @@ actors:
       - id: rotator
         enabled: true
         rfl: {}
+      - id: cacao.audioPlayer
+        enabled: true
+        rfl:
+          sound: a:chords
+          autoplay: true
+          loop: true
   - name: Cubey
     active: true
     guid: aab4d03b-1f4e-4829-bcc2-531e41169d19

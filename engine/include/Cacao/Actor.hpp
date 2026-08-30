@@ -270,6 +270,7 @@ namespace Cacao {
 		 * @brief Create a new component and add it to this actor
 		 *
 		 * @param args The arguments to the component constructor
+		 * @param enabled Whether the component should start enabled or not
 		 *
 		 * @throws ExistingValueException If a component of this type already exists on the actor
 		 */
@@ -283,21 +284,39 @@ namespace Cacao {
 			std::unique_ptr<T> component = std::make_unique<T>(std::forward<Args...>(args...));
 
 			//Call-down to internal function
-			_ComponentSetup(type, std::move(component), enabled);
+			_ComponentSetup(type, std::move(component));
+
+			//Initial callbacks
+			T& comp = static_cast<T&>(*components[type].component);
+			comp.OnMount();
+			comp.SetEnabled(enabled);
 
 			//Return the component reference
-			return static_cast<T&>(*components[type].component);
+			return comp;
 		}
 
 		/**
 		 * @brief Create a new component and add it to this actor
 		 *
 		 * @param factoryID The ID of the Component factory in with the CodeRegistry to create the component
+		 * @param enabled Whether the component should start enabled or not
 		 *
 		 * @throws ExistingValueException If a component of this type already exists on the actor
 		 * @throws NonexistentValueException If the CodeRegistry does not have a Component actory registered for the provided ID
 		 */
 		Component& MountComponent(const std::string& factoryID, bool enabled = true);
+
+		/**
+		 * @brief Create a new component and add it to this actor, with a callback for intial configuration
+		 *
+		 * @param factoryID The ID of the Component factory in with the CodeRegistry to create the component
+		 * @param configure A callback accepting the instantiated component to run for initial configuration
+		 * @param enabled Whether the component should start enabled or not
+		 *
+		 * @throws ExistingValueException If a component of this type already exists on the actor
+		 * @throws NonexistentValueException If the CodeRegistry does not have a Component actory registered for the provided ID
+		 */
+		Component& MountComponent(const std::string& factoryID, std::function<void(Component&)> configure, bool enabled = true);
 
 		/**
 		 * @brief Access a component on the actor
@@ -390,7 +409,7 @@ namespace Cacao {
 		std::unordered_map<std::type_index, ComponentHandle> components;
 		World* world;//NON-OWNING --- DO NOT FREE THIS!!!
 
-		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr, bool enabled);
+		void _ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr);
 		std::unordered_map<std::type_index, Component*> _ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const;
 
 		bool active;

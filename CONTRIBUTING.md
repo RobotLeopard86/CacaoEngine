@@ -23,7 +23,21 @@ All `#include` directives must be grouped (one for Cacao Engine includes, one fo
 #include "externallib/externallib.h"
 ```
 
-All code **must** include clear comments in English with a brief summary of what the particular section of code is doing. All declarations in the public header files (see below) must also have Doxygen annotations as shown here:
+All code **must** include clear comments in English with a brief summary of what the particular section of code is doing. 
+
+The only exceptions to the code-commenting rule in function implementations are:
+1. `Check` calls at the top of the function to validate input
+2. Small functions whose effect is self-descriptive in what methods are called
+
+## Public Headers
+The public header files are those located in the following locations:
+* `engine/include`
+* `libs/audiodecoder/include`
+* `libs/common/include`
+* `libs/asset/include`
+* `libs/image/include`
+
+All class/struct/enum definitions in the public header files must have Doxygen annotations as shown here:
 ```cpp
 /**
  * @brief The description...
@@ -43,16 +57,11 @@ All code **must** include clear comments in English with a brief summary of what
 ```  
 Note the newlines between each section and the consistent prefixing asterisks.
 
-The public header files are those located in the following locations:
-* `engine/include`
-* `libs/audiodecoder/include`
-* `libs/common/include`
-* `libs/asset/include`
-* `libs/image/include`
-
-The only exceptions to the code-commenting rule in function implementations are:
-1. `Check` calls at the top of the function to validate input
-2. Small functions whose effect is self-descriptive in what methods are called
+Additionally, the only libraries that may be referenced in the public headers are:
+* Cacao Engine libraries from the `libs` directory
+* Exathread
+* GLM
+* Crossguid
 
 ## Branching Scheme
 Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  

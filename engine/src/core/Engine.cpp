@@ -7,6 +7,7 @@
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/MeshRenderer.hpp"
+#include "Cacao/AudioPlayer.hpp"
 #include "Cacao/Resource.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
@@ -74,9 +75,9 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Initializing audio system...";
 		AudioManager::Get().Initialize();
 
-		//Initialize FreeType
-		Logger::Engine(Logger::Level::Trace) << "Initializing FreeType instance...";
-		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
+		//Initialize text renderer
+		Logger::Engine(Logger::Level::Trace) << "Initializing text renderer...";
+		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize text renderer!");
 
 		//Done with stage
 		Logger::Engine(Logger::Level::Info) << "Core initialization complete.";
@@ -252,9 +253,9 @@ namespace Cacao {
 	void Engine::CoreShutdown() {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run core shutdown!");
 
-		//Shutdown FreeType
-		Logger::Engine(Logger::Level::Trace) << "Destroying FreeType instance...";
-		Check<ExternalException>(FT_Done_FreeType(freeType) == FT_Err_Ok, "Failed to destroy FreeType instance!");
+		//Shutdown text renderer
+		Logger::Engine(Logger::Level::Trace) << "Shutting down text renderer...";
+		Check<ExternalException>(FT_Done_FreeType(freeType) == FT_Err_Ok, "Failed to shut down text renderer!");
 
 		//Terminate audio
 		Logger::Engine(Logger::Level::Trace) << "Terminating audio system...";
@@ -312,5 +313,8 @@ namespace Cacao {
 	void Engine::RegisterBuiltinComponents() {
 		//Mesh renderer
 		CodeRegistry::Get().RegisterFactory<Component>("cacao.meshRenderer", []() { return new MeshRenderer(); }, typeid(MeshRenderer));
+
+		//Audio player
+		CodeRegistry::Get().RegisterFactory<Component>("cacao.audioPlayer", []() { return new AudioPlayer(); }, typeid(AudioPlayer));
 	}
 }

@@ -54,7 +54,7 @@ namespace Cacao {
 		 *
 		 * @param value The new global gain value, which must be positive
 		 *
-		 * @throws BadValueException If the provided value was not positive
+		 * @throws BadValueException If the provided multiplier is negative
 		 */
 		void SetGlobalGain(float value);
 

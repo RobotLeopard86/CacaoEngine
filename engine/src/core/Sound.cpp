@@ -7,6 +7,8 @@
 
 #include "Bytestream.hpp"
 
+#include "AL/al.h"
+
 namespace Cacao {
 	Sound::Sound(std::vector<char>&& encodedAudio, const std::string& addr)
 	  : Asset(addr) {

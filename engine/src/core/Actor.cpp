@@ -73,16 +73,26 @@ namespace Cacao {
 	}
 
 	Component& Actor::MountComponent(const std::string& factoryID, bool enabled) {
+		return MountComponent(factoryID, [](Component&) {}, enabled);
+	}
+
+	Component& Actor::MountComponent(const std::string& factoryID, std::function<void(Component&)> configure, bool enabled) {
 		//Try to create the object
 		auto [ptr, type] = CodeRegistry::Get().Instantiate<Component>(factoryID);
 		Check<ExistingValueException>(!components.contains(type), "A component of the type specified already exists on the actor!");
 
 		//Call down to common component setup
 		std::unique_ptr<Component> uptr(ptr);
-		_ComponentSetup(type, std::move(uptr), enabled);
+		_ComponentSetup(type, std::move(uptr));
+
+		//Initial callbacks
+		Component& comp = *components[type].component;
+		configure(comp);
+		comp.OnMount();
+		comp.SetEnabled(enabled);
 
 		//Return the component reference
-		return *components[type].component;
+		return comp;
 	}
 
 	void Actor::SetActive(bool state) {
@@ -90,7 +100,7 @@ namespace Cacao {
 		active = state;
 	}
 
-	void Actor::_ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr, bool enabled) {
+	void Actor::_ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr) {
 		//Get or create new handle
 		ComponentHandle& handle = components[type];
 
@@ -102,8 +112,6 @@ namespace Cacao {
 
 		//Set up component object
 		handle.component->owner = self;
-		handle.component->OnMount();
-		handle.component->SetEnabled(enabled);
 	}
 
 	std::unordered_map<std::type_index, Component*> Actor::_ComponentGet(std::function<bool(const std::unique_ptr<Component>&)> filter) const {

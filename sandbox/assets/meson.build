@@ -4,3 +4,6 @@ skybox = custom_target('skybox.xjc', output: 'skybox.xjc', input: ['skybox.ajc',
 
 # Cube material
 cube_mat = custom_target('cubey.xjm', output: 'cubey.xjm', input: 'cubey.ajm', console: true, build_by_default: true, command: [matc, '-V', '@INPUT@', '-o', '@OUTPUT@'])
+
+# Chords music
+chords = fs.copyfile('chords.opus')
