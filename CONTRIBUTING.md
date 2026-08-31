@@ -62,6 +62,7 @@ Additionally, the only libraries that may be referenced in the public headers ar
 * Exathread
 * GLM
 * Crossguid
+* Astra
 
 ## Branching Scheme
 Cacao Engine has two primary branches: `main` and `dev`. `dev` is an **unstable** branch where all development should happen. `dev` should be squash-merged into `main` when a set of changes is complete and working. `main` **must** remain somewhat stable; in-progress work must not be merged into `main` (except work existing prior to the branch split).  

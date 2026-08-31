@@ -10,9 +10,9 @@
 #include <typeindex>
 
 #include "astra/serialized_substitute.hpp"
-#include "crossguid/guid.hpp"
 #include "astra/setup.hpp"
 #include "astra/type_actions/common_actions.hpp"
+#include "crossguid/guid.hpp"
 
 namespace Cacao {
 	class Actor;

@@ -34,11 +34,11 @@ namespace Cacao {
 	}
 
 	template<std::size_t S>
-	std::shared_ptr<Mesh> _GenMesh(const std::array<unsigned char, S>& bin, const std::string& meshName, const std::string& addr) {
+	std::shared_ptr<Mesh> _GenMesh(const std::array<unsigned char, S>& bin, const std::string& addr) {
 		//Create model and get mesh from it
 		std::vector<unsigned char> modelBin(bin.begin(), bin.end());
-		std::shared_ptr<Model> mdl = Model::Create(std::move(modelBin), std::format("a:internal_tmpmdl_{}", meshName));
-		std::shared_ptr<Mesh> badMesh = mdl->GetMesh(meshName);
+		std::shared_ptr<Model> mdl = Model::Create(std::move(modelBin), std::format("a:internal_tmpmdl_for_{}", addr.substr(2)));
+		std::shared_ptr<Mesh> badMesh = mdl->GetMesh("Mesh");
 
 		//Recreate mesh using bad mesh data to ensure proper address
 		std::shared_ptr<Mesh> goodMesh = Mesh::Create(std::move(IMPL(Mesh, *badMesh).vertices), std::move(IMPL(Mesh, *badMesh).indices), addr);
@@ -70,14 +70,14 @@ namespace Cacao {
 	void ResourceManager::SetupBuiltins() {
 		//Meshes
 		std::vector<exathread::Future<std::shared_ptr<Mesh>>> mfuts;
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::capsule, "DefaultCapsule", "a:builtin_capsule"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::cone, "DefaultCone", "a:builtin_cone"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::cube, "DefaultCube", "a:builtin_cube"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::cylinder, "DefaultCylinder", "a:builtin_cylinder"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::quad, "DefaultQuad", "a:builtin_quad"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::quadpyramid, "DefaultQuadPyramid", "a:builtin_quadpyramid"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::sphere, "DefaultSphere", "a:builtin_sphere"); }));
-		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::tripyramid, "DefaultTriPyramid", "a:builtin_tripyramid"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::capsule, "a:builtin_capsule"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::cone, "a:builtin_cone"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::cube, "a:builtin_cube"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::cylinder, "a:builtin_cylinder"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::quad, "a:builtin_quad"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::quadpyramid, "a:builtin_quadpyramid"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::sphere, "a:builtin_sphere"); }));
+		mfuts.push_back(Engine::Get().GetThreadPool()->submit([]() { return _GenMesh(assets::tripyramid, "a:builtin_tripyramid"); }));
 		exathread::MultiFuture<std::shared_ptr<Mesh>> meshes(std::move(mfuts));
 
 		//Shaders

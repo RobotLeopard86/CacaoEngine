@@ -67,5 +67,5 @@ actors:
       - id: cacao.meshRenderer
         enabled: true
         rfl:
-          mesh: a:builtin_cube
+          mesh: a:builtin_capsule
           material: a:cubey
