@@ -9,6 +9,7 @@ When submitting code, it must be formatted using [`clang-format`](https://clang.
 * Classes and methods should be named in PascalCase
 * Member fields and variables should be named in camelCase
 * Do not use Hungarian notation
+* Do not prefix interface/pure virtual class names with `I` as is common in some other codebases
 
 For consistency, please use American English spellings in interface naming (class, method, and field names). 
 
