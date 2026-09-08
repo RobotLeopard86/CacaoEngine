@@ -56,7 +56,7 @@
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class State::MutationProxy" href="classCacao_1_1Reactivity_1_1State_1_1MutationProxy.html" />
-    <link rel="prev" title="Class Dependency" href="classCacao_1_1Reactivity_1_1Dependency.html" />
+    <link rel="prev" title="Class SideEffect" href="classCacao_1_1Reactivity_1_1SideEffect.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -454,6 +454,12 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html">Class Dependency</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1EffectOutput.html">Class EffectOutput</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Template Class State</a></li>
 </ul>
@@ -580,10 +586,11 @@
 </section>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
+<section id="base-types">
+<h3>Base Types<a class="headerlink" href="#base-types" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Reactivity::Dependency</span></code> (<a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html#exhale-class-classcacao-1-1reactivity-1-1dependency"><span class="std std-ref">Class Dependency</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::Reactivity::EffectOutput</span></code> (<a class="reference internal" href="classCacao_1_1Reactivity_1_1EffectOutput.html#exhale-class-classcacao-1-1reactivity-1-1effectoutput"><span class="std std-ref">Class EffectOutput</span></a>)</p></li>
 </ul>
 </section>
 </section>
@@ -591,7 +598,7 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE">
-<span id="_CPPv3I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE"></span><span id="_CPPv2I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">astra</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Reflectable</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Reactivity_1_1State"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">State</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Reactivity</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html#_CPPv4N5Cacao10Reactivity10DependencyE" title="Cacao::Reactivity::Dependency"><span class="n"><span class="pre">Dependency</span></span></a><a class="headerlink" href="#_CPPv4I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE"></span><span id="_CPPv2I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">astra</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Reflectable</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Reactivity_1_1State"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">State</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Reactivity</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html#_CPPv4N5Cacao10Reactivity10DependencyE" title="Cacao::Reactivity::Dependency"><span class="n"><span class="pre">Dependency</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Reactivity</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classCacao_1_1Reactivity_1_1EffectOutput.html#_CPPv4N5Cacao10Reactivity12EffectOutputE" title="Cacao::Reactivity::EffectOutput"><span class="n"><span class="pre">EffectOutput</span></span></a><a class="headerlink" href="#_CPPv4I_N5astra11ReflectableEEN5Cacao10Reactivity5StateE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>A source of reactive state. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -705,12 +712,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Reactivity_1_1Dependency.html"
+       href="classCacao_1_1Reactivity_1_1SideEffect.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Dependency</p>
+        <p class="prev-next-title">Class SideEffect</p>
       </div>
     </a>
     <a class="right-next"
@@ -746,7 +753,7 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-type">Base Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-types">Base Types</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">

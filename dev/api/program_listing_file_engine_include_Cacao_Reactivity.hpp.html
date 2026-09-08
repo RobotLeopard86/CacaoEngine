@@ -411,8 +411,10 @@
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">EvalWriteOk</span><span class="p">();</span>
 <span class="w">    </span><span class="p">};</span>
 
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">EffectOutput</span><span class="w"> </span><span class="p">{};</span>
+
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Reflectable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">State</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Dependency</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">State</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Dependency</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">EffectOutput</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">State</span><span class="p">()</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_default_constructible_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
@@ -545,6 +547,18 @@
 <span class="w">            </span><span class="o">++</span><span class="n">updateCounter</span><span class="p">;</span>
 <span class="w">            </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">evaluator</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">SideEffect</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="n">SideEffect</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="n">Dependency</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">inputs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="n">EffectOutput</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="p">)</span>
+<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">//TODO: register self as a dependency and do cycle checks</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">//TODO: friend class WhateverCallsTheCallback;</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
