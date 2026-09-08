@@ -405,7 +405,11 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="o">::</span><span class="nn">Reactivity</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Dependency</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Dependency</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">protected</span><span class="o">:</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">EvalReadOk</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">EvalWriteOk</span><span class="p">();</span>
+<span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Reflectable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">State</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Dependency</span><span class="w"> </span><span class="p">{</span>
@@ -420,11 +424,13 @@
 <span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">storage</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...)</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">        </span><span class="k">operator</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalReadOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalReadOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="n">storage</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -432,6 +438,7 @@
 <span class="w">        </span><span class="n">State</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_copy_assignable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -439,6 +446,7 @@
 <span class="w">        </span><span class="n">State</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_move_assignable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -466,6 +474,7 @@
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="n">MutationProxy</span><span class="w"> </span><span class="nf">Modify</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">MutationProxy</span><span class="w"> </span><span class="n">proxy</span><span class="p">;</span>
 <span class="w">            </span><span class="n">proxy</span><span class="p">.</span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="n">proxy</span><span class="p">.</span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">storage</span><span class="p">;</span>
@@ -478,6 +487,8 @@
 <span class="w">        </span><span class="n">State</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">State</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_copy_assignable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">other</span><span class="p">.</span><span class="n">EvalReadOk</span><span class="p">();</span>
+<span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk2</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">storageGuard</span><span class="p">);</span>
@@ -491,6 +502,8 @@
 <span class="w">        </span><span class="n">State</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">State</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
 <span class="w">            </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_move_assignable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">other</span><span class="p">.</span><span class="n">EvalWriteOk</span><span class="p">();</span>
+<span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk2</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">storageGuard</span><span class="p">);</span>
@@ -513,10 +526,12 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">operator</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalReadOk</span><span class="p">();</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalReadOk</span><span class="p">();</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -524,7 +539,7 @@
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">T</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">evaluator</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">updateCounter</span><span class="p">;</span>
-<span class="w">        </span><span class="c1">//TODO: friend class WhateverTriggersEvaluate</span>
+<span class="w">        </span><span class="c1">//TODO: friend class WhateverTriggersEvaluate;</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">Evaluate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="o">++</span><span class="n">updateCounter</span><span class="p">;</span>
