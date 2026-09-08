@@ -23,10 +23,15 @@ namespace Cacao::Reactivity {
 	};
 
 	/**
+	 * @brief A small base class for all objects that may be declared as a side effect output
+	 */
+	class CACAO_API EffectOutput {};
+
+	/**
 	 * @brief A source of reactive state
 	 */
 	template<astra::Reflectable T>
-	class CACAO_API State : public Dependency {
+	class CACAO_API State : public Dependency, public EffectOutput {
 	  public:
 		/**
 		 * @brief Create some state with no initial value
@@ -218,5 +223,27 @@ namespace Cacao::Reactivity {
 			++updateCounter;
 			result = evaluator();
 		}
+	};
+
+	/**
+	 * @brief A side effect callback triggered by a change in state
+	 */
+	class CACAO_API SideEffect {
+	  public:
+		/**
+		 * @brief Create a new piece of computed state from a source
+		 *
+		 * @param inputs The dependencies that should trigger a re-evaluation of the value; only these values and outputs can be accessed during execution
+		 * @param outputs The state and callbacks that may be modified by this effect; only these values and inputs can be accessed during execution
+		 * @param callback The function to run when the state changes
+		 */
+		SideEffect(std::initializer_list<Dependency*> inputs, std::initializer_list<EffectOutput*> outputs, std::function<void(void)> callback)
+		  : callback(callback) {
+			//TODO: register self as a dependency and do cycle checks
+		}
+
+	  private:
+		std::function<void(void)> callback;
+		//TODO: friend class WhateverCallsTheCallback;
 	};
 }
