@@ -16,7 +16,11 @@ namespace Cacao::Reactivity {
 	/**
 	 * @brief A small base class for all state-related dependency objects
 	 */
-	class CACAO_API Dependency {};
+	class CACAO_API Dependency {
+	  protected:
+		void EvalReadOk();
+		void EvalWriteOk();
+	};
 
 	/**
 	 * @brief A source of reactive state
@@ -47,6 +51,7 @@ namespace Cacao::Reactivity {
 		 * @return The current held value
 		 */
 		operator const T&() const {
+			EvalReadOk();
 			std::lock_guard lk(storageGuard);
 			return storage;
 		}
@@ -55,6 +60,7 @@ namespace Cacao::Reactivity {
 		 * @brief Access the current value in a read-only manner
 		 */
 		const T* operator->() const {
+			EvalReadOk();
 			std::lock_guard lk(storageGuard);
 			return &storage;
 		}
@@ -67,6 +73,7 @@ namespace Cacao::Reactivity {
 		State& operator=(const T& value)
 			requires std::is_copy_assignable_v<T>
 		{
+			EvalWriteOk();
 			std::lock_guard lk(storageGuard);
 			storage = value;
 		}
@@ -79,6 +86,7 @@ namespace Cacao::Reactivity {
 		State& operator=(T&& value)
 			requires std::is_move_assignable_v<T>
 		{
+			EvalWriteOk();
 			std::lock_guard lk(storageGuard);
 			storage = value;
 		}
@@ -120,6 +128,7 @@ namespace Cacao::Reactivity {
 		 * @brief Modify the contents of the currently held value
 		 */
 		MutationProxy Modify() {
+			EvalWriteOk();
 			MutationProxy proxy;
 			proxy.lock = std::unique_lock<std::mutex>(storageGuard);
 			proxy.ref = &storage;
@@ -133,6 +142,8 @@ namespace Cacao::Reactivity {
 		State& operator=(const State& other)
 			requires std::is_copy_assignable_v<T>
 		{
+			other.EvalReadOk();
+			EvalWriteOk();
 			if(this != &other) {
 				std::lock_guard lk(storageGuard);
 				std::lock_guard lk2(other.storageGuard);
@@ -146,6 +157,8 @@ namespace Cacao::Reactivity {
 		State& operator=(State&& other)
 			requires std::is_move_assignable_v<T>
 		{
+			other.EvalWriteOk();
+			EvalWriteOk();
 			if(this != &other) {
 				std::lock_guard lk(storageGuard);
 				std::lock_guard lk2(other.storageGuard);
@@ -183,6 +196,7 @@ namespace Cacao::Reactivity {
 		 * @return The current held value
 		 */
 		operator const T&() const {
+			EvalReadOk();
 			return result.value();
 		}
 
@@ -190,6 +204,7 @@ namespace Cacao::Reactivity {
 		 * @brief Access the current value in a read-only manner
 		 */
 		const T* operator->() const {
+			EvalReadOk();
 			return &result.value();
 		}
 
@@ -197,7 +212,7 @@ namespace Cacao::Reactivity {
 		std::function<T(void)> evaluator;
 		std::optional<T> result;
 		unsigned int updateCounter;
-		//TODO: friend class WhateverTriggersEvaluate
+		//TODO: friend class WhateverTriggersEvaluate;
 
 		void Evaluate() {
 			++updateCounter;
