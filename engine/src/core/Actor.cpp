@@ -11,7 +11,7 @@
 
 namespace Cacao {
 	Actor::Actor(const std::string& name, ActorRef parent, ActorRef self, xg::Guid guid)
-	  : name(name), guid(guid), parent(parent), self(self), transform({0, 0, 0}, {0, 0, 0}, {1, 1, 1}), worldTransformCached(transform), world(parent.world.lock().get()), active(true) {}
+	  : name(name), guid(guid), parent(parent), self(self), worldTransformCached(transform), world(parent.world.lock().get()), active(true) {}
 
 	glm::mat4 Actor::GetWorldTransformationMatrix() const {
 		//Calculate the transformation matrix
@@ -41,7 +41,7 @@ namespace Cacao {
 		}
 
 		//Now we go in reverse to actually apply the transformations
-		Transform worldTransform({0, 0, 0}, {0, 0, 0}, {1, 1, 1});
+		Transform worldTransform {};
 		for(auto it = pchain.rbegin(); it != pchain.rend(); ++it) {
 			//Get current transform
 			Transform current = (*pchain.rbegin())->GetLocalTransform();

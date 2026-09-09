@@ -38,6 +38,14 @@ namespace Cacao {
 		}
 
 		/**
+		 * @brief Create a default transform
+		 */
+		Transform()
+		  : pos(0, 0, 0), scale(1, 1, 1), rot(1.0, 0.0, 0.0, 0.0) {
+			RecalculateTransformationMatrix();
+		}
+
+		/**
 		 * @brief Get the position
 		 *
 		 * @return The position

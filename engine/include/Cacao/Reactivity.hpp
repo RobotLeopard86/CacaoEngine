@@ -2,6 +2,7 @@
 
 #include "DllHelper.hpp"
 
+#include "astra/json.hpp"
 #include "astra/traits.hpp"
 
 #include <functional>
@@ -30,7 +31,7 @@ namespace Cacao::Reactivity {
 	/**
 	 * @brief A source of reactive state
 	 */
-	template<astra::Reflectable T>
+	template<astra::Serializable T>
 	class CACAO_API State : public Dependency, public EffectOutput {
 	  public:
 		/**
@@ -81,6 +82,8 @@ namespace Cacao::Reactivity {
 			EvalWriteOk();
 			std::lock_guard lk(storageGuard);
 			storage = value;
+			++writeCounter;
+			//TODO: set global dirty flag
 		}
 
 		/**
@@ -94,6 +97,8 @@ namespace Cacao::Reactivity {
 			EvalWriteOk();
 			std::lock_guard lk(storageGuard);
 			storage = value;
+			++writeCounter;
+			//TODO: set global dirty flag
 		}
 
 		/**
@@ -119,12 +124,14 @@ namespace Cacao::Reactivity {
 
 			~MutationProxy() {
 				lock.unlock();
-				//TODO: set dirty flag
+				++(*writeCounter);
+				//TODO: set global dirty flag
 			}
 
 		  private:
 			MutationProxy() {}
 			T* ref;
+			unsigned int* writeCounter;
 			std::unique_lock<std::mutex> lock;
 			friend class State;
 		};
@@ -137,6 +144,7 @@ namespace Cacao::Reactivity {
 			MutationProxy proxy;
 			proxy.lock = std::unique_lock<std::mutex>(storageGuard);
 			proxy.ref = &storage;
+			proxy.writeCounter = &writeCounter;
 			return proxy;
 		}
 
@@ -153,6 +161,8 @@ namespace Cacao::Reactivity {
 				std::lock_guard lk(storageGuard);
 				std::lock_guard lk2(other.storageGuard);
 				storage = other;
+				++writeCounter;
+				//TODO: set global dirty flag
 			}
 			return *this;
 		}
@@ -168,6 +178,8 @@ namespace Cacao::Reactivity {
 				std::lock_guard lk(storageGuard);
 				std::lock_guard lk2(other.storageGuard);
 				storage = std::move(other);
+				++writeCounter;
+				//TODO: set global dirty flag
 			}
 			return *this;
 		}
@@ -176,12 +188,14 @@ namespace Cacao::Reactivity {
 	  private:
 		T storage;
 		std::mutex storageGuard;
+		unsigned int writeCounter = 0;
+		//TODO: friend class WhateverChecksTheWriteCounter;
 	};
 
 	/**
 	 * @brief A piece of state whose value is computed when needed and cached between updates
 	 */
-	template<astra::Reflectable T>
+	template<astra::Serializable T>
 	class CACAO_API Computed : public Dependency {
 	  public:
 		/**
@@ -245,5 +259,61 @@ namespace Cacao::Reactivity {
 	  private:
 		std::function<void(void)> callback;
 		//TODO: friend class WhateverCallsTheCallback;
+	};
+
+	/**
+	 * @brief A bridge to access data originating outside of the reactivity system
+	 */
+	template<astra::Serializable T>
+		requires std::is_move_constructible_v<T>
+	class CACAO_API ExternalBinding : public Dependency {
+	  public:
+		/**
+		 * @brief Create a new external data binding
+		 *
+		 * @param fetcher The function that retrieves the current state of the external data
+		 * @param fluid Whether the value should be considered to have always changed
+		 *
+		 * @warning Using an external binding with @c fluid enabled will force the UI to redraw on <b>every tick</b> because there will always be dirty state. Use with caution!
+		 */
+		ExternalBinding(std::function<T(void)> fetcher, bool fluid = false)
+		  : fetcher(fetcher), fluid(fluid) {}
+
+		/**
+		 * @brief Get the current value
+		 *
+		 * @return The current held value
+		 */
+		operator const T&() const {
+			EvalReadOk();
+			return *cache;
+		}
+
+		/**
+		 * @brief Access the current value in a read-only manner
+		 */
+		const T* operator->() const {
+			EvalReadOk();
+			return cache.get();
+		}
+
+	  private:
+		std::function<T()> fetcher;
+		std::unique_ptr<T> cache;
+		std::size_t cacheHash = 0;
+		bool fluid;
+		//TODO: friend class WhateverCallsCheckRefresh
+
+		void CheckRefresh() {
+			T temp = fetcher();
+			if(!fluid) {
+				astra::SerializedSubstitute<T> sub(temp);
+				std::size_t hash = std::hash<std::string> {}(astra::json::toString(&sub));
+				if(hash == cacheHash) return;
+				cacheHash = hash;
+			}
+			cache = std::make_unique<T>(std::move(temp));
+			//TODO: set global dirty flag
+		}
 	};
 }
