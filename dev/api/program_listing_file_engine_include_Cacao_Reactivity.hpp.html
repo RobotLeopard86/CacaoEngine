@@ -397,6 +397,7 @@
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/json.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"astra/traits.hpp"</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
@@ -413,7 +414,7 @@
 
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">EffectOutput</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Reflectable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Serializable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">State</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Dependency</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">EffectOutput</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">State</span><span class="p">()</span>
@@ -443,6 +444,8 @@
 <span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">            </span><span class="o">++</span><span class="n">writeCounter</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">//TODO: set global dirty flag</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="n">State</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
@@ -451,6 +454,8 @@
 <span class="w">            </span><span class="n">EvalWriteOk</span><span class="p">();</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">            </span><span class="o">++</span><span class="n">writeCounter</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">//TODO: set global dirty flag</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">class</span><span class="w"> </span><span class="nc">MutationProxy</span><span class="w"> </span><span class="p">{</span>
@@ -465,12 +470,14 @@
 
 <span class="w">            </span><span class="o">~</span><span class="n">MutationProxy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">lock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
-<span class="w">                </span><span class="c1">//TODO: set dirty flag</span>
+<span class="w">                </span><span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="n">writeCounter</span><span class="p">);</span>
+<span class="w">                </span><span class="c1">//TODO: set global dirty flag</span>
 <span class="w">            </span><span class="p">}</span>
 
 <span class="w">          </span><span class="k">private</span><span class="o">:</span>
 <span class="w">            </span><span class="n">MutationProxy</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">            </span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">ref</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">writeCounter</span><span class="p">;</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">;</span>
 <span class="w">            </span><span class="k">friend</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">;</span>
 <span class="w">        </span><span class="p">};</span>
@@ -480,6 +487,7 @@
 <span class="w">            </span><span class="n">MutationProxy</span><span class="w"> </span><span class="n">proxy</span><span class="p">;</span>
 <span class="w">            </span><span class="n">proxy</span><span class="p">.</span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">            </span><span class="n">proxy</span><span class="p">.</span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">storage</span><span class="p">;</span>
+<span class="w">            </span><span class="n">proxy</span><span class="p">.</span><span class="n">writeCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">writeCounter</span><span class="p">;</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">proxy</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -495,6 +503,8 @@
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk2</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">                </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">;</span>
+<span class="w">                </span><span class="o">++</span><span class="n">writeCounter</span><span class="p">;</span>
+<span class="w">                </span><span class="c1">//TODO: set global dirty flag</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -510,6 +520,8 @@
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk2</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">storageGuard</span><span class="p">);</span>
 <span class="w">                </span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">);</span>
+<span class="w">                </span><span class="o">++</span><span class="n">writeCounter</span><span class="p">;</span>
+<span class="w">                </span><span class="c1">//TODO: set global dirty flag</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -517,9 +529,11 @@
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">T</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">storageGuard</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">writeCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">//TODO: friend class WhateverChecksTheWriteCounter;</span>
 <span class="w">    </span><span class="p">};</span>
 
-<span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Reflectable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Serializable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
 <span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">Computed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Dependency</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">Computed</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="n">Dependency</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">inputs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">T</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">evaluator</span><span class="p">)</span>
@@ -559,6 +573,43 @@
 <span class="w">      </span><span class="k">private</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="p">;</span>
 <span class="w">        </span><span class="c1">//TODO: friend class WhateverCallsTheCallback;</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="n">astra</span><span class="o">::</span><span class="n">Serializable</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_move_constructible_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">CACAO_API</span><span class="w"> </span><span class="n">ExternalBinding</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Dependency</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">public</span><span class="o">:</span>
+<span class="w">        </span><span class="n">ExternalBinding</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">T</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fetcher</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">fluid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">)</span>
+<span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">fetcher</span><span class="p">(</span><span class="n">fetcher</span><span class="p">),</span><span class="w"> </span><span class="n">fluid</span><span class="p">(</span><span class="n">fluid</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">        </span><span class="k">operator</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalReadOk</span><span class="p">();</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">cache</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EvalReadOk</span><span class="p">();</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">      </span><span class="k">private</span><span class="o">:</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">T</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fetcher</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">cacheHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">fluid</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">//TODO: friend class WhateverCallsCheckRefresh</span>
+
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">CheckRefresh</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">T</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fetcher</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">fluid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">astra</span><span class="o">::</span><span class="n">SerializedSubstitute</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}(</span><span class="n">astra</span><span class="o">::</span><span class="n">json</span><span class="o">::</span><span class="n">toString</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sub</span><span class="p">));</span>
+<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">hash</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cacheHash</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">                </span><span class="n">cacheHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hash</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">temp</span><span class="p">));</span>
+<span class="w">            </span><span class="c1">//TODO: set global dirty flag</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
