@@ -2,10 +2,10 @@
 cpp = meson.get_compiler('cpp')
 
 # Reflection
-engine_reflection = custom_target('cacaoengine.astra.[cpphpp]', output: ['cacaoengine.astra.hpp', 'cacaoengine.astra.cpp'],
+engine_reflection = custom_target('cacaoengine.astra.hpp', output: 'cacaoengine.astra.hpp',
 	input: ['include' / 'Cacao' / 'Actor.hpp', 'include' / 'Cacao' / 'MeshRenderer.hpp', 'include' / 'Cacao' / 'AudioPlayer.hpp', 'include' / 'Cacao' / 'Script.hpp', 'include' / 'Cacao' / 'Substitutes.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
 	meson.current_build_dir(), '-n', 'cacaoengine', '-p', 'Cacao', '@INPUT@'], 
-	install: true, install_dir: ['include' / 'Cacao', false])
+	install: true, install_dir: 'include' / 'Cacao')
 
 # Engine headers
 engine_headers = include_directories('include', '..' / 'libs' / 'asset' / 'include', '..' / 'libs' / 'image' / 'include', '..' / 'libs' / 'common' / 'include')

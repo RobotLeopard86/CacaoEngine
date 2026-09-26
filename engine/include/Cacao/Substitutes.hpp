@@ -30,9 +30,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<xg::Guid> : public As
 	std::string data;
 
 	//Converters
-	SerializedSubstitute(const xg::Guid& guid) {
-		data = guid.str();
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(xg::Guid) {
 		data = in->str();
 	}
@@ -55,10 +52,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<2, U>> : pub
 	U y;
 
 	//Converters
-	SerializedSubstitute(const vec_t& vec) {
-		x = vec.x;
-		y = vec.y;
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(vec_t) {
 		x = in->x;
 		y = in->y;
@@ -83,11 +76,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<3, U>> : pub
 	U z;
 
 	//Converters
-	SerializedSubstitute(const vec_t& vec) {
-		x = vec.x;
-		y = vec.y;
-		z = vec.z;
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(vec_t) {
 		x = in->x;
 		y = in->y;
@@ -114,12 +102,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<4, U>> : pub
 	U w;
 
 	//Converters
-	SerializedSubstitute(const vec_t& vec) {
-		x = vec.x;
-		y = vec.y;
-		z = vec.z;
-		w = vec.w;
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(vec_t) {
 		x = in->x;
 		y = in->y;
@@ -146,12 +128,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::qua<U>> : public
 	U z;
 
 	//Converters
-	SerializedSubstitute(const glm::qua<U>& quat) {
-		x = quat.x;
-		y = quat.y;
-		z = quat.z;
-		w = quat.w;
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(glm::qua<U>) {
 		x = in->x;
 		y = in->y;
@@ -177,13 +153,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::mat<W, H, U>> : 
 	std::array<std::array<U, H>, W> data;
 
 	//Converters
-	SerializedSubstitute(const mat_t& mat) {
-		for(uint8_t x = 0; x < W; ++x) {
-			for(uint8_t y = 0; y < H; ++y) {
-				data[x][y] = mat[x][y];
-			}
-		}
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(mat_t) {
 		for(uint8_t x = 0; x < W; ++x) {
 			for(uint8_t y = 0; y < H; ++y) {
@@ -213,10 +182,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<ActorRef> : public As
 	std::string worldAddr;
 
 	//Converters
-	SerializedSubstitute(const ActorRef& ref) {
-		guid = ref->guid;
-		worldAddr = ref.GetWorld()->GetAddress();
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(ActorRef) {
 		guid = (*in)->guid;
 		worldAddr = in->GetWorld()->GetAddress();
@@ -243,10 +208,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<MeshRenderer> : publi
 	std::string material;
 
 	//Converters
-	SerializedSubstitute(const MeshRenderer& mr) {
-		mesh = mr.mesh->GetAddress();
-		material = mr.material->GetAddress();
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(MeshRenderer) {
 		mesh = in->mesh->GetAddress();
 		material = in->material->GetAddress();
@@ -278,14 +239,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<AudioPlayer> : public
 	float playbackPosition = 0.0f;
 
 	//Converters
-	SerializedSubstitute(const AudioPlayer& ap) {
-		sound = ap.GetSound()->GetAddress();
-		autoplay = ap.autoplay;
-		loop = ap.GetLooping();
-		gain = ap.GetGain();
-		pitchMultiplier = ap.GetPitchMultiplier();
-		playbackPosition = ap.GetPosition();
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(AudioPlayer) {
 		sound = in->GetSound()->GetAddress();
 		autoplay = in->autoplay;
@@ -318,20 +271,6 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<Transform> : public A
 	astra::SerializedSubstitute<glm::vec3> scale;
 
 	//Converters
-	SerializedSubstitute(const Transform& transform) {
-		{
-			glm::vec3 p = transform.GetPosition();
-			position.serialize(&p);
-		}
-		{
-			glm::quat r = transform.GetRotation();
-			rotation.serialize(&r);
-		}
-		{
-			glm::vec3 s = transform.GetScale();
-			scale.serialize(&s);
-		}
-	}
 	ASTRA_SUBSTITUTE_SERIALIZE(Transform) {
 		{
 			glm::vec3 p = in->GetPosition();
@@ -369,7 +308,7 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<Transform> : public A
 
 //This block is to force template instantiation
 ///@cond
-#ifdef _ASTRAGENERATE
+/*#ifdef _ASTRAGENERATE
 struct _ForceInstantiate {
 	astra::SerializedSubstitute<xg::Guid> _0;
 	astra::SerializedSubstitute<ActorRef> _1;
@@ -502,5 +441,5 @@ struct _ForceInstantiate {
 	astra::SerializedSubstitute<glm::quat> _128;
 	astra::SerializedSubstitute<glm::dquat> _129;
 };
-#endif
+#endif*/
 ///@endcond

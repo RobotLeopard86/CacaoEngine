@@ -1,5 +1,5 @@
 # Sandbox reflection
-sandbox_reflection = custom_target('sandbox.astra.[cpphpp]', output: ['sandbox.astra.hpp', 'sandbox.astra.cpp'],
+sandbox_reflection = custom_target('sandbox.astra.hpp', output: 'sandbox.astra.hpp',
 	input: ['src' / 'rotator.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
 	meson.current_build_dir(), '-n', 'sandbox', '-s', engine_reflection[0].full_path().replace('hpp', 'json'), '@INPUT@'], depends: engine_reflection)
 

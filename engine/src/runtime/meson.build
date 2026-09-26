@@ -8,7 +8,7 @@ endif
 dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
 
 # Reflection
-rt_reflection = custom_target('cacaort.astra.[cpphpp]', output: ['cacaort.astra.hpp', 'cacaort.astra.cpp'],
+rt_reflection = custom_target('cacaort.astra.hpp', output: 'cacaort.astra.hpp',
 	input: ['Runtime.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o',
 	meson.current_build_dir(), '-n', 'cacaort', '-s', engine_reflection[0].full_path().replace('hpp', 'json'), '@INPUT@'], depends: engine_reflection)
 
