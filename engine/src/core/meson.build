@@ -70,6 +70,7 @@ engine_srcs += files(
 	'Misc.cpp',
 	'Model.cpp',
 	'PAL.cpp',
+	'Reflection.cpp',
 	'ResourceManager.cpp',
 	'Shader.cpp',
 	'Sound.cpp',
