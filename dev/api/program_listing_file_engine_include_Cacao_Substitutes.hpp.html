@@ -413,6 +413,8 @@
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"glm/glm.hpp"</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">"glm/gtc/quaternion.hpp"</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="p">;</span>
 
 <span class="k">template</span><span class="o">&lt;&gt;</span>
@@ -442,17 +444,16 @@
 <span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">    </span><span class="c1">//Unpacked data representation</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">vec_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">//Converters</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">vec_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
 <span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">vec_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec_t</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">};</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -465,19 +466,18 @@
 <span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">    </span><span class="c1">//Unpacked data representation</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">vec_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">z</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">//Converters</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">vec_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
 <span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">;</span>
 <span class="w">        </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">z</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">vec_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec_t</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">};</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -490,21 +490,20 @@
 <span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">    </span><span class="c1">//Unpacked data representation</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">vec_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">z</span><span class="p">;</span>
 <span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="n">w</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">//Converters</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">vec_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
 <span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">;</span>
 <span class="w">        </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">z</span><span class="p">;</span>
 <span class="w">        </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">vec_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec_t</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">};</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">};</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -530,7 +529,7 @@
 <span class="w">        </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">qua</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">qua</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">};</span>
+<span class="w">        </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">qua</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">};</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -544,18 +543,17 @@
 <span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">    </span><span class="c1">//Unpacked data representation</span>
-<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">mat_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">H</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">W</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">//Converters</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">mat_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_SERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat</span><span class="o">&lt;</span><span class="n">W</span><span class="p">,</span><span class="w"> </span><span class="n">H</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">W</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">for</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">H</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">in</span><span class="p">)[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">];</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">mat_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ASTRA_SUBSTITUTE_DESERIALIZE</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat</span><span class="o">&lt;</span><span class="n">W</span><span class="p">,</span><span class="w"> </span><span class="n">H</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">W</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">for</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">H</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="p">(</span><span class="o">*</span><span class="n">out</span><span class="p">)[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">];</span>
@@ -700,142 +698,6 @@
 
 <span class="w">    </span><span class="n">SerializedSubstitute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 <span class="p">};</span>
-
-<span class="c1">//This block is to force template instantiation</span>
-<span class="cm">/*#ifdef _ASTRAGENERATE</span>
-<span class="cm">struct _ForceInstantiate {</span>
-<span class="cm">    astra::SerializedSubstitute&lt;xg::Guid&gt; _0;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;ActorRef&gt; _1;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;MeshRenderer&gt; _2;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;AudioPlayer&gt; _3;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;Transform&gt; _4;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::bvec2&gt; _5;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8vec2&gt; _6;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16vec2&gt; _7;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32vec2&gt; _8;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64vec2&gt; _9;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8vec2&gt; _10;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16vec2&gt; _11;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32vec2&gt; _12;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64vec2&gt; _13;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dvec2&gt; _14;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::vec2&gt; _15;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::bvec3&gt; _16;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8vec3&gt; _17;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16vec3&gt; _18;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32vec3&gt; _19;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64vec3&gt; _20;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8vec3&gt; _21;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16vec3&gt; _22;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32vec3&gt; _23;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64vec3&gt; _24;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dvec3&gt; _25;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::vec3&gt; _26;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::bvec4&gt; _27;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8vec4&gt; _28;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16vec4&gt; _29;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32vec4&gt; _30;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64vec4&gt; _31;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8vec4&gt; _32;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16vec4&gt; _33;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32vec4&gt; _34;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64vec4&gt; _35;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dvec4&gt; _36;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::vec4&gt; _37;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat2x2&gt; _38;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat2x2&gt; _39;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat2x2&gt; _40;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat2x2&gt; _41;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat2x2&gt; _42;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat2x2&gt; _43;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat2x2&gt; _44;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat2x2&gt; _45;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat2x2&gt; _46;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat2x2&gt; _47;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat2x3&gt; _48;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat2x3&gt; _49;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat2x3&gt; _50;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat2x3&gt; _51;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat2x3&gt; _52;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat2x3&gt; _53;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat2x3&gt; _54;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat2x3&gt; _55;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat2x3&gt; _56;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat2x3&gt; _57;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat2x4&gt; _58;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat2x4&gt; _59;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat2x4&gt; _60;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat2x4&gt; _61;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat2x4&gt; _62;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat2x4&gt; _63;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat2x4&gt; _64;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat2x4&gt; _65;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat2x4&gt; _66;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat2x4&gt; _67;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat3x2&gt; _68;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat3x2&gt; _69;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat3x2&gt; _70;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat3x2&gt; _71;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat3x2&gt; _72;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat3x2&gt; _73;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat3x2&gt; _74;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat3x2&gt; _75;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat3x2&gt; _76;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat3x2&gt; _77;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat3x3&gt; _78;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat3x3&gt; _79;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat3x3&gt; _80;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat3x3&gt; _81;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat3x3&gt; _82;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat3x3&gt; _83;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat3x3&gt; _84;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat3x3&gt; _85;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat3x3&gt; _86;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat3x3&gt; _87;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat3x4&gt; _88;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat3x4&gt; _89;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat3x4&gt; _90;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat3x4&gt; _91;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat3x4&gt; _92;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat3x4&gt; _93;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat3x4&gt; _94;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat3x4&gt; _95;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat3x4&gt; _96;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat3x4&gt; _97;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat4x2&gt; _98;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat4x2&gt; _99;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat4x2&gt; _100;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat4x2&gt; _101;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat4x2&gt; _102;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat4x2&gt; _103;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat4x2&gt; _104;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat4x2&gt; _105;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat4x2&gt; _106;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat4x2&gt; _107;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat4x3&gt; _108;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat4x3&gt; _109;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat4x3&gt; _110;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat4x3&gt; _111;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat4x3&gt; _112;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat4x3&gt; _113;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat4x3&gt; _114;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat4x3&gt; _115;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat4x3&gt; _116;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat4x3&gt; _117;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::mat4x4&gt; _118;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dmat4x4&gt; _119;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i8mat4x4&gt; _120;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i16mat4x4&gt; _121;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i32mat4x4&gt; _122;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::i64mat4x4&gt; _123;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u8mat4x4&gt; _124;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u16mat4x4&gt; _125;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u32mat4x4&gt; _126;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::u64mat4x4&gt; _127;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::quat&gt; _128;</span>
-<span class="cm">    astra::SerializedSubstitute&lt;glm::dquat&gt; _129;</span>
-<span class="cm">};</span>
-<span class="cm">#endif*/</span>
 </pre></div>
 </div>
 </section>
