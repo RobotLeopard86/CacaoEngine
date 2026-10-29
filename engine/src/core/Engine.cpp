@@ -41,6 +41,8 @@
 
 #include "exathread.hpp"
 
+#include "cacaoengine.astra.hpp"//To complete type definitions for reflectable types
+
 namespace Cacao {
 	Engine::Engine()
 	  : state(State::Dead) {}

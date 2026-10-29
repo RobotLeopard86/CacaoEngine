@@ -4,8 +4,10 @@
 #include "ImplAccessor.hpp"
 #include "impl/Sound.hpp"
 #include "impl/AudioPlayer.hpp"
+#include "cacaoengine.astra.hpp"//To complete type definitions for reflectable types
 
 #include "AL/al.h"
+
 #include <memory>
 
 namespace Cacao {

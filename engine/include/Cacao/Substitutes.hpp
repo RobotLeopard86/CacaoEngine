@@ -15,6 +15,7 @@
 #include "astra/setup.hpp"
 
 #include "crossguid/guid.hpp"
+#include "glm/detail/qualifier.hpp"
 #include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
 
@@ -42,8 +43,8 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<xg::Guid> : public As
 	SerializedSubstitute() = default;
 };
 
-template<typename U>
-struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<2, U>> : public AstraReflectBase {
+template<typename U, glm::qualifier Q>
+struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<2, U, Q>> : public AstraReflectBase {
 	//Astra setup
 	ASTRASETUP(SerializedSubstitute)
 	virtual ~SerializedSubstitute() {}
@@ -64,8 +65,8 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<2, U>> : pub
 	SerializedSubstitute() = default;
 };
 
-template<typename U>
-struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<3, U>> : public AstraReflectBase {
+template<typename U, glm::qualifier Q>
+struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<3, U, Q>> : public AstraReflectBase {
 	//Astra setup
 	ASTRASETUP(SerializedSubstitute)
 	virtual ~SerializedSubstitute() {}
@@ -88,8 +89,8 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<3, U>> : pub
 	SerializedSubstitute() = default;
 };
 
-template<typename U>
-struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<4, U>> : public AstraReflectBase {
+template<typename U, glm::qualifier Q>
+struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<4, U, Q>> : public AstraReflectBase {
 	//Astra setup
 	ASTRASETUP(SerializedSubstitute)
 	virtual ~SerializedSubstitute() {}
@@ -114,8 +115,8 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::vec<4, U>> : pub
 	SerializedSubstitute() = default;
 };
 
-template<typename U>
-struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::qua<U>> : public AstraReflectBase {
+template<typename U, glm::qualifier Q>
+struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::qua<U, Q>> : public AstraReflectBase {
 	//Astra setup
 	ASTRASETUP(SerializedSubstitute)
 	virtual ~SerializedSubstitute() {}
@@ -140,9 +141,9 @@ struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::qua<U>> : public
 	SerializedSubstitute() = default;
 };
 
-template<uint8_t W, uint8_t H, typename U>
+template<uint8_t W, uint8_t H, typename U, glm::qualifier Q>
 	requires(W >= 2 && W <= 4 && H >= 2 && H <= 4)
-struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::mat<W, H, U>> : public AstraReflectBase {
+struct CACAO_API ASTRA_REFLECT astra::SerializedSubstitute<glm::mat<W, H, U, Q>> : public AstraReflectBase {
 	//Astra setup
 	ASTRASETUP(SerializedSubstitute)
 	virtual ~SerializedSubstitute() {}

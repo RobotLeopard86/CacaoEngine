@@ -12,6 +12,7 @@
 #include "impl/TickController.hpp"
 #include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
+#include "cacaoengine.astra.hpp"//To complete type definitions for reflectable types
 
 #include <atomic>
 #include <chrono>

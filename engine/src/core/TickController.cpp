@@ -7,6 +7,7 @@
 #include "Cacao/Input.hpp"
 #include "SingletonGet.hpp"
 #include "impl/TickController.hpp"
+#include "cacaoengine.astra.hpp"//To complete type definitions for reflectable types
 
 #include "exathread.hpp"
 
