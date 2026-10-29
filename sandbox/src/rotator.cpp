@@ -4,6 +4,8 @@
 
 #include "glm/trigonometric.hpp"
 
+#include "sandbox.astra.hpp"
+
 namespace sandbox {
 	void Rotator::OnDynTick(float timestep) {
 		constexpr static float degPerSec = 10;

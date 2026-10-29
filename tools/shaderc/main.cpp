@@ -98,8 +98,8 @@ int main(int argc, char* argv[]) {
 	VLOG("Done.")
 
 	//Compilation
+	std::unique_ptr<jms::Spinner> s;
 	try {
-		std::unique_ptr<jms::Spinner> s;
 		for(const auto& [in, out] : tasks) {
 			if(outputLvl != OutputLevel::Silent) {
 				s = std::make_unique<jms::Spinner>("Waiting for compiler to finish initializing...", jms::dots);
@@ -121,13 +121,14 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			if(!result) {
-				ERROR("Failed to compile one or more shaders!")
-				std::cerr << "====== ERROR LOG ======\n"
-						  << log << "\n=======================" << std::endl;
+				s->finish(jms::FinishedState::FAILURE, "Failed to compile one or more shaders!");
+				ERROR("====== ERROR LOG ======\n"
+					  << log << "\n=======================");
 				return 1;
 			}
 		}
 	} catch(const std::exception& e) {
+		s->finish(jms::FinishedState::FAILURE, "Failed to compile one or more shaders!");
 		ERROR("Exception caught during compilation: " << e.what())
 		return 1;
 	}
