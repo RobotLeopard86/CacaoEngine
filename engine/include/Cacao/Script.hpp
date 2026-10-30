@@ -30,5 +30,10 @@ namespace Cacao {
 		Script() {}
 		friend struct astra::CommonActions<Script>;
 #endif
+
+		void OnEnable() override final;
+		void OnDisable() override final;
+		virtual void OnEnabled() {}
+		virtual void OnDisabled() {}
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cacao/GPU.hpp"
+#include "Cacao/MeshRenderer.hpp"
 
 #include <thread>
 #include <atomic>
@@ -65,5 +66,10 @@ namespace Cacao {
 
 		//Current blocking future (for immediate-execution)
 		std::optional<std::shared_future<void>> immediateExecutionTask;
+
+		//List of mesh renderers to draw each frame
+		std::map<float, std::vector<MeshRenderer*>> renderersOpaque;
+		std::map<float, std::vector<MeshRenderer*>> renderersTransparent;
+		std::mutex renderersMtx;
 	};
 }

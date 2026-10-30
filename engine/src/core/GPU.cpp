@@ -25,7 +25,6 @@
 #include "glm/glm.hpp"
 #include "glm/gtx/norm.hpp"
 #include "crossguid/guid.hpp"
-#include "libcacaoasset.hpp"
 
 namespace Cacao {
 	GPUManager::GPUManager()
@@ -82,52 +81,6 @@ namespace Cacao {
 		else {
 			const float a = (c + 0.055f) / 1.055f;
 			return static_cast<float>(std::pow(a, 2.4));
-		}
-	}
-
-	exathread::ValueTask<std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>> FindMeshRenderers(ActorRef actor) {
-		//Inactive actor stop
-		if(!actor->IsActive()) co_return {};
-
-		//Get all meshrenderers and add them to the list
-		auto meshRenderers = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
-			return (dynamic_cast<MeshRenderer*>(component.get()));
-		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
-			return static_cast<MeshRenderer*>(item.second);
-		}) | std::views::common;
-		std::map<float, std::vector<MeshRenderer*>> opaque, transparent;
-		for(MeshRenderer* mr : meshRenderers) {
-			float distance = glm::length2(actor.GetWorld()->cam->GetPosition() - actor->GetWorldTransform().GetPosition());
-			if(mr->material->GetRenderMode() != libcacaoasset::Material::RenderMode::Transparent) {
-				opaque[distance].push_back(mr);
-			} else {
-				transparent[distance].push_back(mr);
-			}
-		}
-
-		//Handle children
-		if(actor->GetAllChildren().size() > 0) {
-			//Find them
-			exathread::MultiFuture<std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>> childMeshRenderersFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindMeshRenderers);
-			co_await exathread::yieldUntilComplete(childMeshRenderersFut);
-
-			//Merge lists and return
-			std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>> result(opaque, transparent);
-			for(const auto& [childOpaque, childTransparent] : childMeshRenderersFut.results()) {
-				for(const auto& [distance, value] : childOpaque) {
-					std::vector<std::vector<MeshRenderer*>> toMerge {result.first[distance], value};
-					auto merged = toMerge | std::views::join | std::views::common;
-					result.first[distance].assign(merged.begin(), merged.end());
-				}
-				for(const auto& [distance, value] : childTransparent) {
-					std::vector<std::vector<MeshRenderer*>> toMerge {result.second[distance], value};
-					auto merged = toMerge | std::views::join | std::views::common;
-					result.second[distance].assign(merged.begin(), merged.end());
-				}
-			}
-			co_return result;
-		} else {
-			co_return std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>(opaque, transparent);
 		}
 	}
 
@@ -268,24 +221,14 @@ namespace Cacao {
 		//Start rendering and clear screen
 		cmd->StartRendering(linearClearColor);
 
-		//Find meshes to render
-		std::vector<std::map<float, std::vector<MeshRenderer*>>> opaqueMerge;
-		std::vector<std::map<float, std::vector<MeshRenderer*>>> transparentMerge;
-		if(world->GetToplevelActors().size() > 0) {
-			//Wait for meshes to be returned
-			exathread::MultiFuture<std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>> meshesFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindMeshRenderers);
-			meshesFut.await();
-
-			//Join final mesh list
-			for(const auto& [meshesOpaque, meshesTransparent] : meshesFut.results()) {
-				opaqueMerge.push_back(meshesOpaque);
-				transparentMerge.push_back(meshesTransparent);
-			}
+		//Gather frame renderer data
+		static std::map<float, std::vector<MeshRenderer*>> opaque;
+		static std::map<float, std::vector<MeshRenderer*>> transparent;
+		{
+			std::lock_guard lk(renderersMtx);
+			for(const auto& [distance, mrs] : renderersOpaque) opaque[distance] = mrs;
+			for(const auto& [distance, mrs] : renderersTransparent) transparent[distance] = mrs;
 		}
-		auto opaqueMerged = opaqueMerge | std::views::join | std::views::common;
-		auto transparentMerged = transparentMerge | std::views::join | std::views::common;
-		std::map<float, std::vector<MeshRenderer*>> opaque(opaqueMerged.begin(), opaqueMerged.end());
-		std::map<float, std::vector<MeshRenderer*>> transparent(transparentMerged.begin(), transparentMerged.end());
 
 		//Run pre-opaque callbacks
 		for(const xg::Guid& guid : mappings[Phase::Opaque].first) {

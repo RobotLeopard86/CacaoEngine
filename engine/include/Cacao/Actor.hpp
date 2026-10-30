@@ -110,8 +110,19 @@ namespace Cacao {
 		 * @details This takes into account both if the component itself is enabled and its owning Actor is active
 		 *
 		 * @note This will return false if the owning Actor is inactive
+		 *
+		 * @return Whether the component is enabled
 		 */
 		bool IsEnabled() const;
+
+		/**
+		 * @brief Check if the component itself is enabled, regardless of if its owning Actor is
+		 *
+		 * @return Whether the component is enabled
+		 */
+		bool IsSelfEnabled() const {
+			return enabled;
+		}
 
 		/**
 		 * @brief Activate or deactivate the component
@@ -237,6 +248,15 @@ namespace Cacao {
 		 * @note This will return false if the parent Actor is inactive
 		 */
 		bool IsActive() const;
+
+		/**
+		 * @brief Check if the actor itself is active, regardless of if its parent is
+		 *
+		 * @return Whether the actor is enabled
+		 */
+		bool IsSelfActive() const {
+			return active;
+		}
 
 		/**
 		 * @brief Activate or deactivate the actor

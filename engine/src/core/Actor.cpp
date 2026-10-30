@@ -96,8 +96,20 @@ namespace Cacao {
 	}
 
 	void Actor::SetActive(bool state) {
+		//Set self state
 		if(state == active) return;
 		active = state;
+
+		//Notify components
+		if(IsActive()) {
+			for(const auto& [_, ch] : components) {
+				ch.component->OnEnable();
+			}
+		} else {
+			for(const auto& [_, ch] : components) {
+				ch.component->OnDisable();
+			}
+		}
 	}
 
 	void Actor::_ComponentSetup(std::type_index type, std::unique_ptr<Component>&& ptr) {

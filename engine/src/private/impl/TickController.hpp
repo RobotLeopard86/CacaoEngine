@@ -2,8 +2,10 @@
 
 #include <chrono>
 #include <memory>
+#include <mutex>
 #include <thread>
 
+#include "Cacao/Script.hpp"
 #include "Cacao/TickController.hpp"
 
 #define TPS_AVG_WINDOW 5
@@ -29,5 +31,9 @@ namespace Cacao {
 		std::atomic<bool> tickControllerOwns = true;
 		std::atomic<bool> gpuMgrWants = false;
 		std::atomic<bool> tickControllerNeedsForShutdown = false;
+
+		//List of scripts to run each tick
+		std::vector<Script*> tickScripts;
+		std::mutex tickScriptsMtx;
 	};
 }

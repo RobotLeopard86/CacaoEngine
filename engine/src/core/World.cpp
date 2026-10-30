@@ -4,12 +4,15 @@
 #include "Cacao/EventConsumer.hpp"
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/MeshRenderer.hpp"
 #include "Cacao/OrthographicCamera.hpp"
 #include "Cacao/PerspectiveCamera.hpp"
 #include "Cacao/Resource.hpp"
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "impl/ResourceManager.hpp"
+#include "impl/TickController.hpp"
+#include "impl/GPUManager.hpp"
 #include "impl/World.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
@@ -19,7 +22,10 @@
 #include "astra/var.hpp"
 #include "astra/binary.hpp"
 #include "crossguid/guid.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/fwd.hpp"
+#include "glm/gtx/norm.hpp"
 
 #include <memory>
 #include <ranges>
@@ -182,6 +188,80 @@ namespace Cacao {
 		return impl->active;
 	}
 
+	exathread::ValueTask<std::vector<Script*>> FindScripts(ActorRef actor) {
+		//Inactive actor stop
+		if(!actor->IsActive()) co_return {};
+
+		//Get all scripts and add them to the list
+		auto actorScripts = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
+			return (dynamic_cast<Script*>(component.get()));
+		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
+			return static_cast<Script*>(item.second);
+		}) | std::views::common;
+		std::vector<Script*> scripts(actorScripts.begin(), actorScripts.end());
+
+		//Handle children
+		if(actor->GetAllChildren().size() > 0) {
+			//Find them
+			exathread::MultiFuture<std::vector<Script*>> childScriptsFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindScripts);
+			co_await exathread::yieldUntilComplete(childScriptsFut);
+
+			//Merge lists and return
+			std::vector<std::vector<Script*>> toMerge = childScriptsFut.results();
+			toMerge.push_back(std::move(scripts));
+			auto joined = std::views::join(toMerge) | std::views::common;
+			co_return std::vector<Script*>(joined.begin(), joined.end());
+		} else {
+			co_return scripts;
+		}
+	}
+
+	exathread::ValueTask<std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>> FindMeshRenderers(ActorRef actor) {
+		//Inactive actor stop
+		if(!actor->IsActive()) co_return {};
+
+		//Get all meshrenderers and add them to the list
+		auto meshRenderers = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
+			return (dynamic_cast<MeshRenderer*>(component.get()));
+		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
+			return static_cast<MeshRenderer*>(item.second);
+		}) | std::views::common;
+		std::map<float, std::vector<MeshRenderer*>> opaque, transparent;
+		for(MeshRenderer* mr : meshRenderers) {
+			float distance = glm::length2(actor.GetWorld()->cam->GetPosition() - actor->GetWorldTransform().GetPosition());
+			if(mr->material->GetRenderMode() != libcacaoasset::Material::RenderMode::Transparent) {
+				opaque[distance].push_back(mr);
+			} else {
+				transparent[distance].push_back(mr);
+			}
+		}
+
+		//Handle children
+		if(actor->GetAllChildren().size() > 0) {
+			//Find them
+			exathread::MultiFuture<std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>> childMeshRenderersFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindMeshRenderers);
+			co_await exathread::yieldUntilComplete(childMeshRenderersFut);
+
+			//Merge lists and return
+			std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>> result(opaque, transparent);
+			for(const auto& [childOpaque, childTransparent] : childMeshRenderersFut.results()) {
+				for(const auto& [distance, value] : childOpaque) {
+					std::vector<std::vector<MeshRenderer*>> toMerge {result.first[distance], value};
+					auto merged = toMerge | std::views::join | std::views::common;
+					result.first[distance].assign(merged.begin(), merged.end());
+				}
+				for(const auto& [distance, value] : childTransparent) {
+					std::vector<std::vector<MeshRenderer*>> toMerge {result.second[distance], value};
+					auto merged = toMerge | std::views::join | std::views::common;
+					result.second[distance].assign(merged.begin(), merged.end());
+				}
+			}
+			co_return result;
+		} else {
+			co_return std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>(opaque, transparent);
+		}
+	}
+
 	void WorldManager::SetActiveWorld(const std::string& addr, bool noload) {
 		//Validate the resource address
 		Check<BadValueException>(Resource::ValidateResourceAddr<World>(addr), "World address is malformed!");
@@ -200,6 +280,52 @@ namespace Cacao {
 			impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
 		}
 		lk.unlock();
+
+		//Reset script and mesh renderer caches
+		{
+			//Acquire mutex
+			std::lock_guard lk(IMPL(TickController).tickScriptsMtx);
+
+			//Fetch new data
+			std::vector<Script*> scriptsMerged;
+			if(impl->active->GetToplevelActors().size() > 0) {
+				//Wait for meshes to be returned
+				exathread::MultiFuture<std::vector<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(impl->active->GetToplevelActors(), FindScripts);
+				scriptsFut.await();
+
+				//Join final mesh list
+				auto joined = scriptsFut.results() | std::views::join | std::views::common;
+				scriptsMerged.assign(joined.begin(), joined.end());
+			}
+
+			//Push to tick controller
+			IMPL(TickController).tickScripts = scriptsMerged;
+		}
+		{
+			//Acquire mutex
+			std::lock_guard lk(IMPL(GPUManager).renderersMtx);
+
+			//Fetch new data
+			std::vector<std::map<float, std::vector<MeshRenderer*>>> opaqueMerge;
+			std::vector<std::map<float, std::vector<MeshRenderer*>>> transparentMerge;
+			if(impl->active->GetToplevelActors().size() > 0) {
+				//Wait for meshes to be returned
+				exathread::MultiFuture<std::pair<std::map<float, std::vector<MeshRenderer*>>, std::map<float, std::vector<MeshRenderer*>>>> meshesFut = Engine::Get().GetThreadPool()->batch(impl->active->GetToplevelActors(), FindMeshRenderers);
+				meshesFut.await();
+
+				//Join final mesh list
+				for(const auto& [meshesOpaque, meshesTransparent] : meshesFut.results()) {
+					opaqueMerge.push_back(meshesOpaque);
+					transparentMerge.push_back(meshesTransparent);
+				}
+			}
+
+			//Push to GPU manager
+			auto opaqueMerged = opaqueMerge | std::views::join | std::views::common;
+			auto transparentMerged = transparentMerge | std::views::join | std::views::common;
+			IMPL(GPUManager).renderersOpaque = std::map<float, std::vector<MeshRenderer*>>(opaqueMerged.begin(), opaqueMerged.end());
+			IMPL(GPUManager).renderersTransparent = std::map<float, std::vector<MeshRenderer*>>(transparentMerged.begin(), transparentMerged.end());
+		}
 	}
 
 	ActorRef World::CreateActor(const std::string& name, ActorRef parent) {

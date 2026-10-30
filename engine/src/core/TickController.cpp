@@ -9,8 +9,6 @@
 #include "impl/TickController.hpp"
 #include "cacaoengine.astra.hpp"//To complete type definitions for reflectable types
 
-#include "exathread.hpp"
-
 #include <atomic>
 #include <chrono>
 #include <memory>
@@ -104,33 +102,6 @@ namespace Cacao {
 		tickControllerOwns.notify_all();
 	}
 
-	exathread::ValueTask<std::vector<Script*>> FindScripts(ActorRef actor) {
-		//Inactive actor stop
-		if(!actor->IsActive()) co_return {};
-
-		//Get all scripts and add them to the list
-		auto actorScripts = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
-			return (dynamic_cast<Script*>(component.get()));
-		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
-			return static_cast<Script*>(item.second);
-		}) | std::views::common;
-		std::vector<Script*> scripts(actorScripts.begin(), actorScripts.end());
-
-		//Handle children
-		if(actor->GetAllChildren().size() > 0) {
-			//Find them
-			exathread::MultiFuture<std::vector<Script*>> childScriptsFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindScripts);
-			co_await exathread::yieldUntilComplete(childScriptsFut);
-
-			//Merge lists and return
-			std::vector<std::vector<Script*>> toMerge = childScriptsFut.results();
-			toMerge.push_back(std::move(scripts));
-			auto joined = std::views::join(toMerge) | std::views::common;
-			co_return std::vector<Script*>(joined.begin(), joined.end());
-		} else {
-			co_return scripts;
-		}
-	}
 
 	void TickController::Impl::DynTick(float timestep) {
 		//Freeze input state
@@ -150,18 +121,15 @@ namespace Cacao {
 		std::shared_ptr<World> world = WorldManager::Get().GetActiveWorld();
 		if(!world) return;
 
-		//Find scripts
-		if(world->GetToplevelActors().size() > 0) {
-			//Wait for scripts to be returned
-			exathread::MultiFuture<std::vector<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(world->GetToplevelActors(), FindScripts);
-			scriptsFut.await();
-
-			//Execute scripts
-			std::vector<std::vector<Script*>> toMerge = scriptsFut.results();
-			auto joined = std::views::join(toMerge) | std::views::common;
-			for(Script* s : joined) {
-				s->OnDynTick(timestep);
-			}
+		//Execute scripts
+		static std::vector<Script*> scriptsThisTick;
+		{
+			std::lock_guard lk(tickScriptsMtx);
+			scriptsThisTick.resize(scriptsThisTick.size());
+			for(std::size_t i = 0; i < tickScripts.size(); ++i) scriptsThisTick[i] = tickScripts[i];
+		}
+		for(Script* s : scriptsThisTick) {
+			s->OnDynTick(timestep);
 		}
 	}
 }

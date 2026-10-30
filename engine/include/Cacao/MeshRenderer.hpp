@@ -10,6 +10,9 @@ namespace Cacao {
 	  public:
 		MeshRenderer() {}
 
+		void OnEnable() override;
+		void OnDisable() override;
+
 		ASTRA_IGNORE std::shared_ptr<Mesh> mesh;
 		ASTRA_IGNORE std::shared_ptr<Material> material;
 
