@@ -455,6 +455,10 @@
 <span class="w">      </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsEnabled</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsSelfEnabled</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
 <span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">IsEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
@@ -517,6 +521,10 @@
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsActive</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsSelfActive</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
 
