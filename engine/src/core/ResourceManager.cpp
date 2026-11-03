@@ -101,6 +101,7 @@ namespace Cacao {
 	void ResourceManager::RegisterLoader(std::type_index tp, ResourceManager::ErasedLoader&& el) {
 		impl->loaders[tp] = std::move(el);
 	}
+
 	exathread::ValueTask<std::shared_ptr<Resource>> ResourceManager::_AsyncLoadOpImpl(std::string address, std::type_index tp) {
 		//Check cache
 		std::shared_ptr<Resource> maybeCached = CheckCache(address);
@@ -123,7 +124,7 @@ namespace Cacao {
 				co_return modelData.mdl->GetMesh(mesh);
 			} else {
 				//Load the model
-				ResourceManager::Impl::ModelData& modelData = impl->models[model];//[] syntax used to create
+				ResourceManager::Impl::ModelData modelData = impl->models[model];//[] syntax used to create
 				exathread::Future<std::shared_ptr<Model>> modelFut = ResourceManager::Get().Load<Model>(std::format("a:{}", model));
 				co_await exathread::yieldUntilComplete(modelFut);
 				modelData.mdl = *modelFut;

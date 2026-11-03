@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 #include <set>
+#include <mutex>
 
 namespace Cacao {
 	struct ResourceManager::Impl {

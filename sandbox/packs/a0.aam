@@ -1,3 +1,4 @@
 skybox.xjc: skybox
-cubey.xjm: cubey
 chords.opus: chords
+palmtree.glb: palm_tree
+palm.xjm: palm_tree_mat
