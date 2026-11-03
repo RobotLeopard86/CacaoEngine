@@ -11,6 +11,7 @@
 
 #include "libcacaoasset.hpp"
 
+#include <future>
 #include <memory>
 #include <typeindex>
 
@@ -90,6 +91,7 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<Resource> ResourceManager::CheckCache(const std::string& addr) {
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
 		return impl->cache.contains(addr) ? impl->cache[addr].lock() : std::shared_ptr<Resource>();
 	}
 
@@ -108,73 +110,73 @@ namespace Cacao {
 		if(maybeCached) co_return maybeCached;
 
 		//Embedded mesh/texture check
-		if(tp == std::type_index(typeid(Mesh))) {
+		if(tp == std::type_index(typeid(Mesh)) || (tp == std::type_index(typeid(Tex2D)) && address[0] == 'e')) {
 			Check<BadStateException>(IsLoaderRegistered(typeid(Model)), "No resource loader configured for the requested type!");
 
 			//Split address string
 			std::size_t slash = address.find_first_of('/');
 			std::string model = address.substr(2, slash - 2);
-			std::string mesh = address.substr(slash + 1);
+			std::string assetName = address.substr(slash + 1);
 
-			//First thing to check: do we have a ModelData instance already?
-			if(impl->models.contains(model)) {
-				//Great, just use that
-				ResourceManager::Impl::ModelData& modelData = impl->models[model];
-				modelData.loadedMeshes.insert(mesh);
-				co_return modelData.mdl->GetMesh(mesh);
-			} else {
+			//Model data creation safeguard
+			std::shared_ptr<ResourceManager::Impl::ModelData> modelData;
+			bool created = false;
+			{
+				std::lock_guard lk {impl->modelProtector};
+				if(impl->models.contains(model)) {
+					modelData = impl->models[model];
+				} else {
+					modelData = std::make_shared<ResourceManager::Impl::ModelData>();
+					impl->models[model] = modelData;
+					created = true;
+				}
+			}
+
+			//If we created this ModelData instance, we need to load it
+			if(created) {
+				//Create load promise
+				std::promise<std::shared_ptr<Model>> promise;
+				modelData->modelFuture = promise.get_future().share();
+
 				//Load the model
-				ResourceManager::Impl::ModelData modelData = impl->models[model];//[] syntax used to create
 				exathread::Future<std::shared_ptr<Model>> modelFut = ResourceManager::Get().Load<Model>(std::format("a:{}", model));
 				co_await exathread::yieldUntilComplete(modelFut);
-				modelData.mdl = *modelFut;
 
-				//Now return the mesh
-				modelData.loadedMeshes.insert(mesh);
-				co_return modelData.mdl->GetMesh(mesh);
-			}
-
-			//Check if the model data can be released due to all embedded assets being cached
-			ResourceManager::Impl::ModelData& modelData = impl->models[model];
-			if(modelData.loadedMeshes.size() == modelData.mdl->ListMeshes().size() && modelData.loadedTextures.size() == modelData.mdl->ListTextures().size()) {
-				modelData.mdl.reset();
-				impl->models.erase(model);
-			}
-		} else if(tp == std::type_index(typeid(Tex2D)) && address[0] == 'e') {
-			Check<BadStateException>(IsLoaderRegistered(typeid(Model)), "No resource loader configured for the requested type!");
-
-			//Split address string
-			std::size_t slash = address.find_first_of('/');
-			std::string model = address.substr(2, slash - 2);
-			std::string tex = address.substr(slash + 1);
-
-			//First thing to check: do we have a ModelData instance already?
-			if(impl->models.contains(model)) {
-				//Great, just use that
-				ResourceManager::Impl::ModelData& modelData = impl->models[model];
-				modelData.loadedTextures.insert(tex);
-				co_return modelData.mdl->GetTexture(tex);
+				//Resolve promise
+				std::shared_ptr<Model> loadedModel = *modelFut;
+				modelData->mdl = loadedModel;
+				promise.set_value(loadedModel);
 			} else {
-				//Load the model
-				ResourceManager::Impl::ModelData& modelData = impl->models[model];//[] syntax used to create
-				exathread::Future<std::shared_ptr<Model>> modelFut = ResourceManager::Get().Load<Model>(std::format("a:{}", model));
-				co_await exathread::yieldUntilComplete(modelFut);
-				modelData.mdl = *modelFut;
-
-				//Now return the mesh
-				modelData.loadedTextures.insert(tex);
-				co_return modelData.mdl->GetTexture(tex);
+				//Wait for the loading thread to finish
+				co_await exathread::yieldUntilTrue([modelData]() { return modelData->modelFuture.wait_for(1ns) == std::future_status::ready; });
 			}
 
-			//Check if the model data can be released due to all embedded assets being cached
-			ResourceManager::Impl::ModelData& modelData = impl->models[model];
-			if(modelData.loadedMeshes.size() == modelData.mdl->ListMeshes().size() && modelData.loadedTextures.size() == modelData.mdl->ListTextures().size()) {
-				modelData.mdl.reset();
-				impl->models.erase(model);
+			//Now that we have the model, update the tracking sets and get the asset
+			std::shared_ptr<Resource> result;
+			{
+				//Get the actual object
+				std::lock_guard lk {modelData->mutex};
+				if(tp == std::type_index(typeid(Mesh))) {
+					result = modelData->mdl->GetMesh(assetName);
+				} else {
+					result = modelData->mdl->GetTexture(assetName);
+				}
+				modelData->loadedTextures.insert(assetName);
+
+				//Check if the model data can be released due to all embedded assets being cached
+				if(modelData->loadedMeshes.size() == modelData->mdl->ListMeshes().size() && modelData->loadedTextures.size() == modelData->mdl->ListTextures().size()) {
+					std::lock_guard mapLk {impl->modelProtector};
+					if(impl->models.contains(model) && impl->models[model] == modelData) {
+						impl->models.erase(model);
+						modelData->mdl.reset();
+					}
+				}
 			}
+
+			co_return result;
 		}
 
-		//Resource was not in cache, we need to load it
+		//Resource was not in cache; we need to load it
 		//Check for a valid loader
 		Check<BadStateException>(IsLoaderRegistered(tp), "No resource loader configured for the requested type!");
 

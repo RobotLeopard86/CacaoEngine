@@ -3,5 +3,5 @@ renderMode: opaque
 parameters:
   - target: texture
     value:
-      address: e:palm_tree/TreeArt
+      address: a:palm_tree_tex
       isCubemap: false

@@ -164,6 +164,7 @@ namespace Cacao {
 		deviceFeatures2.features.setIndependentBlend(VK_TRUE);
 		deviceFeatures2.features.setOcclusionQueryPrecise(VK_TRUE);
 		deviceFeatures2.features.setPipelineStatisticsQuery(VK_TRUE);
+		deviceFeatures2.features.setSamplerAnisotropy(VK_TRUE);
 		vk::DeviceCreateInfo deviceCI({}, queueCI, {}, requiredDevExts, nullptr, &deviceFeatures2);
 		try {
 			dev = physDev.createDevice(deviceCI);

@@ -220,7 +220,7 @@ namespace libcacaoasset {
 		out.id = rd.Query<std::string>("id");
 		out.bytes = rd.Query<std::vector<unsigned char>>("bytes");
 		uint8_t typeNum = rd.Query<uint8_t>("type");
-		if(typeNum < 0 || typeNum > 6) throw std::runtime_error("Invalid type number!");
+		if(typeNum < 0 || typeNum > 7) throw std::runtime_error("Invalid type number!");
 		out.type = static_cast<Resource::Type>(typeNum);
 		return out;
 	}

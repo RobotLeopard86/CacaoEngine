@@ -1,6 +1,7 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/Mesh.hpp"
+#include "assimp/material.h"
 #include "assimp/vector3.h"
 #include "impl/ResourceManager.hpp"
 #include "ImplAccessor.hpp"
@@ -101,7 +102,6 @@ namespace Cacao {
 				//Check if this is a known format
 				std::string fmt = std::string(tex->achFormatHint).substr(0, 3);
 				if(tex->mHeight == 0 && !(fmt.compare("web") == 0 || fmt.compare("jpg") == 0 || fmt.compare("x-t") == 0 || fmt.compare("png") == 0 || fmt.compare("tif") == 0)) continue;
-
 				impl->textureIndex.insert_or_assign(tex->mFilename.length == 0 ? (std::string("Tex") + std::to_string(i)) : std::string(tex->mFilename.C_Str()), tex);
 			}
 		}
@@ -288,7 +288,7 @@ namespace Cacao {
 	}
 
 	std::shared_ptr<Tex2D> Model::GetTexture(const std::string& id) {
-		Check<NonexistentValueException>(impl->textureIndex.contains(id), "Cannot retrieve nonexistent mesh from texture!");
+		Check<NonexistentValueException>(impl->textureIndex.contains(id), "Cannot retrieve nonexistent texture from model!");
 
 		//Get texture info
 		aiTexture* tex = impl->textureIndex[id];

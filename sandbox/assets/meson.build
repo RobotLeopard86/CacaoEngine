@@ -6,6 +6,7 @@ skybox = custom_target('skybox.xjc', output: 'skybox.xjc', input: ['skybox.ajc',
 chords = fs.copyfile('chords.opus')
 
 # Palm tree material
+palm_tex = fs.copyfile('palmtree.png')
 palm_mat = custom_target('palm.xjm', output: 'palm.xjm', input: 'palm.ajm', console: true, build_by_default: true, command: [matc, '-V', '@INPUT@', '-o', '@OUTPUT@'])
 
 # Palm tree

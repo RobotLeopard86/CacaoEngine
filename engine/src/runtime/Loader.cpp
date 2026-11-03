@@ -338,6 +338,7 @@ std::shared_ptr<Material> RTLoader::CreateResource<Material>(const std::string& 
 				} else {
 					m->SetParameter(param.target, *ResourceManager::Get().Load<Cubemap>(val.address));
 				}
+				break;
 			}
 			case 5: {
 				auto val = std::get<libjaguar::Vector<float, 2>>(param.storage);
