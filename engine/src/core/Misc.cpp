@@ -11,36 +11,55 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/norm.hpp"
 
+#include "cacaoengine.astra.hpp"
+
 namespace Cacao {
 	ImplAccessor::ImplAccessor() {}
 
 	CACAOST_GET(ImplAccessor)
 
 	Script::~Script() = default;
-	astra::TypeId Cacao::Script::ASTRA__gettypeid() const {
-		return astra::TypeIdFactory<Cacao::Script>::get();
-	}
+
+	//VERY BIG HACK: this forces the Script class to actually generate a vtable
+	struct ScriptVTableIncluder {
+		ScriptVTableIncluder() {
+			delete new Script();
+		}
+	};
+	__attribute__((used)) ScriptVTableIncluder hack;
 
 	void Script::OnEnable() {
-		//TODO
+		//Add to script list
+		{
+			std::lock_guard lk(IMPL(TickController).tickScriptsMtx);
+			IMPL(TickController).tickScripts.insert(this);
+		}
 
 		//Forward to subclass behavior
 		OnEnabled();
 	}
 
 	void Script::OnDisable() {
-		//TODO
+		//Remove from script list
+		{
+			std::lock_guard lk(IMPL(TickController).tickScriptsMtx);
+			IMPL(TickController).tickScripts.erase(this);
+		}
 
 		//Forward to subclass behavior
 		OnDisabled();
 	}
 
 	void MeshRenderer::OnEnable() {
-		//TODO
+		//Add to renderer list
+		std::lock_guard lk(IMPL(GPUManager).renderersMtx);
+		IMPL(GPUManager).renderers.insert(this);
 	}
 
 	void MeshRenderer::OnDisable() {
-		//TODO
+		//Remove from renderer list
+		std::lock_guard lk(IMPL(GPUManager).renderersMtx);
+		IMPL(GPUManager).renderers.erase(this);
 	}
 
 }

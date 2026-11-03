@@ -22,18 +22,28 @@ namespace Cacao {
 		virtual ~Script();
 
 #ifdef _ASTRAGENERATE
-		Script() {
-		}
+		Script() {}
 #endif
 	  protected:
 #ifndef _ASTRAGENERATE
 		Script() {}
 		friend struct astra::CommonActions<Script>;
+		friend struct ScriptVTableIncluder;
 #endif
 
+		///@cond
 		void OnEnable() override final;
 		void OnDisable() override final;
+		///@endcond
+
+		/**
+		 * @brief Called when the script is enabled
+		 */
 		virtual void OnEnabled() {}
+
+		/**
+		 * @brief Called when the script is disabled
+		 */
 		virtual void OnDisabled() {}
 	};
 }

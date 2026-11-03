@@ -122,11 +122,10 @@ namespace Cacao {
 		if(!world) return;
 
 		//Execute scripts
-		static std::vector<Script*> scriptsThisTick;
+		std::set<Script*> scriptsThisTick;
 		{
 			std::lock_guard lk(tickScriptsMtx);
-			scriptsThisTick.resize(scriptsThisTick.size());
-			for(std::size_t i = 0; i < tickScripts.size(); ++i) scriptsThisTick[i] = tickScripts[i];
+			scriptsThisTick = tickScripts;
 		}
 		for(Script* s : scriptsThisTick) {
 			s->OnDynTick(timestep);

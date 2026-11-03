@@ -4,6 +4,7 @@
 #include <memory>
 #include <mutex>
 #include <thread>
+#include <set>
 
 #include "Cacao/Script.hpp"
 #include "Cacao/TickController.hpp"
@@ -33,7 +34,7 @@ namespace Cacao {
 		std::atomic<bool> tickControllerNeedsForShutdown = false;
 
 		//List of scripts to run each tick
-		std::vector<Script*> tickScripts;
+		std::set<Script*> tickScripts;
 		std::mutex tickScriptsMtx;
 	};
 }

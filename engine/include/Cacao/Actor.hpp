@@ -361,6 +361,7 @@ namespace Cacao {
 			requires std::is_base_of_v<Component, T>
 		void UnmountComponent() {
 			Check<NonexistentValueException>(HasComponent<T>(), "A component of the type specified does not exist on the actor!");
+			GetComponent<T>().OnUnmount();
 			components.erase(std::type_index(typeid(T)));
 		}
 

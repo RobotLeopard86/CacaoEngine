@@ -5,6 +5,7 @@
 
 #include <thread>
 #include <atomic>
+#include <set>
 
 #define FPS_AVG_WINDOW 5
 
@@ -68,8 +69,7 @@ namespace Cacao {
 		std::optional<std::shared_future<void>> immediateExecutionTask;
 
 		//List of mesh renderers to draw each frame
-		std::map<float, std::vector<MeshRenderer*>> renderersOpaque;
-		std::map<float, std::vector<MeshRenderer*>> renderersTransparent;
+		std::set<MeshRenderer*> renderers;
 		std::mutex renderersMtx;
 	};
 }

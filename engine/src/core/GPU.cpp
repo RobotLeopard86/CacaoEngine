@@ -1,5 +1,6 @@
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
+#include "Cacao/Mesh.hpp"
 #include "Cacao/MeshRenderer.hpp"
 #include "Cacao/PAL.hpp"
 #include "Cacao/ResourceManager.hpp"
@@ -222,12 +223,19 @@ namespace Cacao {
 		cmd->StartRendering(linearClearColor);
 
 		//Gather frame renderer data
-		static std::map<float, std::vector<MeshRenderer*>> opaque;
-		static std::map<float, std::vector<MeshRenderer*>> transparent;
+		std::set<MeshRenderer*> renderersThisFrame;
 		{
 			std::lock_guard lk(renderersMtx);
-			for(const auto& [distance, mrs] : renderersOpaque) opaque[distance] = mrs;
-			for(const auto& [distance, mrs] : renderersTransparent) transparent[distance] = mrs;
+			renderersThisFrame = renderers;
+		}
+		std::map<float, std::vector<MeshRenderer*>> opaque, transparent;
+		for(MeshRenderer* mr : renderersThisFrame) {
+			float distance = glm::length2(mr->GetOwner().GetWorld()->cam->GetPosition() - mr->GetOwner()->GetWorldTransform().GetPosition());
+			if(mr->material->GetRenderMode() != libcacaoasset::Material::RenderMode::Transparent) {
+				opaque[distance].push_back(mr);
+			} else {
+				transparent[distance].push_back(mr);
+			}
 		}
 
 		//Run pre-opaque callbacks
