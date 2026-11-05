@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Class State::MutationProxy &#8212; Cacao Engine Docs</title>
+    <title>Class EffectOutput &#8212; Cacao Engine Docs</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Reactivity_1_1State_1_1MutationProxy';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1EffectOutput';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
@@ -55,8 +55,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Resource" href="classCacao_1_1Resource.html" />
-    <link rel="prev" title="Template Class State" href="classCacao_1_1Reactivity_1_1State.html" />
+    <link rel="next" title="Class Engine" href="classCacao_1_1Engine.html" />
+    <link rel="prev" title="Class Dependency" href="classCacao_1_1Dependency.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -341,9 +341,6 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__Reactivity.html">Namespace Cacao::Reactivity</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -389,10 +386,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Computed.html">Template Class Computed</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Dependency.html">Class Dependency</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class EffectOutput</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
@@ -405,6 +411,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -440,27 +449,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Computed.html">Template Class Computed</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html">Class Dependency</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1EffectOutput.html">Class EffectOutput</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1SideEffect.html">Class SideEffect</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1State.html">Template Class State</a></li>
-</ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Class State::MutationProxy</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -470,7 +458,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State.html">Template Class State</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
@@ -544,7 +541,7 @@
     
     <li class="breadcrumb-item"><a href="root.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class State::MutationProxy</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Class EffectOutput</span></li>
   </ul>
 </nav>
 </div>
@@ -561,46 +558,27 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="class-state-mutationproxy">
-<span id="exhale-class-classcacao-1-1reactivity-1-1state-1-1mutationproxy"></span><h1>Class State::MutationProxy<a class="headerlink" href="#class-state-mutationproxy" title="Link to this heading"><span/></a></h1>
+  <section id="class-effectoutput">
+<span id="exhale-class-classcacao-1-1effectoutput"></span><h1>Class EffectOutput<a class="headerlink" href="#class-effectoutput" title="Link to this heading"><span/></a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Reactivity.hpp.html#file-engine-include-cacao-reactivity-hpp"><span class="std std-ref">File Reactivity.hpp</span></a></p></li>
 </ul>
-<section id="nested-relationships">
-<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Link to this heading"><span/></a></h2>
-<p>This class is a nested type of <a class="reference internal" href="classCacao_1_1Reactivity_1_1State.html#exhale-class-classcacao-1-1reactivity-1-1state"><span class="std std-ref">Template Class State</span></a>.</p>
+<section id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
+<section id="derived-type">
+<h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::State&lt;</span> <span class="pre">T</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classCacao_1_1State.html#exhale-class-classcacao-1-1state"><span class="std std-ref">Template Class State</span></a>)</p></li>
+</ul>
+</section>
 </section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10Reactivity5State13MutationProxyE">
-<span id="_CPPv3N5Cacao10Reactivity5State13MutationProxyE"></span><span id="_CPPv2N5Cacao10Reactivity5State13MutationProxyE"></span><span id="Cacao::Reactivity::State::MutationProxy"></span><span class="target" id="classCacao_1_1Reactivity_1_1State_1_1MutationProxy"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MutationProxy</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxyE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>A small proxy object for controlling access to state mutation. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10Reactivity5State13MutationProxycvR1TEv">
-<span id="_CPPv3N5Cacao10Reactivity5State13MutationProxycvR1TEv"></span><span id="_CPPv2N5Cacao10Reactivity5State13MutationProxycvR1TEv"></span><span id="Cacao::Reactivity::State::MutationProxy::castto-TR-operator"></span><span class="target" id="classCacao_1_1Reactivity_1_1State_1_1MutationProxy_1a6e82c282b762a6c548ca39feafdf4223"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxycvR1TEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get the current value. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The current held value </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10Reactivity5State13MutationProxyptEv">
-<span id="_CPPv3N5Cacao10Reactivity5State13MutationProxyptEv"></span><span id="_CPPv2N5Cacao10Reactivity5State13MutationProxyptEv"></span><span id="Cacao::Reactivity::State::MutationProxy::pointer-operator"></span><span class="target" id="classCacao_1_1Reactivity_1_1State_1_1MutationProxy_1a80a8f7e1816e2ea867ed1e041f2aa59e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-&gt;</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxyptEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Access the current value in a writable manner. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao10Reactivity5State13MutationProxyD0Ev">
-<span id="_CPPv3N5Cacao10Reactivity5State13MutationProxyD0Ev"></span><span id="_CPPv2N5Cacao10Reactivity5State13MutationProxyD0Ev"></span><span id="Cacao::Reactivity::State::MutationProxy::~MutationProxy"></span><span class="target" id="classCacao_1_1Reactivity_1_1State_1_1MutationProxy_1aaf49064bc0ac4e2bbfc4522076c012a9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~MutationProxy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxyD0Ev" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
-
-</div>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao12EffectOutputE">
+<span id="_CPPv3N5Cacao12EffectOutputE"></span><span id="_CPPv2N5Cacao12EffectOutputE"></span><span id="Cacao::EffectOutput"></span><span class="target" id="classCacao_1_1EffectOutput"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EffectOutput</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao12EffectOutputE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>A marker base class for all objects that may be declared as a side effect output. </p>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1State.html#classCacao_1_1State"><span class="std std-ref">Cacao::State&lt; T &gt;</span></a></p>
 </dd></dl>
 
 </section>
@@ -617,20 +595,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Reactivity_1_1State.html"
+       href="classCacao_1_1Dependency.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Template Class State</p>
+        <p class="prev-next-title">Class Dependency</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Resource.html"
+       href="classCacao_1_1Engine.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Resource</p>
+        <p class="prev-next-title">Class Engine</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -653,14 +631,12 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-relationships">Nested Relationships</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxyE"><code class="docutils literal notranslate"><span class="pre">Cacao::Reactivity::State::MutationProxy</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxycvR1TEv"><code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">T&amp;()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxyptEv"><code class="docutils literal notranslate"><span class="pre">operator-&gt;()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao10Reactivity5State13MutationProxyD0Ev"><code class="docutils literal notranslate"><span class="pre">~MutationProxy()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao12EffectOutputE"><code class="docutils literal notranslate"><span class="pre">Cacao::EffectOutput</span></code></a></li>
 </ul>
 </li>
 </ul>

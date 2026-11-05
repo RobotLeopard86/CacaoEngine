@@ -55,7 +55,7 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Namespace Cacao::Reactivity" href="namespace_Cacao__Reactivity.html" />
+    <link rel="next" title="Struct ClientIdentity" href="structCacao_1_1ClientIdentity.html" />
     <link rel="prev" title="API Reference" href="root.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -341,9 +341,6 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__Reactivity.html">Namespace Cacao::Reactivity</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -389,10 +386,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Computed.html">Template Class Computed</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Dependency.html">Class Dependency</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EffectOutput.html">Class EffectOutput</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
@@ -405,6 +411,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -440,27 +449,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Computed.html">Template Class Computed</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html">Class Dependency</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1EffectOutput.html">Class EffectOutput</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1SideEffect.html">Class SideEffect</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1State.html">Template Class State</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -470,7 +458,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State.html">Template Class State</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
@@ -566,17 +563,10 @@
 <nav class="contents local" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#namespaces" id="id2">Namespaces</a></p></li>
-<li><p><a class="reference internal" href="#classes" id="id3">Classes</a></p></li>
-<li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id2">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id3">Functions</a></p></li>
 </ul>
 </nav>
-<section id="namespaces">
-<h2>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading"><span/></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="namespace_Cacao__Reactivity.html#namespace-cacao-reactivity"><span class="std std-ref">Namespace Cacao::Reactivity</span></a></p></li>
-</ul>
-</section>
 <section id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
@@ -595,12 +585,16 @@
 <li><p><a class="reference internal" href="classCacao_1_1CodeRegistry.html#exhale-class-classcacao-1-1coderegistry"><span class="std std-ref">Class CodeRegistry</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1CommandBuffer.html#exhale-class-classcacao-1-1commandbuffer"><span class="std std-ref">Class CommandBuffer</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Component.html#exhale-class-classcacao-1-1component"><span class="std std-ref">Class Component</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1Computed.html#exhale-class-classcacao-1-1computed"><span class="std std-ref">Template Class Computed</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Cubemap.html#exhale-class-classcacao-1-1cubemap"><span class="std std-ref">Class Cubemap</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1DataEvent.html#exhale-class-classcacao-1-1dataevent"><span class="std std-ref">Template Class DataEvent</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1Dependency.html#exhale-class-classcacao-1-1dependency"><span class="std std-ref">Class Dependency</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1EffectOutput.html#exhale-class-classcacao-1-1effectoutput"><span class="std std-ref">Class EffectOutput</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Engine.html#exhale-class-classcacao-1-1engine"><span class="std std-ref">Class Engine</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Event.html#exhale-class-classcacao-1-1event"><span class="std std-ref">Class Event</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1EventConsumer.html#exhale-class-classcacao-1-1eventconsumer"><span class="std std-ref">Class EventConsumer</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1EventManager.html#exhale-class-classcacao-1-1eventmanager"><span class="std std-ref">Class EventManager</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1ExternalBinding.html#exhale-class-classcacao-1-1externalbinding"><span class="std std-ref">Template Class ExternalBinding</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1GPUManager.html#exhale-class-classcacao-1-1gpumanager"><span class="std std-ref">Class GPUManager</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Input.html#exhale-class-classcacao-1-1input"><span class="std std-ref">Class Input</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Logger.html#exhale-class-classcacao-1-1logger"><span class="std std-ref">Class Logger</span></a></p></li>
@@ -615,7 +609,10 @@
 <li><p><a class="reference internal" href="classCacao_1_1Resource.html#exhale-class-classcacao-1-1resource"><span class="std std-ref">Class Resource</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Script.html#exhale-class-classcacao-1-1script"><span class="std std-ref">Class Script</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Shader.html#exhale-class-classcacao-1-1shader"><span class="std std-ref">Class Shader</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1SideEffect.html#exhale-class-classcacao-1-1sideeffect"><span class="std std-ref">Class SideEffect</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Sound.html#exhale-class-classcacao-1-1sound"><span class="std std-ref">Class Sound</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1State.html#exhale-class-classcacao-1-1state"><span class="std std-ref">Template Class State</span></a></p></li>
+<li><p><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html#exhale-class-classcacao-1-1state-1-1mutationproxy"><span class="std std-ref">Class State::MutationProxy</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Tex2D.html#exhale-class-classcacao-1-1tex2d"><span class="std std-ref">Class Tex2D</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1TickController.html#exhale-class-classcacao-1-1tickcontroller"><span class="std std-ref">Class TickController</span></a></p></li>
 <li><p><a class="reference internal" href="classCacao_1_1Transform.html#exhale-class-classcacao-1-1transform"><span class="std std-ref">Class Transform</span></a></p></li>
@@ -627,8 +624,8 @@
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"><span/></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="function_Exceptions_8hpp_1a48f6ba71da437dc9c594a1a4e4ea3b78.html#exhale-function-exceptions-8hpp-1a48f6ba71da437dc9c594a1a4e4ea3b78"><span class="std std-ref">Template Function Cacao::Check(bool, std::string_view, std::function&lt;void()&gt;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_Exceptions_8hpp_1ad26bb9089bbca4800d0aa8c4fdda256f.html#exhale-function-exceptions-8hpp-1ad26bb9089bbca4800d0aa8c4fdda256f"><span class="std std-ref">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string_view, std::function&lt;void()&gt;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_Exceptions_8hpp_1a48f6ba71da437dc9c594a1a4e4ea3b78.html#exhale-function-exceptions-8hpp-1a48f6ba71da437dc9c594a1a4e4ea3b78"><span class="std std-ref">Template Function Cacao::Check(bool, std::string_view, std::function&lt;void()&gt;)</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -653,11 +650,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="namespace_Cacao__Reactivity.html"
+       href="structCacao_1_1ClientIdentity.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Namespace Cacao::Reactivity</p>
+        <p class="prev-next-title">Struct ClientIdentity</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -680,7 +677,6 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespaces">Namespaces</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 </ul>

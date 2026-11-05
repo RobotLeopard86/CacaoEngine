@@ -55,8 +55,8 @@
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Tex2D" href="classCacao_1_1Tex2D.html" />
-    <link rel="prev" title="Class Shader" href="classCacao_1_1Shader.html" />
+    <link rel="next" title="Template Class State" href="classCacao_1_1State.html" />
+    <link rel="prev" title="Class SideEffect" href="classCacao_1_1SideEffect.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -341,9 +341,6 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__Reactivity.html">Namespace Cacao::Reactivity</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -389,10 +386,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Computed.html">Template Class Computed</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Dependency.html">Class Dependency</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EffectOutput.html">Class EffectOutput</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
@@ -405,6 +411,9 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -440,27 +449,6 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PerspectiveCamera.html">Class PerspectiveCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Computed.html">Template Class Computed</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1Dependency.html">Class Dependency</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1EffectOutput.html">Class EffectOutput</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1SideEffect.html">Class SideEffect</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1State.html">Template Class State</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Reactivity_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -469,8 +457,17 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Sound</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State.html">Template Class State</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
@@ -656,20 +653,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="classCacao_1_1Shader.html"
+       href="classCacao_1_1SideEffect.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Class Shader</p>
+        <p class="prev-next-title">Class SideEffect</p>
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Tex2D.html"
+       href="classCacao_1_1State.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Tex2D</p>
+        <p class="prev-next-title">Template Class State</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
