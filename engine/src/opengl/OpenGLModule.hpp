@@ -3,6 +3,7 @@
 #include "Cacao/GPU.hpp"
 #include "impl/PAL.hpp"
 #include "impl/GPUManager.hpp"
+#include "BackendCommon.hpp"   // IWYU pragma: keep
 #include "Cacao/Exceptions.hpp"// IWYU pragma: keep
 
 #include <queue>
@@ -59,9 +60,12 @@ namespace Cacao {
 			tasks.push_back(task);
 		}
 
+		void DrawMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, Transform transform) override;
+
 	  protected:
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
+		void UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) override;
 
 	  private:
 		std::vector<std::function<void()>> tasks;
@@ -98,7 +102,13 @@ namespace Cacao {
 		Mesh::Impl* ConfigureMesh() override;
 		Tex2D::Impl* ConfigureTex2D() override;
 		Cubemap::Impl* ConfigureCubemap() override;
+		Shader::Impl* ConfigureShader() override;
+		Material::Impl* ConfigureMaterial() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
+
+		//==================== GLOBAL STATE ====================
+		GLuint shaderBindingCounter = 1;
+		GLuint globalsUBO;
 
 		OpenGLModule()
 		  : PALModule("opengl") {}

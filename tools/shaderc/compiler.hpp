@@ -2,16 +2,12 @@
 
 #include "slang.h"
 #include "slang-com-ptr.h"
-#include "slang-com-helper.h"
 
 using Slang::ComPtr;
 
 #include <string>
 #include <filesystem>
 #include <utility>
-#include <optional>
-
-#include "libcacaoformats.hpp"
 
 class CacaoShaderCompiler {
   public:

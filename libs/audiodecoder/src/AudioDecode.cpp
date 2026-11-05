@@ -1,6 +1,6 @@
 #include "AudioDecode.hpp"
 
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 #include "libcacaoaudiodecode.hpp"
 
 #define DR_MP3_IMPLEMENTATION

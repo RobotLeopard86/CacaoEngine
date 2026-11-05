@@ -7,7 +7,7 @@ index aa1d96d..697722d 100644
  
  if host_machine.system() == 'windows'
 -  sources += import('windows').compile_resources('tif_win32_versioninfo.rc')
-+  sources += import('windows').compile_resources('tif_win32_versioninfo.rc', depend_files: tiffvers_h)
++  sources += import('windows').compile_resources('tif_win32_versioninfo.rc', depend_files: tiffvers_h, include_directories: meson.current_build_dir())
  endif
  
  tiff4_lib = library(

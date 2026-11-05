@@ -1,0 +1,479 @@
+skybox: a:skybox
+skyboxRotation:
+  x: 0
+  y: 0.7071068
+  z: 0
+  w: -0.7071068
+cam:
+  position:
+    x: 0
+    y: 0
+    z: 0
+  rotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
+  clear: 00ACE6
+  orthographic: false
+actors:
+  - name: Rotator
+    active: true
+    guid: c5cad2e0-ae55-4de5-9b91-c91773e43de6
+    parent: 0
+    transform:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: rotator
+        enabled: true
+        rfl: {}
+      - id: cacao.audioPlayer
+        enabled: true
+        rfl:
+          sound: a:chords
+          autoplay: true
+          loop: true
+  - name: Tree1
+    active: true
+    guid: aab4d03b-1f4e-4829-bcc2-531e41169d19
+    parent: 0
+    transform:
+      position:
+        x: 0
+        y: -1
+        z: 5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree2
+    active: true
+    guid: 0e5a2fd4-e243-48d3-ac9f-fe3112378c30
+    parent: 0
+    transform:
+      position:
+        x: 0
+        y: -1
+        z: -5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree3
+    active: true
+    guid: 898967b6-5493-439e-b15c-3d17f1245284
+    parent: 0
+    transform:
+      position:
+        x: -5
+        y: -1
+        z: -5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree4
+    active: true
+    guid: 6ca20304-5336-4952-9c5f-8f5a60af8f45
+    parent: 0
+    transform:
+      position:
+        x: 5
+        y: -1
+        z: 5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree5
+    active: true
+    guid: baaf8e48-daea-4715-83a0-25e2f5d65b79
+    parent: 0
+    transform:
+      position:
+        x: -5
+        y: -1
+        z: 5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree6
+    active: true
+    guid: f3e5e8cf-8977-4d03-be79-ebb2d5ed5a7b
+    parent: 0
+    transform:
+      position:
+        x: 5
+        y: -1
+        z: -5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree7
+    active: true
+    guid: 21183183-dcdd-489d-ad83-c56194a5288f
+    parent: 0
+    transform:
+      position:
+        x: 2.5
+        y: -1
+        z: 2.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree8
+    active: true
+    guid: cc0b5cc4-f2e9-4c31-a5b7-0db22c3d28df
+    parent: 0
+    transform:
+      position:
+        x: 2.5
+        y: -1
+        z: -2.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree9
+    active: true
+    guid: 9bb65412-ed0b-4ea9-a7ba-f8d26beb926b
+    parent: 0
+    transform:
+      position:
+        x: -2.5
+        y: -1
+        z: 2.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree10
+    active: true
+    guid: 1fd9b15e-aa5a-450a-8fa8-3e85565a2dee
+    parent: 0
+    transform:
+      position:
+        x: -2.5
+        y: -1
+        z: -2.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree11
+    active: true
+    guid: 4b660e11-67b6-4233-a2b2-33df46d0d1ab
+    parent: 0
+    transform:
+      position:
+        x: 7.5
+        y: -1
+        z: 7.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree12
+    active: true
+    guid: 9d755588-049d-41fe-9a0c-8cebea044253
+    parent: 0
+    transform:
+      position:
+        x: 7.5
+        y: -1
+        z: -7.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree13
+    active: true
+    guid: 17f16e25-de39-4592-99d7-4ece0a9ad2d2
+    parent: 0
+    transform:
+      position:
+        x: -7.5
+        y: -1
+        z: 7.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree14
+    active: true
+    guid: 1af2c0d3-e156-4ea6-9c95-0c492c6a24f8
+    parent: 0
+    transform:
+      position:
+        x: -7.5
+        y: -1
+        z: 7.5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree15
+    active: true
+    guid: 23d84eff-afd7-4607-896a-ccdec95d3809
+    parent: 0
+    transform:
+      position:
+        x: 1
+        y: -1
+        z: 15
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree16
+    active: true
+    guid: ae3e7f63-d28e-479b-af03-1d715df85aaa
+    parent: 0
+    transform:
+      position:
+        x: -1
+        y: -1
+        z: 15
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree17
+    active: true
+    guid: 73477917-4f14-4b4a-b78c-a738aa7d2502
+    parent: 0
+    transform:
+      position:
+        x: 1
+        y: -1
+        z: -15
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat
+  - name: Tree18
+    active: true
+    guid: 242c0b61-60e9-48c0-90b1-4d8b2f9dc637
+    parent: 0
+    transform:
+      position:
+        x: -1
+        y: -1
+        z: -15
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: m:palm_tree/Tree
+          material: a:palm_tree_mat

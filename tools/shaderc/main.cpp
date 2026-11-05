@@ -1,6 +1,7 @@
 #include "CLI11.hpp"
 #include "spinners.hpp"
 
+#include <thread>
 #include <vector>
 #include <filesystem>
 #include <iostream>
@@ -12,6 +13,11 @@
 #ifndef CACAO_VER
 #define CACAO_VER "unknown"
 #endif
+
+#ifndef CACAO_RELEASE_NICKNAME
+#define CACAO_RELEASE_NICKNAME "Name TBD"
+#endif
+
 #ifndef COMPILER_VER
 #define COMPILER_VER "unknown"
 #endif
@@ -54,7 +60,7 @@ int main(int argc, char* argv[]) {
 	//Version arg
 	app.set_version_flag("-v,--version", []() {
         std::stringstream ss;
-        ss << "Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER;
+        ss << "Shader Compiler v" << COMPILER_VER << "\nFor Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")";
         return ss.str(); }, "Show version info and exit");
 
 	//Parse the CLI
@@ -92,19 +98,17 @@ int main(int argc, char* argv[]) {
 	VLOG("Done.")
 
 	//Compilation
+	std::unique_ptr<jms::Spinner> s;
 	try {
-		//Create compiler object
-		CacaoShaderCompiler csc;
-
-		//Compile
-		std::unique_ptr<jms::Spinner> s;
 		for(const auto& [in, out] : tasks) {
-			std::stringstream taskDesc;
-			taskDesc << "Compiling " << in << "...";
 			if(outputLvl != OutputLevel::Silent) {
-				s = std::make_unique<jms::Spinner>(taskDesc.str(), jms::dots);
+				s = std::make_unique<jms::Spinner>("Waiting for compiler to finish initializing...", jms::dots);
 				s->start();
 			}
+			CacaoShaderCompiler csc;
+			std::stringstream taskDesc;
+			taskDesc << "Compiling " << in << "...";
+			if(outputLvl != OutputLevel::Silent) s->setText(taskDesc.str());
 			auto [result, log] = csc.compile(in, out);
 			if(outputLvl != OutputLevel::Silent) {
 				taskDesc.str("");
@@ -117,13 +121,14 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			if(!result) {
-				ERROR("Failed to compile one or more shaders!")
-				std::cerr << "====== ERROR LOG ======\n"
-						  << log << "\n=======================" << std::endl;
+				s->finish(jms::FinishedState::FAILURE, "Failed to compile one or more shaders!");
+				ERROR("====== ERROR LOG ======\n"
+					  << log << "\n=======================");
 				return 1;
 			}
 		}
 	} catch(const std::exception& e) {
+		s->finish(jms::FinishedState::FAILURE, "Failed to compile one or more shaders!");
 		ERROR("Exception caught during compilation: " << e.what())
 		return 1;
 	}

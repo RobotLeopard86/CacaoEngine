@@ -3,12 +3,15 @@ gladgl_dep = subproject('glad-gl', required: true).get_variable('glad_gl_dep')
 
 # Add base OpenGL module info
 engine_srcs += files(
-	'OpenGLModule.cpp',
-	'GPU.cpp',
 	'Commands.cpp',
+	'GLSL.cpp',
+	'GPU.cpp',
+	'OpenGLModule.cpp',
 	'impls' / 'OpenGLMesh.cpp',
 	'impls' / 'OpenGLTex2D.cpp',
-	'impls' / 'OpenGLCubemap.cpp'
+	'impls' / 'OpenGLCubemap.cpp',
+	'impls' / 'OpenGLShader.cpp',
+	'impls' / 'OpenGLMaterial.cpp'
 )
 engine_inc += include_directories('.')
 engine_deps += gladgl_dep

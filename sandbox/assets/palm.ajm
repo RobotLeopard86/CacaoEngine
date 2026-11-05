@@ -1,0 +1,7 @@
+shaderAddress: a:builtin_basic_texture_shader
+renderMode: opaque
+parameters:
+  - target: texture
+    value:
+      address: a:palm_tree_tex
+      isCubemap: false

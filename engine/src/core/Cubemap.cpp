@@ -2,6 +2,8 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Cubemap.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
 
 #include "libcacaoimage.hpp"
@@ -27,16 +29,23 @@ namespace Cacao {
 			//Convert to 8-bit
 			if(images[i].bitsPerChannel == 16) images[i] = libcacaoimage::Convert16To8BitColor(images[i]);
 
-			//Ensure RGB layout
-			if(images[i].layout != libcacaoimage::Image::Layout::RGB) images[i] = libcacaoimage::ChangeChannelLayout(images[i], libcacaoimage::Image::Layout::RGB);
+			//Ensure RGBA layout
+			if(images[i].layout != libcacaoimage::Image::Layout::RGBA) images[i] = libcacaoimage::ChangeChannelLayout(images[i], libcacaoimage::Image::Layout::RGBA);
 		}
 
 		//Fill data
 		impl->faces = std::move(images);
 	}
 
+	std::shared_ptr<Cubemap> Cubemap::Create(std::array<libcacaoimage::Image, 6>&& faces, const std::string& addr) {
+		std::shared_ptr<Cubemap> ptr(new Cubemap(std::move(faces), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
+	}
+
 	Cubemap::~Cubemap() {
-		if(realized) DropRealized();
+		if(baked) Discard();
 	}
 
 	Cubemap::Cubemap(Cubemap&& other)
@@ -44,9 +53,9 @@ namespace Cacao {
 		//Steal the implementation pointer
 		impl = std::move(other.impl);
 
-		//Copy realization state
-		realized = other.realized;
-		other.realized = false;
+		//Copy baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Blank out other asset address
 		other.address = "";
@@ -56,9 +65,9 @@ namespace Cacao {
 		//Implementation pointer
 		impl = std::move(other.impl);
 
-		//Realization state
-		realized = other.realized;
-		other.realized = false;
+		//Baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Asset address
 		address = other.address;
@@ -67,16 +76,16 @@ namespace Cacao {
 		return *this;
 	}
 
-	void Cubemap::Realize() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized cubemap!");
+	void Cubemap::Bake() {
+		Check<BadBakeStateException>(!baked, "Cannot bake a baked cubemap!");
 
-		impl->Realize(realized);
+		impl->Bake(baked);
 	}
 
-	void Cubemap::DropRealized() {
-		Check<BadRealizeStateException>(realized, "Cannot drop the realized representation of an unrealized cubemap; it does not exist!");
+	void Cubemap::Discard() {
+		Check<BadBakeStateException>(baked, "Cannot discard baked representation of an unbaked cubemap; it does not exist!");
 
-		realized = false;
-		impl->DropRealized();
+		baked = false;
+		impl->Discard();
 	}
 }

@@ -110,6 +110,9 @@ namespace Cacao {
 			EGL_CONTEXT_MAJOR_VERSION, 4,
 			EGL_CONTEXT_MINOR_VERSION, 1,
 			EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+#ifdef _DEBUG
+			EGL_CONTEXT_OPENGL_DEBUG, GL_TRUE,
+#endif
 			EGL_NONE};
 		impl->ctx = eglCreateContext(impl->dpy, impl->cfg, EGL_NO_CONTEXT, contextAttribs);
 		Check<ExternalException>(impl->ctx != EGL_NO_CONTEXT, "Failed to create OpenGL context!");

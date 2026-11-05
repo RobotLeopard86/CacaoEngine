@@ -1,7 +1,7 @@
 # Cacao Engine Material Compiler
 
 ## About
-A tool that compiles Cacao Engine unpacked materials (.ajm) to packed materials that can be used in a game bundle (.xjm). It's a thin wrapper over [`libcacaoformats`](../../libs/formats/README.md), so that can also be used and the same result should be achieved.
+A tool that compiles Cacao Engine material definition files (.ajm) to compiled materials that can be used in a game bundle (.xjm).
 
 ## Command-Line Usage
 ```

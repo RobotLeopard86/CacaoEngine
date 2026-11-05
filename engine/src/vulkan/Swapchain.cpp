@@ -1,28 +1,15 @@
 #include "VulkanModule.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "vulkan/vulkan.hpp"
+#include "vulkan/vulkan_core.h"
+#include "vulkan/vulkan_enums.hpp"
+#include "vulkan/vulkan_handles.hpp"
+#include "vulkan/vulkan_structs.hpp"
 
-#include <atomic>
 #include <cstdint>
 
 namespace Cacao {
-	void SetupRenderingContext(std::unique_ptr<RenderCommandContext>& rcc) {
-		rcc->imageIndex = UINT32_MAX;
-		rcc->available.store(true);
-		vk::SemaphoreCreateInfo semCreate {};
-		vk::SemaphoreTypeCreateInfoKHR semTypeCI(vk::SemaphoreType::eTimeline, 0);
-		try {
-			rcc->acquire = vulkan->dev.createSemaphore(semCreate);
-			rcc->render = vulkan->dev.createSemaphore(semCreate);
-			rcc->sync.semaphore = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {{}, &semTypeCI});
-			rcc->sync.doneValue = 0;
-		} catch(vk::SystemError& err) {
-			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
-			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
-			Check<ExternalException>(false, "Failed to create synchronization objects for rendering command context!");
-		}
-	}
-
 	void VulkanGPU::GenSwapchain() {
 		//Lock the command buffer queue mutex
 		//This will block the GPU thread from running more commands until we're done (that would be bad)
@@ -59,12 +46,17 @@ namespace Cacao {
 			{}, vulkan->surface, std::clamp((vulkan->capabilities.minImageCount + 2), vulkan->capabilities.minImageCount, (vulkan->capabilities.maxImageCount > 0 ? vulkan->capabilities.maxImageCount : UINT32_MAX)),
 			vulkan->surfaceFormat.format, vulkan->surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment, vk::SharingMode::eExclusive);
 		swapchainCI.setPresentMode(presentMode);
+		swapchainCI.setClipped(VK_TRUE);
 		if(vulkan->swapchain.chain) swapchainCI.setOldSwapchain(vulkan->swapchain.chain);
 		try {
 			vk::SwapchainKHR newSwapchain = vulkan->dev.createSwapchainKHR(swapchainCI);
 			if(vulkan->swapchain.chain) {
 				for(vk::ImageView& view : vulkan->swapchain.views) {
 					vulkan->dev.destroyImageView(view);
+				}
+				for(ViewImage& vi : vulkan->swapchain.depthImages) {
+					vulkan->dev.destroyImageView(vi.view);
+					vulkan->allocator.destroyImage(vi.obj, vi.alloc);
 				}
 				vulkan->dev.destroySwapchainKHR(vulkan->swapchain.chain);
 			}
@@ -101,46 +93,107 @@ namespace Cacao {
 			}
 		}
 
-		//Destroy old depth objects
-		vulkan->dev.destroyImageView(vulkan->depth.view);
-		vulkan->allocator.destroyImage(vulkan->depth.obj, vulkan->depth.alloc);
-
-		//Create new depth image and view
-		vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {vulkan->swapchain.extent.width, vulkan->swapchain.extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
-			vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::SharingMode::eExclusive);
-		vma::AllocationCreateInfo depthAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
-		{
-			auto [img, alloc] = vulkan->allocator.createImage(depthCI, depthAllocCI);
-			vulkan->depth.alloc = alloc;
-			vulkan->depth.obj = img;
+		//Create new acquire semaphores
+		for(vk::Semaphore& sem : vulkan->swapchain.acquireSems) {
+			vulkan->dev.destroySemaphore(sem);
 		}
-		vk::ImageViewCreateInfo depthViewCI(
-			{}, vulkan->depth.obj, vk::ImageViewType::e2D, vulkan->selectedDF, {},
-			vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, 1));
+		vulkan->swapchain.acquireSems.resize(vulkan->swapchain.images.size());
+		for(vk::Semaphore& sem : vulkan->swapchain.acquireSems) {
+			sem = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {});
+		}
+		vulkan->swapchain.imageSemIndices.assign(vulkan->swapchain.acquireSems.size(), UINT16_MAX);
+
+		//Create new depth objects
+		vulkan->swapchain.depthImages = std::vector<ViewImage>(vulkan->swapchain.images.size());
+		for(std::size_t i = 0; i < vulkan->swapchain.depthImages.size(); ++i) {
+			//Get slot reference
+			ViewImage& vi = vulkan->swapchain.depthImages[i];
+
+			//Create new objects
+			vk::ImageCreateInfo depthCI({}, vk::ImageType::e2D, vulkan->selectedDF, {vulkan->swapchain.extent.width, vulkan->swapchain.extent.height, 1}, 1, 1, vk::SampleCountFlagBits::e1,
+				vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::SharingMode::eExclusive);
+			vma::AllocationCreateInfo depthAllocCI({}, vma::MemoryUsage::eGpuOnly, vk::MemoryPropertyFlagBits::eDeviceLocal);
+			auto [alloc, img] = vulkan->allocator.createImage(depthCI, depthAllocCI);
+			try {
+				vi.alloc = alloc;
+				vi.obj = img;
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to create new depth image!", [i]() {
+					for(std::size_t j = i - 1; j >= 0; --j) {
+						ViewImage& badVI = vulkan->swapchain.depthImages[i];
+						vulkan->dev.destroyImageView(badVI.view);
+						vulkan->allocator.destroyImage(badVI.obj, badVI.alloc);
+					}
+				});
+			}
+			try {
+				vk::ImageViewCreateInfo depthViewCI({}, vi.obj, vk::ImageViewType::e2D, vulkan->selectedDF, {},
+					vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, 1));
+				vi.view = vulkan->dev.createImageView(depthViewCI);
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to create new depth image view!", [i]() {
+					for(std::size_t j = i; j >= 0; --j) {
+						ViewImage& badVI = vulkan->swapchain.depthImages[i];
+						vulkan->dev.destroyImageView(badVI.view);
+						vulkan->allocator.destroyImage(badVI.obj, badVI.alloc);
+					}
+				});
+			}
+		}
+
+		//Re-create descriptor pool
+		if(vulkan->descriptorPool) {
+			vulkan->dev.resetDescriptorPool(vulkan->descriptorPool);
+			vulkan->dev.destroyDescriptorPool(vulkan->descriptorPool);
+		}
+		vk::DescriptorPoolSize poolSize(vk::DescriptorType::eUniformBuffer, vulkan->swapchain.images.size());
+		vk::DescriptorPoolCreateInfo poolCI({}, vulkan->swapchain.images.size(), poolSize);
 		try {
-			vulkan->depth.view = vulkan->dev.createImageView(depthViewCI);
+			vulkan->descriptorPool = vulkan->dev.createDescriptorPool(poolCI);
 		} catch(vk::SystemError& err) {
-			Check<ExternalException>(false, "Failed to create depth image view!", []() {
-				for(std::size_t i = 0; i < vulkan->swapchain.views.size(); ++i) {
-					vulkan->dev.destroyImageView(vulkan->swapchain.views[i]);
-				}
-				vulkan->swapchain.views.clear();
-			});
+			Check<ExternalException>(false, "Failed to create new descriptor pool!");
 		}
 
-		//Destroy old render contexts
-		for(std::unique_ptr<RenderCommandContext>& rcc : vulkan->swapchain.renderContexts) {
-			if(rcc->acquire) vulkan->dev.destroySemaphore(rcc->acquire);
-			if(rcc->render) vulkan->dev.destroySemaphore(rcc->render);
-			if(rcc->sync.semaphore) vulkan->dev.destroySemaphore(rcc->sync.semaphore);
+		//Destroy old contexts
+		for(RenderCommandContext& rc : vulkan->swapchain.contexts) {
+			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
+			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
+			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
+			if(rc.globals.obj) {
+				vulkan->allocator.unmapMemory(rc.globals.alloc);
+				vulkan->allocator.destroyBuffer(rc.globals.obj, rc.globals.alloc);
+			}
 		}
-		vulkan->swapchain.renderContexts.clear();
+		vulkan->swapchain.contexts.resize(vulkan->swapchain.images.size());
 
-		//Create and setup new render contexts
+		//Create and setup new contexts
+		vk::SemaphoreTypeCreateInfo semTypeCI(vk::SemaphoreType::eTimeline);
+		vk::SemaphoreCreateInfo semaphoreCI {};
+		vk::SemaphoreCreateInfo timelineCI({}, &semTypeCI);
+		vk::FenceCreateInfo fenceCI(vk::FenceCreateFlagBits::eSignaled);
+		vk::BufferCreateInfo globalsCI({}, sizeof(GlobalsData), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
+		vma::AllocationCreateInfo uboAllocCI({}, vma::MemoryUsage::eCpuToGpu);
+		vk::DescriptorSetAllocateInfo setAI(vulkan->descriptorPool, vulkan->engineSetLayout);
 		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
-			std::unique_ptr<RenderCommandContext> newCtx = std::make_unique<RenderCommandContext>();
-			SetupRenderingContext(newCtx);
-			vulkan->swapchain.renderContexts.push_back(std::move(newCtx));
+			RenderCommandContext& rc = vulkan->swapchain.contexts[i];
+			try {
+				rc.rendered = vulkan->dev.createSemaphore(semaphoreCI);
+				rc.inFlight = vulkan->dev.createFence(fenceCI);
+				rc.sync.semaphore = vulkan->dev.createSemaphore(timelineCI);
+				rc.sync.doneValue = 0;
+				rc.globals = vulkan->allocator.createBuffer(globalsCI, uboAllocCI);
+				rc.set = vulkan->dev.allocateDescriptorSets(setAI)[0];
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to create objects for rendering context!");
+			}
+			try {
+				vk::DescriptorBufferInfo globalsDBI(rc.globals.obj, 0, vk::WholeSize);
+				vk::WriteDescriptorSet write(rc.set, 0, 0, 1, vk::DescriptorType::eUniformBuffer, VK_NULL_HANDLE, &globalsDBI);
+				vulkan->dev.updateDescriptorSets(write, {});
+			} catch(vk::SystemError& err) {
+				Check<ExternalException>(false, "Failed to bind rendering context descriptor set objects!");
+			}
+			Check<ExternalException>(vulkan->allocator.mapMemory(rc.globals.alloc, &rc.globals.mem) == vk::Result::eSuccess, "Failed to map rendering context UBO memory!");
 		}
 	}
 }

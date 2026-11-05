@@ -17,16 +17,13 @@ subprojects/*
 !subprojects/spinners-plus-plus
 !subprojects/hires_sleep
 !subprojects/eternal
+!subprojects/mikktspace
 subprojects/nlohmannjson.wrap
-subprojects/reflex.wrap
 subprojects/inja.wrap
-subprojects/llvm.wrap
+subprojects/llvm-win*.wrap
 
 # Don't send Python crap from utility scripts
 scripts/__pycache__
-
-# Don't send local scripts
-scripts/local
 
 # Don't send Meson subproject download hash
 .meson-subproject-wrap-hash.txt

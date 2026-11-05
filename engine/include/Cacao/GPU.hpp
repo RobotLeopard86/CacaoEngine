@@ -4,8 +4,13 @@
 #include <memory>
 
 #include "DllHelper.hpp"
+#include "Camera.hpp"
+#include "Material.hpp"
+#include "Mesh.hpp"
+#include "Transform.hpp"
 
 #include "glm/glm.hpp"
+#include "libcacaoasset.hpp"
 
 namespace Cacao {
 	/**
@@ -25,6 +30,19 @@ namespace Cacao {
 		CommandBuffer& operator=(CommandBuffer&&);
 		///@endcond
 
+		/**
+		 * @brief Draw a mesh using a material
+		 *
+		 * @param mesh The mesh to draw
+		 * @param material The material to draw the mesh with
+		 * @param transform The transform to position the mesh
+		 *
+		 * @throws NonexistentValueException If either the mesh or material handles are empty
+		 * @throws BadBakeStateException If the mesh is not baked
+		 * @throws BadBakeStateException If the shader backing the material is not baked
+		 */
+		virtual void DrawMesh([[maybe_unused]] std::shared_ptr<Mesh> mesh, [[maybe_unused]] std::shared_ptr<Material> material, [[maybe_unused]] Transform transform) {}
+
 		virtual ~CommandBuffer() {};
 
 	  protected:
@@ -32,20 +50,19 @@ namespace Cacao {
 
 		virtual void Execute() {};
 
-		friend class FrameProcessor;
+		friend class GPUManager;
 		friend class PALModule;
 
-		virtual bool SetupContext(bool rendering = false) {
+		virtual bool SetupContext([[maybe_unused]] bool rendering = false) {
 			return true;
 		}
-		virtual void StartRendering(glm::vec3 clearColor) {}
+		virtual void StartRendering([[maybe_unused]] glm::vec3 clearColor) {}
 		virtual void EndRendering() {}
+		virtual void UpdateEngineData([[maybe_unused]] std::shared_ptr<Camera> cam, [[maybe_unused]] bool worldRefresh) {}
 	};
 
 	/**
 	 * @brief The centralized GPU interaction system
-	 *
-	 * @warning Wild usage of this system is <b>not recommended</b> since you will end up fighting with the world renderer. For this reason, you should only access this interface during the pre- and post-render hooks in the FrameProcessor (not yet implemented).
 	 */
 	class CACAO_API GPUManager {
 	  public:
@@ -90,6 +107,8 @@ namespace Cacao {
 		/**
 		 * @brief Submit a task to the GPU for processing
 		 *
+		 * @warning Exercise caution when using this API in order to avoid conflicting with other engine systems
+		 *
 		 * @param cmd The CommandBuffer containing the task to execute
 		 *
 		 * @returns A future that will resolve when the task has finished executing
@@ -106,6 +125,52 @@ namespace Cacao {
 		 * @throws BadInitStateException If the GPU manager is not running
 		 */
 		void SetVSync(bool newState);
+
+		/**
+		 * @brief Check the V-Sync state
+		 *
+		 * @note If @c SetVSync has just been called, this function will return the new value, even if it has not yet taken effect on the GPU
+		 *
+		 * @throws BadInitStateException If the GPU manager is not running
+		 *
+		 * @return If V-Sync is currently enabled
+		 */
+		bool IsVSynced();
+
+		/**
+		 * @brief Check the current FPS (frames per second) of the engine
+		 *
+		 * @return The FPS
+		 */
+		unsigned int GetCurrentFPS();
+
+		/**
+		 * @brief Describes during what phase of rendering a custom callback should be run
+		 */
+		enum class Phase {
+			Opaque,	   ///<Opaque geometry pass
+			Transparent///<Transparent geometry pass
+		};
+
+		/**
+		 * @brief Register a custom rendering callback
+		 *
+		 * @param callback The function to run
+		 * @param phase What rendering phase to run the callback in
+		 * @param runPost Whether to run the callback post-phase (if true) or pre-phase (if false)
+		 *
+		 * @return A GUID that can be used to unregister the callback
+		 */
+		xg::Guid RegisterRenderingCallback(std::function<void(std::unique_ptr<CommandBuffer>&)> callback, Phase phase, bool runPost);
+
+		/**
+		 * @brief Unregister a custom rendering callback
+		 *
+		 * @param callbackGUID The GUID returned from the registration function to identify the callback
+		 *
+		 * @throws NonexistentValueException If no registered callback is associated with the provided GUID
+		 */
+		void UnregisterRenderingCallback(const xg::Guid& callbackGUID);
 
 		///@cond
 		class Impl;

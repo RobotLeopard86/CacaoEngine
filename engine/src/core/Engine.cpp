@@ -1,18 +1,22 @@
 #include "Cacao/Engine.hpp"
-#include "Cacao/FrameProcessor.hpp"
+#include "Cacao/Actor.hpp"
+#include "Cacao/CodeRegistry.hpp"
 #include "Cacao/GPU.hpp"
 #include "Cacao/Log.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "Cacao/AudioManager.hpp"
 #include "Cacao/EventManager.hpp"
+#include "Cacao/MeshRenderer.hpp"
+#include "Cacao/AudioPlayer.hpp"
+#include "Cacao/Resource.hpp"
 #include "Cacao/TickController.hpp"
 #include "Cacao/Window.hpp"
 #include "Cacao/PAL.hpp"
 #include "Freetype.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
-#include "exathread.hpp"
 #include "impl/PAL.hpp"
+
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -25,10 +29,19 @@
 #define CACAO_VER "unknown"
 #endif
 
+#ifndef CACAO_RELEASE_NICKNAME
+#define CACAO_RELEASE_NICKNAME "Name TBD"
+#endif
+
 #include <vector>
 #include <filesystem>
 #include <memory>
 #include <thread>
+#include <chrono>
+
+#include "exathread.hpp"
+
+#include "cacaoengine.astra.hpp"//To complete type definitions for reflectable types
 
 namespace Cacao {
 	Engine::Engine()
@@ -50,11 +63,11 @@ namespace Cacao {
 		icfg = initCfg;
 
 		//Say hello (this will also trigger logging initialization)
-		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << "!";
+		Logger::Engine(Logger::Level::Info) << "Welcome to Cacao Engine v" << CACAO_VER << " (" << CACAO_RELEASE_NICKNAME << ")!";
 
 		//Start thread pool
 		Logger::Engine(Logger::Level::Trace) << "Starting thread pool...";
-		constexpr unsigned int coreServiceCount = 3;//Tick controller, GPU manager, frame processor
+		constexpr unsigned int coreServiceCount = 2;//Tick controller, GPU manager
 		pool = exathread::Pool::Create(std::clamp<std::size_t>(std::thread::hardware_concurrency() - coreServiceCount, 2, SIZE_MAX));
 
 		//Store thread ID
@@ -64,12 +77,12 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Initializing audio system...";
 		AudioManager::Get().Initialize();
 
-		//Initialize FreeType
-		Logger::Engine(Logger::Level::Trace) << "Initializing FreeType instance...";
-		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize FreeType instance!");
+		//Initialize text renderer
+		Logger::Engine(Logger::Level::Trace) << "Initializing text renderer...";
+		Check<ExternalException>(FT_Init_FreeType(&freeType) == FT_Err_Ok, "Failed to initialize text renderer!");
 
 		//Done with stage
-		Logger::Engine(Logger::Level::Info) << "Reached target Core Initialization.";
+		Logger::Engine(Logger::Level::Info) << "Core initialization complete.";
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;
@@ -140,14 +153,15 @@ namespace Cacao {
 		//Enable V-Sync by default
 		GPUManager::Get().SetVSync(true);
 
-		//Start the frame processor if doing so at this time
-		if(icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
-			FrameProcessor::Get().Start();
-		}
+		//Preload built-in assets
+		Logger::Engine(Logger::Level::Trace) << "Preloading built-in assets...";
+		ResourceManager::Get().SetupBuiltins();
+
+		//Register built-in component types
+		RegisterBuiltinComponents();
 
 		//Done with stage
-		Logger::Engine(Logger::Level::Info) << "Reached target Graphics Initialization.";
+		Logger::Engine(Logger::Level::Info) << "Graphics initialization complete.";
 		std::lock_guard lkg(stateMtx);
 		state = State::Ready;
 	}
@@ -161,17 +175,11 @@ namespace Cacao {
 
 		Logger::Engine(Logger::Level::Info) << "Performing final initialization tasks...";
 
-		//Start the frame processor if doing so at this time
-		if(!icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Starting frame processor...";
-			FrameProcessor::Get().Start();
-		}
-
 		//Start the tick controller
 		Logger::Engine(Logger::Level::Trace) << "Starting tick controller...";
 		TickController::Get().Start();
 
-		Logger::Engine(Logger::Level::Info) << "Reached target Game Launch.";
+		Logger::Engine(Logger::Level::Info) << "Engine startup complete!";
 
 		while(state == State::Running) {
 			//Handle OS events
@@ -204,25 +212,27 @@ namespace Cacao {
 		Logger::Engine(Logger::Level::Trace) << "Stopping tick controller...";
 		TickController::Get().Stop();
 
-		//Stop the frame processor if doing so at this time
-		if(!icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
-			FrameProcessor::Get().Stop();
-		}
-
-		//Fire shutdown event (this (for now) will block until all consumers have responded)
-		Event e("EngineShutdown");
+		//Fire client quit event (this (for now) will block until all consumers have responded)
+		Event e("ClientQuit");
 		EventManager::Get().Dispatch(e);
 	}
 
 	void Engine::GfxShutdown() {
 		Check<BadStateException>(state == State::Ready, "Engine must be in ready state to run graphics shutdown!");
 
-		//Stop the frame processor if doing so at this time
-		if(icfg.startFrameProcessorWithGfxSystem) {
-			Logger::Engine(Logger::Level::Trace) << "Stopping frame processor...";
-			FrameProcessor::Get().Stop();
+		//Disable frame generation and wait for GPU manager to clear its task queue before proceeding
+		IMPL(GPUManager).masterFrameGenDisable.store(true);
+		while(IMPL(GPUManager).numFramesInFlight > 0) {
+			std::this_thread::sleep_for(std ::chrono::milliseconds(1));
 		}
+
+		//Fire shutdown event (this (for now) will block until all consumers have responded)
+		Event e("EngineShutdown");
+		EventManager::Get().Dispatch(e);
+
+		//Cleanup built-in assets
+		Logger::Engine(Logger::Level::Trace) << "Unloading built-in assets...";
+		ResourceManager::Get().CleanupBuiltins();
 
 		//Stop the GPU manager
 		Logger::Engine(Logger::Level::Trace) << "Stopping GPU manager...";
@@ -244,24 +254,23 @@ namespace Cacao {
 
 	void Engine::CoreShutdown() {
 		Check<BadStateException>(state == State::Alive, "Engine must be in alive state to run core shutdown!");
-		Logger::Engine(Logger::Level::Info) << "Shutting down engine core...";
 
-		//Shutdown FreeType
-		Logger::Engine(Logger::Level::Trace) << "Destroying FreeType instance...";
-		Check<ExternalException>(FT_Done_FreeType(freeType) == FT_Err_Ok, "Failed to destroy FreeType instance!");
+		//Shutdown text renderer
+		Logger::Engine(Logger::Level::Trace) << "Shutting down text renderer...";
+		Check<ExternalException>(FT_Done_FreeType(freeType) == FT_Err_Ok, "Failed to shut down text renderer!");
 
 		//Terminate audio
 		Logger::Engine(Logger::Level::Trace) << "Terminating audio system...";
 		AudioManager::Get().Terminate();
 
+		//Unsubscribe all final event consumers
+		Logger::Engine(Logger::Level::Trace) << "Unsubscribing remaining event consumers...";
+		EventManager::Get().UnsubscribeAllConsumers();
+
 		//Stop thread pool
 		Logger::Engine(Logger::Level::Trace) << "Stopping thread pool...";
 		pool->waitIdle();
 		pool.reset();
-
-		//Unsubscribe all final event consumers
-		Logger::Engine(Logger::Level::Trace) << "Unsubscribing remaining event consumers...";
-		EventManager::Get().UnsubscribeAllConsumers();
 
 		//Final goodbye message
 		std::lock_guard lkg(stateMtx);
@@ -301,5 +310,13 @@ namespace Cacao {
 		Check<exathread::Pool, BadStateException>(pool, "Engine must be in the Alive state to use the thread pool!");
 
 		return pool;
+	}
+
+	void Engine::RegisterBuiltinComponents() {
+		//Mesh renderer
+		CodeRegistry::Get().RegisterFactory<Component>("cacao.meshRenderer", []() { return new MeshRenderer(); }, typeid(MeshRenderer));
+
+		//Audio player
+		CodeRegistry::Get().RegisterFactory<Component>("cacao.audioPlayer", []() { return new AudioPlayer(); }, typeid(AudioPlayer));
 	}
 }

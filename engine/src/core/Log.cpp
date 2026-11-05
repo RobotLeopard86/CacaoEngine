@@ -12,7 +12,7 @@ namespace Cacao {
 
 	//Impl struct
 	struct Logger::Impl {
-		std::shared_ptr<spdlog::logger> engine, client;
+		std::shared_ptr<spdlog::logger> engine, runtime, client;
 		std::shared_ptr<spdlog::sinks::basic_file_sink_mt> logfileSink;
 		std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> stdoutSink;
 		bool noLog;
@@ -40,13 +40,15 @@ namespace Cacao {
 
 		//Create and register loggers
 		impl->engine = std::make_shared<spdlog::logger>("engine", sinks.begin(), sinks.end());
+		impl->runtime = std::make_shared<spdlog::logger>("runtime", sinks.begin(), sinks.end());
 		impl->client = std::make_shared<spdlog::logger>("client", sinks.begin(), sinks.end());
 		spdlog::register_logger(impl->engine);
+		spdlog::register_logger(impl->runtime);
 		spdlog::register_logger(impl->client);
 		spdlog::set_level(spdlog::level::trace);
 
 		//Apply logging pattern (Month/Day/Year @ Hour:Minute:Second [Logger Name:Thread ID/Message Level]: Message Text)
-		spdlog::set_pattern("%^%D @ %X [%n:%t/%l]: %v%$");
+		spdlog::set_pattern("%^%d %B %Y @ %X [%n:%t/%l]: %v%$");
 
 		//Force log file flushing
 		spdlog::flush_on(spdlog::level::trace);
@@ -58,24 +60,43 @@ namespace Cacao {
 
 	Logger::LogToken Logger::Engine(Level level) {
 		LogToken lt;
-		lt.isClient = false;
+		lt.src = LogToken::Source::Engine;
+		lt.lvl = level;
+		return lt;
+	}
+
+	Logger::LogToken Logger::Runtime(Level level) {
+		LogToken lt;
+		lt.src = LogToken::Source::Runtime;
 		lt.lvl = level;
 		return lt;
 	}
 
 	Logger::LogToken Logger::Client(Level level) {
 		LogToken lt;
-		lt.isClient = true;
+		lt.src = LogToken::Source::Client;
 		lt.lvl = level;
 		return lt;
 	}
 
-	void Logger::ImplLog(std::string message, Level level, bool isClient) {
+	void Logger::ImplLog(std::string message, Level level, LogToken::Source src) {
 		//Skip if no logging enabled
 		if(impl->noLog) return;
 
 		//Set logger
-		std::shared_ptr<spdlog::logger> logger = (isClient ? impl->client : impl->engine);
+		std::shared_ptr<spdlog::logger> logger;
+		switch(src) {
+			case LogToken::Source::Client:
+				logger = impl->client;
+				break;
+			case LogToken::Source::Runtime:
+				logger = impl->runtime;
+				break;
+			case LogToken::Source::Engine:
+				logger = impl->engine;
+				break;
+				;
+		}
 
 		//Send a log message using the level specified
 		switch(level) {

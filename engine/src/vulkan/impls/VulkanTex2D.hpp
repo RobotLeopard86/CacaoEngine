@@ -7,13 +7,16 @@
 namespace Cacao {
 	class VulkanTex2DImpl : public Tex2D::Impl {
 	  public:
-		void Realize(bool& success) override;
-		void DropRealized() override;
+		void Bake(bool& success) override;
+		void Discard() override;
 
 		//Image memory and view
 		ViewImage vi;
 
 		//Image format
 		vk::Format format;
+
+		//Sampler
+		vk::Sampler sampler;
 	};
 }

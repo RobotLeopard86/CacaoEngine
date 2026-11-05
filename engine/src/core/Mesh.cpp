@@ -2,6 +2,8 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Mesh.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
 
 namespace Cacao {
@@ -18,8 +20,15 @@ namespace Cacao {
 		impl->indices = std::move(idx);
 	}
 
+	std::shared_ptr<Mesh> Mesh::Create(std::vector<Vertex>&& vtx, std::vector<glm::uvec3>&& idx, const std::string& addr) {
+		std::shared_ptr<Mesh> ptr(new Mesh(std::move(vtx), std::move(idx), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
+	}
+
 	Mesh::~Mesh() {
-		if(realized) DropRealized();
+		if(baked) Discard();
 	}
 
 	Mesh::Mesh(Mesh&& other)
@@ -27,9 +36,9 @@ namespace Cacao {
 		//Steal the implementation pointer
 		impl = std::move(other.impl);
 
-		//Copy realization state
-		realized = other.realized;
-		other.realized = false;
+		//Copy baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Blank out other asset address
 		other.address = "";
@@ -39,9 +48,9 @@ namespace Cacao {
 		//Implementation pointer
 		impl = std::move(other.impl);
 
-		//Realization state
-		realized = other.realized;
-		other.realized = false;
+		//Baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Asset address
 		address = other.address;
@@ -50,16 +59,16 @@ namespace Cacao {
 		return *this;
 	}
 
-	void Mesh::Realize() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized mesh!");
+	void Mesh::Bake() {
+		Check<BadBakeStateException>(!baked, "Cannot bake a baked mesh!");
 
-		impl->Realize(realized);
+		impl->Bake(baked);
 	}
 
-	void Mesh::DropRealized() {
-		Check<BadRealizeStateException>(realized, "Cannot drop the realized representation of an unrealized mesh; it does not exist!");
+	void Mesh::Discard() {
+		Check<BadBakeStateException>(baked, "Cannot discard baked representation of an unbaked mesh; it does not exist!");
 
-		realized = false;
-		impl->DropRealized();
+		baked = false;
+		impl->Discard();
 	}
 }

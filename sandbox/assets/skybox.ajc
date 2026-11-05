@@ -1,0 +1,6 @@
+left: sky_left.png
+right: sky_right.png
+top: sky_top.png
+bottom: sky_bottom.png
+front: sky_front.png
+back: sky_back.png

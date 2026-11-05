@@ -13,15 +13,17 @@ engine_srcs += files(
 	'VulkanModule.cpp',
 	'VulkanImpl.cpp',
 	'Commands.cpp',
+	'wsi' / 'Common.cpp',
 	'impls' / 'VulkanMesh.cpp',
 	'impls' / 'VulkanTex2D.cpp',
 	'impls' / 'VulkanCubemap.cpp',
-	'wsi' / 'Common.cpp'
+	'impls' / 'VulkanShader.cpp',
+	'impls' / 'VulkanMaterial.cpp'
 )
 engine_inc += include_directories('.')
 engine_deps += [vkheaders, vkhpp, vma, vmahpp]
 engine_args += ['-DVULKAN_HPP_NO_NODISCARD_WARNINGS', '-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1', '-DVMA_VULKAN_VERSION=1003000', '-DVMA_STATIC_VULKAN_FUNCTIONS=0', 
-				'-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1', '-Wno-nullability-completeness']
+				'-DVMA_DYNAMIC_VULKAN_FUNCTIONS=1', '-DVK_NO_PROTOTYPES', '-Wno-nullability-completeness']
 
 # Add platform-specific info
 if host_machine.system() == 'windows'

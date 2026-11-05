@@ -21,9 +21,7 @@ namespace Cacao {
 		 * @throws BadValueException If the audio buffer is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr) {
-			return std::shared_ptr<Sound>(new Sound(std::move(encodedAudio), addr));
-		}
+		static std::shared_ptr<Sound> Create(std::vector<char>&& encodedAudio, const std::string& addr);
 
 		///@cond
 		Sound(const Sound&) = delete;
@@ -35,18 +33,18 @@ namespace Cacao {
 		/**
 		 * @brief Convert the audio data into a form suitable for playback
 		 *
-		 * @throws BadRealizeStateException If the sound is already realized
+		 * @throws BadBakeStateException If the sound is already baked
 		 * @throws BadInitStateException If the audio system is not initialized
 		 */
-		void Realize();
+		void Bake() override;
 
 		/**
-		 * @brief Destroy the realized representation of the asset
+		 * @brief Destroy the baked representation of the asset
 		 *
-		 * @throws BadRealizeStateException If the sound is not realized
+		 * @throws BadBakeStateException If the sound is not baked
 		 * @throws BadInitStateException If the audio system is not initialized
 		 */
-		void DropRealized();
+		void Discard() override;
 
 		///@cond
 		struct Impl;

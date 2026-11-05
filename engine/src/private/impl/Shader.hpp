@@ -1,0 +1,28 @@
+#pragma once
+
+#include "Cacao/Shader.hpp"
+
+namespace Cacao {
+	class Shader::Impl {
+	  public:
+		virtual void Bake(bool& success) = 0;
+		virtual void Discard() = 0;
+
+		//Shader info
+		std::vector<unsigned char> irBuffer;
+		libcacaoasset::Shader::Descriptor descriptor;
+
+		//Custom shader compilation settings
+		struct CustomCompileSettings {
+			bool blendUseOne = false;
+			enum class Depth {
+				Off,
+				Less,
+				Lequal
+			} depth = Depth::Less;
+		};
+		std::optional<CustomCompileSettings> customSettings;
+
+		virtual ~Impl() = default;
+	};
+}

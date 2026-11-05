@@ -4,7 +4,6 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <chrono>
 #include <filesystem>
 #include <thread>
 #include <queue>
@@ -13,7 +12,6 @@
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Identity.hpp"
-#include "Time.hpp"// IWYU pragma: keep
 
 #include "exathread.hpp"
 
@@ -44,36 +42,27 @@ namespace Cacao {
 		/**
 		 * @brief Configuration values for the engine that may change at runtime
 		 */
-		struct CACAO_API Config {
-			/**
-			 * @brief The amount of time that should pass between fixed ticks, in milliseconds
-			 */
-			std::chrono::milliseconds fixedTickInterval = 20ms;
-
-			/**
-			 * @brief The number of frames the renderer can be behind before skipping some to catch up
-			 */
-			int maxFrameLag = 2;
-
+		struct CACAO_API RuntimeConfig {
 			/**
 			 * @brief Whether or not to always re-render the UI every frame. Useful for inspecting UI graphics calls in RenderDoc or similar
 			 */
 			bool alwaysRerenderUI = false;
-		} config;
+
+			/**
+			 * @brief The maximum allowed number of ticks per second; use this to throttle updates or set to UINT32_MAX for unlimited
+			 */
+			unsigned int maxTPS = UINT32_MAX;
+
+			/**
+			 * @brief Whether or not to verbosely log all received input events
+			 */
+			bool verboseInputLogging = false;
+		};
 
 		/**
 		 * @brief Configuration values that are set for startup and cannot be modified afterwards
 		 */
 		struct CACAO_API InitConfig {
-			/**
-			 * @brief Whether the engine is running outside of a bundle
-			 *
-			 * @details If this flag is set, the engine will not attempt to validate that it is in a game bundle on startup.
-			 * This will also disable anything related to the default resource loader and bundle systems.
-			 * Assets, worlds, and game binaries will need to be manually loaded and configured in this mode.
-			 */
-			bool standalone = false;
-
 			/**
 			 * @brief The requested backend to try to initialize first, overriding the default setting.
 			 */
@@ -106,14 +95,6 @@ namespace Cacao {
 			 * @brief ID of the client application. This should be in reverse-domain format with a PascalCase final segment (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
-
-			/**
-			 * @brief Whether to start the frame processor with the graphics system or to start it when the engine starts running
-			 *
-			 * This is set to @c false by default, which is best for games. However, other users may want to continue rendering
-			 * without an active gameloop, thus this option exists.
-			 */
-			bool startFrameProcessorWithGfxSystem = false;
 		};
 
 		/**
@@ -123,6 +104,15 @@ namespace Cacao {
 		 */
 		const InitConfig& GetInitConfig() const {
 			return icfg;
+		}
+
+		/**
+		 * @brief Get a mutable reference to the runtime config values
+		 *
+		 * @return The runtime config values
+		 */
+		RuntimeConfig& GetRuntimeConfig() {
+			return rcfg;
 		}
 
 		//===================== UTILITY FUNCTIONS =====================
@@ -139,7 +129,7 @@ namespace Cacao {
 		/**
 		 * @brief Get access to the engine thread pool
 		 *
-		 * @see https://robotleopard86.github.io/Exathread/2.0.0 for the documentation on how to use the pool
+		 * @see https://robotleopard86.github.io/Exathread/stable for the documentation on how to use the pool
 		 *
 		 * @return A handle to the pool
 		 *
@@ -204,8 +194,6 @@ namespace Cacao {
 		/**
 		 * @brief Initialize all engine systems that don't require graphics or windowing
 		 *
-		 * @details If the engine is not in standalone mode, this will also trigger bundle loading.
-		 *
 		 * The engine must be in the Dead state when this method is called
 		 */
 		void CoreInit(const InitConfig& initCfg);
@@ -261,6 +249,7 @@ namespace Cacao {
 
 	  private:
 		InitConfig icfg;
+		RuntimeConfig rcfg;
 		State state;
 		std::mutex stateMtx;
 
@@ -269,6 +258,8 @@ namespace Cacao {
 		std::thread::id mainThread;
 
 		std::shared_ptr<exathread::Pool> pool;
+
+		void RegisterBuiltinComponents();
 
 		Engine();
 		~Engine();

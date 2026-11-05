@@ -33,7 +33,7 @@ namespace Cacao {
 		 *
 		 * @throws BadValueException If the provided address is malformed
 		 * @throws NonexistentValueException If the provided address does not reference a world
-		 * @throws NonexistentValueException If noload is set and the world is not currently loaded
+		 * @throws NonexistentValueException If @c noload is set and the world is not currently loaded
 		 */
 		void SetActiveWorld(const std::string& addr, bool noload = false);
 

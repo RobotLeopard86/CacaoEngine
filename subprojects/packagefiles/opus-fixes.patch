@@ -1,0 +1,30 @@
+diff --git a/meson.build b/meson.build
+index aadf7ca..688d4c0 100644
+--- a/meson.build
++++ b/meson.build
+@@ -645,6 +645,12 @@ else
+   endif
+ endif
+ 
++# run autogeneration
++if not import('fs').exists('dnn' / 'models')
++  message('Autogenerating DNN model files...')
++  run_command('autogen.' + (build_machine.system() == 'windows' ? 'bat' : 'sh'), check: true)
++endif
++
+ # extract source file lists from .mk files
+ mk_files = [
+   'opus_headers.mk', 'opus_sources.mk',
+diff --git a/src/meson.build b/src/meson.build
+index 5537c67..0619937 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -24,6 +24,8 @@ opus_lib = library('opus',
+ opus_dep = declare_dependency(link_with: opus_lib,
+   include_directories: opus_public_includes)
+ 
++meson.override_dependency('opus', opus_dep)
++
+ # Extra uninstalled Opus programs
+ if not extra_programs.disabled()
+   foreach prog : ['opus_compare', 'opus_demo', 'repacketizer_demo']

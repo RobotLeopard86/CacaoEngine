@@ -4,7 +4,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void OpenGLMeshImpl::Realize(bool& success) {
+	void OpenGLMeshImpl::Bake(bool& success) {
 		//Unpack index buffer data
 		std::vector<unsigned int> ibd(indices.size() * 3);
 		for(unsigned int i = 0; i < indices.size(); ++i) {
@@ -38,11 +38,9 @@ namespace Cacao {
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 			glEnableVertexAttribArray(3);
-			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
-			glEnableVertexAttribArray(3);
-			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+			glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
 
 			//Bind index buffer
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -60,8 +58,8 @@ namespace Cacao {
 		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
-	void OpenGLMeshImpl::DropRealized() {
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+	void OpenGLMeshImpl::Discard() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this]() {
 			//Delete buffers and vertex array
 			glDeleteBuffers(1, &vbo);

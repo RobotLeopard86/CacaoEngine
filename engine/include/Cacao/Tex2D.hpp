@@ -22,9 +22,7 @@ namespace Cacao {
 		 * @throws BadValueException If the image buffer is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Tex2D> Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
-			return std::shared_ptr<Tex2D>(new Tex2D(std::move(imageBuffer), addr));
-		}
+		static std::shared_ptr<Tex2D> Create(libcacaoimage::Image&& imageBuffer, const std::string& addr);
 
 		///@cond
 		Tex2D(const Tex2D&) = delete;
@@ -36,18 +34,18 @@ namespace Cacao {
 		/**
 		 * @brief Convert the image data into a form suitable for rendering
 		 *
-		 * @throws BadRealizeStateException If the texture is already realized
+		 * @throws BadBakeStateException If the texture is already baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void Realize();
+		void Bake() override;
 
 		/**
-		 * @brief Destroy the realized representation of the asset
+		 * @brief Destroy the baked representation of the asset
 		 *
-		 * @throws BadRealizeStateException If the texture is not realized
+		 * @throws BadBakeStateException If the texture is not baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void DropRealized();
+		void Discard() override;
 
 		///@cond
 		class Impl;

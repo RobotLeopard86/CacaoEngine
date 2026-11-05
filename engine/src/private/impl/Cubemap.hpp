@@ -7,8 +7,8 @@
 namespace Cacao {
 	class Cubemap::Impl {
 	  public:
-		virtual void Realize(bool& success) = 0;
-		virtual void DropRealized() = 0;
+		virtual void Bake(bool& success) = 0;
+		virtual void Discard() = 0;
 
 		//Order: +X, -X, +Y, -Y, +Z, -Z
 		std::array<libcacaoimage::Image, 6> faces;

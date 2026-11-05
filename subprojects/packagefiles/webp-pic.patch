@@ -18,20 +18,8 @@ index 916f7e7..45b6ace 100644
    gnu_symbol_visibility: 'hidden',
 +  pic: true
  )
-diff --git a/src/meson.build b/src/meson.build
-index 00be0ea..7abfe84 100644
---- a/src/meson.build
-+++ b/src/meson.build
-@@ -12,6 +12,7 @@ webp_lib = library(
-     webputilsenc_lib,
-   ],
-   version: '7.1.8',
-+  pic: true
- )
- 
- webp_dep = declare_dependency(
 diff --git a/src/utils/meson.build b/src/utils/meson.build
-index 2c0b446..d249bcc 100644
+index f25ac78..98f9467 100644
 --- a/src/utils/meson.build
 +++ b/src/utils/meson.build
 @@ -13,7 +13,7 @@ webputilsdec_lib = static_library(
@@ -43,9 +31,9 @@ index 2c0b446..d249bcc 100644
    dependencies: common_deps,
    gnu_symbol_visibility: 'hidden',
  )
-@@ -26,7 +26,7 @@ webputilsenc_lib = static_library(
-     'quant_levels_utils.c',
-   ],
+@@ -22,7 +22,7 @@ webputilsenc_lib = static_library(
+   'webputilsenc',
+   ['bit_writer_utils.c', 'huffman_encode_utils.c', 'quant_levels_utils.c'],
    build_by_default: false,
 -  pic: get_option('default_library') != 'static',
 +  pic: true,

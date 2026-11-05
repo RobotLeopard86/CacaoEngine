@@ -1,17 +1,19 @@
-import cacaoshaderbase;
+import cacaoengine;
 
-struct Passthru {
-    float4 pos : SV_Position;
-    float happy;
+struct MaterialParameters {
+	Sampler2D aVeryCoolTexture;
+	float3 tint;
+	float yChange;
+	Sampler2D anotherVeryCoolTexture;
 };
+ParameterBlock<MaterialParameters> material;
 
-[shader("vertex")] Passthru VS_main(VSIn input, uniform float4x4 transform) {
-    Passthru o = {};
-    o.pos = mul(cacao.projection, mul(cacao.view, mul(transform, float4(input.position, 1.0))));
-    o.happy = (o.pos.x * o.pos.y) + 3.14f - (o.pos.z / 2.1f);
-    return o;
+void CacaoVertexPreprocess(const Cacao::VSIn3D input, inout Cacao::VSIn3D output) {
+	output.position.y += material.yChange;
 }
 
-[shader("fragment")] float4 FS_main(Passthru p) : SV_Target {
-    return float4(p.pos.r * 0.9f + 0.31f, p.pos.g, p.pos.b / 2, p.happy);
+void CacaoSurfaceMain(const Cacao::SurfaceInput input, inout Cacao::SurfaceSample output) {
+	float4 sampled = material.aVeryCoolTexture.Sample(input.texCoords);
+	float4 anotherSampled = material.anotherVeryCoolTexture.Sample(input.texCoords / 2);
+	output.albedo = float4((sampled.rgb * material.tint) + anotherSampled.gba, sampled.a / (anotherSampled.a - 0.22));
 }

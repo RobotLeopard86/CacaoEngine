@@ -1,5 +1,5 @@
-# Extra args for Windows
-cppargs = ['-DCACAO_VER="' + meson.project_version() + '"']
+# Extra arguments for Windows
+cppargs = []
 if host_machine.system() == 'windows' and get_option('windows_noconsole') == true
 	cppargs += '-DWIN_NOCONSOLE'
 endif
@@ -7,18 +7,26 @@ endif
 # Dynalo (dynamic library loader) dependency
 dynalo_dep = subproject('dynalo', required: true).get_variable('dynalo_dep')
 
+# Reflection
+rt_reflection = custom_target('cacaort.astra.hpp', output: 'cacaort.astra.hpp',
+	input: ['Runtime.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o',
+	meson.current_build_dir(), '-n', 'cacaort', '-s', engine_reflection[0].full_path().replace('hpp', 'json'), '@INPUT@'], depends: engine_reflection)
+
 # Cacao game runtime
 rpath = host_machine.system() == 'darwin' ? '@executable_path' : '$ORIGIN'
 cacao_runtime_exe = executable('cacaort', sources: [
 	'Launcher.cpp',
-	'Setup.cpp'
-], dependencies: [cacao_dep, yaml_cpp, cli11_dep, dynalo_dep], cpp_args: cppargs, build_rpath: rpath, install_rpath: rpath, install: true)
+	'Loader.cpp',
+	'Runtime.cpp',
+	'Runtime.hpp',
+	rt_reflection
+], dependencies: [cacao_dep, yaml_cpp, cli11_dep, dynalo_dep, asset_dep], cpp_args: cppargs, build_rpath: rpath, install_rpath: rpath, install: true)
 
 # Runtime dependency
 cacaort_dep = declare_dependency(sources: ['abi' / 'ABIHandshake.cpp', 'abi' / 'ABI.hpp'], dependencies: cacao_dep, compile_args: bt.contains('debug') ? '-D_DEBUG' : '-DNDEBUG')
 
 # License file
-licenses = custom_target('cacaolicenses', command: [python, meson.project_source_root() / 'scripts' / 'licensecombiner.py', '@OUTPUT@'], output: 'cacaolicenses.txt', build_by_default: true, input: [
+licenses = custom_target('cacaolicenses.txt', command: [python, meson.project_source_root() / 'scripts' / 'licensecombiner.py', '@OUTPUT@'], output: 'cacaolicenses.txt', build_by_default: true, input: [
 	meson.project_source_root() / 'scripts' / 'licensecombiner.py',
 	meson.project_source_root() / 'licenses' / 'CANARY.txt'
 ])

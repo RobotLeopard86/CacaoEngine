@@ -1,5 +1,14 @@
+# Sandbox reflection
+sandbox_reflection = custom_target('sandbox.astra.hpp', output: 'sandbox.astra.hpp',
+	input: ['src' / 'rotator.hpp'], console: true, command: [astra.get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
+	meson.current_build_dir(), '-n', 'sandbox', '-s', engine_reflection[0].full_path().replace('hpp', 'json'), '@INPUT@'], depends: engine_reflection)
+
 # Game binary
-sandbox = shared_module('sandbox', sources: 'src' / 'sandbox.cpp', dependencies: cacaort_dep, name_prefix: '', install: false)
+sandbox = shared_module('sandbox', sources: [
+    'src' / 'sandbox.cpp',
+    'src' / 'rotator.cpp',
+    sandbox_reflection
+], include_directories: 'src', dependencies: cacaort_dep, name_prefix: '', install: false)
 
 # Copy runtime executable
 custom_target('sandbox_rtsetup', command: [rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'sandbox.exe' : 'sandbox', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
@@ -11,3 +20,8 @@ spec.set('ID', 'net.rl86.CacaoSandbox')
 spec.set('TITLE', 'Cacao Engine Sandbox Application')
 spec.set('VERSION', meson.project_version())
 configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
+
+# Resource configuration
+subdir('assets')
+subdir('packs')
+subdir('worlds')

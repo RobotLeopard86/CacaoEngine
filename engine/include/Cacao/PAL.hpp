@@ -9,7 +9,7 @@ namespace Cacao {
 	/**
 	 * @brief Platform abstraction layer for managing platform-specific behavior
 	 *
-	 * @warning This class is only for engine use. While it is documented, <b>no clients should use this class</b>
+	 * @warning This class is only for engine use! While it is documented, <b>no clients should use this class!</b>
 	 */
 	class CACAO_API PAL {
 	  public:

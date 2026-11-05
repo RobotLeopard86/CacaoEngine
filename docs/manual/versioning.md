@@ -19,7 +19,7 @@ Cacao Engine uses a custom versioning system named Evolutionary Versioning (EvoV
 	* The series may not progress until all work for the previous series is done (i.e. no alpha releases may be made once the beta series starts).
 
 ## Nicknames
-Each new minor release of Cacao Engine is given a new nickname. The first letter of a nickname starts as A and will change every major release, cycling through to Z and then back to A. All minor releases are given a new nickname with the same first letter. Nicknames may not repeat. There is no rule on what must constitute a nickname.
+Each new minor release of Cacao Engine is given a new nickname. The first letter of a nickname starts as A and will change every major release, cycling through to Z and then back to A. All minor releases are given a new nickname with the same first letter. Nicknames may not repeat. The current nickname rule is to name releases after cities around the world that start with the given letter.
 
 ## Stability
 All prerelease versions of Cacao Engine are **not** guaranteed to be stable and may not function correctly or at all on all devices/platforms. Once a prerelease has been tested on all platforms and functions correctly, that version will be promoted to the full release.  

@@ -1,91 +1,129 @@
 #include "Cacao/World.hpp"
 #include "Cacao/Actor.hpp"
 #include "Cacao/CodeRegistry.hpp"
-#include "Cacao/Component.hpp"
+#include "Cacao/EventConsumer.hpp"
+#include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/MeshRenderer.hpp"
+#include "Cacao/OrthographicCamera.hpp"
 #include "Cacao/PerspectiveCamera.hpp"
 #include "Cacao/Resource.hpp"
 #include "Cacao/ResourceManager.hpp"
+#include "Cacao/Script.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "impl/ResourceManager.hpp"
+#include "impl/TickController.hpp"
+#include "impl/GPUManager.hpp"
+#include "impl/World.hpp"
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
+
+#include "astra/var.hpp"
+#include "astra/binary.hpp"
+#include "crossguid/guid.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/fwd.hpp"
+#include "glm/gtx/norm.hpp"
+
+#include "cacaoengine.astra.hpp"
 
 #include <memory>
+#include <ranges>
 
 namespace Cacao {
-	World::World(const std::string& addr)
+	World::World(bool useOrthographicCamera, const std::string& addr)
 	  : Resource(addr) {
 		Check<BadValueException>(ValidateResourceAddr<World>(addr), "Resource address is malformed!");
 
-		//Create root actor
-		root.actor = std::shared_ptr<Actor>(new Actor("__WORLDROOT__", ActorHandle {}, xg::Guid {}));
-		root->isRoot = true;
+		//Create implementation pointer
+		impl = std::make_unique<Impl>();
 
 		//Create camera
-		cam = std::make_shared<PerspectiveCamera>();
+		if(useOrthographicCamera) {
+			cam = std::make_shared<OrthographicCamera>();
+		} else {
+			cam = std::make_shared<PerspectiveCamera>();
+		}
 		cam->SetPosition(glm::vec3 {0});
 		cam->SetRotation(glm::vec3 {0});
 	}
 
-	std::shared_ptr<World> World::Create(const std::string& addr, const libcacaoformats::World& world) {
+	std::shared_ptr<World> World::Create(bool useOrthographicCamera, const std::string& addr) {
+		std::shared_ptr<World> ptr(new World(useOrthographicCamera, addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
+	}
+
+	std::shared_ptr<World> World::Create(const libcacaoasset::World& world, const std::string& addr) {
 		//Create base world
-		std::shared_ptr<World> w = Create(addr);
+		std::shared_ptr<World> w = Create(world.camOrthographic, addr);
 
 		//Configure camera and skybox
 		w->cam->SetPosition({world.initialCamPos.x, world.initialCamPos.y, world.initialCamPos.z});
-		w->cam->SetRotation({world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
-		if(!world.skyboxRef.empty() && ValidateResourceAddr<World>(world.skyboxRef)) {
-			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skyboxRef);
+		w->cam->SetRotation({world.initialCamRot.w, world.initialCamRot.x, world.initialCamRot.y, world.initialCamRot.z});
+		w->cam->SetClearColor({world.camClearColor.r, world.camClearColor.g, world.camClearColor.b});
+		w->SetSkyboxRotation({world.initialSkyRot.w, world.initialSkyRot.x, world.initialSkyRot.y, world.initialSkyRot.z});
+		if(!world.skybox.empty() && ValidateResourceAddr<Cubemap>(world.skybox)) {
+			w->skyboxTex = *ResourceManager::Get().Load<Cubemap>(world.skybox);
 		}
 
+		//Create fake parent ref for toplevel actors
+		ActorRef fakeParent;
+		fakeParent.world = w;
+
 		//Process actors and make tree
-		std::unordered_map<xg::Guid, ActorHandle> foundActors;
-		std::unordered_map<xg::Guid, std::vector<libcacaoformats::World::Actor>> awaitingParents;
-		const auto processActor = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor) {
-			auto impl = [w, &foundActors, &awaitingParents](const libcacaoformats::World::Actor& actor, auto& iref) mutable {
+		std::unordered_map<xg::Guid, ActorRef> foundActors;
+		std::unordered_map<xg::Guid, std::vector<libcacaoasset::World::Actor>> awaitingParents;
+		const auto processActor = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor) {
+			auto impl = [w, &foundActors, &awaitingParents, &fakeParent](const libcacaoasset::World::Actor& actor, auto& iref) mutable {
 				//Generate handle
-				ActorHandle hnd;
-				if(actor.parentGUID == xg::Guid {}) {
-					//Top-level actor
-					hnd = Actor::Create(actor.name, w, actor.guid);
-				} else if(foundActors.contains(actor.parentGUID)) {
-					//The parent has been added to the tree
-					hnd = Actor::Create(actor.name, foundActors[actor.parentGUID], actor.guid);
-				} else {
-					//The parent has not been added to the tree but we'll save this for when it is
-					awaitingParents[actor.parentGUID].push_back(actor);
+				xg::Guid pguid(actor.parentGUID);
+				static xg::Guid nullGuid {};
+				if(pguid != nullGuid && foundActors.contains(pguid)) {
+					//The parent has not been added to the tree yet, so we'll save this for when it is
+					awaitingParents[pguid].push_back(actor);
 					return;
 				}
 
-				//Register actor object
-				foundActors.insert_or_assign(hnd->guid, hnd);
+				//Top-level actor or parent found
+				Impl::ActorSlot& slot = w->impl->slotTable.emplace_back(Impl::ActorSlot {.generation = 1, .id = w->impl->slotTable.size(), .actor = std::unique_ptr<Actor> {}});
+				ActorRef ref(w, slot.id, slot.generation);
+				slot.actor = std::unique_ptr<Actor>(new Actor(actor.name, pguid == xg::Guid {} ? fakeParent : foundActors[pguid], ref, xg::Guid {actor.guid}));
 
-				//Setup transform
-				hnd->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
-				hnd->transform.SetRotation({actor.initialRot.x, actor.initialRot.y, actor.initialRot.z});
-				hnd->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
+				//Register actor object
+				foundActors.insert_or_assign(ref->guid, ref);
+
+				//Setup transform and state
+				ref->SetActive(actor.active);
+				ref->transform.SetPosition({actor.initialPos.x, actor.initialPos.y, actor.initialPos.z});
+				ref->transform.SetRotation({actor.initialRot.w, actor.initialRot.x, actor.initialRot.y, actor.initialRot.z});
+				ref->transform.SetScale({actor.initialScale.x, actor.initialScale.y, actor.initialScale.z});
 
 				//Mount components
-				for(const libcacaoformats::World::Component& comp : actor.components) {
+				for(const libcacaoasset::World::Component& comp : actor.components) {
 					//Ensure the type is in the code registry
 					Check<NonexistentValueException>(CodeRegistry::Get().HasFactory<Component>(comp.typeID), "World contains component of an unknown type! Hint: all component types must be registered in the CodeRegistry.");
 
 					//Create the component
-					hnd->MountComponent(comp.typeID);
-
-					//TODO: Add the reflection data back in somehow
+					ref->MountComponent(comp.typeID, [&comp](Component& component) {
+						//Inject reflected data
+						astra::Var cvar(&component);
+						astra::binary::fromVectorIntoVar(comp.reflection, cvar);//
+					},
+						comp.enabled);
 				}
 
 				//Process components that should be children of this one
-				if(awaitingParents.contains(actor.guid))
-					for(const libcacaoformats::World::Actor& ca : awaitingParents[actor.guid]) iref(ca, iref);
+				if(awaitingParents.contains(ref->guid))
+					for(const libcacaoasset::World::Actor& childActor : awaitingParents[ref->guid]) iref(childActor, iref);
 			};
 			impl(actor, impl);
 		};
-		for(const libcacaoformats::World::Actor& actor : world.actors) processActor(actor);
+		for(const libcacaoasset::World::Actor& actor : world.actors) processActor(actor);
 
 		//Return built world
 		return w;
@@ -93,21 +131,52 @@ namespace Cacao {
 
 	World::~World() {}
 
-	void World::ReparentToRoot(ActorHandle actor) {
-		actor->Reparent(root);
+	void World::MakeToplevel(ActorRef actor) {
+		Check<BadValueException>(actor->world != this, "Cannot make an actor that does not belong to this world toplevel!");
+
+		//Remove actor from its current parent
+		auto common = actor->parent->children | std::views::filter([&actor](const ActorRef& ref) {
+			return ref == actor;
+		}) | std::views::common;
+		actor->parent->children = std::vector<ActorRef>(common.begin(), common.end());
+
+		//Set parent to null (marks it as toplevel)
+		actor->parent = ActorRef {};
+		actor->parent.world = std::static_pointer_cast<World>(shared_from_this());
 	}
 
-	std::vector<ActorHandle> World::GetRootChildren() const {
-		return root->GetAllChildren();
+	std::vector<ActorRef> World::GetToplevelActors() const {
+		auto common = impl->slotTable | std::views::transform([this](const Impl::ActorSlot& slot) {
+			return ActorRef(std::const_pointer_cast<World>(std::static_pointer_cast<const World>(shared_from_this())), slot.id, slot.generation);
+		}) | std::views::filter([](const ActorRef& ref) {
+			return !((bool)ref->parent);
+		}) | std::views::common;
+		return std::vector<ActorRef>(common.begin(), common.end());
+	}
+
+	std::vector<ActorRef> World::_FindActors(std::function<bool(ActorRef)> predicate) const {
+		auto common = impl->slotTable | std::views::transform([this](const Impl::ActorSlot& slot) {
+			return ActorRef(std::const_pointer_cast<World>(std::static_pointer_cast<const World>(shared_from_this())), slot.id, slot.generation);
+		}) | std::views::filter(predicate) |
+					  std::views::common;
+		return std::vector<ActorRef>(common.begin(), common.end());
 	}
 
 	struct WorldManager::Impl {
 		std::shared_ptr<World> active;
+		EventConsumer shutdownConsumer;
 	};
 
 	WorldManager::WorldManager() {
 		//Create implementation pointer
 		impl = std::make_unique<Impl>();
+
+		//Register active world release on shutdown
+		impl->shutdownConsumer = EventConsumer([this](Event&) {
+			impl->active.reset();
+			EventManager::Get().UnsubscribeConsumer("EngineShutdown", impl->shutdownConsumer);
+		});
+		EventManager::Get().SubscribeConsumer("EngineShutdown", impl->shutdownConsumer);
 	}
 
 	WorldManager::~WorldManager() {}
@@ -122,18 +191,116 @@ namespace Cacao {
 		return impl->active;
 	}
 
+	template<typename T>
+	exathread::ValueTask<std::set<T*>> FindComponents(ActorRef actor) {
+		//Inactive actor stop
+		if(!actor->IsActive()) co_return {};
+
+		//Get all components and add them to the list
+		auto actorComps = actor->GetComponentsFiltered([](const std::unique_ptr<Component>& component) {
+			return (dynamic_cast<T*>(component.get()));
+		}) | std::views::transform([](const std::unordered_map<std::type_index, Component*>::value_type& item) {
+			return static_cast<T*>(item.second);
+		}) | std::views::common;
+		std::set<T*> comps(actorComps.begin(), actorComps.end());
+
+		//Handle children
+		if(actor->GetAllChildren().size() > 0) {
+			//Find them
+			exathread::MultiFuture<std::set<T*>> childCompsFut = Engine::Get().GetThreadPool()->batch(actor->GetAllChildren(), FindComponents<T>);
+			co_await exathread::yieldUntilComplete(childCompsFut);
+
+			//Merge lists and return
+			std::vector<std::set<T*>> toMerge = childCompsFut.results();
+			toMerge.push_back(std::move(comps));
+			auto joined = std::views::join(toMerge) | std::views::common;
+			co_return std::set<T*>(joined.begin(), joined.end());
+		} else {
+			co_return comps;
+		}
+	}
+
 	void WorldManager::SetActiveWorld(const std::string& addr, bool noload) {
 		//Validate the resource address
 		Check<BadValueException>(Resource::ValidateResourceAddr<World>(addr), "World address is malformed!");
 
 		//Check resource cache
+		std::unique_lock<std::mutex> lk {IMPL(ResourceManager).cacheProtector};
 		if(!IMPL(ResourceManager).cache.contains(addr)) {
 			//noload check
-			Check<NonexistentValueException>(noload, "World requested for activation is not loaded, and noload flag was specified!");
+			Check<NonexistentValueException>(!noload, "World requested for activation is not loaded, and noload flag was specified!");
 
 			//Load it
+			lk.unlock();
 			impl->active = *ResourceManager::Get().Load<World>(addr);
+			return;
+		} else {
+			impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
 		}
-		impl->active = std::static_pointer_cast<World>(IMPL(ResourceManager).cache[addr].lock());
+		lk.unlock();
+
+		//Reset script and mesh renderer caches
+		{
+			//Acquire mutex
+			std::lock_guard lk(IMPL(TickController).tickScriptsMtx);
+
+			//Fetch new data
+			std::set<Script*> scriptsMerged;
+			if(impl->active->GetToplevelActors().size() > 0) {
+				//Wait for meshes to be returned
+				exathread::MultiFuture<std::set<Script*>> scriptsFut = Engine::Get().GetThreadPool()->batch(impl->active->GetToplevelActors(), FindComponents<Script>);
+				scriptsFut.await();
+
+				//Join final mesh list
+				auto joined = scriptsFut.results() | std::views::join | std::views::common;
+				scriptsMerged = std::set<Script*>(joined.begin(), joined.end());
+			}
+
+			//Push to tick controller
+			IMPL(TickController).tickScripts = scriptsMerged;
+		}
+		{
+			//Acquire mutex
+			std::lock_guard lk(IMPL(GPUManager).renderersMtx);
+
+			//Fetch new data
+			std::set<MeshRenderer*> renderersMerged;
+			if(impl->active->GetToplevelActors().size() > 0) {
+				//Wait for meshes to be returned
+				exathread::MultiFuture<std::set<MeshRenderer*>> renderersFut = Engine::Get().GetThreadPool()->batch(impl->active->GetToplevelActors(), FindComponents<MeshRenderer>);
+				renderersFut.await();
+
+				//Join final mesh list
+				auto joined = renderersFut.results() | std::views::join | std::views::common;
+				renderersMerged = std::set<MeshRenderer*>(joined.begin(), joined.end());
+			}
+
+			//Push to tick controller
+			IMPL(GPUManager).renderers = renderersMerged;
+		}
+	}
+
+	ActorRef World::CreateActor(const std::string& name, ActorRef parent) {
+		Check<NonexistentValueException>(!parent.null && parent, "Cannot create an actor under a nonexistent or expired parent!");
+
+		//Obtain slot for actor creation
+		Impl::ActorSlot& slot = [this]() -> Impl::ActorSlot& {
+			if(impl->freeList.empty()) {
+				Impl::ActorSlot& s = impl->slotTable.emplace_back();
+				s.generation = 1;
+				s.id = impl->slotTable.size() - 1;
+				return s;
+			} else {
+				Impl::ActorSlot& s = impl->slotTable[*impl->freeList.begin()];
+				impl->freeList.erase(impl->freeList.begin());
+				++(s.generation);
+				return s;
+			}
+		}();
+
+		//Create actor in slot
+		ActorRef ref(std::static_pointer_cast<World>(shared_from_this()), slot.id, slot.generation);
+		slot.actor = std::unique_ptr<Actor>(new Actor(name, parent, ref, xg::newGuid()));
+		return ref;
 	}
 }

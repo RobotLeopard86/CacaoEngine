@@ -1,5 +1,5 @@
 #include "libcacaoimage.hpp"
-#include "libcacaocommon.hpp"
+#include "CheckException.hpp"
 
 #include "webp/decode.h"
 #include "webp/encode.h"

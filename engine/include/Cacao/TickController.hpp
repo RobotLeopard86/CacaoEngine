@@ -49,20 +49,22 @@ namespace Cacao {
 			return running;
 		}
 
-	  private:
+		/**
+		 * @brief Check the current TPS (ticks per second) of the engine
+		 *
+		 * @return The TPS
+		 */
+		unsigned int GetCurrentTPS();
+
+		///@cond
 		struct Impl;
+		///@endcond
+
+	  private:
 		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
 
 		bool running;
-
-		struct SnapshotRequestControl {
-			SnapshotRequestControl() : request(false), grant(0), done(0) {}
-
-			std::atomic_bool request;
-			std::binary_semaphore grant;
-			std::binary_semaphore done;
-		} snapshotControl;
-		friend class FrameProcessor;
 
 		TickController();
 		~TickController();

@@ -20,9 +20,7 @@ namespace Cacao {
 		 * @throws BadValueException If the model data is empty
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
-			return std::shared_ptr<Model>(new Model(std::move(modelBin), addr));
-		}
+		static std::shared_ptr<Model> Create(std::vector<unsigned char>&& modelBin, const std::string& addr);
 
 		/**
 		 * @brief Get a list of stored meshes
@@ -45,7 +43,8 @@ namespace Cacao {
 		 *
 		 * @return A handle to the mesh resource
 		 *
-		 * @throws NonexistentValueException If the provided ID is not found in meshList
+		 * @throws NonexistentValueException If the provided ID is not found in the mesh list
+		 * @throws MiscException If the mesh requires tangent generation and that step fails
 		 */
 		std::shared_ptr<Mesh> GetMesh(const std::string& id);
 
@@ -56,7 +55,8 @@ namespace Cacao {
 		 *
 		 * @return A handle to the texture resource
 		 *
-		 * @throws NonexistentValueException If the provided ID is not found in texList
+		 * @throws NonexistentValueException If the provided ID is not found in the texture list
+		 * @throws MiscException If texture processing fails
 		 */
 		std::shared_ptr<Tex2D> GetTexture(const std::string& id);
 

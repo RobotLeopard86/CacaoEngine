@@ -1,0 +1,19 @@
+diff --git a/source/tools/meson.build b/source/tools/meson.build
+index 3b76bcb..634707a 100644
+--- a/source/tools/meson.build
++++ b/source/tools/meson.build
+@@ -1,8 +1,8 @@
+ subdir('toolutil')
+-subdir('icupkg')
+-subdir('pkgdata')
+-subdir('icuinfo')
+-subdir('ctestfw')
+-subdir('genbrk')
++#subdir('icupkg')
++#subdir('pkgdata')
++#subdir('icuinfo')
++#subdir('ctestfw')
++#subdir('genbrk')
+ subdir('genccode')
+-subdir('gencmn')
++#subdir('gencmn')

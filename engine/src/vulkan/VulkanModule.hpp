@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Cacao/GPU.hpp"
+#include "Cacao/Material.hpp"
 #include "impl/PAL.hpp"
+#include "BackendCommon.hpp"
 
 #ifdef __linux__
 #ifdef HAS_X11
@@ -23,7 +25,6 @@
 #include <set>
 #include <utility>
 #include <mutex>
-#include <atomic>
 
 namespace Cacao {
 	template<typename T>
@@ -33,14 +34,21 @@ namespace Cacao {
 		T obj;
 
 		Allocated() {}
-		Allocated(std::pair<T, vma::Allocation> p) : alloc(p.second), obj(p.first) {}
+		Allocated(std::pair<vma::Allocation, T> p) : alloc(p.first), obj(p.second) {}
 	};
 
 	struct ViewImage : public Allocated<vk::Image> {
 		vk::ImageView view;
 
 		ViewImage() {}
-		ViewImage(std::pair<vk::Image, vma::Allocation> p) : Allocated<vk::Image>(p) {}
+		ViewImage(std::pair<vma::Allocation, vk::Image> p) : Allocated<vk::Image>(p) {}
+	};
+
+	struct MappedBuffer : Allocated<vk::Buffer> {
+		void* mem;
+
+		MappedBuffer() {}
+		MappedBuffer(std::pair<vma::Allocation, vk::Buffer> p) : Allocated<vk::Buffer>(p) {}
 	};
 
 	struct Sync {
@@ -78,25 +86,15 @@ namespace Cacao {
 
 	class RenderCommandContext {
 	  public:
-		vk::Semaphore acquire, render;
+		//Rendering control
+		vk::Fence inFlight;
+		vk::Semaphore rendered;
+		uint32_t imageIndex;
 		Sync sync;
-		uint32_t imageIndex = UINT32_MAX;
-		std::atomic_bool available;
-		int id;
 
-		RenderCommandContext() {}
-		RenderCommandContext(const RenderCommandContext&) = delete;
-		RenderCommandContext& operator=(const RenderCommandContext&) = delete;
-		RenderCommandContext(RenderCommandContext&& o)
-		  : acquire(std::exchange(o.acquire, {})), render(std::exchange(o.render, {})), sync(std::exchange(o.sync, {})), imageIndex(std::exchange(o.imageIndex, UINT32_MAX)), available(o.available.load(std::memory_order_relaxed)) {}
-		RenderCommandContext& operator=(RenderCommandContext&& o) {
-			acquire = std::exchange(o.acquire, {});
-			render = std::exchange(o.render, {});
-			sync = std::exchange(o.sync, {});
-			imageIndex = std::exchange(o.imageIndex, UINT32_MAX);
-			available.store(o.available.load(std::memory_order_relaxed), std::memory_order_release);
-			return *this;
-		}
+		//Engine descriptors
+		MappedBuffer globals;
+		vk::DescriptorSet set;
 	};
 
 	//THIS IS NOT THREAD-SAFE
@@ -108,27 +106,29 @@ namespace Cacao {
 		VulkanCommandBuffer& operator=(VulkanCommandBuffer&&);
 
 		void Execute() override;
+		Sync& GetSync();
 
-		Sync GetSync();
-		vk::CommandBuffer& vk();
+		vk::CommandBuffer cmd;
+
+		void DrawMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, Transform transform) override;
+		void BindSet(const vk::PipelineLayout& layout);
 
 	  protected:
+		//Contexts
 		TransientCommandContext* transient = nullptr;
 		RenderCommandContext* render = nullptr;
-		bool didStartRender = false;
 
+		//Command buffer pool
 		vk::CommandPool* poolPtr = nullptr;
-		std::promise<void> promise;
-		vk::CommandBuffer primary;
-		std::vector<vk::CommandBuffer> secondaries;
 
+		//Promise
+		std::promise<void> promise;
+
+		//Commands
 		bool SetupContext(bool rendering) override;
 		void StartRendering(glm::vec3 clearColor) override;
 		void EndRendering() override;
-
-		void UnsignalAcquire();
-
-		static unsigned int acquireCount;
+		void UpdateEngineData(std::shared_ptr<Camera> cam, bool worldRefresh) override;
 
 		friend class VulkanGPU;
 		friend class VulkanModule;
@@ -146,6 +146,7 @@ namespace Cacao {
 		}
 		unsigned int MaxFramesInFlight() override;
 		void GenSwapchain() override;
+		void WaitIdle() override;
 
 	  private:
 		std::vector<std::unique_ptr<VulkanCommandBuffer>> submitted;
@@ -165,6 +166,8 @@ namespace Cacao {
 		Mesh::Impl* ConfigureMesh() override;
 		Tex2D::Impl* ConfigureTex2D() override;
 		Cubemap::Impl* ConfigureCubemap() override;
+		Shader::Impl* ConfigureShader() override;
+		Material::Impl* ConfigureMaterial() override;
 		GPUManager::Impl* ConfigureGPUManager() override;
 		std::unique_ptr<CommandBuffer> CreateCmdBuffer() override;
 
@@ -180,30 +183,34 @@ namespace Cacao {
 		vk::SurfaceFormatKHR surfaceFormat;
 		vk::SurfaceCapabilitiesKHR capabilities;
 		struct SwapchainData {
+			//Swapchain and data
 			vk::SwapchainKHR chain;
 			vk::Extent2D extent;
+			uint16_t cycle = 0;
+
+			//Images
 			std::vector<vk::Image> images;
 			std::vector<vk::ImageView> views;
-			std::vector<std::unique_ptr<RenderCommandContext>> renderContexts;
-			uint16_t cycle = 0;
+			std::vector<ViewImage> depthImages;
+
+			//Contexts
+			std::vector<RenderCommandContext> contexts;
+
+			//Acquire semaphore data
+			std::vector<vk::Semaphore> acquireSems;
+			std::vector<uint16_t> imageSemIndices;
 		} swapchain;
 		vk::CommandPool renderingPool;
+		std::mutex renderPoolMtx;
 
-		//==================== SECONDARY COMMAND BUFFER SUPPORT ====================
-		vk::CommandBufferInheritanceRenderingInfo cbRenderingInheritance;
-		vk::CommandBufferInheritanceInfo cbInheritance;
-
-		//==================== DEPTH BUFFER ====================
-		ViewImage depth;
-		vk::Format selectedDF;
-
-		//==================== GLOBALS UBO AND MEMORY ====================
-		Allocated<vk::Buffer> globalsUBO;
-		void* globalsMem;
+		//==================== ENGINE DATA DESCRIPTORS ====================
+		vk::DescriptorSetLayout engineSetLayout;
+		vk::DescriptorPool descriptorPool;
 
 		//==================== MISCELLANEOUS FIELDS ====================
 		bool vsync;
 		std::mutex queueMtx;
+		vk::Format selectedDF;
 
 		VulkanModule()
 		  : PALModule("vulkan") {}

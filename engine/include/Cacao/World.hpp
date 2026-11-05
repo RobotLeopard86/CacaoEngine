@@ -6,7 +6,7 @@
 #include "Actor.hpp"
 #include "Resource.hpp"
 
-#include "libcacaoformats.hpp"
+#include "libcacaoasset.hpp"
 
 #include <memory>
 #include <optional>
@@ -22,82 +22,116 @@ namespace Cacao {
 		/**
 		 * @brief Create a new blank world
 		 *
+		 * @param useOrthographicCamera Whether to use an orthographic camera (true) or perspective camera (false)
 		 * @param addr The resource address to associate with the world
 		 *
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<World> Create(const std::string& addr) {
-			return std::shared_ptr<World>(new World(addr));
-		}
+		static std::shared_ptr<World> Create(bool useOrthographicCamera, const std::string& addr);
 
 		/**
 		 * @brief Create a new world using data
 		 *
-		 * @param addr The resource address to associate with the world
 		 * @param world The world information for setup
+		 * @param addr The resource address to associate with the world
 		 *
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<World> Create(const std::string& addr, const libcacaoformats::World& world);
-
-		std::shared_ptr<Camera> cam;///<World camera that will be used to render everything else
-
-		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
+		static std::shared_ptr<World> Create(const libcacaoasset::World& world, const std::string& addr);
 
 		/**
-		 * @brief Set an actor's parent to the root actor (adding it to the world if it wasn't already)
+		 * @brief Make an Actor a toplevel (no parent, at root of world tree)
 		 *
-		 * @param actor The actor to reparent
+		 * @param actor The actor to make toplevel
+		 *
+		 * @throws BadValueException If the actor does not belong to this world
 		 */
-		void ReparentToRoot(ActorHandle actor);
+		void MakeToplevel(ActorRef actor);
 
 		/**
-		 * @brief Get all entities that are direct children of the root actor
+		 * @brief Get a list of actors that are toplevel (have no parent)
 		 */
-		std::vector<ActorHandle> GetRootChildren() const;
+		std::vector<ActorRef> GetToplevelActors() const;
 
 		/**
-		 * @brief Find an Actor by some arbitrary condition
+		 * @brief Create a new Actor in the world
+		 *
+		 * @param name The name for this new actor
+		 * @param parent The parent for this new actor (leave as a null ref to make toplevel)
+		 *
+		 * @throws NonexistentValueException If the ref references a nonexistent actor or is out-of-date
+		 */
+		ActorRef CreateActor(const std::string& name, ActorRef parent = {});
+
+		/**
+		 * @brief Find an Actor according to some arbitrary condition
 		 *
 		 * @param predicate The predicate to check each actor against
 		 *
 		 * @return An optional that contains the actor if it was found
 		 */
 		template<typename P>
-			requires std::is_invocable_r_v<bool, P, ActorHandle>
-		std::optional<ActorHandle> FindActor(P predicate) const {
-			//Search for the object
-			return actorSearchRunner(root->GetAllChildren(), predicate);
+			requires std::is_invocable_r_v<bool, P, ActorRef>
+		std::vector<ActorRef> FindActors(P predicate) const {
+			//Invoke internal search function with wrapped predicate
+			return _FindActors([&predicate](ActorRef ref) { return predicate(ref); });
 		}
+
+		/**
+		 * @brief Get the rotation of the skybox
+		 *
+		 * @return The rotation
+		 */
+		glm::quat GetSkyboxRotation() const {
+			return skyRot;
+		}
+
+		/**
+		 * @brief Get the rotation of the skybox as Euler angles in degrees
+		 *
+		 * @return The rotation as Euler angles
+		 */
+		glm::vec3 GetSkyboxRotationEuler() const {
+			return glm::degrees(glm::eulerAngles(skyRot));
+		}
+
+		/**
+		 * @brief Set the rotation of the skybox
+		 *
+		 * @param rot The new rotation
+		 */
+		void SetSkyboxRotation(glm::quat rot) {
+			skyRot = glm::normalize(rot);
+		}
+
+		/**
+		 * @brief Set the rotation of the skybox using Euler angles in degrees
+		 *
+		 * @param rot The new rotation in Euler angles
+		 */
+		void SetSkyboxRotationEuler(glm::vec3 rot) {
+			skyRot = glm::normalize(glm::quat(glm::radians(rot)));
+		}
+
+		std::shared_ptr<Camera> cam;	   ///<World camera that will be used to render everything else
+		std::shared_ptr<Cubemap> skyboxTex;///<Cube texture to use as the skybox
 
 		~World();
 
+		///@cond
+		struct Impl;
+		///@endcond
+
 	  private:
-		World(const std::string& addr);
-
-		ActorHandle root;
-
-		//Recursive function for actually running a actor search
-		template<typename P>
-		std::optional<ActorHandle> actorSearchRunner(std::vector<ActorHandle> target, P predicate) const {
-			//Iterate through all children
-			for(auto child : target) {
-				//Does this child pass the predicate?
-				if(predicate(child)) {
-					return std::optional<ActorHandle>(child);
-				}
-
-				//Search through children
-				std::optional<ActorHandle> found = actorSearchRunner(child->GetAllChildren(), predicate);
-				if(found.has_value()) {
-					return found;
-				}
-			}
-			//Nothing was found, return null option
-			return std::nullopt;
-		}
-
+		World(bool useOrthographicCamera, const std::string& addr);
 		friend class ResourceManager;
-		friend class Actor;
+
+		std::unique_ptr<Impl> impl;
+		friend class ImplAccessor;
+
+		//Internal function for actually running a actor search
+		std::vector<ActorRef> _FindActors(std::function<bool(ActorRef)> predicate) const;
+
+		glm::quat skyRot;
 	};
 }

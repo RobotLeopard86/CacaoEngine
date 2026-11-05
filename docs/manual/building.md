@@ -9,10 +9,9 @@ Before you begin, please check the [Platform Support page](./platforms) to ensur
 
 #### All Platforms
 * Git
-* Meson (version `1.9.0` or newer)
+* Meson (version `1.10.2` or newer)
 * Ninja
 * Python 3
-* CMake
 
 ```{note}
 Some Linux distros may not have the requisite Meson version available in their repositories. Follow [the instructions here](https://mesonbuild.com/Getting-meson.html#installing-meson-with-pip) to install via `pip` instead, which always has the latest versions.
@@ -42,7 +41,7 @@ You may be able to use a subset of the listed packages by disabling some feature
 Similarly, you may not need Pipewire packages or ALSA packages if not targeting those audio subsystems, though it is recommended to always include them for best compatibility.
 
 ## Compiler Support
-Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, and Fedora Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
+Cacao Engine is primarily built and tested using [Clang](https://clang.llvm.org) with the [LLD linker](https://lld.llvm.org). While it should compile using GCC or MSVC or alternate linkers, no compatibility guarantees are assured. Cacao Engine is currently confirmed to build correctly on Windows, macOS, Fedora, and Arch Linux using Clang and LLD. More compatibility tests will be conducted prior to release.  
 
 ## Build
 In the root Cacao Engine directory, run the following command to configure the build:  

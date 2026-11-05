@@ -7,10 +7,13 @@
 namespace Cacao {
 	class VulkanCubemapImpl : public Cubemap::Impl {
 	  public:
-		void Realize(bool& success) override;
-		void DropRealized() override;
+		void Bake(bool& success) override;
+		void Discard() override;
 
 		//Image memory and view
 		ViewImage vi;
+
+		//Sampler
+		vk::Sampler sampler;
 	};
 }

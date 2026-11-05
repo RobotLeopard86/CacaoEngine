@@ -1,49 +1,5 @@
 from textwrap import dedent
 import os
-import os.path
-import exhale
-import exhale.configs
-import exhale.utils
-import exhale.deploy
-from pprint import pprint
-
-# This code was taken from https://github.com/mithro/sphinx-contrib-mithro/tree/master/sphinx-contrib-exhale-multiproject because Sphinx had trouble loading it as a module
-def exhale_environment_ready(app):
-    default_project = app.config.breathe_default_project
-    default_exhale_args = dict(app.config.exhale_args)
-
-    exhale_projects_args = dict(app.config._raw_config['exhale_projects_args'])
-    breathe_projects = dict(app.config._raw_config['breathe_projects'])
-
-    for project in breathe_projects:
-        app.config.breathe_default_project = project
-        os.makedirs(breathe_projects[project], exist_ok=True)
-
-        project_exhale_args = exhale_projects_args.get(project, {})
-
-        app.config.exhale_args = dict(default_exhale_args)
-        app.config.exhale_args.update(project_exhale_args)
-        app.config.exhale_args["containmentFolder"] = os.path.realpath(app.config.exhale_args["containmentFolder"])
-        print("="*75)
-        print(project)
-        print("-"*50)
-        pprint(app.config.exhale_args)
-        print("="*75)
-
-        # First, setup the extension and verify all of the configurations.
-        exhale.configs.apply_sphinx_configurations(app)
-        ####### Next, perform any cleanup
-
-        # Generate the full API!
-        try:
-            exhale.deploy.explode()
-        except:
-            exhale.utils.fancyError("Exhale: could not generate reStructuredText documents :/")
-
-    app.config.breathe_default_project = default_project
-
-exhale.environment_ready = exhale_environment_ready
-# End sphinx-contrib-exhale-multiproject code
 
 version = os.environ.get("BUILDVER", default="dev")
 project = 'Cacao Engine'
@@ -58,7 +14,7 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md', '.venv', 'myexhale']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'README.md', 'LICENSE.md', '.venv', 'myexhale']
 
 html_theme = 'pydata_sphinx_theme'
 html_title = "Cacao Engine Docs"
@@ -72,7 +28,7 @@ html_css_files = ["fonts.css"]
 
 breathe_projects = {
     "Cacao Engine": "./_doxy/cacao/xml",
-    "libcacaoformats": "./_doxy/formats/xml",
+    "libcacaoasset": "./_doxy/asset/xml",
     "libcacaocommon": "./_doxy/commonlib/xml",
     "libcacaoaudiodecoder": "./_doxy/audiodecoder/xml",
     "libcacaoimage": "./_doxy/image/xml"
@@ -95,7 +51,7 @@ exhale_projects_args = {
 									INPUT = ../engine/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_MOUSE_BUTTON*,GLM*,std*,CACAO_API
+									EXCLUDE_SYMBOLS = CACAO_KEY*,CACAO_BUTTON*,GLM*,std*,CACAO_API
                                     ENABLE_PREPROCESSING = YES
 									MACRO_EXPANSION = YES
 									EXPAND_ONLY_PREDEF = YES
@@ -105,20 +61,25 @@ exhale_projects_args = {
         "containmentFolder": "./api",
         "rootFileTitle": "API Reference"
     },
-    "libcacaoformats": {
+    "libcacaoasset": {
         "exhaleDoxygenStdin": dedent('''
-									INPUT = ../libs/formats/include
+									INPUT = ../libs/asset/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
-        "containmentFolder": "./libapis/formats",
-        "rootFileTitle": "Cacao Formats Library API"
+        "containmentFolder": "./libapis/asset",
+        "rootFileTitle": "Cacao Assets Library API",
+        "afterTitleDescription": ".. note:: ``libcacoasset`` makes use of Jaguar types. Refer to the `Jaguar documentation <https://robotleopard86.github.io/Jaguar/>`__ for further information."
     },
      "libcacaoimage": {
         "exhaleDoxygenStdin": dedent('''
 									INPUT = ../libs/image/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/image",
         "rootFileTitle": "Cacao Images Library API",
@@ -129,6 +90,8 @@ exhale_projects_args = {
 									INPUT = ../libs/audiodecoder/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/audiodecoder",
         "rootFileTitle": "Cacao Audio Decoder Library API"
@@ -138,7 +101,8 @@ exhale_projects_args = {
 									INPUT = ../libs/common/include
 									HIDE_UNDOC_MEMBERS = YES
 									MAX_INITIALIZER_LINES = 0
-                                    EXCLUDE_SYMBOLS = std
+                                    EXCLUDE_SYMBOLS = std*,CACAO_API
+                                    PREDEFINED += CACAO_API=
 									'''),
         "containmentFolder": "./libapis/common",
         "rootFileTitle": "Cacao Common Utilities API"

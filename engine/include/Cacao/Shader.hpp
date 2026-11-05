@@ -3,6 +3,8 @@
 #include "DllHelper.hpp"
 #include "Asset.hpp"
 
+#include "libcacaoasset.hpp"
+
 namespace Cacao {
 	/**
 	 * @brief Asset type for GPU shaders
@@ -13,14 +15,14 @@ namespace Cacao {
 		 * @brief Create a new shader from IR code
 		 *
 		 * @param shaderIR The Slang IR code to create the shader with
+		 * @param desc Shader behavior and input information
 		 * @param addr The resource address to associate with the shader
 		 *
 		 * @throws BadValueException If the IR code buffer is empty
+		 * @throws BadValueException If the shader description contains invalid data
 		 * @throws BadValueException If the address is malformed
 		 */
-		static std::shared_ptr<Shader> Create(std::vector<unsigned char>&& shaderIR, const std::string& addr) {
-			return std::shared_ptr<Shader>(new Shader(std::move(shaderIR), addr));
-		}
+		static std::shared_ptr<Shader> Create(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr);
 
 		///@cond
 		Shader(const Shader&) = delete;
@@ -30,20 +32,27 @@ namespace Cacao {
 		///@endcond
 
 		/**
-		 * @brief Convert the shader data into a form suitable for rendering
+		 * @brief Get the descriptor for this shader
 		 *
-		 * @throws BadRealizeStateException If the shader is already realized
-		 * @throws BadInitStateException If the graphics backend is not initialized or connected
+		 * @return The shader descriptor
 		 */
-		void Realize();
+		libcacaoasset::Shader::Descriptor GetDescriptor();
 
 		/**
-		 * @brief Destroy the realized representation of the asset
+		 * @brief Convert the shader data into a form suitable for rendering
 		 *
-		 * @throws BadRealizeStateException If the shader is not realized
+		 * @throws BadBakeStateException If the shader is already baked
 		 * @throws BadInitStateException If the graphics backend is not initialized or connected
 		 */
-		void DropRealized();
+		void Bake() override;
+
+		/**
+		 * @brief Destroy the baked representation of the asset
+		 *
+		 * @throws BadBakeStateException If the shader is not baked
+		 * @throws BadInitStateException If the graphics backend is not initialized or connected
+		 */
+		void Discard() override;
 
 		///@cond
 		class Impl;
@@ -52,7 +61,7 @@ namespace Cacao {
 		~Shader();
 
 	  private:
-		Shader(std::vector<unsigned char>&& shaderIR, const std::string& addr);
+		Shader(std::vector<unsigned char>&& shaderIR, libcacaoasset::Shader::Descriptor desc, const std::string& addr);
 		friend class ResourceManager;
 		friend class PAL;
 

@@ -1,6 +1,5 @@
 [wrap-git]
 url = https://gitlab.xiph.org/xiph/opus.git
 depth = 1
-revision = v1.5.2
-patch_directory = opus
-diff_files = opus-override.patch
+revision = v1.6.1
+diff_files = opus-fixes.patch

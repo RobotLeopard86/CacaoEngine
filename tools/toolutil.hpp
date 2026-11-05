@@ -21,11 +21,11 @@ inline OutputLevel outputLvl;
 
 inline std::stringstream lastMsg;
 
-#define CVLOG_NONL(...)                    \
-	VLOG_NONL("\x1b[2K\r" << __VA_ARGS__); \
-	lastMsg.str("");                       \
+#define CVLOG_NONL(...)               \
+	VLOG("\x1b[2K\r" << __VA_ARGS__); \
+	lastMsg.str("");                  \
 	lastMsg << __VA_ARGS__;
-#define CVLOG(...) VLOG("\x1b[2K\r" << lastMsg.str() << __VA_ARGS__)
+#define CVLOG(...) VLOG("\x1b[1F\x1b[2K\r" << lastMsg.str() << __VA_ARGS__)
 #define CVLOG_SINGLE(...) VLOG("\x1b[2K\r" << __VA_ARGS__)
 
 #define CompileCheck(condition, ...) \

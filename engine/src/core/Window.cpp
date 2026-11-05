@@ -9,7 +9,6 @@
 #endif
 
 #include <memory>
-#include <cstdlib>
 
 namespace Cacao {
 	std::unordered_map<std::string, std::function<std::unique_ptr<Window::Impl>()>> Window::Impl::registry;

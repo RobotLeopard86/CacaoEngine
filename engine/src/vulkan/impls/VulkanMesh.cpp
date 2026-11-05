@@ -5,7 +5,7 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void VulkanMeshImpl::Realize(bool& success) {
+	void VulkanMeshImpl::Bake(bool& success) {
 		//Allocate vertex data buffers
 		vk::BufferCreateInfo vertexCI({}, sizeof(Vertex) * vertices.size(), vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
 		vma::AllocationCreateInfo vertexAllocCI(vma::AllocationCreateFlagBits::eWithinBudget, vma::MemoryUsage::eAutoPreferDevice, vk::MemoryPropertyFlagBits::eDeviceLocal);
@@ -58,16 +58,15 @@ namespace Cacao {
 
 		//Transfer data from upload buffers to real buffers
 		std::unique_ptr<VulkanCommandBuffer> vcb = CBCast<VulkanCommandBuffer>(CommandBuffer::Create());
-		vk::CommandBuffer& cmd = vcb->vk();
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, sizeof(Vertex) * vertices.size());
 			vk::CopyBufferInfo2 copyInfo(vboUp.obj, vbo.obj, copy);
-			cmd.copyBuffer2(copyInfo);
+			vcb->cmd.copyBuffer2(copyInfo);
 		}
 		{
 			vk::BufferCopy2 copy(0UL, 0UL, sizeof(unsigned int) * ibd.size());
 			vk::CopyBufferInfo2 copyInfo(iboUp.obj, ibo.obj, copy);
-			cmd.copyBuffer2(copyInfo);
+			vcb->cmd.copyBuffer2(copyInfo);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 
@@ -78,7 +77,7 @@ namespace Cacao {
 		success = true;
 	}
 
-	void VulkanMeshImpl::DropRealized() {
+	void VulkanMeshImpl::Discard() {
 		vulkan->allocator.destroyBuffer(vbo.obj, vbo.alloc);
 		vulkan->allocator.destroyBuffer(ibo.obj, ibo.alloc);
 	}

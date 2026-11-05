@@ -1,37 +1,24 @@
 #include "CLI11.hpp"
+#include "Cacao/Engine.hpp"
 #include "Cacao/Identity.hpp"
+#include "Cacao/Log.hpp"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
 
+#include <exception>
 #include <filesystem>
 #include <string>
 
 #include "Runtime.hpp"
 
-void panic(const std::string& err, const std::string& hint) {
-	std::cerr << "ERROR: " << err << "!\n"
-			  << (!hint.empty() ? std::string("Hint: ") + hint + ".\n" : "")
-			  << "If you are an end user seeing this error, please report this to the developer of the application." << std::endl;
-	exit(-1);
-}
+#include "astra/yaml.hpp"
+#include "cacaort.astra.hpp"// IWYU pragma: keep
 
-void Specparse(YAML::Node root, [[maybe_unused]] bool macOSApp = false) {
-	try {
-		rt.cacaospec = {};
-		rt.cacaospec.meta = {};
-		rt.cacaospec.meta.pkgId = root["meta"]["pkgId"].as<std::string>();
-		rt.cacaospec.meta.title = root["meta"]["title"].as<std::string>();
-		rt.cacaospec.meta.version = root["meta"]["version"].as<std::string>();
-		rt.cacaospec.binary = root["binary"].as<std::string>();
-#ifdef __APPLE__
-		if(macOSApp) rt.cacaospec.binary = "../Frameworks/" + rt.cacaospec.binary;
-#endif
-		if(!std::filesystem::exists(rt.cacaospec.binary)) panic("Game binary does not exist",
-			std::string("This usually means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
-		rt.cacaospec.binary = std::filesystem::absolute(rt.cacaospec.binary).string();
-	} catch(...) {
-		panic("Cacaospec file is improperly formatted", "");
-	}
+void panic(const std::string& err, const std::string& hint) {
+	std::cerr << "\x1b[1;91mERROR: \x1b[0m" << err << "!\n"
+			  << (!hint.empty() ? std::string("\x1b[1;96mHint: \x1b[0m") + hint + ".\n" : "")
+			  << "\x1b[3mIf you are an end user seeing this error, please report this to the developer of the application.\x1b[0m" << std::endl;
+	exit(-1);
 }
 
 int main(int argc, char* argv[]) {
@@ -68,19 +55,23 @@ int main(int argc, char* argv[]) {
 	}
 
 	//Read and parse the spec file
-	YAML::Node specRoot = YAML::LoadFile("cacaospec.yml");
+	try {
+		YAML::Node specRoot = YAML::LoadFile("cacaospec.yml");
+		rt.cacaospec = astra::yaml::fromNode<Runtime::Cacaospec>(specRoot);
+	} catch(const std::exception& e) {
+		panic(std::string("Cacaospec file is invalid: ") + e.what(), std::string("This usually means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
+	}
 #ifdef __APPLE__
-	Specparse(specRoot, inAppBundle);
-#else
-	Specparse(specRoot, false);
+	if(inAppBundle) rt.cacaospec.binary = "../Frameworks/" + rt.cacaospec.binary;
 #endif
+	if(!std::filesystem::exists(rt.cacaospec.binary)) panic("Game binary does not exist",
+		std::string("This usually means the game bundle is not correctly set up. See the documentation at https://robotleopard86.github.io/CacaoEngine/") + CACAO_VER + "/manual/bundles.html for details");
+	rt.cacaospec.binary = std::filesystem::absolute(rt.cacaospec.binary).string();
 
 	//Configure CLI
-	CLI::App app(specRoot["meta"]["title"].as<std::string>(), std::filesystem::path(argv[0]).filename().string());
-	rt.icfg.standalone = true;
-	rt.icfg.startFrameProcessorWithGfxSystem = false;
+	CLI::App app(rt.cacaospec.meta.title, std::filesystem::path(argv[0]).filename().string());
 	rt.icfg.initialRequestedBackend = "vulkan";
-	rt.icfg.clientID = Cacao::ClientIdentity {.id = specRoot["meta"]["pkgId"].as<std::string>(), .displayName = specRoot["meta"]["title"].as<std::string>()};
+	rt.icfg.clientID = ClientIdentity {.id = rt.cacaospec.meta.pkgId, .displayName = rt.cacaospec.meta.title};
 
 	//Backend option
 	app.add_option("--backend,-B", rt.icfg.initialRequestedBackend, "The preferred backend to use. One of ['opengl', 'vulkan'];")->default_val("vulkan")->check([](const std::string& v) {
@@ -111,24 +102,46 @@ int main(int argc, char* argv[]) {
 #endif
 
 	//Engine setup
-	rt.SetupEngine();
+	try {
+		rt.SetupEngine();
+	} catch(const std::exception& e) {
+		Logger::Runtime(Logger::Level::Error) << "(Cacao Engine External Exception) " << e.what();
+		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in engine initialization. Exiting...";
+		if(Engine::Get().GetState() == Engine::State::Ready) Engine::Get().GfxShutdown();
+		if(Engine::Get().GetState() == Engine::State::Alive) Engine::Get().CoreShutdown();
+		Logger::Runtime(Logger::Level::Warn) << "Engine exited with an error code!";
+		Logger::Runtime(Logger::Level::Warn) << "If you are an end user seeing this error, please report it to the application developer.";
+		exit(-1);
+	}
 
 	//Prepare game to run
 	//This is where we load initial resources and whatnot
-	rt.LoadGame();
+	try {
+		rt.LoadGame();
+	} catch(const std::exception& e) {
+		Logger::Runtime(Logger::Level::Error) << "(Cacao Engine External Exception) " << e.what();
+		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in game initialization. Exiting...";
+		rt.DestroyGfxObjects();
+		rt.Cleanup();
+		Engine::Get().GfxShutdown();
+		Engine::Get().CoreShutdown();
+		Logger::Runtime(Logger::Level::Warn) << "Engine exited with an error code!";
+		Logger::Runtime(Logger::Level::Warn) << "If you are an end user seeing this error, please report it to the application developer.";
+		exit(-1);
+	}
 
-	//Run (blocks)
-	Cacao::Engine::Get().Run();
+	//Run (blocks until the game says it's done)
+	Engine::Get().Run();
 
 	//Game has stopped now, destroy graphics objects before shutting down that part of the engine
 	rt.DestroyGfxObjects();
-	Cacao::Engine::Get().GfxShutdown();
+	Engine::Get().GfxShutdown();
 
 	//Run cleanup tasks (unload game data)
 	rt.Cleanup();
 
 	//Stop the engine fully
-	Cacao::Engine::Get().CoreShutdown();
+	Engine::Get().CoreShutdown();
 }
 
 //Windows no-console wrapper

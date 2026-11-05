@@ -7,7 +7,7 @@
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	void OpenGLCubemapImpl::Realize(bool& success) {
+	void OpenGLCubemapImpl::Bake(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
 		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
@@ -21,11 +21,8 @@ namespace Cacao {
 			//Transfer face images
 			uint8_t i = 0;
 			for(const libcacaoimage::Image& image : faces) {
-				//Flip image because OpenGL likes it that way
-				libcacaoimage::Image flipped = libcacaoimage::Flip(image);
-
 				//Copy image data to GPU and adjust increment
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8, flipped.w, flipped.h, 0, GL_RGB, GL_UNSIGNED_BYTE, flipped.data.data());
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i++, 0, GL_SRGB8_ALPHA8, image.w, image.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
 				GL_CHECK("Failed to upload cubemap face texture data!")
 			}
 
@@ -46,8 +43,8 @@ namespace Cacao {
 		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
-	void OpenGLCubemapImpl::DropRealized() {
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+	void OpenGLCubemapImpl::Discard() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);

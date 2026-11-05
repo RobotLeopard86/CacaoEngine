@@ -75,7 +75,9 @@ namespace Cacao {
 		xcb_flush(connection);
 
 		//Connect graphics
+		open = true;
 		PAL::Get().GfxConnect();
+		open = false;
 	}
 
 	void X11WindowImpl::DestroyWindow() {
@@ -318,6 +320,7 @@ namespace Cacao {
 		const uint16_t valueList[] = {(uint16_t)lastPos.x, (uint16_t)lastPos.y, (uint16_t)lastSize.x, (uint16_t)lastSize.y};
 
 		//Set size and position
+		size = lastSize;
 		xcb_configure_window(connection, window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, valueList);
 		xcb_flush(connection);
 	}

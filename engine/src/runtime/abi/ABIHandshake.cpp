@@ -75,7 +75,7 @@ EXPORT ABIHandshakeInfo __CacaoAbiInfoHandshake() {
 //Test functions
 
 static std::string stringRoundtrip(const std::string& input) {
-	if(input != "¿Cómo estás?")
+	if(input.compare("¿Cómo estás?") != 0)
 		return "error";
 	return "¡Estoy bien!";
 }
@@ -84,7 +84,7 @@ static bool engineThrow(void (*thrower)()) {
 	try {
 		thrower();
 	} catch(const std::runtime_error& e) {
-		return std::string(e.what()) == "exceptions ok";
+		return std::string(e.what()).compare("exceptions ok") == 0;
 	}
 	return false;
 }
@@ -94,7 +94,7 @@ static void clientThrow() {
 }
 
 static std::shared_ptr<unsigned int> engineConsumePtr() {
-	return std::make_shared<unsigned int>(42);
+	return std::make_shared<unsigned int>(37);
 }
 
 static bool clientConsumePtr(std::shared_ptr<unsigned int> ptr, unsigned int expected) {
@@ -102,8 +102,7 @@ static bool clientConsumePtr(std::shared_ptr<unsigned int> ptr, unsigned int exp
 }
 
 static int clientConsumeCallback(std::function<int(int)> func, int arg) {
-	if(!func)
-		throw std::runtime_error("invalid function");
+	if(!func) return -1;
 	return func(arg) + 1;
 }
 

@@ -5,13 +5,13 @@
 #include "CommandBufferCast.hpp"
 
 namespace Cacao {
-	void VulkanCubemapImpl::Realize(bool& success) {
+	void VulkanCubemapImpl::Bake(bool& success) {
 		//Calculate sizes
-		vk::DeviceSize faceSize = faces[0].w * faces[0].h * 3;
+		vk::DeviceSize faceSize = faces[0].w * faces[0].h * 4;
 		vk::DeviceSize totalSize = faceSize * 6;
 
 		//Allocate GPU texture & data upload buffers
-		vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8Srgb, {faces[0].w, faces[0].h, 1}, 1, 1,
+		vk::ImageCreateInfo texCI(vk::ImageCreateFlagBits::eCubeCompatible, vk::ImageType::e2D, vk::Format::eR8G8B8A8Srgb, {faces[0].w, faces[0].h, 1}, 1, 6,
 			vk::SampleCountFlagBits::e1, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, vk::SharingMode::eExclusive, 0);
 		vma::AllocationCreateInfo texAllocCI(vma::AllocationCreateFlagBits::eWithinBudget, vma::MemoryUsage::eAutoPreferDevice, vk::MemoryPropertyFlagBits::eDeviceLocal);
 		vk::BufferCreateInfo texUpCI({}, totalSize, vk::BufferUsageFlagBits::eTransferSrc, vk::SharingMode::eExclusive, 0);
@@ -41,13 +41,12 @@ namespace Cacao {
 
 		//Transfer data from upload buffer to real texture memory
 		std::unique_ptr<VulkanCommandBuffer> vcb = CBCast<VulkanCommandBuffer>(CommandBuffer::Create());
-		vk::CommandBuffer& cmd = vcb->vk();
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			cmd.pipelineBarrier2(cdDI);
+			vcb->cmd.pipelineBarrier2(cdDI);
 		}
 		{
 			std::vector<vk::BufferImageCopy2> copies;
@@ -56,14 +55,14 @@ namespace Cacao {
 				copies.push_back(copy);
 			}
 			vk::CopyBufferToImageInfo2 copyInfo(up.obj, vi.obj, vk::ImageLayout::eTransferDstOptimal, copies);
-			cmd.copyBufferToImage2(copyInfo);
+			vcb->cmd.copyBufferToImage2(copyInfo);
 		}
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			cmd.pipelineBarrier2(cdDI);
+			vcb->cmd.pipelineBarrier2(cdDI);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 
@@ -71,15 +70,22 @@ namespace Cacao {
 		vulkan->allocator.destroyBuffer(up.obj, up.alloc);
 
 		//Create image view
-		vk::ImageViewCreateInfo viewCI({}, vi.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8Srgb,
+		vk::ImageViewCreateInfo viewCI({}, vi.obj, vk::ImageViewType::eCube, vk::Format::eR8G8B8A8Srgb,
 			{vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eOne},
 			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 6});
 		vi.view = vulkan->dev.createImageView(viewCI);
 
+		//Create sampler
+		vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge,
+			vk::SamplerAddressMode::eClampToEdge, vk::SamplerAddressMode::eClampToEdge, 0.0f, VK_FALSE, 0.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, 0.0f,
+			vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+		sampler = vulkan->dev.createSampler(samplerCI);
+
 		success = true;
 	}
 
-	void VulkanCubemapImpl::DropRealized() {
+	void VulkanCubemapImpl::Discard() {
+		vulkan->dev.destroySampler(sampler);
 		vulkan->dev.destroyImageView(vi.view);
 		vulkan->allocator.destroyImage(vi.obj, vi.alloc);
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DllHelper.hpp"
-#include "Component.hpp"
+#include "Actor.hpp"
 
 #include <functional>
 #include <memory>
@@ -50,10 +50,9 @@ namespace Cacao {
 		/**
 		 * @brief Check if a factory for a given type of code object has been registered
 		 *
-		 * @param id
-		 * @param factory
-		 * @param type
-		 * @return requires
+		 * @param id The ID of the object factory
+		 *
+		 * @return If the factory has been registered
 		 */
 		template<typename T>
 			requires std::is_same_v<Component, T>
@@ -72,7 +71,14 @@ namespace Cacao {
 		 */
 		template<typename T>
 			requires std::is_same_v<Component, T>
-		std::pair<std::shared_ptr<T>, std::type_index> Instantiate(const std::string& id);
+		std::pair<T*, std::type_index> Instantiate(const std::string& id);
+
+		/**
+		 * @brief Clear all factories from the registry
+		 *
+		 * @warning For use only by the engine or runtimes
+		 */
+		void ClearAllFactories();
 
 	  private:
 		std::unique_ptr<Impl> impl;
@@ -85,9 +91,9 @@ namespace Cacao {
 	//Declare explicitly allowed specializations
 	///@cond
 	template<>
-	void CodeRegistry::RegisterFactory<Component>(const std::string& id, std::function<Component*()> factory, std::type_index type);
+	CACAO_API void CodeRegistry::RegisterFactory<Component>(const std::string& id, std::function<Component*()> factory, std::type_index type);
 
 	template<>
-	std::pair<std::shared_ptr<Component>, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
+	CACAO_API std::pair<Component*, std::type_index> CodeRegistry::Instantiate<Component>(const std::string& id);
 	///@endcond
 }

@@ -1,4 +1,5 @@
 #include "OpenGLTex2D.hpp"
+#include "Cacao/Exceptions.hpp"
 #include "Cacao/GPU.hpp"
 #include "OpenGLModule.hpp"
 #include "CommandBufferCast.hpp"
@@ -8,7 +9,7 @@
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
-	void OpenGLTex2DImpl::Realize(bool& success) {
+	void OpenGLTex2DImpl::Bake(bool& success) {
 		//Open-GL specific stuff needs to be on the GPU thread
 		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
@@ -22,14 +23,12 @@ namespace Cacao {
 					format = GL_RED;
 					internalFormat = GL_RED;
 					break;
-				case libcacaoimage::Image::Layout::RGB:
-					format = GL_RGB;
-					internalFormat = GL_SRGB8;
-					break;
 				case libcacaoimage::Image::Layout::RGBA:
 					format = GL_RGBA;
 					internalFormat = GL_SRGB8_ALPHA8;
 					break;
+				default:
+					throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");
 			}
 
 			//Create texture object
@@ -62,8 +61,8 @@ namespace Cacao {
 		GPUManager::Get().Submit(std::move(cmd)).get();
 	}
 
-	void OpenGLTex2DImpl::DropRealized() {
-		std::unique_ptr<OpenGLCommandBuffer> cmd = std::make_unique<OpenGLCommandBuffer>();
+	void OpenGLTex2DImpl::Discard() {
+		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this]() {
 			//Destroy texture object
 			glDeleteTextures(1, &gpuTex);

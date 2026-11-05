@@ -3,20 +3,22 @@
 #include "Cacao/GPU.hpp"
 #include "VulkanModule.hpp"
 #include "CommandBufferCast.hpp"
+#include "vulkan/vulkan_core.h"
+#include "vulkan/vulkan_enums.hpp"
+#include "vulkan/vulkan_structs.hpp"
 
 namespace Cacao {
-	void VulkanTex2DImpl::Realize(bool& success) {
+	void VulkanTex2DImpl::Bake(bool& success) {
 		//Get texture format
 		switch(img.layout) {
 			case libcacaoimage::Image::Layout::Grayscale:
 				format = vk::Format::eR8Srgb;
 				break;
-			case libcacaoimage::Image::Layout::RGB:
-				format = vk::Format::eR8G8B8Srgb;
-				break;
 			case libcacaoimage::Image::Layout::RGBA:
 				format = vk::Format::eR8G8B8A8Srgb;
 				break;
+			default:
+				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");
 		}
 
 		//Allocate GPU texture & data upload buffers
@@ -44,26 +46,24 @@ namespace Cacao {
 
 		//Transfer data from upload buffer to real texture memory
 		std::unique_ptr<VulkanCommandBuffer> vcb = CBCast<VulkanCommandBuffer>(CommandBuffer::Create());
-		;
-		vk::CommandBuffer& cmd = vcb->vk();
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eNone,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			cmd.pipelineBarrier2(cdDI);
+			vcb->cmd.pipelineBarrier2(cdDI);
 		}
 		{
 			vk::BufferImageCopy2 copy(0UL, 0, 0, {vk::ImageAspectFlagBits::eColor, 0, 0, 1}, {0}, {img.w, img.h, 1});
 			vk::CopyBufferToImageInfo2 copyInfo(up.obj, vi.obj, vk::ImageLayout::eTransferDstOptimal, copy);
-			cmd.copyBufferToImage2(copyInfo);
+			vcb->cmd.copyBufferToImage2(copyInfo);
 		}
 		{
 			vk::ImageMemoryBarrier2 barrier(vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eTransferWrite,
 				vk::PipelineStageFlagBits2::eAllCommands, vk::AccessFlagBits2::eShaderSampledRead,
 				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, 0, 0, vi.obj, {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 			vk::DependencyInfo cdDI({}, {}, {}, barrier);
-			cmd.pipelineBarrier2(cdDI);
+			vcb->cmd.pipelineBarrier2(cdDI);
 		}
 		GPUManager::Get().Submit(std::move(vcb)).get();
 
@@ -76,10 +76,16 @@ namespace Cacao {
 			{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 		vi.view = vulkan->dev.createImageView(viewCI);
 
+		//Create sampler
+		vk::SamplerCreateInfo samplerCI({}, vk::Filter::eLinear, vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
+			vk::SamplerAddressMode::eRepeat, 0.0f, VK_TRUE, 8.0f, VK_FALSE, vk::CompareOp::eNever, 0.0f, (float)VK_REMAINING_MIP_LEVELS, vk::BorderColor::eIntTransparentBlack, VK_FALSE);
+		sampler = vulkan->dev.createSampler(samplerCI);
+
 		success = true;
 	}
 
-	void VulkanTex2DImpl::DropRealized() {
+	void VulkanTex2DImpl::Discard() {
+		vulkan->dev.destroySampler(sampler);
 		vulkan->dev.destroyImageView(vi.view);
 		vulkan->allocator.destroyImage(vi.obj, vi.alloc);
 	}

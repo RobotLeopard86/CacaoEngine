@@ -10,9 +10,13 @@
 #include "Cacao/Cubemap.hpp"
 #include "Cacao/Model.hpp"
 #include "Cacao/Input.hpp"
-#include "Cacao/FrameProcessor.hpp"
+#include "Cacao/TickController.hpp"
+#include "Cacao/Shader.hpp"
+#include "Cacao/Material.hpp"
+#include "Cacao/World.hpp"
 
 #define IMPL(tp, ...) ImplAccessor::Get().Get##tp(__VA_ARGS__)
+#define RES_IMPL(tp, backend, var) static_cast<backend##tp##Impl&>(IMPL(tp, var))
 #define WIN_IMPL(tp) static_cast<tp##WindowImpl&>(ImplAccessor::Get().GetWindow())
 #define GPU_IMPL(tp) static_cast<tp##GPU&>(ImplAccessor::Get().GetGPUManager())
 
@@ -41,7 +45,7 @@ namespace Cacao {
 		IA_MKGETTER_SINGLE(PAL)
 		IA_MKGETTER_SINGLE(GPUManager)
 		IA_MKGETTER_SINGLE(Input)
-		IA_MKGETTER_SINGLE(FrameProcessor)
+		IA_MKGETTER_SINGLE(TickController)
 
 		//Resources
 		IA_MKGETTER(Sound)
@@ -49,8 +53,14 @@ namespace Cacao {
 		IA_MKGETTER(Tex2D)
 		IA_MKGETTER(Cubemap)
 		IA_MKGETTER(Model)
+		IA_MKGETTER(Shader)
+		IA_MKGETTER(World)
+		IA_MKGETTER(Material)
 
 	  private:
 		ImplAccessor();
 	};
 }
+
+#undef IA_MKGETTER
+#undef IA_MKGETTER_SINGLE

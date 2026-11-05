@@ -1,4 +1,4 @@
-project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2025.19.1', license: 'Apache-2.0 WITH LLVM-exception', subproject_dir: 'external', default_options: ['cpp_std=c++20', 'warning_level=3', 'b_staticpic=true', 'default_library=static'])
+project('slang', 'c', 'cpp', meson_version: '>=1.2.0', version: '2026.14.1', license: 'Apache-2.0 WITH LLVM-exception', subproject_dir: 'external', default_options: ['cpp_std=c++20', 'warning_level=1', 'b_staticpic=true', 'default_library=static'])
 
 ###################################
 # COMMON SETUP
@@ -18,7 +18,7 @@ path_separator = (host_machine.system() == 'windows' ? '\\' : '/')
 # Disable certain common warnings
 argsyntax = meson.get_compiler('cpp').get_argument_syntax()
 if argsyntax == 'gcc'
-    add_project_arguments(['-Wno-assume', '-Wno-reorder-ctor', '-Wno-switch', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-extra-semi', '-Wno-unused-variable', '-Wno-logical-op-parentheses'], language: 'cpp')
+    add_project_arguments(['-Wno-assume', '-Wno-reorder-ctor', '-Wno-switch', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-extra-semi', '-Wno-unused-variable', '-Wno-logical-op-parentheses', '-Wno-unused-local-typedef'], language: 'cpp')
 elif argsyntax == 'msvc'
     add_project_arguments(['/wd26495', '/wd4065', '/wd4189', '/wd4100', '/wd4068', '/wd4189', '/wd4805', '/wd4804'], language: 'cpp')
 endif
@@ -88,6 +88,18 @@ spirv_headers_dep = spirv_headers.get_variable('spirv_headers_dep')
 lua = subproject('lua')
 lua_headers_dep = lua.get_variable('lua_headers_dep')
 
+# cmark
+cmark = subproject('cmark')
+cmark_dep = cmark.get_variable('cmark_dep')
+
+# fast_float
+fast_float = subproject('fast_float')
+fast_float_dep = fast_float.get_variable('fast_float_dep')
+
+# fast_float
+slang_tint = subproject('slang-tint-headers')
+slang_tint_dep = slang_tint.get_variable('slang_tint_dep')
+
 # threads
 threads = dependency('threads', required: true)
 
@@ -99,6 +111,7 @@ libdl_dep = meson.get_compiler('cpp').find_library('dl', required: host_machine.
 ###################################
 verfile_config = configuration_data()
 verfile_config.set('SLANG_VERSION_FULL', 'v' + meson.project_version())
+verfile_config.set('SLANG_VERSION_NUMERIC', 'v' + meson.project_version())
 verfile = configure_file(input: 'slang-tag-version.h.in', output: 'slang-tag-version.h', format: 'cmake@', configuration: verfile_config)
 
 ###################################
@@ -112,7 +125,7 @@ slang_core_dep = declare_dependency(include_directories: common_includes, depend
 
 # compiler-core
 compiler_core_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'compiler-core'], check: true).stdout().strip().splitlines()
-compiler_core = library('compiler-core', sources: compiler_core_src, include_directories: common_includes, dependencies: [slang_core_dep, spirv_headers_dep], cpp_args: [export_args, '-fms-extensions'])
+compiler_core = library('compiler-core', sources: compiler_core_src, include_directories: common_includes, dependencies: [slang_core_dep, spirv_headers_dep, fast_float_dep, slang_tint_dep], cpp_args: [export_args, '-fms-extensions', '-DSLANG_ENABLE_DXIL_SUPPORT=0'])
 slang_compiler_core_dep = declare_dependency(dependencies: spirv_headers_dep, link_with: compiler_core, compile_args: [windows_defs, export_args])
 
 ###################################
@@ -233,16 +246,27 @@ no_embedded_core_module_source_dep = declare_dependency(sources: 'source' / 'sla
     fiddle_output_dep, spirv_headers_dep], include_directories: common_includes)
 
 ###################################
+# STANDARD MODULE CONFIGURATION
+###################################
+
+stdmod_config_data = configuration_data()
+stdmod_config_data.set('SLANG_STANDARD_MODULE_DIR_NAME', '')
+stdmod_config_data.set('SLANG_STANDARD_MODULE_INSTALL_DIR', host_machine.system() == 'windows' ? 'bin' : 'lib')
+stdmod_config_data.set('SLANG_NEURAL_MODULE_FILE_NAME', 'neural.slang_module')
+stdmod_config_data.set('SLANG_WORKGRAPH_MODULE_FILE_NAME', 'workgraph.slang_module')
+stdmod_config_h = configure_file(input: 'source' / 'standard-modules' / 'slang-standard-module-config.h.in', output: 'slang-standard-module-config.h', format: 'cmake@', configuration: stdmod_config_data)
+
+###################################
 # SLANG COMMON STUFF
 ###################################
 
 slang_base_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang'], check: true).stdout().strip().splitlines()
-slang_record_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'record'], check: true).stdout().strip().splitlines()
-slang_replay_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'replay'], check: true).stdout().strip().splitlines()
-slang_record_replay_util_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'util'], check: true).stdout().strip().splitlines()
-slang_src = [slang_base_src, slang_record_src, slang_replay_src, slang_record_replay_util_src]
-slang_common_dep = declare_dependency(sources: [slang_src, verfile], compile_args: export_args, include_directories: common_includes, dependencies: [slang_core_dep, slang_prelude_dep, slang_compiler_core_dep,
-    capability_defs_dep, capability_lookup_dep, fiddle_output_dep, lookup_tables_dep, spirv_headers_dep])
+slang_record_replay_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay'], check: true).stdout().strip().splitlines()
+slang_record_replay_proxy_src = run_command([python, 'sourceglob.py', meson.project_source_root() / 'source' / 'slang-record-replay' / 'proxy'], check: true).stdout().strip().splitlines()
+slang_src = [slang_base_src, slang_record_replay_src, slang_record_replay_proxy_src, stdmod_config_h]
+slang_common = static_library('slang_common', sources: [slang_src, verfile], cpp_args: export_args, include_directories: [common_includes, 'tools'], dependencies: [slang_core_dep, slang_prelude_dep, slang_compiler_core_dep,
+    capability_defs_dep, capability_lookup_dep, fiddle_output_dep, lookup_tables_dep, spirv_headers_dep, cmark_dep])
+slang_common_dep = declare_dependency(compile_args: export_args, include_directories: [common_includes, 'tools'], link_with: slang_common)
 
 ###################################
 # CORE MODULE BOOTSTRAP SETUP
@@ -268,7 +292,7 @@ glsl_module_generated_headers = [
 bootstrap_headers = custom_target('bootstrap_headers', command: [slang_bootstrap, '-archive-type', 'riff-lz4', '-save-core-module-bin-source', '@OUTPUT0@', '-save-glsl-module-bin-source', '@OUTPUT1@'], 
     output: [core_module_generated_headers, glsl_module_generated_headers], depends: slang_without_embedded_core_module)
 embedded_core_module_dep = declare_dependency(sources: ['source' / 'slang-core-module' / 'slang-embedded-core-module.cpp', bootstrap_headers], dependencies: slang_core_dep, compile_args: [export_args, 
-    '-DSLANG_EMBED_CORE_MODULE_SOURCE'])
+    '-DSLANG_EMBED_CORE_MODULE'])
 glsl_module = shared_module('slang_glsl_module', sources: [bootstrap_headers[1], 'source' / 'slang-glsl-module' / 'slang-embedded-glsl-module.cpp'], cpp_args: '-DSLANG_SHARED_LIBRARY_TOOL',
     gnu_symbol_visibility: 'hidden', dependencies: slang_core_dep)
 

@@ -48,7 +48,11 @@ namespace Cacao {
 		struct LogToken {
 			Level lvl;
 			std::ostringstream oss;
-			bool isClient;
+			enum class Source {
+				Client,
+				Runtime,
+				Engine
+			} src;
 
 		  public:
 			LogToken() = default;
@@ -77,7 +81,7 @@ namespace Cacao {
 			 * @param args The arguments to the format string
 			 */
 			template<typename... Args>
-			void LogFormatted(std::format_string<Args...> fmtstr, Args&&... args) {
+			void LogFormatted(const std::format_string<Args&...>& fmtstr, Args... args) {
 				oss << std::format(fmtstr, args...);
 			}
 
@@ -89,13 +93,13 @@ namespace Cacao {
 			 * @param args The arguments to the format string
 			 */
 			template<typename... Args>
-			void LogFormatted(const std::locale& locale, std::format_string<Args...> fmtstr, Args&&... args) {
+			void LogFormatted(const std::locale& locale, const std::format_string<Args...>& fmtstr, Args... args) {
 				oss << std::format(locale, fmtstr, args...);
 			}
 
 			~LogToken() {
 				try {
-					Logger::Get().ImplLog(oss.str(), lvl, isClient);
+					Logger::Get().ImplLog(oss.str(), lvl, src);
 				} catch(...) {}
 			}
 		};
@@ -112,9 +116,20 @@ namespace Cacao {
 		static LogToken Engine(Level level = Level::Info);
 
 		/**
+		 * @brief Log a message from the runtime
+		 *
+		 * @note For use only by engine runtimes.
+		 *
+		 * @param level The severity of the message (optional, defaults to Info)
+		 *
+		 * @return A LogToken, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value.
+		 */
+		static LogToken Runtime(Level level = Level::Info);
+
+		/**
 		 * @brief Log a message from the client
 		 *
-		 * @note For use by engine clients.
+		 * @note For use by games.
 		 *
 		 * @param level The severity of the message (optional, defaults to Info)
 		 *
@@ -126,7 +141,7 @@ namespace Cacao {
 		struct Impl;
 		std::unique_ptr<Impl> impl;
 
-		void ImplLog(std::string message, Level level, bool isClient);
+		void ImplLog(std::string message, Level level, LogToken::Source src);
 
 		friend LogToken;
 

@@ -1,19 +1,30 @@
 #pragma once
 
 #include "Asset.hpp"
+#include "Cubemap.hpp"
+#include "Model.hpp"
+#include "World.hpp"
+#include "Material.hpp"
+#include "Sound.hpp"
+#include "Tex2D.hpp"
 #include "Exceptions.hpp"
 #include "DllHelper.hpp"
 #include "Resource.hpp"
 #include "Engine.hpp"
+#include "Shader.hpp"
+#include "Mesh.hpp"
 
+#include <exception>
 #include <memory>
+#include <stdexcept>
 #include <type_traits>
 #include <string>
 #include <typeindex>
+#include <utility>
 
 namespace Cacao {
 	//This is a helper type typedef because fully written out it's super long and nonsensical
-	//To explain: This is the contained type of the returned unique_ptr type of a raw T (deref-ed for consistency)'s FetchData function
+	//To explain: Given a type T (deref'ed for consistency), LoaderIntermediate is the U in the unique_ptr<U> return value of T's FetchData function
 	///@cond
 	template<typename T, typename R>
 	using LoaderIntermediate = decltype(std::declval<std::remove_reference_t<T>>().template FetchData<R>(std::declval<std::string>()))::element_type;
@@ -37,9 +48,9 @@ namespace Cacao {
 	 * These functions should expect to be invoked in the thread pool
 	 */
 	template<typename T, typename R>
-	concept Loader = std::is_base_of_v<Resource, R> && requires(T obj, const std::string& addr) {
+	concept Loader = std::is_base_of_v<Resource, R> && (!std::is_same_v<Asset, R>) && requires(T obj, const std::string& addr) {
 		{ obj.template FetchData<R>(addr) } -> std::same_as<std::unique_ptr<LoaderIntermediate<T, R>>>;
-		{ obj.template CreateResource<R>(std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
+		{ obj.template CreateResource<R>(addr, std::unique_ptr<LoaderIntermediate<T, R>> {}) } -> std::same_as<std::shared_ptr<R>>;
 	};
 
 	/**
@@ -51,9 +62,39 @@ namespace Cacao {
 	template<typename T, typename... Rs>
 	concept MultiLoader = (Loader<T, Rs> && ...);
 
+	///@cond
+	//Declare explicitly allowed specializations
+	///@cond
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Tex2D>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Mesh>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Model>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Cubemap>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Sound>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Shader>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<Material>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<World>(const std::string& addr);
+
+	template<>
+	CACAO_API bool Resource::ValidateResourceAddr<BlobResource>(const std::string& addr);
+	///@endcond
+
 	/**
 	 * @brief Singleton for handling the loading of resources from a game bundle
-	 * @warning This API is still very much under construction and will change as design stuff is worked out! Do not rely on the current version of this API!
 	 */
 	class CACAO_API ResourceManager {
 	  public:
@@ -84,48 +125,19 @@ namespace Cacao {
 		 * @return A future that will return a handle to the resource when completed
 		 */
 		template<typename T>
-			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<BlobResource, T>) && (!std::is_same_v<Asset, T>)
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
 		exathread::Future<std::shared_ptr<T>> Load(const std::string& address) {
 			//Validate the address
 			Check<BadValueException>(Resource::ValidateResourceAddr<T>(address), "Cannot load a resource from a malformed address string!");
 
 			//Run load operation asynchronously
-			return Engine::Get().GetThreadPool()->submit([this, address]() -> std::shared_ptr<T> {
-				//Check cache
-				std::shared_ptr<Resource> maybeCached = CheckCache(address);
-				if(maybeCached) {
-					//There is a cached resource
-					try {
-						//Try to cast the resource to the correct type and return it
-						return std::dynamic_pointer_cast<T>(maybeCached);
-					} catch(const std::bad_cast&) {
-						Check<BadTypeException>(false, "Resource exists in cache but is not of the requested type!");
-						return {};
-					}
-				}
-
-				//Resource was not in cache, we need to load it
-				//Check for a valid loader
-				Check<BadStateException>(IsLoaderRegistered(typeid(T)), "No resource loader configured for the requested type!");
-
-				//Try to load the asset
-				std::shared_ptr<Resource> res = InvokeLoader(typeid(T), address);
-				try {
-					//Try to cast the resource to the correct type and return it
-					return std::dynamic_pointer_cast<T>(res);
-				} catch(const std::bad_cast&) {
-					Check<BadTypeException>(false, "Resource was loade but the returned object is not of the requested type!");
-					return {};
-				}
-
-				return {};
-			});
+			return Engine::Get().GetThreadPool()->submit(std::bind(&ResourceManager::_AsyncLoadOp<T>, this, std::placeholders::_1), address);
 		}
 
 		/**
 		 * @brief Set the resource loader for a given set of types
 		 *
-		 * @warning This function may only be called once per type. If the engine is not launched in standalone mode, this will be done automatically, and it will not be possible to change the loader for the default resource types.
+		 * @warning This function may only be called once per type. This is usually performed by the runtime.
 		 *
 		 * @param loader The resource loader to use
 		 *
@@ -145,6 +157,7 @@ namespace Cacao {
 	  private:
 		std::unique_ptr<Impl> impl;
 		friend class ImplAccessor;
+		friend class Engine;
 
 		ResourceManager();
 		~ResourceManager();
@@ -152,24 +165,91 @@ namespace Cacao {
 		std::shared_ptr<Resource> CheckCache(const std::string& addr);
 		bool IsLoaderRegistered(std::type_index tp);
 		std::shared_ptr<Resource> InvokeLoader(std::type_index tp, const std::string& addr);
+		exathread::ValueTask<std::shared_ptr<Resource>> _AsyncLoadOpImpl(std::string addr, std::type_index tp);
+		void SetupBuiltins();
+		void CleanupBuiltins();
+		std::shared_ptr<Mesh> LoadBuiltinMesh(const std::string& id);
+		std::shared_ptr<Shader> LoadBuiltinShader(const std::string& id);
 
+		template<typename T>
+			requires std::is_base_of_v<Resource, T> && (!std::is_same_v<Asset, T>)
+		exathread::ValueTask<std::shared_ptr<T>> _AsyncLoadOp(std::string address) {
+			//Check if this is a built-in resource
+			if(address.starts_with("a:builtin_") || address.starts_with("a:internal_")) {
+				if constexpr(std::is_same_v<T, Mesh>) co_return LoadBuiltinMesh(address);
+				if constexpr(std::is_same_v<T, Shader>) co_return LoadBuiltinShader(address);
+				Check<NonexistentValueException>(false, "No built-in resource found!");
+			}
+
+			//Return casted impl
+			exathread::Future<std::shared_ptr<Resource>> fut = Engine::Get().GetThreadPool()->submit(std::bind(&ResourceManager::_AsyncLoadOpImpl, this, std::placeholders::_1, std::placeholders::_2),
+				address, std::type_index {typeid(T)});
+			co_await exathread::yieldUntilComplete(fut);
+			std::shared_ptr<Resource> result = *fut;
+			try {
+				co_return std::dynamic_pointer_cast<T>(result);
+			} catch(const std::bad_cast&) {
+				Check<BadTypeException>(false, "Resource exists, but is not of the requested type!");
+				throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
+			}
+		}
+
+		///@cond
 		struct ErasedLoader {
-			std::any loaderObj;
-			std::function<std::shared_ptr<Resource>(const std::string&)> load;
+			void* loaderObj = nullptr;
+			std::function<std::shared_ptr<Resource>(ErasedLoader&, const std::string&)> _load;
+			std::function<void(void*)> _destroy;
+			std::shared_ptr<Resource> load(const std::string& addr) {
+				return _load(*this, addr);
+			}
+			ErasedLoader() = default;
+			ErasedLoader(const ErasedLoader&) = delete;
+			ErasedLoader(ErasedLoader&& o)
+			  : loaderObj(std::exchange(o.loaderObj, nullptr)), _load(std::move(o._load)), _destroy(std::move(o._destroy)) {}
+			ErasedLoader& operator=(const ErasedLoader&) = delete;
+			ErasedLoader& operator=(ErasedLoader&& o) {
+				if(this != &o) {
+					loaderObj = std::exchange(o.loaderObj, nullptr);
+					_load = std::move(o._load);
+					_destroy = std::move(o._destroy);
+				}
+				return *this;
+			}
+			~ErasedLoader() {
+				if(loaderObj) _destroy(loaderObj);
+				loaderObj = nullptr;
+			}
 		};
+
+		void RegisterLoader(std::type_index tp, ErasedLoader&& el);
 
 		template<typename T, typename R>
 			requires Loader<std::remove_reference_t<T>, R>
-		void _ConfigureResourceLoader(const T& loader) {
+		void _ConfigureResourceLoader(T&& loader) {
 			Check<BadStateException>(!IsLoaderRegistered(typeid(R)), "A loader has already been configured for this type!");
 
 			//Create erased loader object
 			ErasedLoader el;
-			el.loaderObj = loader;
-			el.load = [loader](const std::string& addr) {
-				std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader.template FetchData<R>(addr);
-				return std::static_pointer_cast<Resource>(loader.template CreateResource<R>(std::move(intermediate)));
+			el.loaderObj = (void*)new T(std::move(loader));
+			el._load = [](ErasedLoader& el, const std::string& addr) {
+				try {
+					T* loader = static_cast<T*>(el.loaderObj);
+					std::unique_ptr<LoaderIntermediate<T, R>> intermediate = loader->template FetchData<R>(addr);
+					return std::static_pointer_cast<Resource>(loader->template CreateResource<R>(addr, std::move(intermediate)));
+				} catch(const Exception&) {
+					std::rethrow_exception(std::current_exception());
+				} catch(const std::exception& e) {
+					Check<ExternalException>(false, e.what());
+					throw std::runtime_error("UNREACHABLE CODE!!! HOW DID YOU GET HERE?!");//This will never be reached because of the Check call, but the compiler doesn't know what Check does, so we have to spell it out like it's 3
+				}
 			};
+			el._destroy = [](void* obj) {
+				delete static_cast<T*>(obj);
+			};
+
+			//Add loader to list
+			RegisterLoader(typeid(R), std::move(el));
 		}
+		///@endcond
 	};
 }

@@ -1,25 +1,6 @@
 # Configure assimp
-assimp_opts = cmake.subproject_options()
-assimp_opts.add_cmake_defines({
-	'BUILD_SHARED_LIBS': 'OFF',
-	'ASSIMP_BUILD_ZLIB': 'ON',
-	'ASSIMP_NO_EXPORT': 'ON',
-	'ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT': 'OFF',
-	'ASSIMP_BUILD_FBX_IMPORTER': 'ON',
-	'ASSIMP_BUILD_GLTF_IMPORTER': 'ON',
-	'ASSIMP_BUILD_COLLADA_IMPORTER': 'ON',
-	'ASSIMP_BUILD_OBJ_IMPORTER': 'ON',
-	'ASSIMP_BUILD_SAMPLES': 'OFF',
-	'ASSIMP_BUILD_TESTS': 'OFF',
-    'CMAKE_POSITION_INDEPENDENT_CODE': 'ON',
-	'CMAKE_BUILD_TYPE': cmake_build_type,
-	'CMAKE_MSVC_RUNTIME_LIBRARY': cmake_msvc_lib,
-	'CMAKE_POLICY_DEFAULT_CMP0091': 'NEW'
-})
-assimp_opts.set_install(false)
-assimp_sp = cmake.subproject('assimp', options: assimp_opts, required: true)
-assimp_dep = assimp_sp.dependency('assimp')
-zlib_dep = assimp_sp.dependency('zlibstatic')
+assimp_sp = subproject('assimp', required: true)
+assimp_dep = assimp_sp.get_variable('assimp_dep')
 
 # Configure OpenAL-Soft
 alsoft_sp = subproject('openal-soft', required: true, default_options: {
@@ -39,11 +20,11 @@ spdlog_dep = subproject('spdlog', required: true, default_options: {
 	'std_format': 'disabled'
 }).get_variable('spdlog_dep')
 
-# Exathread, glm, high_resolution_sleep, and eternal
+# Exathread, glm, high_resolution_sleep, eternal, and mikktspace
 exathread_dep = subproject('exathread', required: true).get_variable('exathread_dep')
 glm_dep = subproject('glm', required: true).get_variable('glm_dep')
-hires_sleep_dep = subproject('hires_sleep', required: true).get_variable('hires_sleep_dep')
 eternal_dep = subproject('eternal', required: true).get_variable('eternal_dep')
+mikktspace_dep = subproject('mikktspace', required: true).get_variable('mikktspace_dep')
 
 # Configure icu
 icu_sp = subproject('icu', required: true, default_options: ['default_library=static'])
@@ -74,49 +55,54 @@ engine_srcs += files(
 	'expf.c',
 	'Actor.cpp',
 	'AudioManager.cpp',
+	'AudioPlayer.cpp',
+	'BuiltinAssets.cpp',
+	'Cameras.cpp',
 	'CodeRegistry.cpp',
 	'Cubemap.cpp',
 	'Engine.cpp',	
 	'EventManager.cpp',
-	'FrameProcessor.cpp',
 	'GPU.cpp',
 	'Input.cpp',
 	'Log.cpp',
+	'Material.cpp',
 	'Mesh.cpp',
 	'Misc.cpp',
 	'Model.cpp',
 	'PAL.cpp',
-	'PerspectiveCamera.cpp',
-	'Resource.cpp',
+	'ResourceManager.cpp',
+	'Shader.cpp',
 	'Sound.cpp',
+	'Targetgen.cpp',
 	'Tex2D.cpp',
 	'TickController.cpp',
 	'Transform.cpp',
 	'Window.cpp',
-	'World.cpp'
+	'World.cpp',
 )
+engine_srcs += [shaderbasemod, vertex_pipeline, fragment_pipeline, default_assets]
 engine_deps += [
 	yaml_cpp,
-	silica_dep,
+	astra_dep,
 	crossguid,
 	spirv_cross,
 	audiodecode_dep,
-	formats_dep,
+	asset_dep,
 	image_dep,
 	commonlib_dep,
 	assimp_dep,
-	zlib_dep,
 	alsoft_dep,
 	glm_dep,
 	spdlog_dep,
 	exathread_dep,
-	hires_sleep_dep,
 	eternal_dep,
+	slang_dep,
 	icu_dep,
 	freetype_dep,
 	harfbuzz_dep,
 	harfbuzz_icu_dep,
 	harfbuzz_sub_dep,
+	mikktspace_dep,
 	libdl,
 	libatomic,
 	libpipewire,
@@ -126,4 +112,3 @@ engine_deps += [
 	setupapi,
 	apple_audio
 ]
-engine_args += '-DCACAO_VER="' + meson.project_version() + '"'

@@ -2,7 +2,10 @@
 #include "Cacao/PAL.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "impl/Tex2D.hpp"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 #include "PALConfigurables.hpp"
+
 #include "libcacaoimage.hpp"
 
 namespace Cacao {
@@ -16,10 +19,18 @@ namespace Cacao {
 
 		//Fill data
 		impl->img = (imageBuffer.bitsPerChannel == 16 ? libcacaoimage::Convert16To8BitColor(imageBuffer) : std::move(imageBuffer));
+		if(impl->img.layout == libcacaoimage::Image::Layout::RGB) impl->img = libcacaoimage::ChangeChannelLayout(impl->img, libcacaoimage::Image::Layout::RGBA);
+	}
+
+	std::shared_ptr<Tex2D> Tex2D::Create(libcacaoimage::Image&& imageBuffer, const std::string& addr) {
+		std::shared_ptr<Tex2D> ptr(new Tex2D(std::move(imageBuffer), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
 	}
 
 	Tex2D::~Tex2D() {
-		if(realized) DropRealized();
+		if(baked) Discard();
 	}
 
 	Tex2D::Tex2D(Tex2D&& other)
@@ -27,9 +38,9 @@ namespace Cacao {
 		//Steal the implementation pointer
 		impl = std::move(other.impl);
 
-		//Copy realization state
-		realized = other.realized;
-		other.realized = false;
+		//Copy baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Blank out other asset address
 		other.address = "";
@@ -39,9 +50,9 @@ namespace Cacao {
 		//Implementation pointer
 		impl = std::move(other.impl);
 
-		//Realization state
-		realized = other.realized;
-		other.realized = false;
+		//Baking state
+		baked = other.baked;
+		other.baked = false;
 
 		//Asset address
 		address = other.address;
@@ -50,16 +61,16 @@ namespace Cacao {
 		return *this;
 	}
 
-	void Tex2D::Realize() {
-		Check<BadRealizeStateException>(!realized, "Cannot realize a realized texture!");
+	void Tex2D::Bake() {
+		Check<BadBakeStateException>(!baked, "Cannot bake a baked texture!");
 
-		impl->Realize(realized);
+		impl->Bake(baked);
 	}
 
-	void Tex2D::DropRealized() {
-		Check<BadRealizeStateException>(realized, "Cannot drop the realized representation of an unrealized texture; it does not exist!");
+	void Tex2D::Discard() {
+		Check<BadBakeStateException>(baked, "Cannot discard baked representation of an unbaked texture; it does not exist!");
 
-		realized = false;
-		impl->DropRealized();
+		baked = false;
+		impl->Discard();
 	}
 }

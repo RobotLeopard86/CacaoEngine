@@ -1,13 +1,20 @@
 #include "Cacao/Model.hpp"
 #include "Cacao/Exceptions.hpp"
+#include "Cacao/Mesh.hpp"
+#include "assimp/material.h"
+#include "assimp/vector3.h"
+#include "impl/ResourceManager.hpp"
+#include "ImplAccessor.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/config.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/texture.h"
-#include "libcacaocommon.hpp"
+
+#include "Bytestream.hpp"
 #include "libcacaoimage.hpp"
+#include "mikktspace.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/rotate_vector.hpp"
@@ -32,6 +39,13 @@ namespace Cacao {
 		std::unordered_map<std::string, aiTexture*> textureIndex;
 	};
 
+	std::shared_ptr<Model> Model::Create(std::vector<unsigned char>&& modelBin, const std::string& addr) {
+		std::shared_ptr<Model> ptr(new Model(std::move(modelBin), addr));
+		std::lock_guard lk {IMPL(ResourceManager).cacheProtector};
+		IMPL(ResourceManager).cache.insert_or_assign(addr, ptr);
+		return ptr;
+	}
+
 	Model::Model(std::vector<unsigned char>&& modelBin, const std::string& addr)
 	  : Resource(addr) {
 		Check<BadValueException>(ValidateResourceAddr<Model>(addr), "Resource address is malformed!");
@@ -48,11 +62,10 @@ namespace Cacao {
 
 		Post-processing flags applied are:
 		JoinIdenticalVertices - Makes vertices used by more than one face the same (not stored that way by default)
-		CalcTangentSpace - For meshes with normals (normal mapping will later be added and require this)
 		Triangulate - Ensure all polygons are triangles with 3 indices
 		SortByPType - Split meshes with 2+ primitive types into submeshes with 1 primitive type (and ignores lines and points due to configuration property above)
 		*/
-		impl->scene = impl->importer.ReadFileFromMemory(modelBin.data(), modelBin.size(), aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_SortByPType);
+		impl->scene = impl->importer.ReadFileFromMemory(modelBin.data(), modelBin.size(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_SortByPType);
 
 		//Check validity of scene
 		Check<NonexistentValueException>(impl->scene != nullptr, std::string("Failed to load model data, Assimp provided error message: ") + impl->importer.GetErrorString());
@@ -89,7 +102,6 @@ namespace Cacao {
 				//Check if this is a known format
 				std::string fmt = std::string(tex->achFormatHint).substr(0, 3);
 				if(tex->mHeight == 0 && !(fmt.compare("web") == 0 || fmt.compare("jpg") == 0 || fmt.compare("x-t") == 0 || fmt.compare("png") == 0 || fmt.compare("tif") == 0)) continue;
-
 				impl->textureIndex.insert_or_assign(tex->mFilename.length == 0 ? (std::string("Tex") + std::to_string(i)) : std::string(tex->mFilename.C_Str()), tex);
 			}
 		}
@@ -118,13 +130,14 @@ namespace Cacao {
 
 		//Get mesh info
 		aiMesh* amesh = impl->meshIndex[id];
-		bool hasTexCoord = amesh->HasTextureCoords(0);
-		bool hasTanBitan = amesh->HasTangentsAndBitangents();
+		bool hasTexCoords = amesh->HasTextureCoords(0);
 		bool hasNormals = amesh->HasNormals();
+		bool hasTangents = amesh->HasTangentsAndBitangents();
 
 		//Create output buffers
 		std::vector<Vertex> vertices;
-		std::vector<glm::uvec3> indices;
+		vertices.reserve(amesh->mNumVertices);
+		std::vector<glm::uvec3> indices(amesh->mNumFaces);
 
 		//Handle vertices
 		for(unsigned int i = 0; i < amesh->mNumVertices; ++i) {
@@ -133,71 +146,149 @@ namespace Cacao {
 			glm::vec3 position = {vert.x, vert.y, vert.z};
 
 			glm::vec2 texCoords = glm::vec2(0.0f);
-			glm::vec3 tangent = glm::vec3(0.0f);
-			glm::vec3 bitangent = glm::vec3(0.0f);
 			glm::vec3 normal = glm::vec3(0.0f);
+			glm::vec4 tangent = glm::vec4(glm::vec3 {0.0f}, 1.0f);
 
 			//Texture coordinates
-			if(hasTexCoord) {
+			if(hasTexCoords) {
 				aiVector3D tc = amesh->mTextureCoords[0][i];
 				texCoords = {tc.x, tc.y};
-			}
-
-			//Tangent and bitangent vectors
-			if(hasTanBitan) {
-				aiVector3D tan = amesh->mTangents[i];
-				aiVector3D bitan = amesh->mBitangents[i];
-				tangent = {tan.x, tan.y, tan.z};
-				bitangent = {bitan.x, bitan.y, bitan.z};
 			}
 
 			//Normal vectors
 			if(hasNormals) {
 				aiVector3D norm = amesh->mNormals[i];
-				normal = {norm.x, norm.y, norm.z};
+				normal = glm::normalize(glm::vec3 {norm.x, norm.y, norm.z});
 			}
 
-			//Apply axis correction
-			switch(impl->orient) {
-				case Impl::ModelOrientation::PosY:
-					break;
-				case Impl::ModelOrientation::NegY:
-					position = glm::rotateZ(position, glm::radians(180.0f));
-					break;
-				case Impl::ModelOrientation::PosX:
-					position = glm::rotateZ(position, glm::radians(-90.0f));
-					break;
-				case Impl::ModelOrientation::NegX:
-					position = glm::rotateZ(position, glm::radians(90.0f));
-					break;
-				case Impl::ModelOrientation::PosZ:
-					position = glm::rotateX(position, glm::radians(-90.0f));
-					break;
-				case Impl::ModelOrientation::NegZ:
-					position = glm::rotateX(position, glm::radians(90.0f));
-					break;
+			//Tangent vectors
+			if(hasTangents) {
+				aiVector3D aTan = amesh->mTangents[i];
+				aiVector3D aBitan = amesh->mBitangents[i];
+				glm::vec3 tan = glm::normalize(glm::vec3 {aTan.x, aTan.y, aTan.z});
+				glm::vec3 bitan = glm::normalize(glm::vec3 {aBitan.x, aBitan.y, aBitan.z});
+				float sign = glm::dot(glm::cross(normal, tan), bitan) < 0.0f ? -1.0f : 1.0f;
+				tangent = {tan, sign};
 			}
 
 			//Add vertex
-			Vertex vertex {position, texCoords, tangent, bitangent, normal};
+			Vertex vertex {position, texCoords, normal, tangent};
 			vertices.push_back(vertex);
 		}
 
 		//Handle indices
 		for(unsigned int i = 0; i < amesh->mNumFaces; ++i) {
 			aiFace face = amesh->mFaces[i];
-			indices.push_back({face.mIndices[0], face.mIndices[1], face.mIndices[2]});
+			indices[i] = glm::uvec3 {face.mIndices[0], face.mIndices[1], face.mIndices[2]};
+		}
+
+		//Generate tangents if not given by mesh
+		if(!hasTangents && hasNormals && hasTexCoords) {
+			//Define user data
+			struct MikkUserData {
+				std::vector<Vertex>* vtx;
+				std::vector<glm::uvec3>* idx;
+			} userData;
+			userData.vtx = &vertices;
+			userData.idx = &indices;
+
+			//MikkTSpace callbacks
+#define usr (static_cast<MikkUserData*>(ctx->m_pUserData))
+			SMikkTSpaceInterface mikk = {};
+			mikk.m_getNumFaces = [](const SMikkTSpaceContext* ctx) -> int {
+				return (int)usr->idx->size();
+			};
+			mikk.m_getNumVerticesOfFace = [](const SMikkTSpaceContext*, const int) -> int {
+				return 3;//TRIANGLES, BABY!
+			};
+			mikk.m_getPosition = [](const SMikkTSpaceContext* ctx, float posOut[], const int face, const int vertexIndex) -> void {
+				const glm::uvec3& tri = (*(usr->idx))[face];
+				const glm::vec3& pos = (*(usr->vtx))[tri[vertexIndex]].position;
+				posOut[0] = pos.x;
+				posOut[1] = pos.y;
+				posOut[2] = pos.z;
+			};
+			mikk.m_getNormal = [](const SMikkTSpaceContext* ctx, float normOut[], const int face, const int vertexIndex) -> void {
+				const glm::uvec3& tri = (*(usr->idx))[face];
+				const glm::vec3& norm = (*(usr->vtx))[tri[vertexIndex]].normal;
+				normOut[0] = norm.x;
+				normOut[1] = norm.y;
+				normOut[2] = norm.z;
+			};
+			mikk.m_getTexCoord = [](const SMikkTSpaceContext* ctx, float tcOut[], const int face, const int vertexIndex) -> void {
+				const glm::uvec3& tri = (*(usr->idx))[face];
+				const glm::vec2& uv = (*(usr->vtx))[tri[vertexIndex]].texCoords;
+				tcOut[0] = uv.x;
+				tcOut[1] = uv.y;
+			};
+			mikk.m_setTSpaceBasic = [](const SMikkTSpaceContext* ctx, const float tangent[], const float sign, const int face, const int vertexIndex) -> void {
+				Vertex& vtx = (*(usr->vtx))[(*(usr->idx))[face][vertexIndex]];
+				vtx.tangent = glm::vec4(glm::normalize(glm::vec3 {tangent[0], tangent[1], tangent[2]}), sign);
+			};
+
+			//Execute MikkTSpace
+			SMikkTSpaceContext mikkCtx = {};
+			mikkCtx.m_pUserData = &userData;
+			mikkCtx.m_pInterface = &mikk;
+			Check<MiscException>(genTangSpaceDefault(&mikkCtx), "Failed to generate mesh tangent space!");
+		}
+
+		//Apply axis correction
+		switch(impl->orient) {
+			case Impl::ModelOrientation::PosY:
+				break;
+			case Impl::ModelOrientation::NegY:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateZ(v.position, glm::radians(180.0f));
+					v.normal = glm::normalize(glm::rotateZ(v.normal, glm::radians(180.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateZ(glm::vec3 {v.tangent}, glm::radians(180.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::PosX:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateZ(v.position, glm::radians(-90.0f));
+					v.normal = glm::normalize(glm::rotateZ(v.normal, glm::radians(-90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateZ(glm::vec3 {v.tangent}, glm::radians(-90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::NegX:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateZ(v.position, glm::radians(90.0f));
+					v.normal = glm::normalize(glm::rotateZ(v.normal, glm::radians(90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateZ(glm::vec3 {v.tangent}, glm::radians(90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::PosZ:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateX(v.position, glm::radians(-90.0f));
+					v.normal = glm::normalize(glm::rotateX(v.normal, glm::radians(-90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateX(glm::vec3 {v.tangent}, glm::radians(-90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
+			case Impl::ModelOrientation::NegZ:
+				for(Vertex& v : vertices) {
+					v.position = glm::rotateX(v.position, glm::radians(90.0f));
+					v.normal = glm::normalize(glm::rotateX(v.normal, glm::radians(90.0f)));
+					glm::vec3 tangent = glm::normalize(glm::rotateX(glm::vec3 {v.tangent}, glm::radians(90.0f)));
+					v.tangent = glm::vec4(tangent, v.tangent.w);
+				}
+				break;
 		}
 
 		//Construct and return mesh
-		std::stringstream meshAddr("m:");
-		meshAddr << address.substr(2) << "/" << id;
+		std::stringstream meshAddr;
+		meshAddr << "m:" << address.substr(2) << "/" << id;
 		std::shared_ptr<Mesh> mesh = Mesh::Create(std::move(vertices), std::move(indices), meshAddr.str());
+		mesh->Bake();
 		return mesh;
 	}
 
 	std::shared_ptr<Tex2D> Model::GetTexture(const std::string& id) {
-		Check<NonexistentValueException>(impl->textureIndex.contains(id), "Cannot retrieve nonexistent mesh from texture!");
+		Check<NonexistentValueException>(impl->textureIndex.contains(id), "Cannot retrieve nonexistent texture from model!");
 
 		//Get texture info
 		aiTexture* tex = impl->textureIndex[id];
@@ -258,15 +349,15 @@ namespace Cacao {
 			for(const auto& [color, bits] : channels) {
 				if(bits <= 0) ++zeroedChannels;
 			}
-			if(zeroedChannels != 0) CheckException(zeroedChannels % 2 != 0, "Invalid zeroed-channel layout for model embedded texture!");
-			if(zeroedChannels == 1) CheckException(channels['a'] == 0, "Only the alpha channel may be zero for a model embedded texture layout with only one zeroed channel!");
+			if(zeroedChannels != 0) Check<MiscException>(zeroedChannels % 2 != 0, "Invalid zeroed-channel layout for model embedded texture!");
+			if(zeroedChannels == 1) Check<MiscException>(channels['a'] == 0, "Only the alpha channel may be zero for a model embedded texture layout with only one zeroed channel!");
 
 			//Set layout in image object
 			switch(zeroedChannels) {
 				case 0: img.layout = libcacaoimage::Image::Layout::RGBA; break;
 				case 1: img.layout = libcacaoimage::Image::Layout::RGB; break;
 				case 3: img.layout = libcacaoimage::Image::Layout::Grayscale; break;
-				default: CheckException(false, "Impossible channel layout for model embedded texture!");
+				default: Check<MiscException>(false, "Impossible channel layout for model embedded texture!");
 			}
 
 			//Move data to image object
@@ -335,9 +426,10 @@ namespace Cacao {
 
 		//Okay so now we finally have the texture data in the correct format
 		//Now we can make the Tex2D
-		std::stringstream texAddr("m:");
-		texAddr << address.substr(2) << "%" << id;
+		std::stringstream texAddr;
+		texAddr << "e:" << address.substr(2) << "/" << id;
 		std::shared_ptr<Tex2D> t2d = Tex2D::Create(std::move(img), texAddr.str());
+		t2d->Bake();
 		return t2d;
 	}
 }

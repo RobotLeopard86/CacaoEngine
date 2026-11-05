@@ -1,1 +1,1 @@
-commonlib_dep = declare_dependency(include_directories: 'include')
+commonlib_dep = declare_dependency(include_directories: 'include', dependencies: [yaml_cpp])

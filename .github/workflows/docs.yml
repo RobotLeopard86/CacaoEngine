@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Setup Python
@@ -55,14 +55,14 @@ jobs:
             rm -rf stable
             ln -s $BUILDVER stable
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: /tmp/PAGESBUILD
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - name: Add docs changes to Git
         run: |
           cd /tmp/PAGESBUILD
@@ -72,7 +72,7 @@ jobs:
           git add .
           git commit --allow-empty -m "Add changes for ${{ github.sha }}"
       - name: Push docs changes to GitHub
-        uses: ad-m/github-push-action@v0.8.0
+        uses: ad-m/github-push-action@v1.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages

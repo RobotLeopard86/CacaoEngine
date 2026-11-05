@@ -5,9 +5,11 @@
 #include <ostream>
 #include <cstdint>
 
+#include "DllHelper.hpp"
+
 namespace libcacaoimage {
 	///@brief Decoded image representation
-	struct Image {
+	struct CACAO_API Image {
 		unsigned int w;///<Width of image in pixels
 		unsigned int h;///<Height of image in pixels
 
@@ -44,7 +46,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If the format cannot be determined or if decoding fails
 		 */
-		Image DecodeGeneric(std::istream& input);
+		CACAO_API Image DecodeGeneric(std::istream& input);
 
 		/**
 		 * @brief Decode a PNG image
@@ -57,7 +59,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If the data is not in PNG format or if decoding fails
 		 */
-		Image DecodePNG(std::istream& input);
+		CACAO_API Image DecodePNG(std::istream& input);
 
 		/**
 		 * @brief Decode a JPEG image
@@ -70,7 +72,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If the data is not in JPEG format or if decoding fails
 		 */
-		Image DecodeJPEG(std::istream& input);
+		CACAO_API Image DecodeJPEG(std::istream& input);
 
 		/**
 		 * @brief Decode a WebP image
@@ -83,7 +85,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If the data is not in WebP format or if decoding fails
 		 */
-		Image DecodeWebP(std::istream& input);
+		CACAO_API Image DecodeWebP(std::istream& input);
 
 		/**
 		 * @brief Decode a TGA (Targa) image
@@ -96,7 +98,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If the data is not in TGA format or if decoding fails
 		 */
-		Image DecodeTGA(std::istream& input);
+		CACAO_API Image DecodeTGA(std::istream& input);
 
 		/**
 		 * @brief Decode a TIFF image
@@ -109,7 +111,7 @@ namespace libcacaoimage {
 		 *
 		 * @throws std::runtime_error If the data is not in TIFF format or if decoding fails
 		 */
-		Image DecodeTIFF(std::istream& input);
+		CACAO_API Image DecodeTIFF(std::istream& input);
 	}
 
 	///@brief Image encoding functions
@@ -120,9 +122,11 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		std::size_t Reencode(const Image& src, std::ostream& out);
+		CACAO_API std::size_t Reencode(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a PNG image
@@ -130,9 +134,11 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		std::size_t EncodePNG(const Image& src, std::ostream& out);
+		CACAO_API std::size_t EncodePNG(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a JPEG image
@@ -140,9 +146,11 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		std::size_t EncodeJPEG(const Image& src, std::ostream& out);
+		CACAO_API std::size_t EncodeJPEG(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a WebP image
@@ -150,9 +158,11 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		std::size_t EncodeWebP(const Image& src, std::ostream& out);
+		CACAO_API std::size_t EncodeWebP(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a TGA (Targa) image
@@ -160,9 +170,11 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		std::size_t EncodeTGA(const Image& src, std::ostream& out);
+		CACAO_API std::size_t EncodeTGA(const Image& src, std::ostream& out);
 
 		/**
 		 * @brief Encode a TIFF image
@@ -170,9 +182,11 @@ namespace libcacaoimage {
 		 * @param src The image data to encode
 		 * @param out The output stream to write the encoded data to
 		 *
+		 * @return The number of written encoded bytes
+		 *
 		 * @throws std::runtime_error If encoding fails or settings or invalid
 		 */
-		std::size_t EncodeTIFF(const Image& src, std::ostream& out);
+		CACAO_API std::size_t EncodeTIFF(const Image& src, std::ostream& out);
 	}
 
 	/**
@@ -184,7 +198,7 @@ namespace libcacaoimage {
 	 *
 	 * @throws std::runtime_error If the source image is not 16-bit
 	 */
-	Image Convert16To8BitColor(const Image& src);
+	CACAO_API Image Convert16To8BitColor(const Image& src);
 
 	/**
 	 * @brief Flip an Image's pixels vertically to accomodate graphics APIs like OpenGL
@@ -193,7 +207,7 @@ namespace libcacaoimage {
 	 *
 	 * @return A flipped copy of the image
 	 */
-	Image Flip(const Image& src);
+	CACAO_API Image Flip(const Image& src);
 
 	/**
 	 * @brief Adjust the channel layout of an Image
@@ -210,5 +224,5 @@ namespace libcacaoimage {
 	 *
 	 * @throws std::runtime_error If the source image's layout is the same as the new layout
 	 */
-	Image ChangeChannelLayout(const Image& src, Image::Layout layout);
+	CACAO_API Image ChangeChannelLayout(const Image& src, Image::Layout layout);
 }
