@@ -1,49 +1,5 @@
 from textwrap import dedent
 import os
-import os.path
-import exhale
-import exhale.configs
-import exhale.utils
-import exhale.deploy
-from pprint import pprint
-
-# This code was taken from https://github.com/mithro/sphinx-contrib-mithro/tree/master/sphinx-contrib-exhale-multiproject because Sphinx had trouble loading it as a module
-def exhale_environment_ready(app):
-    default_project = app.config.breathe_default_project
-    default_exhale_args = dict(app.config.exhale_args)
-
-    exhale_projects_args = dict(app.config._raw_config['exhale_projects_args'])
-    breathe_projects = dict(app.config._raw_config['breathe_projects'])
-
-    for project in breathe_projects:
-        app.config.breathe_default_project = project
-        os.makedirs(breathe_projects[project], exist_ok=True)
-
-        project_exhale_args = exhale_projects_args.get(project, {})
-
-        app.config.exhale_args = dict(default_exhale_args)
-        app.config.exhale_args.update(project_exhale_args)
-        app.config.exhale_args["containmentFolder"] = os.path.realpath(app.config.exhale_args["containmentFolder"])
-        print("="*75)
-        print(project)
-        print("-"*50)
-        pprint(app.config.exhale_args)
-        print("="*75)
-
-        # First, setup the extension and verify all of the configurations.
-        exhale.configs.apply_sphinx_configurations(app)
-        ####### Next, perform any cleanup
-
-        # Generate the full API!
-        try:
-            exhale.deploy.explode()
-        except:
-            exhale.utils.fancyError("Exhale: could not generate reStructuredText documents :/")
-
-    app.config.breathe_default_project = default_project
-
-exhale.environment_ready = exhale_environment_ready
-# End sphinx-contrib-exhale-multiproject code
 
 version = os.environ.get("BUILDVER", default="dev")
 project = 'Cacao Engine'

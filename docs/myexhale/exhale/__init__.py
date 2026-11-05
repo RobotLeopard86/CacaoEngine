@@ -7,6 +7,8 @@
 ########################################################################################
 
 from __future__ import unicode_literals
+from pprint import pprint
+import os
 
 __version__ = "0.3.8.dev"
 
@@ -16,15 +18,39 @@ def environment_ready(app):
     from . import configs
     from . import utils
     from . import deploy
-    # First, setup the extension and verify all of the configurations.
-    configs.apply_sphinx_configurations(app)
-    ####### Next, perform any cleanup
+    # This code was taken from https://github.com/mithro/sphinx-contrib-mithro/tree/master/sphinx-contrib-exhale-multiproject because Sphinx had trouble loading it as a module
+    default_project = app.config.breathe_default_project
+    default_exhale_args = dict(app.config.exhale_args)
+    exhale_projects_args = dict(app.config._raw_config['exhale_projects_args'])
+    breathe_projects = dict(app.config._raw_config['breathe_projects'])
 
-    # Generate the full API!
-    try:
-        deploy.explode()
-    except:
-        utils.fancyError("Exhale: could not generate reStructuredText documents :/")
+    for project in breathe_projects:
+        app.config.breathe_default_project = project
+        os.makedirs(breathe_projects[project], exist_ok=True)
+
+        project_exhale_args = exhale_projects_args.get(project, {})
+
+        app.config.exhale_args = dict(default_exhale_args)
+        app.config.exhale_args.update(project_exhale_args)
+        app.config.exhale_args["containmentFolder"] = os.path.realpath(app.config.exhale_args["containmentFolder"])
+        print("="*75)
+        print(project)
+        print("-"*50)
+        pprint(app.config.exhale_args)
+        print("="*75)
+
+        # First, setup the extension and verify all of the configurations.
+        configs.apply_sphinx_configurations(app)
+        ####### Next, perform any cleanup
+
+        # Generate the full API!
+        try:
+            deploy.explode()
+        except:
+            utils.fancyError("Exhale: could not generate reStructuredText documents :/")
+
+    app.config.breathe_default_project = default_project
+    # End sphinx-contrib-exhale-multiproject code
 
 
 # TODO:

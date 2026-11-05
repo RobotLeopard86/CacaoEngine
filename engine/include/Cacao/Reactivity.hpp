@@ -10,12 +10,9 @@
 #include <optional>
 #include <type_traits>
 
-/**
- * @brief The namespace containing all of the reactive state machinery for the UI system
- */
-namespace Cacao::Reactivity {
+namespace Cacao {
 	/**
-	 * @brief A small base class for all state-related dependency objects
+	 * @brief A marker base class for all state-related dependency objects
 	 */
 	class CACAO_API Dependency {
 	  protected:
@@ -24,7 +21,7 @@ namespace Cacao::Reactivity {
 	};
 
 	/**
-	 * @brief A small base class for all objects that may be declared as a side effect output
+	 * @brief A marker base class for all objects that may be declared as a side effect output
 	 */
 	class CACAO_API EffectOutput {};
 
