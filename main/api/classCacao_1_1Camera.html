@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,30 +27,31 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
     <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=7b6b01ca"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Camera';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -340,31 +341,16 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1Loader.html">Concept Loader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1RuntimeConfig.html">Struct Engine::RuntimeConfig</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html">Struct TickController::SnapshotRequestControl</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
@@ -373,7 +359,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorRef.html">Class ActorRef</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
@@ -382,7 +368,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html">Class BinaryBlobResource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
@@ -400,10 +386,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Computed.html">Template Class Computed</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Dependency.html">Class Dependency</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EffectOutput.html">Class EffectOutput</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
@@ -418,7 +413,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -430,13 +425,22 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MeshRenderer.html">Class MeshRenderer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1OrthographicCamera.html">Class OrthographicCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
@@ -448,22 +452,25 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State.html">Template Class State</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
@@ -481,61 +488,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a48f6ba71da437dc9c594a1a4e4ea3b78.html">Template Function Cacao::Check(bool, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ad26bb9089bbca4800d0aa8c4fdda256f.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a84c94062bde3ff0017ddd31071e14aba.html">Define CACAO_BUTTON_LEFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1abba3b9a9b29998ce7472c02f14243d0e.html">Variable Paused</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a12adf0581ae42b9dc1a456cdd9ca8665.html">Define CACAO_BUTTON_MIDDLE</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a23268cda20903e8f077f54db28e88a63.html">Define CACAO_BUTTON_RIGHT</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a4256b4ea68f7b83b0580b492975fac45.html">Typedef Cacao::time::dmicroseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a2ee627f4843f0e647748a3a58f6c71f4.html">Typedef Cacao::time::dmilliseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a089ce274eb27ed22b7ca888179c98e2b.html">Typedef Cacao::time::dminutes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a800ee6ea4ace65d56fb0c7e101360bf1.html">Typedef Cacao::time::dnanoseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ad9a328df46a51d0139cc2dd628e23ec5.html">Typedef Cacao::time::dseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a89899dad0df62386aa6ae0d32ce1df57.html">Typedef Cacao::time::dtime_point</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ac2772804de41ed7618f06a957f6dfc34.html">Typedef Cacao::time::fhours</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a99ed33722b9c7d1e9f110dd54a613754.html">Typedef Cacao::time::fmicroseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a00caf7e10b43f1e73a1bf6b077913b18.html">Typedef Cacao::time::fmilliseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1afb37cc2f7ae22667aeb1e88f14783b60.html">Typedef Cacao::time::fminutes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a1ff9460947063ee5392a99a01c732d22.html">Typedef Cacao::time::fnanoseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ae763516073d03facfe9c309bb88a3248.html">Typedef Cacao::time::fseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1abba9b591cb84f1b4b24065abbdecd1b4.html">Typedef Cacao::time::ftime_point</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1adff0cb2b0b9f2305d3d3d0fc7aa6dd46.html">Variable Playing</a></li>
 </ul>
 </div>
 </nav></div>
@@ -543,9 +505,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -598,9 +565,10 @@
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="derived-type">
-<h3>Derived Type<a class="headerlink" href="#derived-type" title="Link to this heading"><span/></a></h3>
+<section id="derived-types">
+<h3>Derived Types<a class="headerlink" href="#derived-types" title="Link to this heading"><span/></a></h3>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::OrthographicCamera</span></code> (<a class="reference internal" href="classCacao_1_1OrthographicCamera.html#exhale-class-classcacao-1-1orthographiccamera"><span class="std std-ref">Class OrthographicCamera</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Cacao::PerspectiveCamera</span></code> (<a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#exhale-class-classcacao-1-1perspectivecamera"><span class="std std-ref">Class PerspectiveCamera</span></a>)</p></li>
 </ul>
 </section>
@@ -615,12 +583,12 @@
 <p class="admonition-title">Note</p>
 <p>Abstract, so cannot be passed by value </p>
 </div>
-<p>Subclassed by <a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#classCacao_1_1PerspectiveCamera"><span class="std std-ref">Cacao::PerspectiveCamera</span></a></p>
+<p>Subclassed by <a class="reference internal" href="classCacao_1_1OrthographicCamera.html#classCacao_1_1OrthographicCamera"><span class="std std-ref">Cacao::OrthographicCamera</span></a>, <a class="reference internal" href="classCacao_1_1PerspectiveCamera.html#classCacao_1_1PerspectiveCamera"><span class="std std-ref">Cacao::PerspectiveCamera</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera6CameraEv">
-<span id="_CPPv3N5Cacao6Camera6CameraEv"></span><span id="_CPPv2N5Cacao6Camera6CameraEv"></span><span id="Cacao::Camera::Camera"></span><span class="target" id="classCacao_1_1Camera_1a3183ee821e4140afeb75a32ed8c9b73f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera6CameraEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera6CameraEv"></span><span id="_CPPv2N5Cacao6Camera6CameraEv"></span><span id="Cacao::Camera::Camera"></span><span class="target" id="classCacao_1_1Camera_1a3183ee821e4140afeb75a32ed8c9b73f"></span><span class="sig-name descname"><span class="n"><span class="pre">Camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera6CameraEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Create a camera. </p>
 </dd></dl>
 
@@ -632,7 +600,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera11GetPositionEv">
-<span id="_CPPv3NK5Cacao6Camera11GetPositionEv"></span><span id="_CPPv2NK5Cacao6Camera11GetPositionEv"></span><span id="Cacao::Camera::GetPositionC"></span><span class="target" id="classCacao_1_1Camera_1ab98713f8b38adea9943ef43425c70361"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetPositionEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera11GetPositionEv"></span><span id="_CPPv2NK5Cacao6Camera11GetPositionEv"></span><span id="Cacao::Camera::GetPositionC"></span><span class="target" id="classCacao_1_1Camera_1addb276d443e0044f9b45f5aaf431ff8e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetPositionEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the position of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -643,7 +611,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E">
-<span id="_CPPv3N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="Cacao::Camera::SetPosition__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a56f060ffb7b1598fd777c5b2b8dcd6b4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetPositionEN3glm4vec3E"></span><span id="Cacao::Camera::SetPosition__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1ad5c8cd7abc2caa1791a21c5a6a9bf67d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the position of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -654,18 +622,29 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera11GetRotationEv">
-<span id="_CPPv3NK5Cacao6Camera11GetRotationEv"></span><span id="_CPPv2NK5Cacao6Camera11GetRotationEv"></span><span id="Cacao::Camera::GetRotationC"></span><span class="target" id="classCacao_1_1Camera_1a6250a2316eeb97c35de66ba24c884bf3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera11GetRotationEv"></span><span id="_CPPv2NK5Cacao6Camera11GetRotationEv"></span><span id="Cacao::Camera::GetRotationC"></span><span class="target" id="classCacao_1_1Camera_1a2396971f193b4d0685c1d15e32ee5add"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetRotationEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the rotation of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The camera rotation </p>
+<dd class="field-odd"><p>The rotation </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetRotationEN3glm4vec3E">
-<span id="_CPPv3N5Cacao6Camera11SetRotationEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera11SetRotationEN3glm4vec3E"></span><span id="Cacao::Camera::SetRotation__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1aa998fdcfe5c57a897b843192e48bb4c5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera16GetRotationEulerEv">
+<span id="_CPPv3NK5Cacao6Camera16GetRotationEulerEv"></span><span id="_CPPv2NK5Cacao6Camera16GetRotationEulerEv"></span><span id="Cacao::Camera::GetRotationEulerC"></span><span class="target" id="classCacao_1_1Camera_1a78803032bc597a354faa3e2148b29c55"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera16GetRotationEulerEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the rotation of the camera as Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation as Euler angles </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11SetRotationEN3glm4quatE">
+<span id="_CPPv3N5Cacao6Camera11SetRotationEN3glm4quatE"></span><span id="_CPPv2N5Cacao6Camera11SetRotationEN3glm4quatE"></span><span id="Cacao::Camera::SetRotation__glm::quat"></span><span class="target" id="classCacao_1_1Camera_1aac356417da19f7b282f7b3852efca842"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4quatE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Set the rotation of the camera. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -675,8 +654,19 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E">
+<span id="_CPPv3N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"></span><span id="_CPPv2N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"></span><span id="Cacao::Camera::SetRotationEuler__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a022dca8bff8e0e15f1fe610919c5d89b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRotationEuler</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the rotation of the camera using Euler angles in degrees. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rot</strong> – The new rotation in Euler angles </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv">
-<span id="_CPPv3NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="Cacao::Camera::GetProjectionMatrixC"></span><span class="target" id="classCacao_1_1Camera_1af6558cb9571d7e1edecad0115c9d8e3e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera19GetProjectionMatrixEv"></span><span id="Cacao::Camera::GetProjectionMatrixC"></span><span class="target" id="classCacao_1_1Camera_1a6622fa4dc4872f1f09c1a1895aaac0e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the projection matrix. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -687,7 +677,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera13GetViewMatrixEv">
-<span id="_CPPv3NK5Cacao6Camera13GetViewMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera13GetViewMatrixEv"></span><span id="Cacao::Camera::GetViewMatrixC"></span><span class="target" id="classCacao_1_1Camera_1aaea8f0c032068f91d8d14c8c95cf63a8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao6Camera13GetViewMatrixEv"></span><span id="_CPPv2NK5Cacao6Camera13GetViewMatrixEv"></span><span id="Cacao::Camera::GetViewMatrixC"></span><span class="target" id="classCacao_1_1Camera_1ae231f337c500dc7183d27bd1963cdb69"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get the view matrix. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -697,19 +687,161 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event">
-<span id="_CPPv3N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="_CPPv2N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="Cacao::Camera::ResizeProjectionMatrix__EventR"></span><span class="target" id="classCacao_1_1Camera_1a1edc10487c065c503b5c350067f388e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResizeProjectionMatrix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="classCacao_1_1Event.html#classCacao_1_1Event"><span class="std std-ref">Event</span></a> handler for resizing the projection matrix when the window size changes. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For use by the engine only</p>
-</div>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera14GetFrontVectorEv">
+<span id="_CPPv3NK5Cacao6Camera14GetFrontVectorEv"></span><span id="_CPPv2NK5Cacao6Camera14GetFrontVectorEv"></span><span id="Cacao::Camera::GetFrontVectorC"></span><span class="target" id="classCacao_1_1Camera_1a5fed9e7e75076d3948b9e5c84fd240e1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetFrontVector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera14GetFrontVectorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the camera’s front vector. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>e</strong> – The event object (which should be a DataEvent&lt;glm::uvec2&gt;) </p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unit vector pointing out at the camera’s rotation </p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera14GetRightVectorEv">
+<span id="_CPPv3NK5Cacao6Camera14GetRightVectorEv"></span><span id="_CPPv2NK5Cacao6Camera14GetRightVectorEv"></span><span id="Cacao::Camera::GetRightVectorC"></span><span class="target" id="classCacao_1_1Camera_1a6062f60449836529c6521f277f4aca4e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetRightVector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera14GetRightVectorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the camera’s up vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unit vector perpendicular to both the front and world up vectors </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera11GetUpVectorEv">
+<span id="_CPPv3NK5Cacao6Camera11GetUpVectorEv"></span><span id="_CPPv2NK5Cacao6Camera11GetUpVectorEv"></span><span id="Cacao::Camera::GetUpVectorC"></span><span class="target" id="classCacao_1_1Camera_1aab9d41e3d1a0d9fe3d5774781235aaa3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetUpVector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera11GetUpVectorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the camera’s up vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unit vector perpendicular to both the front and right vectors </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera13GetLookTargetEv">
+<span id="_CPPv3NK5Cacao6Camera13GetLookTargetEv"></span><span id="_CPPv2NK5Cacao6Camera13GetLookTargetEv"></span><span id="Cacao::Camera::GetLookTargetC"></span><span class="target" id="classCacao_1_1Camera_1ad17b1945f938f5bd068260732ca5fea3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetLookTarget</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetLookTargetEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the point in world space where the camera is looking. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The look target (which is the position + the front vector) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao6Camera13GetClearColorEv">
+<span id="_CPPv3NK5Cacao6Camera13GetClearColorEv"></span><span id="_CPPv2NK5Cacao6Camera13GetClearColorEv"></span><span id="Cacao::Camera::GetClearColorC"></span><span class="target" id="classCacao_1_1Camera_1ab011c637ec5508abc7c124438d70d74b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">u8vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetClearColor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao6Camera13GetClearColorEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the clear color used by the camera. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The camera clear color (in hexadecimal 00 to FF per component) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera13SetClearColorEN3glm6u8vec3E">
+<span id="_CPPv3N5Cacao6Camera13SetClearColorEN3glm6u8vec3E"></span><span id="_CPPv2N5Cacao6Camera13SetClearColorEN3glm6u8vec3E"></span><span id="Cacao::Camera::SetClearColor__glm::u8vec3"></span><span class="target" id="classCacao_1_1Camera_1adf85975b788574f89918521e7c53289c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetClearColor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">u8vec3</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">color</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera13SetClearColorEN3glm6u8vec3E" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Set the camera’s clear color. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>color</strong> – The new clear color (in hexadecimal 00 to FF per component) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event">
+<span id="_CPPv3N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="_CPPv2N5Cacao6Camera22ResizeProjectionMatrixER5Event"></span><span id="Cacao::Camera::ResizeProjectionMatrix__EventR"></span><span class="target" id="classCacao_1_1Camera_1a4f5e0766378072269af028d674ec326f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ResizeProjectionMatrix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Event.html#_CPPv4N5Cacao5EventE" title="Cacao::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><a class="reference internal" href="classCacao_1_1Event.html#classCacao_1_1Event"><span class="std std-ref">Event</span></a> handler for resizing the projection matrix when the window size changes. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use only by the engine internally</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>e</strong> – The event object (which will be casted to a <a class="reference internal" href="classCacao_1_1DataEvent.html#classCacao_1_1DataEvent"><span class="std std-ref">DataEvent&lt;glm::uvec2&gt;</span></a>) </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera21RecalculateViewMatrixEv">
+<span id="_CPPv3N5Cacao6Camera21RecalculateViewMatrixEv"></span><span id="_CPPv2N5Cacao6Camera21RecalculateViewMatrixEv"></span><span id="Cacao::Camera::RecalculateViewMatrix"></span><span class="target" id="classCacao_1_1Camera_1aa70104e1cca5c73b122a4e54eb36fc88"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecalculateViewMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera21RecalculateViewMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera27RecalculateProjectionMatrixEv">
+<span id="_CPPv3N5Cacao6Camera27RecalculateProjectionMatrixEv"></span><span id="_CPPv2N5Cacao6Camera27RecalculateProjectionMatrixEv"></span><span id="Cacao::Camera::RecalculateProjectionMatrix"></span><span class="target" id="classCacao_1_1Camera_1aabbe46f501f2f9d285d243189af39286"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecalculateProjectionMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera27RecalculateProjectionMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera24RecalculateCameraVectorsEv">
+<span id="_CPPv3N5Cacao6Camera24RecalculateCameraVectorsEv"></span><span id="_CPPv2N5Cacao6Camera24RecalculateCameraVectorsEv"></span><span id="Cacao::Camera::RecalculateCameraVectors"></span><span class="target" id="classCacao_1_1Camera_1a43b2a95353424fb91640f09ad7c60706"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecalculateCameraVectors</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Camera24RecalculateCameraVectorsEv" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera14resizeConsumerE">
+<span id="_CPPv3N5Cacao6Camera14resizeConsumerE"></span><span id="_CPPv2N5Cacao6Camera14resizeConsumerE"></span><span id="Cacao::Camera::resizeConsumer__EventConsumer"></span><span class="target" id="classCacao_1_1Camera_1a881027cf7b7561d2e6100cca7cae84c4"></span><a class="reference internal" href="classCacao_1_1EventConsumer.html#_CPPv4N5Cacao13EventConsumerE" title="Cacao::EventConsumer"><span class="n"><span class="pre">EventConsumer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resizeConsumer</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera14resizeConsumerE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera10clearColorE">
+<span id="_CPPv3N5Cacao6Camera10clearColorE"></span><span id="_CPPv2N5Cacao6Camera10clearColorE"></span><span id="Cacao::Camera::clearColor__glm::u8vec3"></span><span class="target" id="classCacao_1_1Camera_1a2981dc02bbcf97071e32d367ad5006b4"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">u8vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clearColor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera10clearColorE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera16projectionMatrixE">
+<span id="_CPPv3N5Cacao6Camera16projectionMatrixE"></span><span id="_CPPv2N5Cacao6Camera16projectionMatrixE"></span><span id="Cacao::Camera::projectionMatrix__glm::mat4"></span><span class="target" id="classCacao_1_1Camera_1afe31a79aaad3743b5f46f1a7c4aa9466"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">projectionMatrix</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera16projectionMatrixE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera10viewMatrixE">
+<span id="_CPPv3N5Cacao6Camera10viewMatrixE"></span><span id="_CPPv2N5Cacao6Camera10viewMatrixE"></span><span id="Cacao::Camera::viewMatrix__glm::mat4"></span><span class="target" id="classCacao_1_1Camera_1a121f6f34f4e7f5cac26c69c6b1c96731"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewMatrix</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera10viewMatrixE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera20viewProjectionMatrixE">
+<span id="_CPPv3N5Cacao6Camera20viewProjectionMatrixE"></span><span id="_CPPv2N5Cacao6Camera20viewProjectionMatrixE"></span><span id="Cacao::Camera::viewProjectionMatrix__glm::mat4"></span><span class="target" id="classCacao_1_1Camera_1a1832e49e3efc26e514ea91b293a53efb"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewProjectionMatrix</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera20viewProjectionMatrixE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8positionE">
+<span id="_CPPv3N5Cacao6Camera8positionE"></span><span id="_CPPv2N5Cacao6Camera8positionE"></span><span id="Cacao::Camera::position__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a112bf3ad26fa52f2cf18a740e29c2d7a"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8positionE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8rotationE">
+<span id="_CPPv3N5Cacao6Camera8rotationE"></span><span id="_CPPv2N5Cacao6Camera8rotationE"></span><span id="Cacao::Camera::rotation__glm::quat"></span><span class="target" id="classCacao_1_1Camera_1a93a1624e34012e3e9aa922a64ed33c67"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">quat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rotation</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8rotationE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8frontVecE">
+<span id="_CPPv3N5Cacao6Camera8frontVecE"></span><span id="_CPPv2N5Cacao6Camera8frontVecE"></span><span id="Cacao::Camera::frontVec__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1abbe3f989f50b80301838671f70e8fbee"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frontVec</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8frontVecE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera5upVecE">
+<span id="_CPPv3N5Cacao6Camera5upVecE"></span><span id="_CPPv2N5Cacao6Camera5upVecE"></span><span id="Cacao::Camera::upVec__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a15cf6273af3ea484bc33ea5f1febcc13"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">upVec</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera5upVecE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera8rightVecE">
+<span id="_CPPv3N5Cacao6Camera8rightVecE"></span><span id="_CPPv2N5Cacao6Camera8rightVecE"></span><span id="Cacao::Camera::rightVec__glm::vec3"></span><span class="target" id="classCacao_1_1Camera_1a0e988fd01382a01ede9774186a059c9c"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vec3</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rightVec</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera8rightVecE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Camera11displaySizeE">
+<span id="_CPPv3N5Cacao6Camera11displaySizeE"></span><span id="_CPPv2N5Cacao6Camera11displaySizeE"></span><span id="Cacao::Camera::displaySize__glm::uvec2"></span><span class="target" id="classCacao_1_1Camera_1a95b2cd3888fcc6dc748f1b0fd96ffc1f"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uvec2</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displaySize</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Camera11displaySizeE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -765,20 +897,42 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-type">Derived Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-types">Derived Types</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6CameraE"><code class="docutils literal notranslate"><span class="pre">Camera</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera6CameraEv"><code class="docutils literal notranslate"><span class="pre">Camera::Camera()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6CameraD0Ev"><code class="docutils literal notranslate"><span class="pre">Camera::~Camera()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera11GetPositionEv"><code class="docutils literal notranslate"><span class="pre">Camera::GetPosition()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">Camera::SetPosition()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera11GetRotationEv"><code class="docutils literal notranslate"><span class="pre">Camera::GetRotation()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">Camera::SetRotation()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv"><code class="docutils literal notranslate"><span class="pre">Camera::GetProjectionMatrix()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv"><code class="docutils literal notranslate"><span class="pre">Camera::GetViewMatrix()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event"><code class="docutils literal notranslate"><span class="pre">Camera::ResizeProjectionMatrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6CameraE"><code class="docutils literal notranslate"><span class="pre">Cacao::Camera</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera6CameraEv"><code class="docutils literal notranslate"><span class="pre">Camera()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6CameraD0Ev"><code class="docutils literal notranslate"><span class="pre">~Camera()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera11GetPositionEv"><code class="docutils literal notranslate"><span class="pre">GetPosition()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera11SetPositionEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetPosition()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera11GetRotationEv"><code class="docutils literal notranslate"><span class="pre">GetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera16GetRotationEulerEv"><code class="docutils literal notranslate"><span class="pre">GetRotationEuler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera11SetRotationEN3glm4quatE"><code class="docutils literal notranslate"><span class="pre">SetRotation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera16SetRotationEulerEN3glm4vec3E"><code class="docutils literal notranslate"><span class="pre">SetRotationEuler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera19GetProjectionMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetProjectionMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera13GetViewMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetViewMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera14GetFrontVectorEv"><code class="docutils literal notranslate"><span class="pre">GetFrontVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera14GetRightVectorEv"><code class="docutils literal notranslate"><span class="pre">GetRightVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera11GetUpVectorEv"><code class="docutils literal notranslate"><span class="pre">GetUpVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera13GetLookTargetEv"><code class="docutils literal notranslate"><span class="pre">GetLookTarget()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao6Camera13GetClearColorEv"><code class="docutils literal notranslate"><span class="pre">GetClearColor()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera13SetClearColorEN3glm6u8vec3E"><code class="docutils literal notranslate"><span class="pre">SetClearColor()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera22ResizeProjectionMatrixER5Event"><code class="docutils literal notranslate"><span class="pre">ResizeProjectionMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera21RecalculateViewMatrixEv"><code class="docutils literal notranslate"><span class="pre">RecalculateViewMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera27RecalculateProjectionMatrixEv"><code class="docutils literal notranslate"><span class="pre">RecalculateProjectionMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera24RecalculateCameraVectorsEv"><code class="docutils literal notranslate"><span class="pre">RecalculateCameraVectors()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera14resizeConsumerE"><code class="docutils literal notranslate"><span class="pre">resizeConsumer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera10clearColorE"><code class="docutils literal notranslate"><span class="pre">clearColor</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera16projectionMatrixE"><code class="docutils literal notranslate"><span class="pre">projectionMatrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera10viewMatrixE"><code class="docutils literal notranslate"><span class="pre">viewMatrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera20viewProjectionMatrixE"><code class="docutils literal notranslate"><span class="pre">viewProjectionMatrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8positionE"><code class="docutils literal notranslate"><span class="pre">position</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8rotationE"><code class="docutils literal notranslate"><span class="pre">rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8frontVecE"><code class="docutils literal notranslate"><span class="pre">frontVec</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera5upVecE"><code class="docutils literal notranslate"><span class="pre">upVec</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera8rightVecE"><code class="docutils literal notranslate"><span class="pre">rightVec</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Camera11displaySizeE"><code class="docutils literal notranslate"><span class="pre">displaySize</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -799,8 +953,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -820,7 +974,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -833,7 +987,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

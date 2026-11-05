@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,34 +27,35 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
     <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=7b6b01ca"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Logger';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Mesh" href="classCacao_1_1Mesh.html" />
+    <link rel="next" title="Class Material" href="classCacao_1_1Material.html" />
     <link rel="prev" title="Class Input" href="classCacao_1_1Input.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -340,31 +341,16 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1Loader.html">Concept Loader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1RuntimeConfig.html">Struct Engine::RuntimeConfig</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html">Struct TickController::SnapshotRequestControl</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
@@ -373,7 +359,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Actor.html">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorRef.html">Class ActorRef</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
@@ -382,7 +368,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html">Class BinaryBlobResource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
@@ -400,10 +386,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Computed.html">Template Class Computed</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Dependency.html">Class Dependency</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EffectOutput.html">Class EffectOutput</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
@@ -418,7 +413,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -430,13 +425,22 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Logger</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MeshRenderer.html">Class MeshRenderer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1OrthographicCamera.html">Class OrthographicCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
@@ -448,22 +452,25 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State.html">Template Class State</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
@@ -481,61 +488,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a48f6ba71da437dc9c594a1a4e4ea3b78.html">Template Function Cacao::Check(bool, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ad26bb9089bbca4800d0aa8c4fdda256f.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a84c94062bde3ff0017ddd31071e14aba.html">Define CACAO_BUTTON_LEFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1abba3b9a9b29998ce7472c02f14243d0e.html">Variable Paused</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a12adf0581ae42b9dc1a456cdd9ca8665.html">Define CACAO_BUTTON_MIDDLE</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a23268cda20903e8f077f54db28e88a63.html">Define CACAO_BUTTON_RIGHT</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a4256b4ea68f7b83b0580b492975fac45.html">Typedef Cacao::time::dmicroseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a2ee627f4843f0e647748a3a58f6c71f4.html">Typedef Cacao::time::dmilliseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a089ce274eb27ed22b7ca888179c98e2b.html">Typedef Cacao::time::dminutes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a800ee6ea4ace65d56fb0c7e101360bf1.html">Typedef Cacao::time::dnanoseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ad9a328df46a51d0139cc2dd628e23ec5.html">Typedef Cacao::time::dseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a89899dad0df62386aa6ae0d32ce1df57.html">Typedef Cacao::time::dtime_point</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ac2772804de41ed7618f06a957f6dfc34.html">Typedef Cacao::time::fhours</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a99ed33722b9c7d1e9f110dd54a613754.html">Typedef Cacao::time::fmicroseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a00caf7e10b43f1e73a1bf6b077913b18.html">Typedef Cacao::time::fmilliseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1afb37cc2f7ae22667aeb1e88f14783b60.html">Typedef Cacao::time::fminutes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a1ff9460947063ee5392a99a01c732d22.html">Typedef Cacao::time::fnanoseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ae763516073d03facfe9c309bb88a3248.html">Typedef Cacao::time::fseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1abba9b591cb84f1b4b24065abbdecd1b4.html">Typedef Cacao::time::ftime_point</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1adff0cb2b0b9f2305d3d3d0fc7aa6dd46.html">Variable Playing</a></li>
 </ul>
 </div>
 </nav></div>
@@ -543,9 +505,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -616,7 +583,7 @@
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5LevelE">
 <span id="_CPPv3N5Cacao6Logger5LevelE"></span><span id="_CPPv2N5Cacao6Logger5LevelE"></span><span class="target" id="classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Level</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger5LevelE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Level of severity for log messages. </p>
+<dd><p><a class="reference internal" href="#classCacao_1_1Logger_1a1659f5c641b8cc720438c99e3a5b3f2e"><span class="std std-ref">Level</span></a> of severity for log messages. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger5Level5TraceE">
@@ -683,12 +650,30 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger7RuntimeE5Level">
+<span id="_CPPv3N5Cacao6Logger7RuntimeE5Level"></span><span id="_CPPv2N5Cacao6Logger7RuntimeE5Level"></span><span id="Cacao::Logger::Runtime__Level"></span><span class="target" id="classCacao_1_1Logger_1ac67e2cfcc064363d9b2d3862de362249"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Cacao::Logger::Level::Info"><span class="n"><span class="pre">Info</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger7RuntimeE5Level" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Log a message from the runtime. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For use only by engine runtimes.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> – The severity of the message (optional, defaults to Info)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html#structCacao_1_1Logger_1_1LogToken"><span class="std std-ref">LogToken</span></a>, which is streamed into like std::cout and logs the resulting message upon destruction. Do not store this return value. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger6ClientE5Level">
 <span id="_CPPv3N5Cacao6Logger6ClientE5Level"></span><span id="_CPPv2N5Cacao6Logger6ClientE5Level"></span><span id="Cacao::Logger::Client__Level"></span><span class="target" id="classCacao_1_1Logger_1a9043c65728c6357c5e2c4ef52d4f5421"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Client</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5LevelE" title="Cacao::Logger::Level"><span class="n"><span class="pre">Level</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger5Level4InfoE" title="Cacao::Logger::Level::Info"><span class="n"><span class="pre">Info</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao6Logger6ClientE5Level" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Log a message from the client. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For use by engine clients.</p>
+<p>For use by games.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -706,6 +691,30 @@
 <span id="_CPPv3N5Cacao6Logger8LogTokenE"></span><span id="_CPPv2N5Cacao6Logger8LogTokenE"></span><span id="Cacao::Logger::LogToken"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogToken</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>A small object used to make the logging API more ergonomic. </p>
 <p>Use operator&lt;&lt; with it just like with std::cout to write log messages (no ending newline or <code class="docutils literal notranslate"><span class="pre">std::endl</span></code> necessary) You can also use LogFormatted just like you would <code class="docutils literal notranslate"><span class="pre">std::format</span></code></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6SourceE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6SourceE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6SourceE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Source</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6SourceE" title="Link to this definition"><span/></a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6Source6ClientE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6Source6ClientE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6Source6ClientE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7a577d7068826de925ea2aec01dbadf5e4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Client</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6Source6ClientE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6Source7RuntimeE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6Source7RuntimeE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6Source7RuntimeE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7abc366f2d0ba3d681e7a3899917c5d3de"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Runtime</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6Source7RuntimeE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken6Source6EngineE">
+<span id="_CPPv3N5Cacao6Logger8LogToken6Source6EngineE"></span><span id="_CPPv2N5Cacao6Logger8LogToken6Source6EngineE"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac6498faef781e2bf8542481b366b40b7a7bfa30721c5e726ff17e3f972237a82c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Engine</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken6Source6EngineE" title="Link to this definition"><span/></a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -748,8 +757,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args">
-<span id="_CPPv3IDpEN5Cacao6Logger8LogToken12LogFormattedENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span id="_CPPv2IDpEN5Cacao6Logger8LogToken12LogFormattedENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1a7f262248eacb6c9e52dfcdd0626f3130"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogFormatted</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fmtstr</span></span>, <a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt13format_stringIDpR4ArgsEEDp4Args">
+<span id="_CPPv3IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt13format_stringIDpR4ArgsEEDp4Args"></span><span id="_CPPv2IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt13format_stringIDpR4ArgsEEDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1a850f2fca51235fd0b0cc629698e18822"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogFormatted</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt13format_stringIDpR4ArgsEEDp4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fmtstr</span></span>, <a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt13format_stringIDpR4ArgsEEDp4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt13format_stringIDpR4ArgsEEDp4Args" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Add a formatted string to the log stream. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -762,8 +771,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args">
-<span id="_CPPv3IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span id="_CPPv2IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1a75f784c4116241110f89a29974e03703"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogFormatted</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">locale</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">locale</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fmtstr</span></span>, <a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args">
+<span id="_CPPv3IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args"></span><span id="_CPPv2IDpEN5Cacao6Logger8LogToken12LogFormattedERKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCacao_1_1Logger_1_1LogToken_1a4665f47a4044475f168d8b073c653102"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogFormatted</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">locale</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">locale</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">format_string</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fmtstr</span></span>, <a class="reference internal" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args" title="Cacao::Logger::LogToken::LogFormatted::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Add a formatted string to the log stream with an explicit locale. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -795,8 +804,8 @@
 <dd></dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken8isClientE">
-<span id="_CPPv3N5Cacao6Logger8LogToken8isClientE"></span><span id="_CPPv2N5Cacao6Logger8LogToken8isClientE"></span><span id="Cacao::Logger::LogToken::isClient__b"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ac33136538a2bccd18fd21d9eb7eda865"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isClient</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken8isClientE" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao6Logger8LogToken3srcE">
+<span id="_CPPv3N5Cacao6Logger8LogToken3srcE"></span><span id="_CPPv2N5Cacao6Logger8LogToken3srcE"></span><span id="Cacao::Logger::LogToken::src__Cacao::Logger::LogToken::Source"></span><span class="target" id="structCacao_1_1Logger_1_1LogToken_1ab7dab5161a006e7d8ec7ff06fe133e2b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="n"><span class="pre">Cacao</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6LoggerE" title="Cacao::Logger"><span class="n"><span class="pre">Logger</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogTokenE" title="Cacao::Logger::LogToken"><span class="n"><span class="pre">LogToken</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N5Cacao6Logger8LogToken6SourceE" title="Cacao::Logger::LogToken::Source"><span class="n"><span class="pre">Source</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">src</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao6Logger8LogToken3srcE" title="Link to this definition"><span/></a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -827,11 +836,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1Mesh.html"
+       href="classCacao_1_1Material.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class Mesh</p>
+        <p class="prev-next-title">Class Material</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -859,31 +868,38 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6LoggerE"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5LevelE"><code class="docutils literal notranslate"><span class="pre">Logger::Level</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5TraceE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Trace</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level4InfoE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Info</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level4WarnE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Warn</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5ErrorE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Error</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5FatalE"><code class="docutils literal notranslate"><span class="pre">Logger::Level::Fatal</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6LoggerE"><code class="docutils literal notranslate"><span class="pre">Cacao::Logger</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5LevelE"><code class="docutils literal notranslate"><span class="pre">Level</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5TraceE"><code class="docutils literal notranslate"><span class="pre">Trace</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level4InfoE"><code class="docutils literal notranslate"><span class="pre">Info</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level4WarnE"><code class="docutils literal notranslate"><span class="pre">Warn</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5ErrorE"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger5Level5FatalE"><code class="docutils literal notranslate"><span class="pre">Fatal</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger3GetEv"><code class="docutils literal notranslate"><span class="pre">Logger::Get()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6EngineE5Level"><code class="docutils literal notranslate"><span class="pre">Logger::Engine()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6ClientE5Level"><code class="docutils literal notranslate"><span class="pre">Logger::Client()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenE"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenEv"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogToken()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenERK8LogToken"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogToken()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenERR8LogToken"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogToken()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenaSERK8LogToken"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::operator=()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenaSERR8LogToken"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::operator=()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao6Logger8LogTokenlsER8LogTokenRK1T"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::operator&lt;&lt;()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvNSt13format_stringIDp4ArgsEEDpRR4Args"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogFormatted()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeENSt13format_stringIDp4ArgsEEDpRR4Args"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::LogFormatted()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenD0Ev"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::~LogToken()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3lvlE"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::lvl</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3ossE"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::oss</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8isClientE"><code class="docutils literal notranslate"><span class="pre">Logger::LogToken::isClient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger3GetEv"><code class="docutils literal notranslate"><span class="pre">Get()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6EngineE5Level"><code class="docutils literal notranslate"><span class="pre">Engine()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger7RuntimeE5Level"><code class="docutils literal notranslate"><span class="pre">Runtime()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger6ClientE5Level"><code class="docutils literal notranslate"><span class="pre">Client()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenE"><code class="docutils literal notranslate"><span class="pre">Cacao::Logger::LogToken</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6SourceE"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6Source6ClientE"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6Source7RuntimeE"><code class="docutils literal notranslate"><span class="pre">Runtime</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken6Source6EngineE"><code class="docutils literal notranslate"><span class="pre">Engine</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenEv"><code class="docutils literal notranslate"><span class="pre">LogToken()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenERK8LogToken"><code class="docutils literal notranslate"><span class="pre">LogToken()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken8LogTokenERR8LogToken"><code class="docutils literal notranslate"><span class="pre">LogToken()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenaSERK8LogToken"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenaSERR8LogToken"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao6Logger8LogTokenlsER8LogTokenRK1T"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt13format_stringIDpR4ArgsEEDp4Args"><code class="docutils literal notranslate"><span class="pre">LogFormatted()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4IDpEN5Cacao6Logger8LogToken12LogFormattedEvRKNSt6localeERKNSt13format_stringIDp4ArgsEEDp4Args"><code class="docutils literal notranslate"><span class="pre">LogFormatted()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogTokenD0Ev"><code class="docutils literal notranslate"><span class="pre">~LogToken()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3lvlE"><code class="docutils literal notranslate"><span class="pre">lvl</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3ossE"><code class="docutils literal notranslate"><span class="pre">oss</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao6Logger8LogToken3srcE"><code class="docutils literal notranslate"><span class="pre">src</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -906,8 +922,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -927,7 +943,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -940,7 +956,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

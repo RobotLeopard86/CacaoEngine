@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,34 +27,35 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
     <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=7b6b01ca"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/classCacao_1_1Actor';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class ActorHandle" href="classCacao_1_1ActorHandle.html" />
+    <link rel="next" title="Class ActorRef" href="classCacao_1_1ActorRef.html" />
     <link rel="prev" title="Struct Vertex" href="structCacao_1_1Vertex.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -340,31 +341,16 @@
 <li class="toctree-l1"><a class="reference internal" href="namespace_Cacao.html">Namespace Cacao</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="namespace_Cacao__time.html">Namespace Cacao::time</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1Loader.html">Concept Loader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="conceptCacao_1_1MultiLoader.html">Concept MultiLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ClientIdentity.html">Struct ClientIdentity</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1Config.html">Struct Engine::Config</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1InitConfig.html">Struct Engine::InitConfig</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Engine_1_1RuntimeConfig.html">Struct Engine::RuntimeConfig</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Logger_1_1LogToken.html">Struct Logger::LogToken</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1ResourceManager_1_1ErasedLoader.html">Struct ResourceManager::ErasedLoader</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="structCacao_1_1TickController_1_1SnapshotRequestControl.html">Struct TickController::SnapshotRequestControl</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="structCacao_1_1Vertex.html">Struct Vertex</a></li>
@@ -373,7 +359,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Class Actor</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorHandle.html">Class ActorHandle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ActorRef.html">Class ActorRef</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Asset.html">Class Asset</a></li>
@@ -382,7 +368,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioManager.html">Class AudioManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BinaryBlobResource.html">Class BinaryBlobResource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1AudioPlayer.html">Class AudioPlayer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1BlobResource.html">Class BlobResource</a></li>
@@ -400,10 +386,19 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Component.html">Class Component</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Computed.html">Template Class Computed</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Cubemap.html">Class Cubemap</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1DataEvent.html">Template Class DataEvent</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Dependency.html">Class Dependency</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EffectOutput.html">Class EffectOutput</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Engine.html">Class Engine</a></li>
@@ -418,7 +413,7 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1EventManager.html">Class EventManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1FrameProcessor.html">Class FrameProcessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ExternalBinding.html">Template Class ExternalBinding</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1GPUManager.html">Class GPUManager</a></li>
@@ -430,13 +425,22 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Logger.html">Class Logger</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Material.html">Class Material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Mesh.html">Class Mesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MeshRenderer.html">Class MeshRenderer</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Model.html">Class Model</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1MultiFuture.html">Template Class MultiFuture</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1OrthographicCamera.html">Class OrthographicCamera</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1PAL.html">Class PAL</a></li>
@@ -448,22 +452,25 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Resource.html">Class Resource</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1ResourceManager.html">Class ResourceManager</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Script.html">Class Script</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Shader.html">Class Shader</a></li>
 </ul>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1SideEffect.html">Class SideEffect</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Sound.html">Class Sound</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State.html">Template Class State</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TextBlobResource.html">Class TextBlobResource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1State_1_1MutationProxy.html">Class State::MutationProxy</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="classCacao_1_1Tex2D.html">Class Tex2D</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1TickController.html">Class TickController</a></li>
@@ -481,61 +488,16 @@
 <li class="toctree-l1"><a class="reference internal" href="classCacao_1_1WorldManager.html">Class WorldManager</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1accac9b75fad823a6d683e0e15ec596a5.html">Template Function Cacao::Check(bool, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1a48f6ba71da437dc9c594a1a4e4ea3b78.html">Template Function Cacao::Check(bool, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ab24ad583c8dfc6404dabf65af70f5d43.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string, std::function&lt;void()&gt;)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function_Exceptions_8hpp_1ad26bb9089bbca4800d0aa8c4fdda256f.html">Template Function Cacao::Check(std::shared_ptr&lt;P&gt;, std::string_view, std::function&lt;void()&gt;)</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a84c94062bde3ff0017ddd31071e14aba.html">Define CACAO_BUTTON_LEFT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1abba3b9a9b29998ce7472c02f14243d0e.html">Variable Paused</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a12adf0581ae42b9dc1a456cdd9ca8665.html">Define CACAO_BUTTON_MIDDLE</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="define_Input_8hpp_1a23268cda20903e8f077f54db28e88a63.html">Define CACAO_BUTTON_RIGHT</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1aa3a4e25a9c6465f9a7920c8d965ef6a5.html">Typedef Cacao::time::dhours</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a4256b4ea68f7b83b0580b492975fac45.html">Typedef Cacao::time::dmicroseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a2ee627f4843f0e647748a3a58f6c71f4.html">Typedef Cacao::time::dmilliseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a089ce274eb27ed22b7ca888179c98e2b.html">Typedef Cacao::time::dminutes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a800ee6ea4ace65d56fb0c7e101360bf1.html">Typedef Cacao::time::dnanoseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ad9a328df46a51d0139cc2dd628e23ec5.html">Typedef Cacao::time::dseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a89899dad0df62386aa6ae0d32ce1df57.html">Typedef Cacao::time::dtime_point</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ac2772804de41ed7618f06a957f6dfc34.html">Typedef Cacao::time::fhours</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a99ed33722b9c7d1e9f110dd54a613754.html">Typedef Cacao::time::fmicroseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a00caf7e10b43f1e73a1bf6b077913b18.html">Typedef Cacao::time::fmilliseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1afb37cc2f7ae22667aeb1e88f14783b60.html">Typedef Cacao::time::fminutes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1a1ff9460947063ee5392a99a01c732d22.html">Typedef Cacao::time::fnanoseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1ae763516073d03facfe9c309bb88a3248.html">Typedef Cacao::time::fseconds</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="typedef_Time_8hpp_1abba9b591cb84f1b4b24065abbdecd1b4.html">Typedef Cacao::time::ftime_point</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_AudioPlayer_8hpp_1adff0cb2b0b9f2305d3d3d0fc7aa6dd46.html">Variable Playing</a></li>
 </ul>
 </div>
 </nav></div>
@@ -543,9 +505,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -596,26 +563,39 @@
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_engine_include_Cacao_Actor.hpp.html#file-engine-include-cacao-actor-hpp"><span class="std std-ref">File Actor.hpp</span></a></p></li>
 </ul>
-<section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Link to this heading"><span/></a></h2>
-<section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Link to this heading"><span/></a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">std::enable_shared_from_this&lt;</span> <span class="pre">Actor</span> <span class="pre">&gt;</span></code></p></li>
-</ul>
-</section>
-</section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Link to this heading"><span/></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5ActorE">
-<span id="_CPPv3N5Cacao5ActorE"></span><span id="_CPPv2N5Cacao5ActorE"></span><span id="Cacao::Actor"></span><span class="target" id="classCacao_1_1Actor"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Actor</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_shared_from_this</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5Cacao5ActorE" title="Cacao::Actor"><span class="n"><span class="pre">Actor</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5Cacao5ActorE" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3N5Cacao5ActorE"></span><span id="_CPPv2N5Cacao5ActorE"></span><span id="Cacao::Actor"></span><span class="target" id="classCacao_1_1Actor"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Actor</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5ActorE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>An object that exists within a <a class="reference internal" href="classCacao_1_1World.html#classCacao_1_1World"><span class="std std-ref">World</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor23GetWorldTransformMatrixEv">
-<span id="_CPPv3NK5Cacao5Actor23GetWorldTransformMatrixEv"></span><span id="_CPPv2NK5Cacao5Actor23GetWorldTransformMatrixEv"></span><span id="Cacao::Actor::GetWorldTransformMatrixC"></span><span class="target" id="classCacao_1_1Actor_1ab55ec1e88bf04359ceae467427fb69f7"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransformMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor23GetWorldTransformMatrixEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor17GetLocalTransformEv">
+<span id="_CPPv3NK5Cacao5Actor17GetLocalTransformEv"></span><span id="_CPPv2NK5Cacao5Actor17GetLocalTransformEv"></span><span id="Cacao::Actor::GetLocalTransformC"></span><span class="target" id="classCacao_1_1Actor_1ab39877663abb402d782b262157527899"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetLocalTransform</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor17GetLocalTransformEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the actor’s local transform relative to its parent. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The local-space transform </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor17SetLocalTransformE9Transform">
+<span id="_CPPv3N5Cacao5Actor17SetLocalTransformE9Transform"></span><span id="_CPPv2N5Cacao5Actor17SetLocalTransformE9Transform"></span><span id="Cacao::Actor::SetLocalTransform__Transform"></span><span class="target" id="classCacao_1_1Actor_1a2e81c657404650c0e25064e8f5246385"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetLocalTransform</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">transform</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor17SetLocalTransformE9Transform" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Update the local transform of the actor relative to its parent. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>transform</strong> – The new local-space transform </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor28GetWorldTransformationMatrixEv">
+<span id="_CPPv3NK5Cacao5Actor28GetWorldTransformationMatrixEv"></span><span id="_CPPv2NK5Cacao5Actor28GetWorldTransformationMatrixEv"></span><span id="Cacao::Actor::GetWorldTransformationMatrixC"></span><span class="target" id="classCacao_1_1Actor_1a544da47a7ac22362fdf9c85ce954f8fa"></span><span class="n"><span class="pre">glm</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mat4</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransformationMatrix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor28GetWorldTransformationMatrixEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Calculate the world-space transformation matrix of the actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -625,25 +605,47 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor17GetWorldTransformEv">
+<span id="_CPPv3NK5Cacao5Actor17GetWorldTransformEv"></span><span id="_CPPv2NK5Cacao5Actor17GetWorldTransformEv"></span><span id="Cacao::Actor::GetWorldTransformC"></span><span class="target" id="classCacao_1_1Actor_1acd933c26ee0f2d282550822f65162e8e"></span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetWorldTransform</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor17GetWorldTransformEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get the effective transform of the actor in world-space. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The world-space transform </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor9GetParentEv">
-<span id="_CPPv3NK5Cacao5Actor9GetParentEv"></span><span id="_CPPv2NK5Cacao5Actor9GetParentEv"></span><span id="Cacao::Actor::GetParentC"></span><span class="target" id="classCacao_1_1Actor_1ad3f2dce3be84d988ab8171dd59f3cc53"></span><a class="reference internal" href="classCacao_1_1ActorHandle.html#_CPPv4N5Cacao11ActorHandleE" title="Cacao::ActorHandle"><span class="n"><span class="pre">ActorHandle</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetParent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor9GetParentEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao5Actor9GetParentEv"></span><span id="_CPPv2NK5Cacao5Actor9GetParentEv"></span><span id="Cacao::Actor::GetParentC"></span><span class="target" id="classCacao_1_1Actor_1a8b0924783655bfe11800789d055ce3ad"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetParent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor9GetParentEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Access the parent of this actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The parent actor, or a null handle if the parent is the world root </p>
+<dd class="field-odd"><p>The parent actor, or a null handle if this actor is toplevel </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor8IsActiveEv">
-<span id="_CPPv3NK5Cacao5Actor8IsActiveEv"></span><span id="_CPPv2NK5Cacao5Actor8IsActiveEv"></span><span id="Cacao::Actor::IsActiveC"></span><span class="target" id="classCacao_1_1Actor_1a7ebe8b5e158e2b7122e233e445c9c9c0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsActive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor8IsActiveEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao5Actor8IsActiveEv"></span><span id="_CPPv2NK5Cacao5Actor8IsActiveEv"></span><span id="Cacao::Actor::IsActiveC"></span><span class="target" id="classCacao_1_1Actor_1a7ebe8b5e158e2b7122e233e445c9c9c0"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsActive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor8IsActiveEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Check if the actor is active. </p>
 <p>This takes into account both if the actor is enabled and its parent <a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is active</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This will return false if the parent <a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> is inactive </p>
 </div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor12IsSelfActiveEv">
+<span id="_CPPv3NK5Cacao5Actor12IsSelfActiveEv"></span><span id="_CPPv2NK5Cacao5Actor12IsSelfActiveEv"></span><span id="Cacao::Actor::IsSelfActiveC"></span><span class="target" id="classCacao_1_1Actor_1a070acbf4a21884362607ced56021bc4e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsSelfActive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor12IsSelfActiveEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Check if the actor itself is active, regardless of if its parent is. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the actor is enabled </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -658,42 +660,17 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor8ReparentE11ActorHandle">
-<span id="_CPPv3N5Cacao5Actor8ReparentE11ActorHandle"></span><span id="_CPPv2N5Cacao5Actor8ReparentE11ActorHandle"></span><span id="Cacao::Actor::Reparent__ActorHandle"></span><span class="target" id="classCacao_1_1Actor_1acc6c063d565ec7a96c9d90a9b57083ed"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Reparent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1ActorHandle.html#_CPPv4N5Cacao11ActorHandleE" title="Cacao::ActorHandle"><span class="n"><span class="pre">ActorHandle</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newParent</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor8ReparentE11ActorHandle" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor8ReparentE8ActorRef">
+<span id="_CPPv3N5Cacao5Actor8ReparentE8ActorRef"></span><span id="_CPPv2N5Cacao5Actor8ReparentE8ActorRef"></span><span id="Cacao::Actor::Reparent__ActorRef"></span><span class="target" id="classCacao_1_1Actor_1a848341ade9bffaad1d4fb4c30abf0c5f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Reparent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">newParent</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor8ReparentE8ActorRef" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Change the parent of this actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>newParent</strong> – The new parent of this actor </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0DpEN5Cacao5Actor14MountComponentEvDpRR4Args">
-<span id="_CPPv3I0DpEN5Cacao5Actor14MountComponentEDpRR4Args"></span><span id="_CPPv2I0DpEN5Cacao5Actor14MountComponentEDpRR4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1a978db0cbbce6d6fec9c42491a40260ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentEvDpRR4Args" title="Cacao::Actor::MountComponent::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentEvDpRR4Args" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new component and add it to this actor. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> – The arguments to the component constructor</p>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringE">
-<span id="_CPPv3N5Cacao5Actor14MountComponentERKNSt6stringE"></span><span id="_CPPv2N5Cacao5Actor14MountComponentERKNSt6stringE"></span><span id="Cacao::Actor::MountComponent__ssCR"></span><span class="target" id="classCacao_1_1Actor_1a1ecf12b7c16c4ba9722dd0eb0d339a14"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">factoryID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new component and add it to this actor. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>factoryID</strong> – The ID of the <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> factory in with the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> to create the component</p>
+<dd class="field-odd"><p><strong>newParent</strong> – The new parent of this actor</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> does not have a <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> actory registered for the provided ID </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If a null ref is provided </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">BadValueException</span></span></span> – If a ref to the same actor being reparented is provided </p></li>
 </ul>
 </dd>
 </dl>
@@ -711,8 +688,66 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0ENK5Cacao5Actor12GetComponentENSt10shared_ptrI1TEEv">
-<span id="_CPPv3I0ENK5Cacao5Actor12GetComponentEv"></span><span id="_CPPv2I0ENK5Cacao5Actor12GetComponentEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1a5c88102b867e1e24a40e1f2b90cd4af3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentENSt10shared_ptrI1TEEv" title="Cacao::Actor::GetComponent::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetComponent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentENSt10shared_ptrI1TEEv" title="Link to this definition"><span/></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0DpEN5Cacao5Actor14MountComponentER1TDpRR4Argsb">
+<span id="_CPPv3I0DpEN5Cacao5Actor14MountComponentEDpRR4Argsb"></span><span id="_CPPv2I0DpEN5Cacao5Actor14MountComponentEDpRR4Argsb"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1a63bbe08cd3494f301206c4ab8ee21e3f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentER1TDpRR4Argsb" title="Cacao::Actor::MountComponent::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentER1TDpRR4Argsb" title="Cacao::Actor::MountComponent::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enabled</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentER1TDpRR4Argsb" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new component and add it to this actor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – The arguments to the component constructor </p></li>
+<li><p><strong>enabled</strong> – Whether the component should start enabled or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringEb">
+<span id="_CPPv3N5Cacao5Actor14MountComponentERKNSt6stringEb"></span><span id="_CPPv2N5Cacao5Actor14MountComponentERKNSt6stringEb"></span><span id="Cacao::Actor::MountComponent__ssCR.b"></span><span class="target" id="classCacao_1_1Actor_1a9c2960c585e40710971fe71b57a81741"></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">factoryID</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enabled</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringEb" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new component and add it to this actor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factoryID</strong> – The ID of the <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> factory in with the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> to create the component </p></li>
+<li><p><strong>enabled</strong> – Whether the component should start enabled or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> does not have a <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> actory registered for the provided ID </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb">
+<span id="_CPPv3N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb"></span><span id="_CPPv2N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb"></span><span class="target" id="classCacao_1_1Actor_1a74c216eaa32406c79adb8ab64130866e"></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">MountComponent</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">factoryID</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">configure</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enabled</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Create a new component and add it to this actor, with a callback for intial configuration. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factoryID</strong> – The ID of the <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> factory in with the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> to create the component </p></li>
+<li><p><strong>configure</strong> – A callback accepting the instantiated component to run for initial configuration </p></li>
+<li><p><strong>enabled</strong> – Whether the component should start enabled or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">ExistingValueException</span></span></span> – If a component of this type already exists on the actor </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the <a class="reference internal" href="classCacao_1_1CodeRegistry.html#classCacao_1_1CodeRegistry"><span class="std std-ref">CodeRegistry</span></a> does not have a <a class="reference internal" href="classCacao_1_1Component.html#classCacao_1_1Component"><span class="std std-ref">Component</span></a> actory registered for the provided ID </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK5Cacao5Actor12GetComponentER1Tv">
+<span id="_CPPv3I0ENK5Cacao5Actor12GetComponentEv"></span><span id="_CPPv2I0ENK5Cacao5Actor12GetComponentEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1adc99790358c83ab24387ee7675c183f2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentER1Tv" title="Cacao::Actor::GetComponent::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetComponent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentER1Tv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Access a component on the actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
@@ -725,9 +760,9 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao5Actor15DeleteComponentEvv">
-<span id="_CPPv3I0EN5Cacao5Actor15DeleteComponentEv"></span><span id="_CPPv2I0EN5Cacao5Actor15DeleteComponentEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1a2a0e6f1f2fe467a2df896c084bc64d8e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteComponent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao5Actor15DeleteComponentEvv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Delete a component from the actor. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5Cacao5Actor16UnmountComponentEvv">
+<span id="_CPPv3I0EN5Cacao5Actor16UnmountComponentEv"></span><span id="_CPPv2I0EN5Cacao5Actor16UnmountComponentEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1ad0f076ef19ce3db88a62c4286ed02c33"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UnmountComponent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5Cacao5Actor16UnmountComponentEvv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Remove a component from the actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If a component of this type does not exist on the actor </p>
@@ -737,22 +772,32 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor16GetAllComponentsEv">
-<span id="_CPPv3NK5Cacao5Actor16GetAllComponentsEv"></span><span id="_CPPv2NK5Cacao5Actor16GetAllComponentsEv"></span><span id="Cacao::Actor::GetAllComponentsC"></span><span class="target" id="classCacao_1_1Actor_1a7273e52ca262197c0dec2e5efdd2ea14"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetAllComponents</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor16GetAllComponentsEv" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Get a copy of all the components on the actor. </p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This doesn’t actually copy the components, just their pointers, but this does increment the reference count</p>
-</div>
+<span id="_CPPv3NK5Cacao5Actor16GetAllComponentsEv"></span><span id="_CPPv2NK5Cacao5Actor16GetAllComponentsEv"></span><span id="Cacao::Actor::GetAllComponentsC"></span><span class="target" id="classCacao_1_1Actor_1a317705dde4dab722fd3d75a4e6e0ae51"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetAllComponents</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor16GetAllComponentsEv" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get a list of all the components on the actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All actor components </p>
+<dd class="field-odd"><p>References to all actor components </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK5Cacao5Actor21GetComponentsFilteredENSt13unordered_mapINSt10type_indexEP9ComponentEE1F">
+<span id="_CPPv3I0ENK5Cacao5Actor21GetComponentsFilteredE1F"></span><span id="_CPPv2I0ENK5Cacao5Actor21GetComponentsFilteredE1F"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classCacao_1_1Actor_1aacc21eff446ba2eb7cec07d9e59beb15"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1Component.html#_CPPv4N5Cacao9ComponentE" title="Cacao::Component"><span class="n"><span class="pre">Component</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetComponentsFiltered</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5Cacao5Actor21GetComponentsFilteredENSt13unordered_mapINSt10type_indexEP9ComponentEE1F" title="Cacao::Actor::GetComponentsFiltered::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">filter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK5Cacao5Actor21GetComponentsFilteredENSt13unordered_mapINSt10type_indexEP9ComponentEE1F" title="Link to this definition"><span/></a><br /></dt>
+<dd><p>Get a filtered list of all the components on the actor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter</strong> – The filter function to check each component against, returning true for matching components</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>References to all matching actor components </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5Cacao5Actor14GetAllChildrenEv">
-<span id="_CPPv3NK5Cacao5Actor14GetAllChildrenEv"></span><span id="_CPPv2NK5Cacao5Actor14GetAllChildrenEv"></span><span id="Cacao::Actor::GetAllChildrenC"></span><span class="target" id="classCacao_1_1Actor_1acc934c6380cef30254100c06f7e1c27d"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1ActorHandle.html#_CPPv4N5Cacao11ActorHandleE" title="Cacao::ActorHandle"><span class="n"><span class="pre">ActorHandle</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetAllChildren</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor14GetAllChildrenEv" title="Link to this definition"><span/></a><br /></dt>
+<span id="_CPPv3NK5Cacao5Actor14GetAllChildrenEv"></span><span id="_CPPv2NK5Cacao5Actor14GetAllChildrenEv"></span><span id="Cacao::Actor::GetAllChildrenC"></span><span class="target" id="classCacao_1_1Actor_1a4856a9ae197eff22ae5f10d1234113d6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1ActorRef.html#_CPPv4N5Cacao8ActorRefE" title="Cacao::ActorRef"><span class="n"><span class="pre">ActorRef</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetAllChildren</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5Cacao5Actor14GetAllChildrenEv" title="Link to this definition"><span/></a><br /></dt>
 <dd><p>Get all the children of the actor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -760,11 +805,6 @@
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5ActorD0Ev">
-<span id="_CPPv3N5Cacao5ActorD0Ev"></span><span id="_CPPv2N5Cacao5ActorD0Ev"></span><span id="Cacao::Actor::~Actor"></span><span class="target" id="classCacao_1_1Actor_1a719fcd529a4a16cf31c2ed4aa9403640"></span><span class="sig-name descname"><span class="n"><span class="pre">~Actor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5ActorD0Ev" title="Link to this definition"><span/></a><br /></dt>
-<dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
@@ -779,52 +819,6 @@
 <dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor4guidE">
 <span id="_CPPv3N5Cacao5Actor4guidE"></span><span id="_CPPv2N5Cacao5Actor4guidE"></span><span id="Cacao::Actor::guid__xg::GuidC"></span><span class="target" id="classCacao_1_1Actor_1a16527d72378cd0e02d2a85867d310058"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">guid</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Actor4guidE" title="Link to this definition"><span/></a><br /></dt>
 <dd><p><a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> ID, unique. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor9transformE">
-<span id="_CPPv3N5Cacao5Actor9transformE"></span><span id="_CPPv2N5Cacao5Actor9transformE"></span><span id="Cacao::Actor::transform__Transform"></span><span class="target" id="classCacao_1_1Actor_1a6a9765596438aaf3adadbea267932c7c"></span><a class="reference internal" href="classCacao_1_1Transform.html#_CPPv4N5Cacao9TransformE" title="Cacao::Transform"><span class="n"><span class="pre">Transform</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transform</span></span></span><a class="headerlink" href="#_CPPv4N5Cacao5Actor9transformE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p><a class="reference internal" href="#classCacao_1_1Actor"><span class="std std-ref">Actor</span></a> transform relative to parent. </p>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor6CreateERKNSt6stringE11ActorHandleN2xg4GuidE">
-<span id="_CPPv3N5Cacao5Actor6CreateERKNSt6stringE11ActorHandleN2xg4GuidE"></span><span id="_CPPv2N5Cacao5Actor6CreateERKNSt6stringE11ActorHandleN2xg4GuidE"></span><span id="Cacao::Actor::Create__ssCR.ActorHandle.xg::Guid"></span><span class="target" id="classCacao_1_1Actor_1af2f7cee9eddebf9aa787bd2fef71b7d9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1ActorHandle.html#_CPPv4N5Cacao11ActorHandleE" title="Cacao::ActorHandle"><span class="n"><span class="pre">ActorHandle</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="classCacao_1_1ActorHandle.html#_CPPv4N5Cacao11ActorHandleE" title="Cacao::ActorHandle"><span class="n"><span class="pre">ActorHandle</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">parent</span></span>, <span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">guid</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor6CreateERKNSt6stringE11ActorHandleN2xg4GuidE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new actor. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The initial name of the actor </p></li>
-<li><p><strong>parent</strong> – The initial actor parent</p></li>
-</ul>
-</dd>
-<dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">NonexistentValueException</span></span></span> – If the provided parent is a null handle </p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A handle to the new actor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N5Cacao5Actor6CreateERKNSt6stringENSt10shared_ptrI5WorldEEN2xg4GuidE">
-<span id="_CPPv3N5Cacao5Actor6CreateERKNSt6stringENSt10shared_ptrI5WorldEEN2xg4GuidE"></span><span id="_CPPv2N5Cacao5Actor6CreateERKNSt6stringENSt10shared_ptrI5WorldEEN2xg4GuidE"></span><span id="Cacao::Actor::Create__ssCR.std::shared_ptr:World:.xg::Guid"></span><span class="target" id="classCacao_1_1Actor_1acc9790c859a959b6c83465dec06d0352"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="classCacao_1_1ActorHandle.html#_CPPv4N5Cacao11ActorHandleE" title="Cacao::ActorHandle"><span class="n"><span class="pre">ActorHandle</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classCacao_1_1World.html#_CPPv4N5Cacao5WorldE" title="Cacao::World"><span class="n"><span class="pre">World</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">world</span></span>, <span class="n"><span class="pre">xg</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Guid</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">guid</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Cacao5Actor6CreateERKNSt6stringENSt10shared_ptrI5WorldEEN2xg4GuidE" title="Link to this definition"><span/></a><br /></dt>
-<dd><p>Create a new actor attached to the world root. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The initial name of the actor </p></li>
-<li><p><strong>world</strong> – The world to place the actor in</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A handle to the new actor </p>
-</dd>
-</dl>
 </dd></dl>
 
 </div>
@@ -853,11 +847,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="classCacao_1_1ActorHandle.html"
+       href="classCacao_1_1ActorRef.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Class ActorHandle</p>
+        <p class="prev-next-title">Class ActorRef</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -880,30 +874,28 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inheritance-relationships">Inheritance Relationships</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-type">Base Type</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-documentation">Class Documentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5ActorE"><code class="docutils literal notranslate"><span class="pre">Actor</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor23GetWorldTransformMatrixEv"><code class="docutils literal notranslate"><span class="pre">Actor::GetWorldTransformMatrix()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor9GetParentEv"><code class="docutils literal notranslate"><span class="pre">Actor::GetParent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor8IsActiveEv"><code class="docutils literal notranslate"><span class="pre">Actor::IsActive()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor9SetActiveEb"><code class="docutils literal notranslate"><span class="pre">Actor::SetActive()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor8ReparentE11ActorHandle"><code class="docutils literal notranslate"><span class="pre">Actor::Reparent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentEvDpRR4Args"><code class="docutils literal notranslate"><span class="pre">Actor::MountComponent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Actor::MountComponent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor12HasComponentEbv"><code class="docutils literal notranslate"><span class="pre">Actor::HasComponent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentENSt10shared_ptrI1TEEv"><code class="docutils literal notranslate"><span class="pre">Actor::GetComponent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao5Actor15DeleteComponentEvv"><code class="docutils literal notranslate"><span class="pre">Actor::DeleteComponent()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor16GetAllComponentsEv"><code class="docutils literal notranslate"><span class="pre">Actor::GetAllComponents()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor14GetAllChildrenEv"><code class="docutils literal notranslate"><span class="pre">Actor::GetAllChildren()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5ActorD0Ev"><code class="docutils literal notranslate"><span class="pre">Actor::~Actor()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor4nameE"><code class="docutils literal notranslate"><span class="pre">Actor::name</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor4guidE"><code class="docutils literal notranslate"><span class="pre">Actor::guid</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor9transformE"><code class="docutils literal notranslate"><span class="pre">Actor::transform</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor6CreateERKNSt6stringE11ActorHandleN2xg4GuidE"><code class="docutils literal notranslate"><span class="pre">Actor::Create()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor6CreateERKNSt6stringENSt10shared_ptrI5WorldEEN2xg4GuidE"><code class="docutils literal notranslate"><span class="pre">Actor::Create()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5ActorE"><code class="docutils literal notranslate"><span class="pre">Cacao::Actor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor17GetLocalTransformEv"><code class="docutils literal notranslate"><span class="pre">GetLocalTransform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor17SetLocalTransformE9Transform"><code class="docutils literal notranslate"><span class="pre">SetLocalTransform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor28GetWorldTransformationMatrixEv"><code class="docutils literal notranslate"><span class="pre">GetWorldTransformationMatrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor17GetWorldTransformEv"><code class="docutils literal notranslate"><span class="pre">GetWorldTransform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor9GetParentEv"><code class="docutils literal notranslate"><span class="pre">GetParent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor8IsActiveEv"><code class="docutils literal notranslate"><span class="pre">IsActive()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor12IsSelfActiveEv"><code class="docutils literal notranslate"><span class="pre">IsSelfActive()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor9SetActiveEb"><code class="docutils literal notranslate"><span class="pre">SetActive()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor8ReparentE8ActorRef"><code class="docutils literal notranslate"><span class="pre">Reparent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor12HasComponentEbv"><code class="docutils literal notranslate"><span class="pre">HasComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0DpEN5Cacao5Actor14MountComponentER1TDpRR4Argsb"><code class="docutils literal notranslate"><span class="pre">MountComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringEb"><code class="docutils literal notranslate"><span class="pre">MountComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor14MountComponentERKNSt6stringENSt8functionIFvR9ComponentEEEb"><code class="docutils literal notranslate"><span class="pre">MountComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor12GetComponentER1Tv"><code class="docutils literal notranslate"><span class="pre">GetComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5Cacao5Actor16UnmountComponentEvv"><code class="docutils literal notranslate"><span class="pre">UnmountComponent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor16GetAllComponentsEv"><code class="docutils literal notranslate"><span class="pre">GetAllComponents()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5Cacao5Actor21GetComponentsFilteredENSt13unordered_mapINSt10type_indexEP9ComponentEE1F"><code class="docutils literal notranslate"><span class="pre">GetComponentsFiltered()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5Cacao5Actor14GetAllChildrenEv"><code class="docutils literal notranslate"><span class="pre">GetAllChildren()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor4nameE"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5Cacao5Actor4guidE"><code class="docutils literal notranslate"><span class="pre">guid</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -924,8 +916,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -945,7 +937,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -958,7 +950,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

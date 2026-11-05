@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,30 +27,31 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
     <link rel="stylesheet" type="text/css" href="../_static/fonts.css?v=734355ca" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=7b6b01ca"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/program_listing_file_engine_include_Cacao_Exceptions.hpp';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/RobotLeopard86/CacaoEngine/refs/heads/dev/docs/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
         </script>
     <link rel="icon" href="../_static/cacaologo.png"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -339,9 +340,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -389,8 +395,8 @@
 <p>↰ <a class="reference internal" href="file_engine_include_Cacao_Exceptions.hpp.html#file-engine-include-cacao-exceptions-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">engine/include/Cacao/Exceptions.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DllHelper.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Log.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"DllHelper.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Log.hpp"</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
@@ -407,48 +413,48 @@
 <span class="w">      </span><span class="k">protected</span><span class="o">:</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">msg</span><span class="p">(</span><span class="s">""</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">        </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Exception</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">};</span>
 
-<span class="cp">#define DEF_EXCEPTION(cls, tp)                                   \</span>
-<span class="cp">    class CACAO_API cls##Exception : public Exception {          \</span>
-<span class="cp">      public:                                                    \</span>
-<span class="cp">        cls##Exception(std::string m) : Exception() {            \</span>
-<span class="cp">            msg = makeMsg(m);                                    \</span>
-<span class="cp">        }                                                        \</span>
-<span class="cp">        ~cls##Exception() {}                                     \</span>
-<span class="cp">        std::string makeMsg(const std::string&amp; m) {              \</span>
-<span class="cp">            std::stringstream ss;                                \</span>
-<span class="cp">            ss &lt;&lt; &quot;(Cacao Engine &quot; &lt;&lt; tp &lt;&lt; &quot; Exception) &quot; &lt;&lt; m; \</span>
-<span class="cp">            return ss.str();                                     \</span>
-<span class="cp">        }                                                        \</span>
+<span class="cp">#define DEF_EXCEPTION(cls, tp)                                                \</span>
+<span class="cp">    class CACAO_API cls##Exception : public Exception {                       \</span>
+<span class="cp">      public:                                                                 \</span>
+<span class="cp">        cls##Exception(std::string_view m) : Exception() {                    \</span>
+<span class="cp">            msg = makeMsg(m);                                                 \</span>
+<span class="cp">        }                                                                     \</span>
+<span class="cp">        ~cls##Exception() {}                                                  \</span>
+<span class="cp">        std::string makeMsg(std::string_view m) {                             \</span>
+<span class="cp">            std::stringstream ss;                                             \</span>
+<span class="cp">            ss &lt;&lt; "(Cacao Engine " &lt;&lt; tp &lt;&lt; " Exception) " &lt;&lt; std::string(m); \</span>
+<span class="cp">            return ss.str();                                                  \</span>
+<span class="cp">        }                                                                     \</span>
 <span class="cp">    };</span>
 
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">External</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;External&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileNotFound</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;File Not Found&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">IO</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;I/O&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileOpen</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;File Open&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">InvalidYAML</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid YAML&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadInitState</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Initialization State&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadRealizeState</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Realization State&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadState</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad State&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadThread</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Thread&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadType</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Type&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadValue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bad Value&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">NonexistentValue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Nonexistent Value&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">ExistingValue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Existing Value&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">Misc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Miscellaneous&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">External</span><span class="p">,</span><span class="w"> </span><span class="s">"External"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileNotFound</span><span class="p">,</span><span class="w"> </span><span class="s">"File Not Found"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">IO</span><span class="p">,</span><span class="w"> </span><span class="s">"I/O"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">FileOpen</span><span class="p">,</span><span class="w"> </span><span class="s">"File Open"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">InvalidYAML</span><span class="p">,</span><span class="w"> </span><span class="s">"Invalid YAML"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadInitState</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Initialization State"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadBakeState</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Baking State"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadState</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad State"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadThread</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Thread"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadType</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Type"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">BadValue</span><span class="p">,</span><span class="w"> </span><span class="s">"Bad Value"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">NonexistentValue</span><span class="p">,</span><span class="w"> </span><span class="s">"Nonexistent Value"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">ExistingValue</span><span class="p">,</span><span class="w"> </span><span class="s">"Existing Value"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">DEF_EXCEPTION</span><span class="p">(</span><span class="n">Misc</span><span class="p">,</span><span class="w"> </span><span class="s">"Miscellaneous"</span><span class="p">)</span>
 
 <span class="cp">#undef DEF_EXCEPTION</span>
 
 
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">E</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Exception</span><span class="p">,</span><span class="w"> </span><span class="n">E</span><span class="o">&gt;</span>
-<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">condition</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">condition</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">unwindFn</span><span class="p">();</span>
-<span class="w">            </span><span class="n">E</span><span class="w"> </span><span class="nf">ex</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="n">E</span><span class="w"> </span><span class="nf">ex</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="p">{</span><span class="n">message</span><span class="p">});</span>
 <span class="w">            </span><span class="n">Logger</span><span class="o">::</span><span class="n">Engine</span><span class="p">(</span><span class="n">Logger</span><span class="o">::</span><span class="n">Level</span><span class="o">::</span><span class="n">Error</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">what</span><span class="p">();</span>
 <span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -456,7 +462,7 @@
 
 <span class="w">    </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">P</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">E</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="k">requires</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">Exception</span><span class="p">,</span><span class="w"> </span><span class="n">E</span><span class="o">&gt;</span>
-<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">CACAO_API</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Check</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unwindFn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Check</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span><span class="p">((</span><span class="kt">bool</span><span class="p">)</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">unwindFn</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -492,8 +498,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -513,7 +519,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -526,7 +532,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
