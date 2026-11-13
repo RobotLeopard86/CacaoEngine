@@ -30,6 +30,8 @@ The only exceptions to the code-commenting rule in function implementations are:
 1. `Check` calls at the top of the function to validate input
 2. Small functions whose effect is self-descriptive in what methods are called
 
+When handling errors or unexpected outcomes in code, always use the `Check` utility in engine code (`engine` directory), which throws the appropriate type of exception if the condition is false. Outside of engine code, use the `CheckException` utility. Do not use returned error values.
+
 ## Public Headers
 The public header files are those located in the following locations:
 * `engine/include`

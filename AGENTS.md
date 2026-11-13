@@ -37,6 +37,7 @@ Instructions for AI coding tools working in this repository. This file follows t
 - Every section of code must have clear, English comments briefly summarizing what it does. Exceptions (no comment required):
   1. `Check` calls at the top of a function validating input
   2. Small functions whose effect is self-descriptive from the calls they make
+- Any handling of errors or unexpected outcomes in code must use the `Check` utility in engine code (`engine` directory), or, outside of engine code, the `CheckException` utility. Both will throw an exception with the specified message if the condition is false. Never use use returned error values.
 
 ## Public Headers
 
