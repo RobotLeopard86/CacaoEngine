@@ -15,7 +15,7 @@
  * @param msg The message for the exception thrown
  * @param unwindFn A function to clean up state before exception throwing should the condition be false
  */
-CACAO_API inline void CheckException(bool cond, std::string msg, std::function<void()> unwindFn = []() {}) {
+CACAO_API inline void CheckException(bool cond, const std::string& msg, std::function<void()> unwindFn = []() {}) {
 	if(!cond) {
 		unwindFn();
 		throw std::runtime_error(msg);

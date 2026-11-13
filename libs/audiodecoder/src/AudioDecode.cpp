@@ -17,7 +17,7 @@
 #define OPUSFILE_SAMPLE_RATE 48000
 
 namespace libcacaoaudiodecode {
-	Result MP3Decode(std::vector<unsigned char> encoded) {
+	Result MP3Decode(const std::vector<unsigned char>& encoded) {
 		//Create return object
 		Result result;
 
@@ -42,7 +42,7 @@ namespace libcacaoaudiodecode {
 		return result;
 	}
 
-	Result WAVDecode(std::vector<unsigned char> encoded) {
+	Result WAVDecode(const std::vector<unsigned char>& encoded) {
 		//Create return object
 		Result result;
 
@@ -67,7 +67,7 @@ namespace libcacaoaudiodecode {
 		return result;
 	}
 
-	Result VorbisDecode(std::vector<unsigned char> encoded) {
+	Result VorbisDecode(const std::vector<unsigned char>& encoded) {
 		//Create return object
 		Result result;
 
@@ -101,13 +101,13 @@ namespace libcacaoaudiodecode {
 		//Open the Vorbis data
 		ov_callbacks cb = OV_CALLBACKS_STREAMONLY_NOCLOSE;
 		cb.read_func = read_callback;
-		ov_open_callbacks(&tracker, &vf, nullptr, 0, cb);
+		CheckException(ov_open_callbacks(&tracker, &vf, nullptr, 0, cb) == 0, "Failed to open Vorbis stream!");
 
 		//Get file info
 		vorbis_info* info = ov_info(&vf, -1);
 		result.sampleRate = info->rate;
 		result.channelCount = info->channels;
-		result.sampleCount = ov_pcm_total(&vf, -1);
+		result.sampleCount = 0;
 
 		//Read the audio data
 		while(true) {
@@ -120,11 +120,14 @@ namespace libcacaoaudiodecode {
 			} else if(samplesRead < 0) {
 				//Oh no, an error!
 				ov_clear(&vf);
-				CheckException(false, "Failed to read Ogg Vorbis file!");
+				CheckException(false, "Failed to read Ogg Vorbis stream!");
 			} else {
 				//Add the PCM data to the end
 				result.data.insert(result.data.end(), pcm, pcm + (samplesRead / result.channelCount));
 			}
+
+			//Add to how many samples we read
+			result.sampleCount += samplesRead;
 		}
 
 		//Clean up Ogg Vorbis
@@ -133,13 +136,14 @@ namespace libcacaoaudiodecode {
 		return result;
 	}
 
-	Result OpusDecode(std::vector<unsigned char> encoded) {
+	Result OpusDecode(const std::vector<unsigned char>& encoded) {
 		//Create return object
 		Result result;
 
 		//Open the file
 		int openError;
 		OggOpusFile* opus = op_open_memory(encoded.data(), encoded.size(), &openError);
+		CheckException(opus != nullptr, "Failed to open Opus stream!");
 
 		//Get file info
 		result.sampleRate = OPUSFILE_SAMPLE_RATE;
@@ -159,7 +163,7 @@ namespace libcacaoaudiodecode {
 			} else if(samplesRead < 0) {
 				//Oh no, an error!
 				op_free(opus);
-				CheckException(false, "Failed to read Opus file!");
+				CheckException(false, "Failed to read Opus stream!");
 			} else {
 				//Add the PCM data to the end
 				result.data.insert(result.data.end(), pcm, pcm + (samplesRead * result.channelCount));

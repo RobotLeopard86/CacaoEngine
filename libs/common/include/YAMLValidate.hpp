@@ -38,7 +38,8 @@ inline void ValidateYAMLNode(const YAML::Node& node, YAML::NodeType::value type,
 
 //Convenience wrapper for checking the type of the node AND doing a user predicate
 inline void ValidateYAMLNode(const YAML::Node& node, YAML::NodeType::value type, std::function<std::string(const YAML::Node&)> predicate, const std::string& context, const std::string& what) {
-	ValidateYAMLNode(node, [&type, &predicate](const YAML::Node& node) { 
-            if(std::string result = predicate(node); !result.empty()) CheckException(false, result);
-            return (node.Type() == type ? "" : "Node is of improper type!"); }, context, what);
+	ValidateYAMLNode(node, [&type, &predicate](const YAML::Node& node) -> std::string { 
+			if(node.Type() != type) return "Node is of improper type!";
+            if(std::string result = predicate(node); !result.empty()) return result;
+			return ""; }, context, what);
 }

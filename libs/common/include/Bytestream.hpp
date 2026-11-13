@@ -156,7 +156,7 @@ class CACAO_API ubytestreambuf : public std::streambuf {
 
 		//Expand buffer and ensure proper size
 		std::ptrdiff_t offset = pptr() - pbase();
-		buffer.push_back(static_cast<char>(ch));
+		buffer.push_back(static_cast<unsigned char>(ch));
 
 		//Reset stream buffer pointers
 		setp(data(), data() + buffer.size());
@@ -275,7 +275,7 @@ class CACAO_API ibytestream : public std::istream {
 	}
 
 	ibytestream(std::vector<unsigned char>& data)
-	  : std::istream(ubufInit(data)), buf(nullptr), useUnsigned(false) {
+	  : std::istream(ubufInit(data)), buf(nullptr), useUnsigned(true) {
 		rdbuf(ubuf);
 		init(ubuf);
 	}
@@ -315,7 +315,7 @@ class CACAO_API obytestream : public std::ostream {
 	}
 
 	obytestream(std::vector<unsigned char>& data)
-	  : std::ostream(ubufInit(data)), buf(nullptr), useUnsigned(false) {
+	  : std::ostream(ubufInit(data)), buf(nullptr), useUnsigned(true) {
 		rdbuf(ubuf);
 		init(ubuf);
 	}
