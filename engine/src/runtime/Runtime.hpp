@@ -47,7 +47,6 @@ inline class Runtime {
 
 	void SetupEngine();
 	void LoadGame();
-	void DestroyGfxObjects();
 	void Cleanup();
 } rt;
 

@@ -164,10 +164,6 @@ void Runtime::LoadGame() {
 	WorldManager::Get().SetActiveWorld(rt.cacaospec.startupWorld);
 }
 
-void Runtime::DestroyGfxObjects() {
-	//TODO
-}
-
 void Runtime::Cleanup() {
 	//Clear code registry
 	CodeRegistry::Get().ClearAllFactories();

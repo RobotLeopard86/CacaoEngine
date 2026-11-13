@@ -121,7 +121,6 @@ int main(int argc, char* argv[]) {
 	} catch(const std::exception& e) {
 		Logger::Runtime(Logger::Level::Error) << "(Cacao Engine External Exception) " << e.what();
 		Logger::Runtime(Logger::Level::Fatal) << "A fatal error has occurred in game initialization. Exiting...";
-		rt.DestroyGfxObjects();
 		rt.Cleanup();
 		Engine::Get().GfxShutdown();
 		Engine::Get().CoreShutdown();
@@ -134,7 +133,6 @@ int main(int argc, char* argv[]) {
 	Engine::Get().Run();
 
 	//Game has stopped now, destroy graphics objects before shutting down that part of the engine
-	rt.DestroyGfxObjects();
 	Engine::Get().GfxShutdown();
 
 	//Run cleanup tasks (unload game data)
