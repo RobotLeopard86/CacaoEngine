@@ -55,6 +55,7 @@ namespace Cacao {
 		EGLContext ctx;
 		EGLSurface surface;
 		EGLConfig cfg;
+		bool cfgChosen = false;
 
 		//Wayland support
 		bool wl;
@@ -86,6 +87,10 @@ namespace Cacao {
 		Check<ExternalException>(eglInitialize(impl->dpy, &major, &minor) == EGL_TRUE, "Failed to initialize EGL!");
 		EGL_CHECK("Failed to initialize EGL!")
 
+		//Activate OpenGL API
+		Check<ExternalException>(eglBindAPI(EGL_OPENGL_API), "Failed to set graphics API mode!");
+		EGL_CHECK("Failed to set graphics API mode!")
+
 		//Configure EGL
 		const EGLint eglCfg[] = {
 			EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
@@ -97,26 +102,13 @@ namespace Cacao {
 			EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
 			EGL_NONE};
 		EGLint numConfigs;
-		EGLBoolean success = eglChooseConfig(impl->dpy, eglCfg, &impl->cfg, 1, &numConfigs);
-		Check<ExternalException>(success && numConfigs >= 1, "Failed to select EGL config!");
-		EGL_CHECK("Failed to select EGL config!")
-
-		//Activate OpenGL API
-		Check<ExternalException>(eglBindAPI(EGL_OPENGL_API), "Failed to set graphics API mode!");
-		EGL_CHECK("Failed to set graphics API mode!")
-
-		//Create context
-		const EGLint contextAttribs[] = {
-			EGL_CONTEXT_MAJOR_VERSION, 4,
-			EGL_CONTEXT_MINOR_VERSION, 1,
-			EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
-#ifdef _DEBUG
-			EGL_CONTEXT_OPENGL_DEBUG, GL_TRUE,
-#endif
-			EGL_NONE};
-		impl->ctx = eglCreateContext(impl->dpy, impl->cfg, EGL_NO_CONTEXT, contextAttribs);
-		Check<ExternalException>(impl->ctx != EGL_NO_CONTEXT, "Failed to create OpenGL context!");
-		EGL_CHECK("Failed to create OpenGL context!")
+		EGLBoolean success = eglChooseConfig(impl->dpy, eglCfg, nullptr, 0, &numConfigs);
+		Check<ExternalException>(success && numConfigs >= 1, "Failed to retrieve EGL configs!");
+		EGL_CHECK("Failed to retrieve EGL configs!")
+		std::unique_ptr<void*[]> configs = std::make_unique_for_overwrite<void*[]>(numConfigs);
+		success = eglChooseConfig(impl->dpy, eglCfg, configs.get(), numConfigs, &numConfigs);
+		Check<ExternalException>(success, "Failed to retrieve EGL configs!");
+		EGL_CHECK("Failed to retrieve EGL configs!")
 
 #ifdef HAS_WAYLAND
 		if(impl->wl) {
@@ -136,27 +128,9 @@ namespace Cacao {
 #endif
 
 		//Create surface
-		if(major > 1 && (major >= 1 && minor == 5)) {
-			//EGL 1.5+ has this built-in
-			void* nativeWin;
-			if(impl->wl) {
-#ifdef HAS_WAYLAND
-				nativeWin = impl->wlEglWindow;
-#endif
-			} else {
-#ifdef HAS_X11
-				nativeWin = &WIN_IMPL(X11).window;
-#endif
-			}
-			impl->surface = eglCreatePlatformWindowSurface(impl->dpy, impl->cfg, nativeWin, nullptr);
-		} else {
-			//Try querying for the extension
-			PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC ext =
-				(PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)eglGetProcAddress("eglCreatePlatformWindowSurfaceEXT");
-
-
-			if(ext) {
-				//Same procedure as with 1.5+
+		for(int i = 0; i < numConfigs; ++i) {
+			if(major > 1 && (major >= 1 && minor == 5)) {
+				//EGL 1.5+ has this built-in
 				void* nativeWin;
 				if(impl->wl) {
 #ifdef HAS_WAYLAND
@@ -167,24 +141,71 @@ namespace Cacao {
 					nativeWin = &WIN_IMPL(X11).window;
 #endif
 				}
-				impl->surface = ext(impl->dpy, impl->cfg, nativeWin, nullptr);
+				const EGLAttrib surfaceAttribs[] = {
+					EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_SRGB,
+					EGL_NONE};
+				impl->surface = eglCreatePlatformWindowSurface(impl->dpy, configs[i], nativeWin, surfaceAttribs);
 			} else {
-				//We have to use the old method
-				EGLNativeWindowType nativeWin;
-				if(impl->wl) {
+				//Try querying for the extension
+				PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC ext =
+					(PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)eglGetProcAddress("eglCreatePlatformWindowSurfaceEXT");
+
+				//Define surface attribs
+				const EGLint surfaceAttribs[] = {
+					EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_SRGB,
+					EGL_NONE};
+
+				//Select method
+				if(ext) {
+					//Same procedure as with 1.5+
+					void* nativeWin;
+					if(impl->wl) {
 #ifdef HAS_WAYLAND
-					nativeWin = (EGLNativeWindowType)impl->wlEglWindow;
+						nativeWin = impl->wlEglWindow;
 #endif
-				} else {
+					} else {
 #ifdef HAS_X11
-					nativeWin = (khronos_uintptr_t)WIN_IMPL(X11).window;
+						nativeWin = &WIN_IMPL(X11).window;
 #endif
+					}
+					impl->surface = ext(impl->dpy, configs[i], nativeWin, surfaceAttribs);
+				} else {
+					//We have to use the old method
+					EGLNativeWindowType nativeWin;
+					if(impl->wl) {
+#ifdef HAS_WAYLAND
+						nativeWin = (EGLNativeWindowType)impl->wlEglWindow;
+#endif
+					} else {
+#ifdef HAS_X11
+						nativeWin = (khronos_uintptr_t)WIN_IMPL(X11).window;
+#endif
+					}
+					impl->surface = eglCreateWindowSurface(impl->dpy, configs[i], nativeWin, nullptr);
 				}
-				impl->surface = eglCreateWindowSurface(impl->dpy, impl->cfg, nativeWin, nullptr);
+			}
+
+			//Did we succeed? If so, move on. If not, try again.
+			if(impl->surface != EGL_NO_SURFACE) {
+				impl->cfg = configs[i];
+				impl->cfgChosen = true;
+				break;
 			}
 		}
-		Check<ExternalException>(impl->ctx != EGL_NO_CONTEXT, "Failed to create EGL surface!");
-		EGL_CHECK("Failed to create EGL surface!")
+		Check<ExternalException>(impl->cfgChosen, "No suitable EGL configs were found!");
+
+		//Create context
+		const EGLint contextAttribs[] = {
+			EGL_CONTEXT_MAJOR_VERSION, 4,
+			EGL_CONTEXT_MINOR_VERSION, 1,
+			EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+#ifdef _DEBUG
+			EGL_CONTEXT_OPENGL_DEBUG, GL_TRUE,
+#endif
+			EGL_NONE};
+		impl->ctx = eglCreateContext(impl->dpy, impl->cfg, EGL_NO_CONTEXT, contextAttribs);
+		Check<ExternalException>(impl->ctx != EGL_NO_CONTEXT, "Failed to create OpenGL context!");
+		EGL_CHECK("Failed to create OpenGL context!")
 
 		//Make context current
 		eglMakeCurrent(impl->dpy, impl->surface, impl->surface, impl->ctx);
