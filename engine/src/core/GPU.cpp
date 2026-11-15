@@ -6,8 +6,8 @@
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "PALConfigurables.hpp"
+#include "RenderDoc.hpp"
 #include "SingletonGet.hpp"
-#include "exathread.hpp"
 #include "impl/GPUManager.hpp"
 #include "impl/PAL.hpp"
 #include "impl/TickController.hpp"
@@ -19,6 +19,7 @@
 #include <chrono>
 #include <future>
 #include <numeric>
+#include <renderdoc_app.h>
 #include <thread>
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -26,6 +27,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtx/norm.hpp"
 #include "crossguid/guid.hpp"
+#include "exathread.hpp"
 
 namespace Cacao {
 	GPUManager::GPUManager()
@@ -88,6 +90,19 @@ namespace Cacao {
 	void GPUManager::Impl::Runloop(std::stop_token stop) {
 		//Backend init
 		RunloopStart();
+
+		//Initialize RenderDoc
+#if RDOC_ENABLE == 1
+		pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
+#ifdef _WIN32
+		RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
+		if(RenderDoc::rdocLib) getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+#else
+		RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+		if(RenderDoc::rdocLib) getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+#endif
+		getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc);
+#endif
 
 		//Set up variables
 		counter = 0;
@@ -194,6 +209,19 @@ namespace Cacao {
 			std::this_thread::yield();
 			RunloopIteration();
 		}
+
+		//Terminate RenderDoc
+#if RDOC_ENABLE == 1
+		if(RenderDoc::rdoc && RenderDoc::rdocLib) {
+			RenderDoc::rdoc = nullptr;
+#ifdef _WIN32
+			FreeLibrary(RenderDoc::rdocLib);
+#else
+			dlclose(RenderDoc::rdocLib);
+#endif
+			RenderDoc::rdocLib = nullptr;
+		}
+#endif
 
 		//Shutdown
 		RunloopStop();
