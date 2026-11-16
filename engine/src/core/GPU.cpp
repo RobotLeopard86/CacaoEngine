@@ -88,21 +88,32 @@ namespace Cacao {
 	}
 
 	void GPUManager::Impl::Runloop(std::stop_token stop) {
-		//Backend init
-		RunloopStart();
-
 		//Initialize RenderDoc
 #if RDOC_ENABLE == 1
-		pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
+		if(Engine::Get().GetInitConfig().enableRenderDoc) {
+			Logger::Engine(Logger::Level::Trace) << "Initializing RenderDoc integration...";
+			pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
 #ifdef _WIN32
-		RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
-		if(RenderDoc::rdocLib) getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+			RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
+			if(RenderDoc::rdocLib) {
+				getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+			} else {
+				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
+			}
 #else
-		RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
-		if(RenderDoc::rdocLib) getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+			RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+			if(RenderDoc::rdocLib) {
+				getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+			} else {
+				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
+			}
 #endif
-		getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc);
+			if(getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc) != 1) Logger::Engine(Logger::Level::Warn) << "Failed to initialize RenderDoc! Frame capture will not work, but everything else will run as normal.";
+		}
 #endif
+
+		//Backend init
+		RunloopStart();
 
 		//Set up variables
 		counter = 0;
@@ -214,9 +225,7 @@ namespace Cacao {
 #if RDOC_ENABLE == 1
 		if(RenderDoc::rdoc && RenderDoc::rdocLib) {
 			RenderDoc::rdoc = nullptr;
-#ifdef _WIN32
-			FreeLibrary(RenderDoc::rdocLib);
-#else
+#ifndef _WIN32
 			dlclose(RenderDoc::rdocLib);
 #endif
 			RenderDoc::rdocLib = nullptr;

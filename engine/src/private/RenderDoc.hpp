@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(_DEBUG) && __has_include("renderdoc_app.h")
+#if __has_include("renderdoc_app.h")
 #define RDOC_ENABLE 1
 #include "renderdoc_app.h"
 

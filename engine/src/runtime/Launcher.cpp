@@ -88,6 +88,9 @@ int main(int argc, char* argv[]) {
 	app.add_flag_callback("--quiet,-q", []() { rt.icfg.suppressConsoleLogging = true; }, "Suppress all console logging output.")->default_val(false);
 	app.add_flag_callback("--no-file-log,-N", []() { rt.icfg.suppressFileLogging = true; }, "Suppress creation and use of logfile.")->default_val(false);
 
+	//RenderDoc
+	app.add_flag_callback("--enable-renderdoc,-r", []() { rt.icfg.enableRenderDoc = true; }, "Enable RenderDoc frame capture integration.")->default_val(false);
+
 #ifdef __APPLE__
 	//macOS chatter
 	bool macChatter = false;

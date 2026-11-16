@@ -3,6 +3,7 @@
 #include "Cacao/EventManager.hpp"
 #include "Cacao/Exceptions.hpp"
 #include "ImplAccessor.hpp"
+#include "RenderDoc.hpp"
 
 #ifdef HAS_X11
 #include "X11Types.hpp"
@@ -248,7 +249,24 @@ namespace Cacao {
 	}
 
 	void Context::MakeCurrent() {
+		//Make it current
 		eglMakeCurrent(impl->dpy, impl->surface, impl->surface, impl->ctx);
+
+		//Connect to RenderDoc
+#if RDOC_ENABLE == 1
+		if(RenderDoc::rdoc) {
+			Logger::Engine(Logger::Level::Info) << "oogala boogala";
+			if(impl->wl) {
+#ifdef HAS_WAYLAND
+				RenderDoc::rdoc->SetActiveWindow(impl->ctx, WIN_IMPL(Wayland).surface);
+#endif
+			} else {
+#ifdef HAS_X11
+				RenderDoc::rdoc->SetActiveWindow(impl->ctx, &WIN_IMPL(X11).window);
+#endif
+			}
+		}
+#endif
 	}
 
 	void Context::Yield() {

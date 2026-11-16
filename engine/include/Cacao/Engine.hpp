@@ -95,6 +95,11 @@ namespace Cacao {
 			 * @brief ID of the client application. This should be in reverse-domain format with a PascalCase final segment (e.g. com.example.MyGame), but this is not enforced
 			 */
 			ClientIdentity clientID;
+
+			/**
+			 * @brief Whether or not to enable RenderDoc frame capture
+			 */
+			bool enableRenderDoc = false;
 		};
 
 		/**
