@@ -166,8 +166,6 @@ namespace Cacao {
 					//Get the button that was pressed
 					xcb_button_press_event_t* buttonEvent = reinterpret_cast<xcb_button_press_event_t*>(event);
 
-					Logger::Engine(Logger::Level::Trace) << "btn " << int(buttonEvent->detail);
-
 					//Dispatch event
 					if(buttonEvent->detail <= 3) {
 						//Mouse press

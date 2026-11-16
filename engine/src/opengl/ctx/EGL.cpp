@@ -255,7 +255,6 @@ namespace Cacao {
 		//Connect to RenderDoc
 #if RDOC_ENABLE == 1
 		if(RenderDoc::rdoc) {
-			Logger::Engine(Logger::Level::Info) << "oogala boogala";
 			if(impl->wl) {
 #ifdef HAS_WAYLAND
 				RenderDoc::rdoc->SetActiveWindow(impl->ctx, WIN_IMPL(Wayland).surface);

@@ -16,6 +16,7 @@
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/PAL.hpp"
+#include "RenderDoc.hpp"
 
 
 #ifdef _WIN32
@@ -96,6 +97,30 @@ namespace Cacao {
 		{
 			Window::Get();
 		}
+
+		//Initialize RenderDoc
+#if RDOC_ENABLE == 1
+		if(icfg.enableRenderDoc) {
+			Logger::Engine(Logger::Level::Trace) << "Initializing RenderDoc integration...";
+			pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
+#ifdef _WIN32
+			RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
+			if(RenderDoc::rdocLib) {
+				getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+			} else {
+				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
+			}
+#else
+			RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+			if(RenderDoc::rdocLib) {
+				getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+			} else {
+				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
+			}
+#endif
+			if(getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc) != 1) Logger::Engine(Logger::Level::Warn) << "Failed to initialize RenderDoc! Frame capture will not work, but everything else will run as normal.";
+		}
+#endif
 
 		//In descending order of priority
 		std::vector<std::string> backends;
@@ -223,7 +248,7 @@ namespace Cacao {
 		//Disable frame generation and wait for GPU manager to clear its task queue before proceeding
 		IMPL(GPUManager).masterFrameGenDisable.store(true);
 		while(IMPL(GPUManager).numFramesInFlight > 0) {
-			std::this_thread::sleep_for(std ::chrono::milliseconds(1));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		}
 
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
@@ -247,6 +272,17 @@ namespace Cacao {
 		PAL::Get().TerminateModule();
 		IMPL(PAL).mod->Destroy();
 		IMPL(PAL).mod.reset();
+
+		//Terminate RenderDoc
+#if RDOC_ENABLE == 1
+		if(RenderDoc::rdoc && RenderDoc::rdocLib) {
+			RenderDoc::rdoc = nullptr;
+#ifndef _WIN32
+			dlclose(RenderDoc::rdocLib);
+#endif
+			RenderDoc::rdocLib = nullptr;
+		}
+#endif
 
 		std::lock_guard lkg(stateMtx);
 		state = State::Alive;

@@ -6,7 +6,6 @@
 #include "Cacao/ResourceManager.hpp"
 #include "Cacao/WorldManager.hpp"
 #include "PALConfigurables.hpp"
-#include "RenderDoc.hpp"
 #include "SingletonGet.hpp"
 #include "impl/GPUManager.hpp"
 #include "impl/PAL.hpp"
@@ -88,30 +87,6 @@ namespace Cacao {
 	}
 
 	void GPUManager::Impl::Runloop(std::stop_token stop) {
-		//Initialize RenderDoc
-#if RDOC_ENABLE == 1
-		if(Engine::Get().GetInitConfig().enableRenderDoc) {
-			Logger::Engine(Logger::Level::Trace) << "Initializing RenderDoc integration...";
-			pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
-#ifdef _WIN32
-			RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
-			if(RenderDoc::rdocLib) {
-				getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
-			} else {
-				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
-			}
-#else
-			RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
-			if(RenderDoc::rdocLib) {
-				getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
-			} else {
-				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
-			}
-#endif
-			if(getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc) != 1) Logger::Engine(Logger::Level::Warn) << "Failed to initialize RenderDoc! Frame capture will not work, but everything else will run as normal.";
-		}
-#endif
-
 		//Backend init
 		RunloopStart();
 
@@ -220,17 +195,6 @@ namespace Cacao {
 			std::this_thread::yield();
 			RunloopIteration();
 		}
-
-		//Terminate RenderDoc
-#if RDOC_ENABLE == 1
-		if(RenderDoc::rdoc && RenderDoc::rdocLib) {
-			RenderDoc::rdoc = nullptr;
-#ifndef _WIN32
-			dlclose(RenderDoc::rdocLib);
-#endif
-			RenderDoc::rdocLib = nullptr;
-		}
-#endif
 
 		//Shutdown
 		RunloopStop();
