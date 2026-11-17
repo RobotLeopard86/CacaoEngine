@@ -13,12 +13,9 @@ namespace Cacao {
 		//Open-GL specific stuff needs to be on the GPU thread
 		std::unique_ptr<OpenGLCommandBuffer> cmd = CBCast<OpenGLCommandBuffer>(CommandBuffer::Create());
 		cmd->AddTask([this, &success]() {
-			//Flip texture
-			libcacaoimage::Image flipped = libcacaoimage::Flip(img);
-
 			//Get texture format
 			GLenum internalFormat;
-			switch(flipped.layout) {
+			switch(img.layout) {
 				case libcacaoimage::Image::Layout::Grayscale:
 					format = GL_RED;
 					internalFormat = GL_RED;
@@ -39,7 +36,7 @@ namespace Cacao {
 			glBindTexture(GL_TEXTURE_2D, gpuTex);
 
 			//Transfer image data
-			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, flipped.w, flipped.h, 0, format, GL_UNSIGNED_BYTE, flipped.data.data());
+			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, img.w, img.h, 0, format, GL_UNSIGNED_BYTE, img.data.data());
 			GL_CHECK("Failed to transfer image data to GPU texture!")
 
 			//Configure and generate mipmaps

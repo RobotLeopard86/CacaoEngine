@@ -263,6 +263,7 @@ namespace Cacao {
 				lastKnownSkybox = world->skyboxTex->GetAddress();
 				skyMat.reset();//Explicit reset ensures the material address is free
 				skyMat = Material::Create(skyShader, "a:internal_skymat");
+				skyMat->SetRenderMode(libcacaoasset::Material::RenderMode::Opaque);
 				skyMat->SetParameter("skyTex", world->skyboxTex);
 			}
 

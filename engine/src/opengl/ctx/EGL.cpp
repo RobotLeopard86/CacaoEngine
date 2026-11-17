@@ -99,6 +99,7 @@ namespace Cacao {
 			EGL_RED_SIZE, 8,
 			EGL_GREEN_SIZE, 8,
 			EGL_BLUE_SIZE, 8,
+			EGL_DEPTH_SIZE, 24,
 			EGL_CONFORMANT, EGL_OPENGL_BIT,
 			EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
 			EGL_NONE};
@@ -182,7 +183,7 @@ namespace Cacao {
 						nativeWin = (khronos_uintptr_t)WIN_IMPL(X11).window;
 #endif
 					}
-					impl->surface = eglCreateWindowSurface(impl->dpy, configs[i], nativeWin, nullptr);
+					impl->surface = eglCreateWindowSurface(impl->dpy, configs[i], nativeWin, surfaceAttribs);
 				}
 			}
 
