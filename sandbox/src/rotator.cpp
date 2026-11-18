@@ -5,6 +5,7 @@
 #include "glm/trigonometric.hpp"
 
 #include "sandbox.astra.hpp"
+#include "cacaoengine.astra.hpp"
 
 namespace sandbox {
 	void Rotator::OnDynTick(float timestep) {

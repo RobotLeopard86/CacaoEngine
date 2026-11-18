@@ -16,6 +16,7 @@
 #include "SingletonGet.hpp"
 #include "ImplAccessor.hpp"
 #include "impl/PAL.hpp"
+#include "impl/ResourceManager.hpp"
 #include "RenderDoc.hpp"
 
 
@@ -254,6 +255,13 @@ namespace Cacao {
 		//Fire shutdown event (this (for now) will block until all consumers have responded)
 		Event e("EngineShutdown");
 		EventManager::Get().Dispatch(e);
+
+		//Release model data from resource manager
+		Logger::Engine(Logger::Level::Trace) << "Cleaning model data cache...";
+		{
+			std::lock_guard mapLk {IMPL(ResourceManager).modelProtector};
+			IMPL(ResourceManager).models.clear();
+		}
 
 		//Cleanup built-in assets
 		Logger::Engine(Logger::Level::Trace) << "Unloading built-in assets...";

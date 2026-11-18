@@ -1,6 +1,7 @@
 #include "Cacao/CodeRegistry.hpp"
 
 #include "rotator.hpp"
+#include "cacaoengine.astra.hpp"
 
 #ifdef _MSC_VER
 #define CALL __cdecl

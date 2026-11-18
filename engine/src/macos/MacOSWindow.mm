@@ -92,7 +92,8 @@ namespace Cacao {
 			[[mainMenu itemAtIndex:0] setTitle:appName];
 
 			//Make frame
-			NSRect frame = NSMakeRect(0, 0, size.x, size.y);
+			NSRect screenRect = [[NSScreen mainScreen] visibleFrame];
+			NSRect frame = NSMakeRect(screenRect.origin.x + (screenRect.size.width - size.x) / 2.0f, screenRect.origin.y + (screenRect.size.height - size.y) / 2.0f, size.x, size.y);
 
 			//Create window and delegate
 			wdel = [[CacaoWinDelegate alloc] init];
@@ -103,6 +104,8 @@ namespace Cacao {
 			[win makeFirstResponder:win];
 			[win setAcceptsMouseMovedEvents:YES];
 			[win makeKeyAndOrderFront:nil];
+			[win setRestorable:NO];
+			[win center];
 
 			//Connect graphics (the shenanigans with open are for the GetContentAreaSize method to work)
 			open = true;
@@ -178,7 +181,7 @@ namespace Cacao {
 		Check<BadValueException>(newSize.x > 0 && newSize.y > 0, "New window size must not have any zero or negative coordinates!");
 
 		size = newSize;
-		[win setFrame:NSMakeRect(0, 0, newSize.x, newSize.y) display:YES];
+		[win setFrame:NSMakeRect(win.frame.origin.x, win.frame.origin.y, newSize.x, newSize.y) display:YES];
 	}
 
 	void MacOSWindowImpl::ModeChange(Window::Mode newMode) {
@@ -496,7 +499,7 @@ using namespace Cacao;
 	WIN_IMPL(MacOS).size = {frameSize.width, frameSize.height};
 	IMPL(GPUManager).masterFrameGenDisable.store(true);
 	while(IMPL(GPUManager).numFramesInFlight > 0) {
-		std::this_thread::sleep_for(std ::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	DataEvent<glm::uvec2> wre("WindowResize", {frameSize.width, frameSize.height});
 	EventManager::Get().Dispatch(wre);
