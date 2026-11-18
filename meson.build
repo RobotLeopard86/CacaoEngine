@@ -107,8 +107,7 @@ yaml_cpp = subproject('yaml-cpp', required: true, default_options: {
 
 # Configure Astra
 astra = subproject('astra', required: true, default_options: {
-	'example': false,
-	'generator': true
+	'example': false
 })
 astra_dep = astra.get_variable('astra_dep')
 
