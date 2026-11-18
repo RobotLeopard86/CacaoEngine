@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 1c8be23..15f8184 100644
+index 1c8be23..4a9a0ad 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -4,7 +4,7 @@ project('harfbuzz', ['c', 'cpp'],
@@ -11,6 +11,15 @@ index 1c8be23..15f8184 100644
      'wrap_mode=nofallback', # Use --wrap-mode=default to revert, https://github.com/harfbuzz/harfbuzz/pull/2548
      'buildtype=debugoptimized',
    ],
+@@ -118,7 +118,7 @@ else
+   # Try pkg-config name
+   freetype_dep = dependency('freetype2',
+                             version: freetype_min_version,
+-                            method: 'pkg-config',
++                            method: 'auto',
+                             required: false,
+                             allow_fallback: false)
+   if not freetype_dep.found()
 @@ -154,7 +154,7 @@ wasm_dep = cpp.find_library('iwasm', required: get_option('wasm'))
  # pkg-config: icu-uc, cmake: ICU but with components
  icu_dep = dependency('icu-uc', 'ICU',
