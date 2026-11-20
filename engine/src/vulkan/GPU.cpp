@@ -204,7 +204,7 @@ namespace Cacao {
 			vk::CommandBufferSubmitInfo cbSubmit(cmd);
 			vk::SemaphoreSubmitInfo wait(vulkan->swapchain.acquireSems[vulkan->swapchain.imageSemIndices[render->imageIndex]], 0, vk::PipelineStageFlagBits2::eColorAttachmentOutput);
 			std::array<vk::SemaphoreSubmitInfo, 2> signals;
-			signals[0] = vk::SemaphoreSubmitInfo(render->rendered, 0, vk::PipelineStageFlagBits2::eAllCommands);
+			signals[0] = vk::SemaphoreSubmitInfo(vulkan->swapchain.renderedSems[render->imageIndex], 0, vk::PipelineStageFlagBits2::eAllCommands);
 			signals[1] = vk::SemaphoreSubmitInfo(GetSync().semaphore, GetSync().doneValue, vk::PipelineStageFlagBits2::eAllCommands);
 			vk::SubmitInfo2 submitInfo({}, wait, cbSubmit, signals);
 
@@ -212,7 +212,7 @@ namespace Cacao {
 			vulkan->queue.submit2(submitInfo, render->inFlight);
 
 			//Present
-			vk::PresentInfoKHR presentInfo(render->rendered, vulkan->swapchain.chain, render->imageIndex);
+			vk::PresentInfoKHR presentInfo(vulkan->swapchain.renderedSems[render->imageIndex], vulkan->swapchain.chain, render->imageIndex);
 			try {
 				vulkan->queue.presentKHR(presentInfo);
 			} catch(vk::OutOfDateKHRError&) {

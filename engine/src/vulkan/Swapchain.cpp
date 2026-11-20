@@ -97,9 +97,14 @@ namespace Cacao {
 		for(vk::Semaphore& sem : vulkan->swapchain.acquireSems) {
 			vulkan->dev.destroySemaphore(sem);
 		}
+		for(vk::Semaphore& sem : vulkan->swapchain.renderedSems) {
+			vulkan->dev.destroySemaphore(sem);
+		}
 		vulkan->swapchain.acquireSems.resize(vulkan->swapchain.images.size());
-		for(vk::Semaphore& sem : vulkan->swapchain.acquireSems) {
-			sem = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {});
+		vulkan->swapchain.renderedSems.resize(vulkan->swapchain.images.size());
+		for(std::size_t i = 0; i < vulkan->swapchain.images.size(); ++i) {
+			vulkan->swapchain.acquireSems[i] = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {});
+			vulkan->swapchain.renderedSems[i] = vulkan->dev.createSemaphore(vk::SemaphoreCreateInfo {});
 		}
 		vulkan->swapchain.imageSemIndices.assign(vulkan->swapchain.acquireSems.size(), UINT16_MAX);
 
@@ -156,7 +161,6 @@ namespace Cacao {
 
 		//Destroy old contexts
 		for(RenderCommandContext& rc : vulkan->swapchain.contexts) {
-			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
 			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
 			if(rc.globals.obj) {
@@ -168,7 +172,6 @@ namespace Cacao {
 
 		//Create and setup new contexts
 		vk::SemaphoreTypeCreateInfo semTypeCI(vk::SemaphoreType::eTimeline);
-		vk::SemaphoreCreateInfo semaphoreCI {};
 		vk::SemaphoreCreateInfo timelineCI({}, &semTypeCI);
 		vk::FenceCreateInfo fenceCI(vk::FenceCreateFlagBits::eSignaled);
 		vk::BufferCreateInfo globalsCI({}, sizeof(GlobalsData), vk::BufferUsageFlagBits::eUniformBuffer, vk::SharingMode::eExclusive);
@@ -177,7 +180,6 @@ namespace Cacao {
 		for(unsigned int i = 0; i < vulkan->swapchain.images.size(); ++i) {
 			RenderCommandContext& rc = vulkan->swapchain.contexts[i];
 			try {
-				rc.rendered = vulkan->dev.createSemaphore(semaphoreCI);
 				rc.inFlight = vulkan->dev.createFence(fenceCI);
 				rc.sync.semaphore = vulkan->dev.createSemaphore(timelineCI);
 				rc.sync.doneValue = 0;

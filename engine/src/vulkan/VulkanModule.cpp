@@ -256,7 +256,6 @@ namespace Cacao {
 
 		//Clean up rendering context objects
 		for(RenderCommandContext& rc : swapchain.contexts) {
-			if(rc.rendered) vulkan->dev.destroySemaphore(rc.rendered);
 			if(rc.inFlight) vulkan->dev.destroyFence(rc.inFlight);
 			if(rc.sync.semaphore) vulkan->dev.destroySemaphore(rc.sync.semaphore);
 			if(rc.globals.obj) {
@@ -265,6 +264,9 @@ namespace Cacao {
 			}
 		}
 		for(vk::Semaphore& sem : swapchain.acquireSems) {
+			if(sem) vulkan->dev.destroySemaphore(sem);
+		}
+		for(vk::Semaphore& sem : swapchain.renderedSems) {
 			if(sem) vulkan->dev.destroySemaphore(sem);
 		}
 
