@@ -412,58 +412,134 @@
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"><span/></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p><strong>This page is not up-to-date!</strong>.
-The engine is currently undergoing heavy restructuring, and this guide has not yet been updated to reflect the new setup procedure. A new version will be published closer to release.</p>
+<p>This guide is still a work-in-progress!</p>
 </div>
-<section id="creating-a-base-project">
-<h2>Creating a base project<a class="headerlink" href="#creating-a-base-project" title="Link to this heading"><span/></a></h2>
-<p>The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at <code class="docutils literal notranslate"><span class="pre">https://github.com/RobotLeopard86/CacaoEngine-Game-Template</span></code>. This repository contains an ideal setup for creating a Cacao Engine game.</p>
+<p>So, you want to get started with Cacao Engine? This guide will teach you how to do so, as well as give you a basic introduction to the systems that you’ll use to build a game. Please note that as precompiled binaries for Cacao Engine are not yet available, this procedure will have you build the engine from source alongside your game. This will change in the future.</p>
+<section id="environment-setup">
+<h2>1. Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading"><span/></a></h2>
+<p>The first thing you need to do is setup your build machine to be able to compile Cacao Engine. To do this, follow the <a class="reference internal" href="building.html"><span class="doc std std-doc">build instructions</span></a> through to the “Compiler Support” section. Then, come back here.</p>
 </section>
-<section id="building">
-<h2>Building<a class="headerlink" href="#building" title="Link to this heading"><span/></a></h2>
-<p>Install the dependencies as listed in the <a class="reference internal" href="building.html"><span class="doc std std-doc">build instructions</span></a>.<br />
-If you’d like to use Visual Studio, see the Visual Studio compatibility guide for info on how to set up a Visual Studio Solution.<br />
-Otherwise, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span></code> if on Windows or <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--native-file</span> <span class="pre">posix_native.ini</span></code> if on Linux or macOS to create a build directory, then run <code class="docutils literal notranslate"><span class="pre">ninja</span> <span class="pre">-C</span> <span class="pre">build</span> <span class="pre">run</span></code> to build and run the template.
-If all goes well, you should see something like this:</p>
-<img alt="../_images/quickstart-template.png" class="dark-light p-2" src="../_images/quickstart-template.png" />
-</section>
-<section id="breaking-down-the-template">
-<h2>Breaking down the template<a class="headerlink" href="#breaking-down-the-template" title="Link to this heading"><span/></a></h2>
-<p>The main part of this template is the <code class="docutils literal notranslate"><span class="pre">src/Game.cpp</span></code> file. It is the entrypoint for your game. Let’s walk through it step-by-step.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef _WIN32</span>
+<section id="creating-the-skeleton-project">
+<h2>2. Creating the Skeleton Project<a class="headerlink" href="#creating-the-skeleton-project" title="Link to this heading"><span/></a></h2>
+<p>Next, you’ll need to configure your build. To do this, you need to copy the files below into your project. The names are very important. You don’t need to worry too much about what all of this does, even though it’s a lot. We’ll come back to it later.</p>
+<p><code class="docutils literal notranslate"><span class="pre">native.ini</span></code>*:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[binaries]</span>
+<span class="na">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'clang'</span>
+<span class="na">cpp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'clang++'</span>
+<span class="na">c_ld</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'lld'</span>
+<span class="na">cpp_ld</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'lld'</span>
+<span class="na">objc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'clang'</span>
+<span class="na">objcpp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'clang++'</span>
+<span class="na">objc_ld</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'lld'</span>
+<span class="na">objcpp_ld</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'lld'</span>
+
+<span class="k">[cmake]</span>
+<span class="na">CMAKE_C_COMPILER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'clang'</span>
+<span class="na">CMAKE_CXX_COMPILER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'clang++'</span>
+<span class="na">LINKER_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'lld'</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While you can opt to build with something other than Clang and LLD, which would mean excluding this file or modifying its fields, we highly discourage this, even on Windows. This is the primary compiler and linker configuration used for Cacao Engine on all platforms and is the principal one supported.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">meson.build</span></code>:</p>
+<div class="highlight-meson notranslate"><div class="highlight"><pre><span></span><span class="nb">project</span><span class="p">(</span><span class="s">'your_project'</span><span class="p">,</span><span class="w"> </span><span class="s">'c'</span><span class="p">,</span><span class="w"> </span><span class="s">'cpp'</span><span class="p">,</span><span class="w"> </span><span class="n">meson_version</span><span class="p">:</span><span class="w"> </span><span class="s">'&gt;=1.10.2'</span><span class="p">,</span><span class="w"> </span><span class="n">default_options</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s">'cpp_std=c++20'</span><span class="p">,</span><span class="w"> </span><span class="s">'b_vscrt=from_buildtype'</span><span class="p">,</span><span class="w"> </span><span class="s">'default_library=static'</span><span class="w"> </span><span class="p">])</span>
+
+<span class="c"># Cacao Engine</span>
+<span class="n">cacao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">subproject</span><span class="p">(</span><span class="s">'cacaoengine'</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">default_options</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="s">'backends'</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">'opengl'</span><span class="p">,</span><span class="w"> </span><span class="s">'vulkan'</span><span class="p">],</span>
+<span class="w">	</span><span class="s">'build_sandbox'</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">})</span>
+
+<span class="c"># Game binary</span>
+<span class="n">your_project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">shared_module</span><span class="p">(</span><span class="s">'your_project'</span><span class="p">,</span><span class="w"> </span><span class="n">sources</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s">'src'</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">'main.cpp'</span><span class="p">,</span>
+<span class="w">	</span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'engine_reflection'</span><span class="p">)</span>
+<span class="p">],</span><span class="w"> </span><span class="nb">include_directories</span><span class="p">:</span><span class="w"> </span><span class="s">'src'</span><span class="p">,</span><span class="w"> </span><span class="n">dependencies</span><span class="p">:</span><span class="w"> </span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'cacaort_dep'</span><span class="p">),</span><span class="w"> </span><span class="n">name_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">''</span><span class="p">,</span><span class="w"> </span><span class="n">install</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span>
+
+<span class="c"># Copy runtime executable</span>
+<span class="n">rtdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'rtdata'</span><span class="p">)</span>
+<span class="nb">custom_target</span><span class="p">(</span><span class="s">'rtsetup'</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">rtdata</span><span class="p">[</span><span class="s">'setup_script'</span><span class="p">],</span><span class="w"> </span><span class="n">rtdata</span><span class="p">[</span><span class="s">'filelist'</span><span class="p">],</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">current_build_dir</span><span class="p">(),</span><span class="w"> </span><span class="s">'@OUTPUT0@'</span><span class="p">],</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="vm">host_machine</span><span class="p">.</span><span class="n">system</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">'windows'</span><span class="w"> </span><span class="p">?</span><span class="w"> </span><span class="s">'your_project.exe'</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">'your_project'</span><span class="p">,</span><span class="w"> </span><span class="n">rtdata</span><span class="p">[</span><span class="s">'filenames'</span><span class="p">]],</span><span class="w"> </span><span class="n">build_by_default</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">depends</span><span class="p">:</span><span class="w"> </span><span class="n">rtdata</span><span class="p">[</span><span class="s">'files'</span><span class="p">])</span>
+
+<span class="c"># Specfile</span>
+<span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">configuration_data</span><span class="p">()</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">'BINPATH'</span><span class="p">,</span><span class="w"> </span><span class="nn">import</span><span class="p">(</span><span class="s">'fs'</span><span class="p">).</span><span class="n">relative_to</span><span class="p">(</span><span class="n">your_project</span><span class="p">,</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">current_build_dir</span><span class="p">()))</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">'ID'</span><span class="p">,</span><span class="w"> </span><span class="s">'com.example.YourProject'</span><span class="p">)</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">'TITLE'</span><span class="p">,</span><span class="w"> </span><span class="s">'Your Project Title'</span><span class="p">)</span>
+<span class="n">spec</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">'VERSION'</span><span class="p">,</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">project_version</span><span class="p">())</span>
+<span class="nb">configure_file</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="s">'cacaospec.yml.in'</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">'cacaospec.yml'</span><span class="p">,</span><span class="w"> </span><span class="n">configuration</span><span class="p">:</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
+
+<span class="c"># Resource configuration</span>
+<span class="nb">subdir</span><span class="p">(</span><span class="s">'packs'</span><span class="p">)</span>
+<span class="nb">subdir</span><span class="p">(</span><span class="s">'worlds'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">subprojects/cacaoengine.wrap</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[wrap-git]</span>
+<span class="na">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https://github.com/RobotLeopard86/CacaoEngine</span>
+<span class="na">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1</span>
+<span class="na">revision</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dev</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">src/main.cpp</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"cacaoengine.astra.hpp"</span>
+
+<span class="cp">#ifdef _MSC_VER</span>
+<span class="cp">#define CALL __cdecl</span>
+<span class="cp">#else</span>
+<span class="cp">#define CALL</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef _WIN32</span>
 <span class="cp">#define EXPORT __declspec(dllexport)</span>
 <span class="cp">#else</span>
 <span class="cp">#define EXPORT</span>
 <span class="cp">#endif</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">CALL</span><span class="w"> </span><span class="n">__CacaoRegisterTypes</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 </pre></div>
 </div>
-<p>This is some C++ preprocessor stuff to make sure that our hook functions are always accessible. On most POSIX systems, all symbols in a shared library are automatically exported, meaning they are visible to other files. On Windows, however, everything in a shared library (DLL) is invisible by default, and must be exported.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao.hpp"</span>
+<p><code class="docutils literal notranslate"><span class="pre">packs/meson.build</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp"># Nothing here for now, but you do need to create this file!</span>
 </pre></div>
 </div>
-<p>Here we include the Cacao Engine header file, giving us access to all of the Cacao Engine functions we need.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{...}</span>
+<p><code class="docutils literal notranslate"><span class="pre">worlds/meson.build</span></code>:</p>
+<div class="highlight-meson notranslate"><div class="highlight"><pre><span></span><span class="nb">custom_target</span><span class="p">(</span><span class="s">'yourfirstworld'</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">'yourfirstworld.xjw'</span><span class="p">,</span><span class="w"> </span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">'yourfirstworld.ajw'</span><span class="p">],</span>
+<span class="w">	</span><span class="n">console</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'worldc'</span><span class="p">),</span><span class="w"> </span><span class="s">'-V'</span><span class="p">,</span><span class="w"> </span><span class="s">'@INPUT@'</span><span class="p">,</span><span class="w"> </span><span class="s">'-o'</span><span class="p">,</span><span class="w"> </span><span class="s">'@OUTPUT@'</span><span class="p">],</span><span class="w"> </span><span class="n">build_by_default</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This is telling the C++ compiler, “Hey! Keep these function names exactly like they are!”. By default, C++ compilers “mangle” names, so as to avoid conflicts. Here though, we need these names preserved so the engine can find them. Now we move inside this block.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">_CacaoLaunch</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">"Hi!"</span><span class="p">);</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">CreateWorld</span><span class="o">&lt;</span><span class="n">Cacao</span><span class="o">::</span><span class="n">PerspectiveCamera</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">WorldManager</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetActiveWorld</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
-<span class="p">}</span>
+<p><code class="docutils literal notranslate"><span class="pre">worlds/yourfirstworld.ajw</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cam</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">position</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">rotation</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">w</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">clear</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FF00FF</span>
+<span class="w">  </span><span class="nt">orthographic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">actors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 </pre></div>
 </div>
-<p>Here we define the startup hook function. Notice that it’s marked with the <code class="docutils literal notranslate"><span class="pre">EXPORT</span></code> macro from earlier. This function is called by the engine to set up your game before the run loop.<br />
-Inside this function, we log <code class="docutils literal notranslate"><span class="pre">Hi!</span></code> to the console, create a world with a perspective camera named <code class="docutils literal notranslate"><span class="pre">World</span></code>, and set it as active.<br />
-Note that the log function specifically says <code class="docutils literal notranslate"><span class="pre">ClientLog</span></code>. This is to distinguish messages coming from your game (the client) and the engine.<br />
-You may also notice that everything is prefixed with <code class="docutils literal notranslate"><span class="pre">Cacao::</span></code>. All Cacao Engine things live in the <code class="docutils literal notranslate"><span class="pre">Cacao</span></code> namespace. If you want to omit this, add <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">namespace</span> <span class="pre">Cacao;</span></code> right after including the <code class="docutils literal notranslate"><span class="pre">Cacao.hpp</span></code> header file.<br />
-Lastly, many components of Cacao Engine follow the singleton pattern, meaning there is only ever one instance of them. In this function, we get the instance of the <code class="docutils literal notranslate"><span class="pre">WorldManager</span></code> to use it.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">_CacaoExiting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	</span><span class="n">Cacao</span><span class="o">::</span><span class="n">Logging</span><span class="o">::</span><span class="n">ClientLog</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
-<span class="p">}</span>
+<p><code class="docutils literal notranslate"><span class="pre">cacaospec.yml.in</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkgId</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">ID@</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">TITLE@</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">VERSION@</span>
+<span class="nt">binary</span><span class="p">:</span><span class="w"> </span><span class="err">@</span><span class="l l-Scalar l-Scalar-Plain">BINPATH@</span>
+<span class="nt">startupWorld</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">w:yourfirstworld</span>
 </pre></div>
 </div>
-<p>Lastly, we define the shutdown hook function. Again, note that it’s marked with the <code class="docutils literal notranslate"><span class="pre">EXPORT</span></code> macro. This function is called during engine shutdown, to clean up everything.</p>
+</section>
+<section id="the-first-build">
+<h2>3. The First Build<a class="headerlink" href="#the-first-build" title="Link to this heading"><span/></a></h2>
+<p>Okay, your skeleton project is now ready to go. Now it’s time to build it for the first time. You’ll need your terminal for this part; open up your project directory in it and run this command: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span></code>. This will configure your build directory, but be warned: it may take a while as it needs to download all the dependencies.</p>
+<p>Once that completes, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">compile</span> <span class="pre">-C</span> <span class="pre">build</span></code> to compile your code and build your project. This <strong>will</strong> take a while. If everything goes well, you should have your project ready to go. Run the executable at <code class="docutils literal notranslate"><span class="pre">build/your_project</span></code> or <code class="docutils literal notranslate"><span class="pre">build\your_project.exe</span></code> (on Windows), and you should see, after a bit, a blank purple window. If you see that, congratulations, Cacao Engine is working!</p>
+<p>TODO</p>
 </section>
 </section>
 
@@ -514,9 +590,9 @@ Lastly, many components of Cacao Engine follow the singleton pattern, meaning th
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-base-project">Creating a base project</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#breaking-down-the-template">Breaking down the template</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">1. Environment Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-skeleton-project">2. Creating the Skeleton Project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-first-build">3. The First Build</a></li>
 </ul>
   </nav></div>
 
