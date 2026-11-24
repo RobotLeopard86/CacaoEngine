@@ -18,7 +18,6 @@
 #include <chrono>
 #include <future>
 #include <numeric>
-#include <renderdoc_app.h>
 #include <thread>
 
 #define GLM_ENABLE_EXPERIMENTAL

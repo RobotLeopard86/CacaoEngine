@@ -10,8 +10,7 @@ When submitting code, it must be formatted using [`clang-format`](https://clang.
 * Member fields and variables should be named in camelCase
 * Do not use Hungarian notation
 * Do not prefix interface/pure virtual class names with `I` as is common in some other codebases
-
-For consistency, please use American English spellings in interface naming (class, method, and field names). 
+* Use American English spellings in interface naming (class, method, and field names). 
 
 All `#include` directives must be grouped (one for Cacao Engine includes, one for STL types and system headers, and one for external libraries) with full blank lines between groups. Only use angle-bracketed includes for system and STL headers, **not** external libraries. Example:
 ```cpp
@@ -88,6 +87,6 @@ More scrutiny will be applied to AI-generated changes to more important componen
 ## Contributing Your Changes
 All code contributions must be submitted as GitHub pull requests; standalone patches will not be accepted.  
 
-Before making changes, make a fork of the repository on GitHub. **Ensure that the "Copy the `main` branch only" option is unchecked**. Please make all changes in your copy of the `dev` branch.  
+Before making changes, make a fork of the repository on GitHub. Please make all changes in your copy of the `dev` branch.  
 
 Before submitting your changes, ensure to rebase your branch onto the upstream `dev` branch (`git pull --rebase`) and reconcile any changes. Then, open a GitHub pull request into the upstream `dev` branch. Be sure to include a detailed summary of what changes you made and why. Pull requests should be made in English, but the use of translation tools (including AI translation) is perfectly acceptable and encouraged for non-fluent speakers.

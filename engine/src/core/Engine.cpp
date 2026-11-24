@@ -101,26 +101,20 @@ namespace Cacao {
 
 		//Initialize RenderDoc
 #if RDOC_ENABLE == 1
-		if(icfg.enableRenderDoc) {
-			Logger::Engine(Logger::Level::Trace) << "Initializing RenderDoc integration...";
-			pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
+		Logger::Engine(Logger::Level::Trace) << "Initializing RenderDoc integration...";
+		pRENDERDOC_GetAPI getRdocApi = [](RENDERDOC_Version, void**) { return 1; };
 #ifdef _WIN32
-			RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
-			if(RenderDoc::rdocLib) {
-				getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
-			} else {
-				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
-			}
-#else
-			RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
-			if(RenderDoc::rdocLib) {
-				getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
-			} else {
-				Logger::Engine(Logger::Level::Warn) << "Failed to load RenderDoc library! Frame capture will not work, but everything else will run as normal.";
-			}
-#endif
-			if(getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc) != 1) Logger::Engine(Logger::Level::Warn) << "Failed to initialize RenderDoc! Frame capture will not work, but everything else will run as normal.";
+		RenderDoc::rdocLib = GetModuleHandleA("renderdoc.dll");
+		if(RenderDoc::rdocLib) {
+			getRdocApi = (pRENDERDOC_GetAPI)GetProcAddress(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
 		}
+#else
+		RenderDoc::rdocLib = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+		if(RenderDoc::rdocLib) {
+			getRdocApi = (pRENDERDOC_GetAPI)dlsym(RenderDoc::rdocLib, "RENDERDOC_GetAPI");
+		}
+#endif
+		if(getRdocApi(eRENDERDOC_API_Version_1_1_2, (void**)&RenderDoc::rdoc) != 1) Logger::Engine(Logger::Level::Warn) << "Failed to initialize RenderDoc! Frame capture will not work, but everything else will run as normal.";
 #endif
 
 		//In descending order of priority
