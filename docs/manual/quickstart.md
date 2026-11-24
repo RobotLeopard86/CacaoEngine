@@ -132,8 +132,35 @@ startupWorld: w:yourfirstworld
 ```
 
 ## 3. The First Build
-Okay, your skeleton project is now ready to go. Now it's time to build it for the first time. You'll need your terminal for this part; open up your project directory in it and run this command: `meson setup build --native-file native.ini`. This will configure your build directory, but be warned: it may take a while as it needs to download all the dependencies.  
+Okay, your skeleton project is now ready to go. Now it's time to build it for the first time. You'll need your terminal for this part; open up your project directory in it and run the appropriate command below:
+* Windows: `meson setup build --vsenv --native-file native.ini`  
+* macOS/Linux: `meson setup build --native-file native.ini`  
+This will configure your build directory, but be warned: it may take a while as it needs to download all the dependencies.  
 
 Once that completes, run `meson compile -C build` to compile your code and build your project. This **will** take a while. If everything goes well, you should have your project ready to go. Run the executable at `build/your_project` or `build\your_project.exe` (on Windows), and you should see, after a bit, a blank purple window. If you see that, congratulations, Cacao Engine is working!
 
-TODO
+## 4. Drawing Something
+Congratulations, you now have a bootstrapped Cacao Engine game. It's a little boring, though; a purple screen isn't that interesting. Now, we'll add a cube. To start, we're going to need a material.  
+
+First, replace the contents of `packs/meson.build` with this:
+```meson
+# Pack a0
+a0_pak = custom_target('a0', output: 'a0.xak', input: [cube_mat],
+	console: true, command: [cacao.get_variable('xak'), '-V', 'create', '-a', meson.current_build_dir() / '..' / 'assets', '-M', '@INPUT0@', '-o', '@OUTPUT@'], build_by_default: true)
+```  
+
+Then, make a new directory in the project called `assets`, and copy this into `assets/meson.build`:  
+```meson
+cube_mat = custom_target('cube.xjm', output: 'cube.xjm', input: 'cube.ajm', console: true, build_by_default: true, command: [cacao.get_variable('matc'), '-V', '@INPUT@', '-o', '@OUTPUT@'])
+```
+
+Now, we just need to write the material for the cube into `assets/cube.ajm`; it should look like this:
+```yaml
+shaderAddress: a:builtin_basic_color_shader
+renderMode: opaque
+parameters:
+  - target: color
+    value: [1.0, 1.0, 1.0, 1.0]
+```
+
+And finally, to hook it all up, add `subdir('assets')` to the root `meson.build`, right above the `subdir('packs')` line. Rebuild the project, run it again, and... you should see that nothing has changed. We haven't actually added a cube yet!
