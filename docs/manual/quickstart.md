@@ -1,58 +1,139 @@
 # Quickstart
 
-```{warning} **This page is not up-to-date!**.  
-The engine is currently undergoing heavy restructuring, and this guide has not yet been updated to reflect the new setup procedure. A new version will be published closer to release.
+```{warning}
+This guide is still a work-in-progress!
 ```
 
-## Creating a base project
-The easiest way to use Cacao Engine is to build it alongside your game. Using Git, clone the repository at `https://github.com/RobotLeopard86/CacaoEngine-Game-Template`. This repository contains an ideal setup for creating a Cacao Engine game.
+So, you want to get started with Cacao Engine? This guide will teach you how to do so, as well as give you a basic introduction to the systems that you'll use to build a game. Please note that as precompiled binaries for Cacao Engine are not yet available, this procedure will have you build the engine from source alongside your game. This will change in the future.
 
-## Building
-Install the dependencies as listed in the [build instructions](./building).  
-If you'd like to use Visual Studio, see the Visual Studio compatibility guide for info on how to set up a Visual Studio Solution.  
-Otherwise, run `meson setup build` if on Windows or `meson setup build --native-file posix_native.ini` if on Linux or macOS to create a build directory, then run `ninja -C build run` to build and run the template.
-If all goes well, you should see something like this:  
-```{image} ../assets/quickstart-template.png
-:class: dark-light p-2
+## 1. Environment Setup
+The first thing you need to do is setup your build machine to be able to compile Cacao Engine. To do this, follow the [build instructions](./building) through to the "Compiler Support" section. Then, come back here.  
+
+## 2. Creating the Skeleton Project
+Next, you'll need to configure your build. To do this, you need to copy the files below into your project. The names are very important. You don't need to worry too much about what all of this does, even though it's a lot. We'll come back to it later.
+
+`native.ini`*:  
+```ini
+[binaries]
+c = 'clang'
+cpp = 'clang++'
+c_ld = 'lld'
+cpp_ld = 'lld'
+objc = 'clang'
+objcpp = 'clang++'
+objc_ld = 'lld'
+objcpp_ld = 'lld'
+
+[cmake]
+CMAKE_C_COMPILER = 'clang'
+CMAKE_CXX_COMPILER = 'clang++'
+LINKER_TYPE = 'lld'
+```  
+```{note}
+While you can opt to build with something other than Clang and LLD, which would mean excluding this file or modifying its fields, we highly discourage this, even on Windows. This is the primary compiler and linker configuration used for Cacao Engine on all platforms and is the principal one supported.
+```  
+
+`meson.build`:
+```meson
+project('your_project', 'c', 'cpp', meson_version: '>=1.10.2', default_options: [ 'cpp_std=c++20', 'b_vscrt=from_buildtype', 'default_library=static' ])
+
+# Cacao Engine
+cacao = subproject('cacaoengine', required: true, default_options: {
+	'backends': ['opengl', 'vulkan'],
+	'build_sandbox': false
+})
+
+# Game binary
+your_project = shared_module('your_project', sources: [
+    'src' / 'main.cpp',
+	cacao.get_variable('engine_reflection')
+], include_directories: 'src', dependencies: cacao.get_variable('cacaort_dep'), name_prefix: '', install: false)
+
+# Copy runtime executable
+rtdata = cacao.get_variable('rtdata')
+custom_target('rtsetup', command: [rtdata['setup_script'], rtdata['filelist'], meson.current_build_dir(), '@OUTPUT0@'], output: [host_machine.system() == 'windows' ? 'your_project.exe' : 'your_project', rtdata['filenames']], build_by_default: true, depends: rtdata['files'])
+
+# Specfile
+spec = configuration_data()
+spec.set('BINPATH', import('fs').relative_to(your_project, meson.current_build_dir()))
+spec.set('ID', 'com.example.YourProject')
+spec.set('TITLE', 'Your Project Title')
+spec.set('VERSION', meson.project_version())
+configure_file(input: 'cacaospec.yml.in', output: 'cacaospec.yml', configuration: spec)
+
+# Resource configuration
+subdir('packs')
+subdir('worlds')
+```  
+
+`subprojects/cacaoengine.wrap`:
+```ini
+[wrap-git]
+url = https://github.com/RobotLeopard86/CacaoEngine
+depth = 1
+revision = dev
 ```
 
-## Breaking down the template
-The main part of this template is the `src/Game.cpp` file. It is the entrypoint for your game. Let's walk through it step-by-step.  
-```
+`src/main.cpp`:
+```cpp
+#include "cacaoengine.astra.hpp"
+
+#ifdef _MSC_VER
+#define CALL __cdecl
+#else
+#define CALL
+#endif
+
 #ifdef _WIN32
 #define EXPORT __declspec(dllexport)
 #else
 #define EXPORT
 #endif
-```  
-This is some C++ preprocessor stuff to make sure that our hook functions are always accessible. On most POSIX systems, all symbols in a shared library are automatically exported, meaning they are visible to other files. On Windows, however, everything in a shared library (DLL) is invisible by default, and must be exported.  
 
-```
-#include "Cacao.hpp"
+extern "C" EXPORT void CALL __CacaoRegisterTypes() {}
 ```  
-Here we include the Cacao Engine header file, giving us access to all of the Cacao Engine functions we need.  
 
+`packs/meson.build`:
 ```
-extern "C" {...}
+# Nothing here for now, but you do need to create this file!
+```
+
+`worlds/meson.build`:
+```meson
+custom_target('yourfirstworld', output: 'yourfirstworld.xjw', input: ['yourfirstworld.ajw'],
+	console: true, command: [cacao.get_variable('worldc'), '-V', '@INPUT@', '-o', '@OUTPUT@'], build_by_default: true)
 ```  
-This is telling the C++ compiler, "Hey! Keep these function names exactly like they are!". By default, C++ compilers "mangle" names, so as to avoid conflicts. Here though, we need these names preserved so the engine can find them. Now we move inside this block.  
 
-```
-EXPORT void _CacaoLaunch() {
-	Cacao::Logging::ClientLog("Hi!");
-	Cacao::WorldManager::GetInstance()->CreateWorld<Cacao::PerspectiveCamera>("World");
-	Cacao::WorldManager::GetInstance()->SetActiveWorld("World");
-}
-```
-Here we define the startup hook function. Notice that it's marked with the `EXPORT` macro from earlier. This function is called by the engine to set up your game before the run loop.  
-Inside this function, we log `Hi!` to the console, create a world with a perspective camera named `World`, and set it as active.  
-Note that the log function specifically says `ClientLog`. This is to distinguish messages coming from your game (the client) and the engine.  
-You may also notice that everything is prefixed with `Cacao::`. All Cacao Engine things live in the `Cacao` namespace. If you want to omit this, add `using namespace Cacao;` right after including the `Cacao.hpp` header file.  
-Lastly, many components of Cacao Engine follow the singleton pattern, meaning there is only ever one instance of them. In this function, we get the instance of the `WorldManager` to use it.  
-
-```
-EXPORT void _CacaoExiting() {
-	Cacao::Logging::ClientLog("Bye!");
-}
+`worlds/yourfirstworld.ajw`:
+```yaml
+cam:
+  position:
+    x: 0
+    y: 0
+    z: 0
+  rotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
+  clear: FF00FF
+  orthographic: false
+actors: []
 ```  
-Lastly, we define the shutdown hook function. Again, note that it's marked with the `EXPORT` macro. This function is called during engine shutdown, to clean up everything.
+
+`cacaospec.yml.in`:
+```yaml
+meta:
+  pkgId: @ID@
+  title: @TITLE@
+  version: @VERSION@
+binary: @BINPATH@
+startupWorld: w:yourfirstworld
+```
+
+## 3. The First Build
+Okay, your skeleton project is now ready to go. Now it's time to build it for the first time. You'll need your terminal for this part; open up your project directory in it and run this command: `meson setup build --native-file native.ini`. This will configure your build directory, but be warned: it may take a while as it needs to download all the dependencies.  
+
+Once that completes, run `meson compile -C build` to compile your code and build your project. This **will** take a while. If everything goes well, you should have your project ready to go. Run the executable at `build/your_project` or `build\your_project.exe` (on Windows), and you should see, after a bit, a blank purple window. If you see that, congratulations, Cacao Engine is working!
+
+TODO

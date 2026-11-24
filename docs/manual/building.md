@@ -58,7 +58,7 @@ For a complete list of options, please see the file `meson_options.txt` in the r
 
 Please note that configuration may take a long time, especially in a fresh checkout of the repository, since all non-system dependencies will be downloaded at this time (some of which are large).  
 
-Once configuration is complete, run `meson compile -C <build directory>` to build the engine. Like configuration, this will take a while, as the dependencies contribute a few thousand objects (mostly from LLVM in the reflection generator). If you chose to build the sandbox application, it can be found in the `sandbox` directory in your build directory.
+Once configuration is complete, run `meson compile -C <build directory>` to build the engine. Like configuration, this will take a while. If you chose to build the sandbox application, it can be found in the `sandbox` directory in your build directory.
 
 When using Wayland, window decorations may fail to load due to the same issue. For this reason, it is advised to first run `meson devenv` in your build directory to set up the proper paths.
 
