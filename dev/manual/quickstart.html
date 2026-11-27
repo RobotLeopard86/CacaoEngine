@@ -537,9 +537,125 @@
 </section>
 <section id="the-first-build">
 <h2>3. The First Build<a class="headerlink" href="#the-first-build" title="Link to this heading"><span/></a></h2>
-<p>Okay, your skeleton project is now ready to go. Now it’s time to build it for the first time. You’ll need your terminal for this part; open up your project directory in it and run this command: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span></code>. This will configure your build directory, but be warned: it may take a while as it needs to download all the dependencies.</p>
+<p>Okay, your skeleton project is now ready to go. Now it’s time to build it for the first time. You’ll need your terminal for this part; open up your project directory in it and run the appropriate command below:</p>
+<ul class="simple">
+<li><p>Windows: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--vsenv</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span></code></p></li>
+<li><p>macOS/Linux: <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span> <span class="pre">build</span> <span class="pre">--native-file</span> <span class="pre">native.ini</span></code><br />
+This will configure your build directory, but be warned: it may take a while as it needs to download all the dependencies.</p></li>
+</ul>
 <p>Once that completes, run <code class="docutils literal notranslate"><span class="pre">meson</span> <span class="pre">compile</span> <span class="pre">-C</span> <span class="pre">build</span></code> to compile your code and build your project. This <strong>will</strong> take a while. If everything goes well, you should have your project ready to go. Run the executable at <code class="docutils literal notranslate"><span class="pre">build/your_project</span></code> or <code class="docutils literal notranslate"><span class="pre">build\your_project.exe</span></code> (on Windows), and you should see, after a bit, a blank purple window. If you see that, congratulations, Cacao Engine is working!</p>
-<p>TODO</p>
+</section>
+<section id="drawing-something">
+<h2>4. Drawing Something<a class="headerlink" href="#drawing-something" title="Link to this heading"><span/></a></h2>
+<p>Congratulations, you now have a bootstrapped Cacao Engine game. It’s a little boring, though; a purple screen isn’t that interesting. Now, we’ll add a cube. To start, we’re going to need a material.</p>
+<p>First, replace the contents of <code class="docutils literal notranslate"><span class="pre">packs/meson.build</span></code> with this:</p>
+<div class="highlight-meson notranslate"><div class="highlight"><pre><span></span><span class="c"># Pack a0</span>
+<span class="n">a0_pak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">custom_target</span><span class="p">(</span><span class="s">'a0'</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">'a0.xak'</span><span class="p">,</span><span class="w"> </span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cube_mat</span><span class="p">],</span><span class="w"> </span><span class="n">console</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'xak'</span><span class="p">),</span><span class="w"> </span><span class="s">'-V'</span><span class="p">,</span><span class="w"> </span><span class="s">'create'</span><span class="p">,</span><span class="w"> </span><span class="s">'-a'</span><span class="p">,</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">current_build_dir</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">'..'</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">'assets'</span><span class="p">,</span><span class="w"> </span><span class="s">'-o'</span><span class="p">,</span><span class="w"> </span><span class="s">'@OUTPUT@'</span><span class="p">],</span><span class="w"> </span><span class="n">build_by_default</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, make a new directory in the project called <code class="docutils literal notranslate"><span class="pre">assets</span></code>, and copy this into <code class="docutils literal notranslate"><span class="pre">assets/meson.build</span></code>:</p>
+<div class="highlight-meson notranslate"><div class="highlight"><pre><span></span><span class="n">cube_mat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">custom_target</span><span class="p">(</span><span class="s">'cube.xjm'</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">'cube.xjm'</span><span class="p">,</span><span class="w"> </span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="s">'cube.ajm'</span><span class="p">,</span><span class="w"> </span><span class="n">console</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">build_by_default</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'matc'</span><span class="p">),</span><span class="w"> </span><span class="s">'-V'</span><span class="p">,</span><span class="w"> </span><span class="s">'@INPUT@'</span><span class="p">,</span><span class="w"> </span><span class="s">'-o'</span><span class="p">,</span><span class="w"> </span><span class="s">'@OUTPUT@'</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now, we just need to write the material for the cube into <code class="docutils literal notranslate"><span class="pre">assets/cube.ajm</span></code>; it should look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">shaderAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a:builtin_basic_color_shader</span>
+<span class="nt">renderMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opaque</span>
+<span class="nt">parameters</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">color</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>And finally, to hook it all up, add <code class="docutils literal notranslate"><span class="pre">subdir('assets')</span></code> to the root <code class="docutils literal notranslate"><span class="pre">meson.build</span></code>, right above the <code class="docutils literal notranslate"><span class="pre">subdir('packs')</span></code> line. Rebuild the project, run it again, and… you should see that nothing has changed. We haven’t actually added a cube yet! Let’s do that now. Go into <code class="docutils literal notranslate"><span class="pre">worlds/yourfirstworld.ajw</span></code> and find this line:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">actors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+</pre></div>
+</div>
+<p>Replace that with this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">actors</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cube</span>
+<span class="w">    </span><span class="nt">active</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">guid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aab4d03b-1f4e-4829-bcc2-531e41169d19</span>
+<span class="w">    </span><span class="nt">parent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">transform</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">position</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">      </span><span class="nt">rotation</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">w</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">scale</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cacao.meshRenderer</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">rfl</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">mesh</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a:builtin_cube</span>
+<span class="w">          </span><span class="nt">material</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a:cube0</span>
+</pre></div>
+</div>
+<p>Now, build and run the program again. You should now see a white square on screen.</p>
+</section>
+<section id="setting-up-a-basic-script">
+<h2>5. Setting Up a Basic Script<a class="headerlink" href="#setting-up-a-basic-script" title="Link to this heading"><span/></a></h2>
+<p>A white square is cool, but what if we want to see some interactivity? For that, we’ll need a script. Create a new file in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder called <code class="docutils literal notranslate"><span class="pre">spinner.hpp</span></code>, and copy this into it:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/Script.hpp"</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">Cacao</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ASTRA_REFLECT</span><span class="w"> </span><span class="n">Spinner</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Script</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Spinner</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">OnDynTick</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">timestep</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">ASTRASETUP</span><span class="p">(</span><span class="n">Spinner</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>You may be wondering what some of those macros are. These are what allow Cacao Engine’s reflection generator to generate the information about your class that’s needed in order for the engine to be able to instantiate your component from the world file. Next, you’ll need to add the reflection generator to your build process. Add this to your root <code class="docutils literal notranslate"><span class="pre">meson.build</span></code>, right after the Cacao Engine subproject but before the game binary:</p>
+<div class="highlight-meson notranslate"><div class="highlight"><pre><span></span><span class="c"># Reflection</span>
+<span class="n">reflection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">custom_target</span><span class="p">(</span><span class="s">'yourproject.astra.hpp'</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">:</span><span class="w"> </span><span class="s">'yourproject.astra.hpp'</span><span class="p">,</span>
+<span class="w">	</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">'src'</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">'spinner.hpp'</span><span class="p">],</span><span class="w"> </span><span class="n">console</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'astra'</span><span class="p">).</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'astra_generator'</span><span class="p">),</span><span class="w"> </span><span class="s">'-c'</span><span class="p">,</span><span class="w"> </span><span class="vm">meson</span><span class="p">.</span><span class="n">global_build_root</span><span class="p">(),</span><span class="w"> </span><span class="s">'-o'</span><span class="p">,</span><span class="w"> </span>
+<span class="w">	</span><span class="vm">meson</span><span class="p">.</span><span class="n">current_build_dir</span><span class="p">(),</span><span class="w"> </span><span class="s">'-n'</span><span class="p">,</span><span class="w"> </span><span class="s">'your_project'</span><span class="p">,</span><span class="w"> </span><span class="s">'-s'</span><span class="p">,</span><span class="w"> </span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'engine_reflection'</span><span class="p">)[</span><span class="err">0</span><span class="p">].</span><span class="n">full_path</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">'hpp'</span><span class="p">,</span><span class="w"> </span><span class="s">'json'</span><span class="p">),</span><span class="w"> </span><span class="s">'@INPUT@'</span><span class="p">],</span><span class="w"> </span><span class="n">depends</span><span class="p">:</span><span class="w"> </span><span class="n">cacao</span><span class="p">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">'engine_reflection'</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>And be sure to add the <code class="docutils literal notranslate"><span class="pre">reflection</span></code> variable to your game binary sources list.</p>
+<p>Now, we need to implement the component in code, so go into <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>, and paste this to replace the <code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></code> line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"spinner.hpp"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"yourproject.astra.hpp"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"glm/trigonometric.hpp"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"Cacao/CodeRegistry.hpp"</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">Spinner::OnDynTick</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">timestep</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">degPerSec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-30</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetLocalTransform</span><span class="p">();</span>
+<span class="w">  </span><span class="n">glm</span><span class="o">::</span><span class="n">quat</span><span class="w"> </span><span class="n">rotDelta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">angleAxis</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">radians</span><span class="p">(</span><span class="n">degPerSec</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">timestep</span><span class="p">),</span><span class="w"> </span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">});</span>
+<span class="w">  </span><span class="n">transform</span><span class="p">.</span><span class="n">SetRotation</span><span class="p">(</span><span class="n">rotDelta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">GetRotation</span><span class="p">());</span>
+<span class="w">  </span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetLocalTransform</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">CALL</span><span class="w"> </span><span class="n">__CacaoRegisterTypes</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="n">CodeRegistry</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">RegisterFactory</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"spinner"</span><span class="p">,</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Spinner</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="k">typeid</span><span class="p">(</span><span class="n">Spinner</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And finally, we need to attach the component to the cube. So, go back into <code class="docutils literal notranslate"><span class="pre">worlds/yourfirstworld.ajw</span></code>, and add this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spinner</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">rfl</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>Note that the indentation is important; this is intentionally indented to line up with where it needs to be for correct YAML syntax in the world file.</p>
+<p>Build and run the program again, and the white cube should be spinning!</p>
+<p>This concludes the quickstart guide; for further details, please consult the rest of the documentation.</p>
 </section>
 </section>
 
@@ -593,6 +709,8 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">1. Environment Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-skeleton-project">2. Creating the Skeleton Project</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-first-build">3. The First Build</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#drawing-something">4. Drawing Something</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-a-basic-script">5. Setting Up a Basic Script</a></li>
 </ul>
   </nav></div>
 
