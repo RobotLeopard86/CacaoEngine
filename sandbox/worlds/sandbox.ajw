@@ -69,6 +69,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree2
     active: true
     guid: 0e5a2fd4-e243-48d3-ac9f-fe3112378c30
@@ -93,6 +96,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree3
     active: true
     guid: 898967b6-5493-439e-b15c-3d17f1245284
@@ -117,6 +123,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree4
     active: true
     guid: 6ca20304-5336-4952-9c5f-8f5a60af8f45
@@ -141,6 +150,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree5
     active: true
     guid: baaf8e48-daea-4715-83a0-25e2f5d65b79
@@ -165,6 +177,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree6
     active: true
     guid: f3e5e8cf-8977-4d03-be79-ebb2d5ed5a7b
@@ -189,6 +204,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree7
     active: true
     guid: 21183183-dcdd-489d-ad83-c56194a5288f
@@ -213,6 +231,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree8
     active: true
     guid: cc0b5cc4-f2e9-4c31-a5b7-0db22c3d28df
@@ -237,6 +258,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree9
     active: true
     guid: 9bb65412-ed0b-4ea9-a7ba-f8d26beb926b
@@ -261,6 +285,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree10
     active: true
     guid: 1fd9b15e-aa5a-450a-8fa8-3e85565a2dee
@@ -285,6 +312,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree11
     active: true
     guid: 4b660e11-67b6-4233-a2b2-33df46d0d1ab
@@ -309,6 +339,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree12
     active: true
     guid: 9d755588-049d-41fe-9a0c-8cebea044253
@@ -333,6 +366,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree13
     active: true
     guid: 17f16e25-de39-4592-99d7-4ece0a9ad2d2
@@ -357,6 +393,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree14
     active: true
     guid: 1af2c0d3-e156-4ea6-9c95-0c492c6a24f8
@@ -381,6 +420,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree15
     active: true
     guid: 23d84eff-afd7-4607-896a-ccdec95d3809
@@ -405,6 +447,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree16
     active: true
     guid: ae3e7f63-d28e-479b-af03-1d715df85aaa
@@ -429,6 +474,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree17
     active: true
     guid: 73477917-4f14-4b4a-b78c-a738aa7d2502
@@ -453,6 +501,9 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}
   - name: Tree18
     active: true
     guid: 242c0b61-60e9-48c0-90b1-4d8b2f9dc637
@@ -477,3 +528,6 @@ actors:
         rfl:
           mesh: m:palm_tree/Tree
           material: a:palm_tree_mat
+      - id: selfspinner
+        enabled: true
+        rfl: {}

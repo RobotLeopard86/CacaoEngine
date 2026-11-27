@@ -1,6 +1,7 @@
 #include "Cacao/CodeRegistry.hpp"
 
 #include "rotator.hpp"
+#include "selfspinner.hpp"
 #include "cacaoengine.astra.hpp"
 
 #ifdef _MSC_VER
@@ -17,4 +18,5 @@
 
 extern "C" EXPORT void CALL __CacaoRegisterTypes() {
 	Cacao::CodeRegistry::Get().RegisterFactory<Cacao::Component>("rotator", []() { return new sandbox::Rotator(); }, typeid(sandbox::Rotator));
+	Cacao::CodeRegistry::Get().RegisterFactory<Cacao::Component>("selfspinner", []() { return new sandbox::SelfSpinner(); }, typeid(sandbox::SelfSpinner));
 }

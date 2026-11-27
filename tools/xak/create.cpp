@@ -4,6 +4,7 @@
 #include <string>
 
 #include "libcacaoasset.hpp"
+#include "yaml-cpp/node/type.h"
 #include "yaml-cpp/yaml.h"
 #include "spinners.hpp"
 
@@ -18,7 +19,6 @@ CreateCmd::CreateCmd(CLI::App& app) {
 	//Address map
 	CLI::Option* addr = cmd->add_option("-M,--addr-map", addrMapPath, "Path to a file mapping asset filenames to asset addresses for engine reference")->check(CLI::ExistingFile);
 	addr->needs(assets);
-	assets->needs(addr);
 
 	//Assets directory help
 	const auto assetsDirHelpFunc = []() {
@@ -92,27 +92,31 @@ void CreateCmd::Callback() {
 	if(noAsset) goto res_begin;
 
 	//Load address map
-	CVLOG_NONL("Loading asset address map... ")
-	addrMap = [this]() {
-		std::ifstream addrMapStream(addrMapPath);
-		if(!addrMapStream.is_open()) {
-			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to open asset address map file stream!")
-		}
-		try {
-			YAML::Node node = YAML::Load(addrMapStream);
-			if(!node.IsMap()) {
-				XAK_ERROR_NONVOID(YAML::Node {}, "Asset address map is not a YAML map!")
+	if(!addrMapPath.empty()) {
+		CVLOG_NONL("Loading asset address map... ")
+		addrMap = [this]() {
+			std::ifstream addrMapStream(addrMapPath);
+			if(!addrMapStream.is_open()) {
+				XAK_ERROR_NONVOID(YAML::Node {}, "Failed to open asset address map file stream!")
 			}
-			if(node.size() < 1) {
-				XAK_ERROR_NONVOID(YAML::Node {}, "Asset address map has no entries!")
+			try {
+				YAML::Node node = YAML::Load(addrMapStream);
+				if(!node.IsMap()) {
+					XAK_ERROR_NONVOID(YAML::Node {}, "Asset address map is not a YAML map!")
+				}
+				if(node.size() < 1) {
+					XAK_ERROR_NONVOID(YAML::Node {}, "Asset address map has no entries!")
+				}
+				return node;
+			} catch(const YAML::ParserException& e) {
+				XAK_ERROR_NONVOID(YAML::Node {}, "Failed to parse asset address map YAML: \"" << e.what() << "\"!")
 			}
-			return node;
-		} catch(const YAML::ParserException& e) {
-			XAK_ERROR_NONVOID(YAML::Node {}, "Failed to parse asset address map YAML: \"" << e.what() << "\"!")
-		}
-	}();
-	if(fail) return;
-	CVLOG("Done.")
+		}();
+		if(fail) return;
+		CVLOG("Done.")
+	} else {
+		addrMap = YAML::Node(YAML::NodeType::value::Map);
+	}
 
 	//Check for address map conflicts and errors
 	{

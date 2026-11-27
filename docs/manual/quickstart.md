@@ -145,8 +145,7 @@ Congratulations, you now have a bootstrapped Cacao Engine game. It's a little bo
 First, replace the contents of `packs/meson.build` with this:
 ```meson
 # Pack a0
-a0_pak = custom_target('a0', output: 'a0.xak', input: [cube_mat],
-	console: true, command: [cacao.get_variable('xak'), '-V', 'create', '-a', meson.current_build_dir() / '..' / 'assets', '-M', '@INPUT0@', '-o', '@OUTPUT@'], build_by_default: true)
+a0_pak = custom_target('a0', output: 'a0.xak', input: [cube_mat], console: true, command: [cacao.get_variable('xak'), '-V', 'create', '-a', meson.current_build_dir() / '..' / 'assets', '-o', '@OUTPUT@'], build_by_default: true)
 ```  
 
 Then, make a new directory in the project called `assets`, and copy this into `assets/meson.build`:  
@@ -163,4 +162,101 @@ parameters:
     value: [1.0, 1.0, 1.0, 1.0]
 ```
 
-And finally, to hook it all up, add `subdir('assets')` to the root `meson.build`, right above the `subdir('packs')` line. Rebuild the project, run it again, and... you should see that nothing has changed. We haven't actually added a cube yet!
+And finally, to hook it all up, add `subdir('assets')` to the root `meson.build`, right above the `subdir('packs')` line. Rebuild the project, run it again, and... you should see that nothing has changed. We haven't actually added a cube yet! Let's do that now. Go into `worlds/yourfirstworld.ajw` and find this line:
+```yaml
+actors: []
+```  
+
+Replace that with this:
+```yaml
+actors:
+  - name: Cube
+    active: true
+    guid: aab4d03b-1f4e-4829-bcc2-531e41169d19
+    parent: 0
+    transform:
+      position:
+        x: 0
+        y: 0
+        z: 5
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    components:
+      - id: cacao.meshRenderer
+        enabled: true
+        rfl:
+          mesh: a:builtin_cube
+          material: a:cube0
+```  
+
+Now, build and run the program again. You should now see a white square on screen.
+
+## 5. Setting Up a Basic Script
+A white square is cool, but what if we want to see some interactivity? For that, we'll need a script. Create a new file in the `src` folder called `spinner.hpp`, and copy this into it:  
+```cpp
+#pragma once
+
+#include "Cacao/Script.hpp"
+
+using namespace Cacao;
+
+class ASTRA_REFLECT Spinner : public Script {
+  public:
+    Spinner() {}
+
+    void OnDynTick(float timestep) override;
+
+    ASTRASETUP(Spinner);
+};
+```  
+
+You may be wondering what some of those macros are. These are what allow Cacao Engine's reflection generator to generate the information about your class that's needed in order for the engine to be able to instantiate your component from the world file. Next, you'll need to add the reflection generator to your build process. Add this to your root `meson.build`, right after the Cacao Engine subproject but before the game binary:  
+```meson
+# Reflection
+reflection = custom_target('yourproject.astra.hpp', output: 'yourproject.astra.hpp',
+	input: ['src' / 'spinner.hpp'], console: true, command: [cacao.get_variable('astra').get_variable('astra_generator'), '-c', meson.global_build_root(), '-o', 
+	meson.current_build_dir(), '-n', 'your_project', '-s', cacao.get_variable('engine_reflection')[0].full_path().replace('hpp', 'json'), '@INPUT@'], depends: cacao.get_variable('engine_reflection'))
+```  
+
+And be sure to add the `reflection` variable to your game binary sources list.  
+
+Now, we need to implement the component in code, so go into `main.cpp`, and paste this to replace the `extern "C"` line:
+```cpp
+#include "spinner.hpp"
+#include "yourproject.astra.hpp"
+
+#include "glm/trigonometric.hpp"
+
+#include "Cacao/CodeRegistry.hpp"
+
+void Spinner::OnDynTick(float timestep) {
+  constexpr static float degPerSec = -30;
+  Transform transform = GetOwner()->GetLocalTransform();
+  glm::quat rotDelta = glm::angleAxis(glm::radians(degPerSec * timestep), glm::vec3 {0, 1, 0});
+  transform.SetRotation(rotDelta * transform.GetRotation());
+  GetOwner()->SetLocalTransform(transform);
+}
+
+extern "C" EXPORT void CALL __CacaoRegisterTypes() {
+	CodeRegistry::Get().RegisterFactory<Component>("spinner", []() { return new Spinner(); }, typeid(Spinner));
+}
+```  
+
+And finally, we need to attach the component to the cube. So, go back into `worlds/yourfirstworld.ajw`, and add this:  
+```yaml
+      - id: spinner
+        enabled: true
+        rfl: {}
+```  
+Note that the indentation is important; this is intentionally indented to line up with where it needs to be for correct YAML syntax in the world file.  
+
+Build and run the program again, and the white cube should be spinning!  
+
+This concludes the quickstart guide; for further details, please consult the rest of the documentation.
